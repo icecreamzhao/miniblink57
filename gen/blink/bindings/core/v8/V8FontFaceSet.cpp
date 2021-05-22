@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FontFaceSet.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -56,500 +56,546 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&FontFaceSet::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "FontFaceSet is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace FontFaceSetV8Internal {
 
-static void sizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
+        FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->size());
-}
+        v8SetReturnValueUnsigned(info, impl->size());
+    }
 
-CORE_EXPORT void sizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::sizeAttributeGetter(info);
-}
+    CORE_EXPORT void sizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::sizeAttributeGetter(info);
+    }
 
-static void onloadingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
+        FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onloading()));
+        EventListener* cppValue(WTF::getPtr(impl->onloading()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::onloadingAttributeGetter(info);
-}
+    CORE_EXPORT void onloadingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::onloadingAttributeGetter(info);
+    }
 
-static void onloadingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
+    static void onloadingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloading(), v8Value, V8FontFaceSet::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloading(), v8Value, V8FontFaceSet::eventListenerCacheIndex);
 
-  impl->setOnloading(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnloading(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  FontFaceSetV8Internal::onloadingAttributeSetter(v8Value, info);
-}
+        FontFaceSetV8Internal::onloadingAttributeSetter(v8Value, info);
+    }
 
-static void onloadingdoneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadingdoneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
+        FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onloadingdone()));
+        EventListener* cppValue(WTF::getPtr(impl->onloadingdone()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadingdoneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::onloadingdoneAttributeGetter(info);
-}
+    CORE_EXPORT void onloadingdoneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::onloadingdoneAttributeGetter(info);
+    }
 
-static void onloadingdoneAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
+    static void onloadingdoneAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadingdone(), v8Value, V8FontFaceSet::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadingdone(), v8Value, V8FontFaceSet::eventListenerCacheIndex);
 
-  impl->setOnloadingdone(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnloadingdone(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadingdoneAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadingdoneAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  FontFaceSetV8Internal::onloadingdoneAttributeSetter(v8Value, info);
-}
+        FontFaceSetV8Internal::onloadingdoneAttributeSetter(v8Value, info);
+    }
 
-static void onloadingerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadingerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
+        FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onloadingerror()));
+        EventListener* cppValue(WTF::getPtr(impl->onloadingerror()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadingerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::onloadingerrorAttributeGetter(info);
-}
+    CORE_EXPORT void onloadingerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::onloadingerrorAttributeGetter(info);
+    }
 
-static void onloadingerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadingerror(), v8Value, V8FontFaceSet::eventListenerCacheIndex);
-
-  impl->setOnloadingerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onloadingerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  FontFaceSetV8Internal::onloadingerrorAttributeSetter(v8Value, info);
-}
-
-static void readyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  v8SetReturnValue(info, impl->ready(scriptState).v8Value());
-}
-
-CORE_EXPORT void readyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::readyAttributeGetter(info);
-}
-
-static void statusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->status(), info.GetIsolate());
-}
-
-CORE_EXPORT void statusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::statusAttributeGetter(info);
-}
-
-static void loadMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "load");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8FontFaceSet::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> font;
-  V8StringResource<> text;
-  font = info[0];
-  if (!font.prepare(exceptionState))
-    return;
-
-  if (!info[1]->IsUndefined()) {
-    text = info[1];
-    if (!text.prepare(exceptionState))
-      return;
-  } else {
-    text = String(" ");
-  }
-
-  ScriptPromise result = impl->load(scriptState, font, text);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-CORE_EXPORT  void loadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::loadMethod(info);
-}
-
-static void checkMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "check");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> font;
-  V8StringResource<> text;
-  font = info[0];
-  if (!font.prepare())
-    return;
-
-  if (!info[1]->IsUndefined()) {
-    text = info[1];
-    if (!text.prepare())
-      return;
-  } else {
-    text = String(" ");
-  }
-
-  bool result = impl->check(font, text, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
-CORE_EXPORT  void checkMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::checkMethod(info);
-}
-
-static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "keys");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->keysForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::keysMethod(info);
-}
-
-static void valuesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "values");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->valuesForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void valuesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::valuesMethod(info);
-}
-
-static void entriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "entries");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->entriesForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void entriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::entriesMethod(info);
-}
-
-static void forEachMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "forEach");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  ScriptValue callback;
-  ScriptValue thisArg;
-  if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  callback = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
-
-  thisArg = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
-
-  impl->forEachForBinding(scriptState, ScriptValue(scriptState, info.Holder()), callback, thisArg, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void forEachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::forEachMethod(info);
-}
-
-static void hasMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "has");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  FontFace* value;
-  value = V8FontFace::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!value) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'FontFace'.");
-
-    return;
-  }
-
-  bool result = impl->hasForBinding(scriptState, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
-CORE_EXPORT  void hasMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::hasMethod(info);
-}
-
-static void addMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "add");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  FontFace* value;
-  value = V8FontFace::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!value) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'FontFace'.");
-
-    return;
-  }
-
-  FontFaceSet* result = impl->addForBinding(scriptState, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void addMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::addMethod(info);
-}
-
-static void clearMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "clear");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  impl->clearForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void clearMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::clearMethod(info);
-}
-
-static void deleteMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "delete");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  FontFace* value;
-  value = V8FontFace::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!value) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'FontFace'.");
-
-    return;
-  }
-
-  bool result = impl->deleteForBinding(scriptState, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
-CORE_EXPORT  void deleteMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::deleteMethod(info);
-}
-
-static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "iterator");
-
-  FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->iterator(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FontFaceSetV8Internal::iteratorMethod(info);
-}
+    static void onloadingerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadingerror(), v8Value, V8FontFaceSet::eventListenerCacheIndex);
+
+        impl->setOnloadingerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onloadingerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        FontFaceSetV8Internal::onloadingerrorAttributeSetter(v8Value, info);
+    }
+
+    static void readyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        v8SetReturnValue(info, impl->ready(scriptState).v8Value());
+    }
+
+    CORE_EXPORT void readyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::readyAttributeGetter(info);
+    }
+
+    static void statusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->status(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void statusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::statusAttributeGetter(info);
+    }
+
+    static void loadMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "load");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8FontFaceSet::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> font;
+        V8StringResource<> text;
+        font = info[0];
+        if (!font.prepare(exceptionState))
+            return;
+
+        if (!info[1]->IsUndefined()) {
+            text = info[1];
+            if (!text.prepare(exceptionState))
+                return;
+        } else {
+            text = String(" ");
+        }
+
+        ScriptPromise result = impl->load(scriptState, font, text);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    CORE_EXPORT void loadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::loadMethod(info);
+    }
+
+    static void checkMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "check");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> font;
+        V8StringResource<> text;
+        font = info[0];
+        if (!font.prepare())
+            return;
+
+        if (!info[1]->IsUndefined()) {
+            text = info[1];
+            if (!text.prepare())
+                return;
+        } else {
+            text = String(" ");
+        }
+
+        bool result = impl->check(font, text, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void checkMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::checkMethod(info);
+    }
+
+    static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "keys");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->keysForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::keysMethod(info);
+    }
+
+    static void valuesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "values");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->valuesForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void valuesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::valuesMethod(info);
+    }
+
+    static void entriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "entries");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->entriesForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void entriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::entriesMethod(info);
+    }
+
+    static void forEachMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "forEach");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        ScriptValue callback;
+        ScriptValue thisArg;
+        if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+
+            return;
+        }
+        callback = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        thisArg = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
+
+        impl->forEachForBinding(scriptState, ScriptValue(scriptState, info.Holder()), callback, thisArg, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void forEachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::forEachMethod(info);
+    }
+
+    static void hasMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "has");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        FontFace* value;
+        value = V8FontFace::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!value) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'FontFace'.");
+
+            return;
+        }
+
+        bool result = impl->hasForBinding(scriptState, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void hasMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::hasMethod(info);
+    }
+
+    static void addMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "add");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        FontFace* value;
+        value = V8FontFace::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!value) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'FontFace'.");
+
+            return;
+        }
+
+        FontFaceSet* result = impl->addForBinding(scriptState, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void addMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::addMethod(info);
+    }
+
+    static void clearMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "clear");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        impl->clearForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void clearMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::clearMethod(info);
+    }
+
+    static void deleteMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "delete");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        FontFace* value;
+        value = V8FontFace::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!value) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'FontFace'.");
+
+            return;
+        }
+
+        bool result = impl->deleteForBinding(scriptState, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void deleteMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::deleteMethod(info);
+    }
+
+    static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FontFaceSet", "iterator");
+
+        FontFaceSet* impl = V8FontFaceSet::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->iterator(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FontFaceSetV8Internal::iteratorMethod(info);
+    }
 
 } // namespace FontFaceSetV8Internal
 
-void V8FontFaceSet::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  FontFaceSet* impl = scriptWrappable->toImpl<FontFaceSet>();
-  // The document() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->document())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8FontFaceSet::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    FontFaceSet* impl = scriptWrappable->toImpl<FontFaceSet>();
+    // The document() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->document())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8FontFaceSetAccessors[] = {
-    {"size", FontFaceSetV8Internal::sizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloading", FontFaceSetV8Internal::onloadingAttributeGetterCallback, FontFaceSetV8Internal::onloadingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadingdone", FontFaceSetV8Internal::onloadingdoneAttributeGetterCallback, FontFaceSetV8Internal::onloadingdoneAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadingerror", FontFaceSetV8Internal::onloadingerrorAttributeGetterCallback, FontFaceSetV8Internal::onloadingerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ready", FontFaceSetV8Internal::readyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"status", FontFaceSetV8Internal::statusAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "size", FontFaceSetV8Internal::sizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloading", FontFaceSetV8Internal::onloadingAttributeGetterCallback, FontFaceSetV8Internal::onloadingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadingdone", FontFaceSetV8Internal::onloadingdoneAttributeGetterCallback, FontFaceSetV8Internal::onloadingdoneAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadingerror", FontFaceSetV8Internal::onloadingerrorAttributeGetterCallback, FontFaceSetV8Internal::onloadingerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ready", FontFaceSetV8Internal::readyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "status", FontFaceSetV8Internal::statusAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8FontFaceSetMethods[] = {
-    {"load", FontFaceSetV8Internal::loadMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"check", FontFaceSetV8Internal::checkMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"keys", FontFaceSetV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"values", FontFaceSetV8Internal::valuesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"entries", FontFaceSetV8Internal::entriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forEach", FontFaceSetV8Internal::forEachMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"has", FontFaceSetV8Internal::hasMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"add", FontFaceSetV8Internal::addMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clear", FontFaceSetV8Internal::clearMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"delete", FontFaceSetV8Internal::deleteMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "load", FontFaceSetV8Internal::loadMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "check", FontFaceSetV8Internal::checkMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "keys", FontFaceSetV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "values", FontFaceSetV8Internal::valuesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "entries", FontFaceSetV8Internal::entriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forEach", FontFaceSetV8Internal::forEachMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "has", FontFaceSetV8Internal::hasMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "add", FontFaceSetV8Internal::addMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clear", FontFaceSetV8Internal::clearMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "delete", FontFaceSetV8Internal::deleteMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8FontFaceSetTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FontFaceSet::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8FontFaceSet::internalFieldCount);
+static void installV8FontFaceSetTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FontFaceSet::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8FontFaceSet::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FontFaceSetAccessors, WTF_ARRAY_LENGTH(V8FontFaceSetAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FontFaceSetMethods, WTF_ARRAY_LENGTH(V8FontFaceSetMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FontFaceSetAccessors, WTF_ARRAY_LENGTH(V8FontFaceSetAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FontFaceSetMethods, WTF_ARRAY_LENGTH(V8FontFaceSetMethods));
 
-  // Iterator (@@iterator)
-  const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, FontFaceSetV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
-  V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
+    // Iterator (@@iterator)
+    const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, FontFaceSetV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
+    V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
 }
 
-v8::Local<v8::FunctionTemplate> V8FontFaceSet::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FontFaceSetTemplate);
+v8::Local<v8::FunctionTemplate> V8FontFaceSet::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FontFaceSetTemplate);
 }
 
-bool V8FontFaceSet::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8FontFaceSet::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8FontFaceSet::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8FontFaceSet::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-FontFaceSet* V8FontFaceSet::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+FontFaceSet* V8FontFaceSet::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

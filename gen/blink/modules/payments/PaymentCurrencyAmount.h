@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentCurrencyAmount_h
 #define PaymentCurrencyAmount_h
 
@@ -20,36 +20,37 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentCurrencyAmount : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentCurrencyAmount();
-  virtual ~PaymentCurrencyAmount();
-  PaymentCurrencyAmount(const PaymentCurrencyAmount&);
-  PaymentCurrencyAmount& operator=(const PaymentCurrencyAmount&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCurrency() const;
-  String currency() const;
-  void setCurrency(String);
+public:
+    PaymentCurrencyAmount();
+    virtual ~PaymentCurrencyAmount();
+    PaymentCurrencyAmount(const PaymentCurrencyAmount&);
+    PaymentCurrencyAmount& operator=(const PaymentCurrencyAmount&);
 
-  bool hasCurrencySystem() const;
-  String currencySystem() const;
-  void setCurrencySystem(String);
+    bool hasCurrency() const;
+    String currency() const;
+    void setCurrency(String);
 
-  bool hasValue() const;
-  String value() const;
-  void setValue(String);
+    bool hasCurrencySystem() const;
+    String currencySystem() const;
+    void setCurrencySystem(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasValue() const;
+    String value() const;
+    void setValue(String);
 
- private:
-  String m_currency;
-  String m_currencySystem;
-  String m_value;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentCurrencyAmount;
+private:
+    String m_currency;
+    String m_currencySystem;
+    String m_value;
+
+    friend class V8PaymentCurrencyAmount;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentCurrencyAmount_h
+#endif // PaymentCurrencyAmount_h

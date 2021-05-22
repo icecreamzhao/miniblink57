@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TypeConversions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,735 +45,820 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&TypeConversions::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "TypeConversions is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TypeConversionsV8Internal {
 
-static void testLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->testLong());
-}
+        v8SetReturnValueInt(info, impl->testLong());
+    }
 
-void testLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testLongAttributeGetter(info);
-}
+    void testLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testLongAttributeGetter(info);
+    }
 
-static void testLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testLong");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testLong");
 
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestLong(cppValue);
-}
+        impl->setTestLong(cppValue);
+    }
 
-void testLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testLongAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testLongAttributeSetter(v8Value, info);
+    }
 
-static void testEnforceRangeLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testEnforceRangeLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->testLong());
-}
+        v8SetReturnValueInt(info, impl->testLong());
+    }
 
-void testEnforceRangeLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testEnforceRangeLongAttributeGetter(info);
-}
+    void testEnforceRangeLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testEnforceRangeLongAttributeGetter(info);
+    }
 
-static void testEnforceRangeLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testEnforceRangeLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeLong");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeLong");
 
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestLong(cppValue);
-}
+        impl->setTestLong(cppValue);
+    }
 
-void testEnforceRangeLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testEnforceRangeLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testEnforceRangeLongAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testEnforceRangeLongAttributeSetter(v8Value, info);
+    }
 
-static void testUnsignedLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testUnsignedLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->testUnsignedLong());
-}
+        v8SetReturnValueUnsigned(info, impl->testUnsignedLong());
+    }
 
-void testUnsignedLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testUnsignedLongAttributeGetter(info);
-}
+    void testUnsignedLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testUnsignedLongAttributeGetter(info);
+    }
 
-static void testUnsignedLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testUnsignedLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testUnsignedLong");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testUnsignedLong");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestUnsignedLong(cppValue);
-}
+        impl->setTestUnsignedLong(cppValue);
+    }
 
-void testUnsignedLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testUnsignedLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testUnsignedLongAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testUnsignedLongAttributeSetter(v8Value, info);
+    }
 
-static void testEnforceRangeUnsignedLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testEnforceRangeUnsignedLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->testUnsignedLong());
-}
+        v8SetReturnValueUnsigned(info, impl->testUnsignedLong());
+    }
 
-void testEnforceRangeUnsignedLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testEnforceRangeUnsignedLongAttributeGetter(info);
-}
+    void testEnforceRangeUnsignedLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testEnforceRangeUnsignedLongAttributeGetter(info);
+    }
 
-static void testEnforceRangeUnsignedLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testEnforceRangeUnsignedLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeUnsignedLong");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeUnsignedLong");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestUnsignedLong(cppValue);
-}
+        impl->setTestUnsignedLong(cppValue);
+    }
 
-void testEnforceRangeUnsignedLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testEnforceRangeUnsignedLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testEnforceRangeUnsignedLongAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testEnforceRangeUnsignedLongAttributeSetter(v8Value, info);
+    }
 
-static void testLongLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testLongLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->testLongLong()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->testLongLong()));
+    }
 
-void testLongLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testLongLongAttributeGetter(info);
-}
+    void testLongLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testLongLongAttributeGetter(info);
+    }
 
-static void testLongLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testLongLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testLongLong");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testLongLong");
 
-  // Prepare the value to be set.
-  long long cppValue = toInt64(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        long long cppValue = toInt64(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestLongLong(cppValue);
-}
+        impl->setTestLongLong(cppValue);
+    }
 
-void testLongLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testLongLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testLongLongAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testLongLongAttributeSetter(v8Value, info);
+    }
 
-static void testEnforceRangeLongLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testEnforceRangeLongLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->testLongLong()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->testLongLong()));
+    }
 
-void testEnforceRangeLongLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testEnforceRangeLongLongAttributeGetter(info);
-}
+    void testEnforceRangeLongLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testEnforceRangeLongLongAttributeGetter(info);
+    }
 
-static void testEnforceRangeLongLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testEnforceRangeLongLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeLongLong");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeLongLong");
 
-  // Prepare the value to be set.
-  long long cppValue = toInt64(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        long long cppValue = toInt64(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestLongLong(cppValue);
-}
+        impl->setTestLongLong(cppValue);
+    }
 
-void testEnforceRangeLongLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testEnforceRangeLongLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testEnforceRangeLongLongAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testEnforceRangeLongLongAttributeSetter(v8Value, info);
+    }
 
-static void testUnsignedLongLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testUnsignedLongLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->testUnsignedLongLong()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->testUnsignedLongLong()));
+    }
 
-void testUnsignedLongLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testUnsignedLongLongAttributeGetter(info);
-}
+    void testUnsignedLongLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testUnsignedLongLongAttributeGetter(info);
+    }
 
-static void testUnsignedLongLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testUnsignedLongLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testUnsignedLongLong");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testUnsignedLongLong");
 
-  // Prepare the value to be set.
-  unsigned long long cppValue = toUInt64(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned long long cppValue = toUInt64(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestUnsignedLongLong(cppValue);
-}
+        impl->setTestUnsignedLongLong(cppValue);
+    }
 
-void testUnsignedLongLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testUnsignedLongLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testUnsignedLongLongAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testUnsignedLongLongAttributeSetter(v8Value, info);
+    }
 
-static void testEnforceRangeUnsignedLongLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testEnforceRangeUnsignedLongLongAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->testUnsignedLongLong()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->testUnsignedLongLong()));
+    }
 
-void testEnforceRangeUnsignedLongLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testEnforceRangeUnsignedLongLongAttributeGetter(info);
-}
+    void testEnforceRangeUnsignedLongLongAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testEnforceRangeUnsignedLongLongAttributeGetter(info);
+    }
 
-static void testEnforceRangeUnsignedLongLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testEnforceRangeUnsignedLongLongAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeUnsignedLongLong");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeUnsignedLongLong");
 
-  // Prepare the value to be set.
-  unsigned long long cppValue = toUInt64(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned long long cppValue = toUInt64(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestUnsignedLongLong(cppValue);
-}
+        impl->setTestUnsignedLongLong(cppValue);
+    }
 
-void testEnforceRangeUnsignedLongLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testEnforceRangeUnsignedLongLongAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testEnforceRangeUnsignedLongLongAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testEnforceRangeUnsignedLongLongAttributeSetter(v8Value, info);
+    }
 
-static void testByteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testByteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->testByte());
-}
+        v8SetReturnValueInt(info, impl->testByte());
+    }
 
-void testByteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testByteAttributeGetter(info);
-}
+    void testByteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testByteAttributeGetter(info);
+    }
 
-static void testByteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testByteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testByte");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testByte");
 
-  // Prepare the value to be set.
-  int cppValue = toInt8(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt8(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestByte(cppValue);
-}
+        impl->setTestByte(cppValue);
+    }
 
-void testByteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testByteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testByteAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testByteAttributeSetter(v8Value, info);
+    }
 
-static void testEnforceRangeByteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testEnforceRangeByteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->testByte());
-}
+        v8SetReturnValueInt(info, impl->testByte());
+    }
 
-void testEnforceRangeByteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testEnforceRangeByteAttributeGetter(info);
-}
+    void testEnforceRangeByteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testEnforceRangeByteAttributeGetter(info);
+    }
 
-static void testEnforceRangeByteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testEnforceRangeByteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeByte");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeByte");
 
-  // Prepare the value to be set.
-  int cppValue = toInt8(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt8(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestByte(cppValue);
-}
+        impl->setTestByte(cppValue);
+    }
 
-void testEnforceRangeByteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testEnforceRangeByteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testEnforceRangeByteAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testEnforceRangeByteAttributeSetter(v8Value, info);
+    }
 
-static void testOctetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testOctetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->testOctet());
-}
+        v8SetReturnValueUnsigned(info, impl->testOctet());
+    }
 
-void testOctetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testOctetAttributeGetter(info);
-}
+    void testOctetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testOctetAttributeGetter(info);
+    }
 
-static void testOctetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testOctetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testOctet");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testOctet");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt8(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt8(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestOctet(cppValue);
-}
+        impl->setTestOctet(cppValue);
+    }
 
-void testOctetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testOctetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testOctetAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testOctetAttributeSetter(v8Value, info);
+    }
 
-static void testEnforceRangeOctetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testEnforceRangeOctetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->testOctet());
-}
+        v8SetReturnValueUnsigned(info, impl->testOctet());
+    }
 
-void testEnforceRangeOctetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testEnforceRangeOctetAttributeGetter(info);
-}
+    void testEnforceRangeOctetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testEnforceRangeOctetAttributeGetter(info);
+    }
 
-static void testEnforceRangeOctetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testEnforceRangeOctetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeOctet");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeOctet");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt8(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt8(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestOctet(cppValue);
-}
+        impl->setTestOctet(cppValue);
+    }
 
-void testEnforceRangeOctetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testEnforceRangeOctetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testEnforceRangeOctetAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testEnforceRangeOctetAttributeSetter(v8Value, info);
+    }
 
-static void testShortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testShortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->testShort());
-}
+        v8SetReturnValueInt(info, impl->testShort());
+    }
 
-void testShortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testShortAttributeGetter(info);
-}
+    void testShortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testShortAttributeGetter(info);
+    }
 
-static void testShortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testShortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testShort");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testShort");
 
-  // Prepare the value to be set.
-  int cppValue = toInt16(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt16(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestShort(cppValue);
-}
+        impl->setTestShort(cppValue);
+    }
 
-void testShortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testShortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testShortAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testShortAttributeSetter(v8Value, info);
+    }
 
-static void testEnforceRangeShortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testEnforceRangeShortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->testShort());
-}
+        v8SetReturnValueInt(info, impl->testShort());
+    }
 
-void testEnforceRangeShortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testEnforceRangeShortAttributeGetter(info);
-}
+    void testEnforceRangeShortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testEnforceRangeShortAttributeGetter(info);
+    }
 
-static void testEnforceRangeShortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testEnforceRangeShortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeShort");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeShort");
 
-  // Prepare the value to be set.
-  int cppValue = toInt16(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt16(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestShort(cppValue);
-}
+        impl->setTestShort(cppValue);
+    }
 
-void testEnforceRangeShortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testEnforceRangeShortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testEnforceRangeShortAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testEnforceRangeShortAttributeSetter(v8Value, info);
+    }
 
-static void testUnsignedShortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testUnsignedShortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->testUnsignedShort());
-}
+        v8SetReturnValueUnsigned(info, impl->testUnsignedShort());
+    }
 
-void testUnsignedShortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testUnsignedShortAttributeGetter(info);
-}
+    void testUnsignedShortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testUnsignedShortAttributeGetter(info);
+    }
 
-static void testUnsignedShortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testUnsignedShortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testUnsignedShort");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testUnsignedShort");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt16(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt16(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestUnsignedShort(cppValue);
-}
+        impl->setTestUnsignedShort(cppValue);
+    }
 
-void testUnsignedShortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testUnsignedShortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testUnsignedShortAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testUnsignedShortAttributeSetter(v8Value, info);
+    }
 
-static void testEnforceRangeUnsignedShortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testEnforceRangeUnsignedShortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->testUnsignedShort());
-}
+        v8SetReturnValueUnsigned(info, impl->testUnsignedShort());
+    }
 
-void testEnforceRangeUnsignedShortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testEnforceRangeUnsignedShortAttributeGetter(info);
-}
+    void testEnforceRangeUnsignedShortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testEnforceRangeUnsignedShortAttributeGetter(info);
+    }
 
-static void testEnforceRangeUnsignedShortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testEnforceRangeUnsignedShortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeUnsignedShort");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testEnforceRangeUnsignedShort");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt16(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt16(info.GetIsolate(), v8Value, EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestUnsignedShort(cppValue);
-}
+        impl->setTestUnsignedShort(cppValue);
+    }
 
-void testEnforceRangeUnsignedShortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testEnforceRangeUnsignedShortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testEnforceRangeUnsignedShortAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testEnforceRangeUnsignedShortAttributeSetter(v8Value, info);
+    }
 
-static void testByteStringAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testByteStringAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->testByteString(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->testByteString(), info.GetIsolate());
+    }
 
-void testByteStringAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testByteStringAttributeGetter(info);
-}
+    void testByteStringAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testByteStringAttributeGetter(info);
+    }
 
-static void testByteStringAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testByteStringAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testByteString");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testByteString");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toByteString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toByteString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestByteString(cppValue);
-}
+        impl->setTestByteString(cppValue);
+    }
 
-void testByteStringAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testByteStringAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testByteStringAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testByteStringAttributeSetter(v8Value, info);
+    }
 
-static void testUSVStringAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void testUSVStringAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->testUSVString(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->testUSVString(), info.GetIsolate());
+    }
 
-void testUSVStringAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::testUSVStringAttributeGetter(info);
-}
+    void testUSVStringAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::testUSVStringAttributeGetter(info);
+    }
 
-static void testUSVStringAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TypeConversions* impl = V8TypeConversions::toImpl(holder);
+    static void testUSVStringAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TypeConversions* impl = V8TypeConversions::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testUSVString");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TypeConversions", "testUSVString");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestUSVString(cppValue);
-}
+        impl->setTestUSVString(cppValue);
+    }
 
-void testUSVStringAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void testUSVStringAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TypeConversionsV8Internal::testUSVStringAttributeSetter(v8Value, info);
-}
+        TypeConversionsV8Internal::testUSVStringAttributeSetter(v8Value, info);
+    }
 
-static void setTestByteStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TypeConversions", "setTestByteString");
+    static void setTestByteStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TypeConversions", "setTestByteString");
 
-  TypeConversions* impl = V8TypeConversions::toImpl(info.Holder());
+        TypeConversions* impl = V8TypeConversions::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> byteString;
-  byteString = toByteString(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        V8StringResource<> byteString;
+        byteString = toByteString(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestByteString(byteString);
-}
+        impl->setTestByteString(byteString);
+    }
 
- void setTestByteStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::setTestByteStringMethod(info);
-}
+    void setTestByteStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::setTestByteStringMethod(info);
+    }
 
-static void setTestByteStringDefaultNullMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TypeConversions", "setTestByteStringDefaultNull");
+    static void setTestByteStringDefaultNullMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TypeConversions", "setTestByteStringDefaultNull");
 
-  TypeConversions* impl = V8TypeConversions::toImpl(info.Holder());
+        TypeConversions* impl = V8TypeConversions::toImpl(info.Holder());
 
-  V8StringResource<> byteString;
-  if (!info[0]->IsUndefined()) {
-    byteString = toByteString(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    byteString = nullptr;
-  }
+        V8StringResource<> byteString;
+        if (!info[0]->IsUndefined()) {
+            byteString = toByteString(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            byteString = nullptr;
+        }
 
-  impl->setTestByteString(byteString);
-}
+        impl->setTestByteString(byteString);
+    }
 
- void setTestByteStringDefaultNullMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::setTestByteStringDefaultNullMethod(info);
-}
+    void setTestByteStringDefaultNullMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::setTestByteStringDefaultNullMethod(info);
+    }
 
-static void setTestUSVStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TypeConversions", "setTestUSVString");
+    static void setTestUSVStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TypeConversions", "setTestUSVString");
 
-  TypeConversions* impl = V8TypeConversions::toImpl(info.Holder());
+        TypeConversions* impl = V8TypeConversions::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> usvString;
-  usvString = toUSVString(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        V8StringResource<> usvString;
+        usvString = toUSVString(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTestUSVString(usvString);
-}
+        impl->setTestUSVString(usvString);
+    }
 
- void setTestUSVStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::setTestUSVStringMethod(info);
-}
+    void setTestUSVStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::setTestUSVStringMethod(info);
+    }
 
-static void setTestUSVStringDefaultNullMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TypeConversions", "setTestUSVStringDefaultNull");
+    static void setTestUSVStringDefaultNullMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TypeConversions", "setTestUSVStringDefaultNull");
 
-  TypeConversions* impl = V8TypeConversions::toImpl(info.Holder());
+        TypeConversions* impl = V8TypeConversions::toImpl(info.Holder());
 
-  V8StringResource<> usvString;
-  if (!info[0]->IsUndefined()) {
-    usvString = toUSVString(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    usvString = nullptr;
-  }
+        V8StringResource<> usvString;
+        if (!info[0]->IsUndefined()) {
+            usvString = toUSVString(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            usvString = nullptr;
+        }
 
-  impl->setTestUSVString(usvString);
-}
+        impl->setTestUSVString(usvString);
+    }
 
- void setTestUSVStringDefaultNullMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TypeConversionsV8Internal::setTestUSVStringDefaultNullMethod(info);
-}
+    void setTestUSVStringDefaultNullMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TypeConversionsV8Internal::setTestUSVStringDefaultNullMethod(info);
+    }
 
 } // namespace TypeConversionsV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8TypeConversionsAccessors[] = {
-    {"testLong", TypeConversionsV8Internal::testLongAttributeGetterCallback, TypeConversionsV8Internal::testLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testEnforceRangeLong", TypeConversionsV8Internal::testEnforceRangeLongAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testUnsignedLong", TypeConversionsV8Internal::testUnsignedLongAttributeGetterCallback, TypeConversionsV8Internal::testUnsignedLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testEnforceRangeUnsignedLong", TypeConversionsV8Internal::testEnforceRangeUnsignedLongAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeUnsignedLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testLongLong", TypeConversionsV8Internal::testLongLongAttributeGetterCallback, TypeConversionsV8Internal::testLongLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testEnforceRangeLongLong", TypeConversionsV8Internal::testEnforceRangeLongLongAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeLongLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testUnsignedLongLong", TypeConversionsV8Internal::testUnsignedLongLongAttributeGetterCallback, TypeConversionsV8Internal::testUnsignedLongLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testEnforceRangeUnsignedLongLong", TypeConversionsV8Internal::testEnforceRangeUnsignedLongLongAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeUnsignedLongLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testByte", TypeConversionsV8Internal::testByteAttributeGetterCallback, TypeConversionsV8Internal::testByteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testEnforceRangeByte", TypeConversionsV8Internal::testEnforceRangeByteAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeByteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testOctet", TypeConversionsV8Internal::testOctetAttributeGetterCallback, TypeConversionsV8Internal::testOctetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testEnforceRangeOctet", TypeConversionsV8Internal::testEnforceRangeOctetAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeOctetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testShort", TypeConversionsV8Internal::testShortAttributeGetterCallback, TypeConversionsV8Internal::testShortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testEnforceRangeShort", TypeConversionsV8Internal::testEnforceRangeShortAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeShortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testUnsignedShort", TypeConversionsV8Internal::testUnsignedShortAttributeGetterCallback, TypeConversionsV8Internal::testUnsignedShortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testEnforceRangeUnsignedShort", TypeConversionsV8Internal::testEnforceRangeUnsignedShortAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeUnsignedShortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testByteString", TypeConversionsV8Internal::testByteStringAttributeGetterCallback, TypeConversionsV8Internal::testByteStringAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"testUSVString", TypeConversionsV8Internal::testUSVStringAttributeGetterCallback, TypeConversionsV8Internal::testUSVStringAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "testLong", TypeConversionsV8Internal::testLongAttributeGetterCallback, TypeConversionsV8Internal::testLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testEnforceRangeLong", TypeConversionsV8Internal::testEnforceRangeLongAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testUnsignedLong", TypeConversionsV8Internal::testUnsignedLongAttributeGetterCallback, TypeConversionsV8Internal::testUnsignedLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testEnforceRangeUnsignedLong", TypeConversionsV8Internal::testEnforceRangeUnsignedLongAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeUnsignedLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testLongLong", TypeConversionsV8Internal::testLongLongAttributeGetterCallback, TypeConversionsV8Internal::testLongLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testEnforceRangeLongLong", TypeConversionsV8Internal::testEnforceRangeLongLongAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeLongLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testUnsignedLongLong", TypeConversionsV8Internal::testUnsignedLongLongAttributeGetterCallback, TypeConversionsV8Internal::testUnsignedLongLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testEnforceRangeUnsignedLongLong", TypeConversionsV8Internal::testEnforceRangeUnsignedLongLongAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeUnsignedLongLongAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testByte", TypeConversionsV8Internal::testByteAttributeGetterCallback, TypeConversionsV8Internal::testByteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testEnforceRangeByte", TypeConversionsV8Internal::testEnforceRangeByteAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeByteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testOctet", TypeConversionsV8Internal::testOctetAttributeGetterCallback, TypeConversionsV8Internal::testOctetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testEnforceRangeOctet", TypeConversionsV8Internal::testEnforceRangeOctetAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeOctetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testShort", TypeConversionsV8Internal::testShortAttributeGetterCallback, TypeConversionsV8Internal::testShortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testEnforceRangeShort", TypeConversionsV8Internal::testEnforceRangeShortAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeShortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testUnsignedShort", TypeConversionsV8Internal::testUnsignedShortAttributeGetterCallback, TypeConversionsV8Internal::testUnsignedShortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testEnforceRangeUnsignedShort", TypeConversionsV8Internal::testEnforceRangeUnsignedShortAttributeGetterCallback, TypeConversionsV8Internal::testEnforceRangeUnsignedShortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testByteString", TypeConversionsV8Internal::testByteStringAttributeGetterCallback, TypeConversionsV8Internal::testByteStringAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "testUSVString", TypeConversionsV8Internal::testUSVStringAttributeGetterCallback, TypeConversionsV8Internal::testUSVStringAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8TypeConversionsMethods[] = {
-    {"setTestByteString", TypeConversionsV8Internal::setTestByteStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTestByteStringDefaultNull", TypeConversionsV8Internal::setTestByteStringDefaultNullMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTestUSVString", TypeConversionsV8Internal::setTestUSVStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTestUSVStringDefaultNull", TypeConversionsV8Internal::setTestUSVStringDefaultNullMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "setTestByteString", TypeConversionsV8Internal::setTestByteStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTestByteStringDefaultNull", TypeConversionsV8Internal::setTestByteStringDefaultNullMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTestUSVString", TypeConversionsV8Internal::setTestUSVStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTestUSVStringDefaultNull", TypeConversionsV8Internal::setTestUSVStringDefaultNullMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8TypeConversionsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TypeConversions::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TypeConversions::internalFieldCount);
+static void installV8TypeConversionsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TypeConversions::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TypeConversions::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TypeConversionsAccessors, WTF_ARRAY_LENGTH(V8TypeConversionsAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TypeConversionsMethods, WTF_ARRAY_LENGTH(V8TypeConversionsMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TypeConversionsAccessors, WTF_ARRAY_LENGTH(V8TypeConversionsAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TypeConversionsMethods, WTF_ARRAY_LENGTH(V8TypeConversionsMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8TypeConversions::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TypeConversionsTemplate);
+v8::Local<v8::FunctionTemplate> V8TypeConversions::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TypeConversionsTemplate);
 }
 
-bool V8TypeConversions::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8TypeConversions::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8TypeConversions::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8TypeConversions::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-TypeConversions* V8TypeConversions::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+TypeConversions* V8TypeConversions::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8TouchEventInit_h
 #define V8TouchEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8TouchEventInit {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, TouchEventInit&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, TouchEventInit&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8TouchEventInit(const TouchEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, TouchEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, TouchEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<TouchEventInit> {
-  static TouchEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static TouchEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<TouchEventInit> {
-  typedef V8TouchEventInit Type;
+    typedef V8TouchEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8TouchEventInit_h
+#endif // V8TouchEventInit_h

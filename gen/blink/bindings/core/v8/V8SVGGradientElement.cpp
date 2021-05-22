@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGGradientElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,131 +51,148 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGGradientElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGGradientElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGGradientElementV8Internal {
 
-CORE_EXPORT void SVG_SPREADMETHOD_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
-  v8SetReturnValueInt(info, 0);
-}
+    CORE_EXPORT void SVG_SPREADMETHOD_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+        v8SetReturnValueInt(info, 0);
+    }
 
-CORE_EXPORT void SVG_SPREADMETHOD_PADConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
-  v8SetReturnValueInt(info, 1);
-}
+    CORE_EXPORT void SVG_SPREADMETHOD_PADConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+        v8SetReturnValueInt(info, 1);
+    }
 
-CORE_EXPORT void SVG_SPREADMETHOD_REFLECTConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
-  v8SetReturnValueInt(info, 2);
-}
+    CORE_EXPORT void SVG_SPREADMETHOD_REFLECTConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+        v8SetReturnValueInt(info, 2);
+    }
 
-CORE_EXPORT void SVG_SPREADMETHOD_REPEATConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
-  v8SetReturnValueInt(info, 3);
-}
+    CORE_EXPORT void SVG_SPREADMETHOD_REPEATConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+        v8SetReturnValueInt(info, 3);
+    }
 
-static void gradientUnitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void gradientUnitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGradientElement* impl = V8SVGGradientElement::toImpl(holder);
+        SVGGradientElement* impl = V8SVGGradientElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->gradientUnits()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->gradientUnits()), impl);
+    }
 
-CORE_EXPORT void gradientUnitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void gradientUnitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGGradientElementV8Internal::gradientUnitsAttributeGetter(info);
-}
+        SVGGradientElementV8Internal::gradientUnitsAttributeGetter(info);
+    }
 
-static void gradientTransformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void gradientTransformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGradientElement* impl = V8SVGGradientElement::toImpl(holder);
+        SVGGradientElement* impl = V8SVGGradientElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->gradientTransform()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->gradientTransform()), impl);
+    }
 
-CORE_EXPORT void gradientTransformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void gradientTransformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGGradientElementV8Internal::gradientTransformAttributeGetter(info);
-}
+        SVGGradientElementV8Internal::gradientTransformAttributeGetter(info);
+    }
 
-static void spreadMethodAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void spreadMethodAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGradientElement* impl = V8SVGGradientElement::toImpl(holder);
+        SVGGradientElement* impl = V8SVGGradientElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->spreadMethod()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->spreadMethod()), impl);
+    }
 
-CORE_EXPORT void spreadMethodAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void spreadMethodAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGGradientElementV8Internal::spreadMethodAttributeGetter(info);
-}
+        SVGGradientElementV8Internal::spreadMethodAttributeGetter(info);
+    }
 
-static void hrefAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hrefAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGradientElement* impl = V8SVGGradientElement::toImpl(holder);
+        SVGGradientElement* impl = V8SVGGradientElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->href()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->href()), impl);
+    }
 
-CORE_EXPORT void hrefAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMUriReference);
+    CORE_EXPORT void hrefAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMUriReference);
 
-  SVGGradientElementV8Internal::hrefAttributeGetter(info);
-}
+        SVGGradientElementV8Internal::hrefAttributeGetter(info);
+    }
 
 } // namespace SVGGradientElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGGradientElementAccessors[] = {
-    {"gradientUnits", SVGGradientElementV8Internal::gradientUnitsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"gradientTransform", SVGGradientElementV8Internal::gradientTransformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"spreadMethod", SVGGradientElementV8Internal::spreadMethodAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"href", SVGGradientElementV8Internal::hrefAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "gradientUnits", SVGGradientElementV8Internal::gradientUnitsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "gradientTransform", SVGGradientElementV8Internal::gradientTransformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "spreadMethod", SVGGradientElementV8Internal::spreadMethodAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "href", SVGGradientElementV8Internal::hrefAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGGradientElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGGradientElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGGradientElement::internalFieldCount);
+static void installV8SVGGradientElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGGradientElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGGradientElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_SPREADMETHOD_UNKNOWN", SVGGradientElementV8Internal::SVG_SPREADMETHOD_UNKNOWNConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_SPREADMETHOD_PAD", SVGGradientElementV8Internal::SVG_SPREADMETHOD_PADConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_SPREADMETHOD_REFLECT", SVGGradientElementV8Internal::SVG_SPREADMETHOD_REFLECTConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_SPREADMETHOD_REPEAT", SVGGradientElementV8Internal::SVG_SPREADMETHOD_REPEATConstantGetterCallback);
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGradientElementAccessors, WTF_ARRAY_LENGTH(V8SVGGradientElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_SPREADMETHOD_UNKNOWN", SVGGradientElementV8Internal::SVG_SPREADMETHOD_UNKNOWNConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_SPREADMETHOD_PAD", SVGGradientElementV8Internal::SVG_SPREADMETHOD_PADConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_SPREADMETHOD_REFLECT", SVGGradientElementV8Internal::SVG_SPREADMETHOD_REFLECTConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_SPREADMETHOD_REPEAT", SVGGradientElementV8Internal::SVG_SPREADMETHOD_REPEATConstantGetterCallback);
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGradientElementAccessors, WTF_ARRAY_LENGTH(V8SVGGradientElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGGradientElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGGradientElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGGradientElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGGradientElementTemplate);
 }
 
-bool V8SVGGradientElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGGradientElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGGradientElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGGradientElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGGradientElement* V8SVGGradientElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGGradientElement* V8SVGGradientElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

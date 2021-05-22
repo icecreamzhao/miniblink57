@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PasswordCredentialData_h
 #define V8PasswordCredentialData_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8PasswordCredentialData {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PasswordCredentialData&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PasswordCredentialData&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8PasswordCredentialData(const PasswordCredentialData&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PasswordCredentialData& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PasswordCredentialData& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<PasswordCredentialData> {
-  static PasswordCredentialData nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static PasswordCredentialData nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<PasswordCredentialData> {
-  typedef V8PasswordCredentialData Type;
+    typedef V8PasswordCredentialData Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PasswordCredentialData_h
+#endif // V8PasswordCredentialData_h

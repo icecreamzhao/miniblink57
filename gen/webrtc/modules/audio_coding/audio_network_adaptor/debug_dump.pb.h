@@ -1007,8 +1007,8 @@ namespace audio_network_adaptor {
             // @@protoc_insertion_point(field_set_allocated:webrtc.audio_network_adaptor.debug_dump.Event.encoder_runtime_config)
         }
 
-#endif // !PROTOBUF_INLINE_NOT_IN_HEADERS
-        // -------------------------------------------------------------------
+#endif // !PROTOBUF_INLINE_NOT_IN_HEADERS \
+    // -------------------------------------------------------------------
 
         // -------------------------------------------------------------------
 

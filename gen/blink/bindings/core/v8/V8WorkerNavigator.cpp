@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WorkerNavigator.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,159 +45,181 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WorkerNavigator::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WorkerNavigator is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace WorkerNavigatorV8Internal {
 
-static void hardwareConcurrencyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hardwareConcurrencyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->hardwareConcurrency());
-}
+        v8SetReturnValueUnsigned(info, impl->hardwareConcurrency());
+    }
 
-CORE_EXPORT void hardwareConcurrencyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerNavigatorV8Internal::hardwareConcurrencyAttributeGetter(info);
-}
+    CORE_EXPORT void hardwareConcurrencyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerNavigatorV8Internal::hardwareConcurrencyAttributeGetter(info);
+    }
 
-static void appCodeNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void appCodeNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->appCodeName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->appCodeName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void appCodeNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerNavigatorV8Internal::appCodeNameAttributeGetter(info);
-}
+    CORE_EXPORT void appCodeNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerNavigatorV8Internal::appCodeNameAttributeGetter(info);
+    }
 
-static void appNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void appNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->appName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->appName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void appNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerNavigatorV8Internal::appNameAttributeGetter(info);
-}
+    CORE_EXPORT void appNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerNavigatorV8Internal::appNameAttributeGetter(info);
+    }
 
-static void appVersionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void appVersionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->appVersion(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->appVersion(), info.GetIsolate());
+    }
 
-CORE_EXPORT void appVersionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerNavigatorV8Internal::appVersionAttributeGetter(info);
-}
+    CORE_EXPORT void appVersionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerNavigatorV8Internal::appVersionAttributeGetter(info);
+    }
 
-static void platformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void platformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->platform(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->platform(), info.GetIsolate());
+    }
 
-CORE_EXPORT void platformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerNavigatorV8Internal::platformAttributeGetter(info);
-}
+    CORE_EXPORT void platformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerNavigatorV8Internal::platformAttributeGetter(info);
+    }
 
-static void productAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void productAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->product(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->product(), info.GetIsolate());
+    }
 
-CORE_EXPORT void productAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerNavigatorV8Internal::productAttributeGetter(info);
-}
+    CORE_EXPORT void productAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerNavigatorV8Internal::productAttributeGetter(info);
+    }
 
-static void userAgentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void userAgentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->userAgent(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->userAgent(), info.GetIsolate());
+    }
 
-CORE_EXPORT void userAgentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerNavigatorV8Internal::userAgentAttributeGetter(info);
-}
+    CORE_EXPORT void userAgentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerNavigatorV8Internal::userAgentAttributeGetter(info);
+    }
 
-static void onLineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onLineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
+        WorkerNavigator* impl = V8WorkerNavigator::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->onLine());
-}
+        v8SetReturnValueBool(info, impl->onLine());
+    }
 
-CORE_EXPORT void onLineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerNavigatorV8Internal::onLineAttributeGetter(info);
-}
+    CORE_EXPORT void onLineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerNavigatorV8Internal::onLineAttributeGetter(info);
+    }
 
 } // namespace WorkerNavigatorV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8WorkerNavigatorAccessors[] = {
-    {"hardwareConcurrency", WorkerNavigatorV8Internal::hardwareConcurrencyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"appCodeName", WorkerNavigatorV8Internal::appCodeNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"appName", WorkerNavigatorV8Internal::appNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"appVersion", WorkerNavigatorV8Internal::appVersionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"platform", WorkerNavigatorV8Internal::platformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"product", WorkerNavigatorV8Internal::productAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"userAgent", WorkerNavigatorV8Internal::userAgentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onLine", WorkerNavigatorV8Internal::onLineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "hardwareConcurrency", WorkerNavigatorV8Internal::hardwareConcurrencyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "appCodeName", WorkerNavigatorV8Internal::appCodeNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "appName", WorkerNavigatorV8Internal::appNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "appVersion", WorkerNavigatorV8Internal::appVersionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "platform", WorkerNavigatorV8Internal::platformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "product", WorkerNavigatorV8Internal::productAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "userAgent", WorkerNavigatorV8Internal::userAgentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onLine", WorkerNavigatorV8Internal::onLineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8WorkerNavigator::installV8WorkerNavigatorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WorkerNavigator::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WorkerNavigator::internalFieldCount);
+void V8WorkerNavigator::installV8WorkerNavigatorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WorkerNavigator::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WorkerNavigator::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerNavigatorAccessors, WTF_ARRAY_LENGTH(V8WorkerNavigatorAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerNavigatorAccessors, WTF_ARRAY_LENGTH(V8WorkerNavigatorAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8WorkerNavigator::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8WorkerNavigator::installV8WorkerNavigatorTemplateFunction);
+v8::Local<v8::FunctionTemplate> V8WorkerNavigator::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8WorkerNavigator::installV8WorkerNavigatorTemplateFunction);
 }
 
-bool V8WorkerNavigator::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WorkerNavigator::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WorkerNavigator::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WorkerNavigator::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WorkerNavigator* V8WorkerNavigator::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WorkerNavigator* V8WorkerNavigator::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
 InstallTemplateFunction V8WorkerNavigator::installV8WorkerNavigatorTemplateFunction = (InstallTemplateFunction)&V8WorkerNavigator::installV8WorkerNavigatorTemplate;
 
-void V8WorkerNavigator::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction) {
-  V8WorkerNavigator::installV8WorkerNavigatorTemplateFunction = installTemplateFunction;
-  if (preparePrototypeAndInterfaceObjectFunction)
-    V8WorkerNavigator::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
+void V8WorkerNavigator::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction)
+{
+    V8WorkerNavigator::installV8WorkerNavigatorTemplateFunction = installTemplateFunction;
+    if (preparePrototypeAndInterfaceObjectFunction)
+        V8WorkerNavigator::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
 }
 
-}  // namespace blink
+} // namespace blink

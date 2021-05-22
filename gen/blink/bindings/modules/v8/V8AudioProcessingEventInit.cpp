@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AudioProcessingEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -17,115 +17,119 @@
 
 namespace blink {
 
-void V8AudioProcessingEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, AudioProcessingEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): inputBuffer, outputBuffer, playbackTime.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> inputBufferValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "inputBuffer")).ToLocal(&inputBufferValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (inputBufferValue.IsEmpty() || inputBufferValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member inputBuffer is undefined.");
-    return;
-  } else {
-    AudioBuffer* inputBuffer = V8AudioBuffer::toImplWithTypeCheck(isolate, inputBufferValue);
-    if (!inputBuffer) {
-      exceptionState.throwTypeError("member inputBuffer is not of type AudioBuffer.");
-      return;
+void V8AudioProcessingEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, AudioProcessingEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): inputBuffer, outputBuffer, playbackTime.");
+        return;
     }
-    impl.setInputBuffer(inputBuffer);
-  }
-
-  v8::Local<v8::Value> outputBufferValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "outputBuffer")).ToLocal(&outputBufferValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (outputBufferValue.IsEmpty() || outputBufferValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member outputBuffer is undefined.");
-    return;
-  } else {
-    AudioBuffer* outputBuffer = V8AudioBuffer::toImplWithTypeCheck(isolate, outputBufferValue);
-    if (!outputBuffer) {
-      exceptionState.throwTypeError("member outputBuffer is not of type AudioBuffer.");
-      return;
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
     }
-    impl.setOutputBuffer(outputBuffer);
-  }
 
-  v8::Local<v8::Value> playbackTimeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "playbackTime")).ToLocal(&playbackTimeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (playbackTimeValue.IsEmpty() || playbackTimeValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member playbackTime is undefined.");
-    return;
-  } else {
-    double playbackTime = toRestrictedDouble(isolate, playbackTimeValue, exceptionState);
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setPlaybackTime(playbackTime);
-  }
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> inputBufferValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "inputBuffer")).ToLocal(&inputBufferValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (inputBufferValue.IsEmpty() || inputBufferValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member inputBuffer is undefined.");
+        return;
+    } else {
+        AudioBuffer* inputBuffer = V8AudioBuffer::toImplWithTypeCheck(isolate, inputBufferValue);
+        if (!inputBuffer) {
+            exceptionState.throwTypeError("member inputBuffer is not of type AudioBuffer.");
+            return;
+        }
+        impl.setInputBuffer(inputBuffer);
+    }
+
+    v8::Local<v8::Value> outputBufferValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "outputBuffer")).ToLocal(&outputBufferValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (outputBufferValue.IsEmpty() || outputBufferValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member outputBuffer is undefined.");
+        return;
+    } else {
+        AudioBuffer* outputBuffer = V8AudioBuffer::toImplWithTypeCheck(isolate, outputBufferValue);
+        if (!outputBuffer) {
+            exceptionState.throwTypeError("member outputBuffer is not of type AudioBuffer.");
+            return;
+        }
+        impl.setOutputBuffer(outputBuffer);
+    }
+
+    v8::Local<v8::Value> playbackTimeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "playbackTime")).ToLocal(&playbackTimeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (playbackTimeValue.IsEmpty() || playbackTimeValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member playbackTime is undefined.");
+        return;
+    } else {
+        double playbackTime = toRestrictedDouble(isolate, playbackTimeValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setPlaybackTime(playbackTime);
+    }
 }
 
-v8::Local<v8::Value> AudioProcessingEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8AudioProcessingEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> AudioProcessingEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8AudioProcessingEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8AudioProcessingEventInit(const AudioProcessingEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8AudioProcessingEventInit(const AudioProcessingEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasInputBuffer()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "inputBuffer"), ToV8(impl.inputBuffer(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasInputBuffer()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "inputBuffer"), ToV8(impl.inputBuffer(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasOutputBuffer()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "outputBuffer"), ToV8(impl.outputBuffer(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasOutputBuffer()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "outputBuffer"), ToV8(impl.outputBuffer(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasPlaybackTime()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "playbackTime"), v8::Number::New(isolate, impl.playbackTime()))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasPlaybackTime()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "playbackTime"), v8::Number::New(isolate, impl.playbackTime()))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  return true;
+    return true;
 }
 
-AudioProcessingEventInit NativeValueTraits<AudioProcessingEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  AudioProcessingEventInit impl;
-  V8AudioProcessingEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+AudioProcessingEventInit NativeValueTraits<AudioProcessingEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    AudioProcessingEventInit impl;
+    V8AudioProcessingEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AudioListener_h
 #define V8AudioListener_h
 
@@ -24,31 +24,35 @@
 namespace blink {
 
 class V8AudioListener {
-  STATIC_ONLY(V8AudioListener);
- public:
-  MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static AudioListener* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<AudioListener>();
-  }
-  MODULES_EXPORT static AudioListener* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<AudioListener>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<AudioListener>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8AudioListener);
+
+public:
+    MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static AudioListener* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<AudioListener>();
+    }
+    MODULES_EXPORT static AudioListener* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<AudioListener>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<AudioListener>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<AudioListener> {
-  typedef V8AudioListener Type;
+    typedef V8AudioListener Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8AudioListener_h
+#endif // V8AudioListener_h

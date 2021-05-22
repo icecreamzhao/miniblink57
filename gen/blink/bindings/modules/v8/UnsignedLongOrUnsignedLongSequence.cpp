@@ -8,106 +8,119 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "UnsignedLongOrUnsignedLongSequence.h"
 
 #include "bindings/core/v8/ToV8.h"
 
 namespace blink {
 
-UnsignedLongOrUnsignedLongSequence::UnsignedLongOrUnsignedLongSequence() : m_type(SpecificTypeNone) {}
-
-unsigned UnsignedLongOrUnsignedLongSequence::getAsUnsignedLong() const {
-  DCHECK(isUnsignedLong());
-  return m_unsignedLong;
+UnsignedLongOrUnsignedLongSequence::UnsignedLongOrUnsignedLongSequence()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void UnsignedLongOrUnsignedLongSequence::setUnsignedLong(unsigned value) {
-  DCHECK(isNull());
-  m_unsignedLong = value;
-  m_type = SpecificTypeUnsignedLong;
+unsigned UnsignedLongOrUnsignedLongSequence::getAsUnsignedLong() const
+{
+    DCHECK(isUnsignedLong());
+    return m_unsignedLong;
 }
 
-UnsignedLongOrUnsignedLongSequence UnsignedLongOrUnsignedLongSequence::fromUnsignedLong(unsigned value) {
-  UnsignedLongOrUnsignedLongSequence container;
-  container.setUnsignedLong(value);
-  return container;
+void UnsignedLongOrUnsignedLongSequence::setUnsignedLong(unsigned value)
+{
+    DCHECK(isNull());
+    m_unsignedLong = value;
+    m_type = SpecificTypeUnsignedLong;
 }
 
-const Vector<unsigned>& UnsignedLongOrUnsignedLongSequence::getAsUnsignedLongSequence() const {
-  DCHECK(isUnsignedLongSequence());
-  return m_unsignedLongSequence;
+UnsignedLongOrUnsignedLongSequence UnsignedLongOrUnsignedLongSequence::fromUnsignedLong(unsigned value)
+{
+    UnsignedLongOrUnsignedLongSequence container;
+    container.setUnsignedLong(value);
+    return container;
 }
 
-void UnsignedLongOrUnsignedLongSequence::setUnsignedLongSequence(const Vector<unsigned>& value) {
-  DCHECK(isNull());
-  m_unsignedLongSequence = value;
-  m_type = SpecificTypeUnsignedLongSequence;
+const Vector<unsigned>& UnsignedLongOrUnsignedLongSequence::getAsUnsignedLongSequence() const
+{
+    DCHECK(isUnsignedLongSequence());
+    return m_unsignedLongSequence;
 }
 
-UnsignedLongOrUnsignedLongSequence UnsignedLongOrUnsignedLongSequence::fromUnsignedLongSequence(const Vector<unsigned>& value) {
-  UnsignedLongOrUnsignedLongSequence container;
-  container.setUnsignedLongSequence(value);
-  return container;
+void UnsignedLongOrUnsignedLongSequence::setUnsignedLongSequence(const Vector<unsigned>& value)
+{
+    DCHECK(isNull());
+    m_unsignedLongSequence = value;
+    m_type = SpecificTypeUnsignedLongSequence;
+}
+
+UnsignedLongOrUnsignedLongSequence UnsignedLongOrUnsignedLongSequence::fromUnsignedLongSequence(const Vector<unsigned>& value)
+{
+    UnsignedLongOrUnsignedLongSequence container;
+    container.setUnsignedLongSequence(value);
+    return container;
 }
 
 UnsignedLongOrUnsignedLongSequence::UnsignedLongOrUnsignedLongSequence(const UnsignedLongOrUnsignedLongSequence&) = default;
 UnsignedLongOrUnsignedLongSequence::~UnsignedLongOrUnsignedLongSequence() = default;
 UnsignedLongOrUnsignedLongSequence& UnsignedLongOrUnsignedLongSequence::operator=(const UnsignedLongOrUnsignedLongSequence&) = default;
 
-DEFINE_TRACE(UnsignedLongOrUnsignedLongSequence) {
+DEFINE_TRACE(UnsignedLongOrUnsignedLongSequence)
+{
 }
 
-void V8UnsignedLongOrUnsignedLongSequence::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, UnsignedLongOrUnsignedLongSequence& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8UnsignedLongOrUnsignedLongSequence::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, UnsignedLongOrUnsignedLongSequence& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (v8Value->IsArray()) {
-    Vector<unsigned> cppValue = toImplArray<Vector<unsigned>>(v8Value, 0, isolate, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setUnsignedLongSequence(cppValue);
-    return;
-  }
+    if (v8Value->IsArray()) {
+        Vector<unsigned> cppValue = toImplArray<Vector<unsigned>>(v8Value, 0, isolate, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setUnsignedLongSequence(cppValue);
+        return;
+    }
 
-  if (v8Value->IsNumber()) {
-    unsigned cppValue = toUInt32(isolate, v8Value, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setUnsignedLong(cppValue);
-    return;
-  }
+    if (v8Value->IsNumber()) {
+        unsigned cppValue = toUInt32(isolate, v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setUnsignedLong(cppValue);
+        return;
+    }
 
-  {
-    unsigned cppValue = toUInt32(isolate, v8Value, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setUnsignedLong(cppValue);
-    return;
-  }
+    {
+        unsigned cppValue = toUInt32(isolate, v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setUnsignedLong(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const UnsignedLongOrUnsignedLongSequence& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const UnsignedLongOrUnsignedLongSequence& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case UnsignedLongOrUnsignedLongSequence::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case UnsignedLongOrUnsignedLongSequence::SpecificTypeUnsignedLong:
-      return v8::Integer::NewFromUnsigned(isolate, impl.getAsUnsignedLong());
+        return v8::Integer::NewFromUnsigned(isolate, impl.getAsUnsignedLong());
     case UnsignedLongOrUnsignedLongSequence::SpecificTypeUnsignedLongSequence:
-      return ToV8(impl.getAsUnsignedLongSequence(), creationContext, isolate);
+        return ToV8(impl.getAsUnsignedLongSequence(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-UnsignedLongOrUnsignedLongSequence NativeValueTraits<UnsignedLongOrUnsignedLongSequence>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  UnsignedLongOrUnsignedLongSequence impl;
-  V8UnsignedLongOrUnsignedLongSequence::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+UnsignedLongOrUnsignedLongSequence NativeValueTraits<UnsignedLongOrUnsignedLongSequence>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    UnsignedLongOrUnsignedLongSequence impl;
+    V8UnsignedLongOrUnsignedLongSequence::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8HashChangeEventInit_h
 #define V8HashChangeEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8HashChangeEventInit {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HashChangeEventInit&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HashChangeEventInit&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8HashChangeEventInit(const HashChangeEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HashChangeEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HashChangeEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<HashChangeEventInit> {
-  static HashChangeEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static HashChangeEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<HashChangeEventInit> {
-  typedef V8HashChangeEventInit Type;
+    typedef V8HashChangeEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8HashChangeEventInit_h
+#endif // V8HashChangeEventInit_h

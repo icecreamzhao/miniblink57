@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TouchList.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,112 +46,123 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&TouchList::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "TouchList is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TouchListV8Internal {
 
-static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TouchList* impl = V8TouchList::toImpl(holder);
+        TouchList* impl = V8TouchList::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->length());
-}
+        v8SetReturnValueUnsigned(info, impl->length());
+    }
 
-CORE_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchListV8Internal::lengthAttributeGetter(info);
-}
+    CORE_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchListV8Internal::lengthAttributeGetter(info);
+    }
 
-static void itemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TouchList", "item");
+    static void itemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TouchList", "item");
 
-  TouchList* impl = V8TouchList::toImpl(info.Holder());
+        TouchList* impl = V8TouchList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned index;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned index;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->item(index));
-}
+        v8SetReturnValue(info, impl->item(index));
+    }
 
-CORE_EXPORT  void itemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchListV8Internal::itemMethod(info);
-}
+    CORE_EXPORT void itemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchListV8Internal::itemMethod(info);
+    }
 
-static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  TouchList* impl = V8TouchList::toImpl(info.Holder());
+    static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        TouchList* impl = V8TouchList::toImpl(info.Holder());
 
-  // We assume that all the implementations support length() method, although
-  // the spec doesn't require that length() must exist.  It's okay that
-  // the interface does not have length attribute as long as the
-  // implementation supports length() member function.
-  if (index >= impl->length())
-    return;  // Returns undefined due to out-of-range.
+        // We assume that all the implementations support length() method, although
+        // the spec doesn't require that length() must exist.  It's okay that
+        // the interface does not have length attribute as long as the
+        // implementation supports length() member function.
+        if (index >= impl->length())
+            return; // Returns undefined due to out-of-range.
 
-  Touch* result = impl->item(index);
-  v8SetReturnValueFast(info, result, impl);
-}
+        Touch* result = impl->item(index);
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  TouchListV8Internal::indexedPropertyGetter(index, info);
-}
+    CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        TouchListV8Internal::indexedPropertyGetter(index, info);
+    }
 
 } // namespace TouchListV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8TouchListAccessors[] = {
-    {"length", TouchListV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "length", TouchListV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8TouchListMethods[] = {
-    {"item", TouchListV8Internal::itemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "item", TouchListV8Internal::itemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8TouchListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TouchList::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TouchList::internalFieldCount);
+static void installV8TouchListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TouchList::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TouchList::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TouchListAccessors, WTF_ARRAY_LENGTH(V8TouchListAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TouchListMethods, WTF_ARRAY_LENGTH(V8TouchListMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TouchListAccessors, WTF_ARRAY_LENGTH(V8TouchListAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TouchListMethods, WTF_ARRAY_LENGTH(V8TouchListMethods));
 
-  // Indexed properties
-  v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(TouchListV8Internal::indexedPropertyGetterCallback, 0, 0, 0, indexedPropertyEnumerator<TouchList>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
-  instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
+    // Indexed properties
+    v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(TouchListV8Internal::indexedPropertyGetterCallback, 0, 0, 0, indexedPropertyEnumerator<TouchList>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
+    instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
 
-  // Array iterator (@@iterator)
-  prototypeTemplate->SetIntrinsicDataProperty(v8::Symbol::GetIterator(isolate), v8::kArrayProto_values, v8::DontEnum);
+    // Array iterator (@@iterator)
+    prototypeTemplate->SetIntrinsicDataProperty(v8::Symbol::GetIterator(isolate), v8::kArrayProto_values, v8::DontEnum);
 }
 
-v8::Local<v8::FunctionTemplate> V8TouchList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TouchListTemplate);
+v8::Local<v8::FunctionTemplate> V8TouchList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TouchListTemplate);
 }
 
-bool V8TouchList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8TouchList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8TouchList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8TouchList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-TouchList* V8TouchList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+TouchList* V8TouchList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FileEntrySync.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,81 +47,90 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&FileEntrySync::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "FileEntrySync is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace FileEntrySyncV8Internal {
 
-static void fileMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileEntrySync", "file");
+    static void fileMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileEntrySync", "file");
 
-  FileEntrySync* impl = V8FileEntrySync::toImpl(info.Holder());
+        FileEntrySync* impl = V8FileEntrySync::toImpl(info.Holder());
 
-  File* result = impl->file(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        File* result = impl->file(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-MODULES_EXPORT  void fileMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileEntrySyncV8Internal::fileMethod(info);
-}
+    MODULES_EXPORT void fileMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileEntrySyncV8Internal::fileMethod(info);
+    }
 
-static void createWriterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileEntrySync", "createWriter");
+    static void createWriterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileEntrySync", "createWriter");
 
-  FileEntrySync* impl = V8FileEntrySync::toImpl(info.Holder());
+        FileEntrySync* impl = V8FileEntrySync::toImpl(info.Holder());
 
-  FileWriterSync* result = impl->createWriter(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        FileWriterSync* result = impl->createWriter(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-MODULES_EXPORT  void createWriterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileEntrySyncV8Internal::createWriterMethod(info);
-}
+    MODULES_EXPORT void createWriterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileEntrySyncV8Internal::createWriterMethod(info);
+    }
 
 } // namespace FileEntrySyncV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8FileEntrySyncMethods[] = {
-    {"file", FileEntrySyncV8Internal::fileMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createWriter", FileEntrySyncV8Internal::createWriterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "file", FileEntrySyncV8Internal::fileMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createWriter", FileEntrySyncV8Internal::createWriterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8FileEntrySyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileEntrySync::wrapperTypeInfo.interfaceName, V8EntrySync::domTemplate(isolate, world), V8FileEntrySync::internalFieldCount);
+static void installV8FileEntrySyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileEntrySync::wrapperTypeInfo.interfaceName, V8EntrySync::domTemplate(isolate, world), V8FileEntrySync::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileEntrySyncMethods, WTF_ARRAY_LENGTH(V8FileEntrySyncMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileEntrySyncMethods, WTF_ARRAY_LENGTH(V8FileEntrySyncMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8FileEntrySync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileEntrySyncTemplate);
+v8::Local<v8::FunctionTemplate> V8FileEntrySync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileEntrySyncTemplate);
 }
 
-bool V8FileEntrySync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8FileEntrySync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8FileEntrySync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8FileEntrySync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-FileEntrySync* V8FileEntrySync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+FileEntrySync* V8FileEntrySync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef WaveShaperOptions_h
 #define WaveShaperOptions_h
 
@@ -21,32 +21,33 @@
 namespace blink {
 
 class MODULES_EXPORT WaveShaperOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  WaveShaperOptions();
-  virtual ~WaveShaperOptions();
-  WaveShaperOptions(const WaveShaperOptions&);
-  WaveShaperOptions& operator=(const WaveShaperOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCurve() const;
-  const Vector<float>& curve() const;
-  void setCurve(const Vector<float>&);
+public:
+    WaveShaperOptions();
+    virtual ~WaveShaperOptions();
+    WaveShaperOptions(const WaveShaperOptions&);
+    WaveShaperOptions& operator=(const WaveShaperOptions&);
 
-  bool hasOversample() const;
-  String oversample() const;
-  void setOversample(String);
+    bool hasCurve() const;
+    const Vector<float>& curve() const;
+    void setCurve(const Vector<float>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasOversample() const;
+    String oversample() const;
+    void setOversample(String);
 
- private:
-  bool m_hasCurve = false;
-  Vector<float> m_curve;
-  String m_oversample;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8WaveShaperOptions;
+private:
+    bool m_hasCurve = false;
+    Vector<float> m_curve;
+    String m_oversample;
+
+    friend class V8WaveShaperOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // WaveShaperOptions_h
+#endif // WaveShaperOptions_h

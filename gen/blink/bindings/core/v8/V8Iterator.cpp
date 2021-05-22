@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Iterator.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,105 +48,114 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Iterator::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Iterator is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace IteratorV8Internal {
 
-static void nextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Iterator", "next");
+    static void nextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Iterator", "next");
 
-  Iterator* impl = V8Iterator::toImpl(info.Holder());
+        Iterator* impl = V8Iterator::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue value;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ScriptValue result = impl->next(scriptState, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        ScriptValue value;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ScriptValue result = impl->next(scriptState, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result.v8Value());
+            return;
+        }
+        value = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        ScriptValue result = impl->next(scriptState, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
     }
-    v8SetReturnValue(info, result.v8Value());
-    return;
-  }
-  value = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
 
-  ScriptValue result = impl->next(scriptState, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+    CORE_EXPORT void nextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IteratorV8Internal::nextMethod(info);
+    }
 
-CORE_EXPORT  void nextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IteratorV8Internal::nextMethod(info);
-}
+    static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Iterator", "iterator");
 
-static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Iterator", "iterator");
+        Iterator* impl = V8Iterator::toImpl(info.Holder());
 
-  Iterator* impl = V8Iterator::toImpl(info.Holder());
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        Iterator* result = impl->iterator(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-  Iterator* result = impl->iterator(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IteratorV8Internal::iteratorMethod(info);
-}
+    CORE_EXPORT void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IteratorV8Internal::iteratorMethod(info);
+    }
 
 } // namespace IteratorV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8IteratorMethods[] = {
-    {"next", IteratorV8Internal::nextMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "next", IteratorV8Internal::nextMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8IteratorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Iterator::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Iterator::internalFieldCount);
+static void installV8IteratorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Iterator::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Iterator::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IteratorMethods, WTF_ARRAY_LENGTH(V8IteratorMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IteratorMethods, WTF_ARRAY_LENGTH(V8IteratorMethods));
 
-  // Iterator (@@iterator)
-  const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, IteratorV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
-  V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
+    // Iterator (@@iterator)
+    const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, IteratorV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
+    V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
 }
 
-v8::Local<v8::FunctionTemplate> V8Iterator::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IteratorTemplate);
+v8::Local<v8::FunctionTemplate> V8Iterator::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IteratorTemplate);
 }
 
-bool V8Iterator::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Iterator::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Iterator::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Iterator::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Iterator* V8Iterator::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Iterator* V8Iterator::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

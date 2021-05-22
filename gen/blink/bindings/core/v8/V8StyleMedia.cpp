@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8StyleMedia.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,83 +46,92 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&StyleMedia::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "StyleMedia is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace StyleMediaV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  StyleMedia* impl = V8StyleMedia::toImpl(holder);
+        StyleMedia* impl = V8StyleMedia::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::StyleMediaType);
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::StyleMediaType);
 
-  StyleMediaV8Internal::typeAttributeGetter(info);
-}
+        StyleMediaV8Internal::typeAttributeGetter(info);
+    }
 
-static void matchMediumMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StyleMedia* impl = V8StyleMedia::toImpl(info.Holder());
+    static void matchMediumMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StyleMedia* impl = V8StyleMedia::toImpl(info.Holder());
 
-  V8StringResource<> mediaquery;
-  mediaquery = info[0];
-  if (!mediaquery.prepare())
-    return;
+        V8StringResource<> mediaquery;
+        mediaquery = info[0];
+        if (!mediaquery.prepare())
+            return;
 
-  v8SetReturnValueBool(info, impl->matchMedium(mediaquery));
-}
+        v8SetReturnValueBool(info, impl->matchMedium(mediaquery));
+    }
 
-CORE_EXPORT  void matchMediumMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::StyleMediaMatchMedium);
-  StyleMediaV8Internal::matchMediumMethod(info);
-}
+    CORE_EXPORT void matchMediumMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::StyleMediaMatchMedium);
+        StyleMediaV8Internal::matchMediumMethod(info);
+    }
 
 } // namespace StyleMediaV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8StyleMediaAccessors[] = {
-    {"type", StyleMediaV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", StyleMediaV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8StyleMediaMethods[] = {
-    {"matchMedium", StyleMediaV8Internal::matchMediumMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "matchMedium", StyleMediaV8Internal::matchMediumMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8StyleMediaTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8StyleMedia::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8StyleMedia::internalFieldCount);
+static void installV8StyleMediaTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8StyleMedia::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8StyleMedia::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StyleMediaAccessors, WTF_ARRAY_LENGTH(V8StyleMediaAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StyleMediaMethods, WTF_ARRAY_LENGTH(V8StyleMediaMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StyleMediaAccessors, WTF_ARRAY_LENGTH(V8StyleMediaAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StyleMediaMethods, WTF_ARRAY_LENGTH(V8StyleMediaMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8StyleMedia::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8StyleMediaTemplate);
+v8::Local<v8::FunctionTemplate> V8StyleMedia::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8StyleMediaTemplate);
 }
 
-bool V8StyleMedia::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8StyleMedia::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8StyleMedia::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8StyleMedia::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-StyleMedia* V8StyleMedia::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+StyleMedia* V8StyleMedia::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

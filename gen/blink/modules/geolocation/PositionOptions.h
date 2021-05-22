@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PositionOptions_h
 #define PositionOptions_h
 
@@ -19,39 +19,40 @@
 namespace blink {
 
 class MODULES_EXPORT PositionOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PositionOptions();
-  virtual ~PositionOptions();
-  PositionOptions(const PositionOptions&);
-  PositionOptions& operator=(const PositionOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasEnableHighAccuracy() const;
-  bool enableHighAccuracy() const;
-  void setEnableHighAccuracy(bool);
+public:
+    PositionOptions();
+    virtual ~PositionOptions();
+    PositionOptions(const PositionOptions&);
+    PositionOptions& operator=(const PositionOptions&);
 
-  bool hasMaximumAge() const;
-  unsigned maximumAge() const;
-  void setMaximumAge(unsigned);
+    bool hasEnableHighAccuracy() const;
+    bool enableHighAccuracy() const;
+    void setEnableHighAccuracy(bool);
 
-  bool hasTimeout() const;
-  unsigned timeout() const;
-  void setTimeout(unsigned);
+    bool hasMaximumAge() const;
+    unsigned maximumAge() const;
+    void setMaximumAge(unsigned);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTimeout() const;
+    unsigned timeout() const;
+    void setTimeout(unsigned);
 
- private:
-  bool m_hasEnableHighAccuracy = false;
-  bool m_enableHighAccuracy;
-  bool m_hasMaximumAge = false;
-  unsigned m_maximumAge;
-  bool m_hasTimeout = false;
-  unsigned m_timeout;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PositionOptions;
+private:
+    bool m_hasEnableHighAccuracy = false;
+    bool m_enableHighAccuracy;
+    bool m_hasMaximumAge = false;
+    unsigned m_maximumAge;
+    bool m_hasTimeout = false;
+    unsigned m_timeout;
+
+    friend class V8PositionOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PositionOptions_h
+#endif // PositionOptions_h

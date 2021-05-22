@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PerformanceObserverEntryList.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,113 +47,124 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PerformanceObserverEntryList::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PerformanceObserverEntryList is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PerformanceObserverEntryListV8Internal {
 
-static void getEntriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceObserverEntryList* impl = V8PerformanceObserverEntryList::toImpl(info.Holder());
+    static void getEntriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceObserverEntryList* impl = V8PerformanceObserverEntryList::toImpl(info.Holder());
 
-  v8SetReturnValue(info, ToV8(impl->getEntries(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->getEntries(), info.Holder(), info.GetIsolate()));
+    }
 
-CORE_EXPORT  void getEntriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceObserverEntryListV8Internal::getEntriesMethod(info);
-}
+    CORE_EXPORT void getEntriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceObserverEntryListV8Internal::getEntriesMethod(info);
+    }
 
-static void getEntriesByTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceObserverEntryList* impl = V8PerformanceObserverEntryList::toImpl(info.Holder());
+    static void getEntriesByTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceObserverEntryList* impl = V8PerformanceObserverEntryList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getEntriesByType", "PerformanceObserverEntryList", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getEntriesByType", "PerformanceObserverEntryList", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> entryType;
-  entryType = info[0];
-  if (!entryType.prepare())
-    return;
+        V8StringResource<> entryType;
+        entryType = info[0];
+        if (!entryType.prepare())
+            return;
 
-  v8SetReturnValue(info, ToV8(impl->getEntriesByType(entryType), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->getEntriesByType(entryType), info.Holder(), info.GetIsolate()));
+    }
 
-CORE_EXPORT  void getEntriesByTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceObserverEntryListV8Internal::getEntriesByTypeMethod(info);
-}
+    CORE_EXPORT void getEntriesByTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceObserverEntryListV8Internal::getEntriesByTypeMethod(info);
+    }
 
-static void getEntriesByNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceObserverEntryList* impl = V8PerformanceObserverEntryList::toImpl(info.Holder());
+    static void getEntriesByNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceObserverEntryList* impl = V8PerformanceObserverEntryList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getEntriesByName", "PerformanceObserverEntryList", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getEntriesByName", "PerformanceObserverEntryList", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> name;
-  V8StringResource<> entryType;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        V8StringResource<> entryType;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  if (!info[1]->IsUndefined()) {
-    entryType = info[1];
-    if (!entryType.prepare())
-      return;
-  } else {
-    entryType = nullptr;
-  }
+        if (!info[1]->IsUndefined()) {
+            entryType = info[1];
+            if (!entryType.prepare())
+                return;
+        } else {
+            entryType = nullptr;
+        }
 
-  v8SetReturnValue(info, ToV8(impl->getEntriesByName(name, entryType), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->getEntriesByName(name, entryType), info.Holder(), info.GetIsolate()));
+    }
 
-CORE_EXPORT  void getEntriesByNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceObserverEntryListV8Internal::getEntriesByNameMethod(info);
-}
+    CORE_EXPORT void getEntriesByNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceObserverEntryListV8Internal::getEntriesByNameMethod(info);
+    }
 
 } // namespace PerformanceObserverEntryListV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8PerformanceObserverEntryListMethods[] = {
-    {"getEntries", PerformanceObserverEntryListV8Internal::getEntriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getEntriesByType", PerformanceObserverEntryListV8Internal::getEntriesByTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getEntriesByName", PerformanceObserverEntryListV8Internal::getEntriesByNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getEntries", PerformanceObserverEntryListV8Internal::getEntriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getEntriesByType", PerformanceObserverEntryListV8Internal::getEntriesByTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getEntriesByName", PerformanceObserverEntryListV8Internal::getEntriesByNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PerformanceObserverEntryListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PerformanceObserverEntryList::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PerformanceObserverEntryList::internalFieldCount);
+static void installV8PerformanceObserverEntryListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PerformanceObserverEntryList::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PerformanceObserverEntryList::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::performanceObserverEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::performanceObserverEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceObserverEntryListMethods, WTF_ARRAY_LENGTH(V8PerformanceObserverEntryListMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceObserverEntryListMethods, WTF_ARRAY_LENGTH(V8PerformanceObserverEntryListMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8PerformanceObserverEntryList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PerformanceObserverEntryListTemplate);
+v8::Local<v8::FunctionTemplate> V8PerformanceObserverEntryList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PerformanceObserverEntryListTemplate);
 }
 
-bool V8PerformanceObserverEntryList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PerformanceObserverEntryList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PerformanceObserverEntryList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PerformanceObserverEntryList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PerformanceObserverEntryList* V8PerformanceObserverEntryList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PerformanceObserverEntryList* V8PerformanceObserverEntryList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FetchEventInit_h
 #define FetchEventInit_h
 
@@ -22,38 +22,39 @@ namespace blink {
 class Request;
 
 class MODULES_EXPORT FetchEventInit : public ExtendableEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FetchEventInit();
-  virtual ~FetchEventInit();
-  FetchEventInit(const FetchEventInit&);
-  FetchEventInit& operator=(const FetchEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasClientId() const;
-  String clientId() const;
-  void setClientId(String);
-  void setClientIdToNull();
+public:
+    FetchEventInit();
+    virtual ~FetchEventInit();
+    FetchEventInit(const FetchEventInit&);
+    FetchEventInit& operator=(const FetchEventInit&);
 
-  bool hasIsReload() const;
-  bool isReload() const;
-  void setIsReload(bool);
+    bool hasClientId() const;
+    String clientId() const;
+    void setClientId(String);
+    void setClientIdToNull();
 
-  bool hasRequest() const;
-  Request* request() const;
-  void setRequest(Request*);
+    bool hasIsReload() const;
+    bool isReload() const;
+    void setIsReload(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRequest() const;
+    Request* request() const;
+    void setRequest(Request*);
 
- private:
-  String m_clientId;
-  bool m_hasIsReload = false;
-  bool m_isReload;
-  Member<Request> m_request;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8FetchEventInit;
+private:
+    String m_clientId;
+    bool m_hasIsReload = false;
+    bool m_isReload;
+    Member<Request> m_request;
+
+    friend class V8FetchEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // FetchEventInit_h
+#endif // FetchEventInit_h

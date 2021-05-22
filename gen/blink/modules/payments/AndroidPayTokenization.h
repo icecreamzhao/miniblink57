@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AndroidPayTokenization_h
 #define AndroidPayTokenization_h
 
@@ -21,31 +21,32 @@
 namespace blink {
 
 class MODULES_EXPORT AndroidPayTokenization : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AndroidPayTokenization();
-  virtual ~AndroidPayTokenization();
-  AndroidPayTokenization(const AndroidPayTokenization&);
-  AndroidPayTokenization& operator=(const AndroidPayTokenization&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasParameters() const;
-  Dictionary parameters() const;
-  void setParameters(Dictionary);
+public:
+    AndroidPayTokenization();
+    virtual ~AndroidPayTokenization();
+    AndroidPayTokenization(const AndroidPayTokenization&);
+    AndroidPayTokenization& operator=(const AndroidPayTokenization&);
 
-  bool hasTokenizationType() const;
-  String tokenizationType() const;
-  void setTokenizationType(String);
+    bool hasParameters() const;
+    Dictionary parameters() const;
+    void setParameters(Dictionary);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTokenizationType() const;
+    String tokenizationType() const;
+    void setTokenizationType(String);
 
- private:
-  Dictionary m_parameters;
-  String m_tokenizationType;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AndroidPayTokenization;
+private:
+    Dictionary m_parameters;
+    String m_tokenizationType;
+
+    friend class V8AndroidPayTokenization;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AndroidPayTokenization_h
+#endif // AndroidPayTokenization_h

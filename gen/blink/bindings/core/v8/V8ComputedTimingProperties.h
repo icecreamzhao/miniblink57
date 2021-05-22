@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ComputedTimingProperties_h
 #define V8ComputedTimingProperties_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ComputedTimingProperties {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ComputedTimingProperties&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ComputedTimingProperties&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8ComputedTimingProperties(const ComputedTimingProperties&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ComputedTimingProperties& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ComputedTimingProperties& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ComputedTimingProperties> {
-  static ComputedTimingProperties nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ComputedTimingProperties nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ComputedTimingProperties> {
-  typedef V8ComputedTimingProperties Type;
+    typedef V8ComputedTimingProperties Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ComputedTimingProperties_h
+#endif // V8ComputedTimingProperties_h

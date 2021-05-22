@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaTrackConstraints.h"
 
 namespace blink {
 
-MediaTrackConstraints::MediaTrackConstraints() {
+MediaTrackConstraints::MediaTrackConstraints()
+{
 }
 
-MediaTrackConstraints::~MediaTrackConstraints() {}
+MediaTrackConstraints::~MediaTrackConstraints() { }
 
 MediaTrackConstraints::MediaTrackConstraints(const MediaTrackConstraints&) = default;
 
 MediaTrackConstraints& MediaTrackConstraints::operator=(const MediaTrackConstraints&) = default;
 
-bool MediaTrackConstraints::hasAdvanced() const {
-  return m_hasAdvanced;
+bool MediaTrackConstraints::hasAdvanced() const
+{
+    return m_hasAdvanced;
 }
-const HeapVector<MediaTrackConstraintSet>& MediaTrackConstraints::advanced() const {
-  DCHECK(m_hasAdvanced);
-  return m_advanced;
+const HeapVector<MediaTrackConstraintSet>& MediaTrackConstraints::advanced() const
+{
+    DCHECK(m_hasAdvanced);
+    return m_advanced;
 }
-void MediaTrackConstraints::setAdvanced(const HeapVector<MediaTrackConstraintSet>& value) {
-  m_advanced = value;
-  m_hasAdvanced = true;
-}
-
-DEFINE_TRACE(MediaTrackConstraints) {
-  visitor->trace(m_advanced);
-  MediaTrackConstraintSet::trace(visitor);
+void MediaTrackConstraints::setAdvanced(const HeapVector<MediaTrackConstraintSet>& value)
+{
+    m_advanced = value;
+    m_hasAdvanced = true;
 }
 
-}  // namespace blink
+DEFINE_TRACE(MediaTrackConstraints)
+{
+    visitor->trace(m_advanced);
+    MediaTrackConstraintSet::trace(visitor);
+}
+
+} // namespace blink

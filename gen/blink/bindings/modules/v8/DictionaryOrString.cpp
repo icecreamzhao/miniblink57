@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "DictionaryOrString.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -16,91 +16,104 @@
 
 namespace blink {
 
-DictionaryOrString::DictionaryOrString() : m_type(SpecificTypeNone) {}
-
-Dictionary DictionaryOrString::getAsDictionary() const {
-  DCHECK(isDictionary());
-  return m_dictionary;
+DictionaryOrString::DictionaryOrString()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void DictionaryOrString::setDictionary(Dictionary value) {
-  DCHECK(isNull());
-  m_dictionary = value;
-  m_type = SpecificTypeDictionary;
+Dictionary DictionaryOrString::getAsDictionary() const
+{
+    DCHECK(isDictionary());
+    return m_dictionary;
 }
 
-DictionaryOrString DictionaryOrString::fromDictionary(Dictionary value) {
-  DictionaryOrString container;
-  container.setDictionary(value);
-  return container;
+void DictionaryOrString::setDictionary(Dictionary value)
+{
+    DCHECK(isNull());
+    m_dictionary = value;
+    m_type = SpecificTypeDictionary;
 }
 
-String DictionaryOrString::getAsString() const {
-  DCHECK(isString());
-  return m_string;
+DictionaryOrString DictionaryOrString::fromDictionary(Dictionary value)
+{
+    DictionaryOrString container;
+    container.setDictionary(value);
+    return container;
 }
 
-void DictionaryOrString::setString(String value) {
-  DCHECK(isNull());
-  m_string = value;
-  m_type = SpecificTypeString;
+String DictionaryOrString::getAsString() const
+{
+    DCHECK(isString());
+    return m_string;
 }
 
-DictionaryOrString DictionaryOrString::fromString(String value) {
-  DictionaryOrString container;
-  container.setString(value);
-  return container;
+void DictionaryOrString::setString(String value)
+{
+    DCHECK(isNull());
+    m_string = value;
+    m_type = SpecificTypeString;
+}
+
+DictionaryOrString DictionaryOrString::fromString(String value)
+{
+    DictionaryOrString container;
+    container.setString(value);
+    return container;
 }
 
 DictionaryOrString::DictionaryOrString(const DictionaryOrString&) = default;
 DictionaryOrString::~DictionaryOrString() = default;
 DictionaryOrString& DictionaryOrString::operator=(const DictionaryOrString&) = default;
 
-DEFINE_TRACE(DictionaryOrString) {
+DEFINE_TRACE(DictionaryOrString)
+{
 }
 
-void V8DictionaryOrString::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DictionaryOrString& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8DictionaryOrString::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DictionaryOrString& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (isUndefinedOrNull(v8Value) || v8Value->IsObject()) {
-    Dictionary cppValue = Dictionary(isolate, v8Value, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setDictionary(cppValue);
-    return;
-  }
+    if (isUndefinedOrNull(v8Value) || v8Value->IsObject()) {
+        Dictionary cppValue = Dictionary(isolate, v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setDictionary(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = v8Value;
-    if (!cppValue.prepare(exceptionState))
-      return;
-    impl.setString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare(exceptionState))
+            return;
+        impl.setString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const DictionaryOrString& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const DictionaryOrString& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case DictionaryOrString::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case DictionaryOrString::SpecificTypeDictionary:
-      return impl.getAsDictionary().v8Value();
+        return impl.getAsDictionary().v8Value();
     case DictionaryOrString::SpecificTypeString:
-      return v8String(isolate, impl.getAsString());
+        return v8String(isolate, impl.getAsString());
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-DictionaryOrString NativeValueTraits<DictionaryOrString>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  DictionaryOrString impl;
-  V8DictionaryOrString::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+DictionaryOrString NativeValueTraits<DictionaryOrString>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    DictionaryOrString impl;
+    V8DictionaryOrString::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

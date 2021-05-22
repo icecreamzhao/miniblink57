@@ -8,53 +8,64 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "InternalDictionaryDerived.h"
 
 namespace blink {
 
-InternalDictionaryDerived::InternalDictionaryDerived() {
-  setDerivedStringMemberWithDefault(String("derivedDefaultStringValue"));
+InternalDictionaryDerived::InternalDictionaryDerived()
+{
+    setDerivedStringMemberWithDefault(String("derivedDefaultStringValue"));
 }
 
-InternalDictionaryDerived::~InternalDictionaryDerived() {}
+InternalDictionaryDerived::~InternalDictionaryDerived() { }
 
 InternalDictionaryDerived::InternalDictionaryDerived(const InternalDictionaryDerived&) = default;
 
 InternalDictionaryDerived& InternalDictionaryDerived::operator=(const InternalDictionaryDerived&) = default;
 
-bool InternalDictionaryDerived::hasDerivedStringMember() const {
-  return !m_derivedStringMember.isNull();
+bool InternalDictionaryDerived::hasDerivedStringMember() const
+{
+    return !m_derivedStringMember.isNull();
 }
-String InternalDictionaryDerived::derivedStringMember() const {
-  return m_derivedStringMember;
+String InternalDictionaryDerived::derivedStringMember() const
+{
+    return m_derivedStringMember;
 }
-void InternalDictionaryDerived::setDerivedStringMember(String value) {
-  m_derivedStringMember = value;
+void InternalDictionaryDerived::setDerivedStringMember(String value)
+{
+    m_derivedStringMember = value;
 }
-bool InternalDictionaryDerived::hasDerivedStringMemberWithDefault() const {
-  return !m_derivedStringMemberWithDefault.isNull();
+bool InternalDictionaryDerived::hasDerivedStringMemberWithDefault() const
+{
+    return !m_derivedStringMemberWithDefault.isNull();
 }
-String InternalDictionaryDerived::derivedStringMemberWithDefault() const {
-  return m_derivedStringMemberWithDefault;
+String InternalDictionaryDerived::derivedStringMemberWithDefault() const
+{
+    return m_derivedStringMemberWithDefault;
 }
-void InternalDictionaryDerived::setDerivedStringMemberWithDefault(String value) {
-  m_derivedStringMemberWithDefault = value;
+void InternalDictionaryDerived::setDerivedStringMemberWithDefault(String value)
+{
+    m_derivedStringMemberWithDefault = value;
 }
-bool InternalDictionaryDerived::hasRequiredBooleanMember() const {
-  return m_hasRequiredBooleanMember;
+bool InternalDictionaryDerived::hasRequiredBooleanMember() const
+{
+    return m_hasRequiredBooleanMember;
 }
-bool InternalDictionaryDerived::requiredBooleanMember() const {
-  DCHECK(m_hasRequiredBooleanMember);
-  return m_requiredBooleanMember;
+bool InternalDictionaryDerived::requiredBooleanMember() const
+{
+    DCHECK(m_hasRequiredBooleanMember);
+    return m_requiredBooleanMember;
 }
-void InternalDictionaryDerived::setRequiredBooleanMember(bool value) {
-  m_requiredBooleanMember = value;
-  m_hasRequiredBooleanMember = true;
+void InternalDictionaryDerived::setRequiredBooleanMember(bool value)
+{
+    m_requiredBooleanMember = value;
+    m_hasRequiredBooleanMember = true;
 }
 
-DEFINE_TRACE(InternalDictionaryDerived) {
-  InternalDictionary::trace(visitor);
+DEFINE_TRACE(InternalDictionaryDerived)
+{
+    InternalDictionary::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

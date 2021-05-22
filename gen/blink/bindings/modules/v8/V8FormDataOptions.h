@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8FormDataOptions_h
 #define V8FormDataOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8FormDataOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FormDataOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FormDataOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8FormDataOptions(const FormDataOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FormDataOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FormDataOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<FormDataOptions> {
-  static FormDataOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static FormDataOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<FormDataOptions> {
-  typedef V8FormDataOptions Type;
+    typedef V8FormDataOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8FormDataOptions_h
+#endif // V8FormDataOptions_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8TrackEvent_h
 #define V8TrackEvent_h
 
@@ -26,32 +26,36 @@
 namespace blink {
 
 class V8TrackEvent {
-  STATIC_ONLY(V8TrackEvent);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static TrackEvent* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<TrackEvent>();
-  }
-  CORE_EXPORT static TrackEvent* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<TrackEvent>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<TrackEvent>());
-  }
-  static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8TrackEvent);
+
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static TrackEvent* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<TrackEvent>();
+    }
+    CORE_EXPORT static TrackEvent* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<TrackEvent>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<TrackEvent>());
+    }
+    static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<TrackEvent> {
-  typedef V8TrackEvent Type;
+    typedef V8TrackEvent Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8TrackEvent_h
+#endif // V8TrackEvent_h

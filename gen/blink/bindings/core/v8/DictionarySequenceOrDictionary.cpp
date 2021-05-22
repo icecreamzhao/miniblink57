@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "DictionarySequenceOrDictionary.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -16,93 +16,106 @@
 
 namespace blink {
 
-DictionarySequenceOrDictionary::DictionarySequenceOrDictionary() : m_type(SpecificTypeNone) {}
-
-const Vector<Dictionary>& DictionarySequenceOrDictionary::getAsDictionarySequence() const {
-  DCHECK(isDictionarySequence());
-  return m_dictionarySequence;
+DictionarySequenceOrDictionary::DictionarySequenceOrDictionary()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void DictionarySequenceOrDictionary::setDictionarySequence(const Vector<Dictionary>& value) {
-  DCHECK(isNull());
-  m_dictionarySequence = value;
-  m_type = SpecificTypeDictionarySequence;
+const Vector<Dictionary>& DictionarySequenceOrDictionary::getAsDictionarySequence() const
+{
+    DCHECK(isDictionarySequence());
+    return m_dictionarySequence;
 }
 
-DictionarySequenceOrDictionary DictionarySequenceOrDictionary::fromDictionarySequence(const Vector<Dictionary>& value) {
-  DictionarySequenceOrDictionary container;
-  container.setDictionarySequence(value);
-  return container;
+void DictionarySequenceOrDictionary::setDictionarySequence(const Vector<Dictionary>& value)
+{
+    DCHECK(isNull());
+    m_dictionarySequence = value;
+    m_type = SpecificTypeDictionarySequence;
 }
 
-Dictionary DictionarySequenceOrDictionary::getAsDictionary() const {
-  DCHECK(isDictionary());
-  return m_dictionary;
+DictionarySequenceOrDictionary DictionarySequenceOrDictionary::fromDictionarySequence(const Vector<Dictionary>& value)
+{
+    DictionarySequenceOrDictionary container;
+    container.setDictionarySequence(value);
+    return container;
 }
 
-void DictionarySequenceOrDictionary::setDictionary(Dictionary value) {
-  DCHECK(isNull());
-  m_dictionary = value;
-  m_type = SpecificTypeDictionary;
+Dictionary DictionarySequenceOrDictionary::getAsDictionary() const
+{
+    DCHECK(isDictionary());
+    return m_dictionary;
 }
 
-DictionarySequenceOrDictionary DictionarySequenceOrDictionary::fromDictionary(Dictionary value) {
-  DictionarySequenceOrDictionary container;
-  container.setDictionary(value);
-  return container;
+void DictionarySequenceOrDictionary::setDictionary(Dictionary value)
+{
+    DCHECK(isNull());
+    m_dictionary = value;
+    m_type = SpecificTypeDictionary;
+}
+
+DictionarySequenceOrDictionary DictionarySequenceOrDictionary::fromDictionary(Dictionary value)
+{
+    DictionarySequenceOrDictionary container;
+    container.setDictionary(value);
+    return container;
 }
 
 DictionarySequenceOrDictionary::DictionarySequenceOrDictionary(const DictionarySequenceOrDictionary&) = default;
 DictionarySequenceOrDictionary::~DictionarySequenceOrDictionary() = default;
 DictionarySequenceOrDictionary& DictionarySequenceOrDictionary::operator=(const DictionarySequenceOrDictionary&) = default;
 
-DEFINE_TRACE(DictionarySequenceOrDictionary) {
+DEFINE_TRACE(DictionarySequenceOrDictionary)
+{
 }
 
-void V8DictionarySequenceOrDictionary::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DictionarySequenceOrDictionary& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8DictionarySequenceOrDictionary::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DictionarySequenceOrDictionary& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (v8Value->IsArray()) {
-    Vector<Dictionary> cppValue = toImplArray<Vector<Dictionary>>(v8Value, 0, isolate, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setDictionarySequence(cppValue);
-    return;
-  }
+    if (v8Value->IsArray()) {
+        Vector<Dictionary> cppValue = toImplArray<Vector<Dictionary>>(v8Value, 0, isolate, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setDictionarySequence(cppValue);
+        return;
+    }
 
-  if (isUndefinedOrNull(v8Value) || v8Value->IsObject()) {
-    Dictionary cppValue = Dictionary(isolate, v8Value, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setDictionary(cppValue);
-    return;
-  }
+    if (isUndefinedOrNull(v8Value) || v8Value->IsObject()) {
+        Dictionary cppValue = Dictionary(isolate, v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setDictionary(cppValue);
+        return;
+    }
 
-  exceptionState.throwTypeError("The provided value is not of type '(sequence<Dictionary> or Dictionary)'");
+    exceptionState.throwTypeError("The provided value is not of type '(sequence<Dictionary> or Dictionary)'");
 }
 
-v8::Local<v8::Value> ToV8(const DictionarySequenceOrDictionary& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const DictionarySequenceOrDictionary& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case DictionarySequenceOrDictionary::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case DictionarySequenceOrDictionary::SpecificTypeDictionarySequence:
-      return ToV8(impl.getAsDictionarySequence(), creationContext, isolate);
+        return ToV8(impl.getAsDictionarySequence(), creationContext, isolate);
     case DictionarySequenceOrDictionary::SpecificTypeDictionary:
-      return impl.getAsDictionary().v8Value();
+        return impl.getAsDictionary().v8Value();
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-DictionarySequenceOrDictionary NativeValueTraits<DictionarySequenceOrDictionary>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  DictionarySequenceOrDictionary impl;
-  V8DictionarySequenceOrDictionary::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+DictionarySequenceOrDictionary NativeValueTraits<DictionarySequenceOrDictionary>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    DictionarySequenceOrDictionary impl;
+    V8DictionarySequenceOrDictionary::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

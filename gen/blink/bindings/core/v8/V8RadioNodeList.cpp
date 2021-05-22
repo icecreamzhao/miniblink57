@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RadioNodeList.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,100 +46,111 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&RadioNodeList::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "RadioNodeList is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace RadioNodeListV8Internal {
 
-static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RadioNodeList* impl = V8RadioNodeList::toImpl(holder);
+        RadioNodeList* impl = V8RadioNodeList::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->value(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->value(), info.GetIsolate());
+    }
 
-CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RadioNodeListV8Internal::valueAttributeGetter(info);
-}
+    CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RadioNodeListV8Internal::valueAttributeGetter(info);
+    }
 
-static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RadioNodeList* impl = V8RadioNodeList::toImpl(holder);
+    static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RadioNodeList* impl = V8RadioNodeList::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setValue(cppValue);
-}
+        impl->setValue(cppValue);
+    }
 
-CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  RadioNodeListV8Internal::valueAttributeSetter(v8Value, info);
-}
+        RadioNodeListV8Internal::valueAttributeSetter(v8Value, info);
+    }
 
-static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  RadioNodeList* impl = V8RadioNodeList::toImpl(info.Holder());
+    static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        RadioNodeList* impl = V8RadioNodeList::toImpl(info.Holder());
 
-  // We assume that all the implementations support length() method, although
-  // the spec doesn't require that length() must exist.  It's okay that
-  // the interface does not have length attribute as long as the
-  // implementation supports length() member function.
-  if (index >= impl->length())
-    return;  // Returns undefined due to out-of-range.
+        // We assume that all the implementations support length() method, although
+        // the spec doesn't require that length() must exist.  It's okay that
+        // the interface does not have length attribute as long as the
+        // implementation supports length() member function.
+        if (index >= impl->length())
+            return; // Returns undefined due to out-of-range.
 
-  Node* result = impl->item(index);
-  v8SetReturnValueFast(info, result, impl);
-}
+        Node* result = impl->item(index);
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  RadioNodeListV8Internal::indexedPropertyGetter(index, info);
-}
+    CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        RadioNodeListV8Internal::indexedPropertyGetter(index, info);
+    }
 
 } // namespace RadioNodeListV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8RadioNodeListAccessors[] = {
-    {"value", RadioNodeListV8Internal::valueAttributeGetterCallback, RadioNodeListV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "value", RadioNodeListV8Internal::valueAttributeGetterCallback, RadioNodeListV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8RadioNodeListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RadioNodeList::wrapperTypeInfo.interfaceName, V8NodeList::domTemplate(isolate, world), V8RadioNodeList::internalFieldCount);
+static void installV8RadioNodeListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RadioNodeList::wrapperTypeInfo.interfaceName, V8NodeList::domTemplate(isolate, world), V8RadioNodeList::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RadioNodeListAccessors, WTF_ARRAY_LENGTH(V8RadioNodeListAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RadioNodeListAccessors, WTF_ARRAY_LENGTH(V8RadioNodeListAccessors));
 
-  // Indexed properties
-  v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(RadioNodeListV8Internal::indexedPropertyGetterCallback, 0, 0, 0, indexedPropertyEnumerator<RadioNodeList>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
-  instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
+    // Indexed properties
+    v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(RadioNodeListV8Internal::indexedPropertyGetterCallback, 0, 0, 0, indexedPropertyEnumerator<RadioNodeList>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
+    instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
 }
 
-v8::Local<v8::FunctionTemplate> V8RadioNodeList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RadioNodeListTemplate);
+v8::Local<v8::FunctionTemplate> V8RadioNodeList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RadioNodeListTemplate);
 }
 
-bool V8RadioNodeList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8RadioNodeList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8RadioNodeList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8RadioNodeList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-RadioNodeList* V8RadioNodeList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+RadioNodeList* V8RadioNodeList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef EventInit_h
 #define EventInit_h
 
@@ -19,39 +19,40 @@
 namespace blink {
 
 class CORE_EXPORT EventInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  EventInit();
-  virtual ~EventInit();
-  EventInit(const EventInit&);
-  EventInit& operator=(const EventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasBubbles() const;
-  bool bubbles() const;
-  void setBubbles(bool);
+public:
+    EventInit();
+    virtual ~EventInit();
+    EventInit(const EventInit&);
+    EventInit& operator=(const EventInit&);
 
-  bool hasCancelable() const;
-  bool cancelable() const;
-  void setCancelable(bool);
+    bool hasBubbles() const;
+    bool bubbles() const;
+    void setBubbles(bool);
 
-  bool hasComposed() const;
-  bool composed() const;
-  void setComposed(bool);
+    bool hasCancelable() const;
+    bool cancelable() const;
+    void setCancelable(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasComposed() const;
+    bool composed() const;
+    void setComposed(bool);
 
- private:
-  bool m_hasBubbles = false;
-  bool m_bubbles;
-  bool m_hasCancelable = false;
-  bool m_cancelable;
-  bool m_hasComposed = false;
-  bool m_composed;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8EventInit;
+private:
+    bool m_hasBubbles = false;
+    bool m_bubbles;
+    bool m_hasCancelable = false;
+    bool m_cancelable;
+    bool m_hasComposed = false;
+    bool m_composed;
+
+    friend class V8EventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // EventInit_h
+#endif // EventInit_h

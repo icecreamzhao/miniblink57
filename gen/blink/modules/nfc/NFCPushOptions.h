@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef NFCPushOptions_h
 #define NFCPushOptions_h
 
@@ -20,38 +20,39 @@
 namespace blink {
 
 class MODULES_EXPORT NFCPushOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  NFCPushOptions();
-  virtual ~NFCPushOptions();
-  NFCPushOptions(const NFCPushOptions&);
-  NFCPushOptions& operator=(const NFCPushOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasIgnoreRead() const;
-  bool ignoreRead() const;
-  void setIgnoreRead(bool);
+public:
+    NFCPushOptions();
+    virtual ~NFCPushOptions();
+    NFCPushOptions(const NFCPushOptions&);
+    NFCPushOptions& operator=(const NFCPushOptions&);
 
-  bool hasTarget() const;
-  String target() const;
-  void setTarget(String);
+    bool hasIgnoreRead() const;
+    bool ignoreRead() const;
+    void setIgnoreRead(bool);
 
-  bool hasTimeout() const;
-  double timeout() const;
-  void setTimeout(double);
+    bool hasTarget() const;
+    String target() const;
+    void setTarget(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTimeout() const;
+    double timeout() const;
+    void setTimeout(double);
 
- private:
-  bool m_hasIgnoreRead = false;
-  bool m_ignoreRead;
-  String m_target;
-  bool m_hasTimeout = false;
-  double m_timeout;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8NFCPushOptions;
+private:
+    bool m_hasIgnoreRead = false;
+    bool m_ignoreRead;
+    String m_target;
+    bool m_hasTimeout = false;
+    double m_timeout;
+
+    friend class V8NFCPushOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // NFCPushOptions_h
+#endif // NFCPushOptions_h

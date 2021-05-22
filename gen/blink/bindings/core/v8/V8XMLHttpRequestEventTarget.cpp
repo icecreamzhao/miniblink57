@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8XMLHttpRequestEventTarget.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,264 +47,297 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&XMLHttpRequestEventTarget::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "XMLHttpRequestEventTarget is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace XMLHttpRequestEventTargetV8Internal {
 
-static void onloadstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onloadstart()));
+        EventListener* cppValue(WTF::getPtr(impl->onloadstart()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XMLHttpRequestEventTargetV8Internal::onloadstartAttributeGetter(info);
-}
+    CORE_EXPORT void onloadstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XMLHttpRequestEventTargetV8Internal::onloadstartAttributeGetter(info);
+    }
 
-static void onloadstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+    static void onloadstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadstart(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadstart(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
 
-  impl->setOnloadstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnloadstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  XMLHttpRequestEventTargetV8Internal::onloadstartAttributeSetter(v8Value, info);
-}
+        XMLHttpRequestEventTargetV8Internal::onloadstartAttributeSetter(v8Value, info);
+    }
 
-static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onprogress()));
+        EventListener* cppValue(WTF::getPtr(impl->onprogress()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XMLHttpRequestEventTargetV8Internal::onprogressAttributeGetter(info);
-}
+    CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XMLHttpRequestEventTargetV8Internal::onprogressAttributeGetter(info);
+    }
 
-static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+    static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onprogress(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onprogress(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
 
-  impl->setOnprogress(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnprogress(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  XMLHttpRequestEventTargetV8Internal::onprogressAttributeSetter(v8Value, info);
-}
+        XMLHttpRequestEventTargetV8Internal::onprogressAttributeSetter(v8Value, info);
+    }
 
-static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onabort()));
+        EventListener* cppValue(WTF::getPtr(impl->onabort()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XMLHttpRequestEventTargetV8Internal::onabortAttributeGetter(info);
-}
+    CORE_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XMLHttpRequestEventTargetV8Internal::onabortAttributeGetter(info);
+    }
 
-static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+    static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onabort(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onabort(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
 
-  impl->setOnabort(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnabort(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  XMLHttpRequestEventTargetV8Internal::onabortAttributeSetter(v8Value, info);
-}
+        XMLHttpRequestEventTargetV8Internal::onabortAttributeSetter(v8Value, info);
+    }
 
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XMLHttpRequestEventTargetV8Internal::onerrorAttributeGetter(info);
-}
+    CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XMLHttpRequestEventTargetV8Internal::onerrorAttributeGetter(info);
+    }
 
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
 
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  XMLHttpRequestEventTargetV8Internal::onerrorAttributeSetter(v8Value, info);
-}
+        XMLHttpRequestEventTargetV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
 
-static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onload()));
+        EventListener* cppValue(WTF::getPtr(impl->onload()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XMLHttpRequestEventTargetV8Internal::onloadAttributeGetter(info);
-}
+    CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XMLHttpRequestEventTargetV8Internal::onloadAttributeGetter(info);
+    }
 
-static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+    static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onload(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onload(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
 
-  impl->setOnload(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnload(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  XMLHttpRequestEventTargetV8Internal::onloadAttributeSetter(v8Value, info);
-}
+        XMLHttpRequestEventTargetV8Internal::onloadAttributeSetter(v8Value, info);
+    }
 
-static void ontimeoutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ontimeoutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->ontimeout()));
+        EventListener* cppValue(WTF::getPtr(impl->ontimeout()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ontimeoutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XMLHttpRequestEventTargetV8Internal::ontimeoutAttributeGetter(info);
-}
+    CORE_EXPORT void ontimeoutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XMLHttpRequestEventTargetV8Internal::ontimeoutAttributeGetter(info);
+    }
 
-static void ontimeoutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+    static void ontimeoutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ontimeout(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ontimeout(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
 
-  impl->setOntimeout(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOntimeout(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ontimeoutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ontimeoutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  XMLHttpRequestEventTargetV8Internal::ontimeoutAttributeSetter(v8Value, info);
-}
+        XMLHttpRequestEventTargetV8Internal::ontimeoutAttributeSetter(v8Value, info);
+    }
 
-static void onloadendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onloadend()));
+        EventListener* cppValue(WTF::getPtr(impl->onloadend()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XMLHttpRequestEventTargetV8Internal::onloadendAttributeGetter(info);
-}
+    CORE_EXPORT void onloadendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XMLHttpRequestEventTargetV8Internal::onloadendAttributeGetter(info);
+    }
 
-static void onloadendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
+    static void onloadendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        XMLHttpRequestEventTarget* impl = V8XMLHttpRequestEventTarget::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadend(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadend(), v8Value, V8XMLHttpRequestEventTarget::eventListenerCacheIndex);
 
-  impl->setOnloadend(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnloadend(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  XMLHttpRequestEventTargetV8Internal::onloadendAttributeSetter(v8Value, info);
-}
+        XMLHttpRequestEventTargetV8Internal::onloadendAttributeSetter(v8Value, info);
+    }
 
 } // namespace XMLHttpRequestEventTargetV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8XMLHttpRequestEventTargetAccessors[] = {
-    {"onloadstart", XMLHttpRequestEventTargetV8Internal::onloadstartAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onloadstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onprogress", XMLHttpRequestEventTargetV8Internal::onprogressAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onabort", XMLHttpRequestEventTargetV8Internal::onabortAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", XMLHttpRequestEventTargetV8Internal::onerrorAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onload", XMLHttpRequestEventTargetV8Internal::onloadAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ontimeout", XMLHttpRequestEventTargetV8Internal::ontimeoutAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::ontimeoutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadend", XMLHttpRequestEventTargetV8Internal::onloadendAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onloadendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "onloadstart", XMLHttpRequestEventTargetV8Internal::onloadstartAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onloadstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onprogress", XMLHttpRequestEventTargetV8Internal::onprogressAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onabort", XMLHttpRequestEventTargetV8Internal::onabortAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", XMLHttpRequestEventTargetV8Internal::onerrorAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onload", XMLHttpRequestEventTargetV8Internal::onloadAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ontimeout", XMLHttpRequestEventTargetV8Internal::ontimeoutAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::ontimeoutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadend", XMLHttpRequestEventTargetV8Internal::onloadendAttributeGetterCallback, XMLHttpRequestEventTargetV8Internal::onloadendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8XMLHttpRequestEventTargetTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XMLHttpRequestEventTarget::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8XMLHttpRequestEventTarget::internalFieldCount);
+static void installV8XMLHttpRequestEventTargetTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XMLHttpRequestEventTarget::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8XMLHttpRequestEventTarget::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XMLHttpRequestEventTargetAccessors, WTF_ARRAY_LENGTH(V8XMLHttpRequestEventTargetAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XMLHttpRequestEventTargetAccessors, WTF_ARRAY_LENGTH(V8XMLHttpRequestEventTargetAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8XMLHttpRequestEventTarget::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XMLHttpRequestEventTargetTemplate);
+v8::Local<v8::FunctionTemplate> V8XMLHttpRequestEventTarget::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XMLHttpRequestEventTargetTemplate);
 }
 
-bool V8XMLHttpRequestEventTarget::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8XMLHttpRequestEventTarget::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8XMLHttpRequestEventTarget::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8XMLHttpRequestEventTarget::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-XMLHttpRequestEventTarget* V8XMLHttpRequestEventTarget::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+XMLHttpRequestEventTarget* V8XMLHttpRequestEventTarget::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

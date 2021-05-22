@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8DatabaseCallback_h
 #define V8DatabaseCallback_h
 
@@ -20,21 +20,23 @@
 namespace blink {
 
 class V8DatabaseCallback final : public DatabaseCallback {
- public:
-  static V8DatabaseCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8DatabaseCallback(callback, scriptState);
-  }
+public:
+    static V8DatabaseCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8DatabaseCallback(callback, scriptState);
+    }
 
-  ~V8DatabaseCallback() override;
+    ~V8DatabaseCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  bool handleEvent(Database* database) override;
- private:
-  MODULES_EXPORT V8DatabaseCallback(v8::Local<v8::Function>, ScriptState*);
+    bool handleEvent(Database* database) override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    MODULES_EXPORT V8DatabaseCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8DatabaseCallback_h
+#endif // V8DatabaseCallback_h

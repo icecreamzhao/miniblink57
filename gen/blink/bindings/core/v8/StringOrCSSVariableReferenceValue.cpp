@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "StringOrCSSVariableReferenceValue.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -16,90 +16,103 @@
 
 namespace blink {
 
-StringOrCSSVariableReferenceValue::StringOrCSSVariableReferenceValue() : m_type(SpecificTypeNone) {}
-
-String StringOrCSSVariableReferenceValue::getAsString() const {
-  DCHECK(isString());
-  return m_string;
+StringOrCSSVariableReferenceValue::StringOrCSSVariableReferenceValue()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void StringOrCSSVariableReferenceValue::setString(String value) {
-  DCHECK(isNull());
-  m_string = value;
-  m_type = SpecificTypeString;
+String StringOrCSSVariableReferenceValue::getAsString() const
+{
+    DCHECK(isString());
+    return m_string;
 }
 
-StringOrCSSVariableReferenceValue StringOrCSSVariableReferenceValue::fromString(String value) {
-  StringOrCSSVariableReferenceValue container;
-  container.setString(value);
-  return container;
+void StringOrCSSVariableReferenceValue::setString(String value)
+{
+    DCHECK(isNull());
+    m_string = value;
+    m_type = SpecificTypeString;
 }
 
-CSSStyleVariableReferenceValue* StringOrCSSVariableReferenceValue::getAsCSSVariableReferenceValue() const {
-  DCHECK(isCSSVariableReferenceValue());
-  return m_cssVariableReferenceValue;
+StringOrCSSVariableReferenceValue StringOrCSSVariableReferenceValue::fromString(String value)
+{
+    StringOrCSSVariableReferenceValue container;
+    container.setString(value);
+    return container;
 }
 
-void StringOrCSSVariableReferenceValue::setCSSVariableReferenceValue(CSSStyleVariableReferenceValue* value) {
-  DCHECK(isNull());
-  m_cssVariableReferenceValue = value;
-  m_type = SpecificTypeCSSVariableReferenceValue;
+CSSStyleVariableReferenceValue* StringOrCSSVariableReferenceValue::getAsCSSVariableReferenceValue() const
+{
+    DCHECK(isCSSVariableReferenceValue());
+    return m_cssVariableReferenceValue;
 }
 
-StringOrCSSVariableReferenceValue StringOrCSSVariableReferenceValue::fromCSSVariableReferenceValue(CSSStyleVariableReferenceValue* value) {
-  StringOrCSSVariableReferenceValue container;
-  container.setCSSVariableReferenceValue(value);
-  return container;
+void StringOrCSSVariableReferenceValue::setCSSVariableReferenceValue(CSSStyleVariableReferenceValue* value)
+{
+    DCHECK(isNull());
+    m_cssVariableReferenceValue = value;
+    m_type = SpecificTypeCSSVariableReferenceValue;
+}
+
+StringOrCSSVariableReferenceValue StringOrCSSVariableReferenceValue::fromCSSVariableReferenceValue(CSSStyleVariableReferenceValue* value)
+{
+    StringOrCSSVariableReferenceValue container;
+    container.setCSSVariableReferenceValue(value);
+    return container;
 }
 
 StringOrCSSVariableReferenceValue::StringOrCSSVariableReferenceValue(const StringOrCSSVariableReferenceValue&) = default;
 StringOrCSSVariableReferenceValue::~StringOrCSSVariableReferenceValue() = default;
 StringOrCSSVariableReferenceValue& StringOrCSSVariableReferenceValue::operator=(const StringOrCSSVariableReferenceValue&) = default;
 
-DEFINE_TRACE(StringOrCSSVariableReferenceValue) {
-  visitor->trace(m_cssVariableReferenceValue);
+DEFINE_TRACE(StringOrCSSVariableReferenceValue)
+{
+    visitor->trace(m_cssVariableReferenceValue);
 }
 
-void V8StringOrCSSVariableReferenceValue::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, StringOrCSSVariableReferenceValue& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8StringOrCSSVariableReferenceValue::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, StringOrCSSVariableReferenceValue& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8CSSVariableReferenceValue::hasInstance(v8Value, isolate)) {
-    CSSStyleVariableReferenceValue* cppValue = V8CSSVariableReferenceValue::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setCSSVariableReferenceValue(cppValue);
-    return;
-  }
+    if (V8CSSVariableReferenceValue::hasInstance(v8Value, isolate)) {
+        CSSStyleVariableReferenceValue* cppValue = V8CSSVariableReferenceValue::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setCSSVariableReferenceValue(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = v8Value;
-    if (!cppValue.prepare(exceptionState))
-      return;
-    impl.setString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare(exceptionState))
+            return;
+        impl.setString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const StringOrCSSVariableReferenceValue& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const StringOrCSSVariableReferenceValue& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case StringOrCSSVariableReferenceValue::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case StringOrCSSVariableReferenceValue::SpecificTypeString:
-      return v8String(isolate, impl.getAsString());
+        return v8String(isolate, impl.getAsString());
     case StringOrCSSVariableReferenceValue::SpecificTypeCSSVariableReferenceValue:
-      return ToV8(impl.getAsCSSVariableReferenceValue(), creationContext, isolate);
+        return ToV8(impl.getAsCSSVariableReferenceValue(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-StringOrCSSVariableReferenceValue NativeValueTraits<StringOrCSSVariableReferenceValue>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  StringOrCSSVariableReferenceValue impl;
-  V8StringOrCSSVariableReferenceValue::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+StringOrCSSVariableReferenceValue NativeValueTraits<StringOrCSSVariableReferenceValue>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    StringOrCSSVariableReferenceValue impl;
+    V8StringOrCSSVariableReferenceValue::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

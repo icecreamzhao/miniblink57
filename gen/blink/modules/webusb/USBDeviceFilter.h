@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef USBDeviceFilter_h
 #define USBDeviceFilter_h
 
@@ -20,56 +20,57 @@
 namespace blink {
 
 class MODULES_EXPORT USBDeviceFilter : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  USBDeviceFilter();
-  virtual ~USBDeviceFilter();
-  USBDeviceFilter(const USBDeviceFilter&);
-  USBDeviceFilter& operator=(const USBDeviceFilter&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasClassCode() const;
-  unsigned classCode() const;
-  void setClassCode(unsigned);
+public:
+    USBDeviceFilter();
+    virtual ~USBDeviceFilter();
+    USBDeviceFilter(const USBDeviceFilter&);
+    USBDeviceFilter& operator=(const USBDeviceFilter&);
 
-  bool hasProductId() const;
-  unsigned productId() const;
-  void setProductId(unsigned);
+    bool hasClassCode() const;
+    unsigned classCode() const;
+    void setClassCode(unsigned);
 
-  bool hasProtocolCode() const;
-  unsigned protocolCode() const;
-  void setProtocolCode(unsigned);
+    bool hasProductId() const;
+    unsigned productId() const;
+    void setProductId(unsigned);
 
-  bool hasSerialNumber() const;
-  String serialNumber() const;
-  void setSerialNumber(String);
+    bool hasProtocolCode() const;
+    unsigned protocolCode() const;
+    void setProtocolCode(unsigned);
 
-  bool hasSubclassCode() const;
-  unsigned subclassCode() const;
-  void setSubclassCode(unsigned);
+    bool hasSerialNumber() const;
+    String serialNumber() const;
+    void setSerialNumber(String);
 
-  bool hasVendorId() const;
-  unsigned vendorId() const;
-  void setVendorId(unsigned);
+    bool hasSubclassCode() const;
+    unsigned subclassCode() const;
+    void setSubclassCode(unsigned);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasVendorId() const;
+    unsigned vendorId() const;
+    void setVendorId(unsigned);
 
- private:
-  bool m_hasClassCode = false;
-  unsigned m_classCode;
-  bool m_hasProductId = false;
-  unsigned m_productId;
-  bool m_hasProtocolCode = false;
-  unsigned m_protocolCode;
-  String m_serialNumber;
-  bool m_hasSubclassCode = false;
-  unsigned m_subclassCode;
-  bool m_hasVendorId = false;
-  unsigned m_vendorId;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8USBDeviceFilter;
+private:
+    bool m_hasClassCode = false;
+    unsigned m_classCode;
+    bool m_hasProductId = false;
+    unsigned m_productId;
+    bool m_hasProtocolCode = false;
+    unsigned m_protocolCode;
+    String m_serialNumber;
+    bool m_hasSubclassCode = false;
+    unsigned m_subclassCode;
+    bool m_hasVendorId = false;
+    unsigned m_vendorId;
+
+    friend class V8USBDeviceFilter;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // USBDeviceFilter_h
+#endif // USBDeviceFilter_h

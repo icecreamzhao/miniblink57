@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PushEventInit_h
 #define PushEventInit_h
 
@@ -25,26 +25,27 @@
 namespace blink {
 
 class MODULES_EXPORT PushEventInit : public ExtendableEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PushEventInit();
-  virtual ~PushEventInit();
-  PushEventInit(const PushEventInit&);
-  PushEventInit& operator=(const PushEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasData() const;
-  const ArrayBufferOrArrayBufferViewOrUSVString& data() const;
-  void setData(const ArrayBufferOrArrayBufferViewOrUSVString&);
+public:
+    PushEventInit();
+    virtual ~PushEventInit();
+    PushEventInit(const PushEventInit&);
+    PushEventInit& operator=(const PushEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasData() const;
+    const ArrayBufferOrArrayBufferViewOrUSVString& data() const;
+    void setData(const ArrayBufferOrArrayBufferViewOrUSVString&);
 
- private:
-  ArrayBufferOrArrayBufferViewOrUSVString m_data;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PushEventInit;
+private:
+    ArrayBufferOrArrayBufferViewOrUSVString m_data;
+
+    friend class V8PushEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PushEventInit_h
+#endif // PushEventInit_h

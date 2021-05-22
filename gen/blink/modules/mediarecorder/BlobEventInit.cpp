@@ -8,46 +8,54 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "BlobEventInit.h"
 
 #include "core/fileapi/Blob.h"
 
 namespace blink {
 
-BlobEventInit::BlobEventInit() {
+BlobEventInit::BlobEventInit()
+{
 }
 
-BlobEventInit::~BlobEventInit() {}
+BlobEventInit::~BlobEventInit() { }
 
 BlobEventInit::BlobEventInit(const BlobEventInit&) = default;
 
 BlobEventInit& BlobEventInit::operator=(const BlobEventInit&) = default;
 
-bool BlobEventInit::hasData() const {
-  return m_data;
+bool BlobEventInit::hasData() const
+{
+    return m_data;
 }
-Blob* BlobEventInit::data() const {
-  return m_data;
+Blob* BlobEventInit::data() const
+{
+    return m_data;
 }
-void BlobEventInit::setData(Blob* value) {
-  m_data = value;
+void BlobEventInit::setData(Blob* value)
+{
+    m_data = value;
 }
-bool BlobEventInit::hasTimecode() const {
-  return m_hasTimecode;
+bool BlobEventInit::hasTimecode() const
+{
+    return m_hasTimecode;
 }
-double BlobEventInit::timecode() const {
-  DCHECK(m_hasTimecode);
-  return m_timecode;
+double BlobEventInit::timecode() const
+{
+    DCHECK(m_hasTimecode);
+    return m_timecode;
 }
-void BlobEventInit::setTimecode(double value) {
-  m_timecode = value;
-  m_hasTimecode = true;
+void BlobEventInit::setTimecode(double value)
+{
+    m_timecode = value;
+    m_hasTimecode = true;
 }
 
-DEFINE_TRACE(BlobEventInit) {
-  visitor->trace(m_data);
-  EventInit::trace(visitor);
+DEFINE_TRACE(BlobEventInit)
+{
+    visitor->trace(m_data);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

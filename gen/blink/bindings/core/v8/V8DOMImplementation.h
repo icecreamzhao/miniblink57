@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8DOMImplementation_h
 #define V8DOMImplementation_h
 
@@ -24,32 +24,36 @@
 namespace blink {
 
 class V8DOMImplementation {
-  STATIC_ONLY(V8DOMImplementation);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static DOMImplementation* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<DOMImplementation>();
-  }
-  CORE_EXPORT static DOMImplementation* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<DOMImplementation>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<DOMImplementation>());
-  }
-  static void visitDOMWrapper(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8DOMImplementation);
+
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static DOMImplementation* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<DOMImplementation>();
+    }
+    CORE_EXPORT static DOMImplementation* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<DOMImplementation>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<DOMImplementation>());
+    }
+    static void visitDOMWrapper(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<DOMImplementation> {
-  typedef V8DOMImplementation Type;
+    typedef V8DOMImplementation Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8DOMImplementation_h
+#endif // V8DOMImplementation_h

@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PresentationConnectionAvailableEventInit.h"
 
 #include "modules/presentation/PresentationConnection.h"
 
 namespace blink {
 
-PresentationConnectionAvailableEventInit::PresentationConnectionAvailableEventInit() {
+PresentationConnectionAvailableEventInit::PresentationConnectionAvailableEventInit()
+{
 }
 
-PresentationConnectionAvailableEventInit::~PresentationConnectionAvailableEventInit() {}
+PresentationConnectionAvailableEventInit::~PresentationConnectionAvailableEventInit() { }
 
 PresentationConnectionAvailableEventInit::PresentationConnectionAvailableEventInit(const PresentationConnectionAvailableEventInit&) = default;
 
 PresentationConnectionAvailableEventInit& PresentationConnectionAvailableEventInit::operator=(const PresentationConnectionAvailableEventInit&) = default;
 
-bool PresentationConnectionAvailableEventInit::hasConnection() const {
-  return m_connection;
+bool PresentationConnectionAvailableEventInit::hasConnection() const
+{
+    return m_connection;
 }
-PresentationConnection* PresentationConnectionAvailableEventInit::connection() const {
-  return m_connection;
+PresentationConnection* PresentationConnectionAvailableEventInit::connection() const
+{
+    return m_connection;
 }
-void PresentationConnectionAvailableEventInit::setConnection(PresentationConnection* value) {
-  m_connection = value;
-}
-
-DEFINE_TRACE(PresentationConnectionAvailableEventInit) {
-  visitor->trace(m_connection);
-  EventInit::trace(visitor);
+void PresentationConnectionAvailableEventInit::setConnection(PresentationConnection* value)
+{
+    m_connection = value;
 }
 
-}  // namespace blink
+DEFINE_TRACE(PresentationConnectionAvailableEventInit)
+{
+    visitor->trace(m_connection);
+    EventInit::trace(visitor);
+}
+
+} // namespace blink

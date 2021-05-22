@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8MessageCallback_h
 #define V8MessageCallback_h
 
@@ -20,21 +20,23 @@
 namespace blink {
 
 class V8MessageCallback final : public MessageCallback {
- public:
-  static V8MessageCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8MessageCallback(callback, scriptState);
-  }
+public:
+    static V8MessageCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8MessageCallback(callback, scriptState);
+    }
 
-  ~V8MessageCallback() override;
+    ~V8MessageCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  void handleMessage(const NFCMessage& message) override;
- private:
-  MODULES_EXPORT V8MessageCallback(v8::Local<v8::Function>, ScriptState*);
+    void handleMessage(const NFCMessage& message) override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    MODULES_EXPORT V8MessageCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8MessageCallback_h
+#endif // V8MessageCallback_h

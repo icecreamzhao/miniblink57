@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8StylePropertyMap.h"
 
 #include "bindings/core/v8/CSSStyleValueOrCSSStyleValueSequence.h"
@@ -52,344 +52,373 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&StylePropertyMap::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "StylePropertyMap is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace StylePropertyMapV8Internal {
 
-static void appendMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "append");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> property;
-  CSSStyleValueOrCSSStyleValueSequenceOrString value;
-  property = info[0];
-  if (!property.prepare())
-    return;
-
-  V8CSSStyleValueOrCSSStyleValueSequenceOrString::toImpl(info.GetIsolate(), info[1], value, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->append(property, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void appendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::appendMethod(info);
-}
-
-static void deleteMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "delete");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> property;
-  property = info[0];
-  if (!property.prepare())
-    return;
-
-  impl->remove(property, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void deleteMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::deleteMethod(info);
-}
-
-static void getMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "get");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> property;
-  property = info[0];
-  if (!property.prepare())
-    return;
-
-  CSSStyleValue* result = impl->get(property, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void getMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::getMethod(info);
-}
-
-static void getAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "getAll");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> property;
-  property = info[0];
-  if (!property.prepare())
-    return;
-
-  HeapVector<Member<CSSStyleValue>> result = impl->getAll(property, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, ToV8(result, info.Holder(), info.GetIsolate()));
-}
-
-CORE_EXPORT  void getAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::getAllMethod(info);
-}
-
-static void hasMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "has");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> property;
-  property = info[0];
-  if (!property.prepare())
-    return;
-
-  bool result = impl->has(property, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
-CORE_EXPORT  void hasMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::hasMethod(info);
-}
-
-static void setMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "set");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> property;
-  CSSStyleValueOrCSSStyleValueSequenceOrString value;
-  property = info[0];
-  if (!property.prepare())
-    return;
-
-  V8CSSStyleValueOrCSSStyleValueSequenceOrString::toImpl(info.GetIsolate(), info[1], value, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->set(property, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void setMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::setMethod(info);
-}
-
-static void getPropertiesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  v8SetReturnValue(info, ToV8(impl->getProperties(), info.Holder(), info.GetIsolate()));
-}
-
-CORE_EXPORT  void getPropertiesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::getPropertiesMethod(info);
-}
-
-static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "keys");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->keysForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::keysMethod(info);
-}
-
-static void valuesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "values");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->valuesForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void valuesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::valuesMethod(info);
-}
-
-static void entriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "entries");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->entriesForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void entriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::entriesMethod(info);
-}
-
-static void forEachMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "forEach");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  ScriptValue callback;
-  ScriptValue thisArg;
-  if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  callback = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
-
-  thisArg = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
-
-  impl->forEachForBinding(scriptState, ScriptValue(scriptState, info.Holder()), callback, thisArg, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void forEachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::forEachMethod(info);
-}
-
-static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "iterator");
-
-  StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->iterator(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StylePropertyMapV8Internal::iteratorMethod(info);
-}
+    static void appendMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "append");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> property;
+        CSSStyleValueOrCSSStyleValueSequenceOrString value;
+        property = info[0];
+        if (!property.prepare())
+            return;
+
+        V8CSSStyleValueOrCSSStyleValueSequenceOrString::toImpl(info.GetIsolate(), info[1], value, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->append(property, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void appendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::appendMethod(info);
+    }
+
+    static void deleteMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "delete");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> property;
+        property = info[0];
+        if (!property.prepare())
+            return;
+
+        impl->remove(property, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void deleteMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::deleteMethod(info);
+    }
+
+    static void getMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "get");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> property;
+        property = info[0];
+        if (!property.prepare())
+            return;
+
+        CSSStyleValue* result = impl->get(property, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void getMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::getMethod(info);
+    }
+
+    static void getAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "getAll");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> property;
+        property = info[0];
+        if (!property.prepare())
+            return;
+
+        HeapVector<Member<CSSStyleValue>> result = impl->getAll(property, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, ToV8(result, info.Holder(), info.GetIsolate()));
+    }
+
+    CORE_EXPORT void getAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::getAllMethod(info);
+    }
+
+    static void hasMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "has");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> property;
+        property = info[0];
+        if (!property.prepare())
+            return;
+
+        bool result = impl->has(property, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void hasMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::hasMethod(info);
+    }
+
+    static void setMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "set");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> property;
+        CSSStyleValueOrCSSStyleValueSequenceOrString value;
+        property = info[0];
+        if (!property.prepare())
+            return;
+
+        V8CSSStyleValueOrCSSStyleValueSequenceOrString::toImpl(info.GetIsolate(), info[1], value, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->set(property, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void setMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::setMethod(info);
+    }
+
+    static void getPropertiesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(impl->getProperties(), info.Holder(), info.GetIsolate()));
+    }
+
+    CORE_EXPORT void getPropertiesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::getPropertiesMethod(info);
+    }
+
+    static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "keys");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->keysForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::keysMethod(info);
+    }
+
+    static void valuesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "values");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->valuesForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void valuesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::valuesMethod(info);
+    }
+
+    static void entriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "entries");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->entriesForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void entriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::entriesMethod(info);
+    }
+
+    static void forEachMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "forEach");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        ScriptValue callback;
+        ScriptValue thisArg;
+        if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+
+            return;
+        }
+        callback = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        thisArg = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
+
+        impl->forEachForBinding(scriptState, ScriptValue(scriptState, info.Holder()), callback, thisArg, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void forEachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::forEachMethod(info);
+    }
+
+    static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StylePropertyMap", "iterator");
+
+        StylePropertyMap* impl = V8StylePropertyMap::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->iterator(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StylePropertyMapV8Internal::iteratorMethod(info);
+    }
 
 } // namespace StylePropertyMapV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8StylePropertyMapMethods[] = {
-    {"append", StylePropertyMapV8Internal::appendMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"delete", StylePropertyMapV8Internal::deleteMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"get", StylePropertyMapV8Internal::getMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getAll", StylePropertyMapV8Internal::getAllMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"has", StylePropertyMapV8Internal::hasMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"set", StylePropertyMapV8Internal::setMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getProperties", StylePropertyMapV8Internal::getPropertiesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"keys", StylePropertyMapV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"values", StylePropertyMapV8Internal::valuesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"entries", StylePropertyMapV8Internal::entriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forEach", StylePropertyMapV8Internal::forEachMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "append", StylePropertyMapV8Internal::appendMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "delete", StylePropertyMapV8Internal::deleteMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "get", StylePropertyMapV8Internal::getMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getAll", StylePropertyMapV8Internal::getAllMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "has", StylePropertyMapV8Internal::hasMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "set", StylePropertyMapV8Internal::setMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getProperties", StylePropertyMapV8Internal::getPropertiesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "keys", StylePropertyMapV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "values", StylePropertyMapV8Internal::valuesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "entries", StylePropertyMapV8Internal::entriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forEach", StylePropertyMapV8Internal::forEachMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8StylePropertyMapTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8StylePropertyMap::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8StylePropertyMap::internalFieldCount);
+static void installV8StylePropertyMapTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8StylePropertyMap::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8StylePropertyMap::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StylePropertyMapMethods, WTF_ARRAY_LENGTH(V8StylePropertyMapMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StylePropertyMapMethods, WTF_ARRAY_LENGTH(V8StylePropertyMapMethods));
 
-  // Iterator (@@iterator)
-  const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, StylePropertyMapV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
-  V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
+    // Iterator (@@iterator)
+    const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, StylePropertyMapV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
+    V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
 }
 
-v8::Local<v8::FunctionTemplate> V8StylePropertyMap::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8StylePropertyMapTemplate);
+v8::Local<v8::FunctionTemplate> V8StylePropertyMap::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8StylePropertyMapTemplate);
 }
 
-bool V8StylePropertyMap::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8StylePropertyMap::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8StylePropertyMap::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8StylePropertyMap::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-StylePropertyMap* V8StylePropertyMap::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+StylePropertyMap* V8StylePropertyMap::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

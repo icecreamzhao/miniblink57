@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8BluetoothRemoteGATTCharacteristic.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -57,351 +57,380 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&BluetoothRemoteGATTCharacteristic::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "BluetoothRemoteGATTCharacteristic is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BluetoothRemoteGATTCharacteristicV8Internal {
 
-static void serviceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void serviceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
 
-  BluetoothRemoteGATTService* cppValue(WTF::getPtr(impl->service()));
+        BluetoothRemoteGATTService* cppValue(WTF::getPtr(impl->service()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BluetoothRemoteGATTCharacteristic#service";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BluetoothRemoteGATTCharacteristic#service";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void serviceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::serviceAttributeGetter(info);
-}
-
-static void uuidAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->uuid(), info.GetIsolate());
-}
-
-MODULES_EXPORT void uuidAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::uuidAttributeGetter(info);
-}
-
-static void propertiesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
-
-  BluetoothCharacteristicProperties* cppValue(WTF::getPtr(impl->properties()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BluetoothRemoteGATTCharacteristic#properties";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void propertiesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::propertiesAttributeGetter(info);
-}
-
-static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
-
-  DOMDataView* cppValue(WTF::getPtr(impl->value()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BluetoothRemoteGATTCharacteristic#value";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::valueAttributeGetter(info);
-}
-
-static void oncharacteristicvaluechangedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->oncharacteristicvaluechanged()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void oncharacteristicvaluechangedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::oncharacteristicvaluechangedAttributeGetter(info);
-}
-
-static void oncharacteristicvaluechangedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncharacteristicvaluechanged(), v8Value, V8BluetoothRemoteGATTCharacteristic::eventListenerCacheIndex);
-
-  impl->setOncharacteristicvaluechanged(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void oncharacteristicvaluechangedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  BluetoothRemoteGATTCharacteristicV8Internal::oncharacteristicvaluechangedAttributeSetter(v8Value, info);
-}
-
-static void getDescriptorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "getDescriptor");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  StringOrUnsignedLong descriptor;
-  V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], descriptor, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->getDescriptor(scriptState, descriptor, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getDescriptorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::getDescriptorMethod(info);
-}
-
-static void getDescriptorsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "getDescriptors");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  StringOrUnsignedLong descriptor;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ScriptPromise result = impl->getDescriptors(scriptState, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    v8SetReturnValue(info, result.v8Value());
-    return;
-  }
-  V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], descriptor, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  ScriptPromise result = impl->getDescriptors(scriptState, descriptor, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+    MODULES_EXPORT void serviceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::serviceAttributeGetter(info);
+    }
 
-MODULES_EXPORT  void getDescriptorsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::getDescriptorsMethod(info);
-}
+    static void uuidAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void readValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "readValue");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+        v8SetReturnValueString(info, impl->uuid(), info.GetIsolate());
+    }
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    MODULES_EXPORT void uuidAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::uuidAttributeGetter(info);
+    }
 
-  ScriptPromise result = impl->readValue(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+    static void propertiesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void readValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::readValueMethod(info);
-}
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
 
-static void writeValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "writeValue");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        BluetoothCharacteristicProperties* cppValue(WTF::getPtr(impl->properties()));
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BluetoothRemoteGATTCharacteristic#properties";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        v8SetReturnValue(info, v8Value);
+    }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+    MODULES_EXPORT void propertiesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::propertiesAttributeGetter(info);
+    }
 
-  ArrayBufferOrArrayBufferView value;
-  V8ArrayBufferOrArrayBufferView::toImpl(info.GetIsolate(), info[0], value, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScriptPromise result = impl->writeValue(scriptState, value);
-  v8SetReturnValue(info, result.v8Value());
-}
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
 
-MODULES_EXPORT  void writeValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::writeValueMethod(info);
-}
+        DOMDataView* cppValue(WTF::getPtr(impl->value()));
 
-static void startNotificationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "startNotifications");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BluetoothRemoteGATTCharacteristic#value";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+        v8SetReturnValue(info, v8Value);
+    }
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    MODULES_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::valueAttributeGetter(info);
+    }
 
-  ScriptPromise result = impl->startNotifications(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+    static void oncharacteristicvaluechangedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void startNotificationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::startNotificationsMethod(info);
-}
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
 
-static void stopNotificationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "stopNotifications");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        EventListener* cppValue(WTF::getPtr(impl->oncharacteristicvaluechanged()));
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    MODULES_EXPORT void oncharacteristicvaluechangedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::oncharacteristicvaluechangedAttributeGetter(info);
+    }
 
-  ScriptPromise result = impl->stopNotifications(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+    static void oncharacteristicvaluechangedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(holder);
 
-MODULES_EXPORT  void stopNotificationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTCharacteristicV8Internal::stopNotificationsMethod(info);
-}
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncharacteristicvaluechanged(), v8Value, V8BluetoothRemoteGATTCharacteristic::eventListenerCacheIndex);
+
+        impl->setOncharacteristicvaluechanged(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void oncharacteristicvaluechangedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        BluetoothRemoteGATTCharacteristicV8Internal::oncharacteristicvaluechangedAttributeSetter(v8Value, info);
+    }
+
+    static void getDescriptorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "getDescriptor");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        StringOrUnsignedLong descriptor;
+        V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], descriptor, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->getDescriptor(scriptState, descriptor, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getDescriptorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::getDescriptorMethod(info);
+    }
+
+    static void getDescriptorsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "getDescriptors");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        StringOrUnsignedLong descriptor;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ScriptPromise result = impl->getDescriptors(scriptState, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result.v8Value());
+            return;
+        }
+        V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], descriptor, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->getDescriptors(scriptState, descriptor, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getDescriptorsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::getDescriptorsMethod(info);
+    }
+
+    static void readValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "readValue");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->readValue(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void readValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::readValueMethod(info);
+    }
+
+    static void writeValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "writeValue");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        ArrayBufferOrArrayBufferView value;
+        V8ArrayBufferOrArrayBufferView::toImpl(info.GetIsolate(), info[0], value, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->writeValue(scriptState, value);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void writeValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::writeValueMethod(info);
+    }
+
+    static void startNotificationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "startNotifications");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->startNotifications(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void startNotificationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::startNotificationsMethod(info);
+    }
+
+    static void stopNotificationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTCharacteristic", "stopNotifications");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BluetoothRemoteGATTCharacteristic::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BluetoothRemoteGATTCharacteristic* impl = V8BluetoothRemoteGATTCharacteristic::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->stopNotifications(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void stopNotificationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTCharacteristicV8Internal::stopNotificationsMethod(info);
+    }
 
 } // namespace BluetoothRemoteGATTCharacteristicV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8BluetoothRemoteGATTCharacteristicAccessors[] = {
-    {"service", BluetoothRemoteGATTCharacteristicV8Internal::serviceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uuid", BluetoothRemoteGATTCharacteristicV8Internal::uuidAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"properties", BluetoothRemoteGATTCharacteristicV8Internal::propertiesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"value", BluetoothRemoteGATTCharacteristicV8Internal::valueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncharacteristicvaluechanged", BluetoothRemoteGATTCharacteristicV8Internal::oncharacteristicvaluechangedAttributeGetterCallback, BluetoothRemoteGATTCharacteristicV8Internal::oncharacteristicvaluechangedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "service", BluetoothRemoteGATTCharacteristicV8Internal::serviceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uuid", BluetoothRemoteGATTCharacteristicV8Internal::uuidAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "properties", BluetoothRemoteGATTCharacteristicV8Internal::propertiesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "value", BluetoothRemoteGATTCharacteristicV8Internal::valueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncharacteristicvaluechanged", BluetoothRemoteGATTCharacteristicV8Internal::oncharacteristicvaluechangedAttributeGetterCallback, BluetoothRemoteGATTCharacteristicV8Internal::oncharacteristicvaluechangedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8BluetoothRemoteGATTCharacteristicMethods[] = {
-    {"getDescriptor", BluetoothRemoteGATTCharacteristicV8Internal::getDescriptorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"getDescriptors", BluetoothRemoteGATTCharacteristicV8Internal::getDescriptorsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"readValue", BluetoothRemoteGATTCharacteristicV8Internal::readValueMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"writeValue", BluetoothRemoteGATTCharacteristicV8Internal::writeValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"startNotifications", BluetoothRemoteGATTCharacteristicV8Internal::startNotificationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"stopNotifications", BluetoothRemoteGATTCharacteristicV8Internal::stopNotificationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "getDescriptor", BluetoothRemoteGATTCharacteristicV8Internal::getDescriptorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "getDescriptors", BluetoothRemoteGATTCharacteristicV8Internal::getDescriptorsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "readValue", BluetoothRemoteGATTCharacteristicV8Internal::readValueMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "writeValue", BluetoothRemoteGATTCharacteristicV8Internal::writeValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "startNotifications", BluetoothRemoteGATTCharacteristicV8Internal::startNotificationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "stopNotifications", BluetoothRemoteGATTCharacteristicV8Internal::stopNotificationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8BluetoothRemoteGATTCharacteristicTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BluetoothRemoteGATTCharacteristic::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8BluetoothRemoteGATTCharacteristic::internalFieldCount);
+static void installV8BluetoothRemoteGATTCharacteristicTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BluetoothRemoteGATTCharacteristic::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8BluetoothRemoteGATTCharacteristic::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::webBluetoothEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::webBluetoothEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothRemoteGATTCharacteristicAccessors, WTF_ARRAY_LENGTH(V8BluetoothRemoteGATTCharacteristicAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothRemoteGATTCharacteristicMethods, WTF_ARRAY_LENGTH(V8BluetoothRemoteGATTCharacteristicMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothRemoteGATTCharacteristicAccessors, WTF_ARRAY_LENGTH(V8BluetoothRemoteGATTCharacteristicAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothRemoteGATTCharacteristicMethods, WTF_ARRAY_LENGTH(V8BluetoothRemoteGATTCharacteristicMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8BluetoothRemoteGATTCharacteristic::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BluetoothRemoteGATTCharacteristicTemplate);
+v8::Local<v8::FunctionTemplate> V8BluetoothRemoteGATTCharacteristic::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BluetoothRemoteGATTCharacteristicTemplate);
 }
 
-bool V8BluetoothRemoteGATTCharacteristic::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8BluetoothRemoteGATTCharacteristic::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8BluetoothRemoteGATTCharacteristic::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8BluetoothRemoteGATTCharacteristic::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-BluetoothRemoteGATTCharacteristic* V8BluetoothRemoteGATTCharacteristic::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+BluetoothRemoteGATTCharacteristic* V8BluetoothRemoteGATTCharacteristic::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

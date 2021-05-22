@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef HitRegionOptions_h
 #define HitRegionOptions_h
 
@@ -23,43 +23,44 @@ class Path2D;
 class Element;
 
 class MODULES_EXPORT HitRegionOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  HitRegionOptions();
-  virtual ~HitRegionOptions();
-  HitRegionOptions(const HitRegionOptions&);
-  HitRegionOptions& operator=(const HitRegionOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasControl() const;
-  Element* control() const;
-  void setControl(Element*);
-  void setControlToNull();
+public:
+    HitRegionOptions();
+    virtual ~HitRegionOptions();
+    HitRegionOptions(const HitRegionOptions&);
+    HitRegionOptions& operator=(const HitRegionOptions&);
 
-  bool hasFillRule() const;
-  String fillRule() const;
-  void setFillRule(String);
+    bool hasControl() const;
+    Element* control() const;
+    void setControl(Element*);
+    void setControlToNull();
 
-  bool hasId() const;
-  String id() const;
-  void setId(String);
+    bool hasFillRule() const;
+    String fillRule() const;
+    void setFillRule(String);
 
-  bool hasPath() const;
-  Path2D* path() const;
-  void setPath(Path2D*);
-  void setPathToNull();
+    bool hasId() const;
+    String id() const;
+    void setId(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPath() const;
+    Path2D* path() const;
+    void setPath(Path2D*);
+    void setPathToNull();
 
- private:
-  Member<Element> m_control;
-  String m_fillRule;
-  String m_id;
-  Member<Path2D> m_path;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8HitRegionOptions;
+private:
+    Member<Element> m_control;
+    String m_fillRule;
+    String m_id;
+    Member<Path2D> m_path;
+
+    friend class V8HitRegionOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // HitRegionOptions_h
+#endif // HitRegionOptions_h

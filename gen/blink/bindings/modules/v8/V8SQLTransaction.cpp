@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SQLTransaction.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,119 +49,126 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SQLTransaction::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SQLTransaction is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SQLTransactionV8Internal {
 
-static void executeSqlMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SQLTransaction", "executeSql");
+    static void executeSqlMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SQLTransaction", "executeSql");
 
-  SQLTransaction* impl = V8SQLTransaction::toImpl(info.Holder());
+        SQLTransaction* impl = V8SQLTransaction::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> sqlStatement;
-  Nullable<Vector<ScriptValue>> arguments;
-  SQLStatementCallback* callback;
-  SQLStatementErrorCallback* errorCallback;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  sqlStatement = info[0];
-  if (!sqlStatement.prepare())
-    return;
+        V8StringResource<> sqlStatement;
+        Nullable<Vector<ScriptValue>> arguments;
+        SQLStatementCallback* callback;
+        SQLStatementErrorCallback* errorCallback;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        sqlStatement = info[0];
+        if (!sqlStatement.prepare())
+            return;
 
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->executeSql(scriptState, sqlStatement, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->executeSql(scriptState, sqlStatement, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        if (!isUndefinedOrNull(info[1])) {
+            arguments = toImplArray<Vector<ScriptValue>>(info[1], 2, info.GetIsolate(), exceptionState);
+            if (exceptionState.hadException())
+                return;
+        }
+
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+
+                return;
+            }
+            callback = V8SQLStatementCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            callback = nullptr;
+        }
+
+        if (!isUndefinedOrNull(info[3])) {
+            if (!info[3]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
+
+                return;
+            }
+            errorCallback = V8SQLStatementErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        impl->executeSql(scriptState, sqlStatement, arguments, callback, errorCallback, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
     }
-    return;
-  }
-  if (!isUndefinedOrNull(info[1])) {
-    arguments = toImplArray<Vector<ScriptValue>>(info[1], 2, info.GetIsolate(), exceptionState);
-    if (exceptionState.hadException())
-      return;
-  }
 
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-      return;
+    MODULES_EXPORT void executeSqlMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SQLTransactionV8Internal::executeSqlMethod(info);
     }
-    callback = V8SQLStatementCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    callback = nullptr;
-  }
-
-  if (!isUndefinedOrNull(info[3])) {
-    if (!info[3]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
-
-      return;
-    }
-    errorCallback = V8SQLStatementErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
-
-  impl->executeSql(scriptState, sqlStatement, arguments, callback, errorCallback, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void executeSqlMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SQLTransactionV8Internal::executeSqlMethod(info);
-}
 
 } // namespace SQLTransactionV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8SQLTransactionMethods[] = {
-    {"executeSql", SQLTransactionV8Internal::executeSqlMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "executeSql", SQLTransactionV8Internal::executeSqlMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SQLTransactionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SQLTransaction::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SQLTransaction::internalFieldCount);
+static void installV8SQLTransactionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SQLTransaction::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SQLTransaction::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SQLTransactionMethods, WTF_ARRAY_LENGTH(V8SQLTransactionMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SQLTransactionMethods, WTF_ARRAY_LENGTH(V8SQLTransactionMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SQLTransaction::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SQLTransactionTemplate);
+v8::Local<v8::FunctionTemplate> V8SQLTransaction::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SQLTransactionTemplate);
 }
 
-bool V8SQLTransaction::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SQLTransaction::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SQLTransaction::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SQLTransaction::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SQLTransaction* V8SQLTransaction::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SQLTransaction* V8SQLTransaction::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

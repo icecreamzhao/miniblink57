@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8USBEndpoint.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,157 +48,172 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&USBEndpoint::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "USBEndpoint is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace USBEndpointV8Internal {
 
-static void endpointNumberAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void endpointNumberAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  USBEndpoint* impl = V8USBEndpoint::toImpl(holder);
+        USBEndpoint* impl = V8USBEndpoint::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->endpointNumber());
-}
+        v8SetReturnValueUnsigned(info, impl->endpointNumber());
+    }
 
-MODULES_EXPORT void endpointNumberAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  USBEndpointV8Internal::endpointNumberAttributeGetter(info);
-}
+    MODULES_EXPORT void endpointNumberAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        USBEndpointV8Internal::endpointNumberAttributeGetter(info);
+    }
 
-static void directionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void directionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  USBEndpoint* impl = V8USBEndpoint::toImpl(holder);
+        USBEndpoint* impl = V8USBEndpoint::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->direction(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->direction(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void directionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  USBEndpointV8Internal::directionAttributeGetter(info);
-}
+    MODULES_EXPORT void directionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        USBEndpointV8Internal::directionAttributeGetter(info);
+    }
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  USBEndpoint* impl = V8USBEndpoint::toImpl(holder);
+        USBEndpoint* impl = V8USBEndpoint::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  USBEndpointV8Internal::typeAttributeGetter(info);
-}
+    MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        USBEndpointV8Internal::typeAttributeGetter(info);
+    }
 
-static void packetSizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void packetSizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  USBEndpoint* impl = V8USBEndpoint::toImpl(holder);
+        USBEndpoint* impl = V8USBEndpoint::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->packetSize());
-}
+        v8SetReturnValueUnsigned(info, impl->packetSize());
+    }
 
-MODULES_EXPORT void packetSizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  USBEndpointV8Internal::packetSizeAttributeGetter(info);
-}
+    MODULES_EXPORT void packetSizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        USBEndpointV8Internal::packetSizeAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "USBEndpoint");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "USBEndpoint");
 
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  USBAlternateInterface* alternate;
-  unsigned endpointNumber;
-  V8StringResource<> direction;
-  alternate = V8USBAlternateInterface::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!alternate) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'USBAlternateInterface'.");
+        USBAlternateInterface* alternate;
+        unsigned endpointNumber;
+        V8StringResource<> direction;
+        alternate = V8USBAlternateInterface::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!alternate) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'USBAlternateInterface'.");
 
-    return;
-  }
+            return;
+        }
 
-  endpointNumber = toUInt8(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        endpointNumber = toUInt8(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  direction = info[2];
-  if (!direction.prepare())
-    return;
-  const char* validDirectionValues[] = {
-      "in",
-      "out",
-  };
-  if (!isValidEnum(direction, validDirectionValues, WTF_ARRAY_LENGTH(validDirectionValues), "USBDirection", exceptionState)) {
-    return;
-  }
+        direction = info[2];
+        if (!direction.prepare())
+            return;
+        const char* validDirectionValues[] = {
+            "in",
+            "out",
+        };
+        if (!isValidEnum(direction, validDirectionValues, WTF_ARRAY_LENGTH(validDirectionValues), "USBDirection", exceptionState)) {
+            return;
+        }
 
-  USBEndpoint* impl = USBEndpoint::create(alternate, endpointNumber, direction, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8USBEndpoint::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        USBEndpoint* impl = USBEndpoint::create(alternate, endpointNumber, direction, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8USBEndpoint::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace USBEndpointV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8USBEndpointAccessors[] = {
-    {"endpointNumber", USBEndpointV8Internal::endpointNumberAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"direction", USBEndpointV8Internal::directionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"type", USBEndpointV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"packetSize", USBEndpointV8Internal::packetSizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "endpointNumber", USBEndpointV8Internal::endpointNumberAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "direction", USBEndpointV8Internal::directionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "type", USBEndpointV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "packetSize", USBEndpointV8Internal::packetSizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8USBEndpoint::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("USBEndpoint"));
-    return;
-  }
+void V8USBEndpoint::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("USBEndpoint"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  USBEndpointV8Internal::constructor(info);
+    USBEndpointV8Internal::constructor(info);
 }
 
-static void installV8USBEndpointTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8USBEndpoint::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8USBEndpoint::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8USBEndpoint::constructorCallback);
-  interfaceTemplate->SetLength(3);
+static void installV8USBEndpointTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8USBEndpoint::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8USBEndpoint::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8USBEndpoint::constructorCallback);
+    interfaceTemplate->SetLength(3);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8USBEndpointAccessors, WTF_ARRAY_LENGTH(V8USBEndpointAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8USBEndpointAccessors, WTF_ARRAY_LENGTH(V8USBEndpointAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8USBEndpoint::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8USBEndpointTemplate);
+v8::Local<v8::FunctionTemplate> V8USBEndpoint::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8USBEndpointTemplate);
 }
 
-bool V8USBEndpoint::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8USBEndpoint::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8USBEndpoint::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8USBEndpoint::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-USBEndpoint* V8USBEndpoint::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+USBEndpoint* V8USBEndpoint::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

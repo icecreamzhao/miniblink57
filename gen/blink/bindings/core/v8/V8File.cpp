@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8File.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,157 +52,172 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&File::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "File is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace FileV8Internal {
 
-static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  File* impl = V8File::toImpl(holder);
+        File* impl = V8File::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->name(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->name(), info.GetIsolate());
+    }
 
-CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileV8Internal::nameAttributeGetter(info);
-}
+    CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileV8Internal::nameAttributeGetter(info);
+    }
 
-static void lastModifiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lastModifiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  File* impl = V8File::toImpl(holder);
+        File* impl = V8File::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->lastModified()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->lastModified()));
+    }
 
-CORE_EXPORT void lastModifiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileV8Internal::lastModifiedAttributeGetter(info);
-}
+    CORE_EXPORT void lastModifiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileV8Internal::lastModifiedAttributeGetter(info);
+    }
 
-static void lastModifiedDateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lastModifiedDateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  File* impl = V8File::toImpl(holder);
+        File* impl = V8File::toImpl(holder);
 
-  v8SetReturnValue(info, v8DateOrNaN(info.GetIsolate(), impl->lastModifiedDate()));
-}
+        v8SetReturnValue(info, v8DateOrNaN(info.GetIsolate(), impl->lastModifiedDate()));
+    }
 
-CORE_EXPORT void lastModifiedDateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::FileGetLastModifiedDate);
+    CORE_EXPORT void lastModifiedDateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::FileGetLastModifiedDate);
 
-  FileV8Internal::lastModifiedDateAttributeGetter(info);
-}
+        FileV8Internal::lastModifiedDateAttributeGetter(info);
+    }
 
-static void webkitRelativePathAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webkitRelativePathAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  File* impl = V8File::toImpl(holder);
+        File* impl = V8File::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->webkitRelativePath(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->webkitRelativePath(), info.GetIsolate());
+    }
 
-CORE_EXPORT void webkitRelativePathAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedFileRelativePath);
+    CORE_EXPORT void webkitRelativePathAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedFileRelativePath);
 
-  FileV8Internal::webkitRelativePathAttributeGetter(info);
-}
+        FileV8Internal::webkitRelativePathAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "File");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "File");
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString> fileBits;
-  V8StringResource<> fileName;
-  FilePropertyBag options;
-  fileBits = toImplArray<HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
+        HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString> fileBits;
+        V8StringResource<> fileName;
+        FilePropertyBag options;
+        fileBits = toImplArray<HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  fileName = info[1];
-  if (!fileName.prepare())
-    return;
+        fileName = info[1];
+        if (!fileName.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
 
-    return;
-  }
-  V8FilePropertyBag::toImpl(info.GetIsolate(), info[2], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8FilePropertyBag::toImpl(info.GetIsolate(), info[2], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  File* impl = File::create(executionContext, fileBits, fileName, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8File::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        File* impl = File::create(executionContext, fileBits, fileName, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8File::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace FileV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8FileAccessors[] = {
-    {"name", FileV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastModified", FileV8Internal::lastModifiedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastModifiedDate", FileV8Internal::lastModifiedDateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitRelativePath", FileV8Internal::webkitRelativePathAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "name", FileV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastModified", FileV8Internal::lastModifiedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastModifiedDate", FileV8Internal::lastModifiedDateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitRelativePath", FileV8Internal::webkitRelativePathAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8File::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("File"));
-    return;
-  }
+void V8File::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("File"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  FileV8Internal::constructor(info);
+    FileV8Internal::constructor(info);
 }
 
-static void installV8FileTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8File::wrapperTypeInfo.interfaceName, V8Blob::domTemplate(isolate, world), V8File::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8File::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8FileTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8File::wrapperTypeInfo.interfaceName, V8Blob::domTemplate(isolate, world), V8File::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8File::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileAccessors, WTF_ARRAY_LENGTH(V8FileAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileAccessors, WTF_ARRAY_LENGTH(V8FileAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8File::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileTemplate);
+v8::Local<v8::FunctionTemplate> V8File::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileTemplate);
 }
 
-bool V8File::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8File::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8File::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8File::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-File* V8File::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+File* V8File::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

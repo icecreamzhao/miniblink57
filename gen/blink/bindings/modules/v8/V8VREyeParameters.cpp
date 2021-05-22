@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8VREyeParameters.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,121 +51,134 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&VREyeParameters::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "VREyeParameters is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace VREyeParametersV8Internal {
 
-static void offsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void offsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VREyeParameters* impl = V8VREyeParameters::toImpl(holder);
+        VREyeParameters* impl = V8VREyeParameters::toImpl(holder);
 
-  DOMFloat32Array* cppValue(WTF::getPtr(impl->offset()));
+        DOMFloat32Array* cppValue(WTF::getPtr(impl->offset()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#VREyeParameters#offset";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#VREyeParameters#offset";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void offsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VREyeParametersV8Internal::offsetAttributeGetter(info);
-}
+    MODULES_EXPORT void offsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VREyeParametersV8Internal::offsetAttributeGetter(info);
+    }
 
-static void fieldOfViewAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fieldOfViewAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VREyeParameters* impl = V8VREyeParameters::toImpl(holder);
+        VREyeParameters* impl = V8VREyeParameters::toImpl(holder);
 
-  VRFieldOfView* cppValue(WTF::getPtr(impl->fieldOfView()));
+        VRFieldOfView* cppValue(WTF::getPtr(impl->fieldOfView()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#VREyeParameters#fieldOfView";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#VREyeParameters#fieldOfView";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void fieldOfViewAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Deprecation::countDeprecation(currentExecutionContext(info.GetIsolate()), UseCounter::VRDeprecatedFieldOfView);
+    MODULES_EXPORT void fieldOfViewAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Deprecation::countDeprecation(currentExecutionContext(info.GetIsolate()), UseCounter::VRDeprecatedFieldOfView);
 
-  VREyeParametersV8Internal::fieldOfViewAttributeGetter(info);
-}
+        VREyeParametersV8Internal::fieldOfViewAttributeGetter(info);
+    }
 
-static void renderWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void renderWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VREyeParameters* impl = V8VREyeParameters::toImpl(holder);
+        VREyeParameters* impl = V8VREyeParameters::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->renderWidth());
-}
+        v8SetReturnValueUnsigned(info, impl->renderWidth());
+    }
 
-MODULES_EXPORT void renderWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VREyeParametersV8Internal::renderWidthAttributeGetter(info);
-}
+    MODULES_EXPORT void renderWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VREyeParametersV8Internal::renderWidthAttributeGetter(info);
+    }
 
-static void renderHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void renderHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VREyeParameters* impl = V8VREyeParameters::toImpl(holder);
+        VREyeParameters* impl = V8VREyeParameters::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->renderHeight());
-}
+        v8SetReturnValueUnsigned(info, impl->renderHeight());
+    }
 
-MODULES_EXPORT void renderHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VREyeParametersV8Internal::renderHeightAttributeGetter(info);
-}
+    MODULES_EXPORT void renderHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VREyeParametersV8Internal::renderHeightAttributeGetter(info);
+    }
 
 } // namespace VREyeParametersV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8VREyeParametersAccessors[] = {
-    {"offset", VREyeParametersV8Internal::offsetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fieldOfView", VREyeParametersV8Internal::fieldOfViewAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"renderWidth", VREyeParametersV8Internal::renderWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"renderHeight", VREyeParametersV8Internal::renderHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "offset", VREyeParametersV8Internal::offsetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fieldOfView", VREyeParametersV8Internal::fieldOfViewAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "renderWidth", VREyeParametersV8Internal::renderWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "renderHeight", VREyeParametersV8Internal::renderHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8VREyeParametersTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VREyeParameters::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VREyeParameters::internalFieldCount);
+static void installV8VREyeParametersTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VREyeParameters::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VREyeParameters::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VREyeParametersAccessors, WTF_ARRAY_LENGTH(V8VREyeParametersAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VREyeParametersAccessors, WTF_ARRAY_LENGTH(V8VREyeParametersAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8VREyeParameters::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VREyeParametersTemplate);
+v8::Local<v8::FunctionTemplate> V8VREyeParameters::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VREyeParametersTemplate);
 }
 
-bool V8VREyeParameters::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8VREyeParameters::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8VREyeParameters::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8VREyeParameters::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-VREyeParameters* V8VREyeParameters::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+VREyeParameters* V8VREyeParameters::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

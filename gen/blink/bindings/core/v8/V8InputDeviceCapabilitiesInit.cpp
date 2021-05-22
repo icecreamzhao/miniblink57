@@ -8,66 +8,70 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8InputDeviceCapabilitiesInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8InputDeviceCapabilitiesInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, InputDeviceCapabilitiesInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8InputDeviceCapabilitiesInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, InputDeviceCapabilitiesInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> firesTouchEventsValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "firesTouchEvents")).ToLocal(&firesTouchEventsValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (firesTouchEventsValue.IsEmpty() || firesTouchEventsValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool firesTouchEvents = toBoolean(isolate, firesTouchEventsValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setFiresTouchEvents(firesTouchEvents);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> firesTouchEventsValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "firesTouchEvents")).ToLocal(&firesTouchEventsValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (firesTouchEventsValue.IsEmpty() || firesTouchEventsValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool firesTouchEvents = toBoolean(isolate, firesTouchEventsValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setFiresTouchEvents(firesTouchEvents);
+    }
 }
 
-v8::Local<v8::Value> InputDeviceCapabilitiesInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8InputDeviceCapabilitiesInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> InputDeviceCapabilitiesInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8InputDeviceCapabilitiesInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8InputDeviceCapabilitiesInit(const InputDeviceCapabilitiesInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasFiresTouchEvents()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "firesTouchEvents"), v8Boolean(impl.firesTouchEvents(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "firesTouchEvents"), v8Boolean(false, isolate))))
-      return false;
-  }
+bool toV8InputDeviceCapabilitiesInit(const InputDeviceCapabilitiesInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasFiresTouchEvents()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "firesTouchEvents"), v8Boolean(impl.firesTouchEvents(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "firesTouchEvents"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-InputDeviceCapabilitiesInit NativeValueTraits<InputDeviceCapabilitiesInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  InputDeviceCapabilitiesInit impl;
-  V8InputDeviceCapabilitiesInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+InputDeviceCapabilitiesInit NativeValueTraits<InputDeviceCapabilitiesInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    InputDeviceCapabilitiesInit impl;
+    V8InputDeviceCapabilitiesInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

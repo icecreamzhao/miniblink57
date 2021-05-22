@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8EXTsRGB_h
 #define V8EXTsRGB_h
 
@@ -24,32 +24,36 @@
 namespace blink {
 
 class V8EXTsRGB {
-  STATIC_ONLY(V8EXTsRGB);
- public:
-  MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static EXTsRGB* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<EXTsRGB>();
-  }
-  MODULES_EXPORT static EXTsRGB* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<EXTsRGB>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<EXTsRGB>());
-  }
-  static void visitDOMWrapper(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8EXTsRGB);
+
+public:
+    MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static EXTsRGB* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<EXTsRGB>();
+    }
+    MODULES_EXPORT static EXTsRGB* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<EXTsRGB>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<EXTsRGB>());
+    }
+    static void visitDOMWrapper(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<EXTsRGB> {
-  typedef V8EXTsRGB Type;
+    typedef V8EXTsRGB Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8EXTsRGB_h
+#endif // V8EXTsRGB_h

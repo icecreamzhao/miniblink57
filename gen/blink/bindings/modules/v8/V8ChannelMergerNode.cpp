@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ChannelMergerNode.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,95 +49,102 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ChannelMergerNode::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ChannelMergerNode is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ChannelMergerNodeV8Internal {
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ChannelMergerNode");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ChannelMergerNode");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  BaseAudioContext* context;
-  ChannelMergerOptions options;
-  context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!context) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
+        BaseAudioContext* context;
+        ChannelMergerOptions options;
+        context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!context) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
 
-    return;
-  }
+            return;
+        }
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-    return;
-  }
-  V8ChannelMergerOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8ChannelMergerOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ChannelMergerNode* impl = ChannelMergerNode::create(context, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ChannelMergerNode::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        ChannelMergerNode* impl = ChannelMergerNode::create(context, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ChannelMergerNode::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace ChannelMergerNodeV8Internal
 
-void V8ChannelMergerNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8ChannelMergerNode_Constructor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("ChannelMergerNode"));
-    return;
-  }
+void V8ChannelMergerNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8ChannelMergerNode_Constructor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("ChannelMergerNode"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  ChannelMergerNodeV8Internal::constructor(info);
+    ChannelMergerNodeV8Internal::constructor(info);
 }
 
-static void installV8ChannelMergerNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ChannelMergerNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8ChannelMergerNode::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8ChannelMergerNode::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8ChannelMergerNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ChannelMergerNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8ChannelMergerNode::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8ChannelMergerNode::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 }
 
-v8::Local<v8::FunctionTemplate> V8ChannelMergerNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ChannelMergerNodeTemplate);
+v8::Local<v8::FunctionTemplate> V8ChannelMergerNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ChannelMergerNodeTemplate);
 }
 
-bool V8ChannelMergerNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ChannelMergerNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ChannelMergerNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ChannelMergerNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ChannelMergerNode* V8ChannelMergerNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ChannelMergerNode* V8ChannelMergerNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Bluetooth.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,93 +50,100 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Bluetooth::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Bluetooth is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BluetoothV8Internal {
 
-static void requestDeviceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Bluetooth", "requestDevice");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void requestDeviceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Bluetooth", "requestDevice");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Bluetooth::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Bluetooth* impl = V8Bluetooth::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Bluetooth::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Bluetooth* impl = V8Bluetooth::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  RequestDeviceOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
+        RequestDeviceOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
 
-    return;
-  }
-  V8RequestDeviceOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8RequestDeviceOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = impl->requestDevice(scriptState, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->requestDevice(scriptState, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void requestDeviceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebBluetoothRequestDevice);
-  BluetoothV8Internal::requestDeviceMethod(info);
-}
+    MODULES_EXPORT void requestDeviceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebBluetoothRequestDevice);
+        BluetoothV8Internal::requestDeviceMethod(info);
+    }
 
 } // namespace BluetoothV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8BluetoothMethods[] = {
-    {"requestDevice", BluetoothV8Internal::requestDeviceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "requestDevice", BluetoothV8Internal::requestDeviceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8BluetoothTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Bluetooth::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Bluetooth::internalFieldCount);
+static void installV8BluetoothTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Bluetooth::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Bluetooth::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::webBluetoothEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::webBluetoothEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothMethods, WTF_ARRAY_LENGTH(V8BluetoothMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothMethods, WTF_ARRAY_LENGTH(V8BluetoothMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Bluetooth::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BluetoothTemplate);
+v8::Local<v8::FunctionTemplate> V8Bluetooth::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BluetoothTemplate);
 }
 
-bool V8Bluetooth::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Bluetooth::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Bluetooth::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Bluetooth::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Bluetooth* V8Bluetooth::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Bluetooth* V8Bluetooth::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

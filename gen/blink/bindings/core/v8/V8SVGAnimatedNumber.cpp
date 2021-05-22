@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGAnimatedNumber.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,101 +46,113 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGAnimatedNumber::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGAnimatedNumber is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGAnimatedNumberV8Internal {
 
-static void baseValAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void baseValAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGAnimatedNumber* impl = V8SVGAnimatedNumber::toImpl(holder);
+        SVGAnimatedNumber* impl = V8SVGAnimatedNumber::toImpl(holder);
 
-  v8SetReturnValue(info, impl->baseVal());
-}
+        v8SetReturnValue(info, impl->baseVal());
+    }
 
-CORE_EXPORT void baseValAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGAnimatedNumberV8Internal::baseValAttributeGetter(info);
-}
+    CORE_EXPORT void baseValAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGAnimatedNumberV8Internal::baseValAttributeGetter(info);
+    }
 
-static void baseValAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGAnimatedNumber* impl = V8SVGAnimatedNumber::toImpl(holder);
+    static void baseValAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGAnimatedNumber* impl = V8SVGAnimatedNumber::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGAnimatedNumber", "baseVal");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGAnimatedNumber", "baseVal");
 
-  // Prepare the value to be set.
-  float cppValue = toRestrictedFloat(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        float cppValue = toRestrictedFloat(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBaseVal(cppValue, exceptionState);
-}
+        impl->setBaseVal(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void baseValAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void baseValAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGAnimatedNumberV8Internal::baseValAttributeSetter(v8Value, info);
-}
+        SVGAnimatedNumberV8Internal::baseValAttributeSetter(v8Value, info);
+    }
 
-static void animValAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void animValAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGAnimatedNumber* impl = V8SVGAnimatedNumber::toImpl(holder);
+        SVGAnimatedNumber* impl = V8SVGAnimatedNumber::toImpl(holder);
 
-  v8SetReturnValue(info, impl->animVal());
-}
+        v8SetReturnValue(info, impl->animVal());
+    }
 
-CORE_EXPORT void animValAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGAnimatedNumberV8Internal::animValAttributeGetter(info);
-}
+    CORE_EXPORT void animValAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGAnimatedNumberV8Internal::animValAttributeGetter(info);
+    }
 
 } // namespace SVGAnimatedNumberV8Internal
 
-void V8SVGAnimatedNumber::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  SVGAnimatedNumber* impl = scriptWrappable->toImpl<SVGAnimatedNumber>();
-  SVGElement* contextElement = impl->contextElement();
-  if (contextElement) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
-  }
+void V8SVGAnimatedNumber::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    SVGAnimatedNumber* impl = scriptWrappable->toImpl<SVGAnimatedNumber>();
+    SVGElement* contextElement = impl->contextElement();
+    if (contextElement) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGAnimatedNumberAccessors[] = {
-    {"baseVal", SVGAnimatedNumberV8Internal::baseValAttributeGetterCallback, SVGAnimatedNumberV8Internal::baseValAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"animVal", SVGAnimatedNumberV8Internal::animValAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "baseVal", SVGAnimatedNumberV8Internal::baseValAttributeGetterCallback, SVGAnimatedNumberV8Internal::baseValAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "animVal", SVGAnimatedNumberV8Internal::animValAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGAnimatedNumberTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGAnimatedNumber::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGAnimatedNumber::internalFieldCount);
+static void installV8SVGAnimatedNumberTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGAnimatedNumber::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGAnimatedNumber::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGAnimatedNumberAccessors, WTF_ARRAY_LENGTH(V8SVGAnimatedNumberAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGAnimatedNumberAccessors, WTF_ARRAY_LENGTH(V8SVGAnimatedNumberAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGAnimatedNumber::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGAnimatedNumberTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGAnimatedNumber::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGAnimatedNumberTemplate);
 }
 
-bool V8SVGAnimatedNumber::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGAnimatedNumber::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGAnimatedNumber::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGAnimatedNumber::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGAnimatedNumber* V8SVGAnimatedNumber::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGAnimatedNumber* V8SVGAnimatedNumber::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

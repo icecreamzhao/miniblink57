@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ShadowRoot.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -55,292 +55,325 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ShadowRoot::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ShadowRoot is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ShadowRootV8Internal {
 
-static void modeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void modeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->mode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->mode(), info.GetIsolate());
+    }
 
-CORE_EXPORT void modeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::modeAttributeGetter(info);
-}
+    CORE_EXPORT void modeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::modeAttributeGetter(info);
+    }
 
-static void hostAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hostAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->host()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->host()), impl);
+    }
 
-CORE_EXPORT void hostAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::hostAttributeGetter(info);
-}
+    CORE_EXPORT void hostAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::hostAttributeGetter(info);
+    }
 
-static void olderShadowRootAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void olderShadowRootAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->olderShadowRootForBindings()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->olderShadowRootForBindings()), impl);
+    }
 
-CORE_EXPORT void olderShadowRootAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::olderShadowRootAttributeGetter(info);
-}
+    CORE_EXPORT void olderShadowRootAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::olderShadowRootAttributeGetter(info);
+    }
 
-static void innerHTMLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void innerHTMLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->innerHTML(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->innerHTML(), info.GetIsolate());
+    }
 
-CORE_EXPORT void innerHTMLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::innerHTMLAttributeGetter(info);
-}
+    CORE_EXPORT void innerHTMLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::innerHTMLAttributeGetter(info);
+    }
 
-static void innerHTMLAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+    static void innerHTMLAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "ShadowRoot", "innerHTML");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "ShadowRoot", "innerHTML");
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setInnerHTML(cppValue, exceptionState);
-}
+        impl->setInnerHTML(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void innerHTMLAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void innerHTMLAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ShadowRootV8Internal::innerHTMLAttributeSetter(v8Value, info);
-}
+        ShadowRootV8Internal::innerHTMLAttributeSetter(v8Value, info);
+    }
 
-static void delegatesFocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void delegatesFocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->delegatesFocus());
-}
+        v8SetReturnValueBool(info, impl->delegatesFocus());
+    }
 
-CORE_EXPORT void delegatesFocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::delegatesFocusAttributeGetter(info);
-}
+    CORE_EXPORT void delegatesFocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::delegatesFocusAttributeGetter(info);
+    }
 
-static void activeElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void activeElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
 
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::activeElement(*impl), impl);
-}
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::activeElement(*impl), impl);
+    }
 
-CORE_EXPORT void activeElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::activeElementAttributeGetter(info);
-}
+    CORE_EXPORT void activeElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::activeElementAttributeGetter(info);
+    }
 
-static void styleSheetsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void styleSheetsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
 
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::styleSheets(*impl), impl);
-}
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::styleSheets(*impl), impl);
+    }
+
+    CORE_EXPORT void styleSheetsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::styleSheetsAttributeGetter(info);
+    }
+
+    static void pointerLockElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-CORE_EXPORT void styleSheetsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::styleSheetsAttributeGetter(info);
-}
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
 
-static void pointerLockElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::pointerLockElement(*impl), impl);
+    }
 
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+    CORE_EXPORT void pointerLockElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::pointerLockElementAttributeGetter(info);
+    }
 
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::pointerLockElement(*impl), impl);
-}
+    static void fullscreenElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-CORE_EXPORT void pointerLockElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::pointerLockElementAttributeGetter(info);
-}
-
-static void fullscreenElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
-
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::fullscreenElement(*impl), impl);
-}
-
-CORE_EXPORT void fullscreenElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::fullscreenElementAttributeGetter(info);
-}
-
-static void cloneNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ShadowRoot", "cloneNode");
-
-  ShadowRoot* impl = V8ShadowRoot::toImpl(info.Holder());
-
-  bool deep;
-  if (!info[0]->IsUndefined()) {
-    deep = toBoolean(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    deep = false;
-  }
-
-  Node* result = impl->cloneNode(deep, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void cloneNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::cloneNodeMethod(info);
-}
-
-static void getSelectionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRoot* impl = V8ShadowRoot::toImpl(info.Holder());
-
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::getSelection(*impl), impl);
-}
-
-CORE_EXPORT  void getSelectionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::getSelectionMethod(info);
-}
-
-static void elementFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ShadowRoot", "elementFromPoint");
-
-  ShadowRoot* impl = V8ShadowRoot::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::elementFromPoint(*impl, x, y), impl);
-}
-
-CORE_EXPORT  void elementFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::elementFromPointMethod(info);
-}
-
-static void elementsFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ShadowRoot", "elementsFromPoint");
-
-  ShadowRoot* impl = V8ShadowRoot::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, ToV8(DocumentOrShadowRoot::elementsFromPoint(*impl, x, y), info.Holder(), info.GetIsolate()));
-}
-
-CORE_EXPORT  void elementsFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ShadowRootV8Internal::elementsFromPointMethod(info);
-}
+        ShadowRoot* impl = V8ShadowRoot::toImpl(holder);
+
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::fullscreenElement(*impl), impl);
+    }
+
+    CORE_EXPORT void fullscreenElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::fullscreenElementAttributeGetter(info);
+    }
+
+    static void cloneNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ShadowRoot", "cloneNode");
+
+        ShadowRoot* impl = V8ShadowRoot::toImpl(info.Holder());
+
+        bool deep;
+        if (!info[0]->IsUndefined()) {
+            deep = toBoolean(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            deep = false;
+        }
+
+        Node* result = impl->cloneNode(deep, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void cloneNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::cloneNodeMethod(info);
+    }
+
+    static void getSelectionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRoot* impl = V8ShadowRoot::toImpl(info.Holder());
+
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::getSelection(*impl), impl);
+    }
+
+    CORE_EXPORT void getSelectionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::getSelectionMethod(info);
+    }
+
+    static void elementFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ShadowRoot", "elementFromPoint");
+
+        ShadowRoot* impl = V8ShadowRoot::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::elementFromPoint(*impl, x, y), impl);
+    }
+
+    CORE_EXPORT void elementFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::elementFromPointMethod(info);
+    }
+
+    static void elementsFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ShadowRoot", "elementsFromPoint");
+
+        ShadowRoot* impl = V8ShadowRoot::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, ToV8(DocumentOrShadowRoot::elementsFromPoint(*impl, x, y), info.Holder(), info.GetIsolate()));
+    }
+
+    CORE_EXPORT void elementsFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ShadowRootV8Internal::elementsFromPointMethod(info);
+    }
 
 } // namespace ShadowRootV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ShadowRootAccessors[] = {
-    {"mode", ShadowRootV8Internal::modeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"host", ShadowRootV8Internal::hostAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"olderShadowRoot", ShadowRootV8Internal::olderShadowRootAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"innerHTML", ShadowRootV8Internal::innerHTMLAttributeGetterCallback, ShadowRootV8Internal::innerHTMLAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"delegatesFocus", ShadowRootV8Internal::delegatesFocusAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"activeElement", ShadowRootV8Internal::activeElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"styleSheets", ShadowRootV8Internal::styleSheetsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pointerLockElement", ShadowRootV8Internal::pointerLockElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "mode", ShadowRootV8Internal::modeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "host", ShadowRootV8Internal::hostAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "olderShadowRoot", ShadowRootV8Internal::olderShadowRootAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "innerHTML", ShadowRootV8Internal::innerHTMLAttributeGetterCallback, ShadowRootV8Internal::innerHTMLAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "delegatesFocus", ShadowRootV8Internal::delegatesFocusAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "activeElement", ShadowRootV8Internal::activeElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "styleSheets", ShadowRootV8Internal::styleSheetsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pointerLockElement", ShadowRootV8Internal::pointerLockElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8ShadowRootMethods[] = {
-    {"cloneNode", ShadowRootV8Internal::cloneNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getSelection", ShadowRootV8Internal::getSelectionMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"elementFromPoint", ShadowRootV8Internal::elementFromPointMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"elementsFromPoint", ShadowRootV8Internal::elementsFromPointMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "cloneNode", ShadowRootV8Internal::cloneNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getSelection", ShadowRootV8Internal::getSelectionMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "elementFromPoint", ShadowRootV8Internal::elementFromPointMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "elementsFromPoint", ShadowRootV8Internal::elementsFromPointMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8ShadowRootTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ShadowRoot::wrapperTypeInfo.interfaceName, V8DocumentFragment::domTemplate(isolate, world), V8ShadowRoot::internalFieldCount);
+static void installV8ShadowRootTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ShadowRoot::wrapperTypeInfo.interfaceName, V8DocumentFragment::domTemplate(isolate, world), V8ShadowRoot::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ShadowRootAccessors, WTF_ARRAY_LENGTH(V8ShadowRootAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ShadowRootMethods, WTF_ARRAY_LENGTH(V8ShadowRootMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ShadowRootAccessors, WTF_ARRAY_LENGTH(V8ShadowRootAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ShadowRootMethods, WTF_ARRAY_LENGTH(V8ShadowRootMethods));
 
-  if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorfullscreenElementConfiguration = {"fullscreenElement", ShadowRootV8Internal::fullscreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfullscreenElementConfiguration);
-  }
+    if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorfullscreenElementConfiguration = { "fullscreenElement", ShadowRootV8Internal::fullscreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfullscreenElementConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8ShadowRoot::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ShadowRootTemplate);
+v8::Local<v8::FunctionTemplate> V8ShadowRoot::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ShadowRootTemplate);
 }
 
-bool V8ShadowRoot::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ShadowRoot::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ShadowRoot::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ShadowRoot::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ShadowRoot* V8ShadowRoot::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ShadowRoot* V8ShadowRoot::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

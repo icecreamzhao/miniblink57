@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Client.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,148 +52,161 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ServiceWorkerClient::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ServiceWorkerClient is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ServiceWorkerClientV8Internal {
 
-static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ServiceWorkerClient* impl = V8Client::toImpl(holder);
+        ServiceWorkerClient* impl = V8Client::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->url(), info.GetIsolate());
-}
-
-MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ServiceWorkerClientV8Internal::urlAttributeGetter(info);
-}
-
-static void frameTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  ServiceWorkerClient* impl = V8Client::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->frameType(), info.GetIsolate());
-}
-
-MODULES_EXPORT void frameTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ServiceWorkerClientV8Internal::frameTypeAttributeGetter(info);
-}
-
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  ServiceWorkerClient* impl = V8Client::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->id(), info.GetIsolate());
-}
-
-MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ServiceWorkerClientV8Internal::idAttributeGetter(info);
-}
-
-static void postMessageImpl(const char* interfaceName, ServiceWorkerClient* instance, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, interfaceName, "postMessage");
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Transferables transferables;
-  if (info.Length() > 1) {
-    const int transferablesArgIndex = 1;
-    if (!SerializedScriptValue::extractTransferables(info.GetIsolate(), info[transferablesArgIndex], transferablesArgIndex, transferables, exceptionState)) {
-      return;
+        v8SetReturnValueString(info, impl->url(), info.GetIsolate());
     }
-  }
 
-  RefPtr<SerializedScriptValue> message;
-  if (instance->canTransferArrayBuffersAndImageBitmaps()) {
-    // This instance supports sending array buffers by move semantics.
-    message = SerializedScriptValue::serialize(info.GetIsolate(), info[0], &transferables, nullptr, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    // This instance doesn't support sending array buffers and image bitmaps
-    // by move semantics. Emulate it by copy-and-neuter semantics that sends
-    // array buffers and image bitmaps via structured clone and then neuters
-    // the original objects
+    MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ServiceWorkerClientV8Internal::urlAttributeGetter(info);
+    }
 
-    // Clear references to array buffers and image bitmaps from transferables
-    // so that the serializer can consider the array buffers as
-    // non-transferable and serialize them into the message.
-    ArrayBufferArray transferableArrayBuffers = transferables.arrayBuffers;
-    transferables.arrayBuffers.clear();
-    ImageBitmapArray transferableImageBitmaps = transferables.imageBitmaps;
-    transferables.imageBitmaps.clear();
-    message = SerializedScriptValue::serialize(info.GetIsolate(), info[0], &transferables, nullptr, exceptionState);
-    if (exceptionState.hadException())
-      return;
+    static void frameTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-    // Neuter the original array buffers on the sender context.
-    SerializedScriptValue::transferArrayBufferContents(info.GetIsolate(), transferableArrayBuffers, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    // Neuter the original image bitmaps on the sender context.
-    SerializedScriptValue::transferImageBitmapContents(info.GetIsolate(), transferableImageBitmaps, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  }
+        ServiceWorkerClient* impl = V8Client::toImpl(holder);
 
-  // FIXME: Only pass context/exceptionState if instance really requires it.
-  ExecutionContext* context = currentExecutionContext(info.GetIsolate());
-  instance->postMessage(context, message.release(), transferables.messagePorts, exceptionState);
-}
+        v8SetReturnValueString(info, impl->frameType(), info.GetIsolate());
+    }
 
-MODULES_EXPORT  void postMessageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  postMessageImpl("Client", V8Client::toImpl(info.Holder()), info);
-}
+    MODULES_EXPORT void frameTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ServiceWorkerClientV8Internal::frameTypeAttributeGetter(info);
+    }
+
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        ServiceWorkerClient* impl = V8Client::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->id(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ServiceWorkerClientV8Internal::idAttributeGetter(info);
+    }
+
+    static void postMessageImpl(const char* interfaceName, ServiceWorkerClient* instance, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, interfaceName, "postMessage");
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Transferables transferables;
+        if (info.Length() > 1) {
+            const int transferablesArgIndex = 1;
+            if (!SerializedScriptValue::extractTransferables(info.GetIsolate(), info[transferablesArgIndex], transferablesArgIndex, transferables, exceptionState)) {
+                return;
+            }
+        }
+
+        RefPtr<SerializedScriptValue> message;
+        if (instance->canTransferArrayBuffersAndImageBitmaps()) {
+            // This instance supports sending array buffers by move semantics.
+            message = SerializedScriptValue::serialize(info.GetIsolate(), info[0], &transferables, nullptr, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            // This instance doesn't support sending array buffers and image bitmaps
+            // by move semantics. Emulate it by copy-and-neuter semantics that sends
+            // array buffers and image bitmaps via structured clone and then neuters
+            // the original objects
+
+            // Clear references to array buffers and image bitmaps from transferables
+            // so that the serializer can consider the array buffers as
+            // non-transferable and serialize them into the message.
+            ArrayBufferArray transferableArrayBuffers = transferables.arrayBuffers;
+            transferables.arrayBuffers.clear();
+            ImageBitmapArray transferableImageBitmaps = transferables.imageBitmaps;
+            transferables.imageBitmaps.clear();
+            message = SerializedScriptValue::serialize(info.GetIsolate(), info[0], &transferables, nullptr, exceptionState);
+            if (exceptionState.hadException())
+                return;
+
+            // Neuter the original array buffers on the sender context.
+            SerializedScriptValue::transferArrayBufferContents(info.GetIsolate(), transferableArrayBuffers, exceptionState);
+            if (exceptionState.hadException())
+                return;
+            // Neuter the original image bitmaps on the sender context.
+            SerializedScriptValue::transferImageBitmapContents(info.GetIsolate(), transferableImageBitmaps, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        }
+
+        // FIXME: Only pass context/exceptionState if instance really requires it.
+        ExecutionContext* context = currentExecutionContext(info.GetIsolate());
+        instance->postMessage(context, message.release(), transferables.messagePorts, exceptionState);
+    }
+
+    MODULES_EXPORT void postMessageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        postMessageImpl("Client", V8Client::toImpl(info.Holder()), info);
+    }
 
 } // namespace ServiceWorkerClientV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ClientAccessors[] = {
-    {"url", ServiceWorkerClientV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"frameType", ServiceWorkerClientV8Internal::frameTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"id", ServiceWorkerClientV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "url", ServiceWorkerClientV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "frameType", ServiceWorkerClientV8Internal::frameTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "id", ServiceWorkerClientV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8ClientMethods[] = {
-    {"postMessage", ServiceWorkerClientV8Internal::postMessageMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "postMessage", ServiceWorkerClientV8Internal::postMessageMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8ClientTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Client::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Client::internalFieldCount);
+static void installV8ClientTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Client::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Client::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ClientAccessors, WTF_ARRAY_LENGTH(V8ClientAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ClientMethods, WTF_ARRAY_LENGTH(V8ClientMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ClientAccessors, WTF_ARRAY_LENGTH(V8ClientAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ClientMethods, WTF_ARRAY_LENGTH(V8ClientMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Client::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ClientTemplate);
+v8::Local<v8::FunctionTemplate> V8Client::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ClientTemplate);
 }
 
-bool V8Client::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Client::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Client::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Client::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ServiceWorkerClient* V8Client::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ServiceWorkerClient* V8Client::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

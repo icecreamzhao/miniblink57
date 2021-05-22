@@ -8,52 +8,63 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaImage.h"
 
 namespace blink {
 
-MediaImage::MediaImage() {
-  setSizes(String(""));
-  setType(String(""));
+MediaImage::MediaImage()
+{
+    setSizes(String(""));
+    setType(String(""));
 }
 
-MediaImage::~MediaImage() {}
+MediaImage::~MediaImage() { }
 
 MediaImage::MediaImage(const MediaImage&) = default;
 
 MediaImage& MediaImage::operator=(const MediaImage&) = default;
 
-bool MediaImage::hasSizes() const {
-  return !m_sizes.isNull();
+bool MediaImage::hasSizes() const
+{
+    return !m_sizes.isNull();
 }
-String MediaImage::sizes() const {
-  return m_sizes;
+String MediaImage::sizes() const
+{
+    return m_sizes;
 }
-void MediaImage::setSizes(String value) {
-  m_sizes = value;
+void MediaImage::setSizes(String value)
+{
+    m_sizes = value;
 }
-bool MediaImage::hasSrc() const {
-  return !m_src.isNull();
+bool MediaImage::hasSrc() const
+{
+    return !m_src.isNull();
 }
-String MediaImage::src() const {
-  return m_src;
+String MediaImage::src() const
+{
+    return m_src;
 }
-void MediaImage::setSrc(String value) {
-  m_src = value;
+void MediaImage::setSrc(String value)
+{
+    m_src = value;
 }
-bool MediaImage::hasType() const {
-  return !m_type.isNull();
+bool MediaImage::hasType() const
+{
+    return !m_type.isNull();
 }
-String MediaImage::type() const {
-  return m_type;
+String MediaImage::type() const
+{
+    return m_type;
 }
-void MediaImage::setType(String value) {
-  m_type = value;
+void MediaImage::setType(String value)
+{
+    m_type = value;
 }
 
-DEFINE_TRACE(MediaImage) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(MediaImage)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

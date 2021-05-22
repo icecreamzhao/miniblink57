@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Int8Array.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -42,35 +42,37 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMInt8Array::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMInt8Array is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
-DOMInt8Array* V8Int8Array::toImpl(v8::Local<v8::Object> object) {
-  DCHECK(object->IsInt8Array());
-  ScriptWrappable* scriptWrappable = toScriptWrappable(object);
-  if (scriptWrappable)
-    return scriptWrappable->toImpl<DOMInt8Array>();
+DOMInt8Array* V8Int8Array::toImpl(v8::Local<v8::Object> object)
+{
+    DCHECK(object->IsInt8Array());
+    ScriptWrappable* scriptWrappable = toScriptWrappable(object);
+    if (scriptWrappable)
+        return scriptWrappable->toImpl<DOMInt8Array>();
 
-  v8::Local<v8::Int8Array> v8View = object.As<v8::Int8Array>();
-  v8::Local<v8::Object> arrayBuffer = v8View->Buffer();
-  DOMInt8Array* typedArray = nullptr;
-  if (arrayBuffer->IsArrayBuffer()) {
-    typedArray = DOMInt8Array::create(V8ArrayBuffer::toImpl(arrayBuffer), v8View->ByteOffset(), v8View->Length());
-  } else if (arrayBuffer->IsSharedArrayBuffer()) {
-    typedArray = DOMInt8Array::create(V8SharedArrayBuffer::toImpl(arrayBuffer), v8View->ByteOffset(), v8View->Length());
-  } else {
-    NOTREACHED();
-  }
-  v8::Local<v8::Object> associatedWrapper = typedArray->associateWithWrapper(v8::Isolate::GetCurrent(), typedArray->wrapperTypeInfo(), object);
-  DCHECK(associatedWrapper == object);
+    v8::Local<v8::Int8Array> v8View = object.As<v8::Int8Array>();
+    v8::Local<v8::Object> arrayBuffer = v8View->Buffer();
+    DOMInt8Array* typedArray = nullptr;
+    if (arrayBuffer->IsArrayBuffer()) {
+        typedArray = DOMInt8Array::create(V8ArrayBuffer::toImpl(arrayBuffer), v8View->ByteOffset(), v8View->Length());
+    } else if (arrayBuffer->IsSharedArrayBuffer()) {
+        typedArray = DOMInt8Array::create(V8SharedArrayBuffer::toImpl(arrayBuffer), v8View->ByteOffset(), v8View->Length());
+    } else {
+        NOTREACHED();
+    }
+    v8::Local<v8::Object> associatedWrapper = typedArray->associateWithWrapper(v8::Isolate::GetCurrent(), typedArray->wrapperTypeInfo(), object);
+    DCHECK(associatedWrapper == object);
 
-  return typedArray->toImpl<DOMInt8Array>();
+    return typedArray->toImpl<DOMInt8Array>();
 }
 
-DOMInt8Array* V8Int8Array::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return value->IsInt8Array() ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMInt8Array* V8Int8Array::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return value->IsInt8Array() ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaStreamTrackEventInit_h
 #define MediaStreamTrackEventInit_h
 
@@ -21,26 +21,27 @@ namespace blink {
 class MediaStreamTrack;
 
 class MODULES_EXPORT MediaStreamTrackEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaStreamTrackEventInit();
-  virtual ~MediaStreamTrackEventInit();
-  MediaStreamTrackEventInit(const MediaStreamTrackEventInit&);
-  MediaStreamTrackEventInit& operator=(const MediaStreamTrackEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasTrack() const;
-  MediaStreamTrack* track() const;
-  void setTrack(MediaStreamTrack*);
+public:
+    MediaStreamTrackEventInit();
+    virtual ~MediaStreamTrackEventInit();
+    MediaStreamTrackEventInit(const MediaStreamTrackEventInit&);
+    MediaStreamTrackEventInit& operator=(const MediaStreamTrackEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTrack() const;
+    MediaStreamTrack* track() const;
+    void setTrack(MediaStreamTrack*);
 
- private:
-  Member<MediaStreamTrack> m_track;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaStreamTrackEventInit;
+private:
+    Member<MediaStreamTrack> m_track;
+
+    friend class V8MediaStreamTrackEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaStreamTrackEventInit_h
+#endif // MediaStreamTrackEventInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGMatrix.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,500 +47,552 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGMatrixTearOff::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGMatrixTearOff is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGMatrixTearOffV8Internal {
 
-static void aAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void aAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->a());
-}
+        v8SetReturnValue(info, impl->a());
+    }
 
-CORE_EXPORT void aAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::aAttributeGetter(info);
-}
+    CORE_EXPORT void aAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::aAttributeGetter(info);
+    }
 
-static void aAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+    static void aAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "a");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "a");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setA(cppValue, exceptionState);
-}
+        impl->setA(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void aAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void aAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGMatrixTearOffV8Internal::aAttributeSetter(v8Value, info);
-}
+        SVGMatrixTearOffV8Internal::aAttributeSetter(v8Value, info);
+    }
 
-static void bAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->b());
-}
+        v8SetReturnValue(info, impl->b());
+    }
 
-CORE_EXPORT void bAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::bAttributeGetter(info);
-}
+    CORE_EXPORT void bAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::bAttributeGetter(info);
+    }
 
-static void bAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+    static void bAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "b");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "b");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setB(cppValue, exceptionState);
-}
+        impl->setB(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void bAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void bAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGMatrixTearOffV8Internal::bAttributeSetter(v8Value, info);
-}
+        SVGMatrixTearOffV8Internal::bAttributeSetter(v8Value, info);
+    }
 
-static void cAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->c());
-}
+        v8SetReturnValue(info, impl->c());
+    }
 
-CORE_EXPORT void cAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::cAttributeGetter(info);
-}
+    CORE_EXPORT void cAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::cAttributeGetter(info);
+    }
 
-static void cAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+    static void cAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "c");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "c");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setC(cppValue, exceptionState);
-}
+        impl->setC(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void cAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void cAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGMatrixTearOffV8Internal::cAttributeSetter(v8Value, info);
-}
+        SVGMatrixTearOffV8Internal::cAttributeSetter(v8Value, info);
+    }
 
-static void dAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->d());
-}
+        v8SetReturnValue(info, impl->d());
+    }
 
-CORE_EXPORT void dAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::dAttributeGetter(info);
-}
+    CORE_EXPORT void dAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::dAttributeGetter(info);
+    }
 
-static void dAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+    static void dAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "d");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "d");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setD(cppValue, exceptionState);
-}
+        impl->setD(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void dAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void dAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGMatrixTearOffV8Internal::dAttributeSetter(v8Value, info);
-}
+        SVGMatrixTearOffV8Internal::dAttributeSetter(v8Value, info);
+    }
 
-static void eAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void eAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->e());
-}
+        v8SetReturnValue(info, impl->e());
+    }
 
-CORE_EXPORT void eAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::eAttributeGetter(info);
-}
+    CORE_EXPORT void eAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::eAttributeGetter(info);
+    }
 
-static void eAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+    static void eAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "e");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "e");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setE(cppValue, exceptionState);
-}
+        impl->setE(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void eAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void eAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGMatrixTearOffV8Internal::eAttributeSetter(v8Value, info);
-}
+        SVGMatrixTearOffV8Internal::eAttributeSetter(v8Value, info);
+    }
 
-static void fAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->f());
-}
+        v8SetReturnValue(info, impl->f());
+    }
 
-CORE_EXPORT void fAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::fAttributeGetter(info);
-}
+    CORE_EXPORT void fAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::fAttributeGetter(info);
+    }
 
-static void fAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
+    static void fAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "f");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGMatrix", "f");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setF(cppValue, exceptionState);
-}
+        impl->setF(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void fAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void fAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGMatrixTearOffV8Internal::fAttributeSetter(v8Value, info);
-}
+        SVGMatrixTearOffV8Internal::fAttributeSetter(v8Value, info);
+    }
 
-static void multiplyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+    static void multiplyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("multiply", "SVGMatrix", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("multiply", "SVGMatrix", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  SVGMatrixTearOff* secondMatrix;
-  secondMatrix = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!secondMatrix) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("multiply", "SVGMatrix", "parameter 1 is not of type 'SVGMatrix'."));
+        SVGMatrixTearOff* secondMatrix;
+        secondMatrix = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!secondMatrix) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("multiply", "SVGMatrix", "parameter 1 is not of type 'SVGMatrix'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValue(info, impl->multiply(secondMatrix));
-}
+        v8SetReturnValue(info, impl->multiply(secondMatrix));
+    }
 
-CORE_EXPORT  void multiplyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::multiplyMethod(info);
-}
+    CORE_EXPORT void multiplyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::multiplyMethod(info);
+    }
 
-static void inverseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "inverse");
+    static void inverseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "inverse");
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  SVGMatrixTearOff* result = impl->inverse(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        SVGMatrixTearOff* result = impl->inverse(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void inverseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::inverseMethod(info);
-}
+    CORE_EXPORT void inverseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::inverseMethod(info);
+    }
 
-static void translateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "translate");
+    static void translateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "translate");
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  float x;
-  float y;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float x;
+        float y;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->translate(x, y));
-}
+        v8SetReturnValue(info, impl->translate(x, y));
+    }
 
-CORE_EXPORT  void translateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::translateMethod(info);
-}
+    CORE_EXPORT void translateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::translateMethod(info);
+    }
 
-static void scaleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "scale");
+    static void scaleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "scale");
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  float scaleFactor;
-  scaleFactor = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float scaleFactor;
+        scaleFactor = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->scale(scaleFactor));
-}
+        v8SetReturnValue(info, impl->scale(scaleFactor));
+    }
 
-CORE_EXPORT  void scaleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::scaleMethod(info);
-}
+    CORE_EXPORT void scaleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::scaleMethod(info);
+    }
 
-static void scaleNonUniformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "scaleNonUniform");
+    static void scaleNonUniformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "scaleNonUniform");
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  float scaleFactorX;
-  float scaleFactorY;
-  scaleFactorX = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float scaleFactorX;
+        float scaleFactorY;
+        scaleFactorX = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  scaleFactorY = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        scaleFactorY = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->scaleNonUniform(scaleFactorX, scaleFactorY));
-}
+        v8SetReturnValue(info, impl->scaleNonUniform(scaleFactorX, scaleFactorY));
+    }
 
-CORE_EXPORT  void scaleNonUniformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::scaleNonUniformMethod(info);
-}
+    CORE_EXPORT void scaleNonUniformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::scaleNonUniformMethod(info);
+    }
 
-static void rotateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "rotate");
+    static void rotateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "rotate");
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  float angle;
-  angle = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float angle;
+        angle = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->rotate(angle));
-}
+        v8SetReturnValue(info, impl->rotate(angle));
+    }
 
-CORE_EXPORT  void rotateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::rotateMethod(info);
-}
+    CORE_EXPORT void rotateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::rotateMethod(info);
+    }
 
-static void rotateFromVectorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "rotateFromVector");
+    static void rotateFromVectorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "rotateFromVector");
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  float x;
-  float y;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float x;
+        float y;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SVGMatrixTearOff* result = impl->rotateFromVector(x, y, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        SVGMatrixTearOff* result = impl->rotateFromVector(x, y, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void rotateFromVectorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::rotateFromVectorMethod(info);
-}
+    CORE_EXPORT void rotateFromVectorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::rotateFromVectorMethod(info);
+    }
 
-static void flipXMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+    static void flipXMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->flipX());
-}
+        v8SetReturnValue(info, impl->flipX());
+    }
 
-CORE_EXPORT  void flipXMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::flipXMethod(info);
-}
+    CORE_EXPORT void flipXMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::flipXMethod(info);
+    }
 
-static void flipYMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+    static void flipYMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->flipY());
-}
+        v8SetReturnValue(info, impl->flipY());
+    }
 
-CORE_EXPORT  void flipYMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::flipYMethod(info);
-}
+    CORE_EXPORT void flipYMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::flipYMethod(info);
+    }
 
-static void skewXMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "skewX");
+    static void skewXMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "skewX");
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  float angle;
-  angle = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float angle;
+        angle = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->skewX(angle));
-}
+        v8SetReturnValue(info, impl->skewX(angle));
+    }
 
-CORE_EXPORT  void skewXMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::skewXMethod(info);
-}
+    CORE_EXPORT void skewXMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::skewXMethod(info);
+    }
 
-static void skewYMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "skewY");
+    static void skewYMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGMatrix", "skewY");
 
-  SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
+        SVGMatrixTearOff* impl = V8SVGMatrix::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  float angle;
-  angle = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float angle;
+        angle = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->skewY(angle));
-}
+        v8SetReturnValue(info, impl->skewY(angle));
+    }
 
-CORE_EXPORT  void skewYMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGMatrixTearOffV8Internal::skewYMethod(info);
-}
+    CORE_EXPORT void skewYMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGMatrixTearOffV8Internal::skewYMethod(info);
+    }
 
 } // namespace SVGMatrixTearOffV8Internal
 
-void V8SVGMatrix::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  SVGMatrixTearOff* impl = scriptWrappable->toImpl<SVGMatrixTearOff>();
-  SVGTransformTearOff* contextTransform = impl->contextTransform();
-  if (contextTransform) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextTransform, isolate);
-  }
+void V8SVGMatrix::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    SVGMatrixTearOff* impl = scriptWrappable->toImpl<SVGMatrixTearOff>();
+    SVGTransformTearOff* contextTransform = impl->contextTransform();
+    if (contextTransform) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextTransform, isolate);
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGMatrixAccessors[] = {
-    {"a", SVGMatrixTearOffV8Internal::aAttributeGetterCallback, SVGMatrixTearOffV8Internal::aAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"b", SVGMatrixTearOffV8Internal::bAttributeGetterCallback, SVGMatrixTearOffV8Internal::bAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"c", SVGMatrixTearOffV8Internal::cAttributeGetterCallback, SVGMatrixTearOffV8Internal::cAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"d", SVGMatrixTearOffV8Internal::dAttributeGetterCallback, SVGMatrixTearOffV8Internal::dAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"e", SVGMatrixTearOffV8Internal::eAttributeGetterCallback, SVGMatrixTearOffV8Internal::eAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"f", SVGMatrixTearOffV8Internal::fAttributeGetterCallback, SVGMatrixTearOffV8Internal::fAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "a", SVGMatrixTearOffV8Internal::aAttributeGetterCallback, SVGMatrixTearOffV8Internal::aAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "b", SVGMatrixTearOffV8Internal::bAttributeGetterCallback, SVGMatrixTearOffV8Internal::bAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "c", SVGMatrixTearOffV8Internal::cAttributeGetterCallback, SVGMatrixTearOffV8Internal::cAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "d", SVGMatrixTearOffV8Internal::dAttributeGetterCallback, SVGMatrixTearOffV8Internal::dAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "e", SVGMatrixTearOffV8Internal::eAttributeGetterCallback, SVGMatrixTearOffV8Internal::eAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "f", SVGMatrixTearOffV8Internal::fAttributeGetterCallback, SVGMatrixTearOffV8Internal::fAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGMatrixMethods[] = {
-    {"multiply", SVGMatrixTearOffV8Internal::multiplyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"inverse", SVGMatrixTearOffV8Internal::inverseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"translate", SVGMatrixTearOffV8Internal::translateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scale", SVGMatrixTearOffV8Internal::scaleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scaleNonUniform", SVGMatrixTearOffV8Internal::scaleNonUniformMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rotate", SVGMatrixTearOffV8Internal::rotateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rotateFromVector", SVGMatrixTearOffV8Internal::rotateFromVectorMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"flipX", SVGMatrixTearOffV8Internal::flipXMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"flipY", SVGMatrixTearOffV8Internal::flipYMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"skewX", SVGMatrixTearOffV8Internal::skewXMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"skewY", SVGMatrixTearOffV8Internal::skewYMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "multiply", SVGMatrixTearOffV8Internal::multiplyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "inverse", SVGMatrixTearOffV8Internal::inverseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "translate", SVGMatrixTearOffV8Internal::translateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scale", SVGMatrixTearOffV8Internal::scaleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scaleNonUniform", SVGMatrixTearOffV8Internal::scaleNonUniformMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rotate", SVGMatrixTearOffV8Internal::rotateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rotateFromVector", SVGMatrixTearOffV8Internal::rotateFromVectorMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "flipX", SVGMatrixTearOffV8Internal::flipXMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "flipY", SVGMatrixTearOffV8Internal::flipYMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "skewX", SVGMatrixTearOffV8Internal::skewXMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "skewY", SVGMatrixTearOffV8Internal::skewYMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGMatrixTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGMatrix::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGMatrix::internalFieldCount);
+static void installV8SVGMatrixTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGMatrix::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGMatrix::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGMatrixAccessors, WTF_ARRAY_LENGTH(V8SVGMatrixAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGMatrixMethods, WTF_ARRAY_LENGTH(V8SVGMatrixMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGMatrixAccessors, WTF_ARRAY_LENGTH(V8SVGMatrixAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGMatrixMethods, WTF_ARRAY_LENGTH(V8SVGMatrixMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGMatrix::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGMatrixTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGMatrix::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGMatrixTemplate);
 }
 
-bool V8SVGMatrix::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGMatrix::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGMatrix::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGMatrix::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGMatrixTearOff* V8SVGMatrix::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGMatrixTearOff* V8SVGMatrix::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

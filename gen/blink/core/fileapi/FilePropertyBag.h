@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FilePropertyBag_h
 #define FilePropertyBag_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class CORE_EXPORT FilePropertyBag : public BlobPropertyBag {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FilePropertyBag();
-  virtual ~FilePropertyBag();
-  FilePropertyBag(const FilePropertyBag&);
-  FilePropertyBag& operator=(const FilePropertyBag&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasLastModified() const;
-  long long lastModified() const;
-  void setLastModified(long long);
+public:
+    FilePropertyBag();
+    virtual ~FilePropertyBag();
+    FilePropertyBag(const FilePropertyBag&);
+    FilePropertyBag& operator=(const FilePropertyBag&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasLastModified() const;
+    long long lastModified() const;
+    void setLastModified(long long);
 
- private:
-  bool m_hasLastModified = false;
-  long long m_lastModified;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8FilePropertyBag;
+private:
+    bool m_hasLastModified = false;
+    long long m_lastModified;
+
+    friend class V8FilePropertyBag;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // FilePropertyBag_h
+#endif // FilePropertyBag_h

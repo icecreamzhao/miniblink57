@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PaymentRequest.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -57,298 +57,325 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&PaymentRequest::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PaymentRequest is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PaymentRequestV8Internal {
 
-static void shippingAddressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shippingAddressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
+        PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
 
-  PaymentAddress* cppValue(WTF::getPtr(impl->getShippingAddress()));
+        PaymentAddress* cppValue(WTF::getPtr(impl->getShippingAddress()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PaymentRequest#shippingAddress";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PaymentRequest#shippingAddress";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void shippingAddressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentRequestV8Internal::shippingAddressAttributeGetter(info);
-}
+    MODULES_EXPORT void shippingAddressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentRequestV8Internal::shippingAddressAttributeGetter(info);
+    }
 
-static void shippingOptionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shippingOptionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
+        PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->shippingOption(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->shippingOption(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void shippingOptionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentRequestV8Internal::shippingOptionAttributeGetter(info);
-}
+    MODULES_EXPORT void shippingOptionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentRequestV8Internal::shippingOptionAttributeGetter(info);
+    }
 
-static void shippingTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shippingTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
+        PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->shippingType(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->shippingType(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void shippingTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentRequestV8Internal::shippingTypeAttributeGetter(info);
-}
+    MODULES_EXPORT void shippingTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentRequestV8Internal::shippingTypeAttributeGetter(info);
+    }
 
-static void onshippingaddresschangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onshippingaddresschangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
+        PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onshippingaddresschange()));
+        EventListener* cppValue(WTF::getPtr(impl->onshippingaddresschange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onshippingaddresschangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentRequestV8Internal::onshippingaddresschangeAttributeGetter(info);
-}
+    MODULES_EXPORT void onshippingaddresschangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentRequestV8Internal::onshippingaddresschangeAttributeGetter(info);
+    }
 
-static void onshippingaddresschangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
+    static void onshippingaddresschangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onshippingaddresschange(), v8Value, V8PaymentRequest::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onshippingaddresschange(), v8Value, V8PaymentRequest::eventListenerCacheIndex);
 
-  impl->setOnshippingaddresschange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnshippingaddresschange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onshippingaddresschangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onshippingaddresschangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  PaymentRequestV8Internal::onshippingaddresschangeAttributeSetter(v8Value, info);
-}
+        PaymentRequestV8Internal::onshippingaddresschangeAttributeSetter(v8Value, info);
+    }
 
-static void onshippingoptionchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onshippingoptionchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
+        PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onshippingoptionchange()));
+        EventListener* cppValue(WTF::getPtr(impl->onshippingoptionchange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onshippingoptionchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentRequestV8Internal::onshippingoptionchangeAttributeGetter(info);
-}
+    MODULES_EXPORT void onshippingoptionchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentRequestV8Internal::onshippingoptionchangeAttributeGetter(info);
+    }
 
-static void onshippingoptionchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
+    static void onshippingoptionchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaymentRequest* impl = V8PaymentRequest::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onshippingoptionchange(), v8Value, V8PaymentRequest::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onshippingoptionchange(), v8Value, V8PaymentRequest::eventListenerCacheIndex);
 
-  impl->setOnshippingoptionchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnshippingoptionchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onshippingoptionchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onshippingoptionchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  PaymentRequestV8Internal::onshippingoptionchangeAttributeSetter(v8Value, info);
-}
+        PaymentRequestV8Internal::onshippingoptionchangeAttributeSetter(v8Value, info);
+    }
 
-static void showMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaymentRequest", "show");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void showMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaymentRequest", "show");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8PaymentRequest::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  PaymentRequest* impl = V8PaymentRequest::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8PaymentRequest::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        PaymentRequest* impl = V8PaymentRequest::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->show(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->show(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void showMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentRequestV8Internal::showMethod(info);
-}
+    MODULES_EXPORT void showMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentRequestV8Internal::showMethod(info);
+    }
 
-static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaymentRequest", "abort");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaymentRequest", "abort");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8PaymentRequest::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  PaymentRequest* impl = V8PaymentRequest::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8PaymentRequest::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        PaymentRequest* impl = V8PaymentRequest::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->abort(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->abort(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentRequestV8Internal::abortMethod(info);
-}
+    MODULES_EXPORT void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentRequestV8Internal::abortMethod(info);
+    }
 
-static void canMakePaymentMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaymentRequest", "canMakePayment");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void canMakePaymentMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaymentRequest", "canMakePayment");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8PaymentRequest::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  PaymentRequest* impl = V8PaymentRequest::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8PaymentRequest::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        PaymentRequest* impl = V8PaymentRequest::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->canMakePayment(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->canMakePayment(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void canMakePaymentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentRequestV8Internal::canMakePaymentMethod(info);
-}
+    MODULES_EXPORT void canMakePaymentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentRequestV8Internal::canMakePaymentMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PaymentRequest");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PaymentRequest");
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  HeapVector<PaymentMethodData> methodData;
-  PaymentDetails details;
-  PaymentOptions options;
-  methodData = toImplArray<HeapVector<PaymentMethodData>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
+        HeapVector<PaymentMethodData> methodData;
+        PaymentDetails details;
+        PaymentOptions options;
+        methodData = toImplArray<HeapVector<PaymentMethodData>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('details') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('details') is not an object.");
 
-    return;
-  }
-  V8PaymentDetails::toImpl(info.GetIsolate(), info[1], details, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8PaymentDetails::toImpl(info.GetIsolate(), info[1], details, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
 
-    return;
-  }
-  V8PaymentOptions::toImpl(info.GetIsolate(), info[2], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8PaymentOptions::toImpl(info.GetIsolate(), info[2], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
-  PaymentRequest* impl = PaymentRequest::create(document, methodData, details, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PaymentRequest::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+        PaymentRequest* impl = PaymentRequest::create(document, methodData, details, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PaymentRequest::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace PaymentRequestV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PaymentRequestAccessors[] = {
-    {"shippingAddress", PaymentRequestV8Internal::shippingAddressAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shippingOption", PaymentRequestV8Internal::shippingOptionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shippingType", PaymentRequestV8Internal::shippingTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onshippingaddresschange", PaymentRequestV8Internal::onshippingaddresschangeAttributeGetterCallback, PaymentRequestV8Internal::onshippingaddresschangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onshippingoptionchange", PaymentRequestV8Internal::onshippingoptionchangeAttributeGetterCallback, PaymentRequestV8Internal::onshippingoptionchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "shippingAddress", PaymentRequestV8Internal::shippingAddressAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shippingOption", PaymentRequestV8Internal::shippingOptionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shippingType", PaymentRequestV8Internal::shippingTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onshippingaddresschange", PaymentRequestV8Internal::onshippingaddresschangeAttributeGetterCallback, PaymentRequestV8Internal::onshippingaddresschangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onshippingoptionchange", PaymentRequestV8Internal::onshippingoptionchangeAttributeGetterCallback, PaymentRequestV8Internal::onshippingoptionchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8PaymentRequestMethods[] = {
-    {"show", PaymentRequestV8Internal::showMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"abort", PaymentRequestV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "show", PaymentRequestV8Internal::showMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "abort", PaymentRequestV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-void V8PaymentRequest::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("PaymentRequest"));
-    return;
-  }
+void V8PaymentRequest::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("PaymentRequest"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  PaymentRequestV8Internal::constructor(info);
+    PaymentRequestV8Internal::constructor(info);
 }
 
-static void installV8PaymentRequestTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaymentRequest::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8PaymentRequest::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8PaymentRequest::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8PaymentRequestTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaymentRequest::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8PaymentRequest::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8PaymentRequest::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  if (!RuntimeEnabledFeatures::paymentRequestEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::paymentRequestEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentRequestAccessors, WTF_ARRAY_LENGTH(V8PaymentRequestAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentRequestMethods, WTF_ARRAY_LENGTH(V8PaymentRequestMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentRequestAccessors, WTF_ARRAY_LENGTH(V8PaymentRequestAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentRequestMethods, WTF_ARRAY_LENGTH(V8PaymentRequestMethods));
 
-  if (RuntimeEnabledFeatures::canMakePaymentEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration canMakePaymentMethodConfiguration = {"canMakePayment", PaymentRequestV8Internal::canMakePaymentMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, canMakePaymentMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::canMakePaymentEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration canMakePaymentMethodConfiguration = { "canMakePayment", PaymentRequestV8Internal::canMakePaymentMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, canMakePaymentMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8PaymentRequest::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaymentRequestTemplate);
+v8::Local<v8::FunctionTemplate> V8PaymentRequest::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaymentRequestTemplate);
 }
 
-bool V8PaymentRequest::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PaymentRequest::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PaymentRequest::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PaymentRequest::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PaymentRequest* V8PaymentRequest::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PaymentRequest* V8PaymentRequest::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

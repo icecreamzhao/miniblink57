@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AudioTimestamp_h
 #define AudioTimestamp_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT AudioTimestamp : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AudioTimestamp();
-  virtual ~AudioTimestamp();
-  AudioTimestamp(const AudioTimestamp&);
-  AudioTimestamp& operator=(const AudioTimestamp&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasContextTime() const;
-  double contextTime() const;
-  void setContextTime(double);
+public:
+    AudioTimestamp();
+    virtual ~AudioTimestamp();
+    AudioTimestamp(const AudioTimestamp&);
+    AudioTimestamp& operator=(const AudioTimestamp&);
 
-  bool hasPerformanceTime() const;
-  double performanceTime() const;
-  void setPerformanceTime(double);
+    bool hasContextTime() const;
+    double contextTime() const;
+    void setContextTime(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPerformanceTime() const;
+    double performanceTime() const;
+    void setPerformanceTime(double);
 
- private:
-  bool m_hasContextTime = false;
-  double m_contextTime;
-  bool m_hasPerformanceTime = false;
-  double m_performanceTime;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AudioTimestamp;
+private:
+    bool m_hasContextTime = false;
+    double m_contextTime;
+    bool m_hasPerformanceTime = false;
+    double m_performanceTime;
+
+    friend class V8AudioTimestamp;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AudioTimestamp_h
+#endif // AudioTimestamp_h

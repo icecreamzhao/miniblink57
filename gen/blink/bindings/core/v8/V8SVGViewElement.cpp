@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGViewElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,123 +50,136 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGViewElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGViewElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGViewElementV8Internal {
 
-static void viewBoxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void viewBoxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGViewElement* impl = V8SVGViewElement::toImpl(holder);
+        SVGViewElement* impl = V8SVGViewElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->viewBox()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->viewBox()), impl);
+    }
 
-CORE_EXPORT void viewBoxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFitToViewBox);
+    CORE_EXPORT void viewBoxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFitToViewBox);
 
-  SVGViewElementV8Internal::viewBoxAttributeGetter(info);
-}
+        SVGViewElementV8Internal::viewBoxAttributeGetter(info);
+    }
 
-static void preserveAspectRatioAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void preserveAspectRatioAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGViewElement* impl = V8SVGViewElement::toImpl(holder);
+        SVGViewElement* impl = V8SVGViewElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->preserveAspectRatio()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->preserveAspectRatio()), impl);
+    }
 
-CORE_EXPORT void preserveAspectRatioAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFitToViewBox);
+    CORE_EXPORT void preserveAspectRatioAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFitToViewBox);
 
-  SVGViewElementV8Internal::preserveAspectRatioAttributeGetter(info);
-}
+        SVGViewElementV8Internal::preserveAspectRatioAttributeGetter(info);
+    }
 
-static void zoomAndPanAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void zoomAndPanAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGViewElement* impl = V8SVGViewElement::toImpl(holder);
+        SVGViewElement* impl = V8SVGViewElement::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->zoomAndPan());
-}
+        v8SetReturnValueUnsigned(info, impl->zoomAndPan());
+    }
 
-CORE_EXPORT void zoomAndPanAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMZoomAndPan);
+    CORE_EXPORT void zoomAndPanAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMZoomAndPan);
 
-  SVGViewElementV8Internal::zoomAndPanAttributeGetter(info);
-}
+        SVGViewElementV8Internal::zoomAndPanAttributeGetter(info);
+    }
 
-static void zoomAndPanAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGViewElement* impl = V8SVGViewElement::toImpl(holder);
+    static void zoomAndPanAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGViewElement* impl = V8SVGViewElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGViewElement", "zoomAndPan");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGViewElement", "zoomAndPan");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt16(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt16(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setZoomAndPan(cppValue, exceptionState);
-}
+        impl->setZoomAndPan(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void zoomAndPanAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void zoomAndPanAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMZoomAndPan);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMZoomAndPan);
 
-  SVGViewElementV8Internal::zoomAndPanAttributeSetter(v8Value, info);
-}
+        SVGViewElementV8Internal::zoomAndPanAttributeSetter(v8Value, info);
+    }
 
 } // namespace SVGViewElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGViewElementAccessors[] = {
-    {"viewBox", SVGViewElementV8Internal::viewBoxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"preserveAspectRatio", SVGViewElementV8Internal::preserveAspectRatioAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"zoomAndPan", SVGViewElementV8Internal::zoomAndPanAttributeGetterCallback, SVGViewElementV8Internal::zoomAndPanAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "viewBox", SVGViewElementV8Internal::viewBoxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "preserveAspectRatio", SVGViewElementV8Internal::preserveAspectRatioAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "zoomAndPan", SVGViewElementV8Internal::zoomAndPanAttributeGetterCallback, SVGViewElementV8Internal::zoomAndPanAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGViewElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGViewElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGViewElement::internalFieldCount);
+static void installV8SVGViewElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGViewElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGViewElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8SVGViewElementConstants[] = {
-      {"SVG_ZOOMANDPAN_UNKNOWN", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_ZOOMANDPAN_DISABLE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_ZOOMANDPAN_MAGNIFY", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SVGViewElementConstants, WTF_ARRAY_LENGTH(V8SVGViewElementConstants));
-  static_assert(0 == SVGViewElement::kSvgZoomandpanUnknown, "the value of SVGViewElement_kSvgZoomandpanUnknown does not match with implementation");
-  static_assert(1 == SVGViewElement::kSvgZoomandpanDisable, "the value of SVGViewElement_kSvgZoomandpanDisable does not match with implementation");
-  static_assert(2 == SVGViewElement::kSvgZoomandpanMagnify, "the value of SVGViewElement_kSvgZoomandpanMagnify does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGViewElementAccessors, WTF_ARRAY_LENGTH(V8SVGViewElementAccessors));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8SVGViewElementConstants[] = {
+        { "SVG_ZOOMANDPAN_UNKNOWN", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_ZOOMANDPAN_DISABLE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_ZOOMANDPAN_MAGNIFY", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SVGViewElementConstants, WTF_ARRAY_LENGTH(V8SVGViewElementConstants));
+    static_assert(0 == SVGViewElement::kSvgZoomandpanUnknown, "the value of SVGViewElement_kSvgZoomandpanUnknown does not match with implementation");
+    static_assert(1 == SVGViewElement::kSvgZoomandpanDisable, "the value of SVGViewElement_kSvgZoomandpanDisable does not match with implementation");
+    static_assert(2 == SVGViewElement::kSvgZoomandpanMagnify, "the value of SVGViewElement_kSvgZoomandpanMagnify does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGViewElementAccessors, WTF_ARRAY_LENGTH(V8SVGViewElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGViewElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGViewElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGViewElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGViewElementTemplate);
 }
 
-bool V8SVGViewElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGViewElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGViewElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGViewElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGViewElement* V8SVGViewElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGViewElement* V8SVGViewElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

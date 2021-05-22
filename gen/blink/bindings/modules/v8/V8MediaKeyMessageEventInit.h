@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8MediaKeyMessageEventInit_h
 #define V8MediaKeyMessageEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8MediaKeyMessageEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaKeyMessageEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaKeyMessageEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8MediaKeyMessageEventInit(const MediaKeyMessageEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaKeyMessageEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaKeyMessageEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<MediaKeyMessageEventInit> {
-  static MediaKeyMessageEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static MediaKeyMessageEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<MediaKeyMessageEventInit> {
-  typedef V8MediaKeyMessageEventInit Type;
+    typedef V8MediaKeyMessageEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8MediaKeyMessageEventInit_h
+#endif // V8MediaKeyMessageEventInit_h

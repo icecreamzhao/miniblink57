@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef HTMLCanvasElementOrOffscreenCanvas_h
 #define HTMLCanvasElementOrOffscreenCanvas_h
 
@@ -24,58 +24,60 @@ class HTMLCanvasElement;
 class OffscreenCanvas;
 
 class MODULES_EXPORT HTMLCanvasElementOrOffscreenCanvas final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  HTMLCanvasElementOrOffscreenCanvas();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isHTMLCanvasElement() const { return m_type == SpecificTypeHTMLCanvasElement; }
-  HTMLCanvasElement* getAsHTMLCanvasElement() const;
-  void setHTMLCanvasElement(HTMLCanvasElement*);
-  static HTMLCanvasElementOrOffscreenCanvas fromHTMLCanvasElement(HTMLCanvasElement*);
+public:
+    HTMLCanvasElementOrOffscreenCanvas();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isOffscreenCanvas() const { return m_type == SpecificTypeOffscreenCanvas; }
-  OffscreenCanvas* getAsOffscreenCanvas() const;
-  void setOffscreenCanvas(OffscreenCanvas*);
-  static HTMLCanvasElementOrOffscreenCanvas fromOffscreenCanvas(OffscreenCanvas*);
+    bool isHTMLCanvasElement() const { return m_type == SpecificTypeHTMLCanvasElement; }
+    HTMLCanvasElement* getAsHTMLCanvasElement() const;
+    void setHTMLCanvasElement(HTMLCanvasElement*);
+    static HTMLCanvasElementOrOffscreenCanvas fromHTMLCanvasElement(HTMLCanvasElement*);
 
-  HTMLCanvasElementOrOffscreenCanvas(const HTMLCanvasElementOrOffscreenCanvas&);
-  ~HTMLCanvasElementOrOffscreenCanvas();
-  HTMLCanvasElementOrOffscreenCanvas& operator=(const HTMLCanvasElementOrOffscreenCanvas&);
-  DECLARE_TRACE();
+    bool isOffscreenCanvas() const { return m_type == SpecificTypeOffscreenCanvas; }
+    OffscreenCanvas* getAsOffscreenCanvas() const;
+    void setOffscreenCanvas(OffscreenCanvas*);
+    static HTMLCanvasElementOrOffscreenCanvas fromOffscreenCanvas(OffscreenCanvas*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeHTMLCanvasElement,
-    SpecificTypeOffscreenCanvas,
-  };
-  SpecificTypes m_type;
+    HTMLCanvasElementOrOffscreenCanvas(const HTMLCanvasElementOrOffscreenCanvas&);
+    ~HTMLCanvasElementOrOffscreenCanvas();
+    HTMLCanvasElementOrOffscreenCanvas& operator=(const HTMLCanvasElementOrOffscreenCanvas&);
+    DECLARE_TRACE();
 
-  Member<HTMLCanvasElement> m_htmlCanvasElement;
-  Member<OffscreenCanvas> m_offscreenCanvas;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeHTMLCanvasElement,
+        SpecificTypeOffscreenCanvas,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const HTMLCanvasElementOrOffscreenCanvas&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<HTMLCanvasElement> m_htmlCanvasElement;
+    Member<OffscreenCanvas> m_offscreenCanvas;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const HTMLCanvasElementOrOffscreenCanvas&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8HTMLCanvasElementOrOffscreenCanvas final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLCanvasElementOrOffscreenCanvas&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLCanvasElementOrOffscreenCanvas&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const HTMLCanvasElementOrOffscreenCanvas&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLCanvasElementOrOffscreenCanvas& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLCanvasElementOrOffscreenCanvas& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<HTMLCanvasElementOrOffscreenCanvas> {
-  MODULES_EXPORT static HTMLCanvasElementOrOffscreenCanvas nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static HTMLCanvasElementOrOffscreenCanvas nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -83,4 +85,4 @@ struct NativeValueTraits<HTMLCanvasElementOrOffscreenCanvas> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::HTMLCanvasElementOrOffscreenCanvas);
 
-#endif  // HTMLCanvasElementOrOffscreenCanvas_h
+#endif // HTMLCanvasElementOrOffscreenCanvas_h

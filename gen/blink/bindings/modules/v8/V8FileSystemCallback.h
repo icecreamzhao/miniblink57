@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8FileSystemCallback_h
 #define V8FileSystemCallback_h
 
@@ -20,21 +20,23 @@
 namespace blink {
 
 class V8FileSystemCallback final : public FileSystemCallback {
- public:
-  static V8FileSystemCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8FileSystemCallback(callback, scriptState);
-  }
+public:
+    static V8FileSystemCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8FileSystemCallback(callback, scriptState);
+    }
 
-  ~V8FileSystemCallback() override;
+    ~V8FileSystemCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  void handleEvent(DOMFileSystem* fileSystem) override;
- private:
-  MODULES_EXPORT V8FileSystemCallback(v8::Local<v8::Function>, ScriptState*);
+    void handleEvent(DOMFileSystem* fileSystem) override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    MODULES_EXPORT V8FileSystemCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8FileSystemCallback_h
+#endif // V8FileSystemCallback_h

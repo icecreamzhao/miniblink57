@@ -8,37 +8,43 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "SensorOptions.h"
 
 namespace blink {
 
-SensorOptions::SensorOptions() {
+SensorOptions::SensorOptions()
+{
 }
 
-SensorOptions::~SensorOptions() {}
+SensorOptions::~SensorOptions() { }
 
 SensorOptions::SensorOptions(const SensorOptions&) = default;
 
 SensorOptions& SensorOptions::operator=(const SensorOptions&) = default;
 
-bool SensorOptions::hasFrequency() const {
-  return m_hasFrequency;
+bool SensorOptions::hasFrequency() const
+{
+    return m_hasFrequency;
 }
-double SensorOptions::frequency() const {
-  DCHECK(m_hasFrequency);
-  return m_frequency;
+double SensorOptions::frequency() const
+{
+    DCHECK(m_hasFrequency);
+    return m_frequency;
 }
-void SensorOptions::setFrequency(double value) {
-  m_frequency = value;
-  m_hasFrequency = true;
+void SensorOptions::setFrequency(double value)
+{
+    m_frequency = value;
+    m_hasFrequency = true;
 }
-void SensorOptions::setFrequencyToNull() {
-  m_hasFrequency = false;
+void SensorOptions::setFrequencyToNull()
+{
+    m_hasFrequency = false;
 }
 
-DEFINE_TRACE(SensorOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(SensorOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

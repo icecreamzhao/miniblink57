@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ExtendableMessageEventInit.h"
 
 #include "bindings/modules/v8/ClientOrServiceWorkerOrMessagePort.h"
@@ -17,73 +17,92 @@
 
 namespace blink {
 
-ExtendableMessageEventInit::ExtendableMessageEventInit() {
+ExtendableMessageEventInit::ExtendableMessageEventInit()
+{
 }
 
-ExtendableMessageEventInit::~ExtendableMessageEventInit() {}
+ExtendableMessageEventInit::~ExtendableMessageEventInit() { }
 
 ExtendableMessageEventInit::ExtendableMessageEventInit(const ExtendableMessageEventInit&) = default;
 
 ExtendableMessageEventInit& ExtendableMessageEventInit::operator=(const ExtendableMessageEventInit&) = default;
 
-bool ExtendableMessageEventInit::hasData() const {
-  return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
+bool ExtendableMessageEventInit::hasData() const
+{
+    return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
 }
-ScriptValue ExtendableMessageEventInit::data() const {
-  return m_data;
+ScriptValue ExtendableMessageEventInit::data() const
+{
+    return m_data;
 }
-void ExtendableMessageEventInit::setData(ScriptValue value) {
-  m_data = value;
+void ExtendableMessageEventInit::setData(ScriptValue value)
+{
+    m_data = value;
 }
-bool ExtendableMessageEventInit::hasLastEventId() const {
-  return !m_lastEventId.isNull();
+bool ExtendableMessageEventInit::hasLastEventId() const
+{
+    return !m_lastEventId.isNull();
 }
-String ExtendableMessageEventInit::lastEventId() const {
-  return m_lastEventId;
+String ExtendableMessageEventInit::lastEventId() const
+{
+    return m_lastEventId;
 }
-void ExtendableMessageEventInit::setLastEventId(String value) {
-  m_lastEventId = value;
+void ExtendableMessageEventInit::setLastEventId(String value)
+{
+    m_lastEventId = value;
 }
-bool ExtendableMessageEventInit::hasOrigin() const {
-  return !m_origin.isNull();
+bool ExtendableMessageEventInit::hasOrigin() const
+{
+    return !m_origin.isNull();
 }
-String ExtendableMessageEventInit::origin() const {
-  return m_origin;
+String ExtendableMessageEventInit::origin() const
+{
+    return m_origin;
 }
-void ExtendableMessageEventInit::setOrigin(String value) {
-  m_origin = value;
+void ExtendableMessageEventInit::setOrigin(String value)
+{
+    m_origin = value;
 }
-bool ExtendableMessageEventInit::hasPorts() const {
-  return m_hasPorts;
+bool ExtendableMessageEventInit::hasPorts() const
+{
+    return m_hasPorts;
 }
-const HeapVector<Member<MessagePort>>& ExtendableMessageEventInit::ports() const {
-  DCHECK(m_hasPorts);
-  return m_ports;
+const HeapVector<Member<MessagePort>>& ExtendableMessageEventInit::ports() const
+{
+    DCHECK(m_hasPorts);
+    return m_ports;
 }
-void ExtendableMessageEventInit::setPorts(const HeapVector<Member<MessagePort>>& value) {
-  m_ports = value;
-  m_hasPorts = true;
+void ExtendableMessageEventInit::setPorts(const HeapVector<Member<MessagePort>>& value)
+{
+    m_ports = value;
+    m_hasPorts = true;
 }
-void ExtendableMessageEventInit::setPortsToNull() {
-  m_hasPorts = false;
+void ExtendableMessageEventInit::setPortsToNull()
+{
+    m_hasPorts = false;
 }
-bool ExtendableMessageEventInit::hasSource() const {
-  return !m_source.isNull();
+bool ExtendableMessageEventInit::hasSource() const
+{
+    return !m_source.isNull();
 }
-const ClientOrServiceWorkerOrMessagePort& ExtendableMessageEventInit::source() const {
-  return m_source;
+const ClientOrServiceWorkerOrMessagePort& ExtendableMessageEventInit::source() const
+{
+    return m_source;
 }
-void ExtendableMessageEventInit::setSource(const ClientOrServiceWorkerOrMessagePort& value) {
-  m_source = value;
+void ExtendableMessageEventInit::setSource(const ClientOrServiceWorkerOrMessagePort& value)
+{
+    m_source = value;
 }
-void ExtendableMessageEventInit::setSourceToNull() {
-  m_source = ClientOrServiceWorkerOrMessagePort();
+void ExtendableMessageEventInit::setSourceToNull()
+{
+    m_source = ClientOrServiceWorkerOrMessagePort();
 }
 
-DEFINE_TRACE(ExtendableMessageEventInit) {
-  visitor->trace(m_ports);
-  visitor->trace(m_source);
-  ExtendableEventInit::trace(visitor);
+DEFINE_TRACE(ExtendableMessageEventInit)
+{
+    visitor->trace(m_ports);
+    visitor->trace(m_source);
+    ExtendableEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

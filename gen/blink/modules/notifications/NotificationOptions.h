@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef NotificationOptions_h
 #define NotificationOptions_h
 
@@ -24,96 +24,97 @@
 namespace blink {
 
 class MODULES_EXPORT NotificationOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  NotificationOptions();
-  virtual ~NotificationOptions();
-  NotificationOptions(const NotificationOptions&);
-  NotificationOptions& operator=(const NotificationOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasActions() const;
-  const HeapVector<NotificationAction>& actions() const;
-  void setActions(const HeapVector<NotificationAction>&);
+public:
+    NotificationOptions();
+    virtual ~NotificationOptions();
+    NotificationOptions(const NotificationOptions&);
+    NotificationOptions& operator=(const NotificationOptions&);
 
-  bool hasBadge() const;
-  String badge() const;
-  void setBadge(String);
+    bool hasActions() const;
+    const HeapVector<NotificationAction>& actions() const;
+    void setActions(const HeapVector<NotificationAction>&);
 
-  bool hasBody() const;
-  String body() const;
-  void setBody(String);
+    bool hasBadge() const;
+    String badge() const;
+    void setBadge(String);
 
-  bool hasData() const;
-  ScriptValue data() const;
-  void setData(ScriptValue);
+    bool hasBody() const;
+    String body() const;
+    void setBody(String);
 
-  bool hasDir() const;
-  String dir() const;
-  void setDir(String);
+    bool hasData() const;
+    ScriptValue data() const;
+    void setData(ScriptValue);
 
-  bool hasIcon() const;
-  String icon() const;
-  void setIcon(String);
+    bool hasDir() const;
+    String dir() const;
+    void setDir(String);
 
-  bool hasImage() const;
-  String image() const;
-  void setImage(String);
+    bool hasIcon() const;
+    String icon() const;
+    void setIcon(String);
 
-  bool hasLang() const;
-  String lang() const;
-  void setLang(String);
+    bool hasImage() const;
+    String image() const;
+    void setImage(String);
 
-  bool hasRenotify() const;
-  bool renotify() const;
-  void setRenotify(bool);
+    bool hasLang() const;
+    String lang() const;
+    void setLang(String);
 
-  bool hasRequireInteraction() const;
-  bool requireInteraction() const;
-  void setRequireInteraction(bool);
+    bool hasRenotify() const;
+    bool renotify() const;
+    void setRenotify(bool);
 
-  bool hasSilent() const;
-  bool silent() const;
-  void setSilent(bool);
+    bool hasRequireInteraction() const;
+    bool requireInteraction() const;
+    void setRequireInteraction(bool);
 
-  bool hasTag() const;
-  String tag() const;
-  void setTag(String);
+    bool hasSilent() const;
+    bool silent() const;
+    void setSilent(bool);
 
-  bool hasTimestamp() const;
-  unsigned long long timestamp() const;
-  void setTimestamp(unsigned long long);
+    bool hasTag() const;
+    String tag() const;
+    void setTag(String);
 
-  bool hasVibrate() const;
-  const UnsignedLongOrUnsignedLongSequence& vibrate() const;
-  void setVibrate(const UnsignedLongOrUnsignedLongSequence&);
+    bool hasTimestamp() const;
+    unsigned long long timestamp() const;
+    void setTimestamp(unsigned long long);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasVibrate() const;
+    const UnsignedLongOrUnsignedLongSequence& vibrate() const;
+    void setVibrate(const UnsignedLongOrUnsignedLongSequence&);
 
- private:
-  bool m_hasActions = false;
-  HeapVector<NotificationAction> m_actions;
-  String m_badge;
-  String m_body;
-  ScriptValue m_data;
-  String m_dir;
-  String m_icon;
-  String m_image;
-  String m_lang;
-  bool m_hasRenotify = false;
-  bool m_renotify;
-  bool m_hasRequireInteraction = false;
-  bool m_requireInteraction;
-  bool m_hasSilent = false;
-  bool m_silent;
-  String m_tag;
-  bool m_hasTimestamp = false;
-  unsigned long long m_timestamp;
-  UnsignedLongOrUnsignedLongSequence m_vibrate;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8NotificationOptions;
+private:
+    bool m_hasActions = false;
+    HeapVector<NotificationAction> m_actions;
+    String m_badge;
+    String m_body;
+    ScriptValue m_data;
+    String m_dir;
+    String m_icon;
+    String m_image;
+    String m_lang;
+    bool m_hasRenotify = false;
+    bool m_renotify;
+    bool m_hasRequireInteraction = false;
+    bool m_requireInteraction;
+    bool m_hasSilent = false;
+    bool m_silent;
+    String m_tag;
+    bool m_hasTimestamp = false;
+    unsigned long long m_timestamp;
+    UnsignedLongOrUnsignedLongSequence m_vibrate;
+
+    friend class V8NotificationOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // NotificationOptions_h
+#endif // NotificationOptions_h

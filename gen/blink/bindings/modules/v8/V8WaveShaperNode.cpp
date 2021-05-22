@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WaveShaperNode.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,182 +53,197 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WaveShaperNode::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WaveShaperNode is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace WaveShaperNodeV8Internal {
 
-static void curveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void curveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WaveShaperNode* impl = V8WaveShaperNode::toImpl(holder);
+        WaveShaperNode* impl = V8WaveShaperNode::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->curve()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->curve()), impl);
+    }
 
-MODULES_EXPORT void curveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WaveShaperNodeV8Internal::curveAttributeGetter(info);
-}
+    MODULES_EXPORT void curveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WaveShaperNodeV8Internal::curveAttributeGetter(info);
+    }
 
-static void curveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  WaveShaperNode* impl = V8WaveShaperNode::toImpl(holder);
+    static void curveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        WaveShaperNode* impl = V8WaveShaperNode::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "WaveShaperNode", "curve");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "WaveShaperNode", "curve");
 
-  // Prepare the value to be set.
-  DOMFloat32Array* cppValue = v8Value->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(v8Value)) : 0;
+        // Prepare the value to be set.
+        DOMFloat32Array* cppValue = v8Value->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(v8Value)) : 0;
 
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue && !isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("The provided value is not of type 'Float32Array'.");
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue && !isUndefinedOrNull(v8Value)) {
+            exceptionState.throwTypeError("The provided value is not of type 'Float32Array'.");
+            return;
+        }
 
-  impl->setCurve(cppValue, exceptionState);
-}
+        impl->setCurve(cppValue, exceptionState);
+    }
 
-MODULES_EXPORT void curveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void curveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  WaveShaperNodeV8Internal::curveAttributeSetter(v8Value, info);
-}
+        WaveShaperNodeV8Internal::curveAttributeSetter(v8Value, info);
+    }
 
-static void oversampleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oversampleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WaveShaperNode* impl = V8WaveShaperNode::toImpl(holder);
+        WaveShaperNode* impl = V8WaveShaperNode::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->oversample(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->oversample(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void oversampleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WaveShaperNodeV8Internal::oversampleAttributeGetter(info);
-}
+    MODULES_EXPORT void oversampleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WaveShaperNodeV8Internal::oversampleAttributeGetter(info);
+    }
 
-static void oversampleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  WaveShaperNode* impl = V8WaveShaperNode::toImpl(holder);
+    static void oversampleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        WaveShaperNode* impl = V8WaveShaperNode::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "WaveShaperNode", "oversample");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "WaveShaperNode", "oversample");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "none",
-      "2x",
-      "4x",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "OverSampleType", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "none",
+            "2x",
+            "4x",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "OverSampleType", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
 
-  impl->setOversample(cppValue);
-}
+        impl->setOversample(cppValue);
+    }
 
-MODULES_EXPORT void oversampleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void oversampleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  WaveShaperNodeV8Internal::oversampleAttributeSetter(v8Value, info);
-}
+        WaveShaperNodeV8Internal::oversampleAttributeSetter(v8Value, info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "WaveShaperNode");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "WaveShaperNode");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  BaseAudioContext* context;
-  WaveShaperOptions options;
-  context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!context) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
+        BaseAudioContext* context;
+        WaveShaperOptions options;
+        context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!context) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
 
-    return;
-  }
+            return;
+        }
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-    return;
-  }
-  V8WaveShaperOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8WaveShaperOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  WaveShaperNode* impl = WaveShaperNode::create(context, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8WaveShaperNode::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        WaveShaperNode* impl = WaveShaperNode::create(context, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8WaveShaperNode::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace WaveShaperNodeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8WaveShaperNodeAccessors[] = {
-    {"curve", WaveShaperNodeV8Internal::curveAttributeGetterCallback, WaveShaperNodeV8Internal::curveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oversample", WaveShaperNodeV8Internal::oversampleAttributeGetterCallback, WaveShaperNodeV8Internal::oversampleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "curve", WaveShaperNodeV8Internal::curveAttributeGetterCallback, WaveShaperNodeV8Internal::curveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oversample", WaveShaperNodeV8Internal::oversampleAttributeGetterCallback, WaveShaperNodeV8Internal::oversampleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8WaveShaperNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8WaveShaperNode_Constructor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("WaveShaperNode"));
-    return;
-  }
+void V8WaveShaperNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8WaveShaperNode_Constructor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("WaveShaperNode"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  WaveShaperNodeV8Internal::constructor(info);
+    WaveShaperNodeV8Internal::constructor(info);
 }
 
-static void installV8WaveShaperNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WaveShaperNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8WaveShaperNode::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8WaveShaperNode::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8WaveShaperNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WaveShaperNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8WaveShaperNode::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8WaveShaperNode::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WaveShaperNodeAccessors, WTF_ARRAY_LENGTH(V8WaveShaperNodeAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WaveShaperNodeAccessors, WTF_ARRAY_LENGTH(V8WaveShaperNodeAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8WaveShaperNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WaveShaperNodeTemplate);
+v8::Local<v8::FunctionTemplate> V8WaveShaperNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WaveShaperNodeTemplate);
 }
 
-bool V8WaveShaperNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WaveShaperNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WaveShaperNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WaveShaperNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WaveShaperNode* V8WaveShaperNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WaveShaperNode* V8WaveShaperNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

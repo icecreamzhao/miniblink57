@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PasswordCredentialData.h"
 
 namespace blink {
 
-PasswordCredentialData::PasswordCredentialData() {
+PasswordCredentialData::PasswordCredentialData()
+{
 }
 
-PasswordCredentialData::~PasswordCredentialData() {}
+PasswordCredentialData::~PasswordCredentialData() { }
 
 PasswordCredentialData::PasswordCredentialData(const PasswordCredentialData&) = default;
 
 PasswordCredentialData& PasswordCredentialData::operator=(const PasswordCredentialData&) = default;
 
-bool PasswordCredentialData::hasPassword() const {
-  return !m_password.isNull();
+bool PasswordCredentialData::hasPassword() const
+{
+    return !m_password.isNull();
 }
-String PasswordCredentialData::password() const {
-  return m_password;
+String PasswordCredentialData::password() const
+{
+    return m_password;
 }
-void PasswordCredentialData::setPassword(String value) {
-  m_password = value;
+void PasswordCredentialData::setPassword(String value)
+{
+    m_password = value;
 }
 
-DEFINE_TRACE(PasswordCredentialData) {
-  LocallyStoredCredentialData::trace(visitor);
+DEFINE_TRACE(PasswordCredentialData)
+{
+    LocallyStoredCredentialData::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCPeerConnectionIceEventInit_h
 #define RTCPeerConnectionIceEventInit_h
 
@@ -21,27 +21,28 @@ namespace blink {
 class RTCIceCandidate;
 
 class MODULES_EXPORT RTCPeerConnectionIceEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCPeerConnectionIceEventInit();
-  virtual ~RTCPeerConnectionIceEventInit();
-  RTCPeerConnectionIceEventInit(const RTCPeerConnectionIceEventInit&);
-  RTCPeerConnectionIceEventInit& operator=(const RTCPeerConnectionIceEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCandidate() const;
-  RTCIceCandidate* candidate() const;
-  void setCandidate(RTCIceCandidate*);
-  void setCandidateToNull();
+public:
+    RTCPeerConnectionIceEventInit();
+    virtual ~RTCPeerConnectionIceEventInit();
+    RTCPeerConnectionIceEventInit(const RTCPeerConnectionIceEventInit&);
+    RTCPeerConnectionIceEventInit& operator=(const RTCPeerConnectionIceEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasCandidate() const;
+    RTCIceCandidate* candidate() const;
+    void setCandidate(RTCIceCandidate*);
+    void setCandidateToNull();
 
- private:
-  Member<RTCIceCandidate> m_candidate;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCPeerConnectionIceEventInit;
+private:
+    Member<RTCIceCandidate> m_candidate;
+
+    friend class V8RTCPeerConnectionIceEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCPeerConnectionIceEventInit_h
+#endif // RTCPeerConnectionIceEventInit_h

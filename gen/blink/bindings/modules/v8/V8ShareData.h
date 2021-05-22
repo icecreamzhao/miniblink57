@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ShareData_h
 #define V8ShareData_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ShareData {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ShareData&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ShareData&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ShareData(const ShareData&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ShareData& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ShareData& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ShareData> {
-  static ShareData nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ShareData nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ShareData> {
-  typedef V8ShareData Type;
+    typedef V8ShareData Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ShareData_h
+#endif // V8ShareData_h

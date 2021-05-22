@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef LongRange_h
 #define LongRange_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT LongRange : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  LongRange();
-  virtual ~LongRange();
-  LongRange(const LongRange&);
-  LongRange& operator=(const LongRange&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMax() const;
-  int max() const;
-  void setMax(int);
+public:
+    LongRange();
+    virtual ~LongRange();
+    LongRange(const LongRange&);
+    LongRange& operator=(const LongRange&);
 
-  bool hasMin() const;
-  int min() const;
-  void setMin(int);
+    bool hasMax() const;
+    int max() const;
+    void setMax(int);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMin() const;
+    int min() const;
+    void setMin(int);
 
- private:
-  bool m_hasMax = false;
-  int m_max;
-  bool m_hasMin = false;
-  int m_min;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8LongRange;
+private:
+    bool m_hasMax = false;
+    int m_max;
+    bool m_hasMin = false;
+    int m_min;
+
+    friend class V8LongRange;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // LongRange_h
+#endif // LongRange_h

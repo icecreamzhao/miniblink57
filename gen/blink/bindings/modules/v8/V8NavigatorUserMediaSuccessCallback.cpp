@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8NavigatorUserMediaSuccessCallback.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -22,28 +22,30 @@
 namespace blink {
 
 V8NavigatorUserMediaSuccessCallback::V8NavigatorUserMediaSuccessCallback(v8::Local<v8::Function> callback, ScriptState* scriptState)
-    : m_scriptState(scriptState) {
-  m_callback.set(scriptState->isolate(), callback);
+    : m_scriptState(scriptState)
+{
+    m_callback.set(scriptState->isolate(), callback);
 }
 
-V8NavigatorUserMediaSuccessCallback::~V8NavigatorUserMediaSuccessCallback() {}
+V8NavigatorUserMediaSuccessCallback::~V8NavigatorUserMediaSuccessCallback() { }
 
-DEFINE_TRACE(V8NavigatorUserMediaSuccessCallback) {
-  NavigatorUserMediaSuccessCallback::trace(visitor);
+DEFINE_TRACE(V8NavigatorUserMediaSuccessCallback)
+{
+    NavigatorUserMediaSuccessCallback::trace(visitor);
 }
 
-void V8NavigatorUserMediaSuccessCallback::handleEvent(MediaStream* stream) {
-  ExecutionContext* executionContext = m_scriptState->getExecutionContext();
-  if (!executionContext || executionContext->isContextSuspended() ||
-      executionContext->isContextDestroyed())
-    return;
-  if (!m_scriptState->contextIsValid())
-    return;
-  ScriptState::Scope scope(m_scriptState.get());
-  v8::Local<v8::Value> streamHandle = ToV8(stream, m_scriptState->context()->Global(), m_scriptState->isolate());
-  v8::Local<v8::Value> argv[] = { streamHandle };
+void V8NavigatorUserMediaSuccessCallback::handleEvent(MediaStream* stream)
+{
+    ExecutionContext* executionContext = m_scriptState->getExecutionContext();
+    if (!executionContext || executionContext->isContextSuspended() || executionContext->isContextDestroyed())
+        return;
+    if (!m_scriptState->contextIsValid())
+        return;
+    ScriptState::Scope scope(m_scriptState.get());
+    v8::Local<v8::Value> streamHandle = ToV8(stream, m_scriptState->context()->Global(), m_scriptState->isolate());
+    v8::Local<v8::Value> argv[] = { streamHandle };
 
-  V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 1, argv, m_scriptState->isolate());
+    V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 1, argv, m_scriptState->isolate());
 }
 
-}  // namespace blink
+} // namespace blink

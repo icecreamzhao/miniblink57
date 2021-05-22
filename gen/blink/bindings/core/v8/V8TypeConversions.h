@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8TypeConversions_h
 #define V8TypeConversions_h
 
@@ -23,31 +23,35 @@
 namespace blink {
 
 class V8TypeConversions {
-  STATIC_ONLY(V8TypeConversions);
- public:
-  static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static TypeConversions* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<TypeConversions>();
-  }
-  static TypeConversions* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<TypeConversions>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<TypeConversions>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8TypeConversions);
+
+public:
+    static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static TypeConversions* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<TypeConversions>();
+    }
+    static TypeConversions* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<TypeConversions>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<TypeConversions>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<TypeConversions> {
-  typedef V8TypeConversions Type;
+    typedef V8TypeConversions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8TypeConversions_h
+#endif // V8TypeConversions_h

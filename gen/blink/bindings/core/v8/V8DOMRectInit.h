@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8DOMRectInit_h
 #define V8DOMRectInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8DOMRectInit {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DOMRectInit&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DOMRectInit&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8DOMRectInit(const DOMRectInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DOMRectInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DOMRectInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<DOMRectInit> {
-  static DOMRectInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static DOMRectInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<DOMRectInit> {
-  typedef V8DOMRectInit Type;
+    typedef V8DOMRectInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8DOMRectInit_h
+#endif // V8DOMRectInit_h

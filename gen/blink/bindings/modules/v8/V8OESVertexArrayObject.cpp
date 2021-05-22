@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8OESVertexArrayObject.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,129 +48,143 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&OESVertexArrayObject::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "OESVertexArrayObject is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace OESVertexArrayObjectV8Internal {
 
-static void createVertexArrayOESMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  OESVertexArrayObject* impl = V8OESVertexArrayObject::toImpl(info.Holder());
+    static void createVertexArrayOESMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OESVertexArrayObject* impl = V8OESVertexArrayObject::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->createVertexArrayOES());
-}
+        v8SetReturnValue(info, impl->createVertexArrayOES());
+    }
 
-MODULES_EXPORT  void createVertexArrayOESMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  OESVertexArrayObjectV8Internal::createVertexArrayOESMethod(info);
-}
+    MODULES_EXPORT void createVertexArrayOESMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OESVertexArrayObjectV8Internal::createVertexArrayOESMethod(info);
+    }
 
-static void deleteVertexArrayOESMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  OESVertexArrayObject* impl = V8OESVertexArrayObject::toImpl(info.Holder());
+    static void deleteVertexArrayOESMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OESVertexArrayObject* impl = V8OESVertexArrayObject::toImpl(info.Holder());
 
-  WebGLVertexArrayObjectOES* arrayObject;
-  arrayObject = V8WebGLVertexArrayObjectOES::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!arrayObject && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteVertexArrayOES", "OESVertexArrayObject", "parameter 1 is not of type 'WebGLVertexArrayObjectOES'."));
+        WebGLVertexArrayObjectOES* arrayObject;
+        arrayObject = V8WebGLVertexArrayObjectOES::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!arrayObject && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteVertexArrayOES", "OESVertexArrayObject", "parameter 1 is not of type 'WebGLVertexArrayObjectOES'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->deleteVertexArrayOES(arrayObject);
-}
+        impl->deleteVertexArrayOES(arrayObject);
+    }
 
-MODULES_EXPORT  void deleteVertexArrayOESMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  OESVertexArrayObjectV8Internal::deleteVertexArrayOESMethod(info);
-}
+    MODULES_EXPORT void deleteVertexArrayOESMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OESVertexArrayObjectV8Internal::deleteVertexArrayOESMethod(info);
+    }
 
-static void isVertexArrayOESMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  OESVertexArrayObject* impl = V8OESVertexArrayObject::toImpl(info.Holder());
+    static void isVertexArrayOESMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OESVertexArrayObject* impl = V8OESVertexArrayObject::toImpl(info.Holder());
 
-  WebGLVertexArrayObjectOES* arrayObject;
-  arrayObject = V8WebGLVertexArrayObjectOES::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!arrayObject && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isVertexArrayOES", "OESVertexArrayObject", "parameter 1 is not of type 'WebGLVertexArrayObjectOES'."));
+        WebGLVertexArrayObjectOES* arrayObject;
+        arrayObject = V8WebGLVertexArrayObjectOES::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!arrayObject && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isVertexArrayOES", "OESVertexArrayObject", "parameter 1 is not of type 'WebGLVertexArrayObjectOES'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValueBool(info, impl->isVertexArrayOES(arrayObject));
-}
+        v8SetReturnValueBool(info, impl->isVertexArrayOES(arrayObject));
+    }
 
-MODULES_EXPORT  void isVertexArrayOESMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  OESVertexArrayObjectV8Internal::isVertexArrayOESMethod(info);
-}
+    MODULES_EXPORT void isVertexArrayOESMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OESVertexArrayObjectV8Internal::isVertexArrayOESMethod(info);
+    }
 
-static void bindVertexArrayOESMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  OESVertexArrayObject* impl = V8OESVertexArrayObject::toImpl(info.Holder());
+    static void bindVertexArrayOESMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OESVertexArrayObject* impl = V8OESVertexArrayObject::toImpl(info.Holder());
 
-  WebGLVertexArrayObjectOES* arrayObject;
-  arrayObject = V8WebGLVertexArrayObjectOES::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!arrayObject && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("bindVertexArrayOES", "OESVertexArrayObject", "parameter 1 is not of type 'WebGLVertexArrayObjectOES'."));
+        WebGLVertexArrayObjectOES* arrayObject;
+        arrayObject = V8WebGLVertexArrayObjectOES::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!arrayObject && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("bindVertexArrayOES", "OESVertexArrayObject", "parameter 1 is not of type 'WebGLVertexArrayObjectOES'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->bindVertexArrayOES(arrayObject);
-}
+        impl->bindVertexArrayOES(arrayObject);
+    }
 
-MODULES_EXPORT  void bindVertexArrayOESMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  OESVertexArrayObjectV8Internal::bindVertexArrayOESMethod(info);
-}
+    MODULES_EXPORT void bindVertexArrayOESMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OESVertexArrayObjectV8Internal::bindVertexArrayOESMethod(info);
+    }
 
 } // namespace OESVertexArrayObjectV8Internal
 
-void V8OESVertexArrayObject::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  OESVertexArrayObject* impl = scriptWrappable->toImpl<OESVertexArrayObject>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8OESVertexArrayObject::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    OESVertexArrayObject* impl = scriptWrappable->toImpl<OESVertexArrayObject>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::MethodConfiguration V8OESVertexArrayObjectMethods[] = {
-    {"createVertexArrayOES", OESVertexArrayObjectV8Internal::createVertexArrayOESMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteVertexArrayOES", OESVertexArrayObjectV8Internal::deleteVertexArrayOESMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isVertexArrayOES", OESVertexArrayObjectV8Internal::isVertexArrayOESMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bindVertexArrayOES", OESVertexArrayObjectV8Internal::bindVertexArrayOESMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "createVertexArrayOES", OESVertexArrayObjectV8Internal::createVertexArrayOESMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteVertexArrayOES", OESVertexArrayObjectV8Internal::deleteVertexArrayOESMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isVertexArrayOES", OESVertexArrayObjectV8Internal::isVertexArrayOESMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bindVertexArrayOES", OESVertexArrayObjectV8Internal::bindVertexArrayOESMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8OESVertexArrayObjectTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8OESVertexArrayObject::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8OESVertexArrayObject::internalFieldCount);
+static void installV8OESVertexArrayObjectTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8OESVertexArrayObject::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8OESVertexArrayObject::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8OESVertexArrayObjectConstants[] = {
-      {"VERTEX_ARRAY_BINDING_OES", 0x85B5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8OESVertexArrayObjectConstants, WTF_ARRAY_LENGTH(V8OESVertexArrayObjectConstants));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8OESVertexArrayObjectMethods, WTF_ARRAY_LENGTH(V8OESVertexArrayObjectMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8OESVertexArrayObjectConstants[] = {
+        { "VERTEX_ARRAY_BINDING_OES", 0x85B5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8OESVertexArrayObjectConstants, WTF_ARRAY_LENGTH(V8OESVertexArrayObjectConstants));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8OESVertexArrayObjectMethods, WTF_ARRAY_LENGTH(V8OESVertexArrayObjectMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8OESVertexArrayObject::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8OESVertexArrayObjectTemplate);
+v8::Local<v8::FunctionTemplate> V8OESVertexArrayObject::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8OESVertexArrayObjectTemplate);
 }
 
-bool V8OESVertexArrayObject::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8OESVertexArrayObject::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8OESVertexArrayObject::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8OESVertexArrayObject::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-OESVertexArrayObject* V8OESVertexArrayObject::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+OESVertexArrayObject* V8OESVertexArrayObject::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

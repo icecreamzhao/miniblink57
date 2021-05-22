@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef LongOrConstrainLongRange_h
 #define LongOrConstrainLongRange_h
 
@@ -22,58 +22,60 @@
 namespace blink {
 
 class MODULES_EXPORT LongOrConstrainLongRange final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  LongOrConstrainLongRange();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isLong() const { return m_type == SpecificTypeLong; }
-  int getAsLong() const;
-  void setLong(int);
-  static LongOrConstrainLongRange fromLong(int);
+public:
+    LongOrConstrainLongRange();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isConstrainLongRange() const { return m_type == SpecificTypeConstrainLongRange; }
-  const ConstrainLongRange& getAsConstrainLongRange() const;
-  void setConstrainLongRange(const ConstrainLongRange&);
-  static LongOrConstrainLongRange fromConstrainLongRange(const ConstrainLongRange&);
+    bool isLong() const { return m_type == SpecificTypeLong; }
+    int getAsLong() const;
+    void setLong(int);
+    static LongOrConstrainLongRange fromLong(int);
 
-  LongOrConstrainLongRange(const LongOrConstrainLongRange&);
-  ~LongOrConstrainLongRange();
-  LongOrConstrainLongRange& operator=(const LongOrConstrainLongRange&);
-  DECLARE_TRACE();
+    bool isConstrainLongRange() const { return m_type == SpecificTypeConstrainLongRange; }
+    const ConstrainLongRange& getAsConstrainLongRange() const;
+    void setConstrainLongRange(const ConstrainLongRange&);
+    static LongOrConstrainLongRange fromConstrainLongRange(const ConstrainLongRange&);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeLong,
-    SpecificTypeConstrainLongRange,
-  };
-  SpecificTypes m_type;
+    LongOrConstrainLongRange(const LongOrConstrainLongRange&);
+    ~LongOrConstrainLongRange();
+    LongOrConstrainLongRange& operator=(const LongOrConstrainLongRange&);
+    DECLARE_TRACE();
 
-  int m_long;
-  ConstrainLongRange m_constrainLongRange;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeLong,
+        SpecificTypeConstrainLongRange,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const LongOrConstrainLongRange&, v8::Local<v8::Object>, v8::Isolate*);
+    int m_long;
+    ConstrainLongRange m_constrainLongRange;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const LongOrConstrainLongRange&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8LongOrConstrainLongRange final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, LongOrConstrainLongRange&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, LongOrConstrainLongRange&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const LongOrConstrainLongRange&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, LongOrConstrainLongRange& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, LongOrConstrainLongRange& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<LongOrConstrainLongRange> {
-  MODULES_EXPORT static LongOrConstrainLongRange nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static LongOrConstrainLongRange nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -81,4 +83,4 @@ struct NativeValueTraits<LongOrConstrainLongRange> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::LongOrConstrainLongRange);
 
-#endif  // LongOrConstrainLongRange_h
+#endif // LongOrConstrainLongRange_h

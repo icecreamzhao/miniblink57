@@ -8,53 +8,64 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "BluetoothScanFilterInit.h"
 
 namespace blink {
 
-BluetoothScanFilterInit::BluetoothScanFilterInit() {
+BluetoothScanFilterInit::BluetoothScanFilterInit()
+{
 }
 
-BluetoothScanFilterInit::~BluetoothScanFilterInit() {}
+BluetoothScanFilterInit::~BluetoothScanFilterInit() { }
 
 BluetoothScanFilterInit::BluetoothScanFilterInit(const BluetoothScanFilterInit&) = default;
 
 BluetoothScanFilterInit& BluetoothScanFilterInit::operator=(const BluetoothScanFilterInit&) = default;
 
-bool BluetoothScanFilterInit::hasName() const {
-  return !m_name.isNull();
+bool BluetoothScanFilterInit::hasName() const
+{
+    return !m_name.isNull();
 }
-String BluetoothScanFilterInit::name() const {
-  return m_name;
+String BluetoothScanFilterInit::name() const
+{
+    return m_name;
 }
-void BluetoothScanFilterInit::setName(String value) {
-  m_name = value;
+void BluetoothScanFilterInit::setName(String value)
+{
+    m_name = value;
 }
-bool BluetoothScanFilterInit::hasNamePrefix() const {
-  return !m_namePrefix.isNull();
+bool BluetoothScanFilterInit::hasNamePrefix() const
+{
+    return !m_namePrefix.isNull();
 }
-String BluetoothScanFilterInit::namePrefix() const {
-  return m_namePrefix;
+String BluetoothScanFilterInit::namePrefix() const
+{
+    return m_namePrefix;
 }
-void BluetoothScanFilterInit::setNamePrefix(String value) {
-  m_namePrefix = value;
+void BluetoothScanFilterInit::setNamePrefix(String value)
+{
+    m_namePrefix = value;
 }
-bool BluetoothScanFilterInit::hasServices() const {
-  return m_hasServices;
+bool BluetoothScanFilterInit::hasServices() const
+{
+    return m_hasServices;
 }
-const HeapVector<StringOrUnsignedLong>& BluetoothScanFilterInit::services() const {
-  DCHECK(m_hasServices);
-  return m_services;
+const HeapVector<StringOrUnsignedLong>& BluetoothScanFilterInit::services() const
+{
+    DCHECK(m_hasServices);
+    return m_services;
 }
-void BluetoothScanFilterInit::setServices(const HeapVector<StringOrUnsignedLong>& value) {
-  m_services = value;
-  m_hasServices = true;
+void BluetoothScanFilterInit::setServices(const HeapVector<StringOrUnsignedLong>& value)
+{
+    m_services = value;
+    m_hasServices = true;
 }
 
-DEFINE_TRACE(BluetoothScanFilterInit) {
-  visitor->trace(m_services);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(BluetoothScanFilterInit)
+{
+    visitor->trace(m_services);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

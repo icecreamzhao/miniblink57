@@ -8,55 +8,66 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "TransitionEventInit.h"
 
 namespace blink {
 
-TransitionEventInit::TransitionEventInit() {
-  setElapsedTime(0);
-  setPropertyName(String(""));
-  setPseudoElement(String(""));
+TransitionEventInit::TransitionEventInit()
+{
+    setElapsedTime(0);
+    setPropertyName(String(""));
+    setPseudoElement(String(""));
 }
 
-TransitionEventInit::~TransitionEventInit() {}
+TransitionEventInit::~TransitionEventInit() { }
 
 TransitionEventInit::TransitionEventInit(const TransitionEventInit&) = default;
 
 TransitionEventInit& TransitionEventInit::operator=(const TransitionEventInit&) = default;
 
-bool TransitionEventInit::hasElapsedTime() const {
-  return m_hasElapsedTime;
+bool TransitionEventInit::hasElapsedTime() const
+{
+    return m_hasElapsedTime;
 }
-double TransitionEventInit::elapsedTime() const {
-  DCHECK(m_hasElapsedTime);
-  return m_elapsedTime;
+double TransitionEventInit::elapsedTime() const
+{
+    DCHECK(m_hasElapsedTime);
+    return m_elapsedTime;
 }
-void TransitionEventInit::setElapsedTime(double value) {
-  m_elapsedTime = value;
-  m_hasElapsedTime = true;
+void TransitionEventInit::setElapsedTime(double value)
+{
+    m_elapsedTime = value;
+    m_hasElapsedTime = true;
 }
-bool TransitionEventInit::hasPropertyName() const {
-  return !m_propertyName.isNull();
+bool TransitionEventInit::hasPropertyName() const
+{
+    return !m_propertyName.isNull();
 }
-String TransitionEventInit::propertyName() const {
-  return m_propertyName;
+String TransitionEventInit::propertyName() const
+{
+    return m_propertyName;
 }
-void TransitionEventInit::setPropertyName(String value) {
-  m_propertyName = value;
+void TransitionEventInit::setPropertyName(String value)
+{
+    m_propertyName = value;
 }
-bool TransitionEventInit::hasPseudoElement() const {
-  return !m_pseudoElement.isNull();
+bool TransitionEventInit::hasPseudoElement() const
+{
+    return !m_pseudoElement.isNull();
 }
-String TransitionEventInit::pseudoElement() const {
-  return m_pseudoElement;
+String TransitionEventInit::pseudoElement() const
+{
+    return m_pseudoElement;
 }
-void TransitionEventInit::setPseudoElement(String value) {
-  m_pseudoElement = value;
+void TransitionEventInit::setPseudoElement(String value)
+{
+    m_pseudoElement = value;
 }
 
-DEFINE_TRACE(TransitionEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(TransitionEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,173 +8,217 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PannerOptions.h"
 
 namespace blink {
 
-PannerOptions::PannerOptions() {
+PannerOptions::PannerOptions()
+{
 }
 
-PannerOptions::~PannerOptions() {}
+PannerOptions::~PannerOptions() { }
 
 PannerOptions::PannerOptions(const PannerOptions&) = default;
 
 PannerOptions& PannerOptions::operator=(const PannerOptions&) = default;
 
-bool PannerOptions::hasConeInnerAngle() const {
-  return m_hasConeInnerAngle;
+bool PannerOptions::hasConeInnerAngle() const
+{
+    return m_hasConeInnerAngle;
 }
-double PannerOptions::coneInnerAngle() const {
-  DCHECK(m_hasConeInnerAngle);
-  return m_coneInnerAngle;
+double PannerOptions::coneInnerAngle() const
+{
+    DCHECK(m_hasConeInnerAngle);
+    return m_coneInnerAngle;
 }
-void PannerOptions::setConeInnerAngle(double value) {
-  m_coneInnerAngle = value;
-  m_hasConeInnerAngle = true;
+void PannerOptions::setConeInnerAngle(double value)
+{
+    m_coneInnerAngle = value;
+    m_hasConeInnerAngle = true;
 }
-bool PannerOptions::hasConeOuterAngle() const {
-  return m_hasConeOuterAngle;
+bool PannerOptions::hasConeOuterAngle() const
+{
+    return m_hasConeOuterAngle;
 }
-double PannerOptions::coneOuterAngle() const {
-  DCHECK(m_hasConeOuterAngle);
-  return m_coneOuterAngle;
+double PannerOptions::coneOuterAngle() const
+{
+    DCHECK(m_hasConeOuterAngle);
+    return m_coneOuterAngle;
 }
-void PannerOptions::setConeOuterAngle(double value) {
-  m_coneOuterAngle = value;
-  m_hasConeOuterAngle = true;
+void PannerOptions::setConeOuterAngle(double value)
+{
+    m_coneOuterAngle = value;
+    m_hasConeOuterAngle = true;
 }
-bool PannerOptions::hasConeOuterGain() const {
-  return m_hasConeOuterGain;
+bool PannerOptions::hasConeOuterGain() const
+{
+    return m_hasConeOuterGain;
 }
-double PannerOptions::coneOuterGain() const {
-  DCHECK(m_hasConeOuterGain);
-  return m_coneOuterGain;
+double PannerOptions::coneOuterGain() const
+{
+    DCHECK(m_hasConeOuterGain);
+    return m_coneOuterGain;
 }
-void PannerOptions::setConeOuterGain(double value) {
-  m_coneOuterGain = value;
-  m_hasConeOuterGain = true;
+void PannerOptions::setConeOuterGain(double value)
+{
+    m_coneOuterGain = value;
+    m_hasConeOuterGain = true;
 }
-bool PannerOptions::hasDistanceModel() const {
-  return !m_distanceModel.isNull();
+bool PannerOptions::hasDistanceModel() const
+{
+    return !m_distanceModel.isNull();
 }
-String PannerOptions::distanceModel() const {
-  return m_distanceModel;
+String PannerOptions::distanceModel() const
+{
+    return m_distanceModel;
 }
-void PannerOptions::setDistanceModel(String value) {
-  m_distanceModel = value;
+void PannerOptions::setDistanceModel(String value)
+{
+    m_distanceModel = value;
 }
-bool PannerOptions::hasMaxDistance() const {
-  return m_hasMaxDistance;
+bool PannerOptions::hasMaxDistance() const
+{
+    return m_hasMaxDistance;
 }
-double PannerOptions::maxDistance() const {
-  DCHECK(m_hasMaxDistance);
-  return m_maxDistance;
+double PannerOptions::maxDistance() const
+{
+    DCHECK(m_hasMaxDistance);
+    return m_maxDistance;
 }
-void PannerOptions::setMaxDistance(double value) {
-  m_maxDistance = value;
-  m_hasMaxDistance = true;
+void PannerOptions::setMaxDistance(double value)
+{
+    m_maxDistance = value;
+    m_hasMaxDistance = true;
 }
-bool PannerOptions::hasOrientationX() const {
-  return m_hasOrientationX;
+bool PannerOptions::hasOrientationX() const
+{
+    return m_hasOrientationX;
 }
-float PannerOptions::orientationX() const {
-  DCHECK(m_hasOrientationX);
-  return m_orientationX;
+float PannerOptions::orientationX() const
+{
+    DCHECK(m_hasOrientationX);
+    return m_orientationX;
 }
-void PannerOptions::setOrientationX(float value) {
-  m_orientationX = value;
-  m_hasOrientationX = true;
+void PannerOptions::setOrientationX(float value)
+{
+    m_orientationX = value;
+    m_hasOrientationX = true;
 }
-bool PannerOptions::hasOrientationY() const {
-  return m_hasOrientationY;
+bool PannerOptions::hasOrientationY() const
+{
+    return m_hasOrientationY;
 }
-float PannerOptions::orientationY() const {
-  DCHECK(m_hasOrientationY);
-  return m_orientationY;
+float PannerOptions::orientationY() const
+{
+    DCHECK(m_hasOrientationY);
+    return m_orientationY;
 }
-void PannerOptions::setOrientationY(float value) {
-  m_orientationY = value;
-  m_hasOrientationY = true;
+void PannerOptions::setOrientationY(float value)
+{
+    m_orientationY = value;
+    m_hasOrientationY = true;
 }
-bool PannerOptions::hasOrientationZ() const {
-  return m_hasOrientationZ;
+bool PannerOptions::hasOrientationZ() const
+{
+    return m_hasOrientationZ;
 }
-float PannerOptions::orientationZ() const {
-  DCHECK(m_hasOrientationZ);
-  return m_orientationZ;
+float PannerOptions::orientationZ() const
+{
+    DCHECK(m_hasOrientationZ);
+    return m_orientationZ;
 }
-void PannerOptions::setOrientationZ(float value) {
-  m_orientationZ = value;
-  m_hasOrientationZ = true;
+void PannerOptions::setOrientationZ(float value)
+{
+    m_orientationZ = value;
+    m_hasOrientationZ = true;
 }
-bool PannerOptions::hasPanningModel() const {
-  return !m_panningModel.isNull();
+bool PannerOptions::hasPanningModel() const
+{
+    return !m_panningModel.isNull();
 }
-String PannerOptions::panningModel() const {
-  return m_panningModel;
+String PannerOptions::panningModel() const
+{
+    return m_panningModel;
 }
-void PannerOptions::setPanningModel(String value) {
-  m_panningModel = value;
+void PannerOptions::setPanningModel(String value)
+{
+    m_panningModel = value;
 }
-bool PannerOptions::hasPositionX() const {
-  return m_hasPositionX;
+bool PannerOptions::hasPositionX() const
+{
+    return m_hasPositionX;
 }
-float PannerOptions::positionX() const {
-  DCHECK(m_hasPositionX);
-  return m_positionX;
+float PannerOptions::positionX() const
+{
+    DCHECK(m_hasPositionX);
+    return m_positionX;
 }
-void PannerOptions::setPositionX(float value) {
-  m_positionX = value;
-  m_hasPositionX = true;
+void PannerOptions::setPositionX(float value)
+{
+    m_positionX = value;
+    m_hasPositionX = true;
 }
-bool PannerOptions::hasPositionY() const {
-  return m_hasPositionY;
+bool PannerOptions::hasPositionY() const
+{
+    return m_hasPositionY;
 }
-float PannerOptions::positionY() const {
-  DCHECK(m_hasPositionY);
-  return m_positionY;
+float PannerOptions::positionY() const
+{
+    DCHECK(m_hasPositionY);
+    return m_positionY;
 }
-void PannerOptions::setPositionY(float value) {
-  m_positionY = value;
-  m_hasPositionY = true;
+void PannerOptions::setPositionY(float value)
+{
+    m_positionY = value;
+    m_hasPositionY = true;
 }
-bool PannerOptions::hasPositionZ() const {
-  return m_hasPositionZ;
+bool PannerOptions::hasPositionZ() const
+{
+    return m_hasPositionZ;
 }
-float PannerOptions::positionZ() const {
-  DCHECK(m_hasPositionZ);
-  return m_positionZ;
+float PannerOptions::positionZ() const
+{
+    DCHECK(m_hasPositionZ);
+    return m_positionZ;
 }
-void PannerOptions::setPositionZ(float value) {
-  m_positionZ = value;
-  m_hasPositionZ = true;
+void PannerOptions::setPositionZ(float value)
+{
+    m_positionZ = value;
+    m_hasPositionZ = true;
 }
-bool PannerOptions::hasRefDistance() const {
-  return m_hasRefDistance;
+bool PannerOptions::hasRefDistance() const
+{
+    return m_hasRefDistance;
 }
-double PannerOptions::refDistance() const {
-  DCHECK(m_hasRefDistance);
-  return m_refDistance;
+double PannerOptions::refDistance() const
+{
+    DCHECK(m_hasRefDistance);
+    return m_refDistance;
 }
-void PannerOptions::setRefDistance(double value) {
-  m_refDistance = value;
-  m_hasRefDistance = true;
+void PannerOptions::setRefDistance(double value)
+{
+    m_refDistance = value;
+    m_hasRefDistance = true;
 }
-bool PannerOptions::hasRolloffFactor() const {
-  return m_hasRolloffFactor;
+bool PannerOptions::hasRolloffFactor() const
+{
+    return m_hasRolloffFactor;
 }
-double PannerOptions::rolloffFactor() const {
-  DCHECK(m_hasRolloffFactor);
-  return m_rolloffFactor;
+double PannerOptions::rolloffFactor() const
+{
+    DCHECK(m_hasRolloffFactor);
+    return m_rolloffFactor;
 }
-void PannerOptions::setRolloffFactor(double value) {
-  m_rolloffFactor = value;
-  m_hasRolloffFactor = true;
+void PannerOptions::setRolloffFactor(double value)
+{
+    m_rolloffFactor = value;
+    m_hasRolloffFactor = true;
 }
 
-DEFINE_TRACE(PannerOptions) {
-  AudioNodeOptions::trace(visitor);
+DEFINE_TRACE(PannerOptions)
+{
+    AudioNodeOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

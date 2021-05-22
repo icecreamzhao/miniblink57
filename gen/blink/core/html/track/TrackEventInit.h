@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef TrackEventInit_h
 #define TrackEventInit_h
 
@@ -23,27 +23,28 @@
 namespace blink {
 
 class CORE_EXPORT TrackEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  TrackEventInit();
-  virtual ~TrackEventInit();
-  TrackEventInit(const TrackEventInit&);
-  TrackEventInit& operator=(const TrackEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasTrack() const;
-  const VideoTrackOrAudioTrackOrTextTrack& track() const;
-  void setTrack(const VideoTrackOrAudioTrackOrTextTrack&);
-  void setTrackToNull();
+public:
+    TrackEventInit();
+    virtual ~TrackEventInit();
+    TrackEventInit(const TrackEventInit&);
+    TrackEventInit& operator=(const TrackEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTrack() const;
+    const VideoTrackOrAudioTrackOrTextTrack& track() const;
+    void setTrack(const VideoTrackOrAudioTrackOrTextTrack&);
+    void setTrackToNull();
 
- private:
-  VideoTrackOrAudioTrackOrTextTrack m_track;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8TrackEventInit;
+private:
+    VideoTrackOrAudioTrackOrTextTrack m_track;
+
+    friend class V8TrackEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // TrackEventInit_h
+#endif // TrackEventInit_h

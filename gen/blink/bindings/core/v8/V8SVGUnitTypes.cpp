@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGUnitTypes.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,7 +45,7 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGUnitTypes::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGUnitTypes is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
@@ -54,43 +54,48 @@ namespace SVGUnitTypesV8Internal {
 
 } // namespace SVGUnitTypesV8Internal
 
-static void installV8SVGUnitTypesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGUnitTypes::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGUnitTypes::internalFieldCount);
+static void installV8SVGUnitTypesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGUnitTypes::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGUnitTypes::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8SVGUnitTypesConstants[] = {
-      {"SVG_UNIT_TYPE_UNKNOWN", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_UNIT_TYPE_USERSPACEONUSE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_UNIT_TYPE_OBJECTBOUNDINGBOX", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SVGUnitTypesConstants, WTF_ARRAY_LENGTH(V8SVGUnitTypesConstants));
-  static_assert(0 == SVGUnitTypes::kSvgUnitTypeUnknown, "the value of SVGUnitTypes_kSvgUnitTypeUnknown does not match with implementation");
-  static_assert(1 == SVGUnitTypes::kSvgUnitTypeUserspaceonuse, "the value of SVGUnitTypes_kSvgUnitTypeUserspaceonuse does not match with implementation");
-  static_assert(2 == SVGUnitTypes::kSvgUnitTypeObjectboundingbox, "the value of SVGUnitTypes_kSvgUnitTypeObjectboundingbox does not match with implementation");
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8SVGUnitTypesConstants[] = {
+        { "SVG_UNIT_TYPE_UNKNOWN", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_UNIT_TYPE_USERSPACEONUSE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SVGUnitTypesConstants, WTF_ARRAY_LENGTH(V8SVGUnitTypesConstants));
+    static_assert(0 == SVGUnitTypes::kSvgUnitTypeUnknown, "the value of SVGUnitTypes_kSvgUnitTypeUnknown does not match with implementation");
+    static_assert(1 == SVGUnitTypes::kSvgUnitTypeUserspaceonuse, "the value of SVGUnitTypes_kSvgUnitTypeUserspaceonuse does not match with implementation");
+    static_assert(2 == SVGUnitTypes::kSvgUnitTypeObjectboundingbox, "the value of SVGUnitTypes_kSvgUnitTypeObjectboundingbox does not match with implementation");
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGUnitTypes::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGUnitTypesTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGUnitTypes::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGUnitTypesTemplate);
 }
 
-bool V8SVGUnitTypes::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGUnitTypes::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGUnitTypes::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGUnitTypes::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGUnitTypes* V8SVGUnitTypes::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGUnitTypes* V8SVGUnitTypes::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

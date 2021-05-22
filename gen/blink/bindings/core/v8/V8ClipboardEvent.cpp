@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ClipboardEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,83 +47,92 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ClipboardEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ClipboardEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ClipboardEventV8Internal {
 
-static void clipboardDataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clipboardDataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ClipboardEvent* impl = V8ClipboardEvent::toImpl(holder);
+        ClipboardEvent* impl = V8ClipboardEvent::toImpl(holder);
 
-  DataTransfer* cppValue(WTF::getPtr(impl->clipboardData()));
+        DataTransfer* cppValue(WTF::getPtr(impl->clipboardData()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#ClipboardEvent#clipboardData";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#ClipboardEvent#clipboardData";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void clipboardDataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ClipboardEventV8Internal::clipboardDataAttributeGetter(info);
-}
+    CORE_EXPORT void clipboardDataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ClipboardEventV8Internal::clipboardDataAttributeGetter(info);
+    }
 
-static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ClipboardEvent* impl = V8ClipboardEvent::toImpl(holder);
+        ClipboardEvent* impl = V8ClipboardEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isTrusted());
-}
+        v8SetReturnValueBool(info, impl->isTrusted());
+    }
 
-CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ClipboardEventV8Internal::isTrustedAttributeGetter(info);
-}
+    CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ClipboardEventV8Internal::isTrustedAttributeGetter(info);
+    }
 
 } // namespace ClipboardEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ClipboardEventAccessors[] = {
-    {"clipboardData", ClipboardEventV8Internal::clipboardDataAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTrusted", ClipboardEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "clipboardData", ClipboardEventV8Internal::clipboardDataAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTrusted", ClipboardEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8ClipboardEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ClipboardEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8ClipboardEvent::internalFieldCount);
+static void installV8ClipboardEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ClipboardEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8ClipboardEvent::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ClipboardEventAccessors, WTF_ARRAY_LENGTH(V8ClipboardEventAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ClipboardEventAccessors, WTF_ARRAY_LENGTH(V8ClipboardEventAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8ClipboardEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ClipboardEventTemplate);
+v8::Local<v8::FunctionTemplate> V8ClipboardEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ClipboardEventTemplate);
 }
 
-bool V8ClipboardEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ClipboardEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ClipboardEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ClipboardEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ClipboardEvent* V8ClipboardEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ClipboardEvent* V8ClipboardEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

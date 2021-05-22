@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "InputEventInit.h"
 
 #include "core/clipboard/DataTransfer.h"
@@ -17,78 +17,97 @@
 
 namespace blink {
 
-InputEventInit::InputEventInit() {
-  setInputType(String(""));
-  setIsComposing(false);
-  setRanges(HeapVector<Member<Range>>());
+InputEventInit::InputEventInit()
+{
+    setInputType(String(""));
+    setIsComposing(false);
+    setRanges(HeapVector<Member<Range>>());
 }
 
-InputEventInit::~InputEventInit() {}
+InputEventInit::~InputEventInit() { }
 
 InputEventInit::InputEventInit(const InputEventInit&) = default;
 
 InputEventInit& InputEventInit::operator=(const InputEventInit&) = default;
 
-bool InputEventInit::hasData() const {
-  return !m_data.isNull();
+bool InputEventInit::hasData() const
+{
+    return !m_data.isNull();
 }
-String InputEventInit::data() const {
-  return m_data;
+String InputEventInit::data() const
+{
+    return m_data;
 }
-void InputEventInit::setData(String value) {
-  m_data = value;
+void InputEventInit::setData(String value)
+{
+    m_data = value;
 }
-void InputEventInit::setDataToNull() {
-  m_data = String();
+void InputEventInit::setDataToNull()
+{
+    m_data = String();
 }
-bool InputEventInit::hasDataTransfer() const {
-  return m_dataTransfer;
+bool InputEventInit::hasDataTransfer() const
+{
+    return m_dataTransfer;
 }
-DataTransfer* InputEventInit::dataTransfer() const {
-  return m_dataTransfer;
+DataTransfer* InputEventInit::dataTransfer() const
+{
+    return m_dataTransfer;
 }
-void InputEventInit::setDataTransfer(DataTransfer* value) {
-  m_dataTransfer = value;
+void InputEventInit::setDataTransfer(DataTransfer* value)
+{
+    m_dataTransfer = value;
 }
-void InputEventInit::setDataTransferToNull() {
-  m_dataTransfer = Member<DataTransfer>();
+void InputEventInit::setDataTransferToNull()
+{
+    m_dataTransfer = Member<DataTransfer>();
 }
-bool InputEventInit::hasInputType() const {
-  return !m_inputType.isNull();
+bool InputEventInit::hasInputType() const
+{
+    return !m_inputType.isNull();
 }
-String InputEventInit::inputType() const {
-  return m_inputType;
+String InputEventInit::inputType() const
+{
+    return m_inputType;
 }
-void InputEventInit::setInputType(String value) {
-  m_inputType = value;
+void InputEventInit::setInputType(String value)
+{
+    m_inputType = value;
 }
-bool InputEventInit::hasIsComposing() const {
-  return m_hasIsComposing;
+bool InputEventInit::hasIsComposing() const
+{
+    return m_hasIsComposing;
 }
-bool InputEventInit::isComposing() const {
-  DCHECK(m_hasIsComposing);
-  return m_isComposing;
+bool InputEventInit::isComposing() const
+{
+    DCHECK(m_hasIsComposing);
+    return m_isComposing;
 }
-void InputEventInit::setIsComposing(bool value) {
-  m_isComposing = value;
-  m_hasIsComposing = true;
+void InputEventInit::setIsComposing(bool value)
+{
+    m_isComposing = value;
+    m_hasIsComposing = true;
 }
-bool InputEventInit::hasRanges() const {
-  return m_hasRanges;
+bool InputEventInit::hasRanges() const
+{
+    return m_hasRanges;
 }
-const HeapVector<Member<Range>>& InputEventInit::ranges() const {
-  DCHECK(m_hasRanges);
-  return m_ranges;
+const HeapVector<Member<Range>>& InputEventInit::ranges() const
+{
+    DCHECK(m_hasRanges);
+    return m_ranges;
 }
-void InputEventInit::setRanges(const HeapVector<Member<Range>>& value) {
-  m_ranges = value;
-  m_hasRanges = true;
+void InputEventInit::setRanges(const HeapVector<Member<Range>>& value)
+{
+    m_ranges = value;
+    m_hasRanges = true;
 }
 
-DEFINE_TRACE(InputEventInit) {
-  visitor->trace(m_dataTransfer);
-  visitor->trace(m_ranges);
-  UIEventInit::trace(visitor);
+DEFINE_TRACE(InputEventInit)
+{
+    visitor->trace(m_dataTransfer);
+    visitor->trace(m_ranges);
+    UIEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

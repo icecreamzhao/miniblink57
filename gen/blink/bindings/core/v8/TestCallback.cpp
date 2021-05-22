@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_function.cpp.tmpl
 
-// clang-format off
+// clang-format on
 
 #include "TestCallback.h"
 
@@ -22,60 +22,64 @@
 namespace blink {
 
 // static
-TestCallback* TestCallback::create(ScriptState* scriptState, v8::Local<v8::Value> callback){
-  if (isUndefinedOrNull(callback))
-    return nullptr;
-  return new TestCallback(scriptState, v8::Local<v8::Function>::Cast(callback));
+TestCallback* TestCallback::create(ScriptState* scriptState, v8::Local<v8::Value> callback)
+{
+    if (isUndefinedOrNull(callback))
+        return nullptr;
+    return new TestCallback(scriptState, v8::Local<v8::Function>::Cast(callback));
 }
 
 TestCallback::TestCallback(ScriptState* scriptState, v8::Local<v8::Function> callback)
-    : m_scriptState(scriptState),
-    m_callback(scriptState->isolate(), this, callback) {
-  DCHECK(!m_callback.isEmpty());
+    : m_scriptState(scriptState)
+    , m_callback(scriptState->isolate(), this, callback)
+{
+    DCHECK(!m_callback.isEmpty());
 }
 
-DEFINE_TRACE(TestCallback) {}
+DEFINE_TRACE(TestCallback) { }
 
-DEFINE_TRACE_WRAPPERS(TestCallback) {
-  visitor->traceWrappers(m_callback.cast<v8::Value>());
+DEFINE_TRACE_WRAPPERS(TestCallback)
+{
+    visitor->traceWrappers(m_callback.cast<v8::Value>());
 }
 
-bool TestCallback::call(ScriptWrappable* scriptWrappable, const String& message1, const String& message2, String& returnValue) {
-  if (!m_scriptState->contextIsValid())
-    return false;
+bool TestCallback::call(ScriptWrappable* scriptWrappable, const String& message1, const String& message2, String& returnValue)
+{
+    if (!m_scriptState->contextIsValid())
+        return false;
 
-  ExecutionContext* context = m_scriptState->getExecutionContext();
-  DCHECK(context);
-  if (context->isContextSuspended() || context->isContextDestroyed())
-    return false;
+    ExecutionContext* context = m_scriptState->getExecutionContext();
+    DCHECK(context);
+    if (context->isContextSuspended() || context->isContextDestroyed())
+        return false;
 
-  if (m_callback.isEmpty())
-    return false;
+    if (m_callback.isEmpty())
+        return false;
 
-  // TODO(bashi): Make sure that using DummyExceptionStateForTesting is OK.
-  // crbug.com/653769
-  DummyExceptionStateForTesting exceptionState;
-  ScriptState::Scope scope(m_scriptState.get());
+    // TODO(bashi): Make sure that using DummyExceptionStateForTesting is OK.
+    // crbug.com/653769
+    DummyExceptionStateForTesting exceptionState;
+    ScriptState::Scope scope(m_scriptState.get());
 
-  v8::Local<v8::Value> message1Argument = v8String(m_scriptState->isolate(), message1);
-  v8::Local<v8::Value> message2Argument = v8String(m_scriptState->isolate(), message2);
+    v8::Local<v8::Value> message1Argument = v8String(m_scriptState->isolate(), message1);
+    v8::Local<v8::Value> message2Argument = v8String(m_scriptState->isolate(), message2);
 
-  v8::Local<v8::Value> thisValue = ToV8(scriptWrappable, m_scriptState->context()->Global(), m_scriptState->isolate());
+    v8::Local<v8::Value> thisValue = ToV8(scriptWrappable, m_scriptState->context()->Global(), m_scriptState->isolate());
 
-  v8::Local<v8::Value> argv[] = { message1Argument, message2Argument };
+    v8::Local<v8::Value> argv[] = { message1Argument, message2Argument };
 
-  v8::Local<v8::Value> v8ReturnValue;
-  v8::TryCatch exceptionCatcher(m_scriptState->isolate());
-  exceptionCatcher.SetVerbose(true);
+    v8::Local<v8::Value> v8ReturnValue;
+    v8::TryCatch exceptionCatcher(m_scriptState->isolate());
+    exceptionCatcher.SetVerbose(true);
 
-  if (V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), thisValue, 2, argv, m_scriptState->isolate()).ToLocal(&v8ReturnValue)) {
-    V8StringResource<> cppValue = v8ReturnValue;
+    if (V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), thisValue, 2, argv, m_scriptState->isolate()).ToLocal(&v8ReturnValue)) {
+        V8StringResource<> cppValue = v8ReturnValue;
         if (!cppValue.prepare())
-          return false;
-    returnValue = cppValue;
-    return true;
-  }
-  return false;
+            return false;
+        returnValue = cppValue;
+        return true;
+    }
+    return false;
 }
 
-}  // namespace blink
+} // namespace blink

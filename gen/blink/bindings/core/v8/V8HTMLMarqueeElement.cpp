@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLMarqueeElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,451 +49,504 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLMarqueeElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLMarqueeElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLMarqueeElementV8Internal {
 
-static void behaviorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void behaviorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::behaviorAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::behaviorAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void behaviorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::behaviorAttributeGetter(info);
-}
+    CORE_EXPORT void behaviorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::behaviorAttributeGetter(info);
+    }
 
-static void behaviorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void behaviorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::behaviorAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::behaviorAttr, cppValue);
+    }
 
-CORE_EXPORT void behaviorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void behaviorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMarqueeElementV8Internal::behaviorAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::behaviorAttributeSetter(v8Value, info);
+    }
 
-static void bgColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bgColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::bgcolorAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::bgcolorAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void bgColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::bgColorAttributeGetter(info);
-}
+    CORE_EXPORT void bgColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::bgColorAttributeGetter(info);
+    }
 
-static void bgColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void bgColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::bgcolorAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::bgcolorAttr, cppValue);
+    }
 
-CORE_EXPORT void bgColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void bgColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMarqueeElementV8Internal::bgColorAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::bgColorAttributeSetter(v8Value, info);
+    }
 
-static void directionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void directionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::directionAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::directionAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void directionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::directionAttributeGetter(info);
-}
+    CORE_EXPORT void directionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::directionAttributeGetter(info);
+    }
 
-static void directionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void directionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::directionAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::directionAttr, cppValue);
+    }
 
-CORE_EXPORT void directionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void directionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMarqueeElementV8Internal::directionAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::directionAttributeSetter(v8Value, info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::heightAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::heightAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::heightAttributeGetter(info);
-}
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::heightAttributeGetter(info);
+    }
 
-static void heightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void heightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::heightAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::heightAttr, cppValue);
+    }
 
-CORE_EXPORT void heightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void heightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMarqueeElementV8Internal::heightAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::heightAttributeSetter(v8Value, info);
+    }
 
-static void hspaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hspaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, std::max(0, static_cast<int>(impl->getIntegralAttribute(HTMLNames::hspaceAttr))));
-}
+        v8SetReturnValueUnsigned(info, std::max(0, static_cast<int>(impl->getIntegralAttribute(HTMLNames::hspaceAttr))));
+    }
 
-CORE_EXPORT void hspaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::hspaceAttributeGetter(info);
-}
+    CORE_EXPORT void hspaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::hspaceAttributeGetter(info);
+    }
 
-static void hspaceAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void hspaceAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "hspace");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "hspace");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setUnsignedIntegralAttribute(HTMLNames::hspaceAttr, cppValue);
-}
+        impl->setUnsignedIntegralAttribute(HTMLNames::hspaceAttr, cppValue);
+    }
 
-CORE_EXPORT void hspaceAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void hspaceAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMarqueeElementV8Internal::hspaceAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::hspaceAttributeSetter(v8Value, info);
+    }
 
-static void loopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void loopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->loop());
-}
+        v8SetReturnValueInt(info, impl->loop());
+    }
 
-CORE_EXPORT void loopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::loopAttributeGetter(info);
-}
+    CORE_EXPORT void loopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::loopAttributeGetter(info);
+    }
 
-static void loopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void loopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "loop");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "loop");
 
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setLoop(cppValue, exceptionState);
-}
+        impl->setLoop(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void loopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void loopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMarqueeElementV8Internal::loopAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::loopAttributeSetter(v8Value, info);
+    }
 
-static void scrollAmountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollAmountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->scrollAmount());
-}
+        v8SetReturnValueInt(info, impl->scrollAmount());
+    }
 
-CORE_EXPORT void scrollAmountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::scrollAmountAttributeGetter(info);
-}
+    CORE_EXPORT void scrollAmountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::scrollAmountAttributeGetter(info);
+    }
 
-static void scrollAmountAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void scrollAmountAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "scrollAmount");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "scrollAmount");
 
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setScrollAmount(cppValue, exceptionState);
-}
+        impl->setScrollAmount(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void scrollAmountAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void scrollAmountAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMarqueeElementV8Internal::scrollAmountAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::scrollAmountAttributeSetter(v8Value, info);
+    }
 
-static void scrollDelayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollDelayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->scrollDelay());
-}
+        v8SetReturnValueInt(info, impl->scrollDelay());
+    }
 
-CORE_EXPORT void scrollDelayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::scrollDelayAttributeGetter(info);
-}
+    CORE_EXPORT void scrollDelayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::scrollDelayAttributeGetter(info);
+    }
 
-static void scrollDelayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void scrollDelayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "scrollDelay");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "scrollDelay");
 
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setScrollDelay(cppValue, exceptionState);
-}
+        impl->setScrollDelay(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void scrollDelayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void scrollDelayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMarqueeElementV8Internal::scrollDelayAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::scrollDelayAttributeSetter(v8Value, info);
+    }
 
-static void trueSpeedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void trueSpeedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::truespeedAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::truespeedAttr));
+    }
 
-CORE_EXPORT void trueSpeedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::trueSpeedAttributeGetter(info);
-}
+    CORE_EXPORT void trueSpeedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::trueSpeedAttributeGetter(info);
+    }
 
-static void trueSpeedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void trueSpeedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "trueSpeed");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "trueSpeed");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::truespeedAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::truespeedAttr, cppValue);
+    }
 
-CORE_EXPORT void trueSpeedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void trueSpeedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMarqueeElementV8Internal::trueSpeedAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::trueSpeedAttributeSetter(v8Value, info);
+    }
 
-static void vspaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void vspaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, std::max(0, static_cast<int>(impl->getIntegralAttribute(HTMLNames::vspaceAttr))));
-}
+        v8SetReturnValueUnsigned(info, std::max(0, static_cast<int>(impl->getIntegralAttribute(HTMLNames::vspaceAttr))));
+    }
 
-CORE_EXPORT void vspaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::vspaceAttributeGetter(info);
-}
+    CORE_EXPORT void vspaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::vspaceAttributeGetter(info);
+    }
 
-static void vspaceAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void vspaceAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "vspace");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMarqueeElement", "vspace");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setUnsignedIntegralAttribute(HTMLNames::vspaceAttr, cppValue);
-}
+        impl->setUnsignedIntegralAttribute(HTMLNames::vspaceAttr, cppValue);
+    }
 
-CORE_EXPORT void vspaceAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void vspaceAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMarqueeElementV8Internal::vspaceAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::vspaceAttributeSetter(v8Value, info);
+    }
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::widthAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::widthAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::widthAttributeGetter(info);
-}
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::widthAttributeGetter(info);
+    }
 
-static void widthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
+    static void widthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::widthAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::widthAttr, cppValue);
+    }
 
-CORE_EXPORT void widthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void widthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMarqueeElementV8Internal::widthAttributeSetter(v8Value, info);
-}
+        HTMLMarqueeElementV8Internal::widthAttributeSetter(v8Value, info);
+    }
 
-static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(info.Holder());
+    static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(info.Holder());
 
-  impl->start();
-}
+        impl->start();
+    }
 
-CORE_EXPORT  void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::startMethod(info);
-}
+    CORE_EXPORT void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::startMethod(info);
+    }
 
-static void stopMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(info.Holder());
+    static void stopMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElement* impl = V8HTMLMarqueeElement::toImpl(info.Holder());
 
-  impl->stop();
-}
+        impl->stop();
+    }
 
-CORE_EXPORT  void stopMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMarqueeElementV8Internal::stopMethod(info);
-}
+    CORE_EXPORT void stopMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMarqueeElementV8Internal::stopMethod(info);
+    }
 
 } // namespace HTMLMarqueeElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLMarqueeElementAccessors[] = {
-    {"behavior", HTMLMarqueeElementV8Internal::behaviorAttributeGetterCallback, HTMLMarqueeElementV8Internal::behaviorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bgColor", HTMLMarqueeElementV8Internal::bgColorAttributeGetterCallback, HTMLMarqueeElementV8Internal::bgColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"direction", HTMLMarqueeElementV8Internal::directionAttributeGetterCallback, HTMLMarqueeElementV8Internal::directionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", HTMLMarqueeElementV8Internal::heightAttributeGetterCallback, HTMLMarqueeElementV8Internal::heightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hspace", HTMLMarqueeElementV8Internal::hspaceAttributeGetterCallback, HTMLMarqueeElementV8Internal::hspaceAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loop", HTMLMarqueeElementV8Internal::loopAttributeGetterCallback, HTMLMarqueeElementV8Internal::loopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollAmount", HTMLMarqueeElementV8Internal::scrollAmountAttributeGetterCallback, HTMLMarqueeElementV8Internal::scrollAmountAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollDelay", HTMLMarqueeElementV8Internal::scrollDelayAttributeGetterCallback, HTMLMarqueeElementV8Internal::scrollDelayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"trueSpeed", HTMLMarqueeElementV8Internal::trueSpeedAttributeGetterCallback, HTMLMarqueeElementV8Internal::trueSpeedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vspace", HTMLMarqueeElementV8Internal::vspaceAttributeGetterCallback, HTMLMarqueeElementV8Internal::vspaceAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", HTMLMarqueeElementV8Internal::widthAttributeGetterCallback, HTMLMarqueeElementV8Internal::widthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "behavior", HTMLMarqueeElementV8Internal::behaviorAttributeGetterCallback, HTMLMarqueeElementV8Internal::behaviorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bgColor", HTMLMarqueeElementV8Internal::bgColorAttributeGetterCallback, HTMLMarqueeElementV8Internal::bgColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "direction", HTMLMarqueeElementV8Internal::directionAttributeGetterCallback, HTMLMarqueeElementV8Internal::directionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", HTMLMarqueeElementV8Internal::heightAttributeGetterCallback, HTMLMarqueeElementV8Internal::heightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hspace", HTMLMarqueeElementV8Internal::hspaceAttributeGetterCallback, HTMLMarqueeElementV8Internal::hspaceAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loop", HTMLMarqueeElementV8Internal::loopAttributeGetterCallback, HTMLMarqueeElementV8Internal::loopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollAmount", HTMLMarqueeElementV8Internal::scrollAmountAttributeGetterCallback, HTMLMarqueeElementV8Internal::scrollAmountAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollDelay", HTMLMarqueeElementV8Internal::scrollDelayAttributeGetterCallback, HTMLMarqueeElementV8Internal::scrollDelayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "trueSpeed", HTMLMarqueeElementV8Internal::trueSpeedAttributeGetterCallback, HTMLMarqueeElementV8Internal::trueSpeedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vspace", HTMLMarqueeElementV8Internal::vspaceAttributeGetterCallback, HTMLMarqueeElementV8Internal::vspaceAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", HTMLMarqueeElementV8Internal::widthAttributeGetterCallback, HTMLMarqueeElementV8Internal::widthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLMarqueeElementMethods[] = {
-    {"start", HTMLMarqueeElementV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stop", HTMLMarqueeElementV8Internal::stopMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "start", HTMLMarqueeElementV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stop", HTMLMarqueeElementV8Internal::stopMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLMarqueeElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLMarqueeElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLMarqueeElement::internalFieldCount);
+static void installV8HTMLMarqueeElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLMarqueeElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLMarqueeElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMarqueeElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMarqueeElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMarqueeElementMethods, WTF_ARRAY_LENGTH(V8HTMLMarqueeElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMarqueeElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMarqueeElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMarqueeElementMethods, WTF_ARRAY_LENGTH(V8HTMLMarqueeElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLMarqueeElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLMarqueeElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLMarqueeElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLMarqueeElementTemplate);
 }
 
-bool V8HTMLMarqueeElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLMarqueeElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLMarqueeElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLMarqueeElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLMarqueeElement* V8HTMLMarqueeElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLMarqueeElement* V8HTMLMarqueeElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

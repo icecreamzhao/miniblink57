@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ForeignFetchResponse_h
 #define ForeignFetchResponse_h
 
@@ -23,37 +23,38 @@ namespace blink {
 class Response;
 
 class MODULES_EXPORT ForeignFetchResponse : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ForeignFetchResponse();
-  virtual ~ForeignFetchResponse();
-  ForeignFetchResponse(const ForeignFetchResponse&);
-  ForeignFetchResponse& operator=(const ForeignFetchResponse&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasHeaders() const;
-  const Vector<String>& headers() const;
-  void setHeaders(const Vector<String>&);
+public:
+    ForeignFetchResponse();
+    virtual ~ForeignFetchResponse();
+    ForeignFetchResponse(const ForeignFetchResponse&);
+    ForeignFetchResponse& operator=(const ForeignFetchResponse&);
 
-  bool hasOrigin() const;
-  String origin() const;
-  void setOrigin(String);
+    bool hasHeaders() const;
+    const Vector<String>& headers() const;
+    void setHeaders(const Vector<String>&);
 
-  bool hasResponse() const;
-  Response* response() const;
-  void setResponse(Response*);
+    bool hasOrigin() const;
+    String origin() const;
+    void setOrigin(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasResponse() const;
+    Response* response() const;
+    void setResponse(Response*);
 
- private:
-  bool m_hasHeaders = false;
-  Vector<String> m_headers;
-  String m_origin;
-  Member<Response> m_response;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ForeignFetchResponse;
+private:
+    bool m_hasHeaders = false;
+    Vector<String> m_headers;
+    String m_origin;
+    Member<Response> m_response;
+
+    friend class V8ForeignFetchResponse;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ForeignFetchResponse_h
+#endif // ForeignFetchResponse_h

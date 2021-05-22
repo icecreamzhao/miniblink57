@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "CSSStyleValueOrCSSStyleValueSequence.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -16,93 +16,106 @@
 
 namespace blink {
 
-CSSStyleValueOrCSSStyleValueSequence::CSSStyleValueOrCSSStyleValueSequence() : m_type(SpecificTypeNone) {}
-
-CSSStyleValue* CSSStyleValueOrCSSStyleValueSequence::getAsCSSStyleValue() const {
-  DCHECK(isCSSStyleValue());
-  return m_cssStyleValue;
+CSSStyleValueOrCSSStyleValueSequence::CSSStyleValueOrCSSStyleValueSequence()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void CSSStyleValueOrCSSStyleValueSequence::setCSSStyleValue(CSSStyleValue* value) {
-  DCHECK(isNull());
-  m_cssStyleValue = value;
-  m_type = SpecificTypeCSSStyleValue;
+CSSStyleValue* CSSStyleValueOrCSSStyleValueSequence::getAsCSSStyleValue() const
+{
+    DCHECK(isCSSStyleValue());
+    return m_cssStyleValue;
 }
 
-CSSStyleValueOrCSSStyleValueSequence CSSStyleValueOrCSSStyleValueSequence::fromCSSStyleValue(CSSStyleValue* value) {
-  CSSStyleValueOrCSSStyleValueSequence container;
-  container.setCSSStyleValue(value);
-  return container;
+void CSSStyleValueOrCSSStyleValueSequence::setCSSStyleValue(CSSStyleValue* value)
+{
+    DCHECK(isNull());
+    m_cssStyleValue = value;
+    m_type = SpecificTypeCSSStyleValue;
 }
 
-const HeapVector<Member<CSSStyleValue>>& CSSStyleValueOrCSSStyleValueSequence::getAsCSSStyleValueSequence() const {
-  DCHECK(isCSSStyleValueSequence());
-  return m_cssStyleValueSequence;
+CSSStyleValueOrCSSStyleValueSequence CSSStyleValueOrCSSStyleValueSequence::fromCSSStyleValue(CSSStyleValue* value)
+{
+    CSSStyleValueOrCSSStyleValueSequence container;
+    container.setCSSStyleValue(value);
+    return container;
 }
 
-void CSSStyleValueOrCSSStyleValueSequence::setCSSStyleValueSequence(const HeapVector<Member<CSSStyleValue>>& value) {
-  DCHECK(isNull());
-  m_cssStyleValueSequence = value;
-  m_type = SpecificTypeCSSStyleValueSequence;
+const HeapVector<Member<CSSStyleValue>>& CSSStyleValueOrCSSStyleValueSequence::getAsCSSStyleValueSequence() const
+{
+    DCHECK(isCSSStyleValueSequence());
+    return m_cssStyleValueSequence;
 }
 
-CSSStyleValueOrCSSStyleValueSequence CSSStyleValueOrCSSStyleValueSequence::fromCSSStyleValueSequence(const HeapVector<Member<CSSStyleValue>>& value) {
-  CSSStyleValueOrCSSStyleValueSequence container;
-  container.setCSSStyleValueSequence(value);
-  return container;
+void CSSStyleValueOrCSSStyleValueSequence::setCSSStyleValueSequence(const HeapVector<Member<CSSStyleValue>>& value)
+{
+    DCHECK(isNull());
+    m_cssStyleValueSequence = value;
+    m_type = SpecificTypeCSSStyleValueSequence;
+}
+
+CSSStyleValueOrCSSStyleValueSequence CSSStyleValueOrCSSStyleValueSequence::fromCSSStyleValueSequence(const HeapVector<Member<CSSStyleValue>>& value)
+{
+    CSSStyleValueOrCSSStyleValueSequence container;
+    container.setCSSStyleValueSequence(value);
+    return container;
 }
 
 CSSStyleValueOrCSSStyleValueSequence::CSSStyleValueOrCSSStyleValueSequence(const CSSStyleValueOrCSSStyleValueSequence&) = default;
 CSSStyleValueOrCSSStyleValueSequence::~CSSStyleValueOrCSSStyleValueSequence() = default;
 CSSStyleValueOrCSSStyleValueSequence& CSSStyleValueOrCSSStyleValueSequence::operator=(const CSSStyleValueOrCSSStyleValueSequence&) = default;
 
-DEFINE_TRACE(CSSStyleValueOrCSSStyleValueSequence) {
-  visitor->trace(m_cssStyleValue);
-  visitor->trace(m_cssStyleValueSequence);
+DEFINE_TRACE(CSSStyleValueOrCSSStyleValueSequence)
+{
+    visitor->trace(m_cssStyleValue);
+    visitor->trace(m_cssStyleValueSequence);
 }
 
-void V8CSSStyleValueOrCSSStyleValueSequence::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, CSSStyleValueOrCSSStyleValueSequence& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8CSSStyleValueOrCSSStyleValueSequence::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, CSSStyleValueOrCSSStyleValueSequence& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8CSSStyleValue::hasInstance(v8Value, isolate)) {
-    CSSStyleValue* cppValue = V8CSSStyleValue::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setCSSStyleValue(cppValue);
-    return;
-  }
+    if (V8CSSStyleValue::hasInstance(v8Value, isolate)) {
+        CSSStyleValue* cppValue = V8CSSStyleValue::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setCSSStyleValue(cppValue);
+        return;
+    }
 
-  if (v8Value->IsArray()) {
-    HeapVector<Member<CSSStyleValue>> cppValue = (toMemberNativeArray<CSSStyleValue>(v8Value, 0, isolate, exceptionState));
-    if (exceptionState.hadException())
-      return;
-    impl.setCSSStyleValueSequence(cppValue);
-    return;
-  }
+    if (v8Value->IsArray()) {
+        HeapVector<Member<CSSStyleValue>> cppValue = (toMemberNativeArray<CSSStyleValue>(v8Value, 0, isolate, exceptionState));
+        if (exceptionState.hadException())
+            return;
+        impl.setCSSStyleValueSequence(cppValue);
+        return;
+    }
 
-  exceptionState.throwTypeError("The provided value is not of type '(CSSStyleValue or sequence<CSSStyleValue>)'");
+    exceptionState.throwTypeError("The provided value is not of type '(CSSStyleValue or sequence<CSSStyleValue>)'");
 }
 
-v8::Local<v8::Value> ToV8(const CSSStyleValueOrCSSStyleValueSequence& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const CSSStyleValueOrCSSStyleValueSequence& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case CSSStyleValueOrCSSStyleValueSequence::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case CSSStyleValueOrCSSStyleValueSequence::SpecificTypeCSSStyleValue:
-      return ToV8(impl.getAsCSSStyleValue(), creationContext, isolate);
+        return ToV8(impl.getAsCSSStyleValue(), creationContext, isolate);
     case CSSStyleValueOrCSSStyleValueSequence::SpecificTypeCSSStyleValueSequence:
-      return ToV8(impl.getAsCSSStyleValueSequence(), creationContext, isolate);
+        return ToV8(impl.getAsCSSStyleValueSequence(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-CSSStyleValueOrCSSStyleValueSequence NativeValueTraits<CSSStyleValueOrCSSStyleValueSequence>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  CSSStyleValueOrCSSStyleValueSequence impl;
-  V8CSSStyleValueOrCSSStyleValueSequence::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+CSSStyleValueOrCSSStyleValueSequence NativeValueTraits<CSSStyleValueOrCSSStyleValueSequence>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    CSSStyleValueOrCSSStyleValueSequence impl;
+    V8CSSStyleValueOrCSSStyleValueSequence::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

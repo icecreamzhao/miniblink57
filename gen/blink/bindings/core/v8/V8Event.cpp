@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Event.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,434 +50,483 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Event::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Event is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace EventV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::typeAttributeGetter(info);
-}
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::typeAttributeGetter(info);
+    }
 
-static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->target()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->target()), impl);
+    }
 
-CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::targetAttributeGetter(info);
-}
+    CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::targetAttributeGetter(info);
+    }
 
-static void currentTargetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void currentTargetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->currentTarget()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->currentTarget()), impl);
+    }
 
-CORE_EXPORT void currentTargetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::currentTargetAttributeGetter(info);
-}
+    CORE_EXPORT void currentTargetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::currentTargetAttributeGetter(info);
+    }
 
-static void eventPhaseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void eventPhaseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->eventPhase());
-}
+        v8SetReturnValueUnsigned(info, impl->eventPhase());
+    }
 
-CORE_EXPORT void eventPhaseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::eventPhaseAttributeGetter(info);
-}
+    CORE_EXPORT void eventPhaseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::eventPhaseAttributeGetter(info);
+    }
 
-static void bubblesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bubblesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->bubbles());
-}
+        v8SetReturnValueBool(info, impl->bubbles());
+    }
 
-CORE_EXPORT void bubblesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::bubblesAttributeGetter(info);
-}
+    CORE_EXPORT void bubblesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::bubblesAttributeGetter(info);
+    }
 
-static void cancelableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cancelableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cancelable());
-}
+        v8SetReturnValueBool(info, impl->cancelable());
+    }
 
-CORE_EXPORT void cancelableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::cancelableAttributeGetter(info);
-}
+    CORE_EXPORT void cancelableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::cancelableAttributeGetter(info);
+    }
 
-static void defaultPreventedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void defaultPreventedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->defaultPrevented());
-}
+        v8SetReturnValueBool(info, impl->defaultPrevented());
+    }
 
-CORE_EXPORT void defaultPreventedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::defaultPreventedAttributeGetter(info);
-}
+    CORE_EXPORT void defaultPreventedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::defaultPreventedAttributeGetter(info);
+    }
 
-static void composedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void composedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->composed());
-}
+        v8SetReturnValueBool(info, impl->composed());
+    }
 
-CORE_EXPORT void composedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventComposed);
+    CORE_EXPORT void composedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventComposed);
 
-  EventV8Internal::composedAttributeGetter(info);
-}
+        EventV8Internal::composedAttributeGetter(info);
+    }
 
-static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isTrusted());
-}
+        v8SetReturnValueBool(info, impl->isTrusted());
+    }
 
-CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::isTrustedAttributeGetter(info);
-}
+    CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::isTrustedAttributeGetter(info);
+    }
 
-static void timeStampAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void timeStampAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, impl->timeStamp(scriptState));
-}
+        v8SetReturnValue(info, impl->timeStamp(scriptState));
+    }
 
-CORE_EXPORT void timeStampAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::timeStampAttributeGetter(info);
-}
+    CORE_EXPORT void timeStampAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::timeStampAttributeGetter(info);
+    }
 
-static void srcElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void srcElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->srcElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->srcElement()), impl);
+    }
 
-CORE_EXPORT void srcElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventSrcElement);
+    CORE_EXPORT void srcElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventSrcElement);
 
-  EventV8Internal::srcElementAttributeGetter(info);
-}
+        EventV8Internal::srcElementAttributeGetter(info);
+    }
 
-static void returnValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void returnValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
 
-  v8SetReturnValueBool(info, impl->legacyReturnValue(executionContext));
-}
+        v8SetReturnValueBool(info, impl->legacyReturnValue(executionContext));
+    }
 
-CORE_EXPORT void returnValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventReturnValue);
+    CORE_EXPORT void returnValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventReturnValue);
 
-  EventV8Internal::returnValueAttributeGetter(info);
-}
+        EventV8Internal::returnValueAttributeGetter(info);
+    }
 
-static void returnValueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Event* impl = V8Event::toImpl(holder);
+    static void returnValueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Event* impl = V8Event::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Event", "returnValue");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Event", "returnValue");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
 
-  impl->setLegacyReturnValue(executionContext, cppValue);
-}
+        impl->setLegacyReturnValue(executionContext, cppValue);
+    }
 
-CORE_EXPORT void returnValueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void returnValueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventReturnValue);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventReturnValue);
 
-  EventV8Internal::returnValueAttributeSetter(v8Value, info);
-}
+        EventV8Internal::returnValueAttributeSetter(v8Value, info);
+    }
 
-static void cancelBubbleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cancelBubbleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
 
-  v8SetReturnValueBool(info, impl->cancelBubble(executionContext));
-}
+        v8SetReturnValueBool(info, impl->cancelBubble(executionContext));
+    }
 
-CORE_EXPORT void cancelBubbleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventCancelBubble);
+    CORE_EXPORT void cancelBubbleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventCancelBubble);
 
-  EventV8Internal::cancelBubbleAttributeGetter(info);
-}
+        EventV8Internal::cancelBubbleAttributeGetter(info);
+    }
 
-static void cancelBubbleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Event* impl = V8Event::toImpl(holder);
+    static void cancelBubbleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Event* impl = V8Event::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Event", "cancelBubble");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Event", "cancelBubble");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
 
-  impl->setCancelBubble(executionContext, cppValue);
-}
+        impl->setCancelBubble(executionContext, cppValue);
+    }
 
-CORE_EXPORT void cancelBubbleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void cancelBubbleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventCancelBubble);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventCancelBubble);
 
-  EventV8Internal::cancelBubbleAttributeSetter(v8Value, info);
-}
+        EventV8Internal::cancelBubbleAttributeSetter(v8Value, info);
+    }
 
-static void pathAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pathAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Event* impl = V8Event::toImpl(holder);
+        Event* impl = V8Event::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, ToV8(impl->path(scriptState), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->path(scriptState), info.Holder(), info.GetIsolate()));
+    }
 
-CORE_EXPORT void pathAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventPath);
+    CORE_EXPORT void pathAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventPath);
 
-  EventV8Internal::pathAttributeGetter(info);
-}
+        EventV8Internal::pathAttributeGetter(info);
+    }
 
-static void composedPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Event* impl = V8Event::toImpl(info.Holder());
+    static void composedPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Event* impl = V8Event::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  HeapVector<Member<EventTarget>> result = impl->composedPath(scriptState);
-  v8SetReturnValue(info, ToV8(result, info.Holder(), info.GetIsolate()));
-}
+        HeapVector<Member<EventTarget>> result = impl->composedPath(scriptState);
+        v8SetReturnValue(info, ToV8(result, info.Holder(), info.GetIsolate()));
+    }
 
-CORE_EXPORT  void composedPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventComposedPath);
-  EventV8Internal::composedPathMethod(info);
-}
+    CORE_EXPORT void composedPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::EventComposedPath);
+        EventV8Internal::composedPathMethod(info);
+    }
 
-static void stopPropagationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Event* impl = V8Event::toImpl(info.Holder());
+    static void stopPropagationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Event* impl = V8Event::toImpl(info.Holder());
 
-  impl->stopPropagation();
-}
+        impl->stopPropagation();
+    }
 
-CORE_EXPORT  void stopPropagationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Event_StopPropagation_Method);
-  EventV8Internal::stopPropagationMethod(info);
-}
+    CORE_EXPORT void stopPropagationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Event_StopPropagation_Method);
+        EventV8Internal::stopPropagationMethod(info);
+    }
 
-static void stopImmediatePropagationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Event* impl = V8Event::toImpl(info.Holder());
+    static void stopImmediatePropagationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Event* impl = V8Event::toImpl(info.Holder());
 
-  impl->stopImmediatePropagation();
-}
+        impl->stopImmediatePropagation();
+    }
 
-CORE_EXPORT  void stopImmediatePropagationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Event_StopImmediatePropagation_Method);
-  EventV8Internal::stopImmediatePropagationMethod(info);
-}
+    CORE_EXPORT void stopImmediatePropagationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Event_StopImmediatePropagation_Method);
+        EventV8Internal::stopImmediatePropagationMethod(info);
+    }
 
-static void preventDefaultMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Event* impl = V8Event::toImpl(info.Holder());
+    static void preventDefaultMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Event* impl = V8Event::toImpl(info.Holder());
 
-  impl->preventDefault();
-}
+        impl->preventDefault();
+    }
 
-CORE_EXPORT  void preventDefaultMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventV8Internal::preventDefaultMethod(info);
-}
+    CORE_EXPORT void preventDefaultMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventV8Internal::preventDefaultMethod(info);
+    }
 
-static void initEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Event", "initEvent");
+    static void initEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Event", "initEvent");
 
-  Event* impl = V8Event::toImpl(info.Holder());
+        Event* impl = V8Event::toImpl(info.Holder());
 
-  V8StringResource<> type;
-  bool bubbles;
-  bool cancelable;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        bool bubbles;
+        bool cancelable;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  bubbles = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        bubbles = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  cancelable = toBoolean(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        cancelable = toBoolean(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->initEvent(type, bubbles, cancelable);
-}
+        impl->initEvent(type, bubbles, cancelable);
+    }
 
-CORE_EXPORT  void initEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Event_InitEvent_Method);
-  EventV8Internal::initEventMethod(info);
-}
+    CORE_EXPORT void initEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Event_InitEvent_Method);
+        EventV8Internal::initEventMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Event");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Event");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  EventInit eventInitDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        EventInit eventInitDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
 
-    return;
-  }
-  V8EventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8EventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  Event* impl = Event::create(type, eventInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Event::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Event* impl = Event::create(type, eventInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Event::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace EventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8EventAccessors[] = {
-    {"type", EventV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"target", EventV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"currentTarget", EventV8Internal::currentTargetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"eventPhase", EventV8Internal::eventPhaseAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bubbles", EventV8Internal::bubblesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cancelable", EventV8Internal::cancelableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"defaultPrevented", EventV8Internal::defaultPreventedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"composed", EventV8Internal::composedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTrusted", EventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"timeStamp", EventV8Internal::timeStampAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"srcElement", EventV8Internal::srcElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"returnValue", EventV8Internal::returnValueAttributeGetterCallback, EventV8Internal::returnValueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cancelBubble", EventV8Internal::cancelBubbleAttributeGetterCallback, EventV8Internal::cancelBubbleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"path", EventV8Internal::pathAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", EventV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "target", EventV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "currentTarget", EventV8Internal::currentTargetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "eventPhase", EventV8Internal::eventPhaseAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bubbles", EventV8Internal::bubblesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cancelable", EventV8Internal::cancelableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "defaultPrevented", EventV8Internal::defaultPreventedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "composed", EventV8Internal::composedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTrusted", EventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "timeStamp", EventV8Internal::timeStampAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "srcElement", EventV8Internal::srcElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "returnValue", EventV8Internal::returnValueAttributeGetterCallback, EventV8Internal::returnValueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cancelBubble", EventV8Internal::cancelBubbleAttributeGetterCallback, EventV8Internal::cancelBubbleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "path", EventV8Internal::pathAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8EventMethods[] = {
-    {"composedPath", EventV8Internal::composedPathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stopPropagation", EventV8Internal::stopPropagationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stopImmediatePropagation", EventV8Internal::stopImmediatePropagationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"preventDefault", EventV8Internal::preventDefaultMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"initEvent", EventV8Internal::initEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "composedPath", EventV8Internal::composedPathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stopPropagation", EventV8Internal::stopPropagationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stopImmediatePropagation", EventV8Internal::stopImmediatePropagationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "preventDefault", EventV8Internal::preventDefaultMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "initEvent", EventV8Internal::initEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8Event::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Event"));
-    return;
-  }
+void V8Event::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Event"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  EventV8Internal::constructor(info);
+    EventV8Internal::constructor(info);
 }
 
-static void installV8EventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Event::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Event::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8Event::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8EventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Event::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Event::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8Event::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8EventConstants[] = {
-      {"NONE", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"CAPTURING_PHASE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"AT_TARGET", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"BUBBLING_PHASE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8EventConstants, WTF_ARRAY_LENGTH(V8EventConstants));
-  static_assert(0 == Event::kNone, "the value of Event_kNone does not match with implementation");
-  static_assert(1 == Event::kCapturingPhase, "the value of Event_kCapturingPhase does not match with implementation");
-  static_assert(2 == Event::kAtTarget, "the value of Event_kAtTarget does not match with implementation");
-  static_assert(3 == Event::kBubblingPhase, "the value of Event_kBubblingPhase does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventAccessors, WTF_ARRAY_LENGTH(V8EventAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventMethods, WTF_ARRAY_LENGTH(V8EventMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8EventConstants[] = {
+        { "NONE", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "CAPTURING_PHASE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "AT_TARGET", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "BUBBLING_PHASE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8EventConstants, WTF_ARRAY_LENGTH(V8EventConstants));
+    static_assert(0 == Event::kNone, "the value of Event_kNone does not match with implementation");
+    static_assert(1 == Event::kCapturingPhase, "the value of Event_kCapturingPhase does not match with implementation");
+    static_assert(2 == Event::kAtTarget, "the value of Event_kAtTarget does not match with implementation");
+    static_assert(3 == Event::kBubblingPhase, "the value of Event_kBubblingPhase does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventAccessors, WTF_ARRAY_LENGTH(V8EventAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventMethods, WTF_ARRAY_LENGTH(V8EventMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Event::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EventTemplate);
+v8::Local<v8::FunctionTemplate> V8Event::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EventTemplate);
 }
 
-bool V8Event::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Event::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Event::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Event::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Event* V8Event::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Event* V8Event::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

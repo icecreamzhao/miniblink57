@@ -8,38 +8,44 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "TrackEventInit.h"
 
 #include "bindings/core/v8/VideoTrackOrAudioTrackOrTextTrack.h"
 
 namespace blink {
 
-TrackEventInit::TrackEventInit() {
+TrackEventInit::TrackEventInit()
+{
 }
 
-TrackEventInit::~TrackEventInit() {}
+TrackEventInit::~TrackEventInit() { }
 
 TrackEventInit::TrackEventInit(const TrackEventInit&) = default;
 
 TrackEventInit& TrackEventInit::operator=(const TrackEventInit&) = default;
 
-bool TrackEventInit::hasTrack() const {
-  return !m_track.isNull();
+bool TrackEventInit::hasTrack() const
+{
+    return !m_track.isNull();
 }
-const VideoTrackOrAudioTrackOrTextTrack& TrackEventInit::track() const {
-  return m_track;
+const VideoTrackOrAudioTrackOrTextTrack& TrackEventInit::track() const
+{
+    return m_track;
 }
-void TrackEventInit::setTrack(const VideoTrackOrAudioTrackOrTextTrack& value) {
-  m_track = value;
+void TrackEventInit::setTrack(const VideoTrackOrAudioTrackOrTextTrack& value)
+{
+    m_track = value;
 }
-void TrackEventInit::setTrackToNull() {
-  m_track = VideoTrackOrAudioTrackOrTextTrack();
+void TrackEventInit::setTrackToNull()
+{
+    m_track = VideoTrackOrAudioTrackOrTextTrack();
 }
 
-DEFINE_TRACE(TrackEventInit) {
-  visitor->trace(m_track);
-  EventInit::trace(visitor);
+DEFINE_TRACE(TrackEventInit)
+{
+    visitor->trace(m_track);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

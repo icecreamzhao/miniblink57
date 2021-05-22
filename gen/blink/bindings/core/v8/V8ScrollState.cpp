@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ScrollState.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,301 +48,338 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ScrollState::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ScrollState is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ScrollStateV8Internal {
 
-static void deltaXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deltaXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValue(info, impl->deltaX());
-}
+        v8SetReturnValue(info, impl->deltaX());
+    }
 
-CORE_EXPORT void deltaXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::deltaXAttributeGetter(info);
-}
+    CORE_EXPORT void deltaXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::deltaXAttributeGetter(info);
+    }
 
-static void deltaYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deltaYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValue(info, impl->deltaY());
-}
+        v8SetReturnValue(info, impl->deltaY());
+    }
 
-CORE_EXPORT void deltaYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::deltaYAttributeGetter(info);
-}
+    CORE_EXPORT void deltaYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::deltaYAttributeGetter(info);
+    }
 
-static void positionXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void positionXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->positionX());
-}
+        v8SetReturnValueInt(info, impl->positionX());
+    }
 
-CORE_EXPORT void positionXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::positionXAttributeGetter(info);
-}
+    CORE_EXPORT void positionXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::positionXAttributeGetter(info);
+    }
 
-static void positionYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void positionYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->positionY());
-}
+        v8SetReturnValueInt(info, impl->positionY());
+    }
 
-CORE_EXPORT void positionYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::positionYAttributeGetter(info);
-}
+    CORE_EXPORT void positionYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::positionYAttributeGetter(info);
+    }
 
-static void velocityXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void velocityXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValue(info, impl->velocityX());
-}
+        v8SetReturnValue(info, impl->velocityX());
+    }
 
-CORE_EXPORT void velocityXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::velocityXAttributeGetter(info);
-}
+    CORE_EXPORT void velocityXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::velocityXAttributeGetter(info);
+    }
 
-static void velocityYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void velocityYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValue(info, impl->velocityY());
-}
+        v8SetReturnValue(info, impl->velocityY());
+    }
 
-CORE_EXPORT void velocityYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::velocityYAttributeGetter(info);
-}
+    CORE_EXPORT void velocityYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::velocityYAttributeGetter(info);
+    }
 
-static void isBeginningAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isBeginningAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isBeginning());
-}
+        v8SetReturnValueBool(info, impl->isBeginning());
+    }
 
-CORE_EXPORT void isBeginningAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::isBeginningAttributeGetter(info);
-}
+    CORE_EXPORT void isBeginningAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::isBeginningAttributeGetter(info);
+    }
 
-static void inInertialPhaseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void inInertialPhaseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->inInertialPhase());
-}
+        v8SetReturnValueBool(info, impl->inInertialPhase());
+    }
 
-CORE_EXPORT void inInertialPhaseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::inInertialPhaseAttributeGetter(info);
-}
+    CORE_EXPORT void inInertialPhaseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::inInertialPhaseAttributeGetter(info);
+    }
 
-static void isEndingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isEndingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isEnding());
-}
+        v8SetReturnValueBool(info, impl->isEnding());
+    }
 
-CORE_EXPORT void isEndingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::isEndingAttributeGetter(info);
-}
+    CORE_EXPORT void isEndingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::isEndingAttributeGetter(info);
+    }
 
-static void shouldPropagateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shouldPropagateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->shouldPropagate());
-}
+        v8SetReturnValueBool(info, impl->shouldPropagate());
+    }
 
-CORE_EXPORT void shouldPropagateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::shouldPropagateAttributeGetter(info);
-}
+    CORE_EXPORT void shouldPropagateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::shouldPropagateAttributeGetter(info);
+    }
 
-static void fromUserInputAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fromUserInputAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fromUserInput());
-}
+        v8SetReturnValueBool(info, impl->fromUserInput());
+    }
 
-CORE_EXPORT void fromUserInputAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::fromUserInputAttributeGetter(info);
-}
+    CORE_EXPORT void fromUserInputAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::fromUserInputAttributeGetter(info);
+    }
 
-static void isDirectManipulationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isDirectManipulationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isDirectManipulation());
-}
+        v8SetReturnValueBool(info, impl->isDirectManipulation());
+    }
 
-CORE_EXPORT void isDirectManipulationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::isDirectManipulationAttributeGetter(info);
-}
+    CORE_EXPORT void isDirectManipulationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::isDirectManipulationAttributeGetter(info);
+    }
 
-static void deltaGranularityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deltaGranularityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScrollState* impl = V8ScrollState::toImpl(holder);
+        ScrollState* impl = V8ScrollState::toImpl(holder);
 
-  v8SetReturnValue(info, impl->deltaGranularity());
-}
+        v8SetReturnValue(info, impl->deltaGranularity());
+    }
 
-CORE_EXPORT void deltaGranularityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::deltaGranularityAttributeGetter(info);
-}
+    CORE_EXPORT void deltaGranularityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::deltaGranularityAttributeGetter(info);
+    }
 
-static void consumeDeltaMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ScrollState", "consumeDelta");
+    static void consumeDeltaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ScrollState", "consumeDelta");
 
-  ScrollState* impl = V8ScrollState::toImpl(info.Holder());
+        ScrollState* impl = V8ScrollState::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  double x;
-  double y;
-  x = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        double x;
+        double y;
+        x = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  y = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        y = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->consumeDelta(x, y, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->consumeDelta(x, y, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void consumeDeltaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::consumeDeltaMethod(info);
-}
+    CORE_EXPORT void consumeDeltaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::consumeDeltaMethod(info);
+    }
 
-static void distributeToScrollChainDescendantMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollState* impl = V8ScrollState::toImpl(info.Holder());
+    static void distributeToScrollChainDescendantMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollState* impl = V8ScrollState::toImpl(info.Holder());
 
-  impl->distributeToScrollChainDescendant();
-}
+        impl->distributeToScrollChainDescendant();
+    }
 
-CORE_EXPORT  void distributeToScrollChainDescendantMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScrollStateV8Internal::distributeToScrollChainDescendantMethod(info);
-}
+    CORE_EXPORT void distributeToScrollChainDescendantMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScrollStateV8Internal::distributeToScrollChainDescendantMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ScrollState");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ScrollState");
 
-  ScrollStateInit scrollStateInit;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('scrollStateInit') is not an object.");
+        ScrollStateInit scrollStateInit;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('scrollStateInit') is not an object.");
 
-    return;
-  }
-  V8ScrollStateInit::toImpl(info.GetIsolate(), info[0], scrollStateInit, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8ScrollStateInit::toImpl(info.GetIsolate(), info[0], scrollStateInit, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScrollState* impl = ScrollState::create(scrollStateInit);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ScrollState::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        ScrollState* impl = ScrollState::create(scrollStateInit);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ScrollState::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace ScrollStateV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ScrollStateAccessors[] = {
-    {"deltaX", ScrollStateV8Internal::deltaXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deltaY", ScrollStateV8Internal::deltaYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"positionX", ScrollStateV8Internal::positionXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"positionY", ScrollStateV8Internal::positionYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"velocityX", ScrollStateV8Internal::velocityXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"velocityY", ScrollStateV8Internal::velocityYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isBeginning", ScrollStateV8Internal::isBeginningAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"inInertialPhase", ScrollStateV8Internal::inInertialPhaseAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isEnding", ScrollStateV8Internal::isEndingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shouldPropagate", ScrollStateV8Internal::shouldPropagateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fromUserInput", ScrollStateV8Internal::fromUserInputAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isDirectManipulation", ScrollStateV8Internal::isDirectManipulationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deltaGranularity", ScrollStateV8Internal::deltaGranularityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "deltaX", ScrollStateV8Internal::deltaXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deltaY", ScrollStateV8Internal::deltaYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "positionX", ScrollStateV8Internal::positionXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "positionY", ScrollStateV8Internal::positionYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "velocityX", ScrollStateV8Internal::velocityXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "velocityY", ScrollStateV8Internal::velocityYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isBeginning", ScrollStateV8Internal::isBeginningAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "inInertialPhase", ScrollStateV8Internal::inInertialPhaseAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isEnding", ScrollStateV8Internal::isEndingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shouldPropagate", ScrollStateV8Internal::shouldPropagateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fromUserInput", ScrollStateV8Internal::fromUserInputAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isDirectManipulation", ScrollStateV8Internal::isDirectManipulationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deltaGranularity", ScrollStateV8Internal::deltaGranularityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8ScrollStateMethods[] = {
-    {"consumeDelta", ScrollStateV8Internal::consumeDeltaMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"distributeToScrollChainDescendant", ScrollStateV8Internal::distributeToScrollChainDescendantMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "consumeDelta", ScrollStateV8Internal::consumeDeltaMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "distributeToScrollChainDescendant", ScrollStateV8Internal::distributeToScrollChainDescendantMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8ScrollState::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("ScrollState"));
-    return;
-  }
+void V8ScrollState::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("ScrollState"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  ScrollStateV8Internal::constructor(info);
+    ScrollStateV8Internal::constructor(info);
 }
 
-static void installV8ScrollStateTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ScrollState::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8ScrollState::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8ScrollState::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8ScrollStateTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ScrollState::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8ScrollState::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8ScrollState::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  if (!RuntimeEnabledFeatures::scrollCustomizationEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::scrollCustomizationEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ScrollStateAccessors, WTF_ARRAY_LENGTH(V8ScrollStateAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ScrollStateMethods, WTF_ARRAY_LENGTH(V8ScrollStateMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ScrollStateAccessors, WTF_ARRAY_LENGTH(V8ScrollStateAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ScrollStateMethods, WTF_ARRAY_LENGTH(V8ScrollStateMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8ScrollState::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ScrollStateTemplate);
+v8::Local<v8::FunctionTemplate> V8ScrollState::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ScrollStateTemplate);
 }
 
-bool V8ScrollState::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ScrollState::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ScrollState::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ScrollState::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ScrollState* V8ScrollState::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ScrollState* V8ScrollState::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

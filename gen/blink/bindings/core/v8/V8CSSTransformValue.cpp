@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CSSTransformValue.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,234 +51,255 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CSSTransformValue::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CSSTransformValue is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CSSTransformValueV8Internal {
 
-static void is2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
+    static void is2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
 
-  v8SetReturnValueBool(info, impl->is2D());
-}
+        v8SetReturnValueBool(info, impl->is2D());
+    }
 
-CORE_EXPORT  void is2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformValueV8Internal::is2DMethod(info);
-}
+    CORE_EXPORT void is2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformValueV8Internal::is2DMethod(info);
+    }
 
-static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "keys");
+    static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "keys");
 
-  CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
+        CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  Iterator* result = impl->keysForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Iterator* result = impl->keysForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformValueV8Internal::keysMethod(info);
-}
+    CORE_EXPORT void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformValueV8Internal::keysMethod(info);
+    }
 
-static void valuesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "values");
+    static void valuesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "values");
 
-  CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
+        CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  Iterator* result = impl->valuesForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Iterator* result = impl->valuesForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void valuesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformValueV8Internal::valuesMethod(info);
-}
+    CORE_EXPORT void valuesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformValueV8Internal::valuesMethod(info);
+    }
 
-static void entriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "entries");
+    static void entriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "entries");
 
-  CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
+        CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  Iterator* result = impl->entriesForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Iterator* result = impl->entriesForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void entriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformValueV8Internal::entriesMethod(info);
-}
+    CORE_EXPORT void entriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformValueV8Internal::entriesMethod(info);
+    }
 
-static void forEachMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "forEach");
+    static void forEachMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "forEach");
 
-  CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
+        CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  ScriptValue callback;
-  ScriptValue thisArg;
-  if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+        ScriptValue callback;
+        ScriptValue thisArg;
+        if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
 
-    return;
-  }
-  callback = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+            return;
+        }
+        callback = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
 
-  thisArg = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
+        thisArg = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
 
-  impl->forEachForBinding(scriptState, ScriptValue(scriptState, info.Holder()), callback, thisArg, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->forEachForBinding(scriptState, ScriptValue(scriptState, info.Holder()), callback, thisArg, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void forEachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformValueV8Internal::forEachMethod(info);
-}
+    CORE_EXPORT void forEachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformValueV8Internal::forEachMethod(info);
+    }
 
-static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "iterator");
+    static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSTransformValue", "iterator");
 
-  CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
+        CSSTransformValue* impl = V8CSSTransformValue::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  Iterator* result = impl->iterator(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Iterator* result = impl->iterator(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformValueV8Internal::iteratorMethod(info);
-}
+    CORE_EXPORT void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformValueV8Internal::iteratorMethod(info);
+    }
 
-static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformValue* impl = CSSTransformValue::create();
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSTransformValue::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformValue* impl = CSSTransformValue::create();
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSTransformValue::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSTransformValue");
+    static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSTransformValue");
 
-  HeapVector<Member<CSSTransformComponent>> transformComponents;
-  transformComponents = (toMemberNativeArray<CSSTransformComponent>(info[0], 1, info.GetIsolate(), exceptionState));
-  if (exceptionState.hadException())
-    return;
+        HeapVector<Member<CSSTransformComponent>> transformComponents;
+        transformComponents = (toMemberNativeArray<CSSTransformComponent>(info[0], 1, info.GetIsolate(), exceptionState));
+        if (exceptionState.hadException())
+            return;
 
-  CSSTransformValue* impl = CSSTransformValue::create(transformComponents);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSTransformValue::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        CSSTransformValue* impl = CSSTransformValue::create(transformComponents);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSTransformValue::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSTransformValue");
-  switch (std::min(1, info.Length())) {
-    case 0:
-      if (true) {
-        CSSTransformValueV8Internal::constructor1(info);
-        return;
-      }
-      break;
-    case 1:
-      if (true) {
-        CSSTransformValueV8Internal::constructor2(info);
-        return;
-      }
-      break;
-    default:
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(0, info.Length()));
-      return;
-  }
-  exceptionState.throwTypeError("No matching constructor signature.");
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSTransformValue");
+        switch (std::min(1, info.Length())) {
+        case 0:
+            if (true) {
+                CSSTransformValueV8Internal::constructor1(info);
+                return;
+            }
+            break;
+        case 1:
+            if (true) {
+                CSSTransformValueV8Internal::constructor2(info);
+                return;
+            }
+            break;
+        default:
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(0, info.Length()));
+            return;
+        }
+        exceptionState.throwTypeError("No matching constructor signature.");
+    }
 
 } // namespace CSSTransformValueV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8CSSTransformValueMethods[] = {
-    {"is2D", CSSTransformValueV8Internal::is2DMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"keys", CSSTransformValueV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"values", CSSTransformValueV8Internal::valuesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"entries", CSSTransformValueV8Internal::entriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forEach", CSSTransformValueV8Internal::forEachMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "is2D", CSSTransformValueV8Internal::is2DMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "keys", CSSTransformValueV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "values", CSSTransformValueV8Internal::valuesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "entries", CSSTransformValueV8Internal::entriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forEach", CSSTransformValueV8Internal::forEachMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8CSSTransformValue::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CSSTransformValue"));
-    return;
-  }
+void V8CSSTransformValue::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CSSTransformValue"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  CSSTransformValueV8Internal::constructor(info);
+    CSSTransformValueV8Internal::constructor(info);
 }
 
-static void installV8CSSTransformValueTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSTransformValue::wrapperTypeInfo.interfaceName, V8CSSStyleValue::domTemplate(isolate, world), V8CSSTransformValue::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8CSSTransformValue::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8CSSTransformValueTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSTransformValue::wrapperTypeInfo.interfaceName, V8CSSStyleValue::domTemplate(isolate, world), V8CSSTransformValue::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8CSSTransformValue::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSTransformValueMethods, WTF_ARRAY_LENGTH(V8CSSTransformValueMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSTransformValueMethods, WTF_ARRAY_LENGTH(V8CSSTransformValueMethods));
 
-  // Iterator (@@iterator)
-  const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, CSSTransformValueV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
-  V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
+    // Iterator (@@iterator)
+    const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, CSSTransformValueV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
+    V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
 }
 
-v8::Local<v8::FunctionTemplate> V8CSSTransformValue::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSTransformValueTemplate);
+v8::Local<v8::FunctionTemplate> V8CSSTransformValue::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSTransformValueTemplate);
 }
 
-bool V8CSSTransformValue::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CSSTransformValue::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CSSTransformValue::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CSSTransformValue::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CSSTransformValue* V8CSSTransformValue::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CSSTransformValue* V8CSSTransformValue::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

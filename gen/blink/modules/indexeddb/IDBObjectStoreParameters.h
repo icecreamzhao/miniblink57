@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef IDBObjectStoreParameters_h
 #define IDBObjectStoreParameters_h
 
@@ -22,33 +22,34 @@
 namespace blink {
 
 class MODULES_EXPORT IDBObjectStoreParameters : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  IDBObjectStoreParameters();
-  virtual ~IDBObjectStoreParameters();
-  IDBObjectStoreParameters(const IDBObjectStoreParameters&);
-  IDBObjectStoreParameters& operator=(const IDBObjectStoreParameters&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAutoIncrement() const;
-  bool autoIncrement() const;
-  void setAutoIncrement(bool);
+public:
+    IDBObjectStoreParameters();
+    virtual ~IDBObjectStoreParameters();
+    IDBObjectStoreParameters(const IDBObjectStoreParameters&);
+    IDBObjectStoreParameters& operator=(const IDBObjectStoreParameters&);
 
-  bool hasKeyPath() const;
-  const StringOrStringSequence& keyPath() const;
-  void setKeyPath(const StringOrStringSequence&);
-  void setKeyPathToNull();
+    bool hasAutoIncrement() const;
+    bool autoIncrement() const;
+    void setAutoIncrement(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasKeyPath() const;
+    const StringOrStringSequence& keyPath() const;
+    void setKeyPath(const StringOrStringSequence&);
+    void setKeyPathToNull();
 
- private:
-  bool m_hasAutoIncrement = false;
-  bool m_autoIncrement;
-  StringOrStringSequence m_keyPath;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8IDBObjectStoreParameters;
+private:
+    bool m_hasAutoIncrement = false;
+    bool m_autoIncrement;
+    StringOrStringSequence m_keyPath;
+
+    friend class V8IDBObjectStoreParameters;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // IDBObjectStoreParameters_h
+#endif // IDBObjectStoreParameters_h

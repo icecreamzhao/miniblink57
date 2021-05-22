@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8IDBFactory_h
 #define V8IDBFactory_h
 
@@ -24,31 +24,35 @@
 namespace blink {
 
 class V8IDBFactory {
-  STATIC_ONLY(V8IDBFactory);
- public:
-  MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static IDBFactory* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<IDBFactory>();
-  }
-  MODULES_EXPORT static IDBFactory* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<IDBFactory>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<IDBFactory>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8IDBFactory);
+
+public:
+    MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static IDBFactory* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<IDBFactory>();
+    }
+    MODULES_EXPORT static IDBFactory* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<IDBFactory>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<IDBFactory>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<IDBFactory> {
-  typedef V8IDBFactory Type;
+    typedef V8IDBFactory Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8IDBFactory_h
+#endif // V8IDBFactory_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaKeySystemConfiguration_h
 #define MediaKeySystemConfiguration_h
 
@@ -22,60 +22,61 @@
 namespace blink {
 
 class MODULES_EXPORT MediaKeySystemConfiguration : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaKeySystemConfiguration();
-  virtual ~MediaKeySystemConfiguration();
-  MediaKeySystemConfiguration(const MediaKeySystemConfiguration&);
-  MediaKeySystemConfiguration& operator=(const MediaKeySystemConfiguration&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAudioCapabilities() const;
-  const HeapVector<MediaKeySystemMediaCapability>& audioCapabilities() const;
-  void setAudioCapabilities(const HeapVector<MediaKeySystemMediaCapability>&);
+public:
+    MediaKeySystemConfiguration();
+    virtual ~MediaKeySystemConfiguration();
+    MediaKeySystemConfiguration(const MediaKeySystemConfiguration&);
+    MediaKeySystemConfiguration& operator=(const MediaKeySystemConfiguration&);
 
-  bool hasDistinctiveIdentifier() const;
-  String distinctiveIdentifier() const;
-  void setDistinctiveIdentifier(String);
+    bool hasAudioCapabilities() const;
+    const HeapVector<MediaKeySystemMediaCapability>& audioCapabilities() const;
+    void setAudioCapabilities(const HeapVector<MediaKeySystemMediaCapability>&);
 
-  bool hasInitDataTypes() const;
-  const Vector<String>& initDataTypes() const;
-  void setInitDataTypes(const Vector<String>&);
+    bool hasDistinctiveIdentifier() const;
+    String distinctiveIdentifier() const;
+    void setDistinctiveIdentifier(String);
 
-  bool hasLabel() const;
-  String label() const;
-  void setLabel(String);
+    bool hasInitDataTypes() const;
+    const Vector<String>& initDataTypes() const;
+    void setInitDataTypes(const Vector<String>&);
 
-  bool hasPersistentState() const;
-  String persistentState() const;
-  void setPersistentState(String);
+    bool hasLabel() const;
+    String label() const;
+    void setLabel(String);
 
-  bool hasSessionTypes() const;
-  const Vector<String>& sessionTypes() const;
-  void setSessionTypes(const Vector<String>&);
+    bool hasPersistentState() const;
+    String persistentState() const;
+    void setPersistentState(String);
 
-  bool hasVideoCapabilities() const;
-  const HeapVector<MediaKeySystemMediaCapability>& videoCapabilities() const;
-  void setVideoCapabilities(const HeapVector<MediaKeySystemMediaCapability>&);
+    bool hasSessionTypes() const;
+    const Vector<String>& sessionTypes() const;
+    void setSessionTypes(const Vector<String>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasVideoCapabilities() const;
+    const HeapVector<MediaKeySystemMediaCapability>& videoCapabilities() const;
+    void setVideoCapabilities(const HeapVector<MediaKeySystemMediaCapability>&);
 
- private:
-  bool m_hasAudioCapabilities = false;
-  HeapVector<MediaKeySystemMediaCapability> m_audioCapabilities;
-  String m_distinctiveIdentifier;
-  bool m_hasInitDataTypes = false;
-  Vector<String> m_initDataTypes;
-  String m_label;
-  String m_persistentState;
-  bool m_hasSessionTypes = false;
-  Vector<String> m_sessionTypes;
-  bool m_hasVideoCapabilities = false;
-  HeapVector<MediaKeySystemMediaCapability> m_videoCapabilities;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaKeySystemConfiguration;
+private:
+    bool m_hasAudioCapabilities = false;
+    HeapVector<MediaKeySystemMediaCapability> m_audioCapabilities;
+    String m_distinctiveIdentifier;
+    bool m_hasInitDataTypes = false;
+    Vector<String> m_initDataTypes;
+    String m_label;
+    String m_persistentState;
+    bool m_hasSessionTypes = false;
+    Vector<String> m_sessionTypes;
+    bool m_hasVideoCapabilities = false;
+    HeapVector<MediaKeySystemMediaCapability> m_videoCapabilities;
+
+    friend class V8MediaKeySystemConfiguration;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaKeySystemConfiguration_h
+#endif // MediaKeySystemConfiguration_h

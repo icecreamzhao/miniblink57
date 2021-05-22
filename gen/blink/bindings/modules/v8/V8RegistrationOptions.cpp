@@ -8,63 +8,67 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RegistrationOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8RegistrationOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RegistrationOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8RegistrationOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RegistrationOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> scopeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "scope")).ToLocal(&scopeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (scopeValue.IsEmpty() || scopeValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> scope = toUSVString(isolate, scopeValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setScope(scope);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> scopeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "scope")).ToLocal(&scopeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (scopeValue.IsEmpty() || scopeValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> scope = toUSVString(isolate, scopeValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setScope(scope);
+    }
 }
 
-v8::Local<v8::Value> RegistrationOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8RegistrationOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> RegistrationOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8RegistrationOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8RegistrationOptions(const RegistrationOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasScope()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "scope"), v8String(isolate, impl.scope()))))
-      return false;
-  }
+bool toV8RegistrationOptions(const RegistrationOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasScope()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "scope"), v8String(isolate, impl.scope()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-RegistrationOptions NativeValueTraits<RegistrationOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  RegistrationOptions impl;
-  V8RegistrationOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+RegistrationOptions NativeValueTraits<RegistrationOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    RegistrationOptions impl;
+    V8RegistrationOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

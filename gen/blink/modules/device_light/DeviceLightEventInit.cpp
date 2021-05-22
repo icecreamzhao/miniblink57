@@ -8,34 +8,39 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "DeviceLightEventInit.h"
 
 namespace blink {
 
-DeviceLightEventInit::DeviceLightEventInit() {
+DeviceLightEventInit::DeviceLightEventInit()
+{
 }
 
-DeviceLightEventInit::~DeviceLightEventInit() {}
+DeviceLightEventInit::~DeviceLightEventInit() { }
 
 DeviceLightEventInit::DeviceLightEventInit(const DeviceLightEventInit&) = default;
 
 DeviceLightEventInit& DeviceLightEventInit::operator=(const DeviceLightEventInit&) = default;
 
-bool DeviceLightEventInit::hasValue() const {
-  return m_hasValue;
+bool DeviceLightEventInit::hasValue() const
+{
+    return m_hasValue;
 }
-double DeviceLightEventInit::value() const {
-  DCHECK(m_hasValue);
-  return m_value;
+double DeviceLightEventInit::value() const
+{
+    DCHECK(m_hasValue);
+    return m_value;
 }
-void DeviceLightEventInit::setValue(double value) {
-  m_value = value;
-  m_hasValue = true;
+void DeviceLightEventInit::setValue(double value)
+{
+    m_value = value;
+    m_hasValue = true;
 }
 
-DEFINE_TRACE(DeviceLightEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(DeviceLightEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

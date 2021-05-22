@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CacheQueryOptions_h
 #define CacheQueryOptions_h
 
@@ -20,44 +20,45 @@
 namespace blink {
 
 class MODULES_EXPORT CacheQueryOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CacheQueryOptions();
-  virtual ~CacheQueryOptions();
-  CacheQueryOptions(const CacheQueryOptions&);
-  CacheQueryOptions& operator=(const CacheQueryOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCacheName() const;
-  String cacheName() const;
-  void setCacheName(String);
+public:
+    CacheQueryOptions();
+    virtual ~CacheQueryOptions();
+    CacheQueryOptions(const CacheQueryOptions&);
+    CacheQueryOptions& operator=(const CacheQueryOptions&);
 
-  bool hasIgnoreMethod() const;
-  bool ignoreMethod() const;
-  void setIgnoreMethod(bool);
+    bool hasCacheName() const;
+    String cacheName() const;
+    void setCacheName(String);
 
-  bool hasIgnoreSearch() const;
-  bool ignoreSearch() const;
-  void setIgnoreSearch(bool);
+    bool hasIgnoreMethod() const;
+    bool ignoreMethod() const;
+    void setIgnoreMethod(bool);
 
-  bool hasIgnoreVary() const;
-  bool ignoreVary() const;
-  void setIgnoreVary(bool);
+    bool hasIgnoreSearch() const;
+    bool ignoreSearch() const;
+    void setIgnoreSearch(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasIgnoreVary() const;
+    bool ignoreVary() const;
+    void setIgnoreVary(bool);
 
- private:
-  String m_cacheName;
-  bool m_hasIgnoreMethod = false;
-  bool m_ignoreMethod;
-  bool m_hasIgnoreSearch = false;
-  bool m_ignoreSearch;
-  bool m_hasIgnoreVary = false;
-  bool m_ignoreVary;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8CacheQueryOptions;
+private:
+    String m_cacheName;
+    bool m_hasIgnoreMethod = false;
+    bool m_ignoreMethod;
+    bool m_hasIgnoreSearch = false;
+    bool m_ignoreSearch;
+    bool m_hasIgnoreVary = false;
+    bool m_ignoreVary;
+
+    friend class V8CacheQueryOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // CacheQueryOptions_h
+#endif // CacheQueryOptions_h

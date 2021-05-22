@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef StringOrArrayBufferOrNFCMessage_h
 #define StringOrArrayBufferOrNFCMessage_h
 
@@ -24,65 +24,67 @@ namespace blink {
 class DOMArrayBuffer;
 
 class MODULES_EXPORT StringOrArrayBufferOrNFCMessage final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  StringOrArrayBufferOrNFCMessage();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isString() const { return m_type == SpecificTypeString; }
-  String getAsString() const;
-  void setString(String);
-  static StringOrArrayBufferOrNFCMessage fromString(String);
+public:
+    StringOrArrayBufferOrNFCMessage();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isArrayBuffer() const { return m_type == SpecificTypeArrayBuffer; }
-  DOMArrayBuffer* getAsArrayBuffer() const;
-  void setArrayBuffer(DOMArrayBuffer*);
-  static StringOrArrayBufferOrNFCMessage fromArrayBuffer(DOMArrayBuffer*);
+    bool isString() const { return m_type == SpecificTypeString; }
+    String getAsString() const;
+    void setString(String);
+    static StringOrArrayBufferOrNFCMessage fromString(String);
 
-  bool isNFCMessage() const { return m_type == SpecificTypeNFCMessage; }
-  const NFCMessage& getAsNFCMessage() const;
-  void setNFCMessage(const NFCMessage&);
-  static StringOrArrayBufferOrNFCMessage fromNFCMessage(const NFCMessage&);
+    bool isArrayBuffer() const { return m_type == SpecificTypeArrayBuffer; }
+    DOMArrayBuffer* getAsArrayBuffer() const;
+    void setArrayBuffer(DOMArrayBuffer*);
+    static StringOrArrayBufferOrNFCMessage fromArrayBuffer(DOMArrayBuffer*);
 
-  StringOrArrayBufferOrNFCMessage(const StringOrArrayBufferOrNFCMessage&);
-  ~StringOrArrayBufferOrNFCMessage();
-  StringOrArrayBufferOrNFCMessage& operator=(const StringOrArrayBufferOrNFCMessage&);
-  DECLARE_TRACE();
+    bool isNFCMessage() const { return m_type == SpecificTypeNFCMessage; }
+    const NFCMessage& getAsNFCMessage() const;
+    void setNFCMessage(const NFCMessage&);
+    static StringOrArrayBufferOrNFCMessage fromNFCMessage(const NFCMessage&);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeString,
-    SpecificTypeArrayBuffer,
-    SpecificTypeNFCMessage,
-  };
-  SpecificTypes m_type;
+    StringOrArrayBufferOrNFCMessage(const StringOrArrayBufferOrNFCMessage&);
+    ~StringOrArrayBufferOrNFCMessage();
+    StringOrArrayBufferOrNFCMessage& operator=(const StringOrArrayBufferOrNFCMessage&);
+    DECLARE_TRACE();
 
-  String m_string;
-  Member<DOMArrayBuffer> m_arrayBuffer;
-  NFCMessage m_nFCMessage;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeString,
+        SpecificTypeArrayBuffer,
+        SpecificTypeNFCMessage,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrArrayBufferOrNFCMessage&, v8::Local<v8::Object>, v8::Isolate*);
+    String m_string;
+    Member<DOMArrayBuffer> m_arrayBuffer;
+    NFCMessage m_nFCMessage;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrArrayBufferOrNFCMessage&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8StringOrArrayBufferOrNFCMessage final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrArrayBufferOrNFCMessage&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrArrayBufferOrNFCMessage&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrArrayBufferOrNFCMessage&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrArrayBufferOrNFCMessage& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrArrayBufferOrNFCMessage& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<StringOrArrayBufferOrNFCMessage> {
-  MODULES_EXPORT static StringOrArrayBufferOrNFCMessage nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static StringOrArrayBufferOrNFCMessage nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -90,4 +92,4 @@ struct NativeValueTraits<StringOrArrayBufferOrNFCMessage> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::StringOrArrayBufferOrNFCMessage);
 
-#endif  // StringOrArrayBufferOrNFCMessage_h
+#endif // StringOrArrayBufferOrNFCMessage_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SQLError.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,92 +45,101 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SQLError::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SQLError is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SQLErrorV8Internal {
 
-static void codeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void codeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SQLError* impl = V8SQLError::toImpl(holder);
+        SQLError* impl = V8SQLError::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->code());
-}
+        v8SetReturnValueUnsigned(info, impl->code());
+    }
 
-MODULES_EXPORT void codeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SQLErrorV8Internal::codeAttributeGetter(info);
-}
+    MODULES_EXPORT void codeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SQLErrorV8Internal::codeAttributeGetter(info);
+    }
 
-static void messageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void messageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SQLError* impl = V8SQLError::toImpl(holder);
+        SQLError* impl = V8SQLError::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->message(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->message(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void messageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SQLErrorV8Internal::messageAttributeGetter(info);
-}
+    MODULES_EXPORT void messageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SQLErrorV8Internal::messageAttributeGetter(info);
+    }
 
 } // namespace SQLErrorV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SQLErrorAccessors[] = {
-    {"code", SQLErrorV8Internal::codeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"message", SQLErrorV8Internal::messageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "code", SQLErrorV8Internal::codeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "message", SQLErrorV8Internal::messageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SQLErrorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SQLError::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SQLError::internalFieldCount);
+static void installV8SQLErrorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SQLError::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SQLError::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8SQLErrorConstants[] = {
-      {"UNKNOWN_ERR", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DATABASE_ERR", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"VERSION_ERR", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"TOO_LARGE_ERR", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"QUOTA_ERR", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SYNTAX_ERR", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"CONSTRAINT_ERR", 6, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"TIMEOUT_ERR", 7, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SQLErrorConstants, WTF_ARRAY_LENGTH(V8SQLErrorConstants));
-  static_assert(0 == SQLError::kUnknownErr, "the value of SQLError_kUnknownErr does not match with implementation");
-  static_assert(1 == SQLError::kDatabaseErr, "the value of SQLError_kDatabaseErr does not match with implementation");
-  static_assert(2 == SQLError::kVersionErr, "the value of SQLError_kVersionErr does not match with implementation");
-  static_assert(3 == SQLError::kTooLargeErr, "the value of SQLError_kTooLargeErr does not match with implementation");
-  static_assert(4 == SQLError::kQuotaErr, "the value of SQLError_kQuotaErr does not match with implementation");
-  static_assert(5 == SQLError::kSyntaxErr, "the value of SQLError_kSyntaxErr does not match with implementation");
-  static_assert(6 == SQLError::kConstraintErr, "the value of SQLError_kConstraintErr does not match with implementation");
-  static_assert(7 == SQLError::kTimeoutErr, "the value of SQLError_kTimeoutErr does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SQLErrorAccessors, WTF_ARRAY_LENGTH(V8SQLErrorAccessors));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8SQLErrorConstants[] = {
+        { "UNKNOWN_ERR", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DATABASE_ERR", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "VERSION_ERR", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "TOO_LARGE_ERR", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "QUOTA_ERR", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SYNTAX_ERR", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "CONSTRAINT_ERR", 6, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "TIMEOUT_ERR", 7, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SQLErrorConstants, WTF_ARRAY_LENGTH(V8SQLErrorConstants));
+    static_assert(0 == SQLError::kUnknownErr, "the value of SQLError_kUnknownErr does not match with implementation");
+    static_assert(1 == SQLError::kDatabaseErr, "the value of SQLError_kDatabaseErr does not match with implementation");
+    static_assert(2 == SQLError::kVersionErr, "the value of SQLError_kVersionErr does not match with implementation");
+    static_assert(3 == SQLError::kTooLargeErr, "the value of SQLError_kTooLargeErr does not match with implementation");
+    static_assert(4 == SQLError::kQuotaErr, "the value of SQLError_kQuotaErr does not match with implementation");
+    static_assert(5 == SQLError::kSyntaxErr, "the value of SQLError_kSyntaxErr does not match with implementation");
+    static_assert(6 == SQLError::kConstraintErr, "the value of SQLError_kConstraintErr does not match with implementation");
+    static_assert(7 == SQLError::kTimeoutErr, "the value of SQLError_kTimeoutErr does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SQLErrorAccessors, WTF_ARRAY_LENGTH(V8SQLErrorAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SQLError::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SQLErrorTemplate);
+v8::Local<v8::FunctionTemplate> V8SQLError::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SQLErrorTemplate);
 }
 
-bool V8SQLError::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SQLError::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SQLError::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SQLError::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SQLError* V8SQLError::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SQLError* V8SQLError::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

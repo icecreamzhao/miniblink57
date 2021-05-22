@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8NodeFilter.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,102 +46,109 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&NodeFilter::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "NodeFilter is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace NodeFilterV8Internal {
 
-static void acceptNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NodeFilter", "acceptNode");
+    static void acceptNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NodeFilter", "acceptNode");
 
-  NodeFilter* impl = V8NodeFilter::toImpl(info.Holder());
+        NodeFilter* impl = V8NodeFilter::toImpl(info.Holder());
 
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
 
-  unsigned result = impl->acceptNode(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
+        unsigned result = impl->acceptNode(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
 
-CORE_EXPORT  void acceptNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeFilterV8Internal::acceptNodeMethod(info);
-}
+    CORE_EXPORT void acceptNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeFilterV8Internal::acceptNodeMethod(info);
+    }
 
 } // namespace NodeFilterV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8NodeFilterMethods[] = {
-    {"acceptNode", NodeFilterV8Internal::acceptNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "acceptNode", NodeFilterV8Internal::acceptNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8NodeFilterTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NodeFilter::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NodeFilter::internalFieldCount);
+static void installV8NodeFilterTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NodeFilter::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NodeFilter::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8NodeFilterConstants[] = {
-      {"FILTER_ACCEPT", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"FILTER_REJECT", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"FILTER_SKIP", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SHOW_ALL", 0xFFFFFFFF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_ELEMENT", 0x1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_ATTRIBUTE", 0x2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_TEXT", 0x4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_CDATA_SECTION", 0x8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_ENTITY_REFERENCE", 0x10, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_ENTITY", 0x20, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_PROCESSING_INSTRUCTION", 0x40, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_COMMENT", 0x80, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_DOCUMENT", 0x100, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_DOCUMENT_TYPE", 0x200, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_DOCUMENT_FRAGMENT", 0x400, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHOW_NOTATION", 0x800, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8NodeFilterConstants, WTF_ARRAY_LENGTH(V8NodeFilterConstants));
-  static_assert(1 == NodeFilter::kFilterAccept, "the value of NodeFilter_kFilterAccept does not match with implementation");
-  static_assert(2 == NodeFilter::kFilterReject, "the value of NodeFilter_kFilterReject does not match with implementation");
-  static_assert(3 == NodeFilter::kFilterSkip, "the value of NodeFilter_kFilterSkip does not match with implementation");
-  static_assert(0xFFFFFFFF == NodeFilter::kShowAll, "the value of NodeFilter_kShowAll does not match with implementation");
-  static_assert(0x1 == NodeFilter::kShowElement, "the value of NodeFilter_kShowElement does not match with implementation");
-  static_assert(0x2 == NodeFilter::kShowAttribute, "the value of NodeFilter_kShowAttribute does not match with implementation");
-  static_assert(0x4 == NodeFilter::kShowText, "the value of NodeFilter_kShowText does not match with implementation");
-  static_assert(0x8 == NodeFilter::kShowCdataSection, "the value of NodeFilter_kShowCdataSection does not match with implementation");
-  static_assert(0x10 == NodeFilter::kShowEntityReference, "the value of NodeFilter_kShowEntityReference does not match with implementation");
-  static_assert(0x20 == NodeFilter::kShowEntity, "the value of NodeFilter_kShowEntity does not match with implementation");
-  static_assert(0x40 == NodeFilter::kShowProcessingInstruction, "the value of NodeFilter_kShowProcessingInstruction does not match with implementation");
-  static_assert(0x80 == NodeFilter::kShowComment, "the value of NodeFilter_kShowComment does not match with implementation");
-  static_assert(0x100 == NodeFilter::kShowDocument, "the value of NodeFilter_kShowDocument does not match with implementation");
-  static_assert(0x200 == NodeFilter::kShowDocumentType, "the value of NodeFilter_kShowDocumentType does not match with implementation");
-  static_assert(0x400 == NodeFilter::kShowDocumentFragment, "the value of NodeFilter_kShowDocumentFragment does not match with implementation");
-  static_assert(0x800 == NodeFilter::kShowNotation, "the value of NodeFilter_kShowNotation does not match with implementation");
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeFilterMethods, WTF_ARRAY_LENGTH(V8NodeFilterMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8NodeFilterConstants[] = {
+        { "FILTER_ACCEPT", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "FILTER_REJECT", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "FILTER_SKIP", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SHOW_ALL", 0xFFFFFFFF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_ELEMENT", 0x1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_ATTRIBUTE", 0x2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_TEXT", 0x4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_CDATA_SECTION", 0x8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_ENTITY_REFERENCE", 0x10, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_ENTITY", 0x20, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_PROCESSING_INSTRUCTION", 0x40, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_COMMENT", 0x80, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_DOCUMENT", 0x100, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_DOCUMENT_TYPE", 0x200, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_DOCUMENT_FRAGMENT", 0x400, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHOW_NOTATION", 0x800, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8NodeFilterConstants, WTF_ARRAY_LENGTH(V8NodeFilterConstants));
+    static_assert(1 == NodeFilter::kFilterAccept, "the value of NodeFilter_kFilterAccept does not match with implementation");
+    static_assert(2 == NodeFilter::kFilterReject, "the value of NodeFilter_kFilterReject does not match with implementation");
+    static_assert(3 == NodeFilter::kFilterSkip, "the value of NodeFilter_kFilterSkip does not match with implementation");
+    static_assert(0xFFFFFFFF == NodeFilter::kShowAll, "the value of NodeFilter_kShowAll does not match with implementation");
+    static_assert(0x1 == NodeFilter::kShowElement, "the value of NodeFilter_kShowElement does not match with implementation");
+    static_assert(0x2 == NodeFilter::kShowAttribute, "the value of NodeFilter_kShowAttribute does not match with implementation");
+    static_assert(0x4 == NodeFilter::kShowText, "the value of NodeFilter_kShowText does not match with implementation");
+    static_assert(0x8 == NodeFilter::kShowCdataSection, "the value of NodeFilter_kShowCdataSection does not match with implementation");
+    static_assert(0x10 == NodeFilter::kShowEntityReference, "the value of NodeFilter_kShowEntityReference does not match with implementation");
+    static_assert(0x20 == NodeFilter::kShowEntity, "the value of NodeFilter_kShowEntity does not match with implementation");
+    static_assert(0x40 == NodeFilter::kShowProcessingInstruction, "the value of NodeFilter_kShowProcessingInstruction does not match with implementation");
+    static_assert(0x80 == NodeFilter::kShowComment, "the value of NodeFilter_kShowComment does not match with implementation");
+    static_assert(0x100 == NodeFilter::kShowDocument, "the value of NodeFilter_kShowDocument does not match with implementation");
+    static_assert(0x200 == NodeFilter::kShowDocumentType, "the value of NodeFilter_kShowDocumentType does not match with implementation");
+    static_assert(0x400 == NodeFilter::kShowDocumentFragment, "the value of NodeFilter_kShowDocumentFragment does not match with implementation");
+    static_assert(0x800 == NodeFilter::kShowNotation, "the value of NodeFilter_kShowNotation does not match with implementation");
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeFilterMethods, WTF_ARRAY_LENGTH(V8NodeFilterMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8NodeFilter::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NodeFilterTemplate);
+v8::Local<v8::FunctionTemplate> V8NodeFilter::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NodeFilterTemplate);
 }
 
-bool V8NodeFilter::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8NodeFilter::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8NodeFilter::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8NodeFilter::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-NodeFilter* V8NodeFilter::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+NodeFilter* V8NodeFilter::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

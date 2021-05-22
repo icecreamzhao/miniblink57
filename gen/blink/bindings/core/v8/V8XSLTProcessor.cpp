@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8XSLTProcessor.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,265 +52,288 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&XSLTProcessor::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "XSLTProcessor is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace XSLTProcessorV8Internal {
 
-static void importStylesheetMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
+    static void importStylesheetMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("importStylesheet", "XSLTProcessor", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("importStylesheet", "XSLTProcessor", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  Node* style;
-  style = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!style) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("importStylesheet", "XSLTProcessor", "parameter 1 is not of type 'Node'."));
+        Node* style;
+        style = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!style) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("importStylesheet", "XSLTProcessor", "parameter 1 is not of type 'Node'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->importStylesheet(style);
-}
+        impl->importStylesheet(style);
+    }
 
-CORE_EXPORT  void importStylesheetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessorV8Internal::importStylesheetMethod(info);
-}
+    CORE_EXPORT void importStylesheetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessorV8Internal::importStylesheetMethod(info);
+    }
 
-static void transformToFragmentMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
+    static void transformToFragmentMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToFragment", "XSLTProcessor", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToFragment", "XSLTProcessor", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  Node* source;
-  Document* output;
-  source = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!source) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToFragment", "XSLTProcessor", "parameter 1 is not of type 'Node'."));
+        Node* source;
+        Document* output;
+        source = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!source) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToFragment", "XSLTProcessor", "parameter 1 is not of type 'Node'."));
 
-    return;
-  }
+            return;
+        }
 
-  output = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!output) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToFragment", "XSLTProcessor", "parameter 2 is not of type 'Document'."));
+        output = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!output) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToFragment", "XSLTProcessor", "parameter 2 is not of type 'Document'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValue(info, impl->transformToFragment(source, output));
-}
+        v8SetReturnValue(info, impl->transformToFragment(source, output));
+    }
 
-CORE_EXPORT  void transformToFragmentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessorV8Internal::transformToFragmentMethod(info);
-}
+    CORE_EXPORT void transformToFragmentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessorV8Internal::transformToFragmentMethod(info);
+    }
 
-static void transformToDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
+    static void transformToDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToDocument", "XSLTProcessor", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToDocument", "XSLTProcessor", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  Node* source;
-  source = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!source) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToDocument", "XSLTProcessor", "parameter 1 is not of type 'Node'."));
+        Node* source;
+        source = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!source) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transformToDocument", "XSLTProcessor", "parameter 1 is not of type 'Node'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValue(info, impl->transformToDocument(source));
-}
+        v8SetReturnValue(info, impl->transformToDocument(source));
+    }
 
-CORE_EXPORT  void transformToDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessorV8Internal::transformToDocumentMethod(info);
-}
+    CORE_EXPORT void transformToDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessorV8Internal::transformToDocumentMethod(info);
+    }
 
-static void setParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
+    static void setParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 3)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setParameter", "XSLTProcessor", ExceptionMessages::notEnoughArguments(3, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setParameter", "XSLTProcessor", ExceptionMessages::notEnoughArguments(3, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> localName;
-  V8StringResource<> value;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> localName;
+        V8StringResource<> value;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  localName = info[1];
-  if (!localName.prepare())
-    return;
+        localName = info[1];
+        if (!localName.prepare())
+            return;
 
-  value = info[2];
-  if (!value.prepare())
-    return;
+        value = info[2];
+        if (!value.prepare())
+            return;
 
-  impl->setParameter(namespaceURI, localName, value);
-}
+        impl->setParameter(namespaceURI, localName, value);
+    }
 
-CORE_EXPORT  void setParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessorV8Internal::setParameterMethod(info);
-}
+    CORE_EXPORT void setParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessorV8Internal::setParameterMethod(info);
+    }
 
-static void getParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
+    static void getParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getParameter", "XSLTProcessor", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getParameter", "XSLTProcessor", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> localName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> localName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  localName = info[1];
-  if (!localName.prepare())
-    return;
+        localName = info[1];
+        if (!localName.prepare())
+            return;
 
-  v8SetReturnValueStringOrNull(info, impl->getParameter(namespaceURI, localName), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->getParameter(namespaceURI, localName), info.GetIsolate());
+    }
 
-CORE_EXPORT  void getParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessorV8Internal::getParameterMethod(info);
-}
+    CORE_EXPORT void getParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessorV8Internal::getParameterMethod(info);
+    }
 
-static void removeParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
+    static void removeParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeParameter", "XSLTProcessor", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeParameter", "XSLTProcessor", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> localName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> localName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  localName = info[1];
-  if (!localName.prepare())
-    return;
+        localName = info[1];
+        if (!localName.prepare())
+            return;
 
-  impl->removeParameter(namespaceURI, localName);
-}
+        impl->removeParameter(namespaceURI, localName);
+    }
 
-CORE_EXPORT  void removeParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessorV8Internal::removeParameterMethod(info);
-}
+    CORE_EXPORT void removeParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessorV8Internal::removeParameterMethod(info);
+    }
 
-static void clearParametersMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
+    static void clearParametersMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
 
-  impl->clearParameters();
-}
+        impl->clearParameters();
+    }
 
-CORE_EXPORT  void clearParametersMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessorV8Internal::clearParametersMethod(info);
-}
+    CORE_EXPORT void clearParametersMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessorV8Internal::clearParametersMethod(info);
+    }
 
-static void resetMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
+    static void resetMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessor* impl = V8XSLTProcessor::toImpl(info.Holder());
 
-  impl->reset();
-}
+        impl->reset();
+    }
 
-CORE_EXPORT  void resetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XSLTProcessorV8Internal::resetMethod(info);
-}
+    CORE_EXPORT void resetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XSLTProcessorV8Internal::resetMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
-  XSLTProcessor* impl = XSLTProcessor::create(document);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8XSLTProcessor::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+        XSLTProcessor* impl = XSLTProcessor::create(document);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8XSLTProcessor::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace XSLTProcessorV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8XSLTProcessorMethods[] = {
-    {"importStylesheet", XSLTProcessorV8Internal::importStylesheetMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"transformToFragment", XSLTProcessorV8Internal::transformToFragmentMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"transformToDocument", XSLTProcessorV8Internal::transformToDocumentMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setParameter", XSLTProcessorV8Internal::setParameterMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getParameter", XSLTProcessorV8Internal::getParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeParameter", XSLTProcessorV8Internal::removeParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearParameters", XSLTProcessorV8Internal::clearParametersMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"reset", XSLTProcessorV8Internal::resetMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "importStylesheet", XSLTProcessorV8Internal::importStylesheetMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "transformToFragment", XSLTProcessorV8Internal::transformToFragmentMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "transformToDocument", XSLTProcessorV8Internal::transformToDocumentMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setParameter", XSLTProcessorV8Internal::setParameterMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getParameter", XSLTProcessorV8Internal::getParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeParameter", XSLTProcessorV8Internal::removeParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearParameters", XSLTProcessorV8Internal::clearParametersMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "reset", XSLTProcessorV8Internal::resetMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8XSLTProcessor::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::XSLTProcessor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("XSLTProcessor"));
-    return;
-  }
+void V8XSLTProcessor::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::XSLTProcessor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("XSLTProcessor"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  XSLTProcessorV8Internal::constructor(info);
+    XSLTProcessorV8Internal::constructor(info);
 }
 
-static void installV8XSLTProcessorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XSLTProcessor::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8XSLTProcessor::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8XSLTProcessor::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8XSLTProcessorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XSLTProcessor::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8XSLTProcessor::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8XSLTProcessor::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  if (!RuntimeEnabledFeatures::xsltEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::xsltEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XSLTProcessorMethods, WTF_ARRAY_LENGTH(V8XSLTProcessorMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XSLTProcessorMethods, WTF_ARRAY_LENGTH(V8XSLTProcessorMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8XSLTProcessor::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XSLTProcessorTemplate);
+v8::Local<v8::FunctionTemplate> V8XSLTProcessor::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XSLTProcessorTemplate);
 }
 
-bool V8XSLTProcessor::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8XSLTProcessor::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8XSLTProcessor::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8XSLTProcessor::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-XSLTProcessor* V8XSLTProcessor::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+XSLTProcessor* V8XSLTProcessor::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

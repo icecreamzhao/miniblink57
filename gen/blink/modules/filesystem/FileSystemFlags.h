@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FileSystemFlags_h
 #define FileSystemFlags_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT FileSystemFlags : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FileSystemFlags();
-  virtual ~FileSystemFlags();
-  FileSystemFlags(const FileSystemFlags&);
-  FileSystemFlags& operator=(const FileSystemFlags&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCreateFlag() const;
-  bool createFlag() const;
-  void setCreateFlag(bool);
+public:
+    FileSystemFlags();
+    virtual ~FileSystemFlags();
+    FileSystemFlags(const FileSystemFlags&);
+    FileSystemFlags& operator=(const FileSystemFlags&);
 
-  bool hasExclusive() const;
-  bool exclusive() const;
-  void setExclusive(bool);
+    bool hasCreateFlag() const;
+    bool createFlag() const;
+    void setCreateFlag(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasExclusive() const;
+    bool exclusive() const;
+    void setExclusive(bool);
 
- private:
-  bool m_hasCreateFlag = false;
-  bool m_createFlag;
-  bool m_hasExclusive = false;
-  bool m_exclusive;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8FileSystemFlags;
+private:
+    bool m_hasCreateFlag = false;
+    bool m_createFlag;
+    bool m_hasExclusive = false;
+    bool m_exclusive;
+
+    friend class V8FileSystemFlags;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // FileSystemFlags_h
+#endif // FileSystemFlags_h

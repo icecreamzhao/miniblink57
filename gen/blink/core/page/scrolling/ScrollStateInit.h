@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ScrollStateInit_h
 #define ScrollStateInit_h
 
@@ -19,99 +19,100 @@
 namespace blink {
 
 class CORE_EXPORT ScrollStateInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ScrollStateInit();
-  virtual ~ScrollStateInit();
-  ScrollStateInit(const ScrollStateInit&);
-  ScrollStateInit& operator=(const ScrollStateInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDeltaGranularity() const;
-  double deltaGranularity() const;
-  void setDeltaGranularity(double);
+public:
+    ScrollStateInit();
+    virtual ~ScrollStateInit();
+    ScrollStateInit(const ScrollStateInit&);
+    ScrollStateInit& operator=(const ScrollStateInit&);
 
-  bool hasDeltaX() const;
-  double deltaX() const;
-  void setDeltaX(double);
+    bool hasDeltaGranularity() const;
+    double deltaGranularity() const;
+    void setDeltaGranularity(double);
 
-  bool hasDeltaY() const;
-  double deltaY() const;
-  void setDeltaY(double);
+    bool hasDeltaX() const;
+    double deltaX() const;
+    void setDeltaX(double);
 
-  bool hasFromUserInput() const;
-  bool fromUserInput() const;
-  void setFromUserInput(bool);
+    bool hasDeltaY() const;
+    double deltaY() const;
+    void setDeltaY(double);
 
-  bool hasIsBeginning() const;
-  bool isBeginning() const;
-  void setIsBeginning(bool);
+    bool hasFromUserInput() const;
+    bool fromUserInput() const;
+    void setFromUserInput(bool);
 
-  bool hasIsDirectManipulation() const;
-  bool isDirectManipulation() const;
-  void setIsDirectManipulation(bool);
+    bool hasIsBeginning() const;
+    bool isBeginning() const;
+    void setIsBeginning(bool);
 
-  bool hasIsEnding() const;
-  bool isEnding() const;
-  void setIsEnding(bool);
+    bool hasIsDirectManipulation() const;
+    bool isDirectManipulation() const;
+    void setIsDirectManipulation(bool);
 
-  bool hasIsInInertialPhase() const;
-  bool isInInertialPhase() const;
-  void setIsInInertialPhase(bool);
+    bool hasIsEnding() const;
+    bool isEnding() const;
+    void setIsEnding(bool);
 
-  bool hasPositionX() const;
-  int positionX() const;
-  void setPositionX(int);
+    bool hasIsInInertialPhase() const;
+    bool isInInertialPhase() const;
+    void setIsInInertialPhase(bool);
 
-  bool hasPositionY() const;
-  int positionY() const;
-  void setPositionY(int);
+    bool hasPositionX() const;
+    int positionX() const;
+    void setPositionX(int);
 
-  bool hasShouldPropagate() const;
-  bool shouldPropagate() const;
-  void setShouldPropagate(bool);
+    bool hasPositionY() const;
+    int positionY() const;
+    void setPositionY(int);
 
-  bool hasVelocityX() const;
-  double velocityX() const;
-  void setVelocityX(double);
+    bool hasShouldPropagate() const;
+    bool shouldPropagate() const;
+    void setShouldPropagate(bool);
 
-  bool hasVelocityY() const;
-  double velocityY() const;
-  void setVelocityY(double);
+    bool hasVelocityX() const;
+    double velocityX() const;
+    void setVelocityX(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasVelocityY() const;
+    double velocityY() const;
+    void setVelocityY(double);
 
- private:
-  bool m_hasDeltaGranularity = false;
-  double m_deltaGranularity;
-  bool m_hasDeltaX = false;
-  double m_deltaX;
-  bool m_hasDeltaY = false;
-  double m_deltaY;
-  bool m_hasFromUserInput = false;
-  bool m_fromUserInput;
-  bool m_hasIsBeginning = false;
-  bool m_isBeginning;
-  bool m_hasIsDirectManipulation = false;
-  bool m_isDirectManipulation;
-  bool m_hasIsEnding = false;
-  bool m_isEnding;
-  bool m_hasIsInInertialPhase = false;
-  bool m_isInInertialPhase;
-  bool m_hasPositionX = false;
-  int m_positionX;
-  bool m_hasPositionY = false;
-  int m_positionY;
-  bool m_hasShouldPropagate = false;
-  bool m_shouldPropagate;
-  bool m_hasVelocityX = false;
-  double m_velocityX;
-  bool m_hasVelocityY = false;
-  double m_velocityY;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ScrollStateInit;
+private:
+    bool m_hasDeltaGranularity = false;
+    double m_deltaGranularity;
+    bool m_hasDeltaX = false;
+    double m_deltaX;
+    bool m_hasDeltaY = false;
+    double m_deltaY;
+    bool m_hasFromUserInput = false;
+    bool m_fromUserInput;
+    bool m_hasIsBeginning = false;
+    bool m_isBeginning;
+    bool m_hasIsDirectManipulation = false;
+    bool m_isDirectManipulation;
+    bool m_hasIsEnding = false;
+    bool m_isEnding;
+    bool m_hasIsInInertialPhase = false;
+    bool m_isInInertialPhase;
+    bool m_hasPositionX = false;
+    int m_positionX;
+    bool m_hasPositionY = false;
+    int m_positionY;
+    bool m_hasShouldPropagate = false;
+    bool m_shouldPropagate;
+    bool m_hasVelocityX = false;
+    double m_velocityX;
+    bool m_hasVelocityY = false;
+    double m_velocityY;
+
+    friend class V8ScrollStateInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ScrollStateInit_h
+#endif // ScrollStateInit_h

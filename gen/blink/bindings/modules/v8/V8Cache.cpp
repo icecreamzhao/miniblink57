@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Cache.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,365 +50,384 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Cache::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Cache is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CacheV8Internal {
 
-static void matchMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "match");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void matchMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "match");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Cache* impl = V8Cache::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Cache* impl = V8Cache::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  RequestOrUSVString request;
-  CacheQueryOptions options;
-  V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        RequestOrUSVString request;
+        CacheQueryOptions options;
+        V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-    return;
-  }
-  V8CacheQueryOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8CacheQueryOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = impl->match(scriptState, request, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void matchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CacheV8Internal::matchMethod(info);
-}
-
-static void matchAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "matchAll");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Cache* impl = V8Cache::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RequestOrUSVString request;
-  CacheQueryOptions options;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ScriptPromise result = impl->matchAll(scriptState, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        ScriptPromise result = impl->match(scriptState, request, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
     }
-    v8SetReturnValue(info, result.v8Value());
-    return;
-  }
-  V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
-
-    return;
-  }
-  V8CacheQueryOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->matchAll(scriptState, request, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void matchAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CacheV8Internal::matchAllMethod(info);
-}
-
-static void addMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "add");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Cache* impl = V8Cache::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  RequestOrUSVString request;
-  V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->add(scriptState, request, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void addMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CacheV8Internal::addMethod(info);
-}
-
-static void addAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "addAll");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Cache* impl = V8Cache::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  HeapVector<RequestOrUSVString> requests;
-  requests = toImplArray<HeapVector<RequestOrUSVString>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->addAll(scriptState, requests, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void addAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CacheV8Internal::addAllMethod(info);
-}
-
-static void putMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "put");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Cache* impl = V8Cache::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  RequestOrUSVString request;
-  Response* response;
-  V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  response = V8Response::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!response) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Response'.");
-
-    return;
-  }
-
-  ScriptPromise result = impl->put(scriptState, request, response, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void putMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CacheV8Internal::putMethod(info);
-}
-
-static void deleteMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "delete");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Cache* impl = V8Cache::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  RequestOrUSVString request;
-  CacheQueryOptions options;
-  V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
-
-    return;
-  }
-  V8CacheQueryOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->deleteFunction(scriptState, request, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void deleteMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CacheV8Internal::deleteMethod(info);
-}
-
-static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "keys");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Cache* impl = V8Cache::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RequestOrUSVString request;
-  CacheQueryOptions options;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ScriptPromise result = impl->keys(scriptState, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    MODULES_EXPORT void matchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CacheV8Internal::matchMethod(info);
     }
-    v8SetReturnValue(info, result.v8Value());
-    return;
-  }
-  V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+    static void matchAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "matchAll");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-    return;
-  }
-  V8CacheQueryOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Cache* impl = V8Cache::toImpl(info.Holder());
 
-  ScriptPromise result = impl->keys(scriptState, request, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-MODULES_EXPORT  void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CacheV8Internal::keysMethod(info);
-}
+        RequestOrUSVString request;
+        CacheQueryOptions options;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ScriptPromise result = impl->matchAll(scriptState, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result.v8Value());
+            return;
+        }
+        V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8CacheQueryOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->matchAll(scriptState, request, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void matchAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CacheV8Internal::matchAllMethod(info);
+    }
+
+    static void addMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "add");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Cache* impl = V8Cache::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        RequestOrUSVString request;
+        V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->add(scriptState, request, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void addMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CacheV8Internal::addMethod(info);
+    }
+
+    static void addAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "addAll");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Cache* impl = V8Cache::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        HeapVector<RequestOrUSVString> requests;
+        requests = toImplArray<HeapVector<RequestOrUSVString>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->addAll(scriptState, requests, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void addAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CacheV8Internal::addAllMethod(info);
+    }
+
+    static void putMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "put");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Cache* impl = V8Cache::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        RequestOrUSVString request;
+        Response* response;
+        V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        response = V8Response::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!response) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Response'.");
+
+            return;
+        }
+
+        ScriptPromise result = impl->put(scriptState, request, response, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void putMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CacheV8Internal::putMethod(info);
+    }
+
+    static void deleteMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "delete");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Cache* impl = V8Cache::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        RequestOrUSVString request;
+        CacheQueryOptions options;
+        V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8CacheQueryOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->deleteFunction(scriptState, request, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void deleteMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CacheV8Internal::deleteMethod(info);
+    }
+
+    static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Cache", "keys");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Cache::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Cache* impl = V8Cache::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        RequestOrUSVString request;
+        CacheQueryOptions options;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ScriptPromise result = impl->keys(scriptState, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result.v8Value());
+            return;
+        }
+        V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], request, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8CacheQueryOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->keys(scriptState, request, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CacheV8Internal::keysMethod(info);
+    }
 
 } // namespace CacheV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8CacheMethods[] = {
-    {"match", CacheV8Internal::matchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"matchAll", CacheV8Internal::matchAllMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"add", CacheV8Internal::addMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"addAll", CacheV8Internal::addAllMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"put", CacheV8Internal::putMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"delete", CacheV8Internal::deleteMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"keys", CacheV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "match", CacheV8Internal::matchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "matchAll", CacheV8Internal::matchAllMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "add", CacheV8Internal::addMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "addAll", CacheV8Internal::addAllMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "put", CacheV8Internal::putMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "delete", CacheV8Internal::deleteMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "keys", CacheV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8CacheTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Cache::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Cache::internalFieldCount);
+static void installV8CacheTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Cache::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Cache::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CacheMethods, WTF_ARRAY_LENGTH(V8CacheMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CacheMethods, WTF_ARRAY_LENGTH(V8CacheMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Cache::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CacheTemplate);
+v8::Local<v8::FunctionTemplate> V8Cache::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CacheTemplate);
 }
 
-bool V8Cache::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Cache::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Cache::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Cache::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Cache* V8Cache::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Cache* V8Cache::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

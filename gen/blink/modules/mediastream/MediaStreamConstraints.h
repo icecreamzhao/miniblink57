@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaStreamConstraints_h
 #define MediaStreamConstraints_h
 
@@ -21,31 +21,32 @@
 namespace blink {
 
 class MODULES_EXPORT MediaStreamConstraints : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaStreamConstraints();
-  virtual ~MediaStreamConstraints();
-  MediaStreamConstraints(const MediaStreamConstraints&);
-  MediaStreamConstraints& operator=(const MediaStreamConstraints&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAudio() const;
-  const BooleanOrMediaTrackConstraints& audio() const;
-  void setAudio(const BooleanOrMediaTrackConstraints&);
+public:
+    MediaStreamConstraints();
+    virtual ~MediaStreamConstraints();
+    MediaStreamConstraints(const MediaStreamConstraints&);
+    MediaStreamConstraints& operator=(const MediaStreamConstraints&);
 
-  bool hasVideo() const;
-  const BooleanOrMediaTrackConstraints& video() const;
-  void setVideo(const BooleanOrMediaTrackConstraints&);
+    bool hasAudio() const;
+    const BooleanOrMediaTrackConstraints& audio() const;
+    void setAudio(const BooleanOrMediaTrackConstraints&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasVideo() const;
+    const BooleanOrMediaTrackConstraints& video() const;
+    void setVideo(const BooleanOrMediaTrackConstraints&);
 
- private:
-  BooleanOrMediaTrackConstraints m_audio;
-  BooleanOrMediaTrackConstraints m_video;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaStreamConstraints;
+private:
+    BooleanOrMediaTrackConstraints m_audio;
+    BooleanOrMediaTrackConstraints m_video;
+
+    friend class V8MediaStreamConstraints;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaStreamConstraints_h
+#endif // MediaStreamConstraints_h

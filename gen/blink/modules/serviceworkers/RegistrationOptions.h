@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RegistrationOptions_h
 #define RegistrationOptions_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class MODULES_EXPORT RegistrationOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RegistrationOptions();
-  virtual ~RegistrationOptions();
-  RegistrationOptions(const RegistrationOptions&);
-  RegistrationOptions& operator=(const RegistrationOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasScope() const;
-  String scope() const;
-  void setScope(String);
+public:
+    RegistrationOptions();
+    virtual ~RegistrationOptions();
+    RegistrationOptions(const RegistrationOptions&);
+    RegistrationOptions& operator=(const RegistrationOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasScope() const;
+    String scope() const;
+    void setScope(String);
 
- private:
-  String m_scope;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RegistrationOptions;
+private:
+    String m_scope;
+
+    friend class V8RegistrationOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RegistrationOptions_h
+#endif // RegistrationOptions_h

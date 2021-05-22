@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "EventSourceInit.h"
 
 namespace blink {
 
-EventSourceInit::EventSourceInit() {
-  setWithCredentials(false);
+EventSourceInit::EventSourceInit()
+{
+    setWithCredentials(false);
 }
 
-EventSourceInit::~EventSourceInit() {}
+EventSourceInit::~EventSourceInit() { }
 
 EventSourceInit::EventSourceInit(const EventSourceInit&) = default;
 
 EventSourceInit& EventSourceInit::operator=(const EventSourceInit&) = default;
 
-bool EventSourceInit::hasWithCredentials() const {
-  return m_hasWithCredentials;
+bool EventSourceInit::hasWithCredentials() const
+{
+    return m_hasWithCredentials;
 }
-bool EventSourceInit::withCredentials() const {
-  DCHECK(m_hasWithCredentials);
-  return m_withCredentials;
+bool EventSourceInit::withCredentials() const
+{
+    DCHECK(m_hasWithCredentials);
+    return m_withCredentials;
 }
-void EventSourceInit::setWithCredentials(bool value) {
-  m_withCredentials = value;
-  m_hasWithCredentials = true;
+void EventSourceInit::setWithCredentials(bool value)
+{
+    m_withCredentials = value;
+    m_hasWithCredentials = true;
 }
 
-DEFINE_TRACE(EventSourceInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(EventSourceInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

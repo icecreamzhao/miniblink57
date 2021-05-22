@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AudioProcessingEventInit_h
 #define AudioProcessingEventInit_h
 
@@ -21,37 +21,38 @@ namespace blink {
 class AudioBuffer;
 
 class MODULES_EXPORT AudioProcessingEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AudioProcessingEventInit();
-  virtual ~AudioProcessingEventInit();
-  AudioProcessingEventInit(const AudioProcessingEventInit&);
-  AudioProcessingEventInit& operator=(const AudioProcessingEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasInputBuffer() const;
-  AudioBuffer* inputBuffer() const;
-  void setInputBuffer(AudioBuffer*);
+public:
+    AudioProcessingEventInit();
+    virtual ~AudioProcessingEventInit();
+    AudioProcessingEventInit(const AudioProcessingEventInit&);
+    AudioProcessingEventInit& operator=(const AudioProcessingEventInit&);
 
-  bool hasOutputBuffer() const;
-  AudioBuffer* outputBuffer() const;
-  void setOutputBuffer(AudioBuffer*);
+    bool hasInputBuffer() const;
+    AudioBuffer* inputBuffer() const;
+    void setInputBuffer(AudioBuffer*);
 
-  bool hasPlaybackTime() const;
-  double playbackTime() const;
-  void setPlaybackTime(double);
+    bool hasOutputBuffer() const;
+    AudioBuffer* outputBuffer() const;
+    void setOutputBuffer(AudioBuffer*);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPlaybackTime() const;
+    double playbackTime() const;
+    void setPlaybackTime(double);
 
- private:
-  Member<AudioBuffer> m_inputBuffer;
-  Member<AudioBuffer> m_outputBuffer;
-  bool m_hasPlaybackTime = false;
-  double m_playbackTime;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AudioProcessingEventInit;
+private:
+    Member<AudioBuffer> m_inputBuffer;
+    Member<AudioBuffer> m_outputBuffer;
+    bool m_hasPlaybackTime = false;
+    double m_playbackTime;
+
+    friend class V8AudioProcessingEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AudioProcessingEventInit_h
+#endif // AudioProcessingEventInit_h

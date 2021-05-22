@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLDListElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,87 +50,96 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLDListElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLDListElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLDListElementV8Internal {
 
-static void compactAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void compactAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDListElement* impl = V8HTMLDListElement::toImpl(holder);
+        HTMLDListElement* impl = V8HTMLDListElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::compactAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::compactAttr));
+    }
 
-CORE_EXPORT void compactAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDListElementV8Internal::compactAttributeGetter(info);
-}
+    CORE_EXPORT void compactAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDListElementV8Internal::compactAttributeGetter(info);
+    }
 
-static void compactAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLDListElement* impl = V8HTMLDListElement::toImpl(holder);
+    static void compactAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLDListElement* impl = V8HTMLDListElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLDListElement", "compact");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLDListElement", "compact");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::compactAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::compactAttr, cppValue);
+    }
 
-CORE_EXPORT void compactAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void compactAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLDListElementV8Internal::compactAttributeSetter(v8Value, info);
-}
+        HTMLDListElementV8Internal::compactAttributeSetter(v8Value, info);
+    }
 
 } // namespace HTMLDListElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLDListElementAccessors[] = {
-    {"compact", HTMLDListElementV8Internal::compactAttributeGetterCallback, HTMLDListElementV8Internal::compactAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "compact", HTMLDListElementV8Internal::compactAttributeGetterCallback, HTMLDListElementV8Internal::compactAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLDListElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLDListElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLDListElement::internalFieldCount);
+static void installV8HTMLDListElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLDListElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLDListElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDListElementAccessors, WTF_ARRAY_LENGTH(V8HTMLDListElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDListElementAccessors, WTF_ARRAY_LENGTH(V8HTMLDListElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLDListElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLDListElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLDListElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLDListElementTemplate);
 }
 
-bool V8HTMLDListElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLDListElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLDListElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLDListElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLDListElement* V8HTMLDListElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLDListElement* V8HTMLDListElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

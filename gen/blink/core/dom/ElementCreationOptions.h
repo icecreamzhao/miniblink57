@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ElementCreationOptions_h
 #define ElementCreationOptions_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class CORE_EXPORT ElementCreationOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ElementCreationOptions();
-  virtual ~ElementCreationOptions();
-  ElementCreationOptions(const ElementCreationOptions&);
-  ElementCreationOptions& operator=(const ElementCreationOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasIs() const;
-  String is() const;
-  void setIs(String);
+public:
+    ElementCreationOptions();
+    virtual ~ElementCreationOptions();
+    ElementCreationOptions(const ElementCreationOptions&);
+    ElementCreationOptions& operator=(const ElementCreationOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasIs() const;
+    String is() const;
+    void setIs(String);
 
- private:
-  String m_is;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ElementCreationOptions;
+private:
+    String m_is;
+
+    friend class V8ElementCreationOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ElementCreationOptions_h
+#endif // ElementCreationOptions_h

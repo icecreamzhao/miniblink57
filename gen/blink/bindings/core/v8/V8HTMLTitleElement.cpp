@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLTitleElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,80 +48,89 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLTitleElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLTitleElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLTitleElementV8Internal {
 
-static void textAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void textAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLTitleElement* impl = V8HTMLTitleElement::toImpl(holder);
+        HTMLTitleElement* impl = V8HTMLTitleElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->text(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->text(), info.GetIsolate());
+    }
 
-CORE_EXPORT void textAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTitleElementV8Internal::textAttributeGetter(info);
-}
+    CORE_EXPORT void textAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTitleElementV8Internal::textAttributeGetter(info);
+    }
 
-static void textAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTitleElement* impl = V8HTMLTitleElement::toImpl(holder);
+    static void textAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTitleElement* impl = V8HTMLTitleElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setText(cppValue);
-}
+        impl->setText(cppValue);
+    }
 
-CORE_EXPORT void textAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void textAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLTitleElementV8Internal::textAttributeSetter(v8Value, info);
-}
+        HTMLTitleElementV8Internal::textAttributeSetter(v8Value, info);
+    }
 
 } // namespace HTMLTitleElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLTitleElementAccessors[] = {
-    {"text", HTMLTitleElementV8Internal::textAttributeGetterCallback, HTMLTitleElementV8Internal::textAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "text", HTMLTitleElementV8Internal::textAttributeGetterCallback, HTMLTitleElementV8Internal::textAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLTitleElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLTitleElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLTitleElement::internalFieldCount);
+static void installV8HTMLTitleElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLTitleElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLTitleElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTitleElementAccessors, WTF_ARRAY_LENGTH(V8HTMLTitleElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTitleElementAccessors, WTF_ARRAY_LENGTH(V8HTMLTitleElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLTitleElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLTitleElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLTitleElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLTitleElementTemplate);
 }
 
-bool V8HTMLTitleElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLTitleElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLTitleElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLTitleElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLTitleElement* V8HTMLTitleElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLTitleElement* V8HTMLTitleElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGTextContentElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,325 +52,355 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGTextContentElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGTextContentElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGTextContentElementV8Internal {
 
-CORE_EXPORT void LENGTHADJUST_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
-  v8SetReturnValueInt(info, 0);
-}
+    CORE_EXPORT void LENGTHADJUST_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
+        v8SetReturnValueInt(info, 0);
+    }
 
-CORE_EXPORT void LENGTHADJUST_SPACINGConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
-  v8SetReturnValueInt(info, 1);
-}
+    CORE_EXPORT void LENGTHADJUST_SPACINGConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
+        v8SetReturnValueInt(info, 1);
+    }
 
-CORE_EXPORT void LENGTHADJUST_SPACINGANDGLYPHSConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
-  v8SetReturnValueInt(info, 2);
-}
+    CORE_EXPORT void LENGTHADJUST_SPACINGANDGLYPHSConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
+        v8SetReturnValueInt(info, 2);
+    }
 
-static void textLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void textLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(holder);
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->textLength()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->textLength()), impl);
+    }
 
-CORE_EXPORT void textLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
+    CORE_EXPORT void textLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
 
-  SVGTextContentElementV8Internal::textLengthAttributeGetter(info);
-}
+        SVGTextContentElementV8Internal::textLengthAttributeGetter(info);
+    }
 
-static void lengthAdjustAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lengthAdjustAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(holder);
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->lengthAdjust()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->lengthAdjust()), impl);
+    }
 
-CORE_EXPORT void lengthAdjustAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
+    CORE_EXPORT void lengthAdjustAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMText);
 
-  SVGTextContentElementV8Internal::lengthAdjustAttributeGetter(info);
-}
+        SVGTextContentElementV8Internal::lengthAdjustAttributeGetter(info);
+    }
 
-static void getNumberOfCharsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
+    static void getNumberOfCharsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
 
-  v8SetReturnValueInt(info, impl->getNumberOfChars());
-}
+        v8SetReturnValueInt(info, impl->getNumberOfChars());
+    }
 
-CORE_EXPORT  void getNumberOfCharsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElementV8Internal::getNumberOfCharsMethod(info);
-}
+    CORE_EXPORT void getNumberOfCharsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElementV8Internal::getNumberOfCharsMethod(info);
+    }
 
-static void getComputedTextLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
+    static void getComputedTextLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->getComputedTextLength());
-}
+        v8SetReturnValue(info, impl->getComputedTextLength());
+    }
 
-CORE_EXPORT  void getComputedTextLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElementV8Internal::getComputedTextLengthMethod(info);
-}
+    CORE_EXPORT void getComputedTextLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElementV8Internal::getComputedTextLengthMethod(info);
+    }
 
-static void getSubStringLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getSubStringLength");
+    static void getSubStringLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getSubStringLength");
 
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  unsigned charnum;
-  unsigned nchars;
-  charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned charnum;
+        unsigned nchars;
+        charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  nchars = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        nchars = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  float result = impl->getSubStringLength(charnum, nchars, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        float result = impl->getSubStringLength(charnum, nchars, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void getSubStringLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElementV8Internal::getSubStringLengthMethod(info);
-}
+    CORE_EXPORT void getSubStringLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElementV8Internal::getSubStringLengthMethod(info);
+    }
 
-static void getStartPositionOfCharMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getStartPositionOfChar");
+    static void getStartPositionOfCharMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getStartPositionOfChar");
 
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned charnum;
-  charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned charnum;
+        charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SVGPointTearOff* result = impl->getStartPositionOfChar(charnum, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        SVGPointTearOff* result = impl->getStartPositionOfChar(charnum, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void getStartPositionOfCharMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElementV8Internal::getStartPositionOfCharMethod(info);
-}
+    CORE_EXPORT void getStartPositionOfCharMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElementV8Internal::getStartPositionOfCharMethod(info);
+    }
 
-static void getEndPositionOfCharMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getEndPositionOfChar");
+    static void getEndPositionOfCharMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getEndPositionOfChar");
 
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned charnum;
-  charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned charnum;
+        charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SVGPointTearOff* result = impl->getEndPositionOfChar(charnum, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        SVGPointTearOff* result = impl->getEndPositionOfChar(charnum, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void getEndPositionOfCharMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElementV8Internal::getEndPositionOfCharMethod(info);
-}
+    CORE_EXPORT void getEndPositionOfCharMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElementV8Internal::getEndPositionOfCharMethod(info);
+    }
 
-static void getExtentOfCharMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getExtentOfChar");
+    static void getExtentOfCharMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getExtentOfChar");
 
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned charnum;
-  charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned charnum;
+        charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SVGRectTearOff* result = impl->getExtentOfChar(charnum, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        SVGRectTearOff* result = impl->getExtentOfChar(charnum, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void getExtentOfCharMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElementV8Internal::getExtentOfCharMethod(info);
-}
+    CORE_EXPORT void getExtentOfCharMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElementV8Internal::getExtentOfCharMethod(info);
+    }
 
-static void getRotationOfCharMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getRotationOfChar");
+    static void getRotationOfCharMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getRotationOfChar");
 
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned charnum;
-  charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned charnum;
+        charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  float result = impl->getRotationOfChar(charnum, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        float result = impl->getRotationOfChar(charnum, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void getRotationOfCharMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElementV8Internal::getRotationOfCharMethod(info);
-}
+    CORE_EXPORT void getRotationOfCharMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElementV8Internal::getRotationOfCharMethod(info);
+    }
 
-static void getCharNumAtPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getCharNumAtPosition");
+    static void getCharNumAtPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "getCharNumAtPosition");
 
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  SVGPointTearOff* point;
-  point = V8SVGPoint::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!point) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'SVGPoint'.");
+        SVGPointTearOff* point;
+        point = V8SVGPoint::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!point) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'SVGPoint'.");
 
-    return;
-  }
+            return;
+        }
 
-  int result = impl->getCharNumAtPosition(point, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueInt(info, result);
-}
+        int result = impl->getCharNumAtPosition(point, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueInt(info, result);
+    }
 
-CORE_EXPORT  void getCharNumAtPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElementV8Internal::getCharNumAtPositionMethod(info);
-}
+    CORE_EXPORT void getCharNumAtPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElementV8Internal::getCharNumAtPositionMethod(info);
+    }
 
-static void selectSubStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "selectSubString");
+    static void selectSubStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTextContentElement", "selectSubString");
 
-  SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
+        SVGTextContentElement* impl = V8SVGTextContentElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  unsigned charnum;
-  unsigned nchars;
-  charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned charnum;
+        unsigned nchars;
+        charnum = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  nchars = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        nchars = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->selectSubString(charnum, nchars, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->selectSubString(charnum, nchars, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void selectSubStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTextContentElementV8Internal::selectSubStringMethod(info);
-}
+    CORE_EXPORT void selectSubStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTextContentElementV8Internal::selectSubStringMethod(info);
+    }
 
 } // namespace SVGTextContentElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGTextContentElementAccessors[] = {
-    {"textLength", SVGTextContentElementV8Internal::textLengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lengthAdjust", SVGTextContentElementV8Internal::lengthAdjustAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "textLength", SVGTextContentElementV8Internal::textLengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lengthAdjust", SVGTextContentElementV8Internal::lengthAdjustAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGTextContentElementMethods[] = {
-    {"getNumberOfChars", SVGTextContentElementV8Internal::getNumberOfCharsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getComputedTextLength", SVGTextContentElementV8Internal::getComputedTextLengthMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getSubStringLength", SVGTextContentElementV8Internal::getSubStringLengthMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getStartPositionOfChar", SVGTextContentElementV8Internal::getStartPositionOfCharMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getEndPositionOfChar", SVGTextContentElementV8Internal::getEndPositionOfCharMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getExtentOfChar", SVGTextContentElementV8Internal::getExtentOfCharMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getRotationOfChar", SVGTextContentElementV8Internal::getRotationOfCharMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getCharNumAtPosition", SVGTextContentElementV8Internal::getCharNumAtPositionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectSubString", SVGTextContentElementV8Internal::selectSubStringMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getNumberOfChars", SVGTextContentElementV8Internal::getNumberOfCharsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getComputedTextLength", SVGTextContentElementV8Internal::getComputedTextLengthMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getSubStringLength", SVGTextContentElementV8Internal::getSubStringLengthMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getStartPositionOfChar", SVGTextContentElementV8Internal::getStartPositionOfCharMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getEndPositionOfChar", SVGTextContentElementV8Internal::getEndPositionOfCharMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getExtentOfChar", SVGTextContentElementV8Internal::getExtentOfCharMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getRotationOfChar", SVGTextContentElementV8Internal::getRotationOfCharMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getCharNumAtPosition", SVGTextContentElementV8Internal::getCharNumAtPositionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectSubString", SVGTextContentElementV8Internal::selectSubStringMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGTextContentElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGTextContentElement::wrapperTypeInfo.interfaceName, V8SVGGraphicsElement::domTemplate(isolate, world), V8SVGTextContentElement::internalFieldCount);
+static void installV8SVGTextContentElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGTextContentElement::wrapperTypeInfo.interfaceName, V8SVGGraphicsElement::domTemplate(isolate, world), V8SVGTextContentElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "LENGTHADJUST_UNKNOWN", SVGTextContentElementV8Internal::LENGTHADJUST_UNKNOWNConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "LENGTHADJUST_SPACING", SVGTextContentElementV8Internal::LENGTHADJUST_SPACINGConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "LENGTHADJUST_SPACINGANDGLYPHS", SVGTextContentElementV8Internal::LENGTHADJUST_SPACINGANDGLYPHSConstantGetterCallback);
-  static_assert(0 == SVGTextContentElement::kLengthadjustUnknown, "the value of SVGTextContentElement_kLengthadjustUnknown does not match with implementation");
-  static_assert(1 == SVGTextContentElement::kLengthadjustSpacing, "the value of SVGTextContentElement_kLengthadjustSpacing does not match with implementation");
-  static_assert(2 == SVGTextContentElement::kLengthadjustSpacingandglyphs, "the value of SVGTextContentElement_kLengthadjustSpacingandglyphs does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGTextContentElementAccessors, WTF_ARRAY_LENGTH(V8SVGTextContentElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGTextContentElementMethods, WTF_ARRAY_LENGTH(V8SVGTextContentElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "LENGTHADJUST_UNKNOWN", SVGTextContentElementV8Internal::LENGTHADJUST_UNKNOWNConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "LENGTHADJUST_SPACING", SVGTextContentElementV8Internal::LENGTHADJUST_SPACINGConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "LENGTHADJUST_SPACINGANDGLYPHS", SVGTextContentElementV8Internal::LENGTHADJUST_SPACINGANDGLYPHSConstantGetterCallback);
+    static_assert(0 == SVGTextContentElement::kLengthadjustUnknown, "the value of SVGTextContentElement_kLengthadjustUnknown does not match with implementation");
+    static_assert(1 == SVGTextContentElement::kLengthadjustSpacing, "the value of SVGTextContentElement_kLengthadjustSpacing does not match with implementation");
+    static_assert(2 == SVGTextContentElement::kLengthadjustSpacingandglyphs, "the value of SVGTextContentElement_kLengthadjustSpacingandglyphs does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGTextContentElementAccessors, WTF_ARRAY_LENGTH(V8SVGTextContentElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGTextContentElementMethods, WTF_ARRAY_LENGTH(V8SVGTextContentElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGTextContentElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGTextContentElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGTextContentElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGTextContentElementTemplate);
 }
 
-bool V8SVGTextContentElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGTextContentElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGTextContentElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGTextContentElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGTextContentElement* V8SVGTextContentElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGTextContentElement* V8SVGTextContentElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

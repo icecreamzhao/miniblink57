@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext_h
 #define CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext_h
 
@@ -26,72 +26,74 @@ class WebGL2RenderingContext;
 class WebGLRenderingContext;
 
 class MODULES_EXPORT CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isCanvasRenderingContext2D() const { return m_type == SpecificTypeCanvasRenderingContext2D; }
-  CanvasRenderingContext2D* getAsCanvasRenderingContext2D() const;
-  void setCanvasRenderingContext2D(CanvasRenderingContext2D*);
-  static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext fromCanvasRenderingContext2D(CanvasRenderingContext2D*);
+public:
+    CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isWebGLRenderingContext() const { return m_type == SpecificTypeWebGLRenderingContext; }
-  WebGLRenderingContext* getAsWebGLRenderingContext() const;
-  void setWebGLRenderingContext(WebGLRenderingContext*);
-  static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext fromWebGLRenderingContext(WebGLRenderingContext*);
+    bool isCanvasRenderingContext2D() const { return m_type == SpecificTypeCanvasRenderingContext2D; }
+    CanvasRenderingContext2D* getAsCanvasRenderingContext2D() const;
+    void setCanvasRenderingContext2D(CanvasRenderingContext2D*);
+    static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext fromCanvasRenderingContext2D(CanvasRenderingContext2D*);
 
-  bool isWebGL2RenderingContext() const { return m_type == SpecificTypeWebGL2RenderingContext; }
-  WebGL2RenderingContext* getAsWebGL2RenderingContext() const;
-  void setWebGL2RenderingContext(WebGL2RenderingContext*);
-  static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext fromWebGL2RenderingContext(WebGL2RenderingContext*);
+    bool isWebGLRenderingContext() const { return m_type == SpecificTypeWebGLRenderingContext; }
+    WebGLRenderingContext* getAsWebGLRenderingContext() const;
+    void setWebGLRenderingContext(WebGLRenderingContext*);
+    static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext fromWebGLRenderingContext(WebGLRenderingContext*);
 
-  bool isImageBitmapRenderingContext() const { return m_type == SpecificTypeImageBitmapRenderingContext; }
-  ImageBitmapRenderingContext* getAsImageBitmapRenderingContext() const;
-  void setImageBitmapRenderingContext(ImageBitmapRenderingContext*);
-  static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext fromImageBitmapRenderingContext(ImageBitmapRenderingContext*);
+    bool isWebGL2RenderingContext() const { return m_type == SpecificTypeWebGL2RenderingContext; }
+    WebGL2RenderingContext* getAsWebGL2RenderingContext() const;
+    void setWebGL2RenderingContext(WebGL2RenderingContext*);
+    static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext fromWebGL2RenderingContext(WebGL2RenderingContext*);
 
-  CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext(const CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext&);
-  ~CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext();
-  CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext& operator=(const CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext&);
-  DECLARE_TRACE();
+    bool isImageBitmapRenderingContext() const { return m_type == SpecificTypeImageBitmapRenderingContext; }
+    ImageBitmapRenderingContext* getAsImageBitmapRenderingContext() const;
+    void setImageBitmapRenderingContext(ImageBitmapRenderingContext*);
+    static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext fromImageBitmapRenderingContext(ImageBitmapRenderingContext*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeCanvasRenderingContext2D,
-    SpecificTypeWebGLRenderingContext,
-    SpecificTypeWebGL2RenderingContext,
-    SpecificTypeImageBitmapRenderingContext,
-  };
-  SpecificTypes m_type;
+    CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext(const CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext&);
+    ~CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext();
+    CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext& operator=(const CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext&);
+    DECLARE_TRACE();
 
-  Member<CanvasRenderingContext2D> m_canvasRenderingContext2D;
-  Member<WebGLRenderingContext> m_webGLRenderingContext;
-  Member<WebGL2RenderingContext> m_webGL2RenderingContext;
-  Member<ImageBitmapRenderingContext> m_imageBitmapRenderingContext;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeCanvasRenderingContext2D,
+        SpecificTypeWebGLRenderingContext,
+        SpecificTypeWebGL2RenderingContext,
+        SpecificTypeImageBitmapRenderingContext,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<CanvasRenderingContext2D> m_canvasRenderingContext2D;
+    Member<WebGLRenderingContext> m_webGLRenderingContext;
+    Member<WebGL2RenderingContext> m_webGL2RenderingContext;
+    Member<ImageBitmapRenderingContext> m_imageBitmapRenderingContext;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext> {
-  MODULES_EXPORT static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -99,4 +101,4 @@ struct NativeValueTraits<CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext);
 
-#endif  // CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext_h
+#endif // CanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContextOrImageBitmapRenderingContext_h

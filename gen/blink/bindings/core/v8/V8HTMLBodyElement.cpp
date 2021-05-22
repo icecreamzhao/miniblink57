@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLBodyElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -54,861 +54,970 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLBodyElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLBodyElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLBodyElementV8Internal {
 
-static void textAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void textAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::textAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::textAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void textAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::textAttributeGetter(info);
-}
+    CORE_EXPORT void textAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::textAttributeGetter(info);
+    }
 
-static void textAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void textAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::textAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::textAttr, cppValue);
+    }
 
-CORE_EXPORT void textAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void textAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLBodyElementV8Internal::textAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::textAttributeSetter(v8Value, info);
+    }
 
-static void linkAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void linkAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::linkAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::linkAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void linkAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::linkAttributeGetter(info);
-}
+    CORE_EXPORT void linkAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::linkAttributeGetter(info);
+    }
 
-static void linkAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void linkAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::linkAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::linkAttr, cppValue);
+    }
 
-CORE_EXPORT void linkAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void linkAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLBodyElementV8Internal::linkAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::linkAttributeSetter(v8Value, info);
+    }
 
-static void vLinkAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void vLinkAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::vlinkAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::vlinkAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void vLinkAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::vLinkAttributeGetter(info);
-}
+    CORE_EXPORT void vLinkAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::vLinkAttributeGetter(info);
+    }
 
-static void vLinkAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void vLinkAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::vlinkAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::vlinkAttr, cppValue);
+    }
 
-CORE_EXPORT void vLinkAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void vLinkAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLBodyElementV8Internal::vLinkAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::vLinkAttributeSetter(v8Value, info);
+    }
 
-static void aLinkAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void aLinkAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::alinkAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::alinkAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void aLinkAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::aLinkAttributeGetter(info);
-}
+    CORE_EXPORT void aLinkAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::aLinkAttributeGetter(info);
+    }
 
-static void aLinkAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void aLinkAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::alinkAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::alinkAttr, cppValue);
+    }
 
-CORE_EXPORT void aLinkAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void aLinkAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLBodyElementV8Internal::aLinkAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::aLinkAttributeSetter(v8Value, info);
+    }
 
-static void bgColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bgColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::bgcolorAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::bgcolorAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void bgColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::bgColorAttributeGetter(info);
-}
+    CORE_EXPORT void bgColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::bgColorAttributeGetter(info);
+    }
 
-static void bgColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void bgColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::bgcolorAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::bgcolorAttr, cppValue);
+    }
 
-CORE_EXPORT void bgColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void bgColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLBodyElementV8Internal::bgColorAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::bgColorAttributeSetter(v8Value, info);
+    }
 
-static void backgroundAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void backgroundAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::backgroundAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::backgroundAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void backgroundAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::backgroundAttributeGetter(info);
-}
+    CORE_EXPORT void backgroundAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::backgroundAttributeGetter(info);
+    }
 
-static void backgroundAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void backgroundAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::backgroundAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::backgroundAttr, cppValue);
+    }
 
-CORE_EXPORT void backgroundAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void backgroundAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLBodyElementV8Internal::backgroundAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::backgroundAttributeSetter(v8Value, info);
+    }
 
-static void onblurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onblurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onblur()));
+        EventListener* cppValue(WTF::getPtr(impl->onblur()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onblurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onblurAttributeGetter(info);
-}
+    CORE_EXPORT void onblurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onblurAttributeGetter(info);
+    }
 
-static void onblurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onblurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnblur(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnblur(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onblurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onblurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onblurAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onblurAttributeSetter(v8Value, info);
+    }
 
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onerrorAttributeGetter(info);
-}
+    CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onerrorAttributeGetter(info);
+    }
 
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onerrorAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
 
-static void onfocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onfocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onfocus()));
+        EventListener* cppValue(WTF::getPtr(impl->onfocus()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onfocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onfocusAttributeGetter(info);
-}
+    CORE_EXPORT void onfocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onfocusAttributeGetter(info);
+    }
 
-static void onfocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onfocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnfocus(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnfocus(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onfocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onfocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onfocusAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onfocusAttributeSetter(v8Value, info);
+    }
 
-static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onload()));
+        EventListener* cppValue(WTF::getPtr(impl->onload()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onloadAttributeGetter(info);
-}
+    CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onloadAttributeGetter(info);
+    }
 
-static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnload(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnload(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onloadAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onloadAttributeSetter(v8Value, info);
+    }
 
-static void onresizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onresizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onresize()));
+        EventListener* cppValue(WTF::getPtr(impl->onresize()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onresizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onresizeAttributeGetter(info);
-}
+    CORE_EXPORT void onresizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onresizeAttributeGetter(info);
+    }
 
-static void onresizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onresizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnresize(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnresize(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onresizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onresizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onresizeAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onresizeAttributeSetter(v8Value, info);
+    }
 
-static void onscrollAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onscrollAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onscroll()));
+        EventListener* cppValue(WTF::getPtr(impl->onscroll()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onscrollAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onscrollAttributeGetter(info);
-}
+    CORE_EXPORT void onscrollAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onscrollAttributeGetter(info);
+    }
 
-static void onscrollAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onscrollAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnscroll(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnscroll(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onscrollAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onscrollAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onscrollAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onscrollAttributeSetter(v8Value, info);
+    }
 
-static void onorientationchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onorientationchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onorientationchange()));
+        EventListener* cppValue(WTF::getPtr(impl->onorientationchange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onorientationchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onorientationchangeAttributeGetter(info);
-}
+    CORE_EXPORT void onorientationchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onorientationchangeAttributeGetter(info);
+    }
 
-static void onorientationchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onorientationchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnorientationchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnorientationchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onorientationchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onorientationchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onorientationchangeAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onorientationchangeAttributeSetter(v8Value, info);
+    }
 
-static void onbeforeunloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onbeforeunloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onbeforeunload(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onbeforeunload(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onbeforeunloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onbeforeunloadAttributeGetter(info);
-}
+    CORE_EXPORT void onbeforeunloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onbeforeunloadAttributeGetter(info);
+    }
 
-static void onbeforeunloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onbeforeunloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnbeforeunload(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnbeforeunload(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onbeforeunloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onbeforeunloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onbeforeunloadAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onbeforeunloadAttributeSetter(v8Value, info);
+    }
 
-static void onhashchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onhashchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onhashchange(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onhashchange(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onhashchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onhashchangeAttributeGetter(info);
-}
+    CORE_EXPORT void onhashchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onhashchangeAttributeGetter(info);
+    }
 
-static void onhashchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onhashchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnhashchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnhashchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onhashchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onhashchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onhashchangeAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onhashchangeAttributeSetter(v8Value, info);
+    }
 
-static void onlanguagechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onlanguagechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onlanguagechange(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onlanguagechange(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onlanguagechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onlanguagechangeAttributeGetter(info);
-}
+    CORE_EXPORT void onlanguagechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onlanguagechangeAttributeGetter(info);
+    }
 
-static void onlanguagechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onlanguagechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnlanguagechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnlanguagechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onlanguagechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onlanguagechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onlanguagechangeAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onlanguagechangeAttributeSetter(v8Value, info);
+    }
 
-static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onmessage(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onmessage(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onmessageAttributeGetter(info);
-}
+    CORE_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onmessageAttributeGetter(info);
+    }
 
-static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnmessage(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnmessage(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onmessageAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onmessageAttributeSetter(v8Value, info);
+    }
 
-static void onofflineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onofflineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onoffline(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onoffline(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onofflineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onofflineAttributeGetter(info);
-}
+    CORE_EXPORT void onofflineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onofflineAttributeGetter(info);
+    }
 
-static void onofflineAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onofflineAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnoffline(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnoffline(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onofflineAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onofflineAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onofflineAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onofflineAttributeSetter(v8Value, info);
+    }
 
-static void ononlineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ononlineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::ononline(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::ononline(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ononlineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::ononlineAttributeGetter(info);
-}
+    CORE_EXPORT void ononlineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::ononlineAttributeGetter(info);
+    }
 
-static void ononlineAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void ononlineAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnonline(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnonline(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ononlineAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ononlineAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::ononlineAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::ononlineAttributeSetter(v8Value, info);
+    }
 
-static void onpagehideAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpagehideAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onpagehide(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onpagehide(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpagehideAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onpagehideAttributeGetter(info);
-}
+    CORE_EXPORT void onpagehideAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onpagehideAttributeGetter(info);
+    }
 
-static void onpagehideAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onpagehideAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnpagehide(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnpagehide(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpagehideAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpagehideAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onpagehideAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onpagehideAttributeSetter(v8Value, info);
+    }
 
-static void onpageshowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpageshowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onpageshow(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onpageshow(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpageshowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onpageshowAttributeGetter(info);
-}
+    CORE_EXPORT void onpageshowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onpageshowAttributeGetter(info);
+    }
 
-static void onpageshowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onpageshowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnpageshow(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnpageshow(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpageshowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpageshowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onpageshowAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onpageshowAttributeSetter(v8Value, info);
+    }
 
-static void onpopstateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpopstateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onpopstate(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onpopstate(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpopstateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onpopstateAttributeGetter(info);
-}
+    CORE_EXPORT void onpopstateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onpopstateAttributeGetter(info);
+    }
 
-static void onpopstateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onpopstateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnpopstate(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnpopstate(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpopstateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpopstateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onpopstateAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onpopstateAttributeSetter(v8Value, info);
+    }
 
-static void onrejectionhandledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onrejectionhandledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onrejectionhandled(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onrejectionhandled(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onrejectionhandledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onrejectionhandledAttributeGetter(info);
-}
+    CORE_EXPORT void onrejectionhandledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onrejectionhandledAttributeGetter(info);
+    }
 
-static void onrejectionhandledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onrejectionhandledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnrejectionhandled(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnrejectionhandled(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onrejectionhandledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onrejectionhandledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onrejectionhandledAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onrejectionhandledAttributeSetter(v8Value, info);
+    }
 
-static void onstorageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onstorageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onstorage(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onstorage(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onstorageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onstorageAttributeGetter(info);
-}
+    CORE_EXPORT void onstorageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onstorageAttributeGetter(info);
+    }
 
-static void onstorageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onstorageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnstorage(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnstorage(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onstorageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onstorageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onstorageAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onstorageAttributeSetter(v8Value, info);
+    }
 
-static void onunhandledrejectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onunhandledrejectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onunhandledrejection(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onunhandledrejection(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onunhandledrejectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onunhandledrejectionAttributeGetter(info);
-}
+    CORE_EXPORT void onunhandledrejectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onunhandledrejectionAttributeGetter(info);
+    }
 
-static void onunhandledrejectionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onunhandledrejectionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnunhandledrejection(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnunhandledrejection(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onunhandledrejectionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onunhandledrejectionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onunhandledrejectionAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onunhandledrejectionAttributeSetter(v8Value, info);
+    }
 
-static void onunloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onunloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  EventListener* cppValue(DOMWindowEventHandlers::onunload(*impl));
+        EventListener* cppValue(DOMWindowEventHandlers::onunload(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onunloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLBodyElementV8Internal::onunloadAttributeGetter(info);
-}
+    CORE_EXPORT void onunloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLBodyElementV8Internal::onunloadAttributeGetter(info);
+    }
 
-static void onunloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
+    static void onunloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLBodyElement* impl = V8HTMLBodyElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  DOMWindowEventHandlers::setOnunload(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        DOMWindowEventHandlers::setOnunload(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onunloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onunloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLBodyElementV8Internal::onunloadAttributeSetter(v8Value, info);
-}
+        HTMLBodyElementV8Internal::onunloadAttributeSetter(v8Value, info);
+    }
 
 } // namespace HTMLBodyElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLBodyElementAccessors[] = {
-    {"text", HTMLBodyElementV8Internal::textAttributeGetterCallback, HTMLBodyElementV8Internal::textAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"link", HTMLBodyElementV8Internal::linkAttributeGetterCallback, HTMLBodyElementV8Internal::linkAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vLink", HTMLBodyElementV8Internal::vLinkAttributeGetterCallback, HTMLBodyElementV8Internal::vLinkAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"aLink", HTMLBodyElementV8Internal::aLinkAttributeGetterCallback, HTMLBodyElementV8Internal::aLinkAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bgColor", HTMLBodyElementV8Internal::bgColorAttributeGetterCallback, HTMLBodyElementV8Internal::bgColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"background", HTMLBodyElementV8Internal::backgroundAttributeGetterCallback, HTMLBodyElementV8Internal::backgroundAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onblur", HTMLBodyElementV8Internal::onblurAttributeGetterCallback, HTMLBodyElementV8Internal::onblurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", HTMLBodyElementV8Internal::onerrorAttributeGetterCallback, HTMLBodyElementV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onfocus", HTMLBodyElementV8Internal::onfocusAttributeGetterCallback, HTMLBodyElementV8Internal::onfocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onload", HTMLBodyElementV8Internal::onloadAttributeGetterCallback, HTMLBodyElementV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onresize", HTMLBodyElementV8Internal::onresizeAttributeGetterCallback, HTMLBodyElementV8Internal::onresizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onscroll", HTMLBodyElementV8Internal::onscrollAttributeGetterCallback, HTMLBodyElementV8Internal::onscrollAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onbeforeunload", HTMLBodyElementV8Internal::onbeforeunloadAttributeGetterCallback, HTMLBodyElementV8Internal::onbeforeunloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onhashchange", HTMLBodyElementV8Internal::onhashchangeAttributeGetterCallback, HTMLBodyElementV8Internal::onhashchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onlanguagechange", HTMLBodyElementV8Internal::onlanguagechangeAttributeGetterCallback, HTMLBodyElementV8Internal::onlanguagechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmessage", HTMLBodyElementV8Internal::onmessageAttributeGetterCallback, HTMLBodyElementV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onoffline", HTMLBodyElementV8Internal::onofflineAttributeGetterCallback, HTMLBodyElementV8Internal::onofflineAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ononline", HTMLBodyElementV8Internal::ononlineAttributeGetterCallback, HTMLBodyElementV8Internal::ononlineAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpagehide", HTMLBodyElementV8Internal::onpagehideAttributeGetterCallback, HTMLBodyElementV8Internal::onpagehideAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpageshow", HTMLBodyElementV8Internal::onpageshowAttributeGetterCallback, HTMLBodyElementV8Internal::onpageshowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpopstate", HTMLBodyElementV8Internal::onpopstateAttributeGetterCallback, HTMLBodyElementV8Internal::onpopstateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onrejectionhandled", HTMLBodyElementV8Internal::onrejectionhandledAttributeGetterCallback, HTMLBodyElementV8Internal::onrejectionhandledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onstorage", HTMLBodyElementV8Internal::onstorageAttributeGetterCallback, HTMLBodyElementV8Internal::onstorageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onunhandledrejection", HTMLBodyElementV8Internal::onunhandledrejectionAttributeGetterCallback, HTMLBodyElementV8Internal::onunhandledrejectionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onunload", HTMLBodyElementV8Internal::onunloadAttributeGetterCallback, HTMLBodyElementV8Internal::onunloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "text", HTMLBodyElementV8Internal::textAttributeGetterCallback, HTMLBodyElementV8Internal::textAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "link", HTMLBodyElementV8Internal::linkAttributeGetterCallback, HTMLBodyElementV8Internal::linkAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vLink", HTMLBodyElementV8Internal::vLinkAttributeGetterCallback, HTMLBodyElementV8Internal::vLinkAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "aLink", HTMLBodyElementV8Internal::aLinkAttributeGetterCallback, HTMLBodyElementV8Internal::aLinkAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bgColor", HTMLBodyElementV8Internal::bgColorAttributeGetterCallback, HTMLBodyElementV8Internal::bgColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "background", HTMLBodyElementV8Internal::backgroundAttributeGetterCallback, HTMLBodyElementV8Internal::backgroundAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onblur", HTMLBodyElementV8Internal::onblurAttributeGetterCallback, HTMLBodyElementV8Internal::onblurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", HTMLBodyElementV8Internal::onerrorAttributeGetterCallback, HTMLBodyElementV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onfocus", HTMLBodyElementV8Internal::onfocusAttributeGetterCallback, HTMLBodyElementV8Internal::onfocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onload", HTMLBodyElementV8Internal::onloadAttributeGetterCallback, HTMLBodyElementV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onresize", HTMLBodyElementV8Internal::onresizeAttributeGetterCallback, HTMLBodyElementV8Internal::onresizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onscroll", HTMLBodyElementV8Internal::onscrollAttributeGetterCallback, HTMLBodyElementV8Internal::onscrollAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onbeforeunload", HTMLBodyElementV8Internal::onbeforeunloadAttributeGetterCallback, HTMLBodyElementV8Internal::onbeforeunloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onhashchange", HTMLBodyElementV8Internal::onhashchangeAttributeGetterCallback, HTMLBodyElementV8Internal::onhashchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onlanguagechange", HTMLBodyElementV8Internal::onlanguagechangeAttributeGetterCallback, HTMLBodyElementV8Internal::onlanguagechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmessage", HTMLBodyElementV8Internal::onmessageAttributeGetterCallback, HTMLBodyElementV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onoffline", HTMLBodyElementV8Internal::onofflineAttributeGetterCallback, HTMLBodyElementV8Internal::onofflineAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ononline", HTMLBodyElementV8Internal::ononlineAttributeGetterCallback, HTMLBodyElementV8Internal::ononlineAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpagehide", HTMLBodyElementV8Internal::onpagehideAttributeGetterCallback, HTMLBodyElementV8Internal::onpagehideAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpageshow", HTMLBodyElementV8Internal::onpageshowAttributeGetterCallback, HTMLBodyElementV8Internal::onpageshowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpopstate", HTMLBodyElementV8Internal::onpopstateAttributeGetterCallback, HTMLBodyElementV8Internal::onpopstateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onrejectionhandled", HTMLBodyElementV8Internal::onrejectionhandledAttributeGetterCallback, HTMLBodyElementV8Internal::onrejectionhandledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onstorage", HTMLBodyElementV8Internal::onstorageAttributeGetterCallback, HTMLBodyElementV8Internal::onstorageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onunhandledrejection", HTMLBodyElementV8Internal::onunhandledrejectionAttributeGetterCallback, HTMLBodyElementV8Internal::onunhandledrejectionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onunload", HTMLBodyElementV8Internal::onunloadAttributeGetterCallback, HTMLBodyElementV8Internal::onunloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLBodyElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLBodyElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLBodyElement::internalFieldCount);
+static void installV8HTMLBodyElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLBodyElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLBodyElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLBodyElementAccessors, WTF_ARRAY_LENGTH(V8HTMLBodyElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLBodyElementAccessors, WTF_ARRAY_LENGTH(V8HTMLBodyElementAccessors));
 
-  if (RuntimeEnabledFeatures::orientationEventEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoronorientationchangeConfiguration = {"onorientationchange", HTMLBodyElementV8Internal::onorientationchangeAttributeGetterCallback, HTMLBodyElementV8Internal::onorientationchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronorientationchangeConfiguration);
-  }
+    if (RuntimeEnabledFeatures::orientationEventEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoronorientationchangeConfiguration = { "onorientationchange", HTMLBodyElementV8Internal::onorientationchangeAttributeGetterCallback, HTMLBodyElementV8Internal::onorientationchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronorientationchangeConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLBodyElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLBodyElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLBodyElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLBodyElementTemplate);
 }
 
-bool V8HTMLBodyElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLBodyElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLBodyElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLBodyElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLBodyElement* V8HTMLBodyElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLBodyElement* V8HTMLBodyElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

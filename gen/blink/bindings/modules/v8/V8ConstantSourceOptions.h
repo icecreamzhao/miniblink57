@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ConstantSourceOptions_h
 #define V8ConstantSourceOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ConstantSourceOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstantSourceOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstantSourceOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ConstantSourceOptions(const ConstantSourceOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstantSourceOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstantSourceOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ConstantSourceOptions> {
-  static ConstantSourceOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ConstantSourceOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ConstantSourceOptions> {
-  typedef V8ConstantSourceOptions Type;
+    typedef V8ConstantSourceOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ConstantSourceOptions_h
+#endif // V8ConstantSourceOptions_h

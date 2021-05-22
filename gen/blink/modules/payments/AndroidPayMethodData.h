@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AndroidPayMethodData_h
 #define AndroidPayMethodData_h
 
@@ -22,53 +22,54 @@
 namespace blink {
 
 class MODULES_EXPORT AndroidPayMethodData : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AndroidPayMethodData();
-  virtual ~AndroidPayMethodData();
-  AndroidPayMethodData(const AndroidPayMethodData&);
-  AndroidPayMethodData& operator=(const AndroidPayMethodData&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAllowedCardNetworks() const;
-  const Vector<String>& allowedCardNetworks() const;
-  void setAllowedCardNetworks(const Vector<String>&);
+public:
+    AndroidPayMethodData();
+    virtual ~AndroidPayMethodData();
+    AndroidPayMethodData(const AndroidPayMethodData&);
+    AndroidPayMethodData& operator=(const AndroidPayMethodData&);
 
-  bool hasEnvironment() const;
-  String environment() const;
-  void setEnvironment(String);
+    bool hasAllowedCardNetworks() const;
+    const Vector<String>& allowedCardNetworks() const;
+    void setAllowedCardNetworks(const Vector<String>&);
 
-  bool hasMerchantId() const;
-  String merchantId() const;
-  void setMerchantId(String);
+    bool hasEnvironment() const;
+    String environment() const;
+    void setEnvironment(String);
 
-  bool hasMerchantName() const;
-  String merchantName() const;
-  void setMerchantName(String);
+    bool hasMerchantId() const;
+    String merchantId() const;
+    void setMerchantId(String);
 
-  bool hasMinGooglePlayServicesVersion() const;
-  String minGooglePlayServicesVersion() const;
-  void setMinGooglePlayServicesVersion(String);
+    bool hasMerchantName() const;
+    String merchantName() const;
+    void setMerchantName(String);
 
-  bool hasPaymentMethodTokenizationParameters() const;
-  const AndroidPayTokenization& paymentMethodTokenizationParameters() const;
-  void setPaymentMethodTokenizationParameters(const AndroidPayTokenization&);
+    bool hasMinGooglePlayServicesVersion() const;
+    String minGooglePlayServicesVersion() const;
+    void setMinGooglePlayServicesVersion(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPaymentMethodTokenizationParameters() const;
+    const AndroidPayTokenization& paymentMethodTokenizationParameters() const;
+    void setPaymentMethodTokenizationParameters(const AndroidPayTokenization&);
 
- private:
-  bool m_hasAllowedCardNetworks = false;
-  Vector<String> m_allowedCardNetworks;
-  String m_environment;
-  String m_merchantId;
-  String m_merchantName;
-  String m_minGooglePlayServicesVersion;
-  bool m_hasPaymentMethodTokenizationParameters = false;
-  AndroidPayTokenization m_paymentMethodTokenizationParameters;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AndroidPayMethodData;
+private:
+    bool m_hasAllowedCardNetworks = false;
+    Vector<String> m_allowedCardNetworks;
+    String m_environment;
+    String m_merchantId;
+    String m_merchantName;
+    String m_minGooglePlayServicesVersion;
+    bool m_hasPaymentMethodTokenizationParameters = false;
+    AndroidPayTokenization m_paymentMethodTokenizationParameters;
+
+    friend class V8AndroidPayMethodData;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AndroidPayMethodData_h
+#endif // AndroidPayMethodData_h

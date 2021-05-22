@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef StorageEventInit_h
 #define StorageEventInit_h
 
@@ -22,50 +22,51 @@ namespace blink {
 class Storage;
 
 class MODULES_EXPORT StorageEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  StorageEventInit();
-  virtual ~StorageEventInit();
-  StorageEventInit(const StorageEventInit&);
-  StorageEventInit& operator=(const StorageEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasKey() const;
-  String key() const;
-  void setKey(String);
-  void setKeyToNull();
+public:
+    StorageEventInit();
+    virtual ~StorageEventInit();
+    StorageEventInit(const StorageEventInit&);
+    StorageEventInit& operator=(const StorageEventInit&);
 
-  bool hasNewValue() const;
-  String newValue() const;
-  void setNewValue(String);
-  void setNewValueToNull();
+    bool hasKey() const;
+    String key() const;
+    void setKey(String);
+    void setKeyToNull();
 
-  bool hasOldValue() const;
-  String oldValue() const;
-  void setOldValue(String);
-  void setOldValueToNull();
+    bool hasNewValue() const;
+    String newValue() const;
+    void setNewValue(String);
+    void setNewValueToNull();
 
-  bool hasStorageArea() const;
-  Storage* storageArea() const;
-  void setStorageArea(Storage*);
-  void setStorageAreaToNull();
+    bool hasOldValue() const;
+    String oldValue() const;
+    void setOldValue(String);
+    void setOldValueToNull();
 
-  bool hasURL() const;
-  String url() const;
-  void setURL(String);
+    bool hasStorageArea() const;
+    Storage* storageArea() const;
+    void setStorageArea(Storage*);
+    void setStorageAreaToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasURL() const;
+    String url() const;
+    void setURL(String);
 
- private:
-  String m_key;
-  String m_newValue;
-  String m_oldValue;
-  Member<Storage> m_storageArea;
-  String m_url;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8StorageEventInit;
+private:
+    String m_key;
+    String m_newValue;
+    String m_oldValue;
+    Member<Storage> m_storageArea;
+    String m_url;
+
+    friend class V8StorageEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // StorageEventInit_h
+#endif // StorageEventInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DeviceLightEventInit_h
 #define DeviceLightEventInit_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT DeviceLightEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DeviceLightEventInit();
-  virtual ~DeviceLightEventInit();
-  DeviceLightEventInit(const DeviceLightEventInit&);
-  DeviceLightEventInit& operator=(const DeviceLightEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasValue() const;
-  double value() const;
-  void setValue(double);
+public:
+    DeviceLightEventInit();
+    virtual ~DeviceLightEventInit();
+    DeviceLightEventInit(const DeviceLightEventInit&);
+    DeviceLightEventInit& operator=(const DeviceLightEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasValue() const;
+    double value() const;
+    void setValue(double);
 
- private:
-  bool m_hasValue = false;
-  double m_value;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8DeviceLightEventInit;
+private:
+    bool m_hasValue = false;
+    double m_value;
+
+    friend class V8DeviceLightEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // DeviceLightEventInit_h
+#endif // DeviceLightEventInit_h

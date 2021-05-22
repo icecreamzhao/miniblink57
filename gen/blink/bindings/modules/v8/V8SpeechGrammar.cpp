@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SpeechGrammar.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,138 +46,153 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SpeechGrammar::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SpeechGrammar is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SpeechGrammarV8Internal {
 
-static void srcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void srcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechGrammar* impl = V8SpeechGrammar::toImpl(holder);
+        SpeechGrammar* impl = V8SpeechGrammar::toImpl(holder);
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
 
-  v8SetReturnValueString(info, impl->src(executionContext), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->src(executionContext), info.GetIsolate());
+    }
 
-MODULES_EXPORT void srcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechGrammarV8Internal::srcAttributeGetter(info);
-}
+    MODULES_EXPORT void srcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammarV8Internal::srcAttributeGetter(info);
+    }
 
-static void srcAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SpeechGrammar* impl = V8SpeechGrammar::toImpl(holder);
+    static void srcAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SpeechGrammar* impl = V8SpeechGrammar::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
 
-  impl->setSrc(executionContext, cppValue);
-}
+        impl->setSrc(executionContext, cppValue);
+    }
 
-MODULES_EXPORT void srcAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void srcAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SpeechGrammarV8Internal::srcAttributeSetter(v8Value, info);
-}
+        SpeechGrammarV8Internal::srcAttributeSetter(v8Value, info);
+    }
 
-static void weightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void weightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechGrammar* impl = V8SpeechGrammar::toImpl(holder);
+        SpeechGrammar* impl = V8SpeechGrammar::toImpl(holder);
 
-  v8SetReturnValue(info, impl->weight());
-}
+        v8SetReturnValue(info, impl->weight());
+    }
 
-MODULES_EXPORT void weightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechGrammarV8Internal::weightAttributeGetter(info);
-}
+    MODULES_EXPORT void weightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammarV8Internal::weightAttributeGetter(info);
+    }
 
-static void weightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SpeechGrammar* impl = V8SpeechGrammar::toImpl(holder);
+    static void weightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SpeechGrammar* impl = V8SpeechGrammar::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SpeechGrammar", "weight");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SpeechGrammar", "weight");
 
-  // Prepare the value to be set.
-  float cppValue = toRestrictedFloat(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        float cppValue = toRestrictedFloat(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setWeight(cppValue);
-}
+        impl->setWeight(cppValue);
+    }
 
-MODULES_EXPORT void weightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void weightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SpeechGrammarV8Internal::weightAttributeSetter(v8Value, info);
-}
+        SpeechGrammarV8Internal::weightAttributeSetter(v8Value, info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechGrammar* impl = SpeechGrammar::create();
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SpeechGrammar::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammar* impl = SpeechGrammar::create();
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SpeechGrammar::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace SpeechGrammarV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SpeechGrammarAccessors[] = {
-    {"src", SpeechGrammarV8Internal::srcAttributeGetterCallback, SpeechGrammarV8Internal::srcAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"weight", SpeechGrammarV8Internal::weightAttributeGetterCallback, SpeechGrammarV8Internal::weightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "src", SpeechGrammarV8Internal::srcAttributeGetterCallback, SpeechGrammarV8Internal::srcAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "weight", SpeechGrammarV8Internal::weightAttributeGetterCallback, SpeechGrammarV8Internal::weightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8SpeechGrammar::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SpeechGrammar"));
-    return;
-  }
+void V8SpeechGrammar::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SpeechGrammar"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  SpeechGrammarV8Internal::constructor(info);
+    SpeechGrammarV8Internal::constructor(info);
 }
 
-static void installV8SpeechGrammarTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SpeechGrammar::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SpeechGrammar::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8SpeechGrammar::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8SpeechGrammarTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SpeechGrammar::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SpeechGrammar::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8SpeechGrammar::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechGrammarAccessors, WTF_ARRAY_LENGTH(V8SpeechGrammarAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechGrammarAccessors, WTF_ARRAY_LENGTH(V8SpeechGrammarAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SpeechGrammar::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SpeechGrammarTemplate);
+v8::Local<v8::FunctionTemplate> V8SpeechGrammar::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SpeechGrammarTemplate);
 }
 
-bool V8SpeechGrammar::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SpeechGrammar::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SpeechGrammar::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SpeechGrammar::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SpeechGrammar* V8SpeechGrammar::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SpeechGrammar* V8SpeechGrammar::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

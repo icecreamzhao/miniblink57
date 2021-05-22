@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ScrollStateCallback_h
 #define V8ScrollStateCallback_h
 
@@ -20,21 +20,23 @@
 namespace blink {
 
 class V8ScrollStateCallback final : public ScrollStateCallback {
- public:
-  static V8ScrollStateCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8ScrollStateCallback(callback, scriptState);
-  }
+public:
+    static V8ScrollStateCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8ScrollStateCallback(callback, scriptState);
+    }
 
-  ~V8ScrollStateCallback() override;
+    ~V8ScrollStateCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  void handleEvent(ScrollState* scrollState) override;
- private:
-  CORE_EXPORT V8ScrollStateCallback(v8::Local<v8::Function>, ScriptState*);
+    void handleEvent(ScrollState* scrollState) override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    CORE_EXPORT V8ScrollStateCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8ScrollStateCallback_h
+#endif // V8ScrollStateCallback_h

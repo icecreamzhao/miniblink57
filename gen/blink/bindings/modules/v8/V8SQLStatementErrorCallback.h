@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8SQLStatementErrorCallback_h
 #define V8SQLStatementErrorCallback_h
 
@@ -20,21 +20,23 @@
 namespace blink {
 
 class V8SQLStatementErrorCallback final : public SQLStatementErrorCallback {
- public:
-  static V8SQLStatementErrorCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8SQLStatementErrorCallback(callback, scriptState);
-  }
+public:
+    static V8SQLStatementErrorCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8SQLStatementErrorCallback(callback, scriptState);
+    }
 
-  ~V8SQLStatementErrorCallback() override;
+    ~V8SQLStatementErrorCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  bool handleEvent(SQLTransaction* transaction, SQLError* error) override;
- private:
-  MODULES_EXPORT V8SQLStatementErrorCallback(v8::Local<v8::Function>, ScriptState*);
+    bool handleEvent(SQLTransaction* transaction, SQLError* error) override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    MODULES_EXPORT V8SQLStatementErrorCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8SQLStatementErrorCallback_h
+#endif // V8SQLStatementErrorCallback_h

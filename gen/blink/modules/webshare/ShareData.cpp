@@ -8,59 +8,73 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ShareData.h"
 
 namespace blink {
 
-ShareData::ShareData() {
+ShareData::ShareData()
+{
 }
 
-ShareData::~ShareData() {}
+ShareData::~ShareData() { }
 
 ShareData::ShareData(const ShareData&) = default;
 
 ShareData& ShareData::operator=(const ShareData&) = default;
 
-bool ShareData::hasText() const {
-  return !m_text.isNull();
+bool ShareData::hasText() const
+{
+    return !m_text.isNull();
 }
-String ShareData::text() const {
-  return m_text;
+String ShareData::text() const
+{
+    return m_text;
 }
-void ShareData::setText(String value) {
-  m_text = value;
+void ShareData::setText(String value)
+{
+    m_text = value;
 }
-void ShareData::setTextToNull() {
-  m_text = String();
+void ShareData::setTextToNull()
+{
+    m_text = String();
 }
-bool ShareData::hasTitle() const {
-  return !m_title.isNull();
+bool ShareData::hasTitle() const
+{
+    return !m_title.isNull();
 }
-String ShareData::title() const {
-  return m_title;
+String ShareData::title() const
+{
+    return m_title;
 }
-void ShareData::setTitle(String value) {
-  m_title = value;
+void ShareData::setTitle(String value)
+{
+    m_title = value;
 }
-void ShareData::setTitleToNull() {
-  m_title = String();
+void ShareData::setTitleToNull()
+{
+    m_title = String();
 }
-bool ShareData::hasURL() const {
-  return !m_url.isNull();
+bool ShareData::hasURL() const
+{
+    return !m_url.isNull();
 }
-String ShareData::url() const {
-  return m_url;
+String ShareData::url() const
+{
+    return m_url;
 }
-void ShareData::setURL(String value) {
-  m_url = value;
+void ShareData::setURL(String value)
+{
+    m_url = value;
 }
-void ShareData::setURLToNull() {
-  m_url = String();
+void ShareData::setURLToNull()
+{
+    m_url = String();
 }
 
-DEFINE_TRACE(ShareData) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ShareData)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

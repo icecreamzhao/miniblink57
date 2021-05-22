@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DoubleOrConstrainDoubleRange_h
 #define DoubleOrConstrainDoubleRange_h
 
@@ -22,58 +22,60 @@
 namespace blink {
 
 class MODULES_EXPORT DoubleOrConstrainDoubleRange final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DoubleOrConstrainDoubleRange();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isDouble() const { return m_type == SpecificTypeDouble; }
-  double getAsDouble() const;
-  void setDouble(double);
-  static DoubleOrConstrainDoubleRange fromDouble(double);
+public:
+    DoubleOrConstrainDoubleRange();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isConstrainDoubleRange() const { return m_type == SpecificTypeConstrainDoubleRange; }
-  const ConstrainDoubleRange& getAsConstrainDoubleRange() const;
-  void setConstrainDoubleRange(const ConstrainDoubleRange&);
-  static DoubleOrConstrainDoubleRange fromConstrainDoubleRange(const ConstrainDoubleRange&);
+    bool isDouble() const { return m_type == SpecificTypeDouble; }
+    double getAsDouble() const;
+    void setDouble(double);
+    static DoubleOrConstrainDoubleRange fromDouble(double);
 
-  DoubleOrConstrainDoubleRange(const DoubleOrConstrainDoubleRange&);
-  ~DoubleOrConstrainDoubleRange();
-  DoubleOrConstrainDoubleRange& operator=(const DoubleOrConstrainDoubleRange&);
-  DECLARE_TRACE();
+    bool isConstrainDoubleRange() const { return m_type == SpecificTypeConstrainDoubleRange; }
+    const ConstrainDoubleRange& getAsConstrainDoubleRange() const;
+    void setConstrainDoubleRange(const ConstrainDoubleRange&);
+    static DoubleOrConstrainDoubleRange fromConstrainDoubleRange(const ConstrainDoubleRange&);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeDouble,
-    SpecificTypeConstrainDoubleRange,
-  };
-  SpecificTypes m_type;
+    DoubleOrConstrainDoubleRange(const DoubleOrConstrainDoubleRange&);
+    ~DoubleOrConstrainDoubleRange();
+    DoubleOrConstrainDoubleRange& operator=(const DoubleOrConstrainDoubleRange&);
+    DECLARE_TRACE();
 
-  double m_double;
-  ConstrainDoubleRange m_constrainDoubleRange;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeDouble,
+        SpecificTypeConstrainDoubleRange,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrConstrainDoubleRange&, v8::Local<v8::Object>, v8::Isolate*);
+    double m_double;
+    ConstrainDoubleRange m_constrainDoubleRange;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrConstrainDoubleRange&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8DoubleOrConstrainDoubleRange final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DoubleOrConstrainDoubleRange&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DoubleOrConstrainDoubleRange&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrConstrainDoubleRange&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DoubleOrConstrainDoubleRange& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DoubleOrConstrainDoubleRange& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<DoubleOrConstrainDoubleRange> {
-  MODULES_EXPORT static DoubleOrConstrainDoubleRange nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static DoubleOrConstrainDoubleRange nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -81,4 +83,4 @@ struct NativeValueTraits<DoubleOrConstrainDoubleRange> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::DoubleOrConstrainDoubleRange);
 
-#endif  // DoubleOrConstrainDoubleRange_h
+#endif // DoubleOrConstrainDoubleRange_h

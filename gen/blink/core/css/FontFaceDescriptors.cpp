@@ -8,93 +8,116 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FontFaceDescriptors.h"
 
 namespace blink {
 
-FontFaceDescriptors::FontFaceDescriptors() {
-  setDisplay(String("auto"));
-  setFeatureSettings(String("normal"));
-  setStretch(String("normal"));
-  setStyle(String("normal"));
-  setUnicodeRange(String("U+0-10FFFF"));
-  setVariant(String("normal"));
-  setWeight(String("normal"));
+FontFaceDescriptors::FontFaceDescriptors()
+{
+    setDisplay(String("auto"));
+    setFeatureSettings(String("normal"));
+    setStretch(String("normal"));
+    setStyle(String("normal"));
+    setUnicodeRange(String("U+0-10FFFF"));
+    setVariant(String("normal"));
+    setWeight(String("normal"));
 }
 
-FontFaceDescriptors::~FontFaceDescriptors() {}
+FontFaceDescriptors::~FontFaceDescriptors() { }
 
 FontFaceDescriptors::FontFaceDescriptors(const FontFaceDescriptors&) = default;
 
 FontFaceDescriptors& FontFaceDescriptors::operator=(const FontFaceDescriptors&) = default;
 
-bool FontFaceDescriptors::hasDisplay() const {
-  return !m_display.isNull();
+bool FontFaceDescriptors::hasDisplay() const
+{
+    return !m_display.isNull();
 }
-String FontFaceDescriptors::display() const {
-  return m_display;
+String FontFaceDescriptors::display() const
+{
+    return m_display;
 }
-void FontFaceDescriptors::setDisplay(String value) {
-  m_display = value;
+void FontFaceDescriptors::setDisplay(String value)
+{
+    m_display = value;
 }
-bool FontFaceDescriptors::hasFeatureSettings() const {
-  return !m_featureSettings.isNull();
+bool FontFaceDescriptors::hasFeatureSettings() const
+{
+    return !m_featureSettings.isNull();
 }
-String FontFaceDescriptors::featureSettings() const {
-  return m_featureSettings;
+String FontFaceDescriptors::featureSettings() const
+{
+    return m_featureSettings;
 }
-void FontFaceDescriptors::setFeatureSettings(String value) {
-  m_featureSettings = value;
+void FontFaceDescriptors::setFeatureSettings(String value)
+{
+    m_featureSettings = value;
 }
-bool FontFaceDescriptors::hasStretch() const {
-  return !m_stretch.isNull();
+bool FontFaceDescriptors::hasStretch() const
+{
+    return !m_stretch.isNull();
 }
-String FontFaceDescriptors::stretch() const {
-  return m_stretch;
+String FontFaceDescriptors::stretch() const
+{
+    return m_stretch;
 }
-void FontFaceDescriptors::setStretch(String value) {
-  m_stretch = value;
+void FontFaceDescriptors::setStretch(String value)
+{
+    m_stretch = value;
 }
-bool FontFaceDescriptors::hasStyle() const {
-  return !m_style.isNull();
+bool FontFaceDescriptors::hasStyle() const
+{
+    return !m_style.isNull();
 }
-String FontFaceDescriptors::style() const {
-  return m_style;
+String FontFaceDescriptors::style() const
+{
+    return m_style;
 }
-void FontFaceDescriptors::setStyle(String value) {
-  m_style = value;
+void FontFaceDescriptors::setStyle(String value)
+{
+    m_style = value;
 }
-bool FontFaceDescriptors::hasUnicodeRange() const {
-  return !m_unicodeRange.isNull();
+bool FontFaceDescriptors::hasUnicodeRange() const
+{
+    return !m_unicodeRange.isNull();
 }
-String FontFaceDescriptors::unicodeRange() const {
-  return m_unicodeRange;
+String FontFaceDescriptors::unicodeRange() const
+{
+    return m_unicodeRange;
 }
-void FontFaceDescriptors::setUnicodeRange(String value) {
-  m_unicodeRange = value;
+void FontFaceDescriptors::setUnicodeRange(String value)
+{
+    m_unicodeRange = value;
 }
-bool FontFaceDescriptors::hasVariant() const {
-  return !m_variant.isNull();
+bool FontFaceDescriptors::hasVariant() const
+{
+    return !m_variant.isNull();
 }
-String FontFaceDescriptors::variant() const {
-  return m_variant;
+String FontFaceDescriptors::variant() const
+{
+    return m_variant;
 }
-void FontFaceDescriptors::setVariant(String value) {
-  m_variant = value;
+void FontFaceDescriptors::setVariant(String value)
+{
+    m_variant = value;
 }
-bool FontFaceDescriptors::hasWeight() const {
-  return !m_weight.isNull();
+bool FontFaceDescriptors::hasWeight() const
+{
+    return !m_weight.isNull();
 }
-String FontFaceDescriptors::weight() const {
-  return m_weight;
+String FontFaceDescriptors::weight() const
+{
+    return m_weight;
 }
-void FontFaceDescriptors::setWeight(String value) {
-  m_weight = value;
+void FontFaceDescriptors::setWeight(String value)
+{
+    m_weight = value;
 }
 
-DEFINE_TRACE(FontFaceDescriptors) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(FontFaceDescriptors)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

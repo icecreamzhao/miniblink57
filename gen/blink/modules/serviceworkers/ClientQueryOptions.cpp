@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ClientQueryOptions.h"
 
 namespace blink {
 
-ClientQueryOptions::ClientQueryOptions() {
-  setIncludeUncontrolled(false);
-  setType(String("window"));
+ClientQueryOptions::ClientQueryOptions()
+{
+    setIncludeUncontrolled(false);
+    setType(String("window"));
 }
 
-ClientQueryOptions::~ClientQueryOptions() {}
+ClientQueryOptions::~ClientQueryOptions() { }
 
 ClientQueryOptions::ClientQueryOptions(const ClientQueryOptions&) = default;
 
 ClientQueryOptions& ClientQueryOptions::operator=(const ClientQueryOptions&) = default;
 
-bool ClientQueryOptions::hasIncludeUncontrolled() const {
-  return m_hasIncludeUncontrolled;
+bool ClientQueryOptions::hasIncludeUncontrolled() const
+{
+    return m_hasIncludeUncontrolled;
 }
-bool ClientQueryOptions::includeUncontrolled() const {
-  DCHECK(m_hasIncludeUncontrolled);
-  return m_includeUncontrolled;
+bool ClientQueryOptions::includeUncontrolled() const
+{
+    DCHECK(m_hasIncludeUncontrolled);
+    return m_includeUncontrolled;
 }
-void ClientQueryOptions::setIncludeUncontrolled(bool value) {
-  m_includeUncontrolled = value;
-  m_hasIncludeUncontrolled = true;
+void ClientQueryOptions::setIncludeUncontrolled(bool value)
+{
+    m_includeUncontrolled = value;
+    m_hasIncludeUncontrolled = true;
 }
-bool ClientQueryOptions::hasType() const {
-  return !m_type.isNull();
+bool ClientQueryOptions::hasType() const
+{
+    return !m_type.isNull();
 }
-String ClientQueryOptions::type() const {
-  return m_type;
+String ClientQueryOptions::type() const
+{
+    return m_type;
 }
-void ClientQueryOptions::setType(String value) {
-  m_type = value;
+void ClientQueryOptions::setType(String value)
+{
+    m_type = value;
 }
 
-DEFINE_TRACE(ClientQueryOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ClientQueryOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

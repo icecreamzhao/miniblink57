@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentDetailsModifier_h
 #define PaymentDetailsModifier_h
 
@@ -23,44 +23,45 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentDetailsModifier : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentDetailsModifier();
-  virtual ~PaymentDetailsModifier();
-  PaymentDetailsModifier(const PaymentDetailsModifier&);
-  PaymentDetailsModifier& operator=(const PaymentDetailsModifier&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAdditionalDisplayItems() const;
-  const HeapVector<PaymentItem>& additionalDisplayItems() const;
-  void setAdditionalDisplayItems(const HeapVector<PaymentItem>&);
+public:
+    PaymentDetailsModifier();
+    virtual ~PaymentDetailsModifier();
+    PaymentDetailsModifier(const PaymentDetailsModifier&);
+    PaymentDetailsModifier& operator=(const PaymentDetailsModifier&);
 
-  bool hasData() const;
-  ScriptValue data() const;
-  void setData(ScriptValue);
+    bool hasAdditionalDisplayItems() const;
+    const HeapVector<PaymentItem>& additionalDisplayItems() const;
+    void setAdditionalDisplayItems(const HeapVector<PaymentItem>&);
 
-  bool hasSupportedMethods() const;
-  const Vector<String>& supportedMethods() const;
-  void setSupportedMethods(const Vector<String>&);
+    bool hasData() const;
+    ScriptValue data() const;
+    void setData(ScriptValue);
 
-  bool hasTotal() const;
-  const PaymentItem& total() const;
-  void setTotal(const PaymentItem&);
+    bool hasSupportedMethods() const;
+    const Vector<String>& supportedMethods() const;
+    void setSupportedMethods(const Vector<String>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTotal() const;
+    const PaymentItem& total() const;
+    void setTotal(const PaymentItem&);
 
- private:
-  bool m_hasAdditionalDisplayItems = false;
-  HeapVector<PaymentItem> m_additionalDisplayItems;
-  ScriptValue m_data;
-  bool m_hasSupportedMethods = false;
-  Vector<String> m_supportedMethods;
-  bool m_hasTotal = false;
-  PaymentItem m_total;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentDetailsModifier;
+private:
+    bool m_hasAdditionalDisplayItems = false;
+    HeapVector<PaymentItem> m_additionalDisplayItems;
+    ScriptValue m_data;
+    bool m_hasSupportedMethods = false;
+    Vector<String> m_supportedMethods;
+    bool m_hasTotal = false;
+    PaymentItem m_total;
+
+    friend class V8PaymentDetailsModifier;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentDetailsModifier_h
+#endif // PaymentDetailsModifier_h

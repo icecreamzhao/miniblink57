@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8NavigatorUserMediaError.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,88 +46,99 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&NavigatorUserMediaError::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "NavigatorUserMediaError is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace NavigatorUserMediaErrorV8Internal {
 
-static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  NavigatorUserMediaError* impl = V8NavigatorUserMediaError::toImpl(holder);
+        NavigatorUserMediaError* impl = V8NavigatorUserMediaError::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->name(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->name(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NavigatorUserMediaErrorV8Internal::nameAttributeGetter(info);
-}
+    MODULES_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NavigatorUserMediaErrorV8Internal::nameAttributeGetter(info);
+    }
 
-static void messageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void messageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  NavigatorUserMediaError* impl = V8NavigatorUserMediaError::toImpl(holder);
+        NavigatorUserMediaError* impl = V8NavigatorUserMediaError::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->message(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->message(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void messageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NavigatorUserMediaErrorV8Internal::messageAttributeGetter(info);
-}
+    MODULES_EXPORT void messageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NavigatorUserMediaErrorV8Internal::messageAttributeGetter(info);
+    }
 
-static void constraintNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void constraintNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  NavigatorUserMediaError* impl = V8NavigatorUserMediaError::toImpl(holder);
+        NavigatorUserMediaError* impl = V8NavigatorUserMediaError::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->constraintName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->constraintName(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void constraintNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8NavigatorUserMediaError_ConstraintName_AttributeGetter);
+    MODULES_EXPORT void constraintNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8NavigatorUserMediaError_ConstraintName_AttributeGetter);
 
-  NavigatorUserMediaErrorV8Internal::constraintNameAttributeGetter(info);
-}
+        NavigatorUserMediaErrorV8Internal::constraintNameAttributeGetter(info);
+    }
 
 } // namespace NavigatorUserMediaErrorV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8NavigatorUserMediaErrorAccessors[] = {
-    {"name", NavigatorUserMediaErrorV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"message", NavigatorUserMediaErrorV8Internal::messageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"constraintName", NavigatorUserMediaErrorV8Internal::constraintNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "name", NavigatorUserMediaErrorV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "message", NavigatorUserMediaErrorV8Internal::messageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "constraintName", NavigatorUserMediaErrorV8Internal::constraintNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8NavigatorUserMediaErrorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NavigatorUserMediaError::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NavigatorUserMediaError::internalFieldCount);
+static void installV8NavigatorUserMediaErrorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NavigatorUserMediaError::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NavigatorUserMediaError::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NavigatorUserMediaErrorAccessors, WTF_ARRAY_LENGTH(V8NavigatorUserMediaErrorAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NavigatorUserMediaErrorAccessors, WTF_ARRAY_LENGTH(V8NavigatorUserMediaErrorAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8NavigatorUserMediaError::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NavigatorUserMediaErrorTemplate);
+v8::Local<v8::FunctionTemplate> V8NavigatorUserMediaError::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NavigatorUserMediaErrorTemplate);
 }
 
-bool V8NavigatorUserMediaError::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8NavigatorUserMediaError::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8NavigatorUserMediaError::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8NavigatorUserMediaError::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-NavigatorUserMediaError* V8NavigatorUserMediaError::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+NavigatorUserMediaError* V8NavigatorUserMediaError::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

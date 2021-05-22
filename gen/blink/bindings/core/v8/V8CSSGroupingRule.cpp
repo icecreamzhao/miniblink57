@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CSSGroupingRule.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,132 +47,143 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CSSGroupingRule::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CSSGroupingRule is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CSSGroupingRuleV8Internal {
 
-static void cssRulesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssRulesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSGroupingRule* impl = V8CSSGroupingRule::toImpl(holder);
+        CSSGroupingRule* impl = V8CSSGroupingRule::toImpl(holder);
 
-  CSSRuleList* cppValue(WTF::getPtr(impl->cssRules()));
+        CSSRuleList* cppValue(WTF::getPtr(impl->cssRules()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#CSSGroupingRule#cssRules";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#CSSGroupingRule#cssRules";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void cssRulesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSGroupingRuleV8Internal::cssRulesAttributeGetter(info);
-}
+    CORE_EXPORT void cssRulesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSGroupingRuleV8Internal::cssRulesAttributeGetter(info);
+    }
 
-static void insertRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSGroupingRule", "insertRule");
+    static void insertRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSGroupingRule", "insertRule");
 
-  CSSGroupingRule* impl = V8CSSGroupingRule::toImpl(info.Holder());
+        CSSGroupingRule* impl = V8CSSGroupingRule::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> rule;
-  unsigned index;
-  rule = info[0];
-  if (!rule.prepare())
-    return;
+        V8StringResource<> rule;
+        unsigned index;
+        rule = info[0];
+        if (!rule.prepare())
+            return;
 
-  index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  unsigned result = impl->insertRule(rule, index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
+        unsigned result = impl->insertRule(rule, index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
 
-CORE_EXPORT  void insertRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSGroupingRuleV8Internal::insertRuleMethod(info);
-}
+    CORE_EXPORT void insertRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSGroupingRuleV8Internal::insertRuleMethod(info);
+    }
 
-static void deleteRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSGroupingRule", "deleteRule");
+    static void deleteRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSGroupingRule", "deleteRule");
 
-  CSSGroupingRule* impl = V8CSSGroupingRule::toImpl(info.Holder());
+        CSSGroupingRule* impl = V8CSSGroupingRule::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned index;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned index;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->deleteRule(index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->deleteRule(index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void deleteRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSGroupingRuleV8Internal::deleteRuleMethod(info);
-}
+    CORE_EXPORT void deleteRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSGroupingRuleV8Internal::deleteRuleMethod(info);
+    }
 
 } // namespace CSSGroupingRuleV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CSSGroupingRuleAccessors[] = {
-    {"cssRules", CSSGroupingRuleV8Internal::cssRulesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "cssRules", CSSGroupingRuleV8Internal::cssRulesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8CSSGroupingRuleMethods[] = {
-    {"insertRule", CSSGroupingRuleV8Internal::insertRuleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteRule", CSSGroupingRuleV8Internal::deleteRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "insertRule", CSSGroupingRuleV8Internal::insertRuleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteRule", CSSGroupingRuleV8Internal::deleteRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CSSGroupingRuleTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSGroupingRule::wrapperTypeInfo.interfaceName, V8CSSRule::domTemplate(isolate, world), V8CSSGroupingRule::internalFieldCount);
+static void installV8CSSGroupingRuleTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSGroupingRule::wrapperTypeInfo.interfaceName, V8CSSRule::domTemplate(isolate, world), V8CSSGroupingRule::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSGroupingRuleAccessors, WTF_ARRAY_LENGTH(V8CSSGroupingRuleAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSGroupingRuleMethods, WTF_ARRAY_LENGTH(V8CSSGroupingRuleMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSGroupingRuleAccessors, WTF_ARRAY_LENGTH(V8CSSGroupingRuleAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSGroupingRuleMethods, WTF_ARRAY_LENGTH(V8CSSGroupingRuleMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8CSSGroupingRule::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSGroupingRuleTemplate);
+v8::Local<v8::FunctionTemplate> V8CSSGroupingRule::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSGroupingRuleTemplate);
 }
 
-bool V8CSSGroupingRule::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CSSGroupingRule::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CSSGroupingRule::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CSSGroupingRule::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CSSGroupingRule* V8CSSGroupingRule::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CSSGroupingRule* V8CSSGroupingRule::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

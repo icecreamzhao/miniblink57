@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef WheelEventInit_h
 #define WheelEventInit_h
 
@@ -19,57 +19,58 @@
 namespace blink {
 
 class CORE_EXPORT WheelEventInit : public MouseEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  WheelEventInit();
-  virtual ~WheelEventInit();
-  WheelEventInit(const WheelEventInit&);
-  WheelEventInit& operator=(const WheelEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDeltaMode() const;
-  unsigned deltaMode() const;
-  void setDeltaMode(unsigned);
+public:
+    WheelEventInit();
+    virtual ~WheelEventInit();
+    WheelEventInit(const WheelEventInit&);
+    WheelEventInit& operator=(const WheelEventInit&);
 
-  bool hasDeltaX() const;
-  double deltaX() const;
-  void setDeltaX(double);
+    bool hasDeltaMode() const;
+    unsigned deltaMode() const;
+    void setDeltaMode(unsigned);
 
-  bool hasDeltaY() const;
-  double deltaY() const;
-  void setDeltaY(double);
+    bool hasDeltaX() const;
+    double deltaX() const;
+    void setDeltaX(double);
 
-  bool hasDeltaZ() const;
-  double deltaZ() const;
-  void setDeltaZ(double);
+    bool hasDeltaY() const;
+    double deltaY() const;
+    void setDeltaY(double);
 
-  bool hasWheelDeltaX() const;
-  int wheelDeltaX() const;
-  void setWheelDeltaX(int);
+    bool hasDeltaZ() const;
+    double deltaZ() const;
+    void setDeltaZ(double);
 
-  bool hasWheelDeltaY() const;
-  int wheelDeltaY() const;
-  void setWheelDeltaY(int);
+    bool hasWheelDeltaX() const;
+    int wheelDeltaX() const;
+    void setWheelDeltaX(int);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasWheelDeltaY() const;
+    int wheelDeltaY() const;
+    void setWheelDeltaY(int);
 
- private:
-  bool m_hasDeltaMode = false;
-  unsigned m_deltaMode;
-  bool m_hasDeltaX = false;
-  double m_deltaX;
-  bool m_hasDeltaY = false;
-  double m_deltaY;
-  bool m_hasDeltaZ = false;
-  double m_deltaZ;
-  bool m_hasWheelDeltaX = false;
-  int m_wheelDeltaX;
-  bool m_hasWheelDeltaY = false;
-  int m_wheelDeltaY;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8WheelEventInit;
+private:
+    bool m_hasDeltaMode = false;
+    unsigned m_deltaMode;
+    bool m_hasDeltaX = false;
+    double m_deltaX;
+    bool m_hasDeltaY = false;
+    double m_deltaY;
+    bool m_hasDeltaZ = false;
+    double m_deltaZ;
+    bool m_hasWheelDeltaX = false;
+    int m_wheelDeltaX;
+    bool m_hasWheelDeltaY = false;
+    int m_wheelDeltaY;
+
+    friend class V8WheelEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // WheelEventInit_h
+#endif // WheelEventInit_h

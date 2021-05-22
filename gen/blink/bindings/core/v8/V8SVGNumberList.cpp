@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGNumberList.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,334 +47,362 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGNumberListTearOff::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGNumberListTearOff is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGNumberListTearOffV8Internal {
 
-static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(holder);
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->length());
-}
+        v8SetReturnValueUnsigned(info, impl->length());
+    }
 
-CORE_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::lengthAttributeGetter(info);
-}
+    CORE_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::lengthAttributeGetter(info);
+    }
 
-static void numberOfItemsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void numberOfItemsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(holder);
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->length());
-}
+        v8SetReturnValueUnsigned(info, impl->length());
+    }
 
-CORE_EXPORT void numberOfItemsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::numberOfItemsAttributeGetter(info);
-}
+    CORE_EXPORT void numberOfItemsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::numberOfItemsAttributeGetter(info);
+    }
 
-static void clearMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "clear");
+    static void clearMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "clear");
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
 
-  impl->clear(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->clear(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void clearMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::clearMethod(info);
-}
+    CORE_EXPORT void clearMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::clearMethod(info);
+    }
 
-static void initializeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "initialize");
+    static void initializeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "initialize");
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  SVGNumberTearOff* newItem;
-  newItem = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!newItem) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'SVGNumber'.");
+        SVGNumberTearOff* newItem;
+        newItem = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!newItem) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'SVGNumber'.");
 
-    return;
-  }
+            return;
+        }
 
-  SVGNumberTearOff* result = impl->initialize(newItem, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        SVGNumberTearOff* result = impl->initialize(newItem, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void initializeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::initializeMethod(info);
-}
+    CORE_EXPORT void initializeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::initializeMethod(info);
+    }
 
-static void getItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "getItem");
+    static void getItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "getItem");
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned index;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned index;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SVGNumberTearOff* result = impl->getItem(index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        SVGNumberTearOff* result = impl->getItem(index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void getItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::getItemMethod(info);
-}
+    CORE_EXPORT void getItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::getItemMethod(info);
+    }
 
-static void insertItemBeforeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "insertItemBefore");
+    static void insertItemBeforeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "insertItemBefore");
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  SVGNumberTearOff* newItem;
-  unsigned index;
-  newItem = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!newItem) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'SVGNumber'.");
+        SVGNumberTearOff* newItem;
+        unsigned index;
+        newItem = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!newItem) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'SVGNumber'.");
 
-    return;
-  }
+            return;
+        }
 
-  index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SVGNumberTearOff* result = impl->insertItemBefore(newItem, index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        SVGNumberTearOff* result = impl->insertItemBefore(newItem, index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void insertItemBeforeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::insertItemBeforeMethod(info);
-}
+    CORE_EXPORT void insertItemBeforeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::insertItemBeforeMethod(info);
+    }
 
-static void replaceItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "replaceItem");
+    static void replaceItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "replaceItem");
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  SVGNumberTearOff* newItem;
-  unsigned index;
-  newItem = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!newItem) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'SVGNumber'.");
+        SVGNumberTearOff* newItem;
+        unsigned index;
+        newItem = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!newItem) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'SVGNumber'.");
 
-    return;
-  }
+            return;
+        }
 
-  index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SVGNumberTearOff* result = impl->replaceItem(newItem, index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        SVGNumberTearOff* result = impl->replaceItem(newItem, index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void replaceItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::replaceItemMethod(info);
-}
+    CORE_EXPORT void replaceItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::replaceItemMethod(info);
+    }
 
-static void removeItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "removeItem");
+    static void removeItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "removeItem");
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned index;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned index;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SVGNumberTearOff* result = impl->removeItem(index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        SVGNumberTearOff* result = impl->removeItem(index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void removeItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::removeItemMethod(info);
-}
+    CORE_EXPORT void removeItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::removeItemMethod(info);
+    }
 
-static void appendItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "appendItem");
+    static void appendItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGNumberList", "appendItem");
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  SVGNumberTearOff* newItem;
-  newItem = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!newItem) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'SVGNumber'.");
+        SVGNumberTearOff* newItem;
+        newItem = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!newItem) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'SVGNumber'.");
 
-    return;
-  }
+            return;
+        }
 
-  SVGNumberTearOff* result = impl->appendItem(newItem, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        SVGNumberTearOff* result = impl->appendItem(newItem, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void appendItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::appendItemMethod(info);
-}
+    CORE_EXPORT void appendItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::appendItemMethod(info);
+    }
 
-static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::IndexedGetterContext, "SVGNumberList");
+    static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::IndexedGetterContext, "SVGNumberList");
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
 
-  // We assume that all the implementations support length() method, although
-  // the spec doesn't require that length() must exist.  It's okay that
-  // the interface does not have length attribute as long as the
-  // implementation supports length() member function.
-  if (index >= impl->length())
-    return;  // Returns undefined due to out-of-range.
+        // We assume that all the implementations support length() method, although
+        // the spec doesn't require that length() must exist.  It's okay that
+        // the interface does not have length attribute as long as the
+        // implementation supports length() member function.
+        if (index >= impl->length())
+            return; // Returns undefined due to out-of-range.
 
-  SVGNumberTearOff* result = impl->getItem(index, exceptionState);
-  v8SetReturnValueFast(info, result, impl);
-}
+        SVGNumberTearOff* result = impl->getItem(index, exceptionState);
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::indexedPropertyGetter(index, info);
-}
+    CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::indexedPropertyGetter(index, info);
+    }
 
-static void indexedPropertySetter(uint32_t index, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::IndexedSetterContext, "SVGNumberList");
+    static void indexedPropertySetter(uint32_t index, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::IndexedSetterContext, "SVGNumberList");
 
-  SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
-  SVGNumberTearOff* propertyValue = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), v8Value);
-  if (!propertyValue) {
-    exceptionState.throwTypeError("The provided value is not of type 'SVGNumber'.");
-    return;
-  }
+        SVGNumberListTearOff* impl = V8SVGNumberList::toImpl(info.Holder());
+        SVGNumberTearOff* propertyValue = V8SVGNumber::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+        if (!propertyValue) {
+            exceptionState.throwTypeError("The provided value is not of type 'SVGNumber'.");
+            return;
+        }
 
-  bool result = impl->anonymousIndexedSetter(index, propertyValue, exceptionState);
-  if (exceptionState.hadException())
-    return;
-  if (!result)
-    return;
-  v8SetReturnValue(info, v8Value);
-}
+        bool result = impl->anonymousIndexedSetter(index, propertyValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        if (!result)
+            return;
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void indexedPropertySetterCallback(uint32_t index, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  SVGNumberListTearOffV8Internal::indexedPropertySetter(index, v8Value, info);
-}
+    CORE_EXPORT void indexedPropertySetterCallback(uint32_t index, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        SVGNumberListTearOffV8Internal::indexedPropertySetter(index, v8Value, info);
+    }
 
 } // namespace SVGNumberListTearOffV8Internal
 
-void V8SVGNumberList::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  SVGNumberListTearOff* impl = scriptWrappable->toImpl<SVGNumberListTearOff>();
-  SVGElement* contextElement = impl->contextElement();
-  if (contextElement) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
-  }
+void V8SVGNumberList::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    SVGNumberListTearOff* impl = scriptWrappable->toImpl<SVGNumberListTearOff>();
+    SVGElement* contextElement = impl->contextElement();
+    if (contextElement) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGNumberListAccessors[] = {
-    {"length", SVGNumberListTearOffV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"numberOfItems", SVGNumberListTearOffV8Internal::numberOfItemsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "length", SVGNumberListTearOffV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "numberOfItems", SVGNumberListTearOffV8Internal::numberOfItemsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGNumberListMethods[] = {
-    {"clear", SVGNumberListTearOffV8Internal::clearMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"initialize", SVGNumberListTearOffV8Internal::initializeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getItem", SVGNumberListTearOffV8Internal::getItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"insertItemBefore", SVGNumberListTearOffV8Internal::insertItemBeforeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"replaceItem", SVGNumberListTearOffV8Internal::replaceItemMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeItem", SVGNumberListTearOffV8Internal::removeItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"appendItem", SVGNumberListTearOffV8Internal::appendItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "clear", SVGNumberListTearOffV8Internal::clearMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "initialize", SVGNumberListTearOffV8Internal::initializeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getItem", SVGNumberListTearOffV8Internal::getItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "insertItemBefore", SVGNumberListTearOffV8Internal::insertItemBeforeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "replaceItem", SVGNumberListTearOffV8Internal::replaceItemMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeItem", SVGNumberListTearOffV8Internal::removeItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "appendItem", SVGNumberListTearOffV8Internal::appendItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGNumberListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGNumberList::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGNumberList::internalFieldCount);
+static void installV8SVGNumberListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGNumberList::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGNumberList::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGNumberListAccessors, WTF_ARRAY_LENGTH(V8SVGNumberListAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGNumberListMethods, WTF_ARRAY_LENGTH(V8SVGNumberListMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGNumberListAccessors, WTF_ARRAY_LENGTH(V8SVGNumberListAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGNumberListMethods, WTF_ARRAY_LENGTH(V8SVGNumberListMethods));
 
-  // Indexed properties
-  v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(SVGNumberListTearOffV8Internal::indexedPropertyGetterCallback, SVGNumberListTearOffV8Internal::indexedPropertySetterCallback, 0, 0, indexedPropertyEnumerator<SVGNumberListTearOff>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
-  instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
+    // Indexed properties
+    v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(SVGNumberListTearOffV8Internal::indexedPropertyGetterCallback, SVGNumberListTearOffV8Internal::indexedPropertySetterCallback, 0, 0, indexedPropertyEnumerator<SVGNumberListTearOff>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
+    instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
 
-  // Array iterator (@@iterator)
-  prototypeTemplate->SetIntrinsicDataProperty(v8::Symbol::GetIterator(isolate), v8::kArrayProto_values, v8::DontEnum);
+    // Array iterator (@@iterator)
+    prototypeTemplate->SetIntrinsicDataProperty(v8::Symbol::GetIterator(isolate), v8::kArrayProto_values, v8::DontEnum);
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGNumberList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGNumberListTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGNumberList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGNumberListTemplate);
 }
 
-bool V8SVGNumberList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGNumberList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGNumberList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGNumberList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGNumberListTearOff* V8SVGNumberList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGNumberListTearOff* V8SVGNumberList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

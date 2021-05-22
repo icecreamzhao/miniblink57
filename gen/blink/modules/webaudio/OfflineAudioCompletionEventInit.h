@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef OfflineAudioCompletionEventInit_h
 #define OfflineAudioCompletionEventInit_h
 
@@ -21,26 +21,27 @@ namespace blink {
 class AudioBuffer;
 
 class MODULES_EXPORT OfflineAudioCompletionEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  OfflineAudioCompletionEventInit();
-  virtual ~OfflineAudioCompletionEventInit();
-  OfflineAudioCompletionEventInit(const OfflineAudioCompletionEventInit&);
-  OfflineAudioCompletionEventInit& operator=(const OfflineAudioCompletionEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasRenderedBuffer() const;
-  AudioBuffer* renderedBuffer() const;
-  void setRenderedBuffer(AudioBuffer*);
+public:
+    OfflineAudioCompletionEventInit();
+    virtual ~OfflineAudioCompletionEventInit();
+    OfflineAudioCompletionEventInit(const OfflineAudioCompletionEventInit&);
+    OfflineAudioCompletionEventInit& operator=(const OfflineAudioCompletionEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRenderedBuffer() const;
+    AudioBuffer* renderedBuffer() const;
+    void setRenderedBuffer(AudioBuffer*);
 
- private:
-  Member<AudioBuffer> m_renderedBuffer;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8OfflineAudioCompletionEventInit;
+private:
+    Member<AudioBuffer> m_renderedBuffer;
+
+    friend class V8OfflineAudioCompletionEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // OfflineAudioCompletionEventInit_h
+#endif // OfflineAudioCompletionEventInit_h

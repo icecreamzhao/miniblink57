@@ -8,43 +8,51 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaKeySystemMediaCapability.h"
 
 namespace blink {
 
-MediaKeySystemMediaCapability::MediaKeySystemMediaCapability() {
-  setContentType(String(""));
-  setRobustness(String(""));
+MediaKeySystemMediaCapability::MediaKeySystemMediaCapability()
+{
+    setContentType(String(""));
+    setRobustness(String(""));
 }
 
-MediaKeySystemMediaCapability::~MediaKeySystemMediaCapability() {}
+MediaKeySystemMediaCapability::~MediaKeySystemMediaCapability() { }
 
 MediaKeySystemMediaCapability::MediaKeySystemMediaCapability(const MediaKeySystemMediaCapability&) = default;
 
 MediaKeySystemMediaCapability& MediaKeySystemMediaCapability::operator=(const MediaKeySystemMediaCapability&) = default;
 
-bool MediaKeySystemMediaCapability::hasContentType() const {
-  return !m_contentType.isNull();
+bool MediaKeySystemMediaCapability::hasContentType() const
+{
+    return !m_contentType.isNull();
 }
-String MediaKeySystemMediaCapability::contentType() const {
-  return m_contentType;
+String MediaKeySystemMediaCapability::contentType() const
+{
+    return m_contentType;
 }
-void MediaKeySystemMediaCapability::setContentType(String value) {
-  m_contentType = value;
+void MediaKeySystemMediaCapability::setContentType(String value)
+{
+    m_contentType = value;
 }
-bool MediaKeySystemMediaCapability::hasRobustness() const {
-  return !m_robustness.isNull();
+bool MediaKeySystemMediaCapability::hasRobustness() const
+{
+    return !m_robustness.isNull();
 }
-String MediaKeySystemMediaCapability::robustness() const {
-  return m_robustness;
+String MediaKeySystemMediaCapability::robustness() const
+{
+    return m_robustness;
 }
-void MediaKeySystemMediaCapability::setRobustness(String value) {
-  m_robustness = value;
+void MediaKeySystemMediaCapability::setRobustness(String value)
+{
+    m_robustness = value;
 }
 
-DEFINE_TRACE(MediaKeySystemMediaCapability) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(MediaKeySystemMediaCapability)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

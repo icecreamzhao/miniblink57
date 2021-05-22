@@ -8,41 +8,49 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "HashChangeEventInit.h"
 
 namespace blink {
 
-HashChangeEventInit::HashChangeEventInit() {
+HashChangeEventInit::HashChangeEventInit()
+{
 }
 
-HashChangeEventInit::~HashChangeEventInit() {}
+HashChangeEventInit::~HashChangeEventInit() { }
 
 HashChangeEventInit::HashChangeEventInit(const HashChangeEventInit&) = default;
 
 HashChangeEventInit& HashChangeEventInit::operator=(const HashChangeEventInit&) = default;
 
-bool HashChangeEventInit::hasNewURL() const {
-  return !m_newURL.isNull();
+bool HashChangeEventInit::hasNewURL() const
+{
+    return !m_newURL.isNull();
 }
-String HashChangeEventInit::newURL() const {
-  return m_newURL;
+String HashChangeEventInit::newURL() const
+{
+    return m_newURL;
 }
-void HashChangeEventInit::setNewURL(String value) {
-  m_newURL = value;
+void HashChangeEventInit::setNewURL(String value)
+{
+    m_newURL = value;
 }
-bool HashChangeEventInit::hasOldURL() const {
-  return !m_oldURL.isNull();
+bool HashChangeEventInit::hasOldURL() const
+{
+    return !m_oldURL.isNull();
 }
-String HashChangeEventInit::oldURL() const {
-  return m_oldURL;
+String HashChangeEventInit::oldURL() const
+{
+    return m_oldURL;
 }
-void HashChangeEventInit::setOldURL(String value) {
-  m_oldURL = value;
+void HashChangeEventInit::setOldURL(String value)
+{
+    m_oldURL = value;
 }
 
-DEFINE_TRACE(HashChangeEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(HashChangeEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,54 +8,65 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "CloseEventInit.h"
 
 namespace blink {
 
-CloseEventInit::CloseEventInit() {
+CloseEventInit::CloseEventInit()
+{
 }
 
-CloseEventInit::~CloseEventInit() {}
+CloseEventInit::~CloseEventInit() { }
 
 CloseEventInit::CloseEventInit(const CloseEventInit&) = default;
 
 CloseEventInit& CloseEventInit::operator=(const CloseEventInit&) = default;
 
-bool CloseEventInit::hasCode() const {
-  return m_hasCode;
+bool CloseEventInit::hasCode() const
+{
+    return m_hasCode;
 }
-unsigned CloseEventInit::code() const {
-  DCHECK(m_hasCode);
-  return m_code;
+unsigned CloseEventInit::code() const
+{
+    DCHECK(m_hasCode);
+    return m_code;
 }
-void CloseEventInit::setCode(unsigned value) {
-  m_code = value;
-  m_hasCode = true;
+void CloseEventInit::setCode(unsigned value)
+{
+    m_code = value;
+    m_hasCode = true;
 }
-bool CloseEventInit::hasReason() const {
-  return !m_reason.isNull();
+bool CloseEventInit::hasReason() const
+{
+    return !m_reason.isNull();
 }
-String CloseEventInit::reason() const {
-  return m_reason;
+String CloseEventInit::reason() const
+{
+    return m_reason;
 }
-void CloseEventInit::setReason(String value) {
-  m_reason = value;
+void CloseEventInit::setReason(String value)
+{
+    m_reason = value;
 }
-bool CloseEventInit::hasWasClean() const {
-  return m_hasWasClean;
+bool CloseEventInit::hasWasClean() const
+{
+    return m_hasWasClean;
 }
-bool CloseEventInit::wasClean() const {
-  DCHECK(m_hasWasClean);
-  return m_wasClean;
+bool CloseEventInit::wasClean() const
+{
+    DCHECK(m_hasWasClean);
+    return m_wasClean;
 }
-void CloseEventInit::setWasClean(bool value) {
-  m_wasClean = value;
-  m_hasWasClean = true;
+void CloseEventInit::setWasClean(bool value)
+{
+    m_wasClean = value;
+    m_hasWasClean = true;
 }
 
-DEFINE_TRACE(CloseEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(CloseEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

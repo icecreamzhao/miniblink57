@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGAnimatedAngle.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,81 +47,91 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGAnimatedAngle::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGAnimatedAngle is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGAnimatedAngleV8Internal {
 
-static void baseValAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void baseValAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGAnimatedAngle* impl = V8SVGAnimatedAngle::toImpl(holder);
+        SVGAnimatedAngle* impl = V8SVGAnimatedAngle::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->baseVal()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->baseVal()), impl);
+    }
 
-CORE_EXPORT void baseValAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGAnimatedAngleV8Internal::baseValAttributeGetter(info);
-}
+    CORE_EXPORT void baseValAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGAnimatedAngleV8Internal::baseValAttributeGetter(info);
+    }
 
-static void animValAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void animValAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGAnimatedAngle* impl = V8SVGAnimatedAngle::toImpl(holder);
+        SVGAnimatedAngle* impl = V8SVGAnimatedAngle::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->animVal()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->animVal()), impl);
+    }
 
-CORE_EXPORT void animValAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGAnimatedAngleV8Internal::animValAttributeGetter(info);
-}
+    CORE_EXPORT void animValAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGAnimatedAngleV8Internal::animValAttributeGetter(info);
+    }
 
 } // namespace SVGAnimatedAngleV8Internal
 
-void V8SVGAnimatedAngle::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  SVGAnimatedAngle* impl = scriptWrappable->toImpl<SVGAnimatedAngle>();
-  SVGElement* contextElement = impl->contextElement();
-  if (contextElement) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
-  }
+void V8SVGAnimatedAngle::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    SVGAnimatedAngle* impl = scriptWrappable->toImpl<SVGAnimatedAngle>();
+    SVGElement* contextElement = impl->contextElement();
+    if (contextElement) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGAnimatedAngleAccessors[] = {
-    {"baseVal", SVGAnimatedAngleV8Internal::baseValAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"animVal", SVGAnimatedAngleV8Internal::animValAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "baseVal", SVGAnimatedAngleV8Internal::baseValAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "animVal", SVGAnimatedAngleV8Internal::animValAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGAnimatedAngleTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGAnimatedAngle::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGAnimatedAngle::internalFieldCount);
+static void installV8SVGAnimatedAngleTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGAnimatedAngle::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGAnimatedAngle::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGAnimatedAngleAccessors, WTF_ARRAY_LENGTH(V8SVGAnimatedAngleAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGAnimatedAngleAccessors, WTF_ARRAY_LENGTH(V8SVGAnimatedAngleAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGAnimatedAngle::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGAnimatedAngleTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGAnimatedAngle::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGAnimatedAngleTemplate);
 }
 
-bool V8SVGAnimatedAngle::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGAnimatedAngle::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGAnimatedAngle::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGAnimatedAngle::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGAnimatedAngle* V8SVGAnimatedAngle::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGAnimatedAngle* V8SVGAnimatedAngle::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

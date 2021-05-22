@@ -8,92 +8,96 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ShadowRootInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8ShadowRootInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ShadowRootInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): mode.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8ShadowRootInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ShadowRootInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): mode.");
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> delegatesFocusValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "delegatesFocus")).ToLocal(&delegatesFocusValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (delegatesFocusValue.IsEmpty() || delegatesFocusValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool delegatesFocus = toBoolean(isolate, delegatesFocusValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setDelegatesFocus(delegatesFocus);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> delegatesFocusValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "delegatesFocus")).ToLocal(&delegatesFocusValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (delegatesFocusValue.IsEmpty() || delegatesFocusValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool delegatesFocus = toBoolean(isolate, delegatesFocusValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setDelegatesFocus(delegatesFocus);
+    }
 
-  v8::Local<v8::Value> modeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mode")).ToLocal(&modeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (modeValue.IsEmpty() || modeValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member mode is undefined.");
-    return;
-  } else {
-    V8StringResource<> mode = modeValue;
-    if (!mode.prepare(exceptionState))
-      return;
-    const char* validValues[] = {
-        "open",
-        "closed",
-    };
-    if (!isValidEnum(mode, validValues, WTF_ARRAY_LENGTH(validValues), "ShadowRootMode", exceptionState))
-      return;
-    impl.setMode(mode);
-  }
+    v8::Local<v8::Value> modeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mode")).ToLocal(&modeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (modeValue.IsEmpty() || modeValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member mode is undefined.");
+        return;
+    } else {
+        V8StringResource<> mode = modeValue;
+        if (!mode.prepare(exceptionState))
+            return;
+        const char* validValues[] = {
+            "open",
+            "closed",
+        };
+        if (!isValidEnum(mode, validValues, WTF_ARRAY_LENGTH(validValues), "ShadowRootMode", exceptionState))
+            return;
+        impl.setMode(mode);
+    }
 }
 
-v8::Local<v8::Value> ShadowRootInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ShadowRootInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ShadowRootInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ShadowRootInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ShadowRootInit(const ShadowRootInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasDelegatesFocus()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "delegatesFocus"), v8Boolean(impl.delegatesFocus(), isolate))))
-      return false;
-  }
+bool toV8ShadowRootInit(const ShadowRootInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasDelegatesFocus()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "delegatesFocus"), v8Boolean(impl.delegatesFocus(), isolate))))
+            return false;
+    }
 
-  if (impl.hasMode()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mode"), v8String(isolate, impl.mode()))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasMode()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mode"), v8String(isolate, impl.mode()))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  return true;
+    return true;
 }
 
-ShadowRootInit NativeValueTraits<ShadowRootInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ShadowRootInit impl;
-  V8ShadowRootInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ShadowRootInit NativeValueTraits<ShadowRootInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ShadowRootInit impl;
+    V8ShadowRootInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WorkerGlobalScope.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -69,759 +69,811 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&WorkerGlobalScope::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WorkerGlobalScope is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace WorkerGlobalScopeV8Internal {
 
-static void selfAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void selfAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->self()), impl);
-}
-
-CORE_EXPORT void selfAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::selfAttributeGetter(info);
-}
-
-static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  WorkerLocation* cppValue(WTF::getPtr(impl->location()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#location";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::locationAttributeGetter(info);
-}
-
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::onerrorAttributeGetter(info);
-}
-
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8WorkerGlobalScope::eventListenerCacheIndex);
-
-  impl->setOnerror(V8EventListenerHelper::ensureEventListener<V8ErrorHandler>(v8Value, true, ScriptState::forReceiverObject(info)));
-}
-
-CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  WorkerGlobalScopeV8Internal::onerrorAttributeSetter(v8Value, info);
-}
-
-static void navigatorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  WorkerNavigator* cppValue(WTF::getPtr(impl->navigator()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#navigator";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-CORE_EXPORT void navigatorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::navigatorAttributeGetter(info);
-}
-
-static void addressSpaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->addressSpaceForBindings(), info.GetIsolate());
-}
-
-CORE_EXPORT void addressSpaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::addressSpaceAttributeGetter(info);
-}
-
-static void onrejectionhandledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onrejectionhandled()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onrejectionhandledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::onrejectionhandledAttributeGetter(info);
-}
-
-static void onrejectionhandledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onrejectionhandled(), v8Value, V8WorkerGlobalScope::eventListenerCacheIndex);
-
-  impl->setOnrejectionhandled(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onrejectionhandledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  WorkerGlobalScopeV8Internal::onrejectionhandledAttributeSetter(v8Value, info);
-}
-
-static void onunhandledrejectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onunhandledrejection()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onunhandledrejectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::onunhandledrejectionAttributeGetter(info);
-}
-
-static void onunhandledrejectionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onunhandledrejection(), v8Value, V8WorkerGlobalScope::eventListenerCacheIndex);
-
-  impl->setOnunhandledrejection(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onunhandledrejectionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  WorkerGlobalScopeV8Internal::onunhandledrejectionAttributeSetter(v8Value, info);
-}
-
-static void isSecureContextAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->isSecureContextForBindings());
-}
-
-CORE_EXPORT void isSecureContextAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::isSecureContextAttributeGetter(info);
-}
-
-static void performanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-//   v8::Local<v8::Object> holder = info.Holder();
-// 
-//   WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-// 
-//   WorkerPerformance* cppValue(WorkerGlobalScopePerformance::performance(*impl));
-// 
-//   // Keep the wrapper object for the return value alive as long as |this|
-//   // object is alive in order to save creation time of the wrapper object.
-//   if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-//     return;
-//   v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-//   const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#performance";
-//   V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-// 
-//   v8SetReturnValue(info, v8Value);
-  DebugBreak();
-}
-
-CORE_EXPORT void performanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::performanceAttributeGetter(info);
-}
-
-static void importScriptsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "importScripts");
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  Vector<String> urls;
-  urls = toImplArguments<Vector<String>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->importScripts(urls, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void importScriptsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::importScriptsMethod(info);
-}
-
-static void btoaMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "btoa");
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> btoa;
-  btoa = info[0];
-  if (!btoa.prepare())
-    return;
-
-  String result = impl->btoa(btoa, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
-CORE_EXPORT  void btoaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::btoaMethod(info);
-}
-
-static void atobMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "atob");
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> atob;
-  atob = info[0];
-  if (!atob.prepare())
-    return;
-
-  String result = impl->atob(atob, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
-CORE_EXPORT  void atobMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::atobMethod(info);
-}
-
-static void setTimeout1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setTimeout");
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  ScriptValue handler;
-  int timeout;
-  Vector<ScriptValue> arguments;
-  if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  handler = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
-
-  if (!info[1]->IsUndefined()) {
-    timeout = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    timeout = 0;
-  }
-  arguments = toImplArguments<Vector<ScriptValue>>(info, 2, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  int result = DOMWindowTimers::setTimeout(scriptState, *impl, handler, timeout, arguments);
-  v8SetReturnValueInt(info, result);
-}
-
-static void setTimeout2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setTimeout");
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  V8StringResource<> handler;
-  int timeout;
-  Vector<ScriptValue> arguments;
-  handler = info[0];
-  if (!handler.prepare())
-    return;
-
-  if (!info[1]->IsUndefined()) {
-    timeout = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    timeout = 0;
-  }
-  arguments = toImplArguments<Vector<ScriptValue>>(info, 2, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  int result = DOMWindowTimers::setTimeout(scriptState, *impl, handler, timeout, arguments);
-  v8SetReturnValueInt(info, result);
-}
-
-static void setTimeoutMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 1:
-      if (info[0]->IsFunction()) {
-        setTimeout1Method(info);
-        return;
-      }
-      if (true) {
-        setTimeout2Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (info[0]->IsFunction()) {
-        setTimeout1Method(info);
-        return;
-      }
-      if (true) {
-        setTimeout2Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (info[0]->IsFunction()) {
-        setTimeout1Method(info);
-        return;
-      }
-      if (true) {
-        setTimeout2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setTimeout");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValueFast(info, WTF::getPtr(impl->self()), impl);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-CORE_EXPORT  void setTimeoutMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::setTimeoutMethod(info);
-}
-
-static void clearTimeoutMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "clearTimeout");
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  int handle;
-  if (!info[0]->IsUndefined()) {
-    handle = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    handle = 0;
-  }
-
-  DOMWindowTimers::clearTimeout(*impl, handle);
-}
-
-CORE_EXPORT  void clearTimeoutMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::clearTimeoutMethod(info);
-}
-
-static void setInterval1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setInterval");
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  ScriptValue handler;
-  int timeout;
-  Vector<ScriptValue> arguments;
-  if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  handler = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
-
-  if (!info[1]->IsUndefined()) {
-    timeout = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    timeout = 0;
-  }
-  arguments = toImplArguments<Vector<ScriptValue>>(info, 2, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  int result = DOMWindowTimers::setInterval(scriptState, *impl, handler, timeout, arguments);
-  v8SetReturnValueInt(info, result);
-}
-
-static void setInterval2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setInterval");
-
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  V8StringResource<> handler;
-  int timeout;
-  Vector<ScriptValue> arguments;
-  handler = info[0];
-  if (!handler.prepare())
-    return;
-
-  if (!info[1]->IsUndefined()) {
-    timeout = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    timeout = 0;
-  }
-  arguments = toImplArguments<Vector<ScriptValue>>(info, 2, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  int result = DOMWindowTimers::setInterval(scriptState, *impl, handler, timeout, arguments);
-  v8SetReturnValueInt(info, result);
-}
-
-static void setIntervalMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 1:
-      if (info[0]->IsFunction()) {
-        setInterval1Method(info);
-        return;
-      }
-      if (true) {
-        setInterval2Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (info[0]->IsFunction()) {
-        setInterval1Method(info);
-        return;
-      }
-      if (true) {
-        setInterval2Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (info[0]->IsFunction()) {
-        setInterval1Method(info);
-        return;
-      }
-      if (true) {
-        setInterval2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setInterval");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+    CORE_EXPORT void selfAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::selfAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-CORE_EXPORT  void setIntervalMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::setIntervalMethod(info);
-}
+    static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void clearIntervalMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "clearInterval");
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
 
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+        WorkerLocation* cppValue(WTF::getPtr(impl->location()));
 
-  int handle;
-  if (!info[0]->IsUndefined()) {
-    handle = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    handle = 0;
-  }
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#location";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  DOMWindowTimers::clearInterval(*impl, handle);
-}
-
-CORE_EXPORT  void clearIntervalMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::clearIntervalMethod(info);
-}
-
-static void createImageBitmap1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "createImageBitmap");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8WorkerGlobalScope::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas imageBitmap;
-  ImageBitmapOptions options;
-  V8HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], imageBitmap, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
-
-    return;
-  }
-  V8ImageBitmapOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = ImageBitmapFactories::createImageBitmap(scriptState, *impl, imageBitmap, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void createImageBitmap2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "createImageBitmap");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8WorkerGlobalScope::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas imageBitmap;
-  int sx;
-  int sy;
-  int sw;
-  int sh;
-  ImageBitmapOptions options;
-  V8HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], imageBitmap, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sx = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sy = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sw = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sh = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!isUndefinedOrNull(info[5]) && !info[5]->IsObject()) {
-    exceptionState.throwTypeError("parameter 6 ('options') is not an object.");
-
-    return;
-  }
-  V8ImageBitmapOptions::toImpl(info.GetIsolate(), info[5], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = ImageBitmapFactories::createImageBitmap(scriptState, *impl, imageBitmap, sx, sy, sw, sh, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void createImageBitmapMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(6, info.Length())) {
-    case 1:
-      if (true) {
-        createImageBitmap1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        createImageBitmap1Method(info);
-        return;
-      }
-      break;
-    case 5:
-      if (true) {
-        createImageBitmap2Method(info);
-        return;
-      }
-      break;
-    case 6:
-      if (true) {
-        createImageBitmap2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "createImageBitmap");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    if (info.Length() >= 1) {
-      exceptionState.throwTypeError(ExceptionMessages::invalidArity("[1, 2, 5, 6]", info.Length()));
-      return;
-    }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-CORE_EXPORT  void createImageBitmapMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopeV8Internal::createImageBitmapMethod(info);
-}
+    CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::locationAttributeGetter(info);
+    }
+
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::onerrorAttributeGetter(info);
+    }
+
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8WorkerGlobalScope::eventListenerCacheIndex);
+
+        impl->setOnerror(V8EventListenerHelper::ensureEventListener<V8ErrorHandler>(v8Value, true, ScriptState::forReceiverObject(info)));
+    }
+
+    CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        WorkerGlobalScopeV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
+
+    static void navigatorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+
+        WorkerNavigator* cppValue(WTF::getPtr(impl->navigator()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#navigator";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    CORE_EXPORT void navigatorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::navigatorAttributeGetter(info);
+    }
+
+    static void addressSpaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->addressSpaceForBindings(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void addressSpaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::addressSpaceAttributeGetter(info);
+    }
+
+    static void onrejectionhandledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onrejectionhandled()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onrejectionhandledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::onrejectionhandledAttributeGetter(info);
+    }
+
+    static void onrejectionhandledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onrejectionhandled(), v8Value, V8WorkerGlobalScope::eventListenerCacheIndex);
+
+        impl->setOnrejectionhandled(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onrejectionhandledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        WorkerGlobalScopeV8Internal::onrejectionhandledAttributeSetter(v8Value, info);
+    }
+
+    static void onunhandledrejectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onunhandledrejection()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onunhandledrejectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::onunhandledrejectionAttributeGetter(info);
+    }
+
+    static void onunhandledrejectionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onunhandledrejection(), v8Value, V8WorkerGlobalScope::eventListenerCacheIndex);
+
+        impl->setOnunhandledrejection(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onunhandledrejectionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        WorkerGlobalScopeV8Internal::onunhandledrejectionAttributeSetter(v8Value, info);
+    }
+
+    static void isSecureContextAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->isSecureContextForBindings());
+    }
+
+    CORE_EXPORT void isSecureContextAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::isSecureContextAttributeGetter(info);
+    }
+
+    static void performanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        //   v8::Local<v8::Object> holder = info.Holder();
+        //
+        //   WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+        //
+        //   WorkerPerformance* cppValue(WorkerGlobalScopePerformance::performance(*impl));
+        //
+        //   // Keep the wrapper object for the return value alive as long as |this|
+        //   // object is alive in order to save creation time of the wrapper object.
+        //   if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+        //     return;
+        //   v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        //   const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#performance";
+        //   V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        //
+        //   v8SetReturnValue(info, v8Value);
+        DebugBreak();
+    }
+
+    CORE_EXPORT void performanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::performanceAttributeGetter(info);
+    }
+
+    static void importScriptsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "importScripts");
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        Vector<String> urls;
+        urls = toImplArguments<Vector<String>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->importScripts(urls, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void importScriptsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::importScriptsMethod(info);
+    }
+
+    static void btoaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "btoa");
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> btoa;
+        btoa = info[0];
+        if (!btoa.prepare())
+            return;
+
+        String result = impl->btoa(btoa, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    CORE_EXPORT void btoaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::btoaMethod(info);
+    }
+
+    static void atobMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "atob");
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> atob;
+        atob = info[0];
+        if (!atob.prepare())
+            return;
+
+        String result = impl->atob(atob, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    CORE_EXPORT void atobMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::atobMethod(info);
+    }
+
+    static void setTimeout1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setTimeout");
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptValue handler;
+        int timeout;
+        Vector<ScriptValue> arguments;
+        if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+
+            return;
+        }
+        handler = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        if (!info[1]->IsUndefined()) {
+            timeout = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            timeout = 0;
+        }
+        arguments = toImplArguments<Vector<ScriptValue>>(info, 2, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        int result = DOMWindowTimers::setTimeout(scriptState, *impl, handler, timeout, arguments);
+        v8SetReturnValueInt(info, result);
+    }
+
+    static void setTimeout2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setTimeout");
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        V8StringResource<> handler;
+        int timeout;
+        Vector<ScriptValue> arguments;
+        handler = info[0];
+        if (!handler.prepare())
+            return;
+
+        if (!info[1]->IsUndefined()) {
+            timeout = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            timeout = 0;
+        }
+        arguments = toImplArguments<Vector<ScriptValue>>(info, 2, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        int result = DOMWindowTimers::setTimeout(scriptState, *impl, handler, timeout, arguments);
+        v8SetReturnValueInt(info, result);
+    }
+
+    static void setTimeoutMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 1:
+            if (info[0]->IsFunction()) {
+                setTimeout1Method(info);
+                return;
+            }
+            if (true) {
+                setTimeout2Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (info[0]->IsFunction()) {
+                setTimeout1Method(info);
+                return;
+            }
+            if (true) {
+                setTimeout2Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (info[0]->IsFunction()) {
+                setTimeout1Method(info);
+                return;
+            }
+            if (true) {
+                setTimeout2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setTimeout");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void setTimeoutMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::setTimeoutMethod(info);
+    }
+
+    static void clearTimeoutMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "clearTimeout");
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        int handle;
+        if (!info[0]->IsUndefined()) {
+            handle = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            handle = 0;
+        }
+
+        DOMWindowTimers::clearTimeout(*impl, handle);
+    }
+
+    CORE_EXPORT void clearTimeoutMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::clearTimeoutMethod(info);
+    }
+
+    static void setInterval1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setInterval");
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptValue handler;
+        int timeout;
+        Vector<ScriptValue> arguments;
+        if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+
+            return;
+        }
+        handler = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        if (!info[1]->IsUndefined()) {
+            timeout = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            timeout = 0;
+        }
+        arguments = toImplArguments<Vector<ScriptValue>>(info, 2, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        int result = DOMWindowTimers::setInterval(scriptState, *impl, handler, timeout, arguments);
+        v8SetReturnValueInt(info, result);
+    }
+
+    static void setInterval2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setInterval");
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        V8StringResource<> handler;
+        int timeout;
+        Vector<ScriptValue> arguments;
+        handler = info[0];
+        if (!handler.prepare())
+            return;
+
+        if (!info[1]->IsUndefined()) {
+            timeout = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            timeout = 0;
+        }
+        arguments = toImplArguments<Vector<ScriptValue>>(info, 2, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        int result = DOMWindowTimers::setInterval(scriptState, *impl, handler, timeout, arguments);
+        v8SetReturnValueInt(info, result);
+    }
+
+    static void setIntervalMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 1:
+            if (info[0]->IsFunction()) {
+                setInterval1Method(info);
+                return;
+            }
+            if (true) {
+                setInterval2Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (info[0]->IsFunction()) {
+                setInterval1Method(info);
+                return;
+            }
+            if (true) {
+                setInterval2Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (info[0]->IsFunction()) {
+                setInterval1Method(info);
+                return;
+            }
+            if (true) {
+                setInterval2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "setInterval");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void setIntervalMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::setIntervalMethod(info);
+    }
+
+    static void clearIntervalMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "clearInterval");
+
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        int handle;
+        if (!info[0]->IsUndefined()) {
+            handle = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            handle = 0;
+        }
+
+        DOMWindowTimers::clearInterval(*impl, handle);
+    }
+
+    CORE_EXPORT void clearIntervalMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::clearIntervalMethod(info);
+    }
+
+    static void createImageBitmap1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "createImageBitmap");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8WorkerGlobalScope::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas imageBitmap;
+        ImageBitmapOptions options;
+        V8HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], imageBitmap, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8ImageBitmapOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = ImageBitmapFactories::createImageBitmap(scriptState, *impl, imageBitmap, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static void createImageBitmap2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "createImageBitmap");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8WorkerGlobalScope::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas imageBitmap;
+        int sx;
+        int sy;
+        int sw;
+        int sh;
+        ImageBitmapOptions options;
+        V8HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], imageBitmap, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sx = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sy = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sw = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sh = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[5]) && !info[5]->IsObject()) {
+            exceptionState.throwTypeError("parameter 6 ('options') is not an object.");
+
+            return;
+        }
+        V8ImageBitmapOptions::toImpl(info.GetIsolate(), info[5], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = ImageBitmapFactories::createImageBitmap(scriptState, *impl, imageBitmap, sx, sy, sw, sh, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static void createImageBitmapMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(6, info.Length())) {
+        case 1:
+            if (true) {
+                createImageBitmap1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                createImageBitmap1Method(info);
+                return;
+            }
+            break;
+        case 5:
+            if (true) {
+                createImageBitmap2Method(info);
+                return;
+            }
+            break;
+        case 6:
+            if (true) {
+                createImageBitmap2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "createImageBitmap");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+            if (info.Length() >= 1) {
+                exceptionState.throwTypeError(ExceptionMessages::invalidArity("[1, 2, 5, 6]", info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void createImageBitmapMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopeV8Internal::createImageBitmapMethod(info);
+    }
 
 } // namespace WorkerGlobalScopeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8WorkerGlobalScopeAccessors[] = {
-    {"self", WorkerGlobalScopeV8Internal::selfAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"location", WorkerGlobalScopeV8Internal::locationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", WorkerGlobalScopeV8Internal::onerrorAttributeGetterCallback, WorkerGlobalScopeV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"navigator", WorkerGlobalScopeV8Internal::navigatorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onrejectionhandled", WorkerGlobalScopeV8Internal::onrejectionhandledAttributeGetterCallback, WorkerGlobalScopeV8Internal::onrejectionhandledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onunhandledrejection", WorkerGlobalScopeV8Internal::onunhandledrejectionAttributeGetterCallback, WorkerGlobalScopeV8Internal::onunhandledrejectionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isSecureContext", WorkerGlobalScopeV8Internal::isSecureContextAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"performance", WorkerGlobalScopeV8Internal::performanceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "self", WorkerGlobalScopeV8Internal::selfAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "location", WorkerGlobalScopeV8Internal::locationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", WorkerGlobalScopeV8Internal::onerrorAttributeGetterCallback, WorkerGlobalScopeV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "navigator", WorkerGlobalScopeV8Internal::navigatorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onrejectionhandled", WorkerGlobalScopeV8Internal::onrejectionhandledAttributeGetterCallback, WorkerGlobalScopeV8Internal::onrejectionhandledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onunhandledrejection", WorkerGlobalScopeV8Internal::onunhandledrejectionAttributeGetterCallback, WorkerGlobalScopeV8Internal::onunhandledrejectionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isSecureContext", WorkerGlobalScopeV8Internal::isSecureContextAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "performance", WorkerGlobalScopeV8Internal::performanceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8WorkerGlobalScopeMethods[] = {
-    {"importScripts", WorkerGlobalScopeV8Internal::importScriptsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"btoa", WorkerGlobalScopeV8Internal::btoaMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"atob", WorkerGlobalScopeV8Internal::atobMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTimeout", WorkerGlobalScopeV8Internal::setTimeoutMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearTimeout", WorkerGlobalScopeV8Internal::clearTimeoutMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setInterval", WorkerGlobalScopeV8Internal::setIntervalMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearInterval", WorkerGlobalScopeV8Internal::clearIntervalMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createImageBitmap", WorkerGlobalScopeV8Internal::createImageBitmapMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "importScripts", WorkerGlobalScopeV8Internal::importScriptsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "btoa", WorkerGlobalScopeV8Internal::btoaMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "atob", WorkerGlobalScopeV8Internal::atobMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTimeout", WorkerGlobalScopeV8Internal::setTimeoutMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearTimeout", WorkerGlobalScopeV8Internal::clearTimeoutMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setInterval", WorkerGlobalScopeV8Internal::setIntervalMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearInterval", WorkerGlobalScopeV8Internal::clearIntervalMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createImageBitmap", WorkerGlobalScopeV8Internal::createImageBitmapMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-void V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WorkerGlobalScope::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8WorkerGlobalScope::internalFieldCount);
+void V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WorkerGlobalScope::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8WorkerGlobalScope::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Global object prototype chain consists of Immutable Prototype Exotic Objects
-  prototypeTemplate->SetImmutableProto();
+    // Global object prototype chain consists of Immutable Prototype Exotic Objects
+    prototypeTemplate->SetImmutableProto();
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeAccessors, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeMethods, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeAccessors, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeMethods, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeMethods));
 
-  if (RuntimeEnabledFeatures::corsRFC1918Enabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoraddressSpaceConfiguration = {"addressSpace", WorkerGlobalScopeV8Internal::addressSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoraddressSpaceConfiguration);
-  }
+    if (RuntimeEnabledFeatures::corsRFC1918Enabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoraddressSpaceConfiguration = { "addressSpace", WorkerGlobalScopeV8Internal::addressSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoraddressSpaceConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8WorkerGlobalScope::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplateFunction);
+v8::Local<v8::FunctionTemplate> V8WorkerGlobalScope::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplateFunction);
 }
 
-bool V8WorkerGlobalScope::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WorkerGlobalScope::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WorkerGlobalScope::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WorkerGlobalScope::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WorkerGlobalScope* V8WorkerGlobalScope::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WorkerGlobalScope* V8WorkerGlobalScope::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
 InstallTemplateFunction V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplateFunction = (InstallTemplateFunction)&V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplate;
 
-void V8WorkerGlobalScope::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction) {
-  V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplateFunction = installTemplateFunction;
-  if (preparePrototypeAndInterfaceObjectFunction)
-    V8WorkerGlobalScope::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
+void V8WorkerGlobalScope::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction)
+{
+    V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplateFunction = installTemplateFunction;
+    if (preparePrototypeAndInterfaceObjectFunction)
+        V8WorkerGlobalScope::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
 }
 
-}  // namespace blink
+} // namespace blink

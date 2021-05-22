@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8InternalsPartial_h
 #define V8InternalsPartial_h
 
@@ -23,14 +23,15 @@
 namespace blink {
 
 class V8InternalsPartial {
-  STATIC_ONLY(V8InternalsPartial);
- public:
-  static void initialize();
+    STATIC_ONLY(V8InternalsPartial);
 
- private:
-  static void installV8InternalsTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+public:
+    static void initialize();
+
+private:
+    static void installV8InternalsTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8InternalsPartial_h
+#endif // V8InternalsPartial_h

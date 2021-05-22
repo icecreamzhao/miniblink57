@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PropertyDescriptor_h
 #define V8PropertyDescriptor_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8PropertyDescriptor {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PropertyDescriptor&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PropertyDescriptor&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8PropertyDescriptor(const PropertyDescriptor&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PropertyDescriptor& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PropertyDescriptor& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<PropertyDescriptor> {
-  static PropertyDescriptor nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static PropertyDescriptor nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<PropertyDescriptor> {
-  typedef V8PropertyDescriptor Type;
+    typedef V8PropertyDescriptor Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PropertyDescriptor_h
+#endif // V8PropertyDescriptor_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8HTMLIFrameElementPartial_h
 #define V8HTMLIFrameElementPartial_h
 
@@ -23,14 +23,15 @@
 namespace blink {
 
 class V8HTMLIFrameElementPartial {
-  STATIC_ONLY(V8HTMLIFrameElementPartial);
- public:
-  static void initialize();
+    STATIC_ONLY(V8HTMLIFrameElementPartial);
 
- private:
-  static void installV8HTMLIFrameElementTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+public:
+    static void initialize();
+
+private:
+    static void installV8HTMLIFrameElementTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8HTMLIFrameElementPartial_h
+#endif // V8HTMLIFrameElementPartial_h

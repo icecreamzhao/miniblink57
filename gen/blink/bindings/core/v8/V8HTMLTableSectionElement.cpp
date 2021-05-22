@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLTableSectionElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -58,258 +58,285 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLTableSectionElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLTableSectionElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLTableSectionElementV8Internal {
 
-static void rowsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rowsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->rows()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->rows()), impl);
+    }
 
-CORE_EXPORT void rowsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTableSectionElementV8Internal::rowsAttributeGetter(info);
-}
+    CORE_EXPORT void rowsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTableSectionElementV8Internal::rowsAttributeGetter(info);
+    }
 
-static void alignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void alignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::alignAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::alignAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void alignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTableSectionElementV8Internal::alignAttributeGetter(info);
-}
+    CORE_EXPORT void alignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTableSectionElementV8Internal::alignAttributeGetter(info);
+    }
 
-static void alignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
+    static void alignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::alignAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::alignAttr, cppValue);
+    }
 
-CORE_EXPORT void alignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void alignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLTableSectionElementV8Internal::alignAttributeSetter(v8Value, info);
-}
+        HTMLTableSectionElementV8Internal::alignAttributeSetter(v8Value, info);
+    }
 
-static void chAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void chAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::charAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::charAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void chAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTableSectionElementV8Internal::chAttributeGetter(info);
-}
+    CORE_EXPORT void chAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTableSectionElementV8Internal::chAttributeGetter(info);
+    }
 
-static void chAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
+    static void chAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::charAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::charAttr, cppValue);
+    }
 
-CORE_EXPORT void chAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void chAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLTableSectionElementV8Internal::chAttributeSetter(v8Value, info);
-}
+        HTMLTableSectionElementV8Internal::chAttributeSetter(v8Value, info);
+    }
 
-static void chOffAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void chOffAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::charoffAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::charoffAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void chOffAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTableSectionElementV8Internal::chOffAttributeGetter(info);
-}
+    CORE_EXPORT void chOffAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTableSectionElementV8Internal::chOffAttributeGetter(info);
+    }
 
-static void chOffAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
+    static void chOffAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::charoffAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::charoffAttr, cppValue);
+    }
 
-CORE_EXPORT void chOffAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void chOffAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLTableSectionElementV8Internal::chOffAttributeSetter(v8Value, info);
-}
+        HTMLTableSectionElementV8Internal::chOffAttributeSetter(v8Value, info);
+    }
 
-static void vAlignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void vAlignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::valignAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::valignAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void vAlignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTableSectionElementV8Internal::vAlignAttributeGetter(info);
-}
+    CORE_EXPORT void vAlignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTableSectionElementV8Internal::vAlignAttributeGetter(info);
+    }
 
-static void vAlignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
+    static void vAlignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::valignAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::valignAttr, cppValue);
+    }
 
-CORE_EXPORT void vAlignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void vAlignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLTableSectionElementV8Internal::vAlignAttributeSetter(v8Value, info);
-}
+        HTMLTableSectionElementV8Internal::vAlignAttributeSetter(v8Value, info);
+    }
 
-static void insertRowMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTableSectionElement", "insertRow");
+    static void insertRowMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTableSectionElement", "insertRow");
 
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(info.Holder());
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(info.Holder());
 
-  int index;
-  if (!info[0]->IsUndefined()) {
-    index = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    index = -1;
-  }
+        int index;
+        if (!info[0]->IsUndefined()) {
+            index = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            index = -1;
+        }
 
-  HTMLElement* result = impl->insertRow(index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        HTMLElement* result = impl->insertRow(index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void insertRowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  HTMLTableSectionElementV8Internal::insertRowMethod(info);
-}
+    CORE_EXPORT void insertRowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        HTMLTableSectionElementV8Internal::insertRowMethod(info);
+    }
 
-static void deleteRowMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTableSectionElement", "deleteRow");
+    static void deleteRowMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTableSectionElement", "deleteRow");
 
-  HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(info.Holder());
+        HTMLTableSectionElement* impl = V8HTMLTableSectionElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  int index;
-  index = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int index;
+        index = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->deleteRow(index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->deleteRow(index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void deleteRowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  HTMLTableSectionElementV8Internal::deleteRowMethod(info);
-}
+    CORE_EXPORT void deleteRowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        HTMLTableSectionElementV8Internal::deleteRowMethod(info);
+    }
 
 } // namespace HTMLTableSectionElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLTableSectionElementAccessors[] = {
-    {"rows", HTMLTableSectionElementV8Internal::rowsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"align", HTMLTableSectionElementV8Internal::alignAttributeGetterCallback, HTMLTableSectionElementV8Internal::alignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ch", HTMLTableSectionElementV8Internal::chAttributeGetterCallback, HTMLTableSectionElementV8Internal::chAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"chOff", HTMLTableSectionElementV8Internal::chOffAttributeGetterCallback, HTMLTableSectionElementV8Internal::chOffAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vAlign", HTMLTableSectionElementV8Internal::vAlignAttributeGetterCallback, HTMLTableSectionElementV8Internal::vAlignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "rows", HTMLTableSectionElementV8Internal::rowsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "align", HTMLTableSectionElementV8Internal::alignAttributeGetterCallback, HTMLTableSectionElementV8Internal::alignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ch", HTMLTableSectionElementV8Internal::chAttributeGetterCallback, HTMLTableSectionElementV8Internal::chAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "chOff", HTMLTableSectionElementV8Internal::chOffAttributeGetterCallback, HTMLTableSectionElementV8Internal::chOffAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vAlign", HTMLTableSectionElementV8Internal::vAlignAttributeGetterCallback, HTMLTableSectionElementV8Internal::vAlignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLTableSectionElementMethods[] = {
-    {"insertRow", HTMLTableSectionElementV8Internal::insertRowMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteRow", HTMLTableSectionElementV8Internal::deleteRowMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "insertRow", HTMLTableSectionElementV8Internal::insertRowMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteRow", HTMLTableSectionElementV8Internal::deleteRowMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLTableSectionElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLTableSectionElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLTableSectionElement::internalFieldCount);
+static void installV8HTMLTableSectionElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLTableSectionElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLTableSectionElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTableSectionElementAccessors, WTF_ARRAY_LENGTH(V8HTMLTableSectionElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTableSectionElementMethods, WTF_ARRAY_LENGTH(V8HTMLTableSectionElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTableSectionElementAccessors, WTF_ARRAY_LENGTH(V8HTMLTableSectionElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTableSectionElementMethods, WTF_ARRAY_LENGTH(V8HTMLTableSectionElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLTableSectionElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLTableSectionElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLTableSectionElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLTableSectionElementTemplate);
 }
 
-bool V8HTMLTableSectionElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLTableSectionElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLTableSectionElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLTableSectionElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLTableSectionElement* V8HTMLTableSectionElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLTableSectionElement* V8HTMLTableSectionElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

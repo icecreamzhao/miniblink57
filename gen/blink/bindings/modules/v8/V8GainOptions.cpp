@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8GainOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,63 +16,67 @@
 
 namespace blink {
 
-void V8GainOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, GainOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8GainOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, GainOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8AudioNodeOptions::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> gainValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "gain")).ToLocal(&gainValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (gainValue.IsEmpty() || gainValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    float gain = toRestrictedFloat(isolate, gainValue, exceptionState);
+    V8AudioNodeOptions::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setGain(gain);
-  }
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> gainValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "gain")).ToLocal(&gainValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (gainValue.IsEmpty() || gainValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        float gain = toRestrictedFloat(isolate, gainValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setGain(gain);
+    }
 }
 
-v8::Local<v8::Value> GainOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8GainOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> GainOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8GainOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8GainOptions(const GainOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8AudioNodeOptions(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8GainOptions(const GainOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8AudioNodeOptions(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasGain()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "gain"), v8::Number::New(isolate, impl.gain()))))
-      return false;
-  }
+    if (impl.hasGain()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "gain"), v8::Number::New(isolate, impl.gain()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-GainOptions NativeValueTraits<GainOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  GainOptions impl;
-  V8GainOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+GainOptions NativeValueTraits<GainOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    GainOptions impl;
+    V8GainOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

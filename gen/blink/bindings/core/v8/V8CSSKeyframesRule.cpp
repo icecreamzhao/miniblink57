@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CSSKeyframesRule.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,190 +48,209 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CSSKeyframesRule::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CSSKeyframesRule is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CSSKeyframesRuleV8Internal {
 
-static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(holder);
+        CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->name(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->name(), info.GetIsolate());
+    }
 
-CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRuleV8Internal::nameAttributeGetter(info);
-}
+    CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRuleV8Internal::nameAttributeGetter(info);
+    }
 
-static void nameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(holder);
+    static void nameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setName(cppValue);
-}
+        impl->setName(cppValue);
+    }
 
-CORE_EXPORT void nameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void nameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CSSKeyframesRuleV8Internal::nameAttributeSetter(v8Value, info);
-}
+        CSSKeyframesRuleV8Internal::nameAttributeSetter(v8Value, info);
+    }
 
-static void cssRulesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssRulesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(holder);
+        CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(holder);
 
-  CSSRuleList* cppValue(WTF::getPtr(impl->cssRules()));
+        CSSRuleList* cppValue(WTF::getPtr(impl->cssRules()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#CSSKeyframesRule#cssRules";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#CSSKeyframesRule#cssRules";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void cssRulesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRuleV8Internal::cssRulesAttributeGetter(info);
-}
+    CORE_EXPORT void cssRulesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRuleV8Internal::cssRulesAttributeGetter(info);
+    }
 
-static void appendRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(info.Holder());
+    static void appendRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("appendRule", "CSSKeyframesRule", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("appendRule", "CSSKeyframesRule", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> rule;
-  rule = info[0];
-  if (!rule.prepare())
-    return;
+        V8StringResource<> rule;
+        rule = info[0];
+        if (!rule.prepare())
+            return;
 
-  impl->appendRule(rule);
-}
+        impl->appendRule(rule);
+    }
 
-CORE_EXPORT  void appendRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRuleV8Internal::appendRuleMethod(info);
-}
+    CORE_EXPORT void appendRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRuleV8Internal::appendRuleMethod(info);
+    }
 
-static void deleteRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(info.Holder());
+    static void deleteRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteRule", "CSSKeyframesRule", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteRule", "CSSKeyframesRule", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> select;
-  select = info[0];
-  if (!select.prepare())
-    return;
+        V8StringResource<> select;
+        select = info[0];
+        if (!select.prepare())
+            return;
 
-  impl->deleteRule(select);
-}
+        impl->deleteRule(select);
+    }
 
-CORE_EXPORT  void deleteRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRuleV8Internal::deleteRuleMethod(info);
-}
+    CORE_EXPORT void deleteRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRuleV8Internal::deleteRuleMethod(info);
+    }
 
-static void findRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(info.Holder());
+    static void findRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("findRule", "CSSKeyframesRule", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("findRule", "CSSKeyframesRule", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> select;
-  select = info[0];
-  if (!select.prepare())
-    return;
+        V8StringResource<> select;
+        select = info[0];
+        if (!select.prepare())
+            return;
 
-  v8SetReturnValue(info, impl->findRule(select));
-}
+        v8SetReturnValue(info, impl->findRule(select));
+    }
 
-CORE_EXPORT  void findRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRuleV8Internal::findRuleMethod(info);
-}
+    CORE_EXPORT void findRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRuleV8Internal::findRuleMethod(info);
+    }
 
-static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(info.Holder());
+    static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRule* impl = V8CSSKeyframesRule::toImpl(info.Holder());
 
-  // We assume that all the implementations support length() method, although
-  // the spec doesn't require that length() must exist.  It's okay that
-  // the interface does not have length attribute as long as the
-  // implementation supports length() member function.
-  if (index >= impl->length())
-    return;  // Returns undefined due to out-of-range.
+        // We assume that all the implementations support length() method, although
+        // the spec doesn't require that length() must exist.  It's okay that
+        // the interface does not have length attribute as long as the
+        // implementation supports length() member function.
+        if (index >= impl->length())
+            return; // Returns undefined due to out-of-range.
 
-  CSSKeyframeRule* result = impl->anonymousIndexedGetter(index);
-  v8SetReturnValueFast(info, result, impl);
-}
+        CSSKeyframeRule* result = impl->anonymousIndexedGetter(index);
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  CSSKeyframesRuleV8Internal::indexedPropertyGetter(index, info);
-}
+    CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        CSSKeyframesRuleV8Internal::indexedPropertyGetter(index, info);
+    }
 
 } // namespace CSSKeyframesRuleV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CSSKeyframesRuleAccessors[] = {
-    {"name", CSSKeyframesRuleV8Internal::nameAttributeGetterCallback, CSSKeyframesRuleV8Internal::nameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssRules", CSSKeyframesRuleV8Internal::cssRulesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "name", CSSKeyframesRuleV8Internal::nameAttributeGetterCallback, CSSKeyframesRuleV8Internal::nameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssRules", CSSKeyframesRuleV8Internal::cssRulesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8CSSKeyframesRuleMethods[] = {
-    {"appendRule", CSSKeyframesRuleV8Internal::appendRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteRule", CSSKeyframesRuleV8Internal::deleteRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"findRule", CSSKeyframesRuleV8Internal::findRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "appendRule", CSSKeyframesRuleV8Internal::appendRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteRule", CSSKeyframesRuleV8Internal::deleteRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "findRule", CSSKeyframesRuleV8Internal::findRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CSSKeyframesRuleTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSKeyframesRule::wrapperTypeInfo.interfaceName, V8CSSRule::domTemplate(isolate, world), V8CSSKeyframesRule::internalFieldCount);
+static void installV8CSSKeyframesRuleTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSKeyframesRule::wrapperTypeInfo.interfaceName, V8CSSRule::domTemplate(isolate, world), V8CSSKeyframesRule::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSKeyframesRuleAccessors, WTF_ARRAY_LENGTH(V8CSSKeyframesRuleAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSKeyframesRuleMethods, WTF_ARRAY_LENGTH(V8CSSKeyframesRuleMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSKeyframesRuleAccessors, WTF_ARRAY_LENGTH(V8CSSKeyframesRuleAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSKeyframesRuleMethods, WTF_ARRAY_LENGTH(V8CSSKeyframesRuleMethods));
 
-  // Indexed properties
-  v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(CSSKeyframesRuleV8Internal::indexedPropertyGetterCallback, 0, 0, 0, 0, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
-  instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
+    // Indexed properties
+    v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(CSSKeyframesRuleV8Internal::indexedPropertyGetterCallback, 0, 0, 0, 0, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
+    instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
 }
 
-v8::Local<v8::FunctionTemplate> V8CSSKeyframesRule::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSKeyframesRuleTemplate);
+v8::Local<v8::FunctionTemplate> V8CSSKeyframesRule::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSKeyframesRuleTemplate);
 }
 
-bool V8CSSKeyframesRule::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CSSKeyframesRule::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CSSKeyframesRule::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CSSKeyframesRule::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CSSKeyframesRule* V8CSSKeyframesRule::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CSSKeyframesRule* V8CSSKeyframesRule::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

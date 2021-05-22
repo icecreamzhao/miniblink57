@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Body.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,156 +47,171 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&Body::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Body is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BodyV8Internal {
 
-static void bodyUsedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bodyUsedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Body* impl = V8Body::toImpl(holder);
+        Body* impl = V8Body::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->bodyUsed());
-}
+        v8SetReturnValueBool(info, impl->bodyUsed());
+    }
 
-MODULES_EXPORT void bodyUsedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BodyV8Internal::bodyUsedAttributeGetter(info);
-}
+    MODULES_EXPORT void bodyUsedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BodyV8Internal::bodyUsedAttributeGetter(info);
+    }
 
-static void arrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Body", "arrayBuffer");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void arrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Body", "arrayBuffer");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Body::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Body* impl = V8Body::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Body::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Body* impl = V8Body::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->arrayBuffer(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->arrayBuffer(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void arrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BodyV8Internal::arrayBufferMethod(info);
-}
+    MODULES_EXPORT void arrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BodyV8Internal::arrayBufferMethod(info);
+    }
 
-static void blobMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Body", "blob");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void blobMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Body", "blob");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Body::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Body* impl = V8Body::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Body::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Body* impl = V8Body::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->blob(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->blob(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void blobMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BodyV8Internal::blobMethod(info);
-}
+    MODULES_EXPORT void blobMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BodyV8Internal::blobMethod(info);
+    }
 
-static void jsonMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Body", "json");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void jsonMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Body", "json");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Body::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Body* impl = V8Body::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Body::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Body* impl = V8Body::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->json(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->json(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void jsonMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BodyV8Internal::jsonMethod(info);
-}
+    MODULES_EXPORT void jsonMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BodyV8Internal::jsonMethod(info);
+    }
 
-static void textMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Body", "text");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void textMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Body", "text");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Body::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Body* impl = V8Body::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Body::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Body* impl = V8Body::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->text(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->text(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void textMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BodyV8Internal::textMethod(info);
-}
+    MODULES_EXPORT void textMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BodyV8Internal::textMethod(info);
+    }
 
 } // namespace BodyV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8BodyAccessors[] = {
-    {"bodyUsed", BodyV8Internal::bodyUsedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "bodyUsed", BodyV8Internal::bodyUsedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8BodyMethods[] = {
-    {"arrayBuffer", BodyV8Internal::arrayBufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"blob", BodyV8Internal::blobMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"json", BodyV8Internal::jsonMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"text", BodyV8Internal::textMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "arrayBuffer", BodyV8Internal::arrayBufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "blob", BodyV8Internal::blobMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "json", BodyV8Internal::jsonMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "text", BodyV8Internal::textMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8BodyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Body::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Body::internalFieldCount);
+static void installV8BodyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Body::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Body::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BodyAccessors, WTF_ARRAY_LENGTH(V8BodyAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BodyMethods, WTF_ARRAY_LENGTH(V8BodyMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BodyAccessors, WTF_ARRAY_LENGTH(V8BodyAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BodyMethods, WTF_ARRAY_LENGTH(V8BodyMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Body::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BodyTemplate);
+v8::Local<v8::FunctionTemplate> V8Body::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BodyTemplate);
 }
 
-bool V8Body::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Body::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Body::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Body::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Body* V8Body::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Body* V8Body::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

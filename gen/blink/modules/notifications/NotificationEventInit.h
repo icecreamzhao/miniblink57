@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef NotificationEventInit_h
 #define NotificationEventInit_h
 
@@ -22,37 +22,38 @@ namespace blink {
 class Notification;
 
 class MODULES_EXPORT NotificationEventInit : public ExtendableEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  NotificationEventInit();
-  virtual ~NotificationEventInit();
-  NotificationEventInit(const NotificationEventInit&);
-  NotificationEventInit& operator=(const NotificationEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAction() const;
-  String action() const;
-  void setAction(String);
+public:
+    NotificationEventInit();
+    virtual ~NotificationEventInit();
+    NotificationEventInit(const NotificationEventInit&);
+    NotificationEventInit& operator=(const NotificationEventInit&);
 
-  bool hasNotification() const;
-  Notification* notification() const;
-  void setNotification(Notification*);
+    bool hasAction() const;
+    String action() const;
+    void setAction(String);
 
-  bool hasReply() const;
-  String reply() const;
-  void setReply(String);
-  void setReplyToNull();
+    bool hasNotification() const;
+    Notification* notification() const;
+    void setNotification(Notification*);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasReply() const;
+    String reply() const;
+    void setReply(String);
+    void setReplyToNull();
 
- private:
-  String m_action;
-  Member<Notification> m_notification;
-  String m_reply;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8NotificationEventInit;
+private:
+    String m_action;
+    Member<Notification> m_notification;
+    String m_reply;
+
+    friend class V8NotificationEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // NotificationEventInit_h
+#endif // NotificationEventInit_h

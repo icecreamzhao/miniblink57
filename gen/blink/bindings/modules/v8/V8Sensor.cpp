@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Sensor.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,222 +53,247 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&Sensor::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Sensor is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SensorV8Internal {
 
-static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Sensor* impl = V8Sensor::toImpl(holder);
+        Sensor* impl = V8Sensor::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->state(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->state(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SensorV8Internal::stateAttributeGetter(info);
-}
+    MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SensorV8Internal::stateAttributeGetter(info);
+    }
 
-static void readingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void readingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Sensor* impl = V8Sensor::toImpl(holder);
+        Sensor* impl = V8Sensor::toImpl(holder);
 
-  SensorReading* cppValue(WTF::getPtr(impl->reading()));
+        SensorReading* cppValue(WTF::getPtr(impl->reading()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Sensor#reading";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Sensor#reading";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void readingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SensorV8Internal::readingAttributeGetter(info);
-}
+    MODULES_EXPORT void readingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SensorV8Internal::readingAttributeGetter(info);
+    }
 
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Sensor* impl = V8Sensor::toImpl(holder);
+        Sensor* impl = V8Sensor::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SensorV8Internal::onerrorAttributeGetter(info);
-}
+    MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SensorV8Internal::onerrorAttributeGetter(info);
+    }
 
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Sensor* impl = V8Sensor::toImpl(holder);
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Sensor* impl = V8Sensor::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8Sensor::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8Sensor::eventListenerCacheIndex);
 
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SensorV8Internal::onerrorAttributeSetter(v8Value, info);
-}
+        SensorV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
 
-static void onchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Sensor* impl = V8Sensor::toImpl(holder);
+        Sensor* impl = V8Sensor::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onchange()));
+        EventListener* cppValue(WTF::getPtr(impl->onchange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SensorV8Internal::onchangeAttributeGetter(info);
-}
+    MODULES_EXPORT void onchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SensorV8Internal::onchangeAttributeGetter(info);
+    }
 
-static void onchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Sensor* impl = V8Sensor::toImpl(holder);
+    static void onchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Sensor* impl = V8Sensor::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchange(), v8Value, V8Sensor::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchange(), v8Value, V8Sensor::eventListenerCacheIndex);
 
-  impl->setOnchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SensorV8Internal::onchangeAttributeSetter(v8Value, info);
-}
+        SensorV8Internal::onchangeAttributeSetter(v8Value, info);
+    }
 
-static void onactivateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onactivateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Sensor* impl = V8Sensor::toImpl(holder);
+        Sensor* impl = V8Sensor::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onactivate()));
+        EventListener* cppValue(WTF::getPtr(impl->onactivate()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onactivateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SensorV8Internal::onactivateAttributeGetter(info);
-}
+    MODULES_EXPORT void onactivateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SensorV8Internal::onactivateAttributeGetter(info);
+    }
 
-static void onactivateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Sensor* impl = V8Sensor::toImpl(holder);
+    static void onactivateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Sensor* impl = V8Sensor::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onactivate(), v8Value, V8Sensor::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onactivate(), v8Value, V8Sensor::eventListenerCacheIndex);
 
-  impl->setOnactivate(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnactivate(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onactivateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onactivateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SensorV8Internal::onactivateAttributeSetter(v8Value, info);
-}
+        SensorV8Internal::onactivateAttributeSetter(v8Value, info);
+    }
 
-static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Sensor", "start");
+    static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Sensor", "start");
 
-  Sensor* impl = V8Sensor::toImpl(info.Holder());
+        Sensor* impl = V8Sensor::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  impl->start(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->start(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GenericSensorStart);
-  SensorV8Internal::startMethod(info);
-}
+    MODULES_EXPORT void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GenericSensorStart);
+        SensorV8Internal::startMethod(info);
+    }
 
-static void stopMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Sensor", "stop");
+    static void stopMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Sensor", "stop");
 
-  Sensor* impl = V8Sensor::toImpl(info.Holder());
+        Sensor* impl = V8Sensor::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  impl->stop(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->stop(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void stopMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GenericSensorStop);
-  SensorV8Internal::stopMethod(info);
-}
+    MODULES_EXPORT void stopMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GenericSensorStop);
+        SensorV8Internal::stopMethod(info);
+    }
 
 } // namespace SensorV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SensorAccessors[] = {
-    {"state", SensorV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"reading", SensorV8Internal::readingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", SensorV8Internal::onerrorAttributeGetterCallback, SensorV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onchange", SensorV8Internal::onchangeAttributeGetterCallback, SensorV8Internal::onchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onactivate", SensorV8Internal::onactivateAttributeGetterCallback, SensorV8Internal::onactivateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "state", SensorV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "reading", SensorV8Internal::readingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", SensorV8Internal::onerrorAttributeGetterCallback, SensorV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onchange", SensorV8Internal::onchangeAttributeGetterCallback, SensorV8Internal::onchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onactivate", SensorV8Internal::onactivateAttributeGetterCallback, SensorV8Internal::onactivateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SensorMethods[] = {
-    {"start", SensorV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stop", SensorV8Internal::stopMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "start", SensorV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stop", SensorV8Internal::stopMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SensorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Sensor::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8Sensor::internalFieldCount);
+static void installV8SensorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Sensor::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8Sensor::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::sensorEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::sensorEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SensorAccessors, WTF_ARRAY_LENGTH(V8SensorAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SensorMethods, WTF_ARRAY_LENGTH(V8SensorMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SensorAccessors, WTF_ARRAY_LENGTH(V8SensorAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SensorMethods, WTF_ARRAY_LENGTH(V8SensorMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Sensor::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SensorTemplate);
+v8::Local<v8::FunctionTemplate> V8Sensor::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SensorTemplate);
 }
 
-bool V8Sensor::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Sensor::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Sensor::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Sensor::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Sensor* V8Sensor::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Sensor* V8Sensor::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

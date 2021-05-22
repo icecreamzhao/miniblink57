@@ -8,58 +8,70 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "NotificationEventInit.h"
 
 #include "modules/notifications/Notification.h"
 
 namespace blink {
 
-NotificationEventInit::NotificationEventInit() {
-  setAction(String(""));
-  setReply(String(""));
+NotificationEventInit::NotificationEventInit()
+{
+    setAction(String(""));
+    setReply(String(""));
 }
 
-NotificationEventInit::~NotificationEventInit() {}
+NotificationEventInit::~NotificationEventInit() { }
 
 NotificationEventInit::NotificationEventInit(const NotificationEventInit&) = default;
 
 NotificationEventInit& NotificationEventInit::operator=(const NotificationEventInit&) = default;
 
-bool NotificationEventInit::hasAction() const {
-  return !m_action.isNull();
+bool NotificationEventInit::hasAction() const
+{
+    return !m_action.isNull();
 }
-String NotificationEventInit::action() const {
-  return m_action;
+String NotificationEventInit::action() const
+{
+    return m_action;
 }
-void NotificationEventInit::setAction(String value) {
-  m_action = value;
+void NotificationEventInit::setAction(String value)
+{
+    m_action = value;
 }
-bool NotificationEventInit::hasNotification() const {
-  return m_notification;
+bool NotificationEventInit::hasNotification() const
+{
+    return m_notification;
 }
-Notification* NotificationEventInit::notification() const {
-  return m_notification;
+Notification* NotificationEventInit::notification() const
+{
+    return m_notification;
 }
-void NotificationEventInit::setNotification(Notification* value) {
-  m_notification = value;
+void NotificationEventInit::setNotification(Notification* value)
+{
+    m_notification = value;
 }
-bool NotificationEventInit::hasReply() const {
-  return !m_reply.isNull();
+bool NotificationEventInit::hasReply() const
+{
+    return !m_reply.isNull();
 }
-String NotificationEventInit::reply() const {
-  return m_reply;
+String NotificationEventInit::reply() const
+{
+    return m_reply;
 }
-void NotificationEventInit::setReply(String value) {
-  m_reply = value;
+void NotificationEventInit::setReply(String value)
+{
+    m_reply = value;
 }
-void NotificationEventInit::setReplyToNull() {
-  m_reply = String();
+void NotificationEventInit::setReplyToNull()
+{
+    m_reply = String();
 }
 
-DEFINE_TRACE(NotificationEventInit) {
-  visitor->trace(m_notification);
-  ExtendableEventInit::trace(visitor);
+DEFINE_TRACE(NotificationEventInit)
+{
+    visitor->trace(m_notification);
+    ExtendableEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

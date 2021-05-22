@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8HTMLIFrameElement_h
 #define V8HTMLIFrameElement_h
 
@@ -25,37 +25,41 @@
 namespace blink {
 
 class V8HTMLIFrameElement {
-  STATIC_ONLY(V8HTMLIFrameElement);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static HTMLIFrameElement* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<HTMLIFrameElement>();
-  }
-  CORE_EXPORT static HTMLIFrameElement* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<HTMLIFrameElement>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<HTMLIFrameElement>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
-  CORE_EXPORT static void preparePrototypeAndInterfaceObject(v8::Local<v8::Context>, const DOMWrapperWorld&, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {}
-  CORE_EXPORT static void updateWrapperTypeInfo(InstallTemplateFunction, PreparePrototypeAndInterfaceObjectFunction);
-  CORE_EXPORT static void installV8HTMLIFrameElementTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+    STATIC_ONLY(V8HTMLIFrameElement);
 
- private:
-  static InstallTemplateFunction installV8HTMLIFrameElementTemplateFunction;
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static HTMLIFrameElement* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<HTMLIFrameElement>();
+    }
+    CORE_EXPORT static HTMLIFrameElement* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<HTMLIFrameElement>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<HTMLIFrameElement>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    CORE_EXPORT static void preparePrototypeAndInterfaceObject(v8::Local<v8::Context>, const DOMWrapperWorld&, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) { }
+    CORE_EXPORT static void updateWrapperTypeInfo(InstallTemplateFunction, PreparePrototypeAndInterfaceObjectFunction);
+    CORE_EXPORT static void installV8HTMLIFrameElementTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+
+private:
+    static InstallTemplateFunction installV8HTMLIFrameElementTemplateFunction;
 };
 
 template <>
 struct V8TypeOf<HTMLIFrameElement> {
-  typedef V8HTMLIFrameElement Type;
+    typedef V8HTMLIFrameElement Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8HTMLIFrameElement_h
+#endif // V8HTMLIFrameElement_h

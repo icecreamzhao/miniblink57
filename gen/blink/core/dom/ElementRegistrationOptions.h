@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ElementRegistrationOptions_h
 #define ElementRegistrationOptions_h
 
@@ -21,33 +21,34 @@
 namespace blink {
 
 class CORE_EXPORT ElementRegistrationOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ElementRegistrationOptions();
-  virtual ~ElementRegistrationOptions();
-  ElementRegistrationOptions(const ElementRegistrationOptions&);
-  ElementRegistrationOptions& operator=(const ElementRegistrationOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasExtends() const;
-  String extends() const;
-  void setExtends(String);
-  void setExtendsToNull();
+public:
+    ElementRegistrationOptions();
+    virtual ~ElementRegistrationOptions();
+    ElementRegistrationOptions(const ElementRegistrationOptions&);
+    ElementRegistrationOptions& operator=(const ElementRegistrationOptions&);
 
-  bool hasPrototype() const;
-  ScriptValue prototype() const;
-  void setPrototype(ScriptValue);
-  void setPrototypeToNull();
+    bool hasExtends() const;
+    String extends() const;
+    void setExtends(String);
+    void setExtendsToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPrototype() const;
+    ScriptValue prototype() const;
+    void setPrototype(ScriptValue);
+    void setPrototypeToNull();
 
- private:
-  String m_extends;
-  ScriptValue m_prototype;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ElementRegistrationOptions;
+private:
+    String m_extends;
+    ScriptValue m_prototype;
+
+    friend class V8ElementRegistrationOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ElementRegistrationOptions_h
+#endif // ElementRegistrationOptions_h

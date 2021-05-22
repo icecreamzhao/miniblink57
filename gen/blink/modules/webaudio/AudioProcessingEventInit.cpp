@@ -8,56 +8,67 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AudioProcessingEventInit.h"
 
 #include "modules/webaudio/AudioBuffer.h"
 
 namespace blink {
 
-AudioProcessingEventInit::AudioProcessingEventInit() {
+AudioProcessingEventInit::AudioProcessingEventInit()
+{
 }
 
-AudioProcessingEventInit::~AudioProcessingEventInit() {}
+AudioProcessingEventInit::~AudioProcessingEventInit() { }
 
 AudioProcessingEventInit::AudioProcessingEventInit(const AudioProcessingEventInit&) = default;
 
 AudioProcessingEventInit& AudioProcessingEventInit::operator=(const AudioProcessingEventInit&) = default;
 
-bool AudioProcessingEventInit::hasInputBuffer() const {
-  return m_inputBuffer;
+bool AudioProcessingEventInit::hasInputBuffer() const
+{
+    return m_inputBuffer;
 }
-AudioBuffer* AudioProcessingEventInit::inputBuffer() const {
-  return m_inputBuffer;
+AudioBuffer* AudioProcessingEventInit::inputBuffer() const
+{
+    return m_inputBuffer;
 }
-void AudioProcessingEventInit::setInputBuffer(AudioBuffer* value) {
-  m_inputBuffer = value;
+void AudioProcessingEventInit::setInputBuffer(AudioBuffer* value)
+{
+    m_inputBuffer = value;
 }
-bool AudioProcessingEventInit::hasOutputBuffer() const {
-  return m_outputBuffer;
+bool AudioProcessingEventInit::hasOutputBuffer() const
+{
+    return m_outputBuffer;
 }
-AudioBuffer* AudioProcessingEventInit::outputBuffer() const {
-  return m_outputBuffer;
+AudioBuffer* AudioProcessingEventInit::outputBuffer() const
+{
+    return m_outputBuffer;
 }
-void AudioProcessingEventInit::setOutputBuffer(AudioBuffer* value) {
-  m_outputBuffer = value;
+void AudioProcessingEventInit::setOutputBuffer(AudioBuffer* value)
+{
+    m_outputBuffer = value;
 }
-bool AudioProcessingEventInit::hasPlaybackTime() const {
-  return m_hasPlaybackTime;
+bool AudioProcessingEventInit::hasPlaybackTime() const
+{
+    return m_hasPlaybackTime;
 }
-double AudioProcessingEventInit::playbackTime() const {
-  DCHECK(m_hasPlaybackTime);
-  return m_playbackTime;
+double AudioProcessingEventInit::playbackTime() const
+{
+    DCHECK(m_hasPlaybackTime);
+    return m_playbackTime;
 }
-void AudioProcessingEventInit::setPlaybackTime(double value) {
-  m_playbackTime = value;
-  m_hasPlaybackTime = true;
+void AudioProcessingEventInit::setPlaybackTime(double value)
+{
+    m_playbackTime = value;
+    m_hasPlaybackTime = true;
 }
 
-DEFINE_TRACE(AudioProcessingEventInit) {
-  visitor->trace(m_inputBuffer);
-  visitor->trace(m_outputBuffer);
-  EventInit::trace(visitor);
+DEFINE_TRACE(AudioProcessingEventInit)
+{
+    visitor->trace(m_inputBuffer);
+    visitor->trace(m_outputBuffer);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

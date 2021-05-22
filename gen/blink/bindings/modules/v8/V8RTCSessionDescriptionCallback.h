@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8RTCSessionDescriptionCallback_h
 #define V8RTCSessionDescriptionCallback_h
 
@@ -20,21 +20,23 @@
 namespace blink {
 
 class V8RTCSessionDescriptionCallback final : public RTCSessionDescriptionCallback {
- public:
-  static V8RTCSessionDescriptionCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8RTCSessionDescriptionCallback(callback, scriptState);
-  }
+public:
+    static V8RTCSessionDescriptionCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8RTCSessionDescriptionCallback(callback, scriptState);
+    }
 
-  ~V8RTCSessionDescriptionCallback() override;
+    ~V8RTCSessionDescriptionCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  void handleEvent(RTCSessionDescription* sdp) override;
- private:
-  MODULES_EXPORT V8RTCSessionDescriptionCallback(v8::Local<v8::Function>, ScriptState*);
+    void handleEvent(RTCSessionDescription* sdp) override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    MODULES_EXPORT V8RTCSessionDescriptionCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8RTCSessionDescriptionCallback_h
+#endif // V8RTCSessionDescriptionCallback_h

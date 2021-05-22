@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8VRFrameData.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,198 +51,217 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&VRFrameData::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "VRFrameData is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace VRFrameDataV8Internal {
 
-static void timestampAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void timestampAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRFrameData* impl = V8VRFrameData::toImpl(holder);
+        VRFrameData* impl = V8VRFrameData::toImpl(holder);
 
-  v8SetReturnValue(info, impl->timestamp());
-}
+        v8SetReturnValue(info, impl->timestamp());
+    }
 
-MODULES_EXPORT void timestampAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRFrameDataV8Internal::timestampAttributeGetter(info);
-}
+    MODULES_EXPORT void timestampAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRFrameDataV8Internal::timestampAttributeGetter(info);
+    }
 
-static void leftProjectionMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void leftProjectionMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRFrameData* impl = V8VRFrameData::toImpl(holder);
+        VRFrameData* impl = V8VRFrameData::toImpl(holder);
 
-  DOMFloat32Array* cppValue(WTF::getPtr(impl->leftProjectionMatrix()));
+        DOMFloat32Array* cppValue(WTF::getPtr(impl->leftProjectionMatrix()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#VRFrameData#leftProjectionMatrix";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#VRFrameData#leftProjectionMatrix";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void leftProjectionMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRFrameDataV8Internal::leftProjectionMatrixAttributeGetter(info);
-}
+    MODULES_EXPORT void leftProjectionMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRFrameDataV8Internal::leftProjectionMatrixAttributeGetter(info);
+    }
 
-static void leftViewMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void leftViewMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRFrameData* impl = V8VRFrameData::toImpl(holder);
+        VRFrameData* impl = V8VRFrameData::toImpl(holder);
 
-  DOMFloat32Array* cppValue(WTF::getPtr(impl->leftViewMatrix()));
+        DOMFloat32Array* cppValue(WTF::getPtr(impl->leftViewMatrix()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#VRFrameData#leftViewMatrix";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#VRFrameData#leftViewMatrix";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void leftViewMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRFrameDataV8Internal::leftViewMatrixAttributeGetter(info);
-}
+    MODULES_EXPORT void leftViewMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRFrameDataV8Internal::leftViewMatrixAttributeGetter(info);
+    }
 
-static void rightProjectionMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rightProjectionMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRFrameData* impl = V8VRFrameData::toImpl(holder);
+        VRFrameData* impl = V8VRFrameData::toImpl(holder);
 
-  DOMFloat32Array* cppValue(WTF::getPtr(impl->rightProjectionMatrix()));
+        DOMFloat32Array* cppValue(WTF::getPtr(impl->rightProjectionMatrix()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#VRFrameData#rightProjectionMatrix";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#VRFrameData#rightProjectionMatrix";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void rightProjectionMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRFrameDataV8Internal::rightProjectionMatrixAttributeGetter(info);
-}
+    MODULES_EXPORT void rightProjectionMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRFrameDataV8Internal::rightProjectionMatrixAttributeGetter(info);
+    }
 
-static void rightViewMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rightViewMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRFrameData* impl = V8VRFrameData::toImpl(holder);
+        VRFrameData* impl = V8VRFrameData::toImpl(holder);
 
-  DOMFloat32Array* cppValue(WTF::getPtr(impl->rightViewMatrix()));
+        DOMFloat32Array* cppValue(WTF::getPtr(impl->rightViewMatrix()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#VRFrameData#rightViewMatrix";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#VRFrameData#rightViewMatrix";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void rightViewMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRFrameDataV8Internal::rightViewMatrixAttributeGetter(info);
-}
+    MODULES_EXPORT void rightViewMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRFrameDataV8Internal::rightViewMatrixAttributeGetter(info);
+    }
 
-static void poseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void poseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRFrameData* impl = V8VRFrameData::toImpl(holder);
+        VRFrameData* impl = V8VRFrameData::toImpl(holder);
 
-  VRPose* cppValue(WTF::getPtr(impl->pose()));
+        VRPose* cppValue(WTF::getPtr(impl->pose()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#VRFrameData#pose";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#VRFrameData#pose";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void poseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRFrameDataV8Internal::poseAttributeGetter(info);
-}
+    MODULES_EXPORT void poseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRFrameDataV8Internal::poseAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRFrameData* impl = VRFrameData::create();
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8VRFrameData::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRFrameData* impl = VRFrameData::create();
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8VRFrameData::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace VRFrameDataV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8VRFrameDataAccessors[] = {
-    {"timestamp", VRFrameDataV8Internal::timestampAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"leftProjectionMatrix", VRFrameDataV8Internal::leftProjectionMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"leftViewMatrix", VRFrameDataV8Internal::leftViewMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rightProjectionMatrix", VRFrameDataV8Internal::rightProjectionMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rightViewMatrix", VRFrameDataV8Internal::rightViewMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pose", VRFrameDataV8Internal::poseAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "timestamp", VRFrameDataV8Internal::timestampAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "leftProjectionMatrix", VRFrameDataV8Internal::leftProjectionMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "leftViewMatrix", VRFrameDataV8Internal::leftViewMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rightProjectionMatrix", VRFrameDataV8Internal::rightProjectionMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rightViewMatrix", VRFrameDataV8Internal::rightViewMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pose", VRFrameDataV8Internal::poseAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8VRFrameData::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("VRFrameData"));
-    return;
-  }
+void V8VRFrameData::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("VRFrameData"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  VRFrameDataV8Internal::constructor(info);
+    VRFrameDataV8Internal::constructor(info);
 }
 
-static void installV8VRFrameDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VRFrameData::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VRFrameData::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8VRFrameData::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8VRFrameDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VRFrameData::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VRFrameData::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8VRFrameData::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VRFrameDataAccessors, WTF_ARRAY_LENGTH(V8VRFrameDataAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VRFrameDataAccessors, WTF_ARRAY_LENGTH(V8VRFrameDataAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8VRFrameData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VRFrameDataTemplate);
+v8::Local<v8::FunctionTemplate> V8VRFrameData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VRFrameDataTemplate);
 }
 
-bool V8VRFrameData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8VRFrameData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8VRFrameData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8VRFrameData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-VRFrameData* V8VRFrameData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+VRFrameData* V8VRFrameData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

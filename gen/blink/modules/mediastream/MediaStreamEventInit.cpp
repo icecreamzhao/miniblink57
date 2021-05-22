@@ -8,38 +8,44 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaStreamEventInit.h"
 
 #include "modules/mediastream/MediaStream.h"
 
 namespace blink {
 
-MediaStreamEventInit::MediaStreamEventInit() {
+MediaStreamEventInit::MediaStreamEventInit()
+{
 }
 
-MediaStreamEventInit::~MediaStreamEventInit() {}
+MediaStreamEventInit::~MediaStreamEventInit() { }
 
 MediaStreamEventInit::MediaStreamEventInit(const MediaStreamEventInit&) = default;
 
 MediaStreamEventInit& MediaStreamEventInit::operator=(const MediaStreamEventInit&) = default;
 
-bool MediaStreamEventInit::hasStream() const {
-  return m_stream;
+bool MediaStreamEventInit::hasStream() const
+{
+    return m_stream;
 }
-MediaStream* MediaStreamEventInit::stream() const {
-  return m_stream;
+MediaStream* MediaStreamEventInit::stream() const
+{
+    return m_stream;
 }
-void MediaStreamEventInit::setStream(MediaStream* value) {
-  m_stream = value;
+void MediaStreamEventInit::setStream(MediaStream* value)
+{
+    m_stream = value;
 }
-void MediaStreamEventInit::setStreamToNull() {
-  m_stream = Member<MediaStream>();
+void MediaStreamEventInit::setStreamToNull()
+{
+    m_stream = Member<MediaStream>();
 }
 
-DEFINE_TRACE(MediaStreamEventInit) {
-  visitor->trace(m_stream);
-  EventInit::trace(visitor);
+DEFINE_TRACE(MediaStreamEventInit)
+{
+    visitor->trace(m_stream);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

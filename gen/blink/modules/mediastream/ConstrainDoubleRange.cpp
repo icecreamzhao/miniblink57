@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ConstrainDoubleRange.h"
 
 namespace blink {
 
-ConstrainDoubleRange::ConstrainDoubleRange() {
+ConstrainDoubleRange::ConstrainDoubleRange()
+{
 }
 
-ConstrainDoubleRange::~ConstrainDoubleRange() {}
+ConstrainDoubleRange::~ConstrainDoubleRange() { }
 
 ConstrainDoubleRange::ConstrainDoubleRange(const ConstrainDoubleRange&) = default;
 
 ConstrainDoubleRange& ConstrainDoubleRange::operator=(const ConstrainDoubleRange&) = default;
 
-bool ConstrainDoubleRange::hasExact() const {
-  return m_hasExact;
+bool ConstrainDoubleRange::hasExact() const
+{
+    return m_hasExact;
 }
-double ConstrainDoubleRange::exact() const {
-  DCHECK(m_hasExact);
-  return m_exact;
+double ConstrainDoubleRange::exact() const
+{
+    DCHECK(m_hasExact);
+    return m_exact;
 }
-void ConstrainDoubleRange::setExact(double value) {
-  m_exact = value;
-  m_hasExact = true;
+void ConstrainDoubleRange::setExact(double value)
+{
+    m_exact = value;
+    m_hasExact = true;
 }
-bool ConstrainDoubleRange::hasIdeal() const {
-  return m_hasIdeal;
+bool ConstrainDoubleRange::hasIdeal() const
+{
+    return m_hasIdeal;
 }
-double ConstrainDoubleRange::ideal() const {
-  DCHECK(m_hasIdeal);
-  return m_ideal;
+double ConstrainDoubleRange::ideal() const
+{
+    DCHECK(m_hasIdeal);
+    return m_ideal;
 }
-void ConstrainDoubleRange::setIdeal(double value) {
-  m_ideal = value;
-  m_hasIdeal = true;
+void ConstrainDoubleRange::setIdeal(double value)
+{
+    m_ideal = value;
+    m_hasIdeal = true;
 }
 
-DEFINE_TRACE(ConstrainDoubleRange) {
-  DoubleRange::trace(visitor);
+DEFINE_TRACE(ConstrainDoubleRange)
+{
+    DoubleRange::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef NFCMessage_h
 #define NFCMessage_h
 
@@ -22,32 +22,33 @@
 namespace blink {
 
 class MODULES_EXPORT NFCMessage : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  NFCMessage();
-  virtual ~NFCMessage();
-  NFCMessage(const NFCMessage&);
-  NFCMessage& operator=(const NFCMessage&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasData() const;
-  const HeapVector<NFCRecord>& data() const;
-  void setData(const HeapVector<NFCRecord>&);
+public:
+    NFCMessage();
+    virtual ~NFCMessage();
+    NFCMessage(const NFCMessage&);
+    NFCMessage& operator=(const NFCMessage&);
 
-  bool hasURL() const;
-  String url() const;
-  void setURL(String);
+    bool hasData() const;
+    const HeapVector<NFCRecord>& data() const;
+    void setData(const HeapVector<NFCRecord>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasURL() const;
+    String url() const;
+    void setURL(String);
 
- private:
-  bool m_hasData = false;
-  HeapVector<NFCRecord> m_data;
-  String m_url;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8NFCMessage;
+private:
+    bool m_hasData = false;
+    HeapVector<NFCRecord> m_data;
+    String m_url;
+
+    friend class V8NFCMessage;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // NFCMessage_h
+#endif // NFCMessage_h

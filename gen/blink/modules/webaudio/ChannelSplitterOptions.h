@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ChannelSplitterOptions_h
 #define ChannelSplitterOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT ChannelSplitterOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ChannelSplitterOptions();
-  virtual ~ChannelSplitterOptions();
-  ChannelSplitterOptions(const ChannelSplitterOptions&);
-  ChannelSplitterOptions& operator=(const ChannelSplitterOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasNumberOfOutputs() const;
-  unsigned numberOfOutputs() const;
-  void setNumberOfOutputs(unsigned);
+public:
+    ChannelSplitterOptions();
+    virtual ~ChannelSplitterOptions();
+    ChannelSplitterOptions(const ChannelSplitterOptions&);
+    ChannelSplitterOptions& operator=(const ChannelSplitterOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasNumberOfOutputs() const;
+    unsigned numberOfOutputs() const;
+    void setNumberOfOutputs(unsigned);
 
- private:
-  bool m_hasNumberOfOutputs = false;
-  unsigned m_numberOfOutputs;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ChannelSplitterOptions;
+private:
+    bool m_hasNumberOfOutputs = false;
+    unsigned m_numberOfOutputs;
+
+    friend class V8ChannelSplitterOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ChannelSplitterOptions_h
+#endif // ChannelSplitterOptions_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CSSTransformComponent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,90 +47,101 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CSSTransformComponent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CSSTransformComponent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CSSTransformComponentV8Internal {
 
-static void cssTextAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssTextAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSTransformComponent* impl = V8CSSTransformComponent::toImpl(holder);
+        CSSTransformComponent* impl = V8CSSTransformComponent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->cssText(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->cssText(), info.GetIsolate());
+    }
 
-CORE_EXPORT void cssTextAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformComponentV8Internal::cssTextAttributeGetter(info);
-}
+    CORE_EXPORT void cssTextAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformComponentV8Internal::cssTextAttributeGetter(info);
+    }
 
-static void is2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformComponent* impl = V8CSSTransformComponent::toImpl(info.Holder());
+    static void is2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformComponent* impl = V8CSSTransformComponent::toImpl(info.Holder());
 
-  v8SetReturnValueBool(info, impl->is2D());
-}
+        v8SetReturnValueBool(info, impl->is2D());
+    }
 
-CORE_EXPORT  void is2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformComponentV8Internal::is2DMethod(info);
-}
+    CORE_EXPORT void is2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformComponentV8Internal::is2DMethod(info);
+    }
 
-static void asMatrixMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformComponent* impl = V8CSSTransformComponent::toImpl(info.Holder());
+    static void asMatrixMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformComponent* impl = V8CSSTransformComponent::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->asMatrix());
-}
+        v8SetReturnValue(info, impl->asMatrix());
+    }
 
-CORE_EXPORT  void asMatrixMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSTransformComponentV8Internal::asMatrixMethod(info);
-}
+    CORE_EXPORT void asMatrixMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSTransformComponentV8Internal::asMatrixMethod(info);
+    }
 
 } // namespace CSSTransformComponentV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CSSTransformComponentAccessors[] = {
-    {"cssText", CSSTransformComponentV8Internal::cssTextAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "cssText", CSSTransformComponentV8Internal::cssTextAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8CSSTransformComponentMethods[] = {
-    {"is2D", CSSTransformComponentV8Internal::is2DMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"asMatrix", CSSTransformComponentV8Internal::asMatrixMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "is2D", CSSTransformComponentV8Internal::is2DMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "asMatrix", CSSTransformComponentV8Internal::asMatrixMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CSSTransformComponentTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSTransformComponent::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CSSTransformComponent::internalFieldCount);
+static void installV8CSSTransformComponentTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSTransformComponent::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CSSTransformComponent::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSTransformComponentAccessors, WTF_ARRAY_LENGTH(V8CSSTransformComponentAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSTransformComponentMethods, WTF_ARRAY_LENGTH(V8CSSTransformComponentMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSTransformComponentAccessors, WTF_ARRAY_LENGTH(V8CSSTransformComponentAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSTransformComponentMethods, WTF_ARRAY_LENGTH(V8CSSTransformComponentMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8CSSTransformComponent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSTransformComponentTemplate);
+v8::Local<v8::FunctionTemplate> V8CSSTransformComponent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSTransformComponentTemplate);
 }
 
-bool V8CSSTransformComponent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CSSTransformComponent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CSSTransformComponent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CSSTransformComponent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CSSTransformComponent* V8CSSTransformComponent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CSSTransformComponent* V8CSSTransformComponent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

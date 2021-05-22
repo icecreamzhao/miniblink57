@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ComputedTimingProperties_h
 #define ComputedTimingProperties_h
 
@@ -19,54 +19,55 @@
 namespace blink {
 
 class CORE_EXPORT ComputedTimingProperties : public AnimationEffectTimingProperties {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ComputedTimingProperties();
-  virtual ~ComputedTimingProperties();
-  ComputedTimingProperties(const ComputedTimingProperties&);
-  ComputedTimingProperties& operator=(const ComputedTimingProperties&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasActiveDuration() const;
-  double activeDuration() const;
-  void setActiveDuration(double);
+public:
+    ComputedTimingProperties();
+    virtual ~ComputedTimingProperties();
+    ComputedTimingProperties(const ComputedTimingProperties&);
+    ComputedTimingProperties& operator=(const ComputedTimingProperties&);
 
-  bool hasCurrentIteration() const;
-  double currentIteration() const;
-  void setCurrentIteration(double);
-  void setCurrentIterationToNull();
+    bool hasActiveDuration() const;
+    double activeDuration() const;
+    void setActiveDuration(double);
 
-  bool hasEndTime() const;
-  double endTime() const;
-  void setEndTime(double);
+    bool hasCurrentIteration() const;
+    double currentIteration() const;
+    void setCurrentIteration(double);
+    void setCurrentIterationToNull();
 
-  bool hasLocalTime() const;
-  double localTime() const;
-  void setLocalTime(double);
-  void setLocalTimeToNull();
+    bool hasEndTime() const;
+    double endTime() const;
+    void setEndTime(double);
 
-  bool hasProgress() const;
-  double progress() const;
-  void setProgress(double);
-  void setProgressToNull();
+    bool hasLocalTime() const;
+    double localTime() const;
+    void setLocalTime(double);
+    void setLocalTimeToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasProgress() const;
+    double progress() const;
+    void setProgress(double);
+    void setProgressToNull();
 
- private:
-  bool m_hasActiveDuration = false;
-  double m_activeDuration;
-  bool m_hasCurrentIteration = false;
-  double m_currentIteration;
-  bool m_hasEndTime = false;
-  double m_endTime;
-  bool m_hasLocalTime = false;
-  double m_localTime;
-  bool m_hasProgress = false;
-  double m_progress;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ComputedTimingProperties;
+private:
+    bool m_hasActiveDuration = false;
+    double m_activeDuration;
+    bool m_hasCurrentIteration = false;
+    double m_currentIteration;
+    bool m_hasEndTime = false;
+    double m_endTime;
+    bool m_hasLocalTime = false;
+    double m_localTime;
+    bool m_hasProgress = false;
+    double m_progress;
+
+    friend class V8ComputedTimingProperties;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ComputedTimingProperties_h
+#endif // ComputedTimingProperties_h

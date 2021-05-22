@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaStreamConstraints.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -17,83 +17,87 @@
 
 namespace blink {
 
-void V8MediaStreamConstraints::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, MediaStreamConstraints& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8MediaStreamConstraints::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, MediaStreamConstraints& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> audioValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "audio")).ToLocal(&audioValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (audioValue.IsEmpty() || audioValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    BooleanOrMediaTrackConstraints audio;
-    V8BooleanOrMediaTrackConstraints::toImpl(isolate, audioValue, audio, UnionTypeConversionMode::NotNullable, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setAudio(audio);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> audioValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "audio")).ToLocal(&audioValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (audioValue.IsEmpty() || audioValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        BooleanOrMediaTrackConstraints audio;
+        V8BooleanOrMediaTrackConstraints::toImpl(isolate, audioValue, audio, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setAudio(audio);
+    }
 
-  v8::Local<v8::Value> videoValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "video")).ToLocal(&videoValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (videoValue.IsEmpty() || videoValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    BooleanOrMediaTrackConstraints video;
-    V8BooleanOrMediaTrackConstraints::toImpl(isolate, videoValue, video, UnionTypeConversionMode::NotNullable, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setVideo(video);
-  }
+    v8::Local<v8::Value> videoValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "video")).ToLocal(&videoValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (videoValue.IsEmpty() || videoValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        BooleanOrMediaTrackConstraints video;
+        V8BooleanOrMediaTrackConstraints::toImpl(isolate, videoValue, video, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setVideo(video);
+    }
 }
 
-v8::Local<v8::Value> MediaStreamConstraints::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8MediaStreamConstraints(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> MediaStreamConstraints::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8MediaStreamConstraints(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8MediaStreamConstraints(const MediaStreamConstraints& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasAudio()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "audio"), ToV8(impl.audio(), creationContext, isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "audio"), ToV8(BooleanOrMediaTrackConstraints::fromBoolean(false), creationContext, isolate))))
-      return false;
-  }
+bool toV8MediaStreamConstraints(const MediaStreamConstraints& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasAudio()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "audio"), ToV8(impl.audio(), creationContext, isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "audio"), ToV8(BooleanOrMediaTrackConstraints::fromBoolean(false), creationContext, isolate))))
+            return false;
+    }
 
-  if (impl.hasVideo()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "video"), ToV8(impl.video(), creationContext, isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "video"), ToV8(BooleanOrMediaTrackConstraints::fromBoolean(false), creationContext, isolate))))
-      return false;
-  }
+    if (impl.hasVideo()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "video"), ToV8(impl.video(), creationContext, isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "video"), ToV8(BooleanOrMediaTrackConstraints::fromBoolean(false), creationContext, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-MediaStreamConstraints NativeValueTraits<MediaStreamConstraints>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  MediaStreamConstraints impl;
-  V8MediaStreamConstraints::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+MediaStreamConstraints NativeValueTraits<MediaStreamConstraints>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    MediaStreamConstraints impl;
+    V8MediaStreamConstraints::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

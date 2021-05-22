@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8VideoPlaybackQuality.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,103 +46,116 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&VideoPlaybackQuality::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "VideoPlaybackQuality is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace VideoPlaybackQualityV8Internal {
 
-static void creationTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void creationTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoPlaybackQuality* impl = V8VideoPlaybackQuality::toImpl(holder);
+        VideoPlaybackQuality* impl = V8VideoPlaybackQuality::toImpl(holder);
 
-  v8SetReturnValue(info, impl->creationTime());
-}
+        v8SetReturnValue(info, impl->creationTime());
+    }
 
-MODULES_EXPORT void creationTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoPlaybackQualityV8Internal::creationTimeAttributeGetter(info);
-}
+    MODULES_EXPORT void creationTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoPlaybackQualityV8Internal::creationTimeAttributeGetter(info);
+    }
 
-static void totalVideoFramesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void totalVideoFramesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoPlaybackQuality* impl = V8VideoPlaybackQuality::toImpl(holder);
+        VideoPlaybackQuality* impl = V8VideoPlaybackQuality::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->totalVideoFrames());
-}
+        v8SetReturnValueUnsigned(info, impl->totalVideoFrames());
+    }
 
-MODULES_EXPORT void totalVideoFramesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoPlaybackQualityV8Internal::totalVideoFramesAttributeGetter(info);
-}
+    MODULES_EXPORT void totalVideoFramesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoPlaybackQualityV8Internal::totalVideoFramesAttributeGetter(info);
+    }
 
-static void droppedVideoFramesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void droppedVideoFramesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoPlaybackQuality* impl = V8VideoPlaybackQuality::toImpl(holder);
+        VideoPlaybackQuality* impl = V8VideoPlaybackQuality::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->droppedVideoFrames());
-}
+        v8SetReturnValueUnsigned(info, impl->droppedVideoFrames());
+    }
 
-MODULES_EXPORT void droppedVideoFramesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoPlaybackQualityV8Internal::droppedVideoFramesAttributeGetter(info);
-}
+    MODULES_EXPORT void droppedVideoFramesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoPlaybackQualityV8Internal::droppedVideoFramesAttributeGetter(info);
+    }
 
-static void corruptedVideoFramesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void corruptedVideoFramesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoPlaybackQuality* impl = V8VideoPlaybackQuality::toImpl(holder);
+        VideoPlaybackQuality* impl = V8VideoPlaybackQuality::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->corruptedVideoFrames());
-}
+        v8SetReturnValueUnsigned(info, impl->corruptedVideoFrames());
+    }
 
-MODULES_EXPORT void corruptedVideoFramesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoPlaybackQualityV8Internal::corruptedVideoFramesAttributeGetter(info);
-}
+    MODULES_EXPORT void corruptedVideoFramesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoPlaybackQualityV8Internal::corruptedVideoFramesAttributeGetter(info);
+    }
 
 } // namespace VideoPlaybackQualityV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8VideoPlaybackQualityAccessors[] = {
-    {"creationTime", VideoPlaybackQualityV8Internal::creationTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"totalVideoFrames", VideoPlaybackQualityV8Internal::totalVideoFramesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"droppedVideoFrames", VideoPlaybackQualityV8Internal::droppedVideoFramesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"corruptedVideoFrames", VideoPlaybackQualityV8Internal::corruptedVideoFramesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "creationTime", VideoPlaybackQualityV8Internal::creationTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "totalVideoFrames", VideoPlaybackQualityV8Internal::totalVideoFramesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "droppedVideoFrames", VideoPlaybackQualityV8Internal::droppedVideoFramesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "corruptedVideoFrames", VideoPlaybackQualityV8Internal::corruptedVideoFramesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8VideoPlaybackQualityTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VideoPlaybackQuality::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VideoPlaybackQuality::internalFieldCount);
+static void installV8VideoPlaybackQualityTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VideoPlaybackQuality::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VideoPlaybackQuality::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VideoPlaybackQualityAccessors, WTF_ARRAY_LENGTH(V8VideoPlaybackQualityAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VideoPlaybackQualityAccessors, WTF_ARRAY_LENGTH(V8VideoPlaybackQualityAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8VideoPlaybackQuality::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VideoPlaybackQualityTemplate);
+v8::Local<v8::FunctionTemplate> V8VideoPlaybackQuality::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VideoPlaybackQualityTemplate);
 }
 
-bool V8VideoPlaybackQuality::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8VideoPlaybackQuality::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8VideoPlaybackQuality::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8VideoPlaybackQuality::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-VideoPlaybackQuality* V8VideoPlaybackQuality::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+VideoPlaybackQuality* V8VideoPlaybackQuality::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

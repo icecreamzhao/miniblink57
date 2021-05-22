@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ServiceWorkerGlobalScope_h
 #define V8ServiceWorkerGlobalScope_h
 
@@ -27,38 +27,42 @@ namespace blink {
 
 class ScriptState;
 class V8ServiceWorkerGlobalScope {
-  STATIC_ONLY(V8ServiceWorkerGlobalScope);
- public:
-  MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static ServiceWorkerGlobalScope* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<ServiceWorkerGlobalScope>();
-  }
-  MODULES_EXPORT static ServiceWorkerGlobalScope* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<ServiceWorkerGlobalScope>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<ServiceWorkerGlobalScope>());
-  }
-  static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
+    STATIC_ONLY(V8ServiceWorkerGlobalScope);
 
-  static void installForeignFetch(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installForeignFetch(ScriptState*, v8::Local<v8::Object> instance);
+public:
+    MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static ServiceWorkerGlobalScope* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<ServiceWorkerGlobalScope>();
+    }
+    MODULES_EXPORT static ServiceWorkerGlobalScope* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<ServiceWorkerGlobalScope>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<ServiceWorkerGlobalScope>());
+    }
+    static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
 
-  static void installServiceWorkerNavigationPreload(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installServiceWorkerNavigationPreload(ScriptState*, v8::Local<v8::Object> instance);
+    static void installForeignFetch(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installForeignFetch(ScriptState*, v8::Local<v8::Object> instance);
+
+    static void installServiceWorkerNavigationPreload(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installServiceWorkerNavigationPreload(ScriptState*, v8::Local<v8::Object> instance);
 };
 
 template <>
 struct V8TypeOf<ServiceWorkerGlobalScope> {
-  typedef V8ServiceWorkerGlobalScope Type;
+    typedef V8ServiceWorkerGlobalScope Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ServiceWorkerGlobalScope_h
+#endif // V8ServiceWorkerGlobalScope_h

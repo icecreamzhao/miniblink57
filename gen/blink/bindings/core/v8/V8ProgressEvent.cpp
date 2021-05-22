@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ProgressEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,144 +47,159 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ProgressEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ProgressEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ProgressEventV8Internal {
 
-static void lengthComputableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lengthComputableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ProgressEvent* impl = V8ProgressEvent::toImpl(holder);
+        ProgressEvent* impl = V8ProgressEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->lengthComputable());
-}
+        v8SetReturnValueBool(info, impl->lengthComputable());
+    }
 
-CORE_EXPORT void lengthComputableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ProgressEventV8Internal::lengthComputableAttributeGetter(info);
-}
+    CORE_EXPORT void lengthComputableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ProgressEventV8Internal::lengthComputableAttributeGetter(info);
+    }
 
-static void loadedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void loadedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ProgressEvent* impl = V8ProgressEvent::toImpl(holder);
+        ProgressEvent* impl = V8ProgressEvent::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->loaded()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->loaded()));
+    }
 
-CORE_EXPORT void loadedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ProgressEventV8Internal::loadedAttributeGetter(info);
-}
+    CORE_EXPORT void loadedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ProgressEventV8Internal::loadedAttributeGetter(info);
+    }
 
-static void totalAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void totalAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ProgressEvent* impl = V8ProgressEvent::toImpl(holder);
+        ProgressEvent* impl = V8ProgressEvent::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->total()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->total()));
+    }
 
-CORE_EXPORT void totalAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ProgressEventV8Internal::totalAttributeGetter(info);
-}
+    CORE_EXPORT void totalAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ProgressEventV8Internal::totalAttributeGetter(info);
+    }
 
-static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ProgressEvent* impl = V8ProgressEvent::toImpl(holder);
+        ProgressEvent* impl = V8ProgressEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isTrusted());
-}
+        v8SetReturnValueBool(info, impl->isTrusted());
+    }
 
-CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ProgressEventV8Internal::isTrustedAttributeGetter(info);
-}
+    CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ProgressEventV8Internal::isTrustedAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ProgressEvent");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ProgressEvent");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  ProgressEventInit eventInitDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        ProgressEventInit eventInitDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
 
-    return;
-  }
-  V8ProgressEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8ProgressEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ProgressEvent* impl = ProgressEvent::create(type, eventInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ProgressEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        ProgressEvent* impl = ProgressEvent::create(type, eventInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ProgressEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace ProgressEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ProgressEventAccessors[] = {
-    {"lengthComputable", ProgressEventV8Internal::lengthComputableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loaded", ProgressEventV8Internal::loadedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"total", ProgressEventV8Internal::totalAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTrusted", ProgressEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "lengthComputable", ProgressEventV8Internal::lengthComputableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loaded", ProgressEventV8Internal::loadedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "total", ProgressEventV8Internal::totalAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTrusted", ProgressEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
-void V8ProgressEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("ProgressEvent"));
-    return;
-  }
+void V8ProgressEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("ProgressEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  ProgressEventV8Internal::constructor(info);
+    ProgressEventV8Internal::constructor(info);
 }
 
-static void installV8ProgressEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ProgressEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8ProgressEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8ProgressEvent::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8ProgressEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ProgressEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8ProgressEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8ProgressEvent::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ProgressEventAccessors, WTF_ARRAY_LENGTH(V8ProgressEventAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ProgressEventAccessors, WTF_ARRAY_LENGTH(V8ProgressEventAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8ProgressEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ProgressEventTemplate);
+v8::Local<v8::FunctionTemplate> V8ProgressEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ProgressEventTemplate);
 }
 
-bool V8ProgressEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ProgressEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ProgressEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ProgressEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ProgressEvent* V8ProgressEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ProgressEvent* V8ProgressEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

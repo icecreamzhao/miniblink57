@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RadioNodeListOrElement.h"
 
 #include "bindings/core/v8/DictionarySequenceOrDictionary.h"
@@ -23,91 +23,104 @@
 
 namespace blink {
 
-RadioNodeListOrElement::RadioNodeListOrElement() : m_type(SpecificTypeNone) {}
-
-RadioNodeList* RadioNodeListOrElement::getAsRadioNodeList() const {
-  DCHECK(isRadioNodeList());
-  return m_radioNodeList;
+RadioNodeListOrElement::RadioNodeListOrElement()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void RadioNodeListOrElement::setRadioNodeList(RadioNodeList* value) {
-  DCHECK(isNull());
-  m_radioNodeList = value;
-  m_type = SpecificTypeRadioNodeList;
+RadioNodeList* RadioNodeListOrElement::getAsRadioNodeList() const
+{
+    DCHECK(isRadioNodeList());
+    return m_radioNodeList;
 }
 
-RadioNodeListOrElement RadioNodeListOrElement::fromRadioNodeList(RadioNodeList* value) {
-  RadioNodeListOrElement container;
-  container.setRadioNodeList(value);
-  return container;
+void RadioNodeListOrElement::setRadioNodeList(RadioNodeList* value)
+{
+    DCHECK(isNull());
+    m_radioNodeList = value;
+    m_type = SpecificTypeRadioNodeList;
 }
 
-Element* RadioNodeListOrElement::getAsElement() const {
-  DCHECK(isElement());
-  return m_element;
+RadioNodeListOrElement RadioNodeListOrElement::fromRadioNodeList(RadioNodeList* value)
+{
+    RadioNodeListOrElement container;
+    container.setRadioNodeList(value);
+    return container;
 }
 
-void RadioNodeListOrElement::setElement(Element* value) {
-  DCHECK(isNull());
-  m_element = value;
-  m_type = SpecificTypeElement;
+Element* RadioNodeListOrElement::getAsElement() const
+{
+    DCHECK(isElement());
+    return m_element;
 }
 
-RadioNodeListOrElement RadioNodeListOrElement::fromElement(Element* value) {
-  RadioNodeListOrElement container;
-  container.setElement(value);
-  return container;
+void RadioNodeListOrElement::setElement(Element* value)
+{
+    DCHECK(isNull());
+    m_element = value;
+    m_type = SpecificTypeElement;
+}
+
+RadioNodeListOrElement RadioNodeListOrElement::fromElement(Element* value)
+{
+    RadioNodeListOrElement container;
+    container.setElement(value);
+    return container;
 }
 
 RadioNodeListOrElement::RadioNodeListOrElement(const RadioNodeListOrElement&) = default;
 RadioNodeListOrElement::~RadioNodeListOrElement() = default;
 RadioNodeListOrElement& RadioNodeListOrElement::operator=(const RadioNodeListOrElement&) = default;
 
-DEFINE_TRACE(RadioNodeListOrElement) {
-  visitor->trace(m_radioNodeList);
-  visitor->trace(m_element);
+DEFINE_TRACE(RadioNodeListOrElement)
+{
+    visitor->trace(m_radioNodeList);
+    visitor->trace(m_element);
 }
 
-void V8RadioNodeListOrElement::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RadioNodeListOrElement& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8RadioNodeListOrElement::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RadioNodeListOrElement& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8RadioNodeList::hasInstance(v8Value, isolate)) {
-    RadioNodeList* cppValue = V8RadioNodeList::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setRadioNodeList(cppValue);
-    return;
-  }
+    if (V8RadioNodeList::hasInstance(v8Value, isolate)) {
+        RadioNodeList* cppValue = V8RadioNodeList::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setRadioNodeList(cppValue);
+        return;
+    }
 
-  if (V8Element::hasInstance(v8Value, isolate)) {
-    Element* cppValue = V8Element::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setElement(cppValue);
-    return;
-  }
+    if (V8Element::hasInstance(v8Value, isolate)) {
+        Element* cppValue = V8Element::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setElement(cppValue);
+        return;
+    }
 
-  exceptionState.throwTypeError("The provided value is not of type '(RadioNodeList or Element)'");
+    exceptionState.throwTypeError("The provided value is not of type '(RadioNodeList or Element)'");
 }
 
-v8::Local<v8::Value> ToV8(const RadioNodeListOrElement& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const RadioNodeListOrElement& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case RadioNodeListOrElement::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case RadioNodeListOrElement::SpecificTypeRadioNodeList:
-      return ToV8(impl.getAsRadioNodeList(), creationContext, isolate);
+        return ToV8(impl.getAsRadioNodeList(), creationContext, isolate);
     case RadioNodeListOrElement::SpecificTypeElement:
-      return ToV8(impl.getAsElement(), creationContext, isolate);
+        return ToV8(impl.getAsElement(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-RadioNodeListOrElement NativeValueTraits<RadioNodeListOrElement>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  RadioNodeListOrElement impl;
-  V8RadioNodeListOrElement::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+RadioNodeListOrElement NativeValueTraits<RadioNodeListOrElement>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    RadioNodeListOrElement impl;
+    V8RadioNodeListOrElement::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8VideoTrack.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,154 +48,173 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&VideoTrack::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "VideoTrack is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace VideoTrackV8Internal {
 
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoTrack* impl = V8VideoTrack::toImpl(holder);
+        VideoTrack* impl = V8VideoTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->id(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->id(), info.GetIsolate());
+    }
 
-CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoTrackV8Internal::idAttributeGetter(info);
-}
+    CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoTrackV8Internal::idAttributeGetter(info);
+    }
 
-static void kindAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void kindAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoTrack* impl = V8VideoTrack::toImpl(holder);
+        VideoTrack* impl = V8VideoTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->kind(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->kind(), info.GetIsolate());
+    }
 
-CORE_EXPORT void kindAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoTrackV8Internal::kindAttributeGetter(info);
-}
+    CORE_EXPORT void kindAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoTrackV8Internal::kindAttributeGetter(info);
+    }
 
-static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoTrack* impl = V8VideoTrack::toImpl(holder);
+        VideoTrack* impl = V8VideoTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->label(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->label(), info.GetIsolate());
+    }
 
-CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoTrackV8Internal::labelAttributeGetter(info);
-}
+    CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoTrackV8Internal::labelAttributeGetter(info);
+    }
 
-static void languageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void languageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoTrack* impl = V8VideoTrack::toImpl(holder);
+        VideoTrack* impl = V8VideoTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->language(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->language(), info.GetIsolate());
+    }
 
-CORE_EXPORT void languageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoTrackV8Internal::languageAttributeGetter(info);
-}
+    CORE_EXPORT void languageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoTrackV8Internal::languageAttributeGetter(info);
+    }
 
-static void selectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void selectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoTrack* impl = V8VideoTrack::toImpl(holder);
+        VideoTrack* impl = V8VideoTrack::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->selected());
-}
+        v8SetReturnValueBool(info, impl->selected());
+    }
 
-CORE_EXPORT void selectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoTrackV8Internal::selectedAttributeGetter(info);
-}
+    CORE_EXPORT void selectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoTrackV8Internal::selectedAttributeGetter(info);
+    }
 
-static void selectedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  VideoTrack* impl = V8VideoTrack::toImpl(holder);
+    static void selectedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        VideoTrack* impl = V8VideoTrack::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VideoTrack", "selected");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VideoTrack", "selected");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setSelected(cppValue);
-}
+        impl->setSelected(cppValue);
+    }
 
-CORE_EXPORT void selectedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void selectedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  VideoTrackV8Internal::selectedAttributeSetter(v8Value, info);
-}
+        VideoTrackV8Internal::selectedAttributeSetter(v8Value, info);
+    }
 
 } // namespace VideoTrackV8Internal
 
-void V8VideoTrack::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  VideoTrack* impl = scriptWrappable->toImpl<VideoTrack>();
-  // The owner() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->owner())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8VideoTrack::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    VideoTrack* impl = scriptWrappable->toImpl<VideoTrack>();
+    // The owner() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->owner())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8VideoTrackAccessors[] = {
-    {"id", VideoTrackV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"kind", VideoTrackV8Internal::kindAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"label", VideoTrackV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"language", VideoTrackV8Internal::languageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selected", VideoTrackV8Internal::selectedAttributeGetterCallback, VideoTrackV8Internal::selectedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "id", VideoTrackV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "kind", VideoTrackV8Internal::kindAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "label", VideoTrackV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "language", VideoTrackV8Internal::languageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selected", VideoTrackV8Internal::selectedAttributeGetterCallback, VideoTrackV8Internal::selectedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8VideoTrack::installV8VideoTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VideoTrack::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VideoTrack::internalFieldCount);
+void V8VideoTrack::installV8VideoTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VideoTrack::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VideoTrack::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VideoTrackAccessors, WTF_ARRAY_LENGTH(V8VideoTrackAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VideoTrackAccessors, WTF_ARRAY_LENGTH(V8VideoTrackAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8VideoTrack::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8VideoTrack::installV8VideoTrackTemplateFunction);
+v8::Local<v8::FunctionTemplate> V8VideoTrack::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8VideoTrack::installV8VideoTrackTemplateFunction);
 }
 
-bool V8VideoTrack::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8VideoTrack::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8VideoTrack::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8VideoTrack::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-VideoTrack* V8VideoTrack::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+VideoTrack* V8VideoTrack::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
 InstallTemplateFunction V8VideoTrack::installV8VideoTrackTemplateFunction = (InstallTemplateFunction)&V8VideoTrack::installV8VideoTrackTemplate;
 
-void V8VideoTrack::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction) {
-  V8VideoTrack::installV8VideoTrackTemplateFunction = installTemplateFunction;
-  if (preparePrototypeAndInterfaceObjectFunction)
-    V8VideoTrack::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
+void V8VideoTrack::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction)
+{
+    V8VideoTrack::installV8VideoTrackTemplateFunction = installTemplateFunction;
+    if (preparePrototypeAndInterfaceObjectFunction)
+        V8VideoTrack::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
 }
 
-}  // namespace blink
+} // namespace blink

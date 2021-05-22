@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8RTCConfiguration_h
 #define V8RTCConfiguration_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8RTCConfiguration {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCConfiguration&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCConfiguration&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8RTCConfiguration(const RTCConfiguration&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCConfiguration& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCConfiguration& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<RTCConfiguration> {
-  static RTCConfiguration nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static RTCConfiguration nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<RTCConfiguration> {
-  typedef V8RTCConfiguration Type;
+    typedef V8RTCConfiguration Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8RTCConfiguration_h
+#endif // V8RTCConfiguration_h

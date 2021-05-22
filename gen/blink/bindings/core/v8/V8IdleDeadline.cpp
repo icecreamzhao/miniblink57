@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8IdleDeadline.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,75 +45,84 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&IdleDeadline::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "IdleDeadline is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace IdleDeadlineV8Internal {
 
-static void didTimeoutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void didTimeoutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IdleDeadline* impl = V8IdleDeadline::toImpl(holder);
+        IdleDeadline* impl = V8IdleDeadline::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->didTimeout());
-}
+        v8SetReturnValueBool(info, impl->didTimeout());
+    }
 
-CORE_EXPORT void didTimeoutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IdleDeadlineV8Internal::didTimeoutAttributeGetter(info);
-}
+    CORE_EXPORT void didTimeoutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IdleDeadlineV8Internal::didTimeoutAttributeGetter(info);
+    }
 
-static void timeRemainingMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IdleDeadline* impl = V8IdleDeadline::toImpl(info.Holder());
+    static void timeRemainingMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IdleDeadline* impl = V8IdleDeadline::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->timeRemaining());
-}
+        v8SetReturnValue(info, impl->timeRemaining());
+    }
 
-CORE_EXPORT  void timeRemainingMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IdleDeadlineV8Internal::timeRemainingMethod(info);
-}
+    CORE_EXPORT void timeRemainingMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IdleDeadlineV8Internal::timeRemainingMethod(info);
+    }
 
 } // namespace IdleDeadlineV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8IdleDeadlineAccessors[] = {
-    {"didTimeout", IdleDeadlineV8Internal::didTimeoutAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "didTimeout", IdleDeadlineV8Internal::didTimeoutAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8IdleDeadlineMethods[] = {
-    {"timeRemaining", IdleDeadlineV8Internal::timeRemainingMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "timeRemaining", IdleDeadlineV8Internal::timeRemainingMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8IdleDeadlineTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IdleDeadline::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8IdleDeadline::internalFieldCount);
+static void installV8IdleDeadlineTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IdleDeadline::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8IdleDeadline::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IdleDeadlineAccessors, WTF_ARRAY_LENGTH(V8IdleDeadlineAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IdleDeadlineMethods, WTF_ARRAY_LENGTH(V8IdleDeadlineMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IdleDeadlineAccessors, WTF_ARRAY_LENGTH(V8IdleDeadlineAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IdleDeadlineMethods, WTF_ARRAY_LENGTH(V8IdleDeadlineMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8IdleDeadline::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IdleDeadlineTemplate);
+v8::Local<v8::FunctionTemplate> V8IdleDeadline::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IdleDeadlineTemplate);
 }
 
-bool V8IdleDeadline::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8IdleDeadline::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8IdleDeadline::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8IdleDeadline::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-IdleDeadline* V8IdleDeadline::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+IdleDeadline* V8IdleDeadline::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

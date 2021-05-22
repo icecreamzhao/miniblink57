@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FileOrUSVString.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -16,90 +16,103 @@
 
 namespace blink {
 
-FileOrUSVString::FileOrUSVString() : m_type(SpecificTypeNone) {}
-
-File* FileOrUSVString::getAsFile() const {
-  DCHECK(isFile());
-  return m_file;
+FileOrUSVString::FileOrUSVString()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void FileOrUSVString::setFile(File* value) {
-  DCHECK(isNull());
-  m_file = value;
-  m_type = SpecificTypeFile;
+File* FileOrUSVString::getAsFile() const
+{
+    DCHECK(isFile());
+    return m_file;
 }
 
-FileOrUSVString FileOrUSVString::fromFile(File* value) {
-  FileOrUSVString container;
-  container.setFile(value);
-  return container;
+void FileOrUSVString::setFile(File* value)
+{
+    DCHECK(isNull());
+    m_file = value;
+    m_type = SpecificTypeFile;
 }
 
-String FileOrUSVString::getAsUSVString() const {
-  DCHECK(isUSVString());
-  return m_uSVString;
+FileOrUSVString FileOrUSVString::fromFile(File* value)
+{
+    FileOrUSVString container;
+    container.setFile(value);
+    return container;
 }
 
-void FileOrUSVString::setUSVString(String value) {
-  DCHECK(isNull());
-  m_uSVString = value;
-  m_type = SpecificTypeUSVString;
+String FileOrUSVString::getAsUSVString() const
+{
+    DCHECK(isUSVString());
+    return m_uSVString;
 }
 
-FileOrUSVString FileOrUSVString::fromUSVString(String value) {
-  FileOrUSVString container;
-  container.setUSVString(value);
-  return container;
+void FileOrUSVString::setUSVString(String value)
+{
+    DCHECK(isNull());
+    m_uSVString = value;
+    m_type = SpecificTypeUSVString;
+}
+
+FileOrUSVString FileOrUSVString::fromUSVString(String value)
+{
+    FileOrUSVString container;
+    container.setUSVString(value);
+    return container;
 }
 
 FileOrUSVString::FileOrUSVString(const FileOrUSVString&) = default;
 FileOrUSVString::~FileOrUSVString() = default;
 FileOrUSVString& FileOrUSVString::operator=(const FileOrUSVString&) = default;
 
-DEFINE_TRACE(FileOrUSVString) {
-  visitor->trace(m_file);
+DEFINE_TRACE(FileOrUSVString)
+{
+    visitor->trace(m_file);
 }
 
-void V8FileOrUSVString::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, FileOrUSVString& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8FileOrUSVString::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, FileOrUSVString& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8File::hasInstance(v8Value, isolate)) {
-    File* cppValue = V8File::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setFile(cppValue);
-    return;
-  }
+    if (V8File::hasInstance(v8Value, isolate)) {
+        File* cppValue = V8File::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setFile(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = toUSVString(isolate, v8Value, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setUSVString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = toUSVString(isolate, v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setUSVString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const FileOrUSVString& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const FileOrUSVString& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case FileOrUSVString::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case FileOrUSVString::SpecificTypeFile:
-      return ToV8(impl.getAsFile(), creationContext, isolate);
+        return ToV8(impl.getAsFile(), creationContext, isolate);
     case FileOrUSVString::SpecificTypeUSVString:
-      return v8String(isolate, impl.getAsUSVString());
+        return v8String(isolate, impl.getAsUSVString());
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-FileOrUSVString NativeValueTraits<FileOrUSVString>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  FileOrUSVString impl;
-  V8FileOrUSVString::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+FileOrUSVString NativeValueTraits<FileOrUSVString>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    FileOrUSVString impl;
+    V8FileOrUSVString::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

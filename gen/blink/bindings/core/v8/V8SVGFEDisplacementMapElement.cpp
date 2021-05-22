@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGFEDisplacementMapElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,227 +52,257 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGFEDisplacementMapElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGFEDisplacementMapElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGFEDisplacementMapElementV8Internal {
 
-CORE_EXPORT void SVG_CHANNEL_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 0);
-}
+    CORE_EXPORT void SVG_CHANNEL_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 0);
+    }
 
-CORE_EXPORT void SVG_CHANNEL_RConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 1);
-}
+    CORE_EXPORT void SVG_CHANNEL_RConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 1);
+    }
 
-CORE_EXPORT void SVG_CHANNEL_GConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 2);
-}
+    CORE_EXPORT void SVG_CHANNEL_GConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 2);
+    }
 
-CORE_EXPORT void SVG_CHANNEL_BConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 3);
-}
+    CORE_EXPORT void SVG_CHANNEL_BConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 3);
+    }
 
-CORE_EXPORT void SVG_CHANNEL_AConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 4);
-}
+    CORE_EXPORT void SVG_CHANNEL_AConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 4);
+    }
 
-static void in1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void in1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->in1()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->in1()), impl);
+    }
 
-CORE_EXPORT void in1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void in1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::in1AttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::in1AttributeGetter(info);
+    }
 
-static void in2AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void in2AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->in2()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->in2()), impl);
+    }
 
-CORE_EXPORT void in2AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void in2AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::in2AttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::in2AttributeGetter(info);
+    }
 
-static void scaleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scaleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->scale()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->scale()), impl);
+    }
 
-CORE_EXPORT void scaleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void scaleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::scaleAttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::scaleAttributeGetter(info);
+    }
 
-static void xChannelSelectorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xChannelSelectorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->xChannelSelector()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->xChannelSelector()), impl);
+    }
 
-CORE_EXPORT void xChannelSelectorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void xChannelSelectorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::xChannelSelectorAttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::xChannelSelectorAttributeGetter(info);
+    }
 
-static void yChannelSelectorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yChannelSelectorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->yChannelSelector()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->yChannelSelector()), impl);
+    }
 
-CORE_EXPORT void yChannelSelectorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void yChannelSelectorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::yChannelSelectorAttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::yChannelSelectorAttributeGetter(info);
+    }
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::xAttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::xAttributeGetter(info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::yAttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::yAttributeGetter(info);
+    }
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::widthAttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::widthAttributeGetter(info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::heightAttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::heightAttributeGetter(info);
+    }
 
-static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
+        SVGFEDisplacementMapElement* impl = V8SVGFEDisplacementMapElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
+    }
 
-CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDisplacementMapElementV8Internal::resultAttributeGetter(info);
-}
+        SVGFEDisplacementMapElementV8Internal::resultAttributeGetter(info);
+    }
 
 } // namespace SVGFEDisplacementMapElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGFEDisplacementMapElementAccessors[] = {
-    {"in1", SVGFEDisplacementMapElementV8Internal::in1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"in2", SVGFEDisplacementMapElementV8Internal::in2AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scale", SVGFEDisplacementMapElementV8Internal::scaleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"xChannelSelector", SVGFEDisplacementMapElementV8Internal::xChannelSelectorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"yChannelSelector", SVGFEDisplacementMapElementV8Internal::yChannelSelectorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"x", SVGFEDisplacementMapElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", SVGFEDisplacementMapElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", SVGFEDisplacementMapElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", SVGFEDisplacementMapElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"result", SVGFEDisplacementMapElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "in1", SVGFEDisplacementMapElementV8Internal::in1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "in2", SVGFEDisplacementMapElementV8Internal::in2AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scale", SVGFEDisplacementMapElementV8Internal::scaleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "xChannelSelector", SVGFEDisplacementMapElementV8Internal::xChannelSelectorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "yChannelSelector", SVGFEDisplacementMapElementV8Internal::yChannelSelectorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "x", SVGFEDisplacementMapElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", SVGFEDisplacementMapElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", SVGFEDisplacementMapElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", SVGFEDisplacementMapElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "result", SVGFEDisplacementMapElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGFEDisplacementMapElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFEDisplacementMapElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFEDisplacementMapElement::internalFieldCount);
+static void installV8SVGFEDisplacementMapElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFEDisplacementMapElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFEDisplacementMapElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_UNKNOWN", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_UNKNOWNConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_R", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_RConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_G", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_GConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_B", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_BConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_A", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_AConstantGetterCallback);
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFEDisplacementMapElementAccessors, WTF_ARRAY_LENGTH(V8SVGFEDisplacementMapElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_UNKNOWN", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_UNKNOWNConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_R", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_RConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_G", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_GConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_B", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_BConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_CHANNEL_A", SVGFEDisplacementMapElementV8Internal::SVG_CHANNEL_AConstantGetterCallback);
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFEDisplacementMapElementAccessors, WTF_ARRAY_LENGTH(V8SVGFEDisplacementMapElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGFEDisplacementMapElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFEDisplacementMapElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGFEDisplacementMapElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFEDisplacementMapElementTemplate);
 }
 
-bool V8SVGFEDisplacementMapElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGFEDisplacementMapElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGFEDisplacementMapElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGFEDisplacementMapElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGFEDisplacementMapElement* V8SVGFEDisplacementMapElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGFEDisplacementMapElement* V8SVGFEDisplacementMapElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

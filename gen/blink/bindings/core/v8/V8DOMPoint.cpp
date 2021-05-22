@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DOMPoint.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,270 +49,295 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMPoint::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMPoint is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DOMPointV8Internal {
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMPoint* impl = V8DOMPoint::toImpl(holder);
+        DOMPoint* impl = V8DOMPoint::toImpl(holder);
 
-  v8SetReturnValue(info, impl->x());
-}
+        v8SetReturnValue(info, impl->x());
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMPointV8Internal::xAttributeGetter(info);
-}
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMPointV8Internal::xAttributeGetter(info);
+    }
 
-static void xAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMPoint* impl = V8DOMPoint::toImpl(holder);
+    static void xAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMPoint* impl = V8DOMPoint::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMPoint", "x");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMPoint", "x");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setX(cppValue);
-}
+        impl->setX(cppValue);
+    }
 
-CORE_EXPORT void xAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void xAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMPointV8Internal::xAttributeSetter(v8Value, info);
-}
+        DOMPointV8Internal::xAttributeSetter(v8Value, info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMPoint* impl = V8DOMPoint::toImpl(holder);
+        DOMPoint* impl = V8DOMPoint::toImpl(holder);
 
-  v8SetReturnValue(info, impl->y());
-}
+        v8SetReturnValue(info, impl->y());
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMPointV8Internal::yAttributeGetter(info);
-}
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMPointV8Internal::yAttributeGetter(info);
+    }
 
-static void yAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMPoint* impl = V8DOMPoint::toImpl(holder);
+    static void yAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMPoint* impl = V8DOMPoint::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMPoint", "y");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMPoint", "y");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setY(cppValue);
-}
+        impl->setY(cppValue);
+    }
 
-CORE_EXPORT void yAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void yAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMPointV8Internal::yAttributeSetter(v8Value, info);
-}
+        DOMPointV8Internal::yAttributeSetter(v8Value, info);
+    }
 
-static void zAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void zAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMPoint* impl = V8DOMPoint::toImpl(holder);
+        DOMPoint* impl = V8DOMPoint::toImpl(holder);
 
-  v8SetReturnValue(info, impl->z());
-}
+        v8SetReturnValue(info, impl->z());
+    }
 
-CORE_EXPORT void zAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMPointV8Internal::zAttributeGetter(info);
-}
+    CORE_EXPORT void zAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMPointV8Internal::zAttributeGetter(info);
+    }
 
-static void zAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMPoint* impl = V8DOMPoint::toImpl(holder);
+    static void zAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMPoint* impl = V8DOMPoint::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMPoint", "z");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMPoint", "z");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setZ(cppValue);
-}
+        impl->setZ(cppValue);
+    }
 
-CORE_EXPORT void zAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void zAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMPointV8Internal::zAttributeSetter(v8Value, info);
-}
+        DOMPointV8Internal::zAttributeSetter(v8Value, info);
+    }
 
-static void wAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void wAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMPoint* impl = V8DOMPoint::toImpl(holder);
+        DOMPoint* impl = V8DOMPoint::toImpl(holder);
 
-  v8SetReturnValue(info, impl->w());
-}
+        v8SetReturnValue(info, impl->w());
+    }
 
-CORE_EXPORT void wAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMPointV8Internal::wAttributeGetter(info);
-}
+    CORE_EXPORT void wAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMPointV8Internal::wAttributeGetter(info);
+    }
 
-static void wAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMPoint* impl = V8DOMPoint::toImpl(holder);
+    static void wAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMPoint* impl = V8DOMPoint::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMPoint", "w");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMPoint", "w");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setW(cppValue);
-}
+        impl->setW(cppValue);
+    }
 
-CORE_EXPORT void wAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void wAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMPointV8Internal::wAttributeSetter(v8Value, info);
-}
+        DOMPointV8Internal::wAttributeSetter(v8Value, info);
+    }
 
-static void fromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMPoint", "fromPoint");
+    static void fromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMPoint", "fromPoint");
 
-  DOMPointInit other;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
+        DOMPointInit other;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
 
-    return;
-  }
-  V8DOMPointInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8DOMPointInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  DOMPoint* result = DOMPoint::fromPoint(other);
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
-}
+        DOMPoint* result = DOMPoint::fromPoint(other);
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
+    }
 
-CORE_EXPORT  void fromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMPointV8Internal::fromPointMethod(info);
-}
+    CORE_EXPORT void fromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMPointV8Internal::fromPointMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMPoint");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMPoint");
 
-  double x;
-  double y;
-  double z;
-  double w;
-  if (!info[0]->IsUndefined()) {
-    x = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    x = 0;
-  }
-  if (!info[1]->IsUndefined()) {
-    y = toDouble(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    y = 0;
-  }
-  if (!info[2]->IsUndefined()) {
-    z = toDouble(info.GetIsolate(), info[2], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    z = 0;
-  }
-  if (!info[3]->IsUndefined()) {
-    w = toDouble(info.GetIsolate(), info[3], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    w = 1;
-  }
+        double x;
+        double y;
+        double z;
+        double w;
+        if (!info[0]->IsUndefined()) {
+            x = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            x = 0;
+        }
+        if (!info[1]->IsUndefined()) {
+            y = toDouble(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            y = 0;
+        }
+        if (!info[2]->IsUndefined()) {
+            z = toDouble(info.GetIsolate(), info[2], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            z = 0;
+        }
+        if (!info[3]->IsUndefined()) {
+            w = toDouble(info.GetIsolate(), info[3], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            w = 1;
+        }
 
-  DOMPoint* impl = DOMPoint::create(x, y, z, w);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMPoint::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        DOMPoint* impl = DOMPoint::create(x, y, z, w);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMPoint::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace DOMPointV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8DOMPointAccessors[] = {
-    {"x", DOMPointV8Internal::xAttributeGetterCallback, DOMPointV8Internal::xAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", DOMPointV8Internal::yAttributeGetterCallback, DOMPointV8Internal::yAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"z", DOMPointV8Internal::zAttributeGetterCallback, DOMPointV8Internal::zAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"w", DOMPointV8Internal::wAttributeGetterCallback, DOMPointV8Internal::wAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "x", DOMPointV8Internal::xAttributeGetterCallback, DOMPointV8Internal::xAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", DOMPointV8Internal::yAttributeGetterCallback, DOMPointV8Internal::yAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "z", DOMPointV8Internal::zAttributeGetterCallback, DOMPointV8Internal::zAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "w", DOMPointV8Internal::wAttributeGetterCallback, DOMPointV8Internal::wAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8DOMPointMethods[] = {
-    {"fromPoint", DOMPointV8Internal::fromPointMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
+    { "fromPoint", DOMPointV8Internal::fromPointMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
 };
 
-void V8DOMPoint::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMPoint"));
-    return;
-  }
+void V8DOMPoint::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMPoint"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  DOMPointV8Internal::constructor(info);
+    DOMPointV8Internal::constructor(info);
 }
 
-static void installV8DOMPointTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMPoint::wrapperTypeInfo.interfaceName, V8DOMPointReadOnly::domTemplate(isolate, world), V8DOMPoint::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8DOMPoint::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8DOMPointTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMPoint::wrapperTypeInfo.interfaceName, V8DOMPointReadOnly::domTemplate(isolate, world), V8DOMPoint::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8DOMPoint::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  if (!RuntimeEnabledFeatures::geometryInterfacesEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::geometryInterfacesEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMPointAccessors, WTF_ARRAY_LENGTH(V8DOMPointAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMPointMethods, WTF_ARRAY_LENGTH(V8DOMPointMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMPointAccessors, WTF_ARRAY_LENGTH(V8DOMPointAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMPointMethods, WTF_ARRAY_LENGTH(V8DOMPointMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DOMPoint::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMPointTemplate);
+v8::Local<v8::FunctionTemplate> V8DOMPoint::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMPointTemplate);
 }
 
-bool V8DOMPoint::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DOMPoint::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DOMPoint::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DOMPoint::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DOMPoint* V8DOMPoint::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMPoint* V8DOMPoint::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

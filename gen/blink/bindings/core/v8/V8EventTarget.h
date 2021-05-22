@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8EventTarget_h
 #define V8EventTarget_h
 
@@ -26,43 +26,47 @@
 namespace blink {
 
 class V8EventTarget {
-  STATIC_ONLY(V8EventTarget);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static EventTarget* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<EventTarget>();
-  }
-  CORE_EXPORT static EventTarget* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<EventTarget>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<EventTarget>());
-  }
-  static void addEventListenerMethodPrologueCustom(const v8::FunctionCallbackInfo<v8::Value>&, EventTarget*);
-  static void addEventListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, EventTarget*);
-  static void removeEventListenerMethodPrologueCustom(const v8::FunctionCallbackInfo<v8::Value>&, EventTarget*);
-  static void removeEventListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, EventTarget*);
-  static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
+    STATIC_ONLY(V8EventTarget);
 
-  CORE_EXPORT static void installRuntimeEnabledFeatures(
-      v8::Isolate* isolate,
-      const DOMWrapperWorld& world,
-      v8::Local<v8::Object> instance,
-      v8::Local<v8::Object> prototype,
-      v8::Local<v8::Function> interface);
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static EventTarget* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<EventTarget>();
+    }
+    CORE_EXPORT static EventTarget* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<EventTarget>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<EventTarget>());
+    }
+    static void addEventListenerMethodPrologueCustom(const v8::FunctionCallbackInfo<v8::Value>&, EventTarget*);
+    static void addEventListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, EventTarget*);
+    static void removeEventListenerMethodPrologueCustom(const v8::FunctionCallbackInfo<v8::Value>&, EventTarget*);
+    static void removeEventListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, EventTarget*);
+    static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
+
+    CORE_EXPORT static void installRuntimeEnabledFeatures(
+        v8::Isolate* isolate,
+        const DOMWrapperWorld& world,
+        v8::Local<v8::Object> instance,
+        v8::Local<v8::Object> prototype,
+        v8::Local<v8::Function> interface);
 };
 
 template <>
 struct V8TypeOf<EventTarget> {
-  typedef V8EventTarget Type;
+    typedef V8EventTarget Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8EventTarget_h
+#endif // V8EventTarget_h

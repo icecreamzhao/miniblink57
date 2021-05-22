@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8KeyframeEffectReadOnly.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -51,177 +51,186 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&KeyframeEffectReadOnly::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "KeyframeEffectReadOnly is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace KeyframeEffectReadOnlyV8Internal {
 
-static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "KeyframeEffectReadOnly");
+    static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "KeyframeEffectReadOnly");
 
-  Element* target;
-  DictionarySequenceOrDictionary effect;
-  double timing;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  target = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!target && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+        Element* target;
+        DictionarySequenceOrDictionary effect;
+        double timing;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        target = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!target && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
 
-    return;
-  }
+            return;
+        }
 
-  V8DictionarySequenceOrDictionary::toImpl(info.GetIsolate(), info[1], effect, UnionTypeConversionMode::Nullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        V8DictionarySequenceOrDictionary::toImpl(info.GetIsolate(), info[1], effect, UnionTypeConversionMode::Nullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-    KeyframeEffectReadOnly* impl = KeyframeEffectReadOnly::create(executionContext, target, effect, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+            KeyframeEffectReadOnly* impl = KeyframeEffectReadOnly::create(executionContext, target, effect, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8::Local<v8::Object> wrapper = info.Holder();
+            wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8KeyframeEffectReadOnly::wrapperTypeInfo, wrapper);
+            v8SetReturnValue(info, wrapper);
+            return;
+        }
+        timing = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        KeyframeEffectReadOnly* impl = KeyframeEffectReadOnly::create(executionContext, target, effect, timing, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8KeyframeEffectReadOnly::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
     }
-    v8::Local<v8::Object> wrapper = info.Holder();
-    wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8KeyframeEffectReadOnly::wrapperTypeInfo, wrapper);
-    v8SetReturnValue(info, wrapper);
-    return;
-  }
-  timing = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  KeyframeEffectReadOnly* impl = KeyframeEffectReadOnly::create(executionContext, target, effect, timing, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8KeyframeEffectReadOnly::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "KeyframeEffectReadOnly");
 
-static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "KeyframeEffectReadOnly");
+        Element* target;
+        DictionarySequenceOrDictionary effect;
+        KeyframeEffectOptions timing;
+        target = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!target && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
 
-  Element* target;
-  DictionarySequenceOrDictionary effect;
-  KeyframeEffectOptions timing;
-  target = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!target && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+            return;
+        }
 
-    return;
-  }
+        V8DictionarySequenceOrDictionary::toImpl(info.GetIsolate(), info[1], effect, UnionTypeConversionMode::Nullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  V8DictionarySequenceOrDictionary::toImpl(info.GetIsolate(), info[1], effect, UnionTypeConversionMode::Nullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('timing') is not an object.");
 
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('timing') is not an object.");
+            return;
+        }
+        V8KeyframeEffectOptions::toImpl(info.GetIsolate(), info[2], timing, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-    return;
-  }
-  V8KeyframeEffectOptions::toImpl(info.GetIsolate(), info[2], timing, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        KeyframeEffectReadOnly* impl = KeyframeEffectReadOnly::create(executionContext, target, effect, timing, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8KeyframeEffectReadOnly::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  KeyframeEffectReadOnly* impl = KeyframeEffectReadOnly::create(executionContext, target, effect, timing, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8KeyframeEffectReadOnly::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
-
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "KeyframeEffectReadOnly");
-  switch (std::min(3, info.Length())) {
-    case 2:
-      if (true) {
-        KeyframeEffectReadOnlyV8Internal::constructor1(info);
-        return;
-      }
-      break;
-    case 3:
-      if (info[2]->IsUndefined()) {
-        KeyframeEffectReadOnlyV8Internal::constructor1(info);
-        return;
-      }
-      if (info[2]->IsObject()) {
-        KeyframeEffectReadOnlyV8Internal::constructor2(info);
-        return;
-      }
-      if (true) {
-        KeyframeEffectReadOnlyV8Internal::constructor1(info);
-        return;
-      }
-      break;
-    default:
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
-  }
-  exceptionState.throwTypeError("No matching constructor signature.");
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "KeyframeEffectReadOnly");
+        switch (std::min(3, info.Length())) {
+        case 2:
+            if (true) {
+                KeyframeEffectReadOnlyV8Internal::constructor1(info);
+                return;
+            }
+            break;
+        case 3:
+            if (info[2]->IsUndefined()) {
+                KeyframeEffectReadOnlyV8Internal::constructor1(info);
+                return;
+            }
+            if (info[2]->IsObject()) {
+                KeyframeEffectReadOnlyV8Internal::constructor2(info);
+                return;
+            }
+            if (true) {
+                KeyframeEffectReadOnlyV8Internal::constructor1(info);
+                return;
+            }
+            break;
+        default:
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+        exceptionState.throwTypeError("No matching constructor signature.");
+    }
 
 } // namespace KeyframeEffectReadOnlyV8Internal
 
-void V8KeyframeEffectReadOnly::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("KeyframeEffectReadOnly"));
-    return;
-  }
+void V8KeyframeEffectReadOnly::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("KeyframeEffectReadOnly"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  KeyframeEffectReadOnlyV8Internal::constructor(info);
+    KeyframeEffectReadOnlyV8Internal::constructor(info);
 }
 
-static void installV8KeyframeEffectReadOnlyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8KeyframeEffectReadOnly::wrapperTypeInfo.interfaceName, V8AnimationEffectReadOnly::domTemplate(isolate, world), V8KeyframeEffectReadOnly::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8KeyframeEffectReadOnly::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8KeyframeEffectReadOnlyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8KeyframeEffectReadOnly::wrapperTypeInfo.interfaceName, V8AnimationEffectReadOnly::domTemplate(isolate, world), V8KeyframeEffectReadOnly::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8KeyframeEffectReadOnly::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  if (!RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 }
 
-v8::Local<v8::FunctionTemplate> V8KeyframeEffectReadOnly::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8KeyframeEffectReadOnlyTemplate);
+v8::Local<v8::FunctionTemplate> V8KeyframeEffectReadOnly::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8KeyframeEffectReadOnlyTemplate);
 }
 
-bool V8KeyframeEffectReadOnly::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8KeyframeEffectReadOnly::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8KeyframeEffectReadOnly::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8KeyframeEffectReadOnly::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-KeyframeEffectReadOnly* V8KeyframeEffectReadOnly::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+KeyframeEffectReadOnly* V8KeyframeEffectReadOnly::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

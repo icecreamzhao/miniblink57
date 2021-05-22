@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Attr.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,165 +48,186 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Attr::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Attr is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace AttrV8Internal {
 
-static void namespaceURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    static void namespaceURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
 
-  v8::Local<v8::Object> holder = info.Holder();
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Attr* impl = V8Attr::toImpl(holder);
+        Attr* impl = V8Attr::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->namespaceURI(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->namespaceURI(), info.GetIsolate());
+    }
 
-CORE_EXPORT void namespaceURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    CORE_EXPORT void namespaceURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
 
-  AttrV8Internal::namespaceURIAttributeGetter(info);
-}
+        AttrV8Internal::namespaceURIAttributeGetter(info);
+    }
 
-static void prefixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void prefixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Attr* impl = V8Attr::toImpl(holder);
+        Attr* impl = V8Attr::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->prefix(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->prefix(), info.GetIsolate());
+    }
 
-CORE_EXPORT void prefixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AttrV8Internal::prefixAttributeGetter(info);
-}
+    CORE_EXPORT void prefixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AttrV8Internal::prefixAttributeGetter(info);
+    }
 
-static void localNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void localNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Attr* impl = V8Attr::toImpl(holder);
+        Attr* impl = V8Attr::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->localName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->localName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void localNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AttrV8Internal::localNameAttributeGetter(info);
-}
+    CORE_EXPORT void localNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AttrV8Internal::localNameAttributeGetter(info);
+    }
 
-static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Attr* impl = V8Attr::toImpl(holder);
+        Attr* impl = V8Attr::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->name(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->name(), info.GetIsolate());
+    }
 
-CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AttrV8Internal::nameAttributeGetter(info);
-}
+    CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AttrV8Internal::nameAttributeGetter(info);
+    }
 
-static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Attr* impl = V8Attr::toImpl(holder);
+        Attr* impl = V8Attr::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->value(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->value(), info.GetIsolate());
+    }
 
-CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AttrV8Internal::valueAttributeGetter(info);
-}
+    CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AttrV8Internal::valueAttributeGetter(info);
+    }
 
-static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Attr* impl = V8Attr::toImpl(holder);
+    static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Attr* impl = V8Attr::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setValue(cppValue);
-}
+        impl->setValue(cppValue);
+    }
 
-CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  AttrV8Internal::valueAttributeSetter(v8Value, info);
-}
+        AttrV8Internal::valueAttributeSetter(v8Value, info);
+    }
 
-static void ownerElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ownerElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Attr* impl = V8Attr::toImpl(holder);
+        Attr* impl = V8Attr::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->ownerElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->ownerElement()), impl);
+    }
 
-CORE_EXPORT void ownerElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AttrV8Internal::ownerElementAttributeGetter(info);
-}
+    CORE_EXPORT void ownerElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AttrV8Internal::ownerElementAttributeGetter(info);
+    }
 
-static void specifiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void specifiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Attr* impl = V8Attr::toImpl(holder);
+        Attr* impl = V8Attr::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->specified());
-}
+        v8SetReturnValueBool(info, impl->specified());
+    }
 
-CORE_EXPORT void specifiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AttrV8Internal::specifiedAttributeGetter(info);
-}
+    CORE_EXPORT void specifiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AttrV8Internal::specifiedAttributeGetter(info);
+    }
 
 } // namespace AttrV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8AttrAccessors[] = {
-    {"namespaceURI", AttrV8Internal::namespaceURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"prefix", AttrV8Internal::prefixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"localName", AttrV8Internal::localNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"name", AttrV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"value", AttrV8Internal::valueAttributeGetterCallback, AttrV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ownerElement", AttrV8Internal::ownerElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"specified", AttrV8Internal::specifiedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "namespaceURI", AttrV8Internal::namespaceURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "prefix", AttrV8Internal::prefixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "localName", AttrV8Internal::localNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "name", AttrV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "value", AttrV8Internal::valueAttributeGetterCallback, AttrV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ownerElement", AttrV8Internal::ownerElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "specified", AttrV8Internal::specifiedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8AttrTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Attr::wrapperTypeInfo.interfaceName, V8Node::domTemplate(isolate, world), V8Attr::internalFieldCount);
+static void installV8AttrTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Attr::wrapperTypeInfo.interfaceName, V8Node::domTemplate(isolate, world), V8Attr::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AttrAccessors, WTF_ARRAY_LENGTH(V8AttrAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AttrAccessors, WTF_ARRAY_LENGTH(V8AttrAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8Attr::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AttrTemplate);
+v8::Local<v8::FunctionTemplate> V8Attr::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AttrTemplate);
 }
 
-bool V8Attr::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Attr::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Attr::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Attr::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Attr* V8Attr::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Attr* V8Attr::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

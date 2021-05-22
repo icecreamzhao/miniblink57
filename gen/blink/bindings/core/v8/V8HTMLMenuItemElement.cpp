@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLMenuItemElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,323 +51,356 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLMenuItemElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLMenuItemElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLMenuItemElementV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  String cppValue(impl->fastGetAttribute(HTMLNames::typeAttr));
+        String cppValue(impl->fastGetAttribute(HTMLNames::typeAttr));
 
-  if (cppValue.isEmpty()) {
-    cppValue = "command";
-  } else if (equalIgnoringASCIICase(cppValue, "checkbox")) {
-    cppValue = "checkbox";
-  } else if (equalIgnoringASCIICase(cppValue, "radio")) {
-    cppValue = "radio";
-  } else {
-    cppValue = "command";
-  }
+        if (cppValue.isEmpty()) {
+            cppValue = "command";
+        } else if (equalIgnoringASCIICase(cppValue, "checkbox")) {
+            cppValue = "checkbox";
+        } else if (equalIgnoringASCIICase(cppValue, "radio")) {
+            cppValue = "radio";
+        } else {
+            cppValue = "command";
+        }
 
-  v8SetReturnValueString(info, cppValue, info.GetIsolate());
-}
+        v8SetReturnValueString(info, cppValue, info.GetIsolate());
+    }
 
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMenuItemElementV8Internal::typeAttributeGetter(info);
-}
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMenuItemElementV8Internal::typeAttributeGetter(info);
+    }
 
-static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+    static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::typeAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::typeAttr, cppValue);
+    }
 
-CORE_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMenuItemElementV8Internal::typeAttributeSetter(v8Value, info);
-}
+        HTMLMenuItemElementV8Internal::typeAttributeSetter(v8Value, info);
+    }
 
-static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::labelAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::labelAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMenuItemElementV8Internal::labelAttributeGetter(info);
-}
+    CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMenuItemElementV8Internal::labelAttributeGetter(info);
+    }
 
-static void labelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+    static void labelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::labelAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::labelAttr, cppValue);
+    }
 
-CORE_EXPORT void labelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void labelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMenuItemElementV8Internal::labelAttributeSetter(v8Value, info);
-}
+        HTMLMenuItemElementV8Internal::labelAttributeSetter(v8Value, info);
+    }
 
-static void iconAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void iconAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->getURLAttribute(HTMLNames::iconAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getURLAttribute(HTMLNames::iconAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void iconAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMenuItemElementV8Internal::iconAttributeGetter(info);
-}
+    CORE_EXPORT void iconAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMenuItemElementV8Internal::iconAttributeGetter(info);
+    }
 
-static void iconAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+    static void iconAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::iconAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::iconAttr, cppValue);
+    }
 
-CORE_EXPORT void iconAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void iconAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMenuItemElementV8Internal::iconAttributeSetter(v8Value, info);
-}
+        HTMLMenuItemElementV8Internal::iconAttributeSetter(v8Value, info);
+    }
 
-static void disabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void disabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::disabledAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::disabledAttr));
+    }
 
-CORE_EXPORT void disabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMenuItemElementV8Internal::disabledAttributeGetter(info);
-}
+    CORE_EXPORT void disabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMenuItemElementV8Internal::disabledAttributeGetter(info);
+    }
 
-static void disabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+    static void disabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMenuItemElement", "disabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMenuItemElement", "disabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::disabledAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::disabledAttr, cppValue);
+    }
 
-CORE_EXPORT void disabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void disabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMenuItemElementV8Internal::disabledAttributeSetter(v8Value, info);
-}
+        HTMLMenuItemElementV8Internal::disabledAttributeSetter(v8Value, info);
+    }
 
-static void checkedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void checkedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::checkedAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::checkedAttr));
+    }
 
-CORE_EXPORT void checkedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMenuItemElementV8Internal::checkedAttributeGetter(info);
-}
+    CORE_EXPORT void checkedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMenuItemElementV8Internal::checkedAttributeGetter(info);
+    }
 
-static void checkedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+    static void checkedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMenuItemElement", "checked");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMenuItemElement", "checked");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::checkedAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::checkedAttr, cppValue);
+    }
 
-CORE_EXPORT void checkedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void checkedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMenuItemElementV8Internal::checkedAttributeSetter(v8Value, info);
-}
+        HTMLMenuItemElementV8Internal::checkedAttributeSetter(v8Value, info);
+    }
 
-static void radiogroupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void radiogroupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::radiogroupAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::radiogroupAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void radiogroupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMenuItemElementV8Internal::radiogroupAttributeGetter(info);
-}
+    CORE_EXPORT void radiogroupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMenuItemElementV8Internal::radiogroupAttributeGetter(info);
+    }
 
-static void radiogroupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+    static void radiogroupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::radiogroupAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::radiogroupAttr, cppValue);
+    }
 
-CORE_EXPORT void radiogroupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void radiogroupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMenuItemElementV8Internal::radiogroupAttributeSetter(v8Value, info);
-}
+        HTMLMenuItemElementV8Internal::radiogroupAttributeSetter(v8Value, info);
+    }
 
-static void defaultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void defaultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::defaultAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::defaultAttr));
+    }
 
-CORE_EXPORT void defaultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMenuItemElementV8Internal::defaultAttributeGetter(info);
-}
+    CORE_EXPORT void defaultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMenuItemElementV8Internal::defaultAttributeGetter(info);
+    }
 
-static void defaultAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
+    static void defaultAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMenuItemElement* impl = V8HTMLMenuItemElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMenuItemElement", "default");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMenuItemElement", "default");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::defaultAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::defaultAttr, cppValue);
+    }
 
-CORE_EXPORT void defaultAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void defaultAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMenuItemElementV8Internal::defaultAttributeSetter(v8Value, info);
-}
+        HTMLMenuItemElementV8Internal::defaultAttributeSetter(v8Value, info);
+    }
 
 } // namespace HTMLMenuItemElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLMenuItemElementAccessors[] = {
-    {"type", HTMLMenuItemElementV8Internal::typeAttributeGetterCallback, HTMLMenuItemElementV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"label", HTMLMenuItemElementV8Internal::labelAttributeGetterCallback, HTMLMenuItemElementV8Internal::labelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"icon", HTMLMenuItemElementV8Internal::iconAttributeGetterCallback, HTMLMenuItemElementV8Internal::iconAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disabled", HTMLMenuItemElementV8Internal::disabledAttributeGetterCallback, HTMLMenuItemElementV8Internal::disabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"checked", HTMLMenuItemElementV8Internal::checkedAttributeGetterCallback, HTMLMenuItemElementV8Internal::checkedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"radiogroup", HTMLMenuItemElementV8Internal::radiogroupAttributeGetterCallback, HTMLMenuItemElementV8Internal::radiogroupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"default", HTMLMenuItemElementV8Internal::defaultAttributeGetterCallback, HTMLMenuItemElementV8Internal::defaultAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", HTMLMenuItemElementV8Internal::typeAttributeGetterCallback, HTMLMenuItemElementV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "label", HTMLMenuItemElementV8Internal::labelAttributeGetterCallback, HTMLMenuItemElementV8Internal::labelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "icon", HTMLMenuItemElementV8Internal::iconAttributeGetterCallback, HTMLMenuItemElementV8Internal::iconAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disabled", HTMLMenuItemElementV8Internal::disabledAttributeGetterCallback, HTMLMenuItemElementV8Internal::disabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "checked", HTMLMenuItemElementV8Internal::checkedAttributeGetterCallback, HTMLMenuItemElementV8Internal::checkedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "radiogroup", HTMLMenuItemElementV8Internal::radiogroupAttributeGetterCallback, HTMLMenuItemElementV8Internal::radiogroupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "default", HTMLMenuItemElementV8Internal::defaultAttributeGetterCallback, HTMLMenuItemElementV8Internal::defaultAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLMenuItemElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLMenuItemElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLMenuItemElement::internalFieldCount);
+static void installV8HTMLMenuItemElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLMenuItemElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLMenuItemElement::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::contextMenuEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::contextMenuEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMenuItemElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMenuItemElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMenuItemElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMenuItemElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLMenuItemElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLMenuItemElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLMenuItemElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLMenuItemElementTemplate);
 }
 
-bool V8HTMLMenuItemElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLMenuItemElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLMenuItemElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLMenuItemElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLMenuItemElement* V8HTMLMenuItemElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLMenuItemElement* V8HTMLMenuItemElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

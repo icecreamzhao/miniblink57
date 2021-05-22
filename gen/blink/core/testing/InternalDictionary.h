@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef InternalDictionary_h
 #define InternalDictionary_h
 
@@ -26,187 +26,188 @@ class EventTarget;
 class Element;
 
 class InternalDictionary : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  InternalDictionary();
-  virtual ~InternalDictionary();
-  InternalDictionary(const InternalDictionary&);
-  InternalDictionary& operator=(const InternalDictionary&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasBooleanMember() const;
-  bool booleanMember() const;
-  void setBooleanMember(bool);
+public:
+    InternalDictionary();
+    virtual ~InternalDictionary();
+    InternalDictionary(const InternalDictionary&);
+    InternalDictionary& operator=(const InternalDictionary&);
 
-  bool hasByteStringMember() const;
-  String byteStringMember() const;
-  void setByteStringMember(String);
+    bool hasBooleanMember() const;
+    bool booleanMember() const;
+    void setBooleanMember(bool);
 
-  bool hasDictionaryMember() const;
-  Dictionary dictionaryMember() const;
-  void setDictionaryMember(Dictionary);
+    bool hasByteStringMember() const;
+    String byteStringMember() const;
+    void setByteStringMember(String);
 
-  bool hasDoubleMember() const;
-  double doubleMember() const;
-  void setDoubleMember(double);
+    bool hasDictionaryMember() const;
+    Dictionary dictionaryMember() const;
+    void setDictionaryMember(Dictionary);
 
-  bool hasDoubleOrStringMember() const;
-  const DoubleOrString& doubleOrStringMember() const;
-  void setDoubleOrStringMember(const DoubleOrString&);
+    bool hasDoubleMember() const;
+    double doubleMember() const;
+    void setDoubleMember(double);
 
-  bool hasDoubleOrStringSequenceMember() const;
-  const HeapVector<DoubleOrString>& doubleOrStringSequenceMember() const;
-  void setDoubleOrStringSequenceMember(const HeapVector<DoubleOrString>&);
+    bool hasDoubleOrStringMember() const;
+    const DoubleOrString& doubleOrStringMember() const;
+    void setDoubleOrStringMember(const DoubleOrString&);
 
-  bool hasElementMember() const;
-  Element* elementMember() const;
-  void setElementMember(Element*);
+    bool hasDoubleOrStringSequenceMember() const;
+    const HeapVector<DoubleOrString>& doubleOrStringSequenceMember() const;
+    void setDoubleOrStringSequenceMember(const HeapVector<DoubleOrString>&);
 
-  bool hasElementOrNullMember() const;
-  Element* elementOrNullMember() const;
-  void setElementOrNullMember(Element*);
-  void setElementOrNullMemberToNull();
+    bool hasElementMember() const;
+    Element* elementMember() const;
+    void setElementMember(Element*);
 
-  bool hasEnumArrayMember() const;
-  const Vector<String>& enumArrayMember() const;
-  void setEnumArrayMember(const Vector<String>&);
+    bool hasElementOrNullMember() const;
+    Element* elementOrNullMember() const;
+    void setElementOrNullMember(Element*);
+    void setElementOrNullMemberToNull();
 
-  bool hasEnumMember() const;
-  String enumMember() const;
-  void setEnumMember(String);
+    bool hasEnumArrayMember() const;
+    const Vector<String>& enumArrayMember() const;
+    void setEnumArrayMember(const Vector<String>&);
 
-  bool hasEnumMemberWithDefault() const;
-  String enumMemberWithDefault() const;
-  void setEnumMemberWithDefault(String);
+    bool hasEnumMember() const;
+    String enumMember() const;
+    void setEnumMember(String);
 
-  bool hasEnumOrNullMember() const;
-  String enumOrNullMember() const;
-  void setEnumOrNullMember(String);
-  void setEnumOrNullMemberToNull();
+    bool hasEnumMemberWithDefault() const;
+    String enumMemberWithDefault() const;
+    void setEnumMemberWithDefault(String);
 
-  bool hasEventTargetOrNullMember() const;
-  EventTarget* eventTargetOrNullMember() const;
-  void setEventTargetOrNullMember(EventTarget*);
-  void setEventTargetOrNullMemberToNull();
+    bool hasEnumOrNullMember() const;
+    String enumOrNullMember() const;
+    void setEnumOrNullMember(String);
+    void setEnumOrNullMemberToNull();
 
-  bool hasLongMember() const;
-  int longMember() const;
-  void setLongMember(int);
+    bool hasEventTargetOrNullMember() const;
+    EventTarget* eventTargetOrNullMember() const;
+    void setEventTargetOrNullMember(EventTarget*);
+    void setEventTargetOrNullMemberToNull();
 
-  bool hasLongMemberWithClamp() const;
-  int longMemberWithClamp() const;
-  void setLongMemberWithClamp(int);
+    bool hasLongMember() const;
+    int longMember() const;
+    void setLongMember(int);
 
-  bool hasLongMemberWithDefault() const;
-  int longMemberWithDefault() const;
-  void setLongMemberWithDefault(int);
+    bool hasLongMemberWithClamp() const;
+    int longMemberWithClamp() const;
+    void setLongMemberWithClamp(int);
 
-  bool hasLongMemberWithEnforceRange() const;
-  int longMemberWithEnforceRange() const;
-  void setLongMemberWithEnforceRange(int);
+    bool hasLongMemberWithDefault() const;
+    int longMemberWithDefault() const;
+    void setLongMemberWithDefault(int);
 
-  bool hasLongOrNullMember() const;
-  int longOrNullMember() const;
-  void setLongOrNullMember(int);
-  void setLongOrNullMemberToNull();
+    bool hasLongMemberWithEnforceRange() const;
+    int longMemberWithEnforceRange() const;
+    void setLongMemberWithEnforceRange(int);
 
-  bool hasLongOrNullMemberWithDefault() const;
-  int longOrNullMemberWithDefault() const;
-  void setLongOrNullMemberWithDefault(int);
-  void setLongOrNullMemberWithDefaultToNull();
+    bool hasLongOrNullMember() const;
+    int longOrNullMember() const;
+    void setLongOrNullMember(int);
+    void setLongOrNullMemberToNull();
 
-  bool hasObjectMember() const;
-  ScriptValue objectMember() const;
-  void setObjectMember(ScriptValue);
+    bool hasLongOrNullMemberWithDefault() const;
+    int longOrNullMemberWithDefault() const;
+    void setLongOrNullMemberWithDefault(int);
+    void setLongOrNullMemberWithDefaultToNull();
 
-  bool hasObjectOrNullMemberWithDefault() const;
-  ScriptValue objectOrNullMemberWithDefault() const;
-  void setObjectOrNullMemberWithDefault(ScriptValue);
-  void setObjectOrNullMemberWithDefaultToNull();
+    bool hasObjectMember() const;
+    ScriptValue objectMember() const;
+    void setObjectMember(ScriptValue);
 
-  bool hasPrefixGetMember() const;
-  ScriptValue getPrefixGetMember() const;
-  void setPrefixGetMember(ScriptValue);
+    bool hasObjectOrNullMemberWithDefault() const;
+    ScriptValue objectOrNullMemberWithDefault() const;
+    void setObjectOrNullMemberWithDefault(ScriptValue);
+    void setObjectOrNullMemberWithDefaultToNull();
 
-  bool hasStringMember() const;
-  String stringMember() const;
-  void setStringMember(String);
+    bool hasPrefixGetMember() const;
+    ScriptValue getPrefixGetMember() const;
+    void setPrefixGetMember(ScriptValue);
 
-  bool hasStringMemberWithDefault() const;
-  String stringMemberWithDefault() const;
-  void setStringMemberWithDefault(String);
+    bool hasStringMember() const;
+    String stringMember() const;
+    void setStringMember(String);
 
-  bool hasStringSequenceMember() const;
-  const Vector<String>& stringSequenceMember() const;
-  void setStringSequenceMember(const Vector<String>&);
+    bool hasStringMemberWithDefault() const;
+    String stringMemberWithDefault() const;
+    void setStringMemberWithDefault(String);
 
-  bool hasStringSequenceMemberWithDefault() const;
-  const Vector<String>& stringSequenceMemberWithDefault() const;
-  void setStringSequenceMemberWithDefault(const Vector<String>&);
+    bool hasStringSequenceMember() const;
+    const Vector<String>& stringSequenceMember() const;
+    void setStringSequenceMember(const Vector<String>&);
 
-  bool hasStringSequenceOrNullMember() const;
-  const Vector<String>& stringSequenceOrNullMember() const;
-  void setStringSequenceOrNullMember(const Vector<String>&);
-  void setStringSequenceOrNullMemberToNull();
+    bool hasStringSequenceMemberWithDefault() const;
+    const Vector<String>& stringSequenceMemberWithDefault() const;
+    void setStringSequenceMemberWithDefault(const Vector<String>&);
 
-  bool hasUnrestrictedDoubleMember() const;
-  double unrestrictedDoubleMember() const;
-  void setUnrestrictedDoubleMember(double);
+    bool hasStringSequenceOrNullMember() const;
+    const Vector<String>& stringSequenceOrNullMember() const;
+    void setStringSequenceOrNullMember(const Vector<String>&);
+    void setStringSequenceOrNullMemberToNull();
 
-  bool hasUsvStringMember() const;
-  String usvStringMember() const;
-  void setUsvStringMember(String);
+    bool hasUnrestrictedDoubleMember() const;
+    double unrestrictedDoubleMember() const;
+    void setUnrestrictedDoubleMember(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasUsvStringMember() const;
+    String usvStringMember() const;
+    void setUsvStringMember(String);
 
- private:
-  bool m_hasBooleanMember = false;
-  bool m_booleanMember;
-  String m_byteStringMember;
-  Dictionary m_dictionaryMember;
-  bool m_hasDoubleMember = false;
-  double m_doubleMember;
-  DoubleOrString m_doubleOrStringMember;
-  bool m_hasDoubleOrStringSequenceMember = false;
-  HeapVector<DoubleOrString> m_doubleOrStringSequenceMember;
-  Member<Element> m_elementMember;
-  Member<Element> m_elementOrNullMember;
-  bool m_hasEnumArrayMember = false;
-  Vector<String> m_enumArrayMember;
-  String m_enumMember;
-  String m_enumMemberWithDefault;
-  String m_enumOrNullMember;
-  Member<EventTarget> m_eventTargetOrNullMember;
-  bool m_hasLongMember = false;
-  int m_longMember;
-  bool m_hasLongMemberWithClamp = false;
-  int m_longMemberWithClamp;
-  bool m_hasLongMemberWithDefault = false;
-  int m_longMemberWithDefault;
-  bool m_hasLongMemberWithEnforceRange = false;
-  int m_longMemberWithEnforceRange;
-  bool m_hasLongOrNullMember = false;
-  int m_longOrNullMember;
-  bool m_hasLongOrNullMemberWithDefault = false;
-  int m_longOrNullMemberWithDefault;
-  ScriptValue m_objectMember;
-  ScriptValue m_objectOrNullMemberWithDefault;
-  ScriptValue m_prefixGetMember;
-  String m_stringMember;
-  String m_stringMemberWithDefault;
-  bool m_hasStringSequenceMember = false;
-  Vector<String> m_stringSequenceMember;
-  bool m_hasStringSequenceMemberWithDefault = false;
-  Vector<String> m_stringSequenceMemberWithDefault;
-  bool m_hasStringSequenceOrNullMember = false;
-  Vector<String> m_stringSequenceOrNullMember;
-  bool m_hasUnrestrictedDoubleMember = false;
-  double m_unrestrictedDoubleMember;
-  String m_usvStringMember;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8InternalDictionary;
+private:
+    bool m_hasBooleanMember = false;
+    bool m_booleanMember;
+    String m_byteStringMember;
+    Dictionary m_dictionaryMember;
+    bool m_hasDoubleMember = false;
+    double m_doubleMember;
+    DoubleOrString m_doubleOrStringMember;
+    bool m_hasDoubleOrStringSequenceMember = false;
+    HeapVector<DoubleOrString> m_doubleOrStringSequenceMember;
+    Member<Element> m_elementMember;
+    Member<Element> m_elementOrNullMember;
+    bool m_hasEnumArrayMember = false;
+    Vector<String> m_enumArrayMember;
+    String m_enumMember;
+    String m_enumMemberWithDefault;
+    String m_enumOrNullMember;
+    Member<EventTarget> m_eventTargetOrNullMember;
+    bool m_hasLongMember = false;
+    int m_longMember;
+    bool m_hasLongMemberWithClamp = false;
+    int m_longMemberWithClamp;
+    bool m_hasLongMemberWithDefault = false;
+    int m_longMemberWithDefault;
+    bool m_hasLongMemberWithEnforceRange = false;
+    int m_longMemberWithEnforceRange;
+    bool m_hasLongOrNullMember = false;
+    int m_longOrNullMember;
+    bool m_hasLongOrNullMemberWithDefault = false;
+    int m_longOrNullMemberWithDefault;
+    ScriptValue m_objectMember;
+    ScriptValue m_objectOrNullMemberWithDefault;
+    ScriptValue m_prefixGetMember;
+    String m_stringMember;
+    String m_stringMemberWithDefault;
+    bool m_hasStringSequenceMember = false;
+    Vector<String> m_stringSequenceMember;
+    bool m_hasStringSequenceMemberWithDefault = false;
+    Vector<String> m_stringSequenceMemberWithDefault;
+    bool m_hasStringSequenceOrNullMember = false;
+    Vector<String> m_stringSequenceOrNullMember;
+    bool m_hasUnrestrictedDoubleMember = false;
+    double m_unrestrictedDoubleMember;
+    String m_usvStringMember;
+
+    friend class V8InternalDictionary;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // InternalDictionary_h
+#endif // InternalDictionary_h

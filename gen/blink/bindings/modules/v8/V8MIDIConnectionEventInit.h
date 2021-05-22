@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8MIDIConnectionEventInit_h
 #define V8MIDIConnectionEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8MIDIConnectionEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MIDIConnectionEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MIDIConnectionEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8MIDIConnectionEventInit(const MIDIConnectionEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MIDIConnectionEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MIDIConnectionEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<MIDIConnectionEventInit> {
-  static MIDIConnectionEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static MIDIConnectionEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<MIDIConnectionEventInit> {
-  typedef V8MIDIConnectionEventInit Type;
+    typedef V8MIDIConnectionEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8MIDIConnectionEventInit_h
+#endif // V8MIDIConnectionEventInit_h

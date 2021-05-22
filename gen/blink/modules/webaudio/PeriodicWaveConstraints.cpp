@@ -8,34 +8,39 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PeriodicWaveConstraints.h"
 
 namespace blink {
 
-PeriodicWaveConstraints::PeriodicWaveConstraints() {
+PeriodicWaveConstraints::PeriodicWaveConstraints()
+{
 }
 
-PeriodicWaveConstraints::~PeriodicWaveConstraints() {}
+PeriodicWaveConstraints::~PeriodicWaveConstraints() { }
 
 PeriodicWaveConstraints::PeriodicWaveConstraints(const PeriodicWaveConstraints&) = default;
 
 PeriodicWaveConstraints& PeriodicWaveConstraints::operator=(const PeriodicWaveConstraints&) = default;
 
-bool PeriodicWaveConstraints::hasDisableNormalization() const {
-  return m_hasDisableNormalization;
+bool PeriodicWaveConstraints::hasDisableNormalization() const
+{
+    return m_hasDisableNormalization;
 }
-bool PeriodicWaveConstraints::disableNormalization() const {
-  DCHECK(m_hasDisableNormalization);
-  return m_disableNormalization;
+bool PeriodicWaveConstraints::disableNormalization() const
+{
+    DCHECK(m_hasDisableNormalization);
+    return m_disableNormalization;
 }
-void PeriodicWaveConstraints::setDisableNormalization(bool value) {
-  m_disableNormalization = value;
-  m_hasDisableNormalization = true;
+void PeriodicWaveConstraints::setDisableNormalization(bool value)
+{
+    m_disableNormalization = value;
+    m_hasDisableNormalization = true;
 }
 
-DEFINE_TRACE(PeriodicWaveConstraints) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PeriodicWaveConstraints)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

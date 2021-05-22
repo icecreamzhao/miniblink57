@@ -8,59 +8,71 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FetchEventInit.h"
 
 #include "modules/fetch/Request.h"
 
 namespace blink {
 
-FetchEventInit::FetchEventInit() {
-  setIsReload(false);
+FetchEventInit::FetchEventInit()
+{
+    setIsReload(false);
 }
 
-FetchEventInit::~FetchEventInit() {}
+FetchEventInit::~FetchEventInit() { }
 
 FetchEventInit::FetchEventInit(const FetchEventInit&) = default;
 
 FetchEventInit& FetchEventInit::operator=(const FetchEventInit&) = default;
 
-bool FetchEventInit::hasClientId() const {
-  return !m_clientId.isNull();
+bool FetchEventInit::hasClientId() const
+{
+    return !m_clientId.isNull();
 }
-String FetchEventInit::clientId() const {
-  return m_clientId;
+String FetchEventInit::clientId() const
+{
+    return m_clientId;
 }
-void FetchEventInit::setClientId(String value) {
-  m_clientId = value;
+void FetchEventInit::setClientId(String value)
+{
+    m_clientId = value;
 }
-void FetchEventInit::setClientIdToNull() {
-  m_clientId = String();
+void FetchEventInit::setClientIdToNull()
+{
+    m_clientId = String();
 }
-bool FetchEventInit::hasIsReload() const {
-  return m_hasIsReload;
+bool FetchEventInit::hasIsReload() const
+{
+    return m_hasIsReload;
 }
-bool FetchEventInit::isReload() const {
-  DCHECK(m_hasIsReload);
-  return m_isReload;
+bool FetchEventInit::isReload() const
+{
+    DCHECK(m_hasIsReload);
+    return m_isReload;
 }
-void FetchEventInit::setIsReload(bool value) {
-  m_isReload = value;
-  m_hasIsReload = true;
+void FetchEventInit::setIsReload(bool value)
+{
+    m_isReload = value;
+    m_hasIsReload = true;
 }
-bool FetchEventInit::hasRequest() const {
-  return m_request;
+bool FetchEventInit::hasRequest() const
+{
+    return m_request;
 }
-Request* FetchEventInit::request() const {
-  return m_request;
+Request* FetchEventInit::request() const
+{
+    return m_request;
 }
-void FetchEventInit::setRequest(Request* value) {
-  m_request = value;
+void FetchEventInit::setRequest(Request* value)
+{
+    m_request = value;
 }
 
-DEFINE_TRACE(FetchEventInit) {
-  visitor->trace(m_request);
-  ExtendableEventInit::trace(visitor);
+DEFINE_TRACE(FetchEventInit)
+{
+    visitor->trace(m_request);
+    ExtendableEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

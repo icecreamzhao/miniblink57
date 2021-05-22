@@ -8,171 +8,215 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "NotificationOptions.h"
 
 #include "bindings/modules/v8/UnsignedLongOrUnsignedLongSequence.h"
 
 namespace blink {
 
-NotificationOptions::NotificationOptions() {
-  setActions(HeapVector<NotificationAction>());
-  setBody(String(""));
-  setDir(String("auto"));
-  setLang(String(""));
-  setRenotify(false);
-  setRequireInteraction(false);
-  setSilent(false);
-  setTag(String(""));
+NotificationOptions::NotificationOptions()
+{
+    setActions(HeapVector<NotificationAction>());
+    setBody(String(""));
+    setDir(String("auto"));
+    setLang(String(""));
+    setRenotify(false);
+    setRequireInteraction(false);
+    setSilent(false);
+    setTag(String(""));
 }
 
-NotificationOptions::~NotificationOptions() {}
+NotificationOptions::~NotificationOptions() { }
 
 NotificationOptions::NotificationOptions(const NotificationOptions&) = default;
 
 NotificationOptions& NotificationOptions::operator=(const NotificationOptions&) = default;
 
-bool NotificationOptions::hasActions() const {
-  return m_hasActions;
+bool NotificationOptions::hasActions() const
+{
+    return m_hasActions;
 }
-const HeapVector<NotificationAction>& NotificationOptions::actions() const {
-  DCHECK(m_hasActions);
-  return m_actions;
+const HeapVector<NotificationAction>& NotificationOptions::actions() const
+{
+    DCHECK(m_hasActions);
+    return m_actions;
 }
-void NotificationOptions::setActions(const HeapVector<NotificationAction>& value) {
-  m_actions = value;
-  m_hasActions = true;
+void NotificationOptions::setActions(const HeapVector<NotificationAction>& value)
+{
+    m_actions = value;
+    m_hasActions = true;
 }
-bool NotificationOptions::hasBadge() const {
-  return !m_badge.isNull();
+bool NotificationOptions::hasBadge() const
+{
+    return !m_badge.isNull();
 }
-String NotificationOptions::badge() const {
-  return m_badge;
+String NotificationOptions::badge() const
+{
+    return m_badge;
 }
-void NotificationOptions::setBadge(String value) {
-  m_badge = value;
+void NotificationOptions::setBadge(String value)
+{
+    m_badge = value;
 }
-bool NotificationOptions::hasBody() const {
-  return !m_body.isNull();
+bool NotificationOptions::hasBody() const
+{
+    return !m_body.isNull();
 }
-String NotificationOptions::body() const {
-  return m_body;
+String NotificationOptions::body() const
+{
+    return m_body;
 }
-void NotificationOptions::setBody(String value) {
-  m_body = value;
+void NotificationOptions::setBody(String value)
+{
+    m_body = value;
 }
-bool NotificationOptions::hasData() const {
-  return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
+bool NotificationOptions::hasData() const
+{
+    return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
 }
-ScriptValue NotificationOptions::data() const {
-  return m_data;
+ScriptValue NotificationOptions::data() const
+{
+    return m_data;
 }
-void NotificationOptions::setData(ScriptValue value) {
-  m_data = value;
+void NotificationOptions::setData(ScriptValue value)
+{
+    m_data = value;
 }
-bool NotificationOptions::hasDir() const {
-  return !m_dir.isNull();
+bool NotificationOptions::hasDir() const
+{
+    return !m_dir.isNull();
 }
-String NotificationOptions::dir() const {
-  return m_dir;
+String NotificationOptions::dir() const
+{
+    return m_dir;
 }
-void NotificationOptions::setDir(String value) {
-  m_dir = value;
+void NotificationOptions::setDir(String value)
+{
+    m_dir = value;
 }
-bool NotificationOptions::hasIcon() const {
-  return !m_icon.isNull();
+bool NotificationOptions::hasIcon() const
+{
+    return !m_icon.isNull();
 }
-String NotificationOptions::icon() const {
-  return m_icon;
+String NotificationOptions::icon() const
+{
+    return m_icon;
 }
-void NotificationOptions::setIcon(String value) {
-  m_icon = value;
+void NotificationOptions::setIcon(String value)
+{
+    m_icon = value;
 }
-bool NotificationOptions::hasImage() const {
-  return !m_image.isNull();
+bool NotificationOptions::hasImage() const
+{
+    return !m_image.isNull();
 }
-String NotificationOptions::image() const {
-  return m_image;
+String NotificationOptions::image() const
+{
+    return m_image;
 }
-void NotificationOptions::setImage(String value) {
-  m_image = value;
+void NotificationOptions::setImage(String value)
+{
+    m_image = value;
 }
-bool NotificationOptions::hasLang() const {
-  return !m_lang.isNull();
+bool NotificationOptions::hasLang() const
+{
+    return !m_lang.isNull();
 }
-String NotificationOptions::lang() const {
-  return m_lang;
+String NotificationOptions::lang() const
+{
+    return m_lang;
 }
-void NotificationOptions::setLang(String value) {
-  m_lang = value;
+void NotificationOptions::setLang(String value)
+{
+    m_lang = value;
 }
-bool NotificationOptions::hasRenotify() const {
-  return m_hasRenotify;
+bool NotificationOptions::hasRenotify() const
+{
+    return m_hasRenotify;
 }
-bool NotificationOptions::renotify() const {
-  DCHECK(m_hasRenotify);
-  return m_renotify;
+bool NotificationOptions::renotify() const
+{
+    DCHECK(m_hasRenotify);
+    return m_renotify;
 }
-void NotificationOptions::setRenotify(bool value) {
-  m_renotify = value;
-  m_hasRenotify = true;
+void NotificationOptions::setRenotify(bool value)
+{
+    m_renotify = value;
+    m_hasRenotify = true;
 }
-bool NotificationOptions::hasRequireInteraction() const {
-  return m_hasRequireInteraction;
+bool NotificationOptions::hasRequireInteraction() const
+{
+    return m_hasRequireInteraction;
 }
-bool NotificationOptions::requireInteraction() const {
-  DCHECK(m_hasRequireInteraction);
-  return m_requireInteraction;
+bool NotificationOptions::requireInteraction() const
+{
+    DCHECK(m_hasRequireInteraction);
+    return m_requireInteraction;
 }
-void NotificationOptions::setRequireInteraction(bool value) {
-  m_requireInteraction = value;
-  m_hasRequireInteraction = true;
+void NotificationOptions::setRequireInteraction(bool value)
+{
+    m_requireInteraction = value;
+    m_hasRequireInteraction = true;
 }
-bool NotificationOptions::hasSilent() const {
-  return m_hasSilent;
+bool NotificationOptions::hasSilent() const
+{
+    return m_hasSilent;
 }
-bool NotificationOptions::silent() const {
-  DCHECK(m_hasSilent);
-  return m_silent;
+bool NotificationOptions::silent() const
+{
+    DCHECK(m_hasSilent);
+    return m_silent;
 }
-void NotificationOptions::setSilent(bool value) {
-  m_silent = value;
-  m_hasSilent = true;
+void NotificationOptions::setSilent(bool value)
+{
+    m_silent = value;
+    m_hasSilent = true;
 }
-bool NotificationOptions::hasTag() const {
-  return !m_tag.isNull();
+bool NotificationOptions::hasTag() const
+{
+    return !m_tag.isNull();
 }
-String NotificationOptions::tag() const {
-  return m_tag;
+String NotificationOptions::tag() const
+{
+    return m_tag;
 }
-void NotificationOptions::setTag(String value) {
-  m_tag = value;
+void NotificationOptions::setTag(String value)
+{
+    m_tag = value;
 }
-bool NotificationOptions::hasTimestamp() const {
-  return m_hasTimestamp;
+bool NotificationOptions::hasTimestamp() const
+{
+    return m_hasTimestamp;
 }
-unsigned long long NotificationOptions::timestamp() const {
-  DCHECK(m_hasTimestamp);
-  return m_timestamp;
+unsigned long long NotificationOptions::timestamp() const
+{
+    DCHECK(m_hasTimestamp);
+    return m_timestamp;
 }
-void NotificationOptions::setTimestamp(unsigned long long value) {
-  m_timestamp = value;
-  m_hasTimestamp = true;
+void NotificationOptions::setTimestamp(unsigned long long value)
+{
+    m_timestamp = value;
+    m_hasTimestamp = true;
 }
-bool NotificationOptions::hasVibrate() const {
-  return !m_vibrate.isNull();
+bool NotificationOptions::hasVibrate() const
+{
+    return !m_vibrate.isNull();
 }
-const UnsignedLongOrUnsignedLongSequence& NotificationOptions::vibrate() const {
-  return m_vibrate;
+const UnsignedLongOrUnsignedLongSequence& NotificationOptions::vibrate() const
+{
+    return m_vibrate;
 }
-void NotificationOptions::setVibrate(const UnsignedLongOrUnsignedLongSequence& value) {
-  m_vibrate = value;
+void NotificationOptions::setVibrate(const UnsignedLongOrUnsignedLongSequence& value)
+{
+    m_vibrate = value;
 }
 
-DEFINE_TRACE(NotificationOptions) {
-  visitor->trace(m_actions);
-  visitor->trace(m_vibrate);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(NotificationOptions)
+{
+    visitor->trace(m_actions);
+    visitor->trace(m_vibrate);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

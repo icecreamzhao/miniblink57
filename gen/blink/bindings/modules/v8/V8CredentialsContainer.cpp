@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CredentialsContainer.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,151 +51,162 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CredentialsContainer::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CredentialsContainer is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CredentialsContainerV8Internal {
 
-static void getMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CredentialsContainer", "get");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void getMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CredentialsContainer", "get");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8CredentialsContainer::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  CredentialsContainer* impl = V8CredentialsContainer::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8CredentialsContainer::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        CredentialsContainer* impl = V8CredentialsContainer::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  CredentialRequestOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
+        CredentialRequestOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
 
-    return;
-  }
-  V8CredentialRequestOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8CredentialRequestOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = impl->get(scriptState, options);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->get(scriptState, options);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void getMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CredentialManagerGet);
-  CredentialsContainerV8Internal::getMethod(info);
-}
+    MODULES_EXPORT void getMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CredentialManagerGet);
+        CredentialsContainerV8Internal::getMethod(info);
+    }
 
-static void storeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CredentialsContainer", "store");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void storeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CredentialsContainer", "store");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8CredentialsContainer::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  CredentialsContainer* impl = V8CredentialsContainer::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8CredentialsContainer::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        CredentialsContainer* impl = V8CredentialsContainer::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Credential* credential;
-  credential = V8Credential::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!credential) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Credential'.");
+        Credential* credential;
+        credential = V8Credential::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!credential) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Credential'.");
 
-    return;
-  }
+            return;
+        }
 
-  ScriptPromise result = impl->store(scriptState, credential);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->store(scriptState, credential);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void storeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CredentialManagerStore);
-  CredentialsContainerV8Internal::storeMethod(info);
-}
+    MODULES_EXPORT void storeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CredentialManagerStore);
+        CredentialsContainerV8Internal::storeMethod(info);
+    }
 
-static void requireUserMediationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CredentialsContainer", "requireUserMediation");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void requireUserMediationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CredentialsContainer", "requireUserMediation");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8CredentialsContainer::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  CredentialsContainer* impl = V8CredentialsContainer::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8CredentialsContainer::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        CredentialsContainer* impl = V8CredentialsContainer::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->requireUserMediation(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->requireUserMediation(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void requireUserMediationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CredentialManagerRequireUserMediation);
-  CredentialsContainerV8Internal::requireUserMediationMethod(info);
-}
+    MODULES_EXPORT void requireUserMediationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CredentialManagerRequireUserMediation);
+        CredentialsContainerV8Internal::requireUserMediationMethod(info);
+    }
 
 } // namespace CredentialsContainerV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8CredentialsContainerMethods[] = {
-    {"get", CredentialsContainerV8Internal::getMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"store", CredentialsContainerV8Internal::storeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"requireUserMediation", CredentialsContainerV8Internal::requireUserMediationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "get", CredentialsContainerV8Internal::getMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "store", CredentialsContainerV8Internal::storeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "requireUserMediation", CredentialsContainerV8Internal::requireUserMediationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8CredentialsContainerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CredentialsContainer::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CredentialsContainer::internalFieldCount);
+static void installV8CredentialsContainerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CredentialsContainer::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CredentialsContainer::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::credentialManagerEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::credentialManagerEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CredentialsContainerMethods, WTF_ARRAY_LENGTH(V8CredentialsContainerMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CredentialsContainerMethods, WTF_ARRAY_LENGTH(V8CredentialsContainerMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8CredentialsContainer::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CredentialsContainerTemplate);
+v8::Local<v8::FunctionTemplate> V8CredentialsContainer::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CredentialsContainerTemplate);
 }
 
-bool V8CredentialsContainer::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CredentialsContainer::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CredentialsContainer::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CredentialsContainer::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CredentialsContainer* V8CredentialsContainer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CredentialsContainer* V8CredentialsContainer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

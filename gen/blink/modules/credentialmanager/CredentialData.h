@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CredentialData_h
 #define CredentialData_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class MODULES_EXPORT CredentialData : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CredentialData();
-  virtual ~CredentialData();
-  CredentialData(const CredentialData&);
-  CredentialData& operator=(const CredentialData&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasId() const;
-  String id() const;
-  void setId(String);
+public:
+    CredentialData();
+    virtual ~CredentialData();
+    CredentialData(const CredentialData&);
+    CredentialData& operator=(const CredentialData&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasId() const;
+    String id() const;
+    void setId(String);
 
- private:
-  String m_id;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8CredentialData;
+private:
+    String m_id;
+
+    friend class V8CredentialData;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // CredentialData_h
+#endif // CredentialData_h

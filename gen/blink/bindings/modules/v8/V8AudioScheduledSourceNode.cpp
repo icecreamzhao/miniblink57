@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AudioScheduledSourceNode.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,150 +47,163 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&AudioScheduledSourceNode::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "AudioScheduledSourceNode is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace AudioScheduledSourceNodeV8Internal {
 
-static void onendedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onendedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AudioScheduledSourceNode* impl = V8AudioScheduledSourceNode::toImpl(holder);
+        AudioScheduledSourceNode* impl = V8AudioScheduledSourceNode::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onended()));
+        EventListener* cppValue(WTF::getPtr(impl->onended()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onendedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioScheduledSourceNodeV8Internal::onendedAttributeGetter(info);
-}
-
-static void onendedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  AudioScheduledSourceNode* impl = V8AudioScheduledSourceNode::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onended(), v8Value, V8AudioScheduledSourceNode::eventListenerCacheIndex);
-
-  impl->setOnended(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onendedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  AudioScheduledSourceNodeV8Internal::onendedAttributeSetter(v8Value, info);
-}
-
-static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "AudioScheduledSourceNode", "start");
-
-  AudioScheduledSourceNode* impl = V8AudioScheduledSourceNode::toImpl(info.Holder());
-
-  double when;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->start(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
     }
-    return;
-  }
-  when = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  impl->start(when, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioScheduledSourceNodeV8Internal::startMethod(info);
-}
-
-static void stopMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "AudioScheduledSourceNode", "stop");
-
-  AudioScheduledSourceNode* impl = V8AudioScheduledSourceNode::toImpl(info.Holder());
-
-  double when;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->stop(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    MODULES_EXPORT void onendedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioScheduledSourceNodeV8Internal::onendedAttributeGetter(info);
     }
-    return;
-  }
-  when = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  impl->stop(when, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void onendedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        AudioScheduledSourceNode* impl = V8AudioScheduledSourceNode::toImpl(holder);
 
-MODULES_EXPORT  void stopMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioScheduledSourceNodeV8Internal::stopMethod(info);
-}
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onended(), v8Value, V8AudioScheduledSourceNode::eventListenerCacheIndex);
+
+        impl->setOnended(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onendedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        AudioScheduledSourceNodeV8Internal::onendedAttributeSetter(v8Value, info);
+    }
+
+    static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "AudioScheduledSourceNode", "start");
+
+        AudioScheduledSourceNode* impl = V8AudioScheduledSourceNode::toImpl(info.Holder());
+
+        double when;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->start(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        when = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->start(when, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioScheduledSourceNodeV8Internal::startMethod(info);
+    }
+
+    static void stopMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "AudioScheduledSourceNode", "stop");
+
+        AudioScheduledSourceNode* impl = V8AudioScheduledSourceNode::toImpl(info.Holder());
+
+        double when;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->stop(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        when = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->stop(when, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void stopMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioScheduledSourceNodeV8Internal::stopMethod(info);
+    }
 
 } // namespace AudioScheduledSourceNodeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8AudioScheduledSourceNodeAccessors[] = {
-    {"onended", AudioScheduledSourceNodeV8Internal::onendedAttributeGetterCallback, AudioScheduledSourceNodeV8Internal::onendedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "onended", AudioScheduledSourceNodeV8Internal::onendedAttributeGetterCallback, AudioScheduledSourceNodeV8Internal::onendedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8AudioScheduledSourceNodeMethods[] = {
-    {"start", AudioScheduledSourceNodeV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stop", AudioScheduledSourceNodeV8Internal::stopMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "start", AudioScheduledSourceNodeV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stop", AudioScheduledSourceNodeV8Internal::stopMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8AudioScheduledSourceNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AudioScheduledSourceNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8AudioScheduledSourceNode::internalFieldCount);
+static void installV8AudioScheduledSourceNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AudioScheduledSourceNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8AudioScheduledSourceNode::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioScheduledSourceNodeAccessors, WTF_ARRAY_LENGTH(V8AudioScheduledSourceNodeAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioScheduledSourceNodeMethods, WTF_ARRAY_LENGTH(V8AudioScheduledSourceNodeMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioScheduledSourceNodeAccessors, WTF_ARRAY_LENGTH(V8AudioScheduledSourceNodeAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioScheduledSourceNodeMethods, WTF_ARRAY_LENGTH(V8AudioScheduledSourceNodeMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8AudioScheduledSourceNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AudioScheduledSourceNodeTemplate);
+v8::Local<v8::FunctionTemplate> V8AudioScheduledSourceNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AudioScheduledSourceNodeTemplate);
 }
 
-bool V8AudioScheduledSourceNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8AudioScheduledSourceNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8AudioScheduledSourceNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8AudioScheduledSourceNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-AudioScheduledSourceNode* V8AudioScheduledSourceNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+AudioScheduledSourceNode* V8AudioScheduledSourceNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

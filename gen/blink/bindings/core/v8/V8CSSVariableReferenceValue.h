@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8CSSVariableReferenceValue_h
 #define V8CSSVariableReferenceValue_h
 
@@ -24,31 +24,35 @@
 namespace blink {
 
 class V8CSSVariableReferenceValue {
-  STATIC_ONLY(V8CSSVariableReferenceValue);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static CSSStyleVariableReferenceValue* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<CSSStyleVariableReferenceValue>();
-  }
-  CORE_EXPORT static CSSStyleVariableReferenceValue* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<CSSStyleVariableReferenceValue>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<CSSStyleVariableReferenceValue>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8CSSVariableReferenceValue);
+
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static CSSStyleVariableReferenceValue* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<CSSStyleVariableReferenceValue>();
+    }
+    CORE_EXPORT static CSSStyleVariableReferenceValue* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<CSSStyleVariableReferenceValue>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<CSSStyleVariableReferenceValue>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<CSSStyleVariableReferenceValue> {
-  typedef V8CSSVariableReferenceValue Type;
+    typedef V8CSSVariableReferenceValue Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8CSSVariableReferenceValue_h
+#endif // V8CSSVariableReferenceValue_h

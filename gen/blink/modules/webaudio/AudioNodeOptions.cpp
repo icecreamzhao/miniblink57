@@ -8,52 +8,63 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AudioNodeOptions.h"
 
 namespace blink {
 
-AudioNodeOptions::AudioNodeOptions() {
+AudioNodeOptions::AudioNodeOptions()
+{
 }
 
-AudioNodeOptions::~AudioNodeOptions() {}
+AudioNodeOptions::~AudioNodeOptions() { }
 
 AudioNodeOptions::AudioNodeOptions(const AudioNodeOptions&) = default;
 
 AudioNodeOptions& AudioNodeOptions::operator=(const AudioNodeOptions&) = default;
 
-bool AudioNodeOptions::hasChannelCount() const {
-  return m_hasChannelCount;
+bool AudioNodeOptions::hasChannelCount() const
+{
+    return m_hasChannelCount;
 }
-unsigned AudioNodeOptions::channelCount() const {
-  DCHECK(m_hasChannelCount);
-  return m_channelCount;
+unsigned AudioNodeOptions::channelCount() const
+{
+    DCHECK(m_hasChannelCount);
+    return m_channelCount;
 }
-void AudioNodeOptions::setChannelCount(unsigned value) {
-  m_channelCount = value;
-  m_hasChannelCount = true;
+void AudioNodeOptions::setChannelCount(unsigned value)
+{
+    m_channelCount = value;
+    m_hasChannelCount = true;
 }
-bool AudioNodeOptions::hasChannelCountMode() const {
-  return !m_channelCountMode.isNull();
+bool AudioNodeOptions::hasChannelCountMode() const
+{
+    return !m_channelCountMode.isNull();
 }
-String AudioNodeOptions::channelCountMode() const {
-  return m_channelCountMode;
+String AudioNodeOptions::channelCountMode() const
+{
+    return m_channelCountMode;
 }
-void AudioNodeOptions::setChannelCountMode(String value) {
-  m_channelCountMode = value;
+void AudioNodeOptions::setChannelCountMode(String value)
+{
+    m_channelCountMode = value;
 }
-bool AudioNodeOptions::hasChannelInterpretation() const {
-  return !m_channelInterpretation.isNull();
+bool AudioNodeOptions::hasChannelInterpretation() const
+{
+    return !m_channelInterpretation.isNull();
 }
-String AudioNodeOptions::channelInterpretation() const {
-  return m_channelInterpretation;
+String AudioNodeOptions::channelInterpretation() const
+{
+    return m_channelInterpretation;
 }
-void AudioNodeOptions::setChannelInterpretation(String value) {
-  m_channelInterpretation = value;
+void AudioNodeOptions::setChannelInterpretation(String value)
+{
+    m_channelInterpretation = value;
 }
 
-DEFINE_TRACE(AudioNodeOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(AudioNodeOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

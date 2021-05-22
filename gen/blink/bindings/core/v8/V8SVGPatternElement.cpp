@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGPatternElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -55,242 +55,273 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGPatternElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGPatternElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGPatternElementV8Internal {
 
-static void patternUnitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void patternUnitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->patternUnits()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->patternUnits()), impl);
+    }
 
-CORE_EXPORT void patternUnitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void patternUnitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGPatternElementV8Internal::patternUnitsAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::patternUnitsAttributeGetter(info);
+    }
 
-static void patternContentUnitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void patternContentUnitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->patternContentUnits()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->patternContentUnits()), impl);
+    }
 
-CORE_EXPORT void patternContentUnitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void patternContentUnitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGPatternElementV8Internal::patternContentUnitsAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::patternContentUnitsAttributeGetter(info);
+    }
 
-static void patternTransformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void patternTransformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->patternTransform()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->patternTransform()), impl);
+    }
 
-CORE_EXPORT void patternTransformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void patternTransformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGPatternElementV8Internal::patternTransformAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::patternTransformAttributeGetter(info);
+    }
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGPatternElementV8Internal::xAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::xAttributeGetter(info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGPatternElementV8Internal::yAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::yAttributeGetter(info);
+    }
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGPatternElementV8Internal::widthAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::widthAttributeGetter(info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMPaintServer);
 
-  SVGPatternElementV8Internal::heightAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::heightAttributeGetter(info);
+    }
 
-static void viewBoxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void viewBoxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->viewBox()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->viewBox()), impl);
+    }
 
-CORE_EXPORT void viewBoxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFitToViewBox);
+    CORE_EXPORT void viewBoxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFitToViewBox);
 
-  SVGPatternElementV8Internal::viewBoxAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::viewBoxAttributeGetter(info);
+    }
 
-static void preserveAspectRatioAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void preserveAspectRatioAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->preserveAspectRatio()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->preserveAspectRatio()), impl);
+    }
 
-CORE_EXPORT void preserveAspectRatioAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFitToViewBox);
+    CORE_EXPORT void preserveAspectRatioAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFitToViewBox);
 
-  SVGPatternElementV8Internal::preserveAspectRatioAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::preserveAspectRatioAttributeGetter(info);
+    }
 
-static void requiredFeaturesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void requiredFeaturesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->requiredFeatures()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->requiredFeatures()), impl);
+    }
 
-CORE_EXPORT void requiredFeaturesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
+    CORE_EXPORT void requiredFeaturesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
 
-  SVGPatternElementV8Internal::requiredFeaturesAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::requiredFeaturesAttributeGetter(info);
+    }
 
-static void requiredExtensionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void requiredExtensionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->requiredExtensions()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->requiredExtensions()), impl);
+    }
 
-CORE_EXPORT void requiredExtensionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
+    CORE_EXPORT void requiredExtensionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
 
-  SVGPatternElementV8Internal::requiredExtensionsAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::requiredExtensionsAttributeGetter(info);
+    }
 
-static void systemLanguageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void systemLanguageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->systemLanguage()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->systemLanguage()), impl);
+    }
 
-CORE_EXPORT void systemLanguageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
+    CORE_EXPORT void systemLanguageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
 
-  SVGPatternElementV8Internal::systemLanguageAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::systemLanguageAttributeGetter(info);
+    }
 
-static void hrefAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hrefAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
+        SVGPatternElement* impl = V8SVGPatternElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->href()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->href()), impl);
+    }
 
-CORE_EXPORT void hrefAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMUriReference);
+    CORE_EXPORT void hrefAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMUriReference);
 
-  SVGPatternElementV8Internal::hrefAttributeGetter(info);
-}
+        SVGPatternElementV8Internal::hrefAttributeGetter(info);
+    }
 
 } // namespace SVGPatternElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGPatternElementAccessors[] = {
-    {"patternUnits", SVGPatternElementV8Internal::patternUnitsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"patternContentUnits", SVGPatternElementV8Internal::patternContentUnitsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"patternTransform", SVGPatternElementV8Internal::patternTransformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"x", SVGPatternElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", SVGPatternElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", SVGPatternElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", SVGPatternElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"viewBox", SVGPatternElementV8Internal::viewBoxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"preserveAspectRatio", SVGPatternElementV8Internal::preserveAspectRatioAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"requiredFeatures", SVGPatternElementV8Internal::requiredFeaturesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"requiredExtensions", SVGPatternElementV8Internal::requiredExtensionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"systemLanguage", SVGPatternElementV8Internal::systemLanguageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"href", SVGPatternElementV8Internal::hrefAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "patternUnits", SVGPatternElementV8Internal::patternUnitsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "patternContentUnits", SVGPatternElementV8Internal::patternContentUnitsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "patternTransform", SVGPatternElementV8Internal::patternTransformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "x", SVGPatternElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", SVGPatternElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", SVGPatternElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", SVGPatternElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "viewBox", SVGPatternElementV8Internal::viewBoxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "preserveAspectRatio", SVGPatternElementV8Internal::preserveAspectRatioAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "requiredFeatures", SVGPatternElementV8Internal::requiredFeaturesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "requiredExtensions", SVGPatternElementV8Internal::requiredExtensionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "systemLanguage", SVGPatternElementV8Internal::systemLanguageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "href", SVGPatternElementV8Internal::hrefAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGPatternElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGPatternElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGPatternElement::internalFieldCount);
+static void installV8SVGPatternElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGPatternElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGPatternElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGPatternElementAccessors, WTF_ARRAY_LENGTH(V8SVGPatternElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGPatternElementAccessors, WTF_ARRAY_LENGTH(V8SVGPatternElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGPatternElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGPatternElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGPatternElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGPatternElementTemplate);
 }
 
-bool V8SVGPatternElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGPatternElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGPatternElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGPatternElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGPatternElement* V8SVGPatternElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGPatternElement* V8SVGPatternElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

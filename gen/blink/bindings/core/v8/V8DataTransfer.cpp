@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DataTransfer.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,281 +49,308 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DataTransfer::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DataTransfer is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DataTransferV8Internal {
 
-static void dropEffectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dropEffectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DataTransfer* impl = V8DataTransfer::toImpl(holder);
+        DataTransfer* impl = V8DataTransfer::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->dropEffect(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->dropEffect(), info.GetIsolate());
+    }
 
-CORE_EXPORT void dropEffectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransferV8Internal::dropEffectAttributeGetter(info);
-}
+    CORE_EXPORT void dropEffectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransferV8Internal::dropEffectAttributeGetter(info);
+    }
 
-static void dropEffectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DataTransfer* impl = V8DataTransfer::toImpl(holder);
+    static void dropEffectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DataTransfer* impl = V8DataTransfer::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setDropEffect(cppValue);
-}
+        impl->setDropEffect(cppValue);
+    }
 
-CORE_EXPORT void dropEffectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void dropEffectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DataTransferV8Internal::dropEffectAttributeSetter(v8Value, info);
-}
+        DataTransferV8Internal::dropEffectAttributeSetter(v8Value, info);
+    }
 
-static void effectAllowedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void effectAllowedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DataTransfer* impl = V8DataTransfer::toImpl(holder);
+        DataTransfer* impl = V8DataTransfer::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->effectAllowed(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->effectAllowed(), info.GetIsolate());
+    }
 
-CORE_EXPORT void effectAllowedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransferV8Internal::effectAllowedAttributeGetter(info);
-}
+    CORE_EXPORT void effectAllowedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransferV8Internal::effectAllowedAttributeGetter(info);
+    }
 
-static void effectAllowedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DataTransfer* impl = V8DataTransfer::toImpl(holder);
+    static void effectAllowedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DataTransfer* impl = V8DataTransfer::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setEffectAllowed(cppValue);
-}
+        impl->setEffectAllowed(cppValue);
+    }
 
-CORE_EXPORT void effectAllowedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void effectAllowedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DataTransferV8Internal::effectAllowedAttributeSetter(v8Value, info);
-}
+        DataTransferV8Internal::effectAllowedAttributeSetter(v8Value, info);
+    }
 
-static void itemsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void itemsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DataTransfer* impl = V8DataTransfer::toImpl(holder);
+        DataTransfer* impl = V8DataTransfer::toImpl(holder);
 
-  DataTransferItemList* cppValue(WTF::getPtr(impl->items()));
+        DataTransferItemList* cppValue(WTF::getPtr(impl->items()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#DataTransfer#items";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#DataTransfer#items";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void itemsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransferV8Internal::itemsAttributeGetter(info);
-}
+    CORE_EXPORT void itemsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransferV8Internal::itemsAttributeGetter(info);
+    }
 
-static void typesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DataTransfer* impl = V8DataTransfer::toImpl(holder);
+        DataTransfer* impl = V8DataTransfer::toImpl(holder);
 
-  v8SetReturnValue(info, ToV8(impl->types(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->types(), info.Holder(), info.GetIsolate()));
+    }
 
-CORE_EXPORT void typesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransferV8Internal::typesAttributeGetter(info);
-}
+    CORE_EXPORT void typesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransferV8Internal::typesAttributeGetter(info);
+    }
 
-static void filesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void filesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DataTransfer* impl = V8DataTransfer::toImpl(holder);
+        DataTransfer* impl = V8DataTransfer::toImpl(holder);
 
-  FileList* cppValue(WTF::getPtr(impl->files()));
+        FileList* cppValue(WTF::getPtr(impl->files()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#DataTransfer#files";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#DataTransfer#files";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void filesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransferV8Internal::filesAttributeGetter(info);
-}
+    CORE_EXPORT void filesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransferV8Internal::filesAttributeGetter(info);
+    }
 
-static void setDragImageMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DataTransfer", "setDragImage");
+    static void setDragImageMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DataTransfer", "setDragImage");
 
-  DataTransfer* impl = V8DataTransfer::toImpl(info.Holder());
+        DataTransfer* impl = V8DataTransfer::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  Element* image;
-  int x;
-  int y;
-  image = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!image) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+        Element* image;
+        int x;
+        int y;
+        image = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!image) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
 
-    return;
-  }
+            return;
+        }
 
-  x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setDragImage(image, x, y);
-}
+        impl->setDragImage(image, x, y);
+    }
 
-CORE_EXPORT  void setDragImageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransferV8Internal::setDragImageMethod(info);
-}
+    CORE_EXPORT void setDragImageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransferV8Internal::setDragImageMethod(info);
+    }
 
-static void getDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransfer* impl = V8DataTransfer::toImpl(info.Holder());
+    static void getDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransfer* impl = V8DataTransfer::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getData", "DataTransfer", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getData", "DataTransfer", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> format;
-  format = info[0];
-  if (!format.prepare())
-    return;
+        V8StringResource<> format;
+        format = info[0];
+        if (!format.prepare())
+            return;
 
-  v8SetReturnValueString(info, impl->getData(format), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getData(format), info.GetIsolate());
+    }
 
-CORE_EXPORT  void getDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransferV8Internal::getDataMethod(info);
-}
+    CORE_EXPORT void getDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransferV8Internal::getDataMethod(info);
+    }
 
-static void setDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransfer* impl = V8DataTransfer::toImpl(info.Holder());
+    static void setDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransfer* impl = V8DataTransfer::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setData", "DataTransfer", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setData", "DataTransfer", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<> format;
-  V8StringResource<> data;
-  format = info[0];
-  if (!format.prepare())
-    return;
+        V8StringResource<> format;
+        V8StringResource<> data;
+        format = info[0];
+        if (!format.prepare())
+            return;
 
-  data = info[1];
-  if (!data.prepare())
-    return;
+        data = info[1];
+        if (!data.prepare())
+            return;
 
-  impl->setData(format, data);
-}
+        impl->setData(format, data);
+    }
 
-CORE_EXPORT  void setDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransferV8Internal::setDataMethod(info);
-}
+    CORE_EXPORT void setDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransferV8Internal::setDataMethod(info);
+    }
 
-static void clearDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransfer* impl = V8DataTransfer::toImpl(info.Holder());
+    static void clearDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransfer* impl = V8DataTransfer::toImpl(info.Holder());
 
-  V8StringResource<> format;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->clearData();
-    return;
-  }
-  format = info[0];
-  if (!format.prepare())
-    return;
+        V8StringResource<> format;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->clearData();
+            return;
+        }
+        format = info[0];
+        if (!format.prepare())
+            return;
 
-  impl->clearData(format);
-}
+        impl->clearData(format);
+    }
 
-CORE_EXPORT  void clearDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DataTransferV8Internal::clearDataMethod(info);
-}
+    CORE_EXPORT void clearDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DataTransferV8Internal::clearDataMethod(info);
+    }
 
 } // namespace DataTransferV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8DataTransferAccessors[] = {
-    {"dropEffect", DataTransferV8Internal::dropEffectAttributeGetterCallback, DataTransferV8Internal::dropEffectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"effectAllowed", DataTransferV8Internal::effectAllowedAttributeGetterCallback, DataTransferV8Internal::effectAllowedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"items", DataTransferV8Internal::itemsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"types", DataTransferV8Internal::typesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"files", DataTransferV8Internal::filesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "dropEffect", DataTransferV8Internal::dropEffectAttributeGetterCallback, DataTransferV8Internal::dropEffectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "effectAllowed", DataTransferV8Internal::effectAllowedAttributeGetterCallback, DataTransferV8Internal::effectAllowedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "items", DataTransferV8Internal::itemsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "types", DataTransferV8Internal::typesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "files", DataTransferV8Internal::filesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8DataTransferMethods[] = {
-    {"setDragImage", DataTransferV8Internal::setDragImageMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getData", DataTransferV8Internal::getDataMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setData", DataTransferV8Internal::setDataMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearData", DataTransferV8Internal::clearDataMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "setDragImage", DataTransferV8Internal::setDragImageMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getData", DataTransferV8Internal::getDataMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setData", DataTransferV8Internal::setDataMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearData", DataTransferV8Internal::clearDataMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8DataTransferTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DataTransfer::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DataTransfer::internalFieldCount);
+static void installV8DataTransferTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DataTransfer::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DataTransfer::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DataTransferAccessors, WTF_ARRAY_LENGTH(V8DataTransferAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DataTransferMethods, WTF_ARRAY_LENGTH(V8DataTransferMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DataTransferAccessors, WTF_ARRAY_LENGTH(V8DataTransferAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DataTransferMethods, WTF_ARRAY_LENGTH(V8DataTransferMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DataTransfer::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DataTransferTemplate);
+v8::Local<v8::FunctionTemplate> V8DataTransfer::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DataTransferTemplate);
 }
 
-bool V8DataTransfer::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DataTransfer::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DataTransfer::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DataTransfer::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DataTransfer* V8DataTransfer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DataTransfer* V8DataTransfer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

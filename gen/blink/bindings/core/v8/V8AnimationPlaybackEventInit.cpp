@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AnimationPlaybackEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,92 +16,96 @@
 
 namespace blink {
 
-void V8AnimationPlaybackEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, AnimationPlaybackEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8AnimationPlaybackEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, AnimationPlaybackEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> currentTimeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "currentTime")).ToLocal(&currentTimeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (currentTimeValue.IsEmpty() || currentTimeValue->IsUndefined()) {
-    // Do nothing.
-  } else if (currentTimeValue->IsNull()) {
-    impl.setCurrentTimeToNull();
-  } else {
-    double currentTime = toRestrictedDouble(isolate, currentTimeValue, exceptionState);
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setCurrentTime(currentTime);
-  }
+        return;
 
-  v8::Local<v8::Value> timelineTimeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "timelineTime")).ToLocal(&timelineTimeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (timelineTimeValue.IsEmpty() || timelineTimeValue->IsUndefined()) {
-    // Do nothing.
-  } else if (timelineTimeValue->IsNull()) {
-    impl.setTimelineTimeToNull();
-  } else {
-    double timelineTime = toRestrictedDouble(isolate, timelineTimeValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setTimelineTime(timelineTime);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> currentTimeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "currentTime")).ToLocal(&currentTimeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (currentTimeValue.IsEmpty() || currentTimeValue->IsUndefined()) {
+        // Do nothing.
+    } else if (currentTimeValue->IsNull()) {
+        impl.setCurrentTimeToNull();
+    } else {
+        double currentTime = toRestrictedDouble(isolate, currentTimeValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setCurrentTime(currentTime);
+    }
+
+    v8::Local<v8::Value> timelineTimeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "timelineTime")).ToLocal(&timelineTimeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (timelineTimeValue.IsEmpty() || timelineTimeValue->IsUndefined()) {
+        // Do nothing.
+    } else if (timelineTimeValue->IsNull()) {
+        impl.setTimelineTimeToNull();
+    } else {
+        double timelineTime = toRestrictedDouble(isolate, timelineTimeValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setTimelineTime(timelineTime);
+    }
 }
 
-v8::Local<v8::Value> AnimationPlaybackEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8AnimationPlaybackEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> AnimationPlaybackEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8AnimationPlaybackEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8AnimationPlaybackEventInit(const AnimationPlaybackEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8AnimationPlaybackEventInit(const AnimationPlaybackEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasCurrentTime()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "currentTime"), v8::Number::New(isolate, impl.currentTime()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "currentTime"), v8::Null(isolate))))
-      return false;
-  }
+    if (impl.hasCurrentTime()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "currentTime"), v8::Number::New(isolate, impl.currentTime()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "currentTime"), v8::Null(isolate))))
+            return false;
+    }
 
-  if (impl.hasTimelineTime()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "timelineTime"), v8::Number::New(isolate, impl.timelineTime()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "timelineTime"), v8::Null(isolate))))
-      return false;
-  }
+    if (impl.hasTimelineTime()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "timelineTime"), v8::Number::New(isolate, impl.timelineTime()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "timelineTime"), v8::Null(isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-AnimationPlaybackEventInit NativeValueTraits<AnimationPlaybackEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  AnimationPlaybackEventInit impl;
-  V8AnimationPlaybackEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+AnimationPlaybackEventInit NativeValueTraits<AnimationPlaybackEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    AnimationPlaybackEventInit impl;
+    V8AnimationPlaybackEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

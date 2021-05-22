@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCDataChannelEventInit_h
 #define RTCDataChannelEventInit_h
 
@@ -21,26 +21,27 @@ namespace blink {
 class RTCDataChannel;
 
 class MODULES_EXPORT RTCDataChannelEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCDataChannelEventInit();
-  virtual ~RTCDataChannelEventInit();
-  RTCDataChannelEventInit(const RTCDataChannelEventInit&);
-  RTCDataChannelEventInit& operator=(const RTCDataChannelEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasChannel() const;
-  RTCDataChannel* channel() const;
-  void setChannel(RTCDataChannel*);
+public:
+    RTCDataChannelEventInit();
+    virtual ~RTCDataChannelEventInit();
+    RTCDataChannelEventInit(const RTCDataChannelEventInit&);
+    RTCDataChannelEventInit& operator=(const RTCDataChannelEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasChannel() const;
+    RTCDataChannel* channel() const;
+    void setChannel(RTCDataChannel*);
 
- private:
-  Member<RTCDataChannel> m_channel;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCDataChannelEventInit;
+private:
+    Member<RTCDataChannel> m_channel;
+
+    friend class V8RTCDataChannelEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCDataChannelEventInit_h
+#endif // RTCDataChannelEventInit_h

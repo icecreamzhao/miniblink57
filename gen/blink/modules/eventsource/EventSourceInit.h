@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef EventSourceInit_h
 #define EventSourceInit_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT EventSourceInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  EventSourceInit();
-  virtual ~EventSourceInit();
-  EventSourceInit(const EventSourceInit&);
-  EventSourceInit& operator=(const EventSourceInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasWithCredentials() const;
-  bool withCredentials() const;
-  void setWithCredentials(bool);
+public:
+    EventSourceInit();
+    virtual ~EventSourceInit();
+    EventSourceInit(const EventSourceInit&);
+    EventSourceInit& operator=(const EventSourceInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasWithCredentials() const;
+    bool withCredentials() const;
+    void setWithCredentials(bool);
 
- private:
-  bool m_hasWithCredentials = false;
-  bool m_withCredentials;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8EventSourceInit;
+private:
+    bool m_hasWithCredentials = false;
+    bool m_withCredentials;
+
+    friend class V8EventSourceInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // EventSourceInit_h
+#endif // EventSourceInit_h

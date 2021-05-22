@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PopStateEventInit.h"
 
 namespace blink {
 
-PopStateEventInit::PopStateEventInit() {
+PopStateEventInit::PopStateEventInit()
+{
 }
 
-PopStateEventInit::~PopStateEventInit() {}
+PopStateEventInit::~PopStateEventInit() { }
 
 PopStateEventInit::PopStateEventInit(const PopStateEventInit&) = default;
 
 PopStateEventInit& PopStateEventInit::operator=(const PopStateEventInit&) = default;
 
-bool PopStateEventInit::hasState() const {
-  return !(m_state.isEmpty() || m_state.isNull() || m_state.isUndefined());
+bool PopStateEventInit::hasState() const
+{
+    return !(m_state.isEmpty() || m_state.isNull() || m_state.isUndefined());
 }
-ScriptValue PopStateEventInit::state() const {
-  return m_state;
+ScriptValue PopStateEventInit::state() const
+{
+    return m_state;
 }
-void PopStateEventInit::setState(ScriptValue value) {
-  m_state = value;
+void PopStateEventInit::setState(ScriptValue value)
+{
+    m_state = value;
 }
 
-DEFINE_TRACE(PopStateEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(PopStateEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

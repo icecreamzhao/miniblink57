@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PhotoCapabilities.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,342 +48,377 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PhotoCapabilities::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PhotoCapabilities is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PhotoCapabilitiesV8Internal {
 
-static void whiteBalanceModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void whiteBalanceModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->whiteBalanceMode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->whiteBalanceMode(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void whiteBalanceModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::whiteBalanceModeAttributeGetter(info);
-}
+    MODULES_EXPORT void whiteBalanceModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::whiteBalanceModeAttributeGetter(info);
+    }
 
-static void colorTemperatureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void colorTemperatureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->colorTemperature()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->colorTemperature()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#colorTemperature";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#colorTemperature";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void colorTemperatureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::colorTemperatureAttributeGetter(info);
-}
+    MODULES_EXPORT void colorTemperatureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::colorTemperatureAttributeGetter(info);
+    }
 
-static void exposureModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void exposureModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->exposureMode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->exposureMode(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void exposureModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::exposureModeAttributeGetter(info);
-}
+    MODULES_EXPORT void exposureModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::exposureModeAttributeGetter(info);
+    }
 
-static void exposureCompensationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void exposureCompensationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->exposureCompensation()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->exposureCompensation()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#exposureCompensation";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#exposureCompensation";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void exposureCompensationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::exposureCompensationAttributeGetter(info);
-}
+    MODULES_EXPORT void exposureCompensationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::exposureCompensationAttributeGetter(info);
+    }
 
-static void isoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->iso()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->iso()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#iso";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#iso";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void isoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::isoAttributeGetter(info);
-}
+    MODULES_EXPORT void isoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::isoAttributeGetter(info);
+    }
 
-static void redEyeReductionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void redEyeReductionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->redEyeReduction());
-}
+        v8SetReturnValueBool(info, impl->redEyeReduction());
+    }
 
-MODULES_EXPORT void redEyeReductionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::redEyeReductionAttributeGetter(info);
-}
+    MODULES_EXPORT void redEyeReductionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::redEyeReductionAttributeGetter(info);
+    }
 
-static void focusModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void focusModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->focusMode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->focusMode(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void focusModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::focusModeAttributeGetter(info);
-}
+    MODULES_EXPORT void focusModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::focusModeAttributeGetter(info);
+    }
 
-static void brightnessAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void brightnessAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->brightness()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->brightness()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#brightness";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#brightness";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void brightnessAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::brightnessAttributeGetter(info);
-}
+    MODULES_EXPORT void brightnessAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::brightnessAttributeGetter(info);
+    }
 
-static void contrastAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void contrastAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->contrast()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->contrast()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#contrast";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#contrast";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void contrastAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::contrastAttributeGetter(info);
-}
+    MODULES_EXPORT void contrastAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::contrastAttributeGetter(info);
+    }
 
-static void saturationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void saturationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->saturation()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->saturation()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#saturation";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#saturation";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void saturationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::saturationAttributeGetter(info);
-}
+    MODULES_EXPORT void saturationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::saturationAttributeGetter(info);
+    }
 
-static void sharpnessAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sharpnessAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->sharpness()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->sharpness()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#sharpness";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#sharpness";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void sharpnessAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::sharpnessAttributeGetter(info);
-}
+    MODULES_EXPORT void sharpnessAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::sharpnessAttributeGetter(info);
+    }
 
-static void imageHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void imageHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->imageHeight()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->imageHeight()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#imageHeight";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#imageHeight";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void imageHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::imageHeightAttributeGetter(info);
-}
+    MODULES_EXPORT void imageHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::imageHeightAttributeGetter(info);
+    }
 
-static void imageWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void imageWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->imageWidth()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->imageWidth()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#imageWidth";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#imageWidth";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void imageWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::imageWidthAttributeGetter(info);
-}
+    MODULES_EXPORT void imageWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::imageWidthAttributeGetter(info);
+    }
 
-static void zoomAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void zoomAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  MediaSettingsRange* cppValue(WTF::getPtr(impl->zoom()));
+        MediaSettingsRange* cppValue(WTF::getPtr(impl->zoom()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#zoom";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PhotoCapabilities#zoom";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void zoomAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::zoomAttributeGetter(info);
-}
+    MODULES_EXPORT void zoomAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::zoomAttributeGetter(info);
+    }
 
-static void fillLightModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fillLightModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
+        PhotoCapabilities* impl = V8PhotoCapabilities::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fillLightMode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fillLightMode(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void fillLightModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PhotoCapabilitiesV8Internal::fillLightModeAttributeGetter(info);
-}
+    MODULES_EXPORT void fillLightModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PhotoCapabilitiesV8Internal::fillLightModeAttributeGetter(info);
+    }
 
 } // namespace PhotoCapabilitiesV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PhotoCapabilitiesAccessors[] = {
-    {"whiteBalanceMode", PhotoCapabilitiesV8Internal::whiteBalanceModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"colorTemperature", PhotoCapabilitiesV8Internal::colorTemperatureAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"exposureMode", PhotoCapabilitiesV8Internal::exposureModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"exposureCompensation", PhotoCapabilitiesV8Internal::exposureCompensationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"iso", PhotoCapabilitiesV8Internal::isoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"redEyeReduction", PhotoCapabilitiesV8Internal::redEyeReductionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"focusMode", PhotoCapabilitiesV8Internal::focusModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"brightness", PhotoCapabilitiesV8Internal::brightnessAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"contrast", PhotoCapabilitiesV8Internal::contrastAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"saturation", PhotoCapabilitiesV8Internal::saturationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sharpness", PhotoCapabilitiesV8Internal::sharpnessAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"imageHeight", PhotoCapabilitiesV8Internal::imageHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"imageWidth", PhotoCapabilitiesV8Internal::imageWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"zoom", PhotoCapabilitiesV8Internal::zoomAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fillLightMode", PhotoCapabilitiesV8Internal::fillLightModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "whiteBalanceMode", PhotoCapabilitiesV8Internal::whiteBalanceModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "colorTemperature", PhotoCapabilitiesV8Internal::colorTemperatureAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "exposureMode", PhotoCapabilitiesV8Internal::exposureModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "exposureCompensation", PhotoCapabilitiesV8Internal::exposureCompensationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "iso", PhotoCapabilitiesV8Internal::isoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "redEyeReduction", PhotoCapabilitiesV8Internal::redEyeReductionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "focusMode", PhotoCapabilitiesV8Internal::focusModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "brightness", PhotoCapabilitiesV8Internal::brightnessAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "contrast", PhotoCapabilitiesV8Internal::contrastAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "saturation", PhotoCapabilitiesV8Internal::saturationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sharpness", PhotoCapabilitiesV8Internal::sharpnessAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "imageHeight", PhotoCapabilitiesV8Internal::imageHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "imageWidth", PhotoCapabilitiesV8Internal::imageWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "zoom", PhotoCapabilitiesV8Internal::zoomAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fillLightMode", PhotoCapabilitiesV8Internal::fillLightModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PhotoCapabilitiesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PhotoCapabilities::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PhotoCapabilities::internalFieldCount);
+static void installV8PhotoCapabilitiesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PhotoCapabilities::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PhotoCapabilities::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PhotoCapabilitiesAccessors, WTF_ARRAY_LENGTH(V8PhotoCapabilitiesAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PhotoCapabilitiesAccessors, WTF_ARRAY_LENGTH(V8PhotoCapabilitiesAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8PhotoCapabilities::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PhotoCapabilitiesTemplate);
+v8::Local<v8::FunctionTemplate> V8PhotoCapabilities::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PhotoCapabilitiesTemplate);
 }
 
-bool V8PhotoCapabilities::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PhotoCapabilities::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PhotoCapabilities::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PhotoCapabilities::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PhotoCapabilities* V8PhotoCapabilities::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PhotoCapabilities* V8PhotoCapabilities::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

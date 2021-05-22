@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RequestOrUSVString_h
 #define RequestOrUSVString_h
 
@@ -23,58 +23,60 @@ namespace blink {
 class Request;
 
 class MODULES_EXPORT RequestOrUSVString final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RequestOrUSVString();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isRequest() const { return m_type == SpecificTypeRequest; }
-  Request* getAsRequest() const;
-  void setRequest(Request*);
-  static RequestOrUSVString fromRequest(Request*);
+public:
+    RequestOrUSVString();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isUSVString() const { return m_type == SpecificTypeUSVString; }
-  String getAsUSVString() const;
-  void setUSVString(String);
-  static RequestOrUSVString fromUSVString(String);
+    bool isRequest() const { return m_type == SpecificTypeRequest; }
+    Request* getAsRequest() const;
+    void setRequest(Request*);
+    static RequestOrUSVString fromRequest(Request*);
 
-  RequestOrUSVString(const RequestOrUSVString&);
-  ~RequestOrUSVString();
-  RequestOrUSVString& operator=(const RequestOrUSVString&);
-  DECLARE_TRACE();
+    bool isUSVString() const { return m_type == SpecificTypeUSVString; }
+    String getAsUSVString() const;
+    void setUSVString(String);
+    static RequestOrUSVString fromUSVString(String);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeRequest,
-    SpecificTypeUSVString,
-  };
-  SpecificTypes m_type;
+    RequestOrUSVString(const RequestOrUSVString&);
+    ~RequestOrUSVString();
+    RequestOrUSVString& operator=(const RequestOrUSVString&);
+    DECLARE_TRACE();
 
-  Member<Request> m_request;
-  String m_uSVString;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeRequest,
+        SpecificTypeUSVString,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const RequestOrUSVString&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<Request> m_request;
+    String m_uSVString;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const RequestOrUSVString&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8RequestOrUSVString final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RequestOrUSVString&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RequestOrUSVString&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const RequestOrUSVString&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RequestOrUSVString& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RequestOrUSVString& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<RequestOrUSVString> {
-  MODULES_EXPORT static RequestOrUSVString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static RequestOrUSVString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -82,4 +84,4 @@ struct NativeValueTraits<RequestOrUSVString> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::RequestOrUSVString);
 
-#endif  // RequestOrUSVString_h
+#endif // RequestOrUSVString_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas_h
 #define HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas_h
 
@@ -29,93 +29,95 @@ class ImageData;
 class OffscreenCanvas;
 
 class CORE_EXPORT HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isHTMLImageElement() const { return m_type == SpecificTypeHTMLImageElement; }
-  HTMLImageElement* getAsHTMLImageElement() const;
-  void setHTMLImageElement(HTMLImageElement*);
-  static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromHTMLImageElement(HTMLImageElement*);
+public:
+    HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isHTMLVideoElement() const { return m_type == SpecificTypeHTMLVideoElement; }
-  HTMLVideoElement* getAsHTMLVideoElement() const;
-  void setHTMLVideoElement(HTMLVideoElement*);
-  static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromHTMLVideoElement(HTMLVideoElement*);
+    bool isHTMLImageElement() const { return m_type == SpecificTypeHTMLImageElement; }
+    HTMLImageElement* getAsHTMLImageElement() const;
+    void setHTMLImageElement(HTMLImageElement*);
+    static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromHTMLImageElement(HTMLImageElement*);
 
-  bool isHTMLCanvasElement() const { return m_type == SpecificTypeHTMLCanvasElement; }
-  HTMLCanvasElement* getAsHTMLCanvasElement() const;
-  void setHTMLCanvasElement(HTMLCanvasElement*);
-  static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromHTMLCanvasElement(HTMLCanvasElement*);
+    bool isHTMLVideoElement() const { return m_type == SpecificTypeHTMLVideoElement; }
+    HTMLVideoElement* getAsHTMLVideoElement() const;
+    void setHTMLVideoElement(HTMLVideoElement*);
+    static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromHTMLVideoElement(HTMLVideoElement*);
 
-  bool isBlob() const { return m_type == SpecificTypeBlob; }
-  Blob* getAsBlob() const;
-  void setBlob(Blob*);
-  static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromBlob(Blob*);
+    bool isHTMLCanvasElement() const { return m_type == SpecificTypeHTMLCanvasElement; }
+    HTMLCanvasElement* getAsHTMLCanvasElement() const;
+    void setHTMLCanvasElement(HTMLCanvasElement*);
+    static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromHTMLCanvasElement(HTMLCanvasElement*);
 
-  bool isImageData() const { return m_type == SpecificTypeImageData; }
-  ImageData* getAsImageData() const;
-  void setImageData(ImageData*);
-  static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromImageData(ImageData*);
+    bool isBlob() const { return m_type == SpecificTypeBlob; }
+    Blob* getAsBlob() const;
+    void setBlob(Blob*);
+    static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromBlob(Blob*);
 
-  bool isImageBitmap() const { return m_type == SpecificTypeImageBitmap; }
-  ImageBitmap* getAsImageBitmap() const;
-  void setImageBitmap(ImageBitmap*);
-  static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromImageBitmap(ImageBitmap*);
+    bool isImageData() const { return m_type == SpecificTypeImageData; }
+    ImageData* getAsImageData() const;
+    void setImageData(ImageData*);
+    static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromImageData(ImageData*);
 
-  bool isOffscreenCanvas() const { return m_type == SpecificTypeOffscreenCanvas; }
-  OffscreenCanvas* getAsOffscreenCanvas() const;
-  void setOffscreenCanvas(OffscreenCanvas*);
-  static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromOffscreenCanvas(OffscreenCanvas*);
+    bool isImageBitmap() const { return m_type == SpecificTypeImageBitmap; }
+    ImageBitmap* getAsImageBitmap() const;
+    void setImageBitmap(ImageBitmap*);
+    static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromImageBitmap(ImageBitmap*);
 
-  HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas(const HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas&);
-  ~HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas();
-  HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas& operator=(const HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas&);
-  DECLARE_TRACE();
+    bool isOffscreenCanvas() const { return m_type == SpecificTypeOffscreenCanvas; }
+    OffscreenCanvas* getAsOffscreenCanvas() const;
+    void setOffscreenCanvas(OffscreenCanvas*);
+    static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas fromOffscreenCanvas(OffscreenCanvas*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeHTMLImageElement,
-    SpecificTypeHTMLVideoElement,
-    SpecificTypeHTMLCanvasElement,
-    SpecificTypeBlob,
-    SpecificTypeImageData,
-    SpecificTypeImageBitmap,
-    SpecificTypeOffscreenCanvas,
-  };
-  SpecificTypes m_type;
+    HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas(const HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas&);
+    ~HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas();
+    HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas& operator=(const HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas&);
+    DECLARE_TRACE();
 
-  Member<HTMLImageElement> m_htmlImageElement;
-  Member<HTMLVideoElement> m_htmlVideoElement;
-  Member<HTMLCanvasElement> m_htmlCanvasElement;
-  Member<Blob> m_blob;
-  Member<ImageData> m_imageData;
-  Member<ImageBitmap> m_imageBitmap;
-  Member<OffscreenCanvas> m_offscreenCanvas;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeHTMLImageElement,
+        SpecificTypeHTMLVideoElement,
+        SpecificTypeHTMLCanvasElement,
+        SpecificTypeBlob,
+        SpecificTypeImageData,
+        SpecificTypeImageBitmap,
+        SpecificTypeOffscreenCanvas,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<HTMLImageElement> m_htmlImageElement;
+    Member<HTMLVideoElement> m_htmlVideoElement;
+    Member<HTMLCanvasElement> m_htmlCanvasElement;
+    Member<Blob> m_blob;
+    Member<ImageData> m_imageData;
+    Member<ImageBitmap> m_imageBitmap;
+    Member<OffscreenCanvas> m_offscreenCanvas;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas> {
-  CORE_EXPORT static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -123,4 +125,4 @@ struct NativeValueTraits<HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOr
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas);
 
-#endif  // HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas_h
+#endif // HTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrBlobOrImageDataOrImageBitmapOrOffscreenCanvas_h

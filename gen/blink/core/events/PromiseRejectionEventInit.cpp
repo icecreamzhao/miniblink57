@@ -8,43 +8,51 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PromiseRejectionEventInit.h"
 
 namespace blink {
 
-PromiseRejectionEventInit::PromiseRejectionEventInit() {
+PromiseRejectionEventInit::PromiseRejectionEventInit()
+{
 }
 
-PromiseRejectionEventInit::~PromiseRejectionEventInit() {}
+PromiseRejectionEventInit::~PromiseRejectionEventInit() { }
 
 PromiseRejectionEventInit::PromiseRejectionEventInit(const PromiseRejectionEventInit&) = default;
 
 PromiseRejectionEventInit& PromiseRejectionEventInit::operator=(const PromiseRejectionEventInit&) = default;
 
-bool PromiseRejectionEventInit::hasPromise() const {
-  return m_hasPromise;
+bool PromiseRejectionEventInit::hasPromise() const
+{
+    return m_hasPromise;
 }
-ScriptPromise PromiseRejectionEventInit::promise() const {
-  DCHECK(m_hasPromise);
-  return m_promise;
+ScriptPromise PromiseRejectionEventInit::promise() const
+{
+    DCHECK(m_hasPromise);
+    return m_promise;
 }
-void PromiseRejectionEventInit::setPromise(ScriptPromise value) {
-  m_promise = value;
-  m_hasPromise = true;
+void PromiseRejectionEventInit::setPromise(ScriptPromise value)
+{
+    m_promise = value;
+    m_hasPromise = true;
 }
-bool PromiseRejectionEventInit::hasReason() const {
-  return !(m_reason.isEmpty() || m_reason.isNull() || m_reason.isUndefined());
+bool PromiseRejectionEventInit::hasReason() const
+{
+    return !(m_reason.isEmpty() || m_reason.isNull() || m_reason.isUndefined());
 }
-ScriptValue PromiseRejectionEventInit::reason() const {
-  return m_reason;
+ScriptValue PromiseRejectionEventInit::reason() const
+{
+    return m_reason;
 }
-void PromiseRejectionEventInit::setReason(ScriptValue value) {
-  m_reason = value;
+void PromiseRejectionEventInit::setReason(ScriptValue value)
+{
+    m_reason = value;
 }
 
-DEFINE_TRACE(PromiseRejectionEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(PromiseRejectionEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

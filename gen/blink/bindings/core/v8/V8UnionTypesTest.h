@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8UnionTypesTest_h
 #define V8UnionTypesTest_h
 
@@ -28,31 +28,35 @@
 namespace blink {
 
 class V8UnionTypesTest {
-  STATIC_ONLY(V8UnionTypesTest);
- public:
-  static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static UnionTypesTest* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<UnionTypesTest>();
-  }
-  static UnionTypesTest* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<UnionTypesTest>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<UnionTypesTest>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8UnionTypesTest);
+
+public:
+    static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static UnionTypesTest* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<UnionTypesTest>();
+    }
+    static UnionTypesTest* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<UnionTypesTest>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<UnionTypesTest>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<UnionTypesTest> {
-  typedef V8UnionTypesTest Type;
+    typedef V8UnionTypesTest Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8UnionTypesTest_h
+#endif // V8UnionTypesTest_h

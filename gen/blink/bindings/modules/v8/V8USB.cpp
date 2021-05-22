@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8USB.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,174 +50,191 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&USB::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "USB is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace USBV8Internal {
 
-static void onconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  USB* impl = V8USB::toImpl(holder);
+        USB* impl = V8USB::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onconnect()));
+        EventListener* cppValue(WTF::getPtr(impl->onconnect()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  USBV8Internal::onconnectAttributeGetter(info);
-}
+    MODULES_EXPORT void onconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        USBV8Internal::onconnectAttributeGetter(info);
+    }
 
-static void onconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  USB* impl = V8USB::toImpl(holder);
+    static void onconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        USB* impl = V8USB::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnect(), v8Value, V8USB::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnect(), v8Value, V8USB::eventListenerCacheIndex);
 
-  impl->setOnconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  USBV8Internal::onconnectAttributeSetter(v8Value, info);
-}
+        USBV8Internal::onconnectAttributeSetter(v8Value, info);
+    }
 
-static void ondisconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondisconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  USB* impl = V8USB::toImpl(holder);
+        USB* impl = V8USB::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->ondisconnect()));
+        EventListener* cppValue(WTF::getPtr(impl->ondisconnect()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void ondisconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  USBV8Internal::ondisconnectAttributeGetter(info);
-}
+    MODULES_EXPORT void ondisconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        USBV8Internal::ondisconnectAttributeGetter(info);
+    }
 
-static void ondisconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  USB* impl = V8USB::toImpl(holder);
+    static void ondisconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        USB* impl = V8USB::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondisconnect(), v8Value, V8USB::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondisconnect(), v8Value, V8USB::eventListenerCacheIndex);
 
-  impl->setOndisconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOndisconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void ondisconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void ondisconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  USBV8Internal::ondisconnectAttributeSetter(v8Value, info);
-}
+        USBV8Internal::ondisconnectAttributeSetter(v8Value, info);
+    }
 
-static void getDevicesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "USB", "getDevices");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void getDevicesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "USB", "getDevices");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8USB::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  USB* impl = V8USB::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8USB::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        USB* impl = V8USB::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->getDevices(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->getDevices(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void getDevicesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  USBV8Internal::getDevicesMethod(info);
-}
+    MODULES_EXPORT void getDevicesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        USBV8Internal::getDevicesMethod(info);
+    }
 
-static void requestDeviceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "USB", "requestDevice");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void requestDeviceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "USB", "requestDevice");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8USB::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  USB* impl = V8USB::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8USB::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        USB* impl = V8USB::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  USBDeviceRequestOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
+        USBDeviceRequestOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
 
-    return;
-  }
-  V8USBDeviceRequestOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8USBDeviceRequestOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = impl->requestDevice(scriptState, options);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->requestDevice(scriptState, options);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void requestDeviceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  USBV8Internal::requestDeviceMethod(info);
-}
+    MODULES_EXPORT void requestDeviceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        USBV8Internal::requestDeviceMethod(info);
+    }
 
 } // namespace USBV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8USBAccessors[] = {
-    {"onconnect", USBV8Internal::onconnectAttributeGetterCallback, USBV8Internal::onconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondisconnect", USBV8Internal::ondisconnectAttributeGetterCallback, USBV8Internal::ondisconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "onconnect", USBV8Internal::onconnectAttributeGetterCallback, USBV8Internal::onconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondisconnect", USBV8Internal::ondisconnectAttributeGetterCallback, USBV8Internal::ondisconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8USBMethods[] = {
-    {"getDevices", USBV8Internal::getDevicesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"requestDevice", USBV8Internal::requestDeviceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "getDevices", USBV8Internal::getDevicesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "requestDevice", USBV8Internal::requestDeviceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8USBTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8USB::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8USB::internalFieldCount);
+static void installV8USBTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8USB::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8USB::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8USBAccessors, WTF_ARRAY_LENGTH(V8USBAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8USBMethods, WTF_ARRAY_LENGTH(V8USBMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8USBAccessors, WTF_ARRAY_LENGTH(V8USBAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8USBMethods, WTF_ARRAY_LENGTH(V8USBMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8USB::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8USBTemplate);
+v8::Local<v8::FunctionTemplate> V8USB::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8USBTemplate);
 }
 
-bool V8USB::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8USB::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8USB::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8USB::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-USB* V8USB::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+USB* V8USB::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

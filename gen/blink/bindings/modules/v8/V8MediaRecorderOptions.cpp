@@ -8,120 +8,124 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaRecorderOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8MediaRecorderOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, MediaRecorderOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8MediaRecorderOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, MediaRecorderOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> audioBitsPerSecondValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "audioBitsPerSecond")).ToLocal(&audioBitsPerSecondValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (audioBitsPerSecondValue.IsEmpty() || audioBitsPerSecondValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned audioBitsPerSecond = toUInt32(isolate, audioBitsPerSecondValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setAudioBitsPerSecond(audioBitsPerSecond);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> audioBitsPerSecondValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "audioBitsPerSecond")).ToLocal(&audioBitsPerSecondValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (audioBitsPerSecondValue.IsEmpty() || audioBitsPerSecondValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned audioBitsPerSecond = toUInt32(isolate, audioBitsPerSecondValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setAudioBitsPerSecond(audioBitsPerSecond);
+    }
 
-  v8::Local<v8::Value> bitsPerSecondValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "bitsPerSecond")).ToLocal(&bitsPerSecondValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (bitsPerSecondValue.IsEmpty() || bitsPerSecondValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned bitsPerSecond = toUInt32(isolate, bitsPerSecondValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setBitsPerSecond(bitsPerSecond);
-  }
+    v8::Local<v8::Value> bitsPerSecondValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "bitsPerSecond")).ToLocal(&bitsPerSecondValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (bitsPerSecondValue.IsEmpty() || bitsPerSecondValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned bitsPerSecond = toUInt32(isolate, bitsPerSecondValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setBitsPerSecond(bitsPerSecond);
+    }
 
-  v8::Local<v8::Value> mimeTypeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mimeType")).ToLocal(&mimeTypeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (mimeTypeValue.IsEmpty() || mimeTypeValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> mimeType = mimeTypeValue;
-    if (!mimeType.prepare(exceptionState))
-      return;
-    impl.setMimeType(mimeType);
-  }
+    v8::Local<v8::Value> mimeTypeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mimeType")).ToLocal(&mimeTypeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (mimeTypeValue.IsEmpty() || mimeTypeValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> mimeType = mimeTypeValue;
+        if (!mimeType.prepare(exceptionState))
+            return;
+        impl.setMimeType(mimeType);
+    }
 
-  v8::Local<v8::Value> videoBitsPerSecondValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "videoBitsPerSecond")).ToLocal(&videoBitsPerSecondValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (videoBitsPerSecondValue.IsEmpty() || videoBitsPerSecondValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned videoBitsPerSecond = toUInt32(isolate, videoBitsPerSecondValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setVideoBitsPerSecond(videoBitsPerSecond);
-  }
+    v8::Local<v8::Value> videoBitsPerSecondValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "videoBitsPerSecond")).ToLocal(&videoBitsPerSecondValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (videoBitsPerSecondValue.IsEmpty() || videoBitsPerSecondValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned videoBitsPerSecond = toUInt32(isolate, videoBitsPerSecondValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setVideoBitsPerSecond(videoBitsPerSecond);
+    }
 }
 
-v8::Local<v8::Value> MediaRecorderOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8MediaRecorderOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> MediaRecorderOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8MediaRecorderOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8MediaRecorderOptions(const MediaRecorderOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasAudioBitsPerSecond()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "audioBitsPerSecond"), v8::Integer::NewFromUnsigned(isolate, impl.audioBitsPerSecond()))))
-      return false;
-  }
+bool toV8MediaRecorderOptions(const MediaRecorderOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasAudioBitsPerSecond()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "audioBitsPerSecond"), v8::Integer::NewFromUnsigned(isolate, impl.audioBitsPerSecond()))))
+            return false;
+    }
 
-  if (impl.hasBitsPerSecond()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "bitsPerSecond"), v8::Integer::NewFromUnsigned(isolate, impl.bitsPerSecond()))))
-      return false;
-  }
+    if (impl.hasBitsPerSecond()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "bitsPerSecond"), v8::Integer::NewFromUnsigned(isolate, impl.bitsPerSecond()))))
+            return false;
+    }
 
-  if (impl.hasMimeType()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mimeType"), v8String(isolate, impl.mimeType()))))
-      return false;
-  }
+    if (impl.hasMimeType()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mimeType"), v8String(isolate, impl.mimeType()))))
+            return false;
+    }
 
-  if (impl.hasVideoBitsPerSecond()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "videoBitsPerSecond"), v8::Integer::NewFromUnsigned(isolate, impl.videoBitsPerSecond()))))
-      return false;
-  }
+    if (impl.hasVideoBitsPerSecond()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "videoBitsPerSecond"), v8::Integer::NewFromUnsigned(isolate, impl.videoBitsPerSecond()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-MediaRecorderOptions NativeValueTraits<MediaRecorderOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  MediaRecorderOptions impl;
-  V8MediaRecorderOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+MediaRecorderOptions NativeValueTraits<MediaRecorderOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    MediaRecorderOptions impl;
+    V8MediaRecorderOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

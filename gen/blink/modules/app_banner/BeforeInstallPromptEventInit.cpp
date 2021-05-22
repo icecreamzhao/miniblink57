@@ -8,34 +8,39 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "BeforeInstallPromptEventInit.h"
 
 namespace blink {
 
-BeforeInstallPromptEventInit::BeforeInstallPromptEventInit() {
+BeforeInstallPromptEventInit::BeforeInstallPromptEventInit()
+{
 }
 
-BeforeInstallPromptEventInit::~BeforeInstallPromptEventInit() {}
+BeforeInstallPromptEventInit::~BeforeInstallPromptEventInit() { }
 
 BeforeInstallPromptEventInit::BeforeInstallPromptEventInit(const BeforeInstallPromptEventInit&) = default;
 
 BeforeInstallPromptEventInit& BeforeInstallPromptEventInit::operator=(const BeforeInstallPromptEventInit&) = default;
 
-bool BeforeInstallPromptEventInit::hasPlatforms() const {
-  return m_hasPlatforms;
+bool BeforeInstallPromptEventInit::hasPlatforms() const
+{
+    return m_hasPlatforms;
 }
-const Vector<String>& BeforeInstallPromptEventInit::platforms() const {
-  DCHECK(m_hasPlatforms);
-  return m_platforms;
+const Vector<String>& BeforeInstallPromptEventInit::platforms() const
+{
+    DCHECK(m_hasPlatforms);
+    return m_platforms;
 }
-void BeforeInstallPromptEventInit::setPlatforms(const Vector<String>& value) {
-  m_platforms = value;
-  m_hasPlatforms = true;
+void BeforeInstallPromptEventInit::setPlatforms(const Vector<String>& value)
+{
+    m_platforms = value;
+    m_hasPlatforms = true;
 }
 
-DEFINE_TRACE(BeforeInstallPromptEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(BeforeInstallPromptEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

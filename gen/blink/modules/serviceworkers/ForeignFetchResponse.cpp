@@ -8,55 +8,66 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ForeignFetchResponse.h"
 
 #include "modules/fetch/Response.h"
 
 namespace blink {
 
-ForeignFetchResponse::ForeignFetchResponse() {
+ForeignFetchResponse::ForeignFetchResponse()
+{
 }
 
-ForeignFetchResponse::~ForeignFetchResponse() {}
+ForeignFetchResponse::~ForeignFetchResponse() { }
 
 ForeignFetchResponse::ForeignFetchResponse(const ForeignFetchResponse&) = default;
 
 ForeignFetchResponse& ForeignFetchResponse::operator=(const ForeignFetchResponse&) = default;
 
-bool ForeignFetchResponse::hasHeaders() const {
-  return m_hasHeaders;
+bool ForeignFetchResponse::hasHeaders() const
+{
+    return m_hasHeaders;
 }
-const Vector<String>& ForeignFetchResponse::headers() const {
-  DCHECK(m_hasHeaders);
-  return m_headers;
+const Vector<String>& ForeignFetchResponse::headers() const
+{
+    DCHECK(m_hasHeaders);
+    return m_headers;
 }
-void ForeignFetchResponse::setHeaders(const Vector<String>& value) {
-  m_headers = value;
-  m_hasHeaders = true;
+void ForeignFetchResponse::setHeaders(const Vector<String>& value)
+{
+    m_headers = value;
+    m_hasHeaders = true;
 }
-bool ForeignFetchResponse::hasOrigin() const {
-  return !m_origin.isNull();
+bool ForeignFetchResponse::hasOrigin() const
+{
+    return !m_origin.isNull();
 }
-String ForeignFetchResponse::origin() const {
-  return m_origin;
+String ForeignFetchResponse::origin() const
+{
+    return m_origin;
 }
-void ForeignFetchResponse::setOrigin(String value) {
-  m_origin = value;
+void ForeignFetchResponse::setOrigin(String value)
+{
+    m_origin = value;
 }
-bool ForeignFetchResponse::hasResponse() const {
-  return m_response;
+bool ForeignFetchResponse::hasResponse() const
+{
+    return m_response;
 }
-Response* ForeignFetchResponse::response() const {
-  return m_response;
+Response* ForeignFetchResponse::response() const
+{
+    return m_response;
 }
-void ForeignFetchResponse::setResponse(Response* value) {
-  m_response = value;
+void ForeignFetchResponse::setResponse(Response* value)
+{
+    m_response = value;
 }
 
-DEFINE_TRACE(ForeignFetchResponse) {
-  visitor->trace(m_response);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ForeignFetchResponse)
+{
+    visitor->trace(m_response);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

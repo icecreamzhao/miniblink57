@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AnimationEffectTimingReadOnly.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,158 +47,179 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&AnimationEffectTimingReadOnly::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "AnimationEffectTimingReadOnly is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace AnimationEffectTimingReadOnlyV8Internal {
 
-static void delayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void delayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
+        AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->delay());
-}
+        v8SetReturnValue(info, impl->delay());
+    }
 
-CORE_EXPORT void delayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationEffectTimingReadOnlyV8Internal::delayAttributeGetter(info);
-}
+    CORE_EXPORT void delayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationEffectTimingReadOnlyV8Internal::delayAttributeGetter(info);
+    }
 
-static void endDelayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void endDelayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
+        AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->endDelay());
-}
+        v8SetReturnValue(info, impl->endDelay());
+    }
 
-CORE_EXPORT void endDelayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationEffectTimingReadOnlyV8Internal::endDelayAttributeGetter(info);
-}
+    CORE_EXPORT void endDelayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationEffectTimingReadOnlyV8Internal::endDelayAttributeGetter(info);
+    }
 
-static void fillAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fillAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
+        AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fill(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fill(), info.GetIsolate());
+    }
 
-CORE_EXPORT void fillAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationEffectTimingReadOnlyV8Internal::fillAttributeGetter(info);
-}
+    CORE_EXPORT void fillAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationEffectTimingReadOnlyV8Internal::fillAttributeGetter(info);
+    }
 
-static void iterationStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void iterationStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
+        AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->iterationStart());
-}
+        v8SetReturnValue(info, impl->iterationStart());
+    }
 
-CORE_EXPORT void iterationStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationEffectTimingReadOnlyV8Internal::iterationStartAttributeGetter(info);
-}
+    CORE_EXPORT void iterationStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationEffectTimingReadOnlyV8Internal::iterationStartAttributeGetter(info);
+    }
 
-static void iterationsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void iterationsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
+        AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->iterations());
-}
+        v8SetReturnValue(info, impl->iterations());
+    }
 
-CORE_EXPORT void iterationsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationEffectTimingReadOnlyV8Internal::iterationsAttributeGetter(info);
-}
+    CORE_EXPORT void iterationsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationEffectTimingReadOnlyV8Internal::iterationsAttributeGetter(info);
+    }
 
-static void durationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void durationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
+        AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
 
-  UnrestrictedDoubleOrString result;
-  impl->duration(result);
+        UnrestrictedDoubleOrString result;
+        impl->duration(result);
 
-  v8SetReturnValue(info, result);
-}
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT void durationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationEffectTimingReadOnlyV8Internal::durationAttributeGetter(info);
-}
+    CORE_EXPORT void durationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationEffectTimingReadOnlyV8Internal::durationAttributeGetter(info);
+    }
 
-static void directionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void directionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
+        AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->direction(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->direction(), info.GetIsolate());
+    }
 
-CORE_EXPORT void directionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationEffectTimingReadOnlyV8Internal::directionAttributeGetter(info);
-}
+    CORE_EXPORT void directionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationEffectTimingReadOnlyV8Internal::directionAttributeGetter(info);
+    }
 
-static void easingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void easingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
+        AnimationEffectTimingReadOnly* impl = V8AnimationEffectTimingReadOnly::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->easing(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->easing(), info.GetIsolate());
+    }
 
-CORE_EXPORT void easingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationEffectTimingReadOnlyV8Internal::easingAttributeGetter(info);
-}
+    CORE_EXPORT void easingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationEffectTimingReadOnlyV8Internal::easingAttributeGetter(info);
+    }
 
 } // namespace AnimationEffectTimingReadOnlyV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8AnimationEffectTimingReadOnlyAccessors[] = {
-    {"delay", AnimationEffectTimingReadOnlyV8Internal::delayAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"endDelay", AnimationEffectTimingReadOnlyV8Internal::endDelayAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fill", AnimationEffectTimingReadOnlyV8Internal::fillAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"iterationStart", AnimationEffectTimingReadOnlyV8Internal::iterationStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"iterations", AnimationEffectTimingReadOnlyV8Internal::iterationsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"duration", AnimationEffectTimingReadOnlyV8Internal::durationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"direction", AnimationEffectTimingReadOnlyV8Internal::directionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"easing", AnimationEffectTimingReadOnlyV8Internal::easingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "delay", AnimationEffectTimingReadOnlyV8Internal::delayAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "endDelay", AnimationEffectTimingReadOnlyV8Internal::endDelayAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fill", AnimationEffectTimingReadOnlyV8Internal::fillAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "iterationStart", AnimationEffectTimingReadOnlyV8Internal::iterationStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "iterations", AnimationEffectTimingReadOnlyV8Internal::iterationsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "duration", AnimationEffectTimingReadOnlyV8Internal::durationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "direction", AnimationEffectTimingReadOnlyV8Internal::directionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "easing", AnimationEffectTimingReadOnlyV8Internal::easingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8AnimationEffectTimingReadOnlyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AnimationEffectTimingReadOnly::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8AnimationEffectTimingReadOnly::internalFieldCount);
+static void installV8AnimationEffectTimingReadOnlyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AnimationEffectTimingReadOnly::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8AnimationEffectTimingReadOnly::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationEffectTimingReadOnlyAccessors, WTF_ARRAY_LENGTH(V8AnimationEffectTimingReadOnlyAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationEffectTimingReadOnlyAccessors, WTF_ARRAY_LENGTH(V8AnimationEffectTimingReadOnlyAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8AnimationEffectTimingReadOnly::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AnimationEffectTimingReadOnlyTemplate);
+v8::Local<v8::FunctionTemplate> V8AnimationEffectTimingReadOnly::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AnimationEffectTimingReadOnlyTemplate);
 }
 
-bool V8AnimationEffectTimingReadOnly::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8AnimationEffectTimingReadOnly::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8AnimationEffectTimingReadOnly::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8AnimationEffectTimingReadOnly::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-AnimationEffectTimingReadOnly* V8AnimationEffectTimingReadOnly::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+AnimationEffectTimingReadOnly* V8AnimationEffectTimingReadOnly::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

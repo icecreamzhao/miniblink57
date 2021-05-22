@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FileOrUSVString_h
 #define FileOrUSVString_h
 
@@ -23,58 +23,60 @@ namespace blink {
 class File;
 
 class CORE_EXPORT FileOrUSVString final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FileOrUSVString();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isFile() const { return m_type == SpecificTypeFile; }
-  File* getAsFile() const;
-  void setFile(File*);
-  static FileOrUSVString fromFile(File*);
+public:
+    FileOrUSVString();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isUSVString() const { return m_type == SpecificTypeUSVString; }
-  String getAsUSVString() const;
-  void setUSVString(String);
-  static FileOrUSVString fromUSVString(String);
+    bool isFile() const { return m_type == SpecificTypeFile; }
+    File* getAsFile() const;
+    void setFile(File*);
+    static FileOrUSVString fromFile(File*);
 
-  FileOrUSVString(const FileOrUSVString&);
-  ~FileOrUSVString();
-  FileOrUSVString& operator=(const FileOrUSVString&);
-  DECLARE_TRACE();
+    bool isUSVString() const { return m_type == SpecificTypeUSVString; }
+    String getAsUSVString() const;
+    void setUSVString(String);
+    static FileOrUSVString fromUSVString(String);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeFile,
-    SpecificTypeUSVString,
-  };
-  SpecificTypes m_type;
+    FileOrUSVString(const FileOrUSVString&);
+    ~FileOrUSVString();
+    FileOrUSVString& operator=(const FileOrUSVString&);
+    DECLARE_TRACE();
 
-  Member<File> m_file;
-  String m_uSVString;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeFile,
+        SpecificTypeUSVString,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const FileOrUSVString&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<File> m_file;
+    String m_uSVString;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const FileOrUSVString&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8FileOrUSVString final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FileOrUSVString&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FileOrUSVString&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const FileOrUSVString&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FileOrUSVString& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FileOrUSVString& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<FileOrUSVString> {
-  CORE_EXPORT static FileOrUSVString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static FileOrUSVString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -82,4 +84,4 @@ struct NativeValueTraits<FileOrUSVString> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::FileOrUSVString);
 
-#endif  // FileOrUSVString_h
+#endif // FileOrUSVString_h

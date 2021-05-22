@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8IDBRequest.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,223 +52,246 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&IDBRequest::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "IDBRequest is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace IDBRequestV8Internal {
 
-static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBRequest* impl = V8IDBRequest::toImpl(holder);
+        IDBRequest* impl = V8IDBRequest::toImpl(holder);
 
-  // [CachedAttribute]
-  v8::Local<v8::String> propertyName = v8AtomicString(info.GetIsolate(), "result");
-  if (!impl->isResultDirty()) {
-    v8::Local<v8::Value> v8Value = V8HiddenValue::getHiddenValue(ScriptState::forFunctionObject(info), holder, propertyName);
-    if (!v8Value.IsEmpty() && !v8Value->IsUndefined()) {
-      v8SetReturnValue(info, v8Value);
-      return;
+        // [CachedAttribute]
+        v8::Local<v8::String> propertyName = v8AtomicString(info.GetIsolate(), "result");
+        if (!impl->isResultDirty()) {
+            v8::Local<v8::Value> v8Value = V8HiddenValue::getHiddenValue(ScriptState::forFunctionObject(info), holder, propertyName);
+            if (!v8Value.IsEmpty() && !v8Value->IsUndefined()) {
+                v8SetReturnValue(info, v8Value);
+                return;
+            }
+        }
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "IDBRequest", "result");
+
+        ScriptValue cppValue(impl->result(scriptState, exceptionState));
+
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
+
+        // [CachedAttribute]
+        v8::Local<v8::Value> v8Value(cppValue.v8Value());
+        V8HiddenValue::setHiddenValue(ScriptState::forFunctionObject(info), holder, propertyName, v8Value);
+
+        v8SetReturnValue(info, v8Value);
     }
-  }
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "IDBRequest", "result");
+    MODULES_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBRequestV8Internal::resultAttributeGetter(info);
+    }
 
-  ScriptValue cppValue(impl->result(scriptState, exceptionState));
+    static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
+        IDBRequest* impl = V8IDBRequest::toImpl(holder);
 
-  // [CachedAttribute]
-  v8::Local<v8::Value> v8Value(cppValue.v8Value());
-  V8HiddenValue::setHiddenValue(ScriptState::forFunctionObject(info), holder, propertyName, v8Value);
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "IDBRequest", "error");
 
-  v8SetReturnValue(info, v8Value);
-}
+        DOMException* cppValue(impl->error(exceptionState));
 
-MODULES_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBRequestV8Internal::resultAttributeGetter(info);
-}
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
 
-static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#IDBRequest#error";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  IDBRequest* impl = V8IDBRequest::toImpl(holder);
+        v8SetReturnValue(info, v8Value);
+    }
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "IDBRequest", "error");
+    MODULES_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBRequestV8Internal::errorAttributeGetter(info);
+    }
 
-  DOMException* cppValue(impl->error(exceptionState));
+    static void sourceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
+        IDBRequest* impl = V8IDBRequest::toImpl(holder);
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#IDBRequest#error";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, impl->source(scriptState).v8Value());
+    }
 
-MODULES_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBRequestV8Internal::errorAttributeGetter(info);
-}
+    MODULES_EXPORT void sourceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBRequestV8Internal::sourceAttributeGetter(info);
+    }
 
-static void sourceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void transactionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBRequest* impl = V8IDBRequest::toImpl(holder);
+        IDBRequest* impl = V8IDBRequest::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        IDBTransaction* cppValue(WTF::getPtr(impl->transaction()));
 
-  v8SetReturnValue(info, impl->source(scriptState).v8Value());
-}
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#IDBRequest#transaction";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-MODULES_EXPORT void sourceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBRequestV8Internal::sourceAttributeGetter(info);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-static void transactionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    MODULES_EXPORT void transactionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBRequestV8Internal::transactionAttributeGetter(info);
+    }
 
-  IDBRequest* impl = V8IDBRequest::toImpl(holder);
+    static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBTransaction* cppValue(WTF::getPtr(impl->transaction()));
+        IDBRequest* impl = V8IDBRequest::toImpl(holder);
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#IDBRequest#transaction";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        v8SetReturnValueString(info, impl->readyState(), info.GetIsolate());
+    }
 
-  v8SetReturnValue(info, v8Value);
-}
+    MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBRequestV8Internal::readyStateAttributeGetter(info);
+    }
 
-MODULES_EXPORT void transactionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBRequestV8Internal::transactionAttributeGetter(info);
-}
+    static void onsuccessAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        IDBRequest* impl = V8IDBRequest::toImpl(holder);
 
-  IDBRequest* impl = V8IDBRequest::toImpl(holder);
+        EventListener* cppValue(WTF::getPtr(impl->onsuccess()));
 
-  v8SetReturnValueString(info, impl->readyState(), info.GetIsolate());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBRequestV8Internal::readyStateAttributeGetter(info);
-}
+    MODULES_EXPORT void onsuccessAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBRequestV8Internal::onsuccessAttributeGetter(info);
+    }
 
-static void onsuccessAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onsuccessAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        IDBRequest* impl = V8IDBRequest::toImpl(holder);
 
-  IDBRequest* impl = V8IDBRequest::toImpl(holder);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsuccess(), v8Value, V8IDBRequest::eventListenerCacheIndex);
 
-  EventListener* cppValue(WTF::getPtr(impl->onsuccess()));
+        impl->setOnsuccess(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+    MODULES_EXPORT void onsuccessAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-MODULES_EXPORT void onsuccessAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBRequestV8Internal::onsuccessAttributeGetter(info);
-}
+        IDBRequestV8Internal::onsuccessAttributeSetter(v8Value, info);
+    }
 
-static void onsuccessAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  IDBRequest* impl = V8IDBRequest::toImpl(holder);
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsuccess(), v8Value, V8IDBRequest::eventListenerCacheIndex);
+        IDBRequest* impl = V8IDBRequest::toImpl(holder);
 
-  impl->setOnsuccess(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
 
-MODULES_EXPORT void onsuccessAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-  IDBRequestV8Internal::onsuccessAttributeSetter(v8Value, info);
-}
+    MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBRequestV8Internal::onerrorAttributeGetter(info);
+    }
 
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        IDBRequest* impl = V8IDBRequest::toImpl(holder);
 
-  IDBRequest* impl = V8IDBRequest::toImpl(holder);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8IDBRequest::eventListenerCacheIndex);
 
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+    MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBRequestV8Internal::onerrorAttributeGetter(info);
-}
-
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  IDBRequest* impl = V8IDBRequest::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8IDBRequest::eventListenerCacheIndex);
-
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  IDBRequestV8Internal::onerrorAttributeSetter(v8Value, info);
-}
+        IDBRequestV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
 
 } // namespace IDBRequestV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8IDBRequestAccessors[] = {
-    {"result", IDBRequestV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"error", IDBRequestV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"source", IDBRequestV8Internal::sourceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"transaction", IDBRequestV8Internal::transactionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readyState", IDBRequestV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsuccess", IDBRequestV8Internal::onsuccessAttributeGetterCallback, IDBRequestV8Internal::onsuccessAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", IDBRequestV8Internal::onerrorAttributeGetterCallback, IDBRequestV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "result", IDBRequestV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "error", IDBRequestV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "source", IDBRequestV8Internal::sourceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "transaction", IDBRequestV8Internal::transactionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readyState", IDBRequestV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsuccess", IDBRequestV8Internal::onsuccessAttributeGetterCallback, IDBRequestV8Internal::onsuccessAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", IDBRequestV8Internal::onerrorAttributeGetterCallback, IDBRequestV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8IDBRequestTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IDBRequest::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8IDBRequest::internalFieldCount);
+static void installV8IDBRequestTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IDBRequest::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8IDBRequest::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IDBRequestAccessors, WTF_ARRAY_LENGTH(V8IDBRequestAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IDBRequestAccessors, WTF_ARRAY_LENGTH(V8IDBRequestAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8IDBRequest::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IDBRequestTemplate);
+v8::Local<v8::FunctionTemplate> V8IDBRequest::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IDBRequestTemplate);
 }
 
-bool V8IDBRequest::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8IDBRequest::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8IDBRequest::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8IDBRequest::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-IDBRequest* V8IDBRequest::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+IDBRequest* V8IDBRequest::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

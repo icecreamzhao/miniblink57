@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8CustomEvent_h
 #define V8CustomEvent_h
 
@@ -25,35 +25,39 @@
 namespace blink {
 
 class V8CustomEvent {
-  STATIC_ONLY(V8CustomEvent);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static CustomEvent* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<CustomEvent>();
-  }
-  CORE_EXPORT static CustomEvent* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<CustomEvent>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<CustomEvent>());
-  }
-  static void initCustomEventMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, CustomEvent*);
-  static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
-  static void constructorCustom(const v8::FunctionCallbackInfo<v8::Value>&);
-  static void detailAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>&);
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8CustomEvent);
+
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static CustomEvent* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<CustomEvent>();
+    }
+    CORE_EXPORT static CustomEvent* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<CustomEvent>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<CustomEvent>());
+    }
+    static void initCustomEventMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, CustomEvent*);
+    static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
+    static void constructorCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+    static void detailAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<CustomEvent> {
-  typedef V8CustomEvent Type;
+    typedef V8CustomEvent Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8CustomEvent_h
+#endif // V8CustomEvent_h

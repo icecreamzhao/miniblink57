@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ForeignFetchOptions_h
 #define ForeignFetchOptions_h
 
@@ -21,33 +21,34 @@
 namespace blink {
 
 class MODULES_EXPORT ForeignFetchOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ForeignFetchOptions();
-  virtual ~ForeignFetchOptions();
-  ForeignFetchOptions(const ForeignFetchOptions&);
-  ForeignFetchOptions& operator=(const ForeignFetchOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasOrigins() const;
-  const Vector<String>& origins() const;
-  void setOrigins(const Vector<String>&);
+public:
+    ForeignFetchOptions();
+    virtual ~ForeignFetchOptions();
+    ForeignFetchOptions(const ForeignFetchOptions&);
+    ForeignFetchOptions& operator=(const ForeignFetchOptions&);
 
-  bool hasScopes() const;
-  const Vector<String>& scopes() const;
-  void setScopes(const Vector<String>&);
+    bool hasOrigins() const;
+    const Vector<String>& origins() const;
+    void setOrigins(const Vector<String>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasScopes() const;
+    const Vector<String>& scopes() const;
+    void setScopes(const Vector<String>&);
 
- private:
-  bool m_hasOrigins = false;
-  Vector<String> m_origins;
-  bool m_hasScopes = false;
-  Vector<String> m_scopes;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ForeignFetchOptions;
+private:
+    bool m_hasOrigins = false;
+    Vector<String> m_origins;
+    bool m_hasScopes = false;
+    Vector<String> m_scopes;
+
+    friend class V8ForeignFetchOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ForeignFetchOptions_h
+#endif // ForeignFetchOptions_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AudioWorkletGlobalScope.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,7 +50,7 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&AudioWorkletGlobalScope::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "AudioWorkletGlobalScope is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
@@ -59,53 +59,58 @@ namespace AudioWorkletGlobalScopeV8Internal {
 
 } // namespace AudioWorkletGlobalScopeV8Internal
 
-static void installV8AudioWorkletGlobalScopeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AudioWorkletGlobalScope::wrapperTypeInfo.interfaceName, V8WorkletGlobalScope::domTemplate(isolate, world), V8AudioWorkletGlobalScope::internalFieldCount);
+static void installV8AudioWorkletGlobalScopeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AudioWorkletGlobalScope::wrapperTypeInfo.interfaceName, V8WorkletGlobalScope::domTemplate(isolate, world), V8AudioWorkletGlobalScope::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::audioWorkletEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::audioWorkletEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Global object prototype chain consists of Immutable Prototype Exotic Objects
-  prototypeTemplate->SetImmutableProto();
+    // Global object prototype chain consists of Immutable Prototype Exotic Objects
+    prototypeTemplate->SetImmutableProto();
 
-  // Global objects are Immutable Prototype Exotic Objects
-  instanceTemplate->SetImmutableProto();
+    // Global objects are Immutable Prototype Exotic Objects
+    instanceTemplate->SetImmutableProto();
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 
-  if (RuntimeEnabledFeatures::audioWorkletEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeAudioWorkletGlobalScopeConfiguration = {"AudioWorkletGlobalScope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioWorkletGlobalScope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAudioWorkletGlobalScopeConfiguration);
-  }
-  if (RuntimeEnabledFeatures::workletEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeWorkletGlobalScopeConfiguration = {"WorkletGlobalScope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WorkletGlobalScope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeWorkletGlobalScopeConfiguration);
-  }
+    if (RuntimeEnabledFeatures::audioWorkletEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeAudioWorkletGlobalScopeConfiguration = { "AudioWorkletGlobalScope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioWorkletGlobalScope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAudioWorkletGlobalScopeConfiguration);
+    }
+    if (RuntimeEnabledFeatures::workletEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeWorkletGlobalScopeConfiguration = { "WorkletGlobalScope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WorkletGlobalScope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeWorkletGlobalScopeConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8AudioWorkletGlobalScope::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AudioWorkletGlobalScopeTemplate);
+v8::Local<v8::FunctionTemplate> V8AudioWorkletGlobalScope::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AudioWorkletGlobalScopeTemplate);
 }
 
-bool V8AudioWorkletGlobalScope::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8AudioWorkletGlobalScope::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8AudioWorkletGlobalScope::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8AudioWorkletGlobalScope::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-AudioWorkletGlobalScope* V8AudioWorkletGlobalScope::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+AudioWorkletGlobalScope* V8AudioWorkletGlobalScope::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

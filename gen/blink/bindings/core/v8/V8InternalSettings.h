@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8InternalSettings_h
 #define V8InternalSettings_h
 
@@ -24,31 +24,35 @@
 namespace blink {
 
 class V8InternalSettings {
-  STATIC_ONLY(V8InternalSettings);
- public:
-  static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static InternalSettings* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<InternalSettings>();
-  }
-  static InternalSettings* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<InternalSettings>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<InternalSettings>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8InternalSettings);
+
+public:
+    static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static InternalSettings* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<InternalSettings>();
+    }
+    static InternalSettings* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<InternalSettings>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<InternalSettings>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<InternalSettings> {
-  typedef V8InternalSettings Type;
+    typedef V8InternalSettings Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8InternalSettings_h
+#endif // V8InternalSettings_h

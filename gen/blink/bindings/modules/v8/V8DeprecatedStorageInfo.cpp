@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DeprecatedStorageInfo.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,155 +48,164 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DeprecatedStorageInfo::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DeprecatedStorageInfo is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DeprecatedStorageInfoV8Internal {
 
-static void queryUsageAndQuotaMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DeprecatedStorageInfo", "queryUsageAndQuota");
+    static void queryUsageAndQuotaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DeprecatedStorageInfo", "queryUsageAndQuota");
 
-  DeprecatedStorageInfo* impl = V8DeprecatedStorageInfo::toImpl(info.Holder());
+        DeprecatedStorageInfo* impl = V8DeprecatedStorageInfo::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned storageType;
-  StorageUsageCallback* usageCallback;
-  StorageErrorCallback* errorCallback;
-  storageType = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned storageType;
+        StorageUsageCallback* usageCallback;
+        StorageErrorCallback* errorCallback;
+        storageType = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[1])) {
-    if (!info[1]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+        if (!isUndefinedOrNull(info[1])) {
+            if (!info[1]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
 
-      return;
+                return;
+            }
+            usageCallback = V8StorageUsageCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+        } else {
+            usageCallback = nullptr;
+        }
+
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+
+                return;
+            }
+            errorCallback = V8StorageErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->queryUsageAndQuota(executionContext, storageType, usageCallback, errorCallback);
     }
-    usageCallback = V8StorageUsageCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-  } else {
-    usageCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-      return;
+    MODULES_EXPORT void queryUsageAndQuotaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DeprecatedStorageInfoV8Internal::queryUsageAndQuotaMethod(info);
     }
-    errorCallback = V8StorageErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->queryUsageAndQuota(executionContext, storageType, usageCallback, errorCallback);
-}
+    static void requestQuotaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DeprecatedStorageInfo", "requestQuota");
 
-MODULES_EXPORT  void queryUsageAndQuotaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DeprecatedStorageInfoV8Internal::queryUsageAndQuotaMethod(info);
-}
+        DeprecatedStorageInfo* impl = V8DeprecatedStorageInfo::toImpl(info.Holder());
 
-static void requestQuotaMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DeprecatedStorageInfo", "requestQuota");
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  DeprecatedStorageInfo* impl = V8DeprecatedStorageInfo::toImpl(info.Holder());
+        unsigned storageType;
+        unsigned long long newQuotaInBytes;
+        StorageQuotaCallback* quotaCallback;
+        StorageErrorCallback* errorCallback;
+        storageType = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        newQuotaInBytes = toUInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  unsigned storageType;
-  unsigned long long newQuotaInBytes;
-  StorageQuotaCallback* quotaCallback;
-  StorageErrorCallback* errorCallback;
-  storageType = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
 
-  newQuotaInBytes = toUInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+                return;
+            }
+            quotaCallback = V8StorageQuotaCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            quotaCallback = nullptr;
+        }
 
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+        if (!isUndefinedOrNull(info[3])) {
+            if (!info[3]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
 
-      return;
+                return;
+            }
+            errorCallback = V8StorageErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->requestQuota(executionContext, storageType, newQuotaInBytes, quotaCallback, errorCallback);
     }
-    quotaCallback = V8StorageQuotaCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    quotaCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[3])) {
-    if (!info[3]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
-
-      return;
+    MODULES_EXPORT void requestQuotaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DeprecatedStorageInfoV8Internal::requestQuotaMethod(info);
     }
-    errorCallback = V8StorageErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->requestQuota(executionContext, storageType, newQuotaInBytes, quotaCallback, errorCallback);
-}
-
-MODULES_EXPORT  void requestQuotaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DeprecatedStorageInfoV8Internal::requestQuotaMethod(info);
-}
 
 } // namespace DeprecatedStorageInfoV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8DeprecatedStorageInfoMethods[] = {
-    {"queryUsageAndQuota", DeprecatedStorageInfoV8Internal::queryUsageAndQuotaMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"requestQuota", DeprecatedStorageInfoV8Internal::requestQuotaMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "queryUsageAndQuota", DeprecatedStorageInfoV8Internal::queryUsageAndQuotaMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "requestQuota", DeprecatedStorageInfoV8Internal::requestQuotaMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8DeprecatedStorageInfoTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DeprecatedStorageInfo::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DeprecatedStorageInfo::internalFieldCount);
+static void installV8DeprecatedStorageInfoTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DeprecatedStorageInfo::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DeprecatedStorageInfo::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8DeprecatedStorageInfoConstants[] = {
-      {"TEMPORARY", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"PERSISTENT", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8DeprecatedStorageInfoConstants, WTF_ARRAY_LENGTH(V8DeprecatedStorageInfoConstants));
-  static_assert(0 == DeprecatedStorageInfo::kTemporary, "the value of DeprecatedStorageInfo_kTemporary does not match with implementation");
-  static_assert(1 == DeprecatedStorageInfo::kPersistent, "the value of DeprecatedStorageInfo_kPersistent does not match with implementation");
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DeprecatedStorageInfoMethods, WTF_ARRAY_LENGTH(V8DeprecatedStorageInfoMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8DeprecatedStorageInfoConstants[] = {
+        { "TEMPORARY", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "PERSISTENT", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8DeprecatedStorageInfoConstants, WTF_ARRAY_LENGTH(V8DeprecatedStorageInfoConstants));
+    static_assert(0 == DeprecatedStorageInfo::kTemporary, "the value of DeprecatedStorageInfo_kTemporary does not match with implementation");
+    static_assert(1 == DeprecatedStorageInfo::kPersistent, "the value of DeprecatedStorageInfo_kPersistent does not match with implementation");
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DeprecatedStorageInfoMethods, WTF_ARRAY_LENGTH(V8DeprecatedStorageInfoMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DeprecatedStorageInfo::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DeprecatedStorageInfoTemplate);
+v8::Local<v8::FunctionTemplate> V8DeprecatedStorageInfo::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DeprecatedStorageInfoTemplate);
 }
 
-bool V8DeprecatedStorageInfo::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DeprecatedStorageInfo::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DeprecatedStorageInfo::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DeprecatedStorageInfo::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DeprecatedStorageInfo* V8DeprecatedStorageInfo::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DeprecatedStorageInfo* V8DeprecatedStorageInfo::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

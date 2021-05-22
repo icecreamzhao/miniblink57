@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FontFaceDescriptors_h
 #define FontFaceDescriptors_h
 
@@ -20,56 +20,57 @@
 namespace blink {
 
 class CORE_EXPORT FontFaceDescriptors : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FontFaceDescriptors();
-  virtual ~FontFaceDescriptors();
-  FontFaceDescriptors(const FontFaceDescriptors&);
-  FontFaceDescriptors& operator=(const FontFaceDescriptors&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDisplay() const;
-  String display() const;
-  void setDisplay(String);
+public:
+    FontFaceDescriptors();
+    virtual ~FontFaceDescriptors();
+    FontFaceDescriptors(const FontFaceDescriptors&);
+    FontFaceDescriptors& operator=(const FontFaceDescriptors&);
 
-  bool hasFeatureSettings() const;
-  String featureSettings() const;
-  void setFeatureSettings(String);
+    bool hasDisplay() const;
+    String display() const;
+    void setDisplay(String);
 
-  bool hasStretch() const;
-  String stretch() const;
-  void setStretch(String);
+    bool hasFeatureSettings() const;
+    String featureSettings() const;
+    void setFeatureSettings(String);
 
-  bool hasStyle() const;
-  String style() const;
-  void setStyle(String);
+    bool hasStretch() const;
+    String stretch() const;
+    void setStretch(String);
 
-  bool hasUnicodeRange() const;
-  String unicodeRange() const;
-  void setUnicodeRange(String);
+    bool hasStyle() const;
+    String style() const;
+    void setStyle(String);
 
-  bool hasVariant() const;
-  String variant() const;
-  void setVariant(String);
+    bool hasUnicodeRange() const;
+    String unicodeRange() const;
+    void setUnicodeRange(String);
 
-  bool hasWeight() const;
-  String weight() const;
-  void setWeight(String);
+    bool hasVariant() const;
+    String variant() const;
+    void setVariant(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasWeight() const;
+    String weight() const;
+    void setWeight(String);
 
- private:
-  String m_display;
-  String m_featureSettings;
-  String m_stretch;
-  String m_style;
-  String m_unicodeRange;
-  String m_variant;
-  String m_weight;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8FontFaceDescriptors;
+private:
+    String m_display;
+    String m_featureSettings;
+    String m_stretch;
+    String m_style;
+    String m_unicodeRange;
+    String m_variant;
+    String m_weight;
+
+    friend class V8FontFaceDescriptors;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // FontFaceDescriptors_h
+#endif // FontFaceDescriptors_h

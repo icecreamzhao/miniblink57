@@ -8,67 +8,81 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PaymentDetailsModifier.h"
 
 namespace blink {
 
-PaymentDetailsModifier::PaymentDetailsModifier() {
+PaymentDetailsModifier::PaymentDetailsModifier()
+{
 }
 
-PaymentDetailsModifier::~PaymentDetailsModifier() {}
+PaymentDetailsModifier::~PaymentDetailsModifier() { }
 
 PaymentDetailsModifier::PaymentDetailsModifier(const PaymentDetailsModifier&) = default;
 
 PaymentDetailsModifier& PaymentDetailsModifier::operator=(const PaymentDetailsModifier&) = default;
 
-bool PaymentDetailsModifier::hasAdditionalDisplayItems() const {
-  return m_hasAdditionalDisplayItems;
+bool PaymentDetailsModifier::hasAdditionalDisplayItems() const
+{
+    return m_hasAdditionalDisplayItems;
 }
-const HeapVector<PaymentItem>& PaymentDetailsModifier::additionalDisplayItems() const {
-  DCHECK(m_hasAdditionalDisplayItems);
-  return m_additionalDisplayItems;
+const HeapVector<PaymentItem>& PaymentDetailsModifier::additionalDisplayItems() const
+{
+    DCHECK(m_hasAdditionalDisplayItems);
+    return m_additionalDisplayItems;
 }
-void PaymentDetailsModifier::setAdditionalDisplayItems(const HeapVector<PaymentItem>& value) {
-  m_additionalDisplayItems = value;
-  m_hasAdditionalDisplayItems = true;
+void PaymentDetailsModifier::setAdditionalDisplayItems(const HeapVector<PaymentItem>& value)
+{
+    m_additionalDisplayItems = value;
+    m_hasAdditionalDisplayItems = true;
 }
-bool PaymentDetailsModifier::hasData() const {
-  return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
+bool PaymentDetailsModifier::hasData() const
+{
+    return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
 }
-ScriptValue PaymentDetailsModifier::data() const {
-  return m_data;
+ScriptValue PaymentDetailsModifier::data() const
+{
+    return m_data;
 }
-void PaymentDetailsModifier::setData(ScriptValue value) {
-  m_data = value;
+void PaymentDetailsModifier::setData(ScriptValue value)
+{
+    m_data = value;
 }
-bool PaymentDetailsModifier::hasSupportedMethods() const {
-  return m_hasSupportedMethods;
+bool PaymentDetailsModifier::hasSupportedMethods() const
+{
+    return m_hasSupportedMethods;
 }
-const Vector<String>& PaymentDetailsModifier::supportedMethods() const {
-  DCHECK(m_hasSupportedMethods);
-  return m_supportedMethods;
+const Vector<String>& PaymentDetailsModifier::supportedMethods() const
+{
+    DCHECK(m_hasSupportedMethods);
+    return m_supportedMethods;
 }
-void PaymentDetailsModifier::setSupportedMethods(const Vector<String>& value) {
-  m_supportedMethods = value;
-  m_hasSupportedMethods = true;
+void PaymentDetailsModifier::setSupportedMethods(const Vector<String>& value)
+{
+    m_supportedMethods = value;
+    m_hasSupportedMethods = true;
 }
-bool PaymentDetailsModifier::hasTotal() const {
-  return m_hasTotal;
+bool PaymentDetailsModifier::hasTotal() const
+{
+    return m_hasTotal;
 }
-const PaymentItem& PaymentDetailsModifier::total() const {
-  DCHECK(m_hasTotal);
-  return m_total;
+const PaymentItem& PaymentDetailsModifier::total() const
+{
+    DCHECK(m_hasTotal);
+    return m_total;
 }
-void PaymentDetailsModifier::setTotal(const PaymentItem& value) {
-  m_total = value;
-  m_hasTotal = true;
+void PaymentDetailsModifier::setTotal(const PaymentItem& value)
+{
+    m_total = value;
+    m_hasTotal = true;
 }
 
-DEFINE_TRACE(PaymentDetailsModifier) {
-  visitor->trace(m_additionalDisplayItems);
-  visitor->trace(m_total);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PaymentDetailsModifier)
+{
+    visitor->trace(m_additionalDisplayItems);
+    visitor->trace(m_total);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

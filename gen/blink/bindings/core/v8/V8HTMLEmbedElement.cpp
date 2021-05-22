@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLEmbedElement.h"
 
 #include "bindings/core/v8/BindingSecurity.h"
@@ -53,320 +53,355 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLEmbedElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLEmbedElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLEmbedElementV8Internal {
 
-static void srcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void srcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->getURLAttribute(HTMLNames::srcAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getURLAttribute(HTMLNames::srcAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void srcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLEmbedElementV8Internal::srcAttributeGetter(info);
-}
+    CORE_EXPORT void srcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLEmbedElementV8Internal::srcAttributeGetter(info);
+    }
 
-static void srcAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+    static void srcAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::srcAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::srcAttr, cppValue);
+    }
 
-CORE_EXPORT void srcAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void srcAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLEmbedElementV8Internal::srcAttributeSetter(v8Value, info);
-}
+        HTMLEmbedElementV8Internal::srcAttributeSetter(v8Value, info);
+    }
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::typeAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::typeAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLEmbedElementV8Internal::typeAttributeGetter(info);
-}
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLEmbedElementV8Internal::typeAttributeGetter(info);
+    }
 
-static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+    static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::typeAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::typeAttr, cppValue);
+    }
 
-CORE_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLEmbedElementV8Internal::typeAttributeSetter(v8Value, info);
-}
+        HTMLEmbedElementV8Internal::typeAttributeSetter(v8Value, info);
+    }
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::widthAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::widthAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLEmbedElementV8Internal::widthAttributeGetter(info);
-}
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLEmbedElementV8Internal::widthAttributeGetter(info);
+    }
 
-static void widthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+    static void widthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::widthAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::widthAttr, cppValue);
+    }
 
-CORE_EXPORT void widthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void widthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLEmbedElementV8Internal::widthAttributeSetter(v8Value, info);
-}
+        HTMLEmbedElementV8Internal::widthAttributeSetter(v8Value, info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::heightAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::heightAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLEmbedElementV8Internal::heightAttributeGetter(info);
-}
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLEmbedElementV8Internal::heightAttributeGetter(info);
+    }
 
-static void heightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+    static void heightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::heightAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::heightAttr, cppValue);
+    }
 
-CORE_EXPORT void heightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void heightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLEmbedElementV8Internal::heightAttributeSetter(v8Value, info);
-}
+        HTMLEmbedElementV8Internal::heightAttributeSetter(v8Value, info);
+    }
 
-static void alignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void alignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::alignAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::alignAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void alignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLEmbedElementV8Internal::alignAttributeGetter(info);
-}
+    CORE_EXPORT void alignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLEmbedElementV8Internal::alignAttributeGetter(info);
+    }
 
-static void alignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+    static void alignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::alignAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::alignAttr, cppValue);
+    }
 
-CORE_EXPORT void alignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void alignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLEmbedElementV8Internal::alignAttributeSetter(v8Value, info);
-}
+        HTMLEmbedElementV8Internal::alignAttributeSetter(v8Value, info);
+    }
 
-static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->getNameAttribute(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getNameAttribute(), info.GetIsolate());
+    }
 
-CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLEmbedElementV8Internal::nameAttributeGetter(info);
-}
+    CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLEmbedElementV8Internal::nameAttributeGetter(info);
+    }
 
-static void nameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
+    static void nameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::nameAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::nameAttr, cppValue);
+    }
 
-CORE_EXPORT void nameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void nameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLEmbedElementV8Internal::nameAttributeSetter(v8Value, info);
-}
+        HTMLEmbedElementV8Internal::nameAttributeSetter(v8Value, info);
+    }
 
-static void getSVGDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLEmbedElement", "getSVGDocument");
+    static void getSVGDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLEmbedElement", "getSVGDocument");
 
-  HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(info.Holder());
+        HTMLEmbedElement* impl = V8HTMLEmbedElement::toImpl(info.Holder());
 
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl->getSVGDocument(exceptionState), exceptionState)) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl->getSVGDocument(exceptionState), exceptionState)) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  Document* result = impl->getSVGDocument(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, ToV8(result, ToV8(impl->contentWindow(), v8::Local<v8::Object>(), info.GetIsolate()).As<v8::Object>(), info.GetIsolate()));
-}
+        Document* result = impl->getSVGDocument(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, ToV8(result, ToV8(impl->contentWindow(), v8::Local<v8::Object>(), info.GetIsolate()).As<v8::Object>(), info.GetIsolate()));
+    }
 
-CORE_EXPORT  void getSVGDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLEmbedElementV8Internal::getSVGDocumentMethod(info);
-}
+    CORE_EXPORT void getSVGDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLEmbedElementV8Internal::getSVGDocumentMethod(info);
+    }
 
-CORE_EXPORT void namedPropertyGetterCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+    CORE_EXPORT void namedPropertyGetterCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
 
-  V8HTMLEmbedElement::namedPropertyGetterCustom(propertyName, info);
-}
+        V8HTMLEmbedElement::namedPropertyGetterCustom(propertyName, info);
+    }
 
-CORE_EXPORT void namedPropertySetterCallback(v8::Local<v8::Name> name, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+    CORE_EXPORT void namedPropertySetterCallback(v8::Local<v8::Name> name, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
 
-  V8HTMLEmbedElement::namedPropertySetterCustom(propertyName, v8Value, info);
-}
+        V8HTMLEmbedElement::namedPropertySetterCustom(propertyName, v8Value, info);
+    }
 
-CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  const AtomicString& propertyName = AtomicString::number(index);
+    CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        const AtomicString& propertyName = AtomicString::number(index);
 
-  V8HTMLEmbedElement::namedPropertyGetterCustom(propertyName, info);
-}
+        V8HTMLEmbedElement::namedPropertyGetterCustom(propertyName, info);
+    }
 
-CORE_EXPORT void indexedPropertySetterCallback(uint32_t index, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  const AtomicString& propertyName = AtomicString::number(index);
+    CORE_EXPORT void indexedPropertySetterCallback(uint32_t index, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        const AtomicString& propertyName = AtomicString::number(index);
 
-  V8HTMLEmbedElement::namedPropertySetterCustom(propertyName, v8Value, info);
-}
+        V8HTMLEmbedElement::namedPropertySetterCustom(propertyName, v8Value, info);
+    }
 
 } // namespace HTMLEmbedElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLEmbedElementAccessors[] = {
-    {"src", HTMLEmbedElementV8Internal::srcAttributeGetterCallback, HTMLEmbedElementV8Internal::srcAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"type", HTMLEmbedElementV8Internal::typeAttributeGetterCallback, HTMLEmbedElementV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", HTMLEmbedElementV8Internal::widthAttributeGetterCallback, HTMLEmbedElementV8Internal::widthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", HTMLEmbedElementV8Internal::heightAttributeGetterCallback, HTMLEmbedElementV8Internal::heightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"align", HTMLEmbedElementV8Internal::alignAttributeGetterCallback, HTMLEmbedElementV8Internal::alignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"name", HTMLEmbedElementV8Internal::nameAttributeGetterCallback, HTMLEmbedElementV8Internal::nameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "src", HTMLEmbedElementV8Internal::srcAttributeGetterCallback, HTMLEmbedElementV8Internal::srcAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "type", HTMLEmbedElementV8Internal::typeAttributeGetterCallback, HTMLEmbedElementV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", HTMLEmbedElementV8Internal::widthAttributeGetterCallback, HTMLEmbedElementV8Internal::widthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", HTMLEmbedElementV8Internal::heightAttributeGetterCallback, HTMLEmbedElementV8Internal::heightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "align", HTMLEmbedElementV8Internal::alignAttributeGetterCallback, HTMLEmbedElementV8Internal::alignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "name", HTMLEmbedElementV8Internal::nameAttributeGetterCallback, HTMLEmbedElementV8Internal::nameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLEmbedElementMethods[] = {
-    {"getSVGDocument", HTMLEmbedElementV8Internal::getSVGDocumentMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getSVGDocument", HTMLEmbedElementV8Internal::getSVGDocumentMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLEmbedElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLEmbedElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLEmbedElement::internalFieldCount);
+static void installV8HTMLEmbedElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLEmbedElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLEmbedElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLEmbedElementAccessors, WTF_ARRAY_LENGTH(V8HTMLEmbedElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLEmbedElementMethods, WTF_ARRAY_LENGTH(V8HTMLEmbedElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLEmbedElementAccessors, WTF_ARRAY_LENGTH(V8HTMLEmbedElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLEmbedElementMethods, WTF_ARRAY_LENGTH(V8HTMLEmbedElementMethods));
 
-  // Indexed properties
-  v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(HTMLEmbedElementV8Internal::indexedPropertyGetterCallback, HTMLEmbedElementV8Internal::indexedPropertySetterCallback, 0, 0, 0, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
-  instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
-  // Named properties
-  v8::NamedPropertyHandlerConfiguration namedPropertyHandlerConfig(HTMLEmbedElementV8Internal::namedPropertyGetterCallback, HTMLEmbedElementV8Internal::namedPropertySetterCallback, 0, 0, 0, v8::Local<v8::Value>(), static_cast<v8::PropertyHandlerFlags>(int(v8::PropertyHandlerFlags::kOnlyInterceptStrings)));
-  instanceTemplate->SetHandler(namedPropertyHandlerConfig);
+    // Indexed properties
+    v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(HTMLEmbedElementV8Internal::indexedPropertyGetterCallback, HTMLEmbedElementV8Internal::indexedPropertySetterCallback, 0, 0, 0, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
+    instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
+    // Named properties
+    v8::NamedPropertyHandlerConfiguration namedPropertyHandlerConfig(HTMLEmbedElementV8Internal::namedPropertyGetterCallback, HTMLEmbedElementV8Internal::namedPropertySetterCallback, 0, 0, 0, v8::Local<v8::Value>(), static_cast<v8::PropertyHandlerFlags>(int(v8::PropertyHandlerFlags::kOnlyInterceptStrings)));
+    instanceTemplate->SetHandler(namedPropertyHandlerConfig);
 
-  instanceTemplate->SetCallAsFunctionHandler(V8HTMLEmbedElement::legacyCallCustom);
+    instanceTemplate->SetCallAsFunctionHandler(V8HTMLEmbedElement::legacyCallCustom);
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLEmbedElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLEmbedElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLEmbedElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLEmbedElementTemplate);
 }
 
-bool V8HTMLEmbedElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLEmbedElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLEmbedElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLEmbedElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLEmbedElement* V8HTMLEmbedElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLEmbedElement* V8HTMLEmbedElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

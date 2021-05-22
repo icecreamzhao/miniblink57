@@ -8,73 +8,77 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ScrollOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8ScrollOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ScrollOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8ScrollOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ScrollOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> behaviorValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "behavior")).ToLocal(&behaviorValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (behaviorValue.IsEmpty() || behaviorValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> behavior = behaviorValue;
-    if (!behavior.prepare(exceptionState))
-      return;
-    const char* validValues[] = {
-        "auto",
-        "instant",
-        "smooth",
-    };
-    if (!isValidEnum(behavior, validValues, WTF_ARRAY_LENGTH(validValues), "ScrollBehavior", exceptionState))
-      return;
-    impl.setBehavior(behavior);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> behaviorValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "behavior")).ToLocal(&behaviorValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (behaviorValue.IsEmpty() || behaviorValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> behavior = behaviorValue;
+        if (!behavior.prepare(exceptionState))
+            return;
+        const char* validValues[] = {
+            "auto",
+            "instant",
+            "smooth",
+        };
+        if (!isValidEnum(behavior, validValues, WTF_ARRAY_LENGTH(validValues), "ScrollBehavior", exceptionState))
+            return;
+        impl.setBehavior(behavior);
+    }
 }
 
-v8::Local<v8::Value> ScrollOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ScrollOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ScrollOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ScrollOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ScrollOptions(const ScrollOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasBehavior()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "behavior"), v8String(isolate, impl.behavior()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "behavior"), v8String(isolate, String("auto")))))
-      return false;
-  }
+bool toV8ScrollOptions(const ScrollOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasBehavior()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "behavior"), v8String(isolate, impl.behavior()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "behavior"), v8String(isolate, String("auto")))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-ScrollOptions NativeValueTraits<ScrollOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ScrollOptions impl;
-  V8ScrollOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ScrollOptions NativeValueTraits<ScrollOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ScrollOptions impl;
+    V8ScrollOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

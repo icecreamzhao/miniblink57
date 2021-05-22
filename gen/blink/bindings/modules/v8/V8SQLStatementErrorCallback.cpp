@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SQLStatementErrorCallback.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -21,14 +21,16 @@
 namespace blink {
 
 V8SQLStatementErrorCallback::V8SQLStatementErrorCallback(v8::Local<v8::Function> callback, ScriptState* scriptState)
-    : m_scriptState(scriptState) {
-  m_callback.set(scriptState->isolate(), callback);
+    : m_scriptState(scriptState)
+{
+    m_callback.set(scriptState->isolate(), callback);
 }
 
-V8SQLStatementErrorCallback::~V8SQLStatementErrorCallback() {}
+V8SQLStatementErrorCallback::~V8SQLStatementErrorCallback() { }
 
-DEFINE_TRACE(V8SQLStatementErrorCallback) {
-  SQLStatementErrorCallback::trace(visitor);
+DEFINE_TRACE(V8SQLStatementErrorCallback)
+{
+    SQLStatementErrorCallback::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

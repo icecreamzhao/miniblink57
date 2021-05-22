@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ApplicationCacheErrorEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,120 +16,124 @@
 
 namespace blink {
 
-void V8ApplicationCacheErrorEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ApplicationCacheErrorEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8ApplicationCacheErrorEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ApplicationCacheErrorEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> messageValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "message")).ToLocal(&messageValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (messageValue.IsEmpty() || messageValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> message = messageValue;
-    if (!message.prepare(exceptionState))
-      return;
-    impl.setMessage(message);
-  }
-
-  v8::Local<v8::Value> reasonValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "reason")).ToLocal(&reasonValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (reasonValue.IsEmpty() || reasonValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> reason = reasonValue;
-    if (!reason.prepare(exceptionState))
-      return;
-    impl.setReason(reason);
-  }
-
-  v8::Local<v8::Value> statusValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "status")).ToLocal(&statusValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (statusValue.IsEmpty() || statusValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned status = toUInt16(isolate, statusValue, NormalConversion, exceptionState);
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setStatus(status);
-  }
+        return;
 
-  v8::Local<v8::Value> urlValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "url")).ToLocal(&urlValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (urlValue.IsEmpty() || urlValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> url = urlValue;
-    if (!url.prepare(exceptionState))
-      return;
-    impl.setURL(url);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> messageValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "message")).ToLocal(&messageValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (messageValue.IsEmpty() || messageValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> message = messageValue;
+        if (!message.prepare(exceptionState))
+            return;
+        impl.setMessage(message);
+    }
+
+    v8::Local<v8::Value> reasonValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "reason")).ToLocal(&reasonValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (reasonValue.IsEmpty() || reasonValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> reason = reasonValue;
+        if (!reason.prepare(exceptionState))
+            return;
+        impl.setReason(reason);
+    }
+
+    v8::Local<v8::Value> statusValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "status")).ToLocal(&statusValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (statusValue.IsEmpty() || statusValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned status = toUInt16(isolate, statusValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setStatus(status);
+    }
+
+    v8::Local<v8::Value> urlValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "url")).ToLocal(&urlValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (urlValue.IsEmpty() || urlValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> url = urlValue;
+        if (!url.prepare(exceptionState))
+            return;
+        impl.setURL(url);
+    }
 }
 
-v8::Local<v8::Value> ApplicationCacheErrorEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ApplicationCacheErrorEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ApplicationCacheErrorEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ApplicationCacheErrorEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ApplicationCacheErrorEventInit(const ApplicationCacheErrorEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8ApplicationCacheErrorEventInit(const ApplicationCacheErrorEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasMessage()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "message"), v8String(isolate, impl.message()))))
-      return false;
-  }
+    if (impl.hasMessage()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "message"), v8String(isolate, impl.message()))))
+            return false;
+    }
 
-  if (impl.hasReason()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "reason"), v8String(isolate, impl.reason()))))
-      return false;
-  }
+    if (impl.hasReason()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "reason"), v8String(isolate, impl.reason()))))
+            return false;
+    }
 
-  if (impl.hasStatus()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "status"), v8::Integer::NewFromUnsigned(isolate, impl.status()))))
-      return false;
-  }
+    if (impl.hasStatus()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "status"), v8::Integer::NewFromUnsigned(isolate, impl.status()))))
+            return false;
+    }
 
-  if (impl.hasURL()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "url"), v8String(isolate, impl.url()))))
-      return false;
-  }
+    if (impl.hasURL()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "url"), v8String(isolate, impl.url()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-ApplicationCacheErrorEventInit NativeValueTraits<ApplicationCacheErrorEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ApplicationCacheErrorEventInit impl;
-  V8ApplicationCacheErrorEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ApplicationCacheErrorEventInit NativeValueTraits<ApplicationCacheErrorEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ApplicationCacheErrorEventInit impl;
+    V8ApplicationCacheErrorEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,22 +8,24 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ExtendableEventInit.h"
 
 namespace blink {
 
-ExtendableEventInit::ExtendableEventInit() {
+ExtendableEventInit::ExtendableEventInit()
+{
 }
 
-ExtendableEventInit::~ExtendableEventInit() {}
+ExtendableEventInit::~ExtendableEventInit() { }
 
 ExtendableEventInit::ExtendableEventInit(const ExtendableEventInit&) = default;
 
 ExtendableEventInit& ExtendableEventInit::operator=(const ExtendableEventInit&) = default;
 
-DEFINE_TRACE(ExtendableEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(ExtendableEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

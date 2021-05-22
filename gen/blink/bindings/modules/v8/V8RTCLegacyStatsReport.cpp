@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RTCLegacyStatsReport.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,122 +45,137 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&RTCLegacyStatsReport::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "RTCLegacyStatsReport is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace RTCLegacyStatsReportV8Internal {
 
-static void timestampAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void timestampAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(holder);
+        RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(holder);
 
-  v8SetReturnValue(info, v8DateOrNaN(info.GetIsolate(), impl->timestamp()));
-}
+        v8SetReturnValue(info, v8DateOrNaN(info.GetIsolate(), impl->timestamp()));
+    }
 
-MODULES_EXPORT void timestampAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCLegacyStatsReportV8Internal::timestampAttributeGetter(info);
-}
+    MODULES_EXPORT void timestampAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCLegacyStatsReportV8Internal::timestampAttributeGetter(info);
+    }
 
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(holder);
+        RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->id(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->id(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCLegacyStatsReportV8Internal::idAttributeGetter(info);
-}
+    MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCLegacyStatsReportV8Internal::idAttributeGetter(info);
+    }
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(holder);
+        RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCLegacyStatsReportV8Internal::typeAttributeGetter(info);
-}
+    MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCLegacyStatsReportV8Internal::typeAttributeGetter(info);
+    }
 
-static void statMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(info.Holder());
+    static void statMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("stat", "RTCLegacyStatsReport", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("stat", "RTCLegacyStatsReport", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  v8SetReturnValueString(info, impl->stat(name), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->stat(name), info.GetIsolate());
+    }
 
-MODULES_EXPORT  void statMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCLegacyStatsReportV8Internal::statMethod(info);
-}
+    MODULES_EXPORT void statMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCLegacyStatsReportV8Internal::statMethod(info);
+    }
 
-static void namesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(info.Holder());
+    static void namesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCLegacyStatsReport* impl = V8RTCLegacyStatsReport::toImpl(info.Holder());
 
-  v8SetReturnValue(info, ToV8(impl->names(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->names(), info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT  void namesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCLegacyStatsReportV8Internal::namesMethod(info);
-}
+    MODULES_EXPORT void namesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCLegacyStatsReportV8Internal::namesMethod(info);
+    }
 
 } // namespace RTCLegacyStatsReportV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8RTCLegacyStatsReportAccessors[] = {
-    {"timestamp", RTCLegacyStatsReportV8Internal::timestampAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"id", RTCLegacyStatsReportV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"type", RTCLegacyStatsReportV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "timestamp", RTCLegacyStatsReportV8Internal::timestampAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "id", RTCLegacyStatsReportV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "type", RTCLegacyStatsReportV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8RTCLegacyStatsReportMethods[] = {
-    {"stat", RTCLegacyStatsReportV8Internal::statMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"names", RTCLegacyStatsReportV8Internal::namesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "stat", RTCLegacyStatsReportV8Internal::statMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "names", RTCLegacyStatsReportV8Internal::namesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8RTCLegacyStatsReportTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCLegacyStatsReport::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8RTCLegacyStatsReport::internalFieldCount);
+static void installV8RTCLegacyStatsReportTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCLegacyStatsReport::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8RTCLegacyStatsReport::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCLegacyStatsReportAccessors, WTF_ARRAY_LENGTH(V8RTCLegacyStatsReportAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCLegacyStatsReportMethods, WTF_ARRAY_LENGTH(V8RTCLegacyStatsReportMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCLegacyStatsReportAccessors, WTF_ARRAY_LENGTH(V8RTCLegacyStatsReportAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCLegacyStatsReportMethods, WTF_ARRAY_LENGTH(V8RTCLegacyStatsReportMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8RTCLegacyStatsReport::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCLegacyStatsReportTemplate);
+v8::Local<v8::FunctionTemplate> V8RTCLegacyStatsReport::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCLegacyStatsReportTemplate);
 }
 
-bool V8RTCLegacyStatsReport::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8RTCLegacyStatsReport::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8RTCLegacyStatsReport::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8RTCLegacyStatsReport::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-RTCLegacyStatsReport* V8RTCLegacyStatsReport::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+RTCLegacyStatsReport* V8RTCLegacyStatsReport::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

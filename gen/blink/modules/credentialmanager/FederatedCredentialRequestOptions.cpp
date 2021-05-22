@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FederatedCredentialRequestOptions.h"
 
 namespace blink {
 
-FederatedCredentialRequestOptions::FederatedCredentialRequestOptions() {
+FederatedCredentialRequestOptions::FederatedCredentialRequestOptions()
+{
 }
 
-FederatedCredentialRequestOptions::~FederatedCredentialRequestOptions() {}
+FederatedCredentialRequestOptions::~FederatedCredentialRequestOptions() { }
 
 FederatedCredentialRequestOptions::FederatedCredentialRequestOptions(const FederatedCredentialRequestOptions&) = default;
 
 FederatedCredentialRequestOptions& FederatedCredentialRequestOptions::operator=(const FederatedCredentialRequestOptions&) = default;
 
-bool FederatedCredentialRequestOptions::hasProtocols() const {
-  return m_hasProtocols;
+bool FederatedCredentialRequestOptions::hasProtocols() const
+{
+    return m_hasProtocols;
 }
-const Vector<String>& FederatedCredentialRequestOptions::protocols() const {
-  DCHECK(m_hasProtocols);
-  return m_protocols;
+const Vector<String>& FederatedCredentialRequestOptions::protocols() const
+{
+    DCHECK(m_hasProtocols);
+    return m_protocols;
 }
-void FederatedCredentialRequestOptions::setProtocols(const Vector<String>& value) {
-  m_protocols = value;
-  m_hasProtocols = true;
+void FederatedCredentialRequestOptions::setProtocols(const Vector<String>& value)
+{
+    m_protocols = value;
+    m_hasProtocols = true;
 }
-bool FederatedCredentialRequestOptions::hasProviders() const {
-  return m_hasProviders;
+bool FederatedCredentialRequestOptions::hasProviders() const
+{
+    return m_hasProviders;
 }
-const Vector<String>& FederatedCredentialRequestOptions::providers() const {
-  DCHECK(m_hasProviders);
-  return m_providers;
+const Vector<String>& FederatedCredentialRequestOptions::providers() const
+{
+    DCHECK(m_hasProviders);
+    return m_providers;
 }
-void FederatedCredentialRequestOptions::setProviders(const Vector<String>& value) {
-  m_providers = value;
-  m_hasProviders = true;
+void FederatedCredentialRequestOptions::setProviders(const Vector<String>& value)
+{
+    m_providers = value;
+    m_hasProviders = true;
 }
 
-DEFINE_TRACE(FederatedCredentialRequestOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(FederatedCredentialRequestOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

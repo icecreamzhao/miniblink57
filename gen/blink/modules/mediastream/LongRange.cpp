@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "LongRange.h"
 
 namespace blink {
 
-LongRange::LongRange() {
+LongRange::LongRange()
+{
 }
 
-LongRange::~LongRange() {}
+LongRange::~LongRange() { }
 
 LongRange::LongRange(const LongRange&) = default;
 
 LongRange& LongRange::operator=(const LongRange&) = default;
 
-bool LongRange::hasMax() const {
-  return m_hasMax;
+bool LongRange::hasMax() const
+{
+    return m_hasMax;
 }
-int LongRange::max() const {
-  DCHECK(m_hasMax);
-  return m_max;
+int LongRange::max() const
+{
+    DCHECK(m_hasMax);
+    return m_max;
 }
-void LongRange::setMax(int value) {
-  m_max = value;
-  m_hasMax = true;
+void LongRange::setMax(int value)
+{
+    m_max = value;
+    m_hasMax = true;
 }
-bool LongRange::hasMin() const {
-  return m_hasMin;
+bool LongRange::hasMin() const
+{
+    return m_hasMin;
 }
-int LongRange::min() const {
-  DCHECK(m_hasMin);
-  return m_min;
+int LongRange::min() const
+{
+    DCHECK(m_hasMin);
+    return m_min;
 }
-void LongRange::setMin(int value) {
-  m_min = value;
-  m_hasMin = true;
+void LongRange::setMin(int value)
+{
+    m_min = value;
+    m_hasMin = true;
 }
 
-DEFINE_TRACE(LongRange) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(LongRange)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

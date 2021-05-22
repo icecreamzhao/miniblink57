@@ -8,102 +8,125 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaKeySystemConfiguration.h"
 
 namespace blink {
 
-MediaKeySystemConfiguration::MediaKeySystemConfiguration() {
-  setAudioCapabilities(HeapVector<MediaKeySystemMediaCapability>());
-  setDistinctiveIdentifier(String("optional"));
-  setInitDataTypes(Vector<String>());
-  setLabel(String(""));
-  setPersistentState(String("optional"));
-  setVideoCapabilities(HeapVector<MediaKeySystemMediaCapability>());
+MediaKeySystemConfiguration::MediaKeySystemConfiguration()
+{
+    setAudioCapabilities(HeapVector<MediaKeySystemMediaCapability>());
+    setDistinctiveIdentifier(String("optional"));
+    setInitDataTypes(Vector<String>());
+    setLabel(String(""));
+    setPersistentState(String("optional"));
+    setVideoCapabilities(HeapVector<MediaKeySystemMediaCapability>());
 }
 
-MediaKeySystemConfiguration::~MediaKeySystemConfiguration() {}
+MediaKeySystemConfiguration::~MediaKeySystemConfiguration() { }
 
 MediaKeySystemConfiguration::MediaKeySystemConfiguration(const MediaKeySystemConfiguration&) = default;
 
 MediaKeySystemConfiguration& MediaKeySystemConfiguration::operator=(const MediaKeySystemConfiguration&) = default;
 
-bool MediaKeySystemConfiguration::hasAudioCapabilities() const {
-  return m_hasAudioCapabilities;
+bool MediaKeySystemConfiguration::hasAudioCapabilities() const
+{
+    return m_hasAudioCapabilities;
 }
-const HeapVector<MediaKeySystemMediaCapability>& MediaKeySystemConfiguration::audioCapabilities() const {
-  DCHECK(m_hasAudioCapabilities);
-  return m_audioCapabilities;
+const HeapVector<MediaKeySystemMediaCapability>& MediaKeySystemConfiguration::audioCapabilities() const
+{
+    DCHECK(m_hasAudioCapabilities);
+    return m_audioCapabilities;
 }
-void MediaKeySystemConfiguration::setAudioCapabilities(const HeapVector<MediaKeySystemMediaCapability>& value) {
-  m_audioCapabilities = value;
-  m_hasAudioCapabilities = true;
+void MediaKeySystemConfiguration::setAudioCapabilities(const HeapVector<MediaKeySystemMediaCapability>& value)
+{
+    m_audioCapabilities = value;
+    m_hasAudioCapabilities = true;
 }
-bool MediaKeySystemConfiguration::hasDistinctiveIdentifier() const {
-  return !m_distinctiveIdentifier.isNull();
+bool MediaKeySystemConfiguration::hasDistinctiveIdentifier() const
+{
+    return !m_distinctiveIdentifier.isNull();
 }
-String MediaKeySystemConfiguration::distinctiveIdentifier() const {
-  return m_distinctiveIdentifier;
+String MediaKeySystemConfiguration::distinctiveIdentifier() const
+{
+    return m_distinctiveIdentifier;
 }
-void MediaKeySystemConfiguration::setDistinctiveIdentifier(String value) {
-  m_distinctiveIdentifier = value;
+void MediaKeySystemConfiguration::setDistinctiveIdentifier(String value)
+{
+    m_distinctiveIdentifier = value;
 }
-bool MediaKeySystemConfiguration::hasInitDataTypes() const {
-  return m_hasInitDataTypes;
+bool MediaKeySystemConfiguration::hasInitDataTypes() const
+{
+    return m_hasInitDataTypes;
 }
-const Vector<String>& MediaKeySystemConfiguration::initDataTypes() const {
-  DCHECK(m_hasInitDataTypes);
-  return m_initDataTypes;
+const Vector<String>& MediaKeySystemConfiguration::initDataTypes() const
+{
+    DCHECK(m_hasInitDataTypes);
+    return m_initDataTypes;
 }
-void MediaKeySystemConfiguration::setInitDataTypes(const Vector<String>& value) {
-  m_initDataTypes = value;
-  m_hasInitDataTypes = true;
+void MediaKeySystemConfiguration::setInitDataTypes(const Vector<String>& value)
+{
+    m_initDataTypes = value;
+    m_hasInitDataTypes = true;
 }
-bool MediaKeySystemConfiguration::hasLabel() const {
-  return !m_label.isNull();
+bool MediaKeySystemConfiguration::hasLabel() const
+{
+    return !m_label.isNull();
 }
-String MediaKeySystemConfiguration::label() const {
-  return m_label;
+String MediaKeySystemConfiguration::label() const
+{
+    return m_label;
 }
-void MediaKeySystemConfiguration::setLabel(String value) {
-  m_label = value;
+void MediaKeySystemConfiguration::setLabel(String value)
+{
+    m_label = value;
 }
-bool MediaKeySystemConfiguration::hasPersistentState() const {
-  return !m_persistentState.isNull();
+bool MediaKeySystemConfiguration::hasPersistentState() const
+{
+    return !m_persistentState.isNull();
 }
-String MediaKeySystemConfiguration::persistentState() const {
-  return m_persistentState;
+String MediaKeySystemConfiguration::persistentState() const
+{
+    return m_persistentState;
 }
-void MediaKeySystemConfiguration::setPersistentState(String value) {
-  m_persistentState = value;
+void MediaKeySystemConfiguration::setPersistentState(String value)
+{
+    m_persistentState = value;
 }
-bool MediaKeySystemConfiguration::hasSessionTypes() const {
-  return m_hasSessionTypes;
+bool MediaKeySystemConfiguration::hasSessionTypes() const
+{
+    return m_hasSessionTypes;
 }
-const Vector<String>& MediaKeySystemConfiguration::sessionTypes() const {
-  DCHECK(m_hasSessionTypes);
-  return m_sessionTypes;
+const Vector<String>& MediaKeySystemConfiguration::sessionTypes() const
+{
+    DCHECK(m_hasSessionTypes);
+    return m_sessionTypes;
 }
-void MediaKeySystemConfiguration::setSessionTypes(const Vector<String>& value) {
-  m_sessionTypes = value;
-  m_hasSessionTypes = true;
+void MediaKeySystemConfiguration::setSessionTypes(const Vector<String>& value)
+{
+    m_sessionTypes = value;
+    m_hasSessionTypes = true;
 }
-bool MediaKeySystemConfiguration::hasVideoCapabilities() const {
-  return m_hasVideoCapabilities;
+bool MediaKeySystemConfiguration::hasVideoCapabilities() const
+{
+    return m_hasVideoCapabilities;
 }
-const HeapVector<MediaKeySystemMediaCapability>& MediaKeySystemConfiguration::videoCapabilities() const {
-  DCHECK(m_hasVideoCapabilities);
-  return m_videoCapabilities;
+const HeapVector<MediaKeySystemMediaCapability>& MediaKeySystemConfiguration::videoCapabilities() const
+{
+    DCHECK(m_hasVideoCapabilities);
+    return m_videoCapabilities;
 }
-void MediaKeySystemConfiguration::setVideoCapabilities(const HeapVector<MediaKeySystemMediaCapability>& value) {
-  m_videoCapabilities = value;
-  m_hasVideoCapabilities = true;
+void MediaKeySystemConfiguration::setVideoCapabilities(const HeapVector<MediaKeySystemMediaCapability>& value)
+{
+    m_videoCapabilities = value;
+    m_hasVideoCapabilities = true;
 }
 
-DEFINE_TRACE(MediaKeySystemConfiguration) {
-  visitor->trace(m_audioCapabilities);
-  visitor->trace(m_videoCapabilities);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(MediaKeySystemConfiguration)
+{
+    visitor->trace(m_audioCapabilities);
+    visitor->trace(m_videoCapabilities);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

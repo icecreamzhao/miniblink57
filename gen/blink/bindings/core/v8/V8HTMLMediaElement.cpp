@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLMediaElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -60,859 +60,955 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&HTMLMediaElement::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLMediaElement is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLMediaElementV8Internal {
 
-static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->error()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->error()), impl);
+    }
 
-CORE_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::errorAttributeGetter(info);
-}
+    CORE_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::errorAttributeGetter(info);
+    }
 
-static void srcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void srcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->getURLAttribute(HTMLNames::srcAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getURLAttribute(HTMLNames::srcAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void srcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::srcAttributeGetter(info);
-}
+    CORE_EXPORT void srcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::srcAttributeGetter(info);
+    }
 
-static void srcAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void srcAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::srcAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::srcAttr, cppValue);
+    }
 
-CORE_EXPORT void srcAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void srcAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMediaElementV8Internal::srcAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::srcAttributeSetter(v8Value, info);
+    }
 
-static void currentSrcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void currentSrcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->currentSrc(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->currentSrc(), info.GetIsolate());
+    }
 
-CORE_EXPORT void currentSrcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::currentSrcAttributeGetter(info);
-}
+    CORE_EXPORT void currentSrcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::currentSrcAttributeGetter(info);
+    }
 
-static void crossOriginAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void crossOriginAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  String cppValue(impl->fastGetAttribute(HTMLNames::crossoriginAttr));
+        String cppValue(impl->fastGetAttribute(HTMLNames::crossoriginAttr));
 
-  if (cppValue.isNull()) {
-    ;
-  } else if (cppValue.isEmpty()) {
-    cppValue = "anonymous";
-  } else if (equalIgnoringASCIICase(cppValue, "anonymous")) {
-    cppValue = "anonymous";
-  } else if (equalIgnoringASCIICase(cppValue, "use-credentials")) {
-    cppValue = "use-credentials";
-  } else {
-    cppValue = "anonymous";
-  }
+        if (cppValue.isNull()) {
+            ;
+        } else if (cppValue.isEmpty()) {
+            cppValue = "anonymous";
+        } else if (equalIgnoringASCIICase(cppValue, "anonymous")) {
+            cppValue = "anonymous";
+        } else if (equalIgnoringASCIICase(cppValue, "use-credentials")) {
+            cppValue = "use-credentials";
+        } else {
+            cppValue = "anonymous";
+        }
 
-  v8SetReturnValueStringOrNull(info, cppValue, info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, cppValue, info.GetIsolate());
+    }
 
-CORE_EXPORT void crossOriginAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::crossOriginAttributeGetter(info);
-}
+    CORE_EXPORT void crossOriginAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::crossOriginAttributeGetter(info);
+    }
 
-static void crossOriginAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void crossOriginAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::crossoriginAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::crossoriginAttr, cppValue);
+    }
 
-CORE_EXPORT void crossOriginAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void crossOriginAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMediaElementV8Internal::crossOriginAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::crossOriginAttributeSetter(v8Value, info);
+    }
 
-static void networkStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void networkStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->getNetworkState());
-}
+        v8SetReturnValueUnsigned(info, impl->getNetworkState());
+    }
 
-CORE_EXPORT void networkStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::networkStateAttributeGetter(info);
-}
+    CORE_EXPORT void networkStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::networkStateAttributeGetter(info);
+    }
 
-static void preloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void preloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->preload(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->preload(), info.GetIsolate());
+    }
 
-CORE_EXPORT void preloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::preloadAttributeGetter(info);
-}
+    CORE_EXPORT void preloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::preloadAttributeGetter(info);
+    }
 
-static void preloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void preloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setPreload(cppValue);
-}
+        impl->setPreload(cppValue);
+    }
 
-CORE_EXPORT void preloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void preloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLMediaElementV8Internal::preloadAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::preloadAttributeSetter(v8Value, info);
+    }
 
-static void bufferedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bufferedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->buffered()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->buffered()), impl);
+    }
 
-CORE_EXPORT void bufferedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::bufferedAttributeGetter(info);
-}
+    CORE_EXPORT void bufferedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::bufferedAttributeGetter(info);
+    }
 
-static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->getReadyState());
-}
+        v8SetReturnValueUnsigned(info, impl->getReadyState());
+    }
 
-CORE_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::readyStateAttributeGetter(info);
-}
+    CORE_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::readyStateAttributeGetter(info);
+    }
 
-static void seekingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void seekingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->seeking());
-}
+        v8SetReturnValueBool(info, impl->seeking());
+    }
 
-CORE_EXPORT void seekingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::seekingAttributeGetter(info);
-}
+    CORE_EXPORT void seekingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::seekingAttributeGetter(info);
+    }
 
-static void currentTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void currentTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->currentTime());
-}
+        v8SetReturnValue(info, impl->currentTime());
+    }
 
-CORE_EXPORT void currentTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::currentTimeAttributeGetter(info);
-}
+    CORE_EXPORT void currentTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::currentTimeAttributeGetter(info);
+    }
 
-static void currentTimeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void currentTimeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "currentTime");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "currentTime");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setCurrentTime(cppValue);
-}
+        impl->setCurrentTime(cppValue);
+    }
 
-CORE_EXPORT void currentTimeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void currentTimeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMediaElementV8Internal::currentTimeAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::currentTimeAttributeSetter(v8Value, info);
+    }
 
-static void durationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void durationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->duration());
-}
+        v8SetReturnValue(info, impl->duration());
+    }
 
-CORE_EXPORT void durationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::durationAttributeGetter(info);
-}
+    CORE_EXPORT void durationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::durationAttributeGetter(info);
+    }
 
-static void pausedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pausedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->paused());
-}
+        v8SetReturnValueBool(info, impl->paused());
+    }
 
-CORE_EXPORT void pausedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::pausedAttributeGetter(info);
-}
+    CORE_EXPORT void pausedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::pausedAttributeGetter(info);
+    }
 
-static void defaultPlaybackRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void defaultPlaybackRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->defaultPlaybackRate());
-}
+        v8SetReturnValue(info, impl->defaultPlaybackRate());
+    }
 
-CORE_EXPORT void defaultPlaybackRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::defaultPlaybackRateAttributeGetter(info);
-}
+    CORE_EXPORT void defaultPlaybackRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::defaultPlaybackRateAttributeGetter(info);
+    }
 
-static void defaultPlaybackRateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void defaultPlaybackRateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "defaultPlaybackRate");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "defaultPlaybackRate");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setDefaultPlaybackRate(cppValue);
-}
+        impl->setDefaultPlaybackRate(cppValue);
+    }
 
-CORE_EXPORT void defaultPlaybackRateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void defaultPlaybackRateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMediaElementV8Internal::defaultPlaybackRateAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::defaultPlaybackRateAttributeSetter(v8Value, info);
+    }
 
-static void playbackRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void playbackRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->playbackRate());
-}
+        v8SetReturnValue(info, impl->playbackRate());
+    }
 
-CORE_EXPORT void playbackRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::playbackRateAttributeGetter(info);
-}
+    CORE_EXPORT void playbackRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::playbackRateAttributeGetter(info);
+    }
 
-static void playbackRateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void playbackRateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "playbackRate");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "playbackRate");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setPlaybackRate(cppValue);
-}
+        impl->setPlaybackRate(cppValue);
+    }
 
-CORE_EXPORT void playbackRateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void playbackRateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMediaElementV8Internal::playbackRateAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::playbackRateAttributeSetter(v8Value, info);
+    }
 
-static void playedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void playedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->played()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->played()), impl);
+    }
 
-CORE_EXPORT void playedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::playedAttributeGetter(info);
-}
+    CORE_EXPORT void playedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::playedAttributeGetter(info);
+    }
 
-static void seekableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void seekableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->seekable()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->seekable()), impl);
+    }
 
-CORE_EXPORT void seekableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::seekableAttributeGetter(info);
-}
+    CORE_EXPORT void seekableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::seekableAttributeGetter(info);
+    }
 
-static void endedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void endedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->ended());
-}
+        v8SetReturnValueBool(info, impl->ended());
+    }
 
-CORE_EXPORT void endedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::endedAttributeGetter(info);
-}
+    CORE_EXPORT void endedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::endedAttributeGetter(info);
+    }
 
-static void autoplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void autoplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::autoplayAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::autoplayAttr));
+    }
 
-CORE_EXPORT void autoplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::autoplayAttributeGetter(info);
-}
+    CORE_EXPORT void autoplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::autoplayAttributeGetter(info);
+    }
 
-static void autoplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void autoplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "autoplay");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "autoplay");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::autoplayAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::autoplayAttr, cppValue);
+    }
 
-CORE_EXPORT void autoplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void autoplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMediaElementV8Internal::autoplayAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::autoplayAttributeSetter(v8Value, info);
+    }
 
-static void loopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void loopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::loopAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::loopAttr));
+    }
 
-CORE_EXPORT void loopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::loopAttributeGetter(info);
-}
+    CORE_EXPORT void loopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::loopAttributeGetter(info);
+    }
 
-static void loopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void loopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "loop");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "loop");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::loopAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::loopAttr, cppValue);
+    }
 
-CORE_EXPORT void loopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void loopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMediaElementV8Internal::loopAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::loopAttributeSetter(v8Value, info);
+    }
 
-static void controlsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void controlsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::controlsAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::controlsAttr));
+    }
 
-CORE_EXPORT void controlsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::controlsAttributeGetter(info);
-}
+    CORE_EXPORT void controlsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::controlsAttributeGetter(info);
+    }
 
-static void controlsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void controlsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "controls");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "controls");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::controlsAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::controlsAttr, cppValue);
+    }
 
-CORE_EXPORT void controlsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void controlsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMediaElementV8Internal::controlsAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::controlsAttributeSetter(v8Value, info);
+    }
 
-static void volumeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void volumeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->volume());
-}
+        v8SetReturnValue(info, impl->volume());
+    }
 
-CORE_EXPORT void volumeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::volumeAttributeGetter(info);
-}
+    CORE_EXPORT void volumeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::volumeAttributeGetter(info);
+    }
 
-static void volumeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void volumeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "volume");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "volume");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setVolume(cppValue, exceptionState);
-}
+        impl->setVolume(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void volumeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void volumeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMediaElementV8Internal::volumeAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::volumeAttributeSetter(v8Value, info);
+    }
 
-static void mutedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mutedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->muted());
-}
+        v8SetReturnValueBool(info, impl->muted());
+    }
 
-CORE_EXPORT void mutedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::mutedAttributeGetter(info);
-}
+    CORE_EXPORT void mutedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::mutedAttributeGetter(info);
+    }
 
-static void mutedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void mutedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "muted");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "muted");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setMuted(cppValue);
-}
+        impl->setMuted(cppValue);
+    }
 
-CORE_EXPORT void mutedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void mutedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMediaElementV8Internal::mutedAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::mutedAttributeSetter(v8Value, info);
+    }
 
-static void defaultMutedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void defaultMutedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::mutedAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::mutedAttr));
+    }
 
-CORE_EXPORT void defaultMutedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::defaultMutedAttributeGetter(info);
-}
+    CORE_EXPORT void defaultMutedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::defaultMutedAttributeGetter(info);
+    }
 
-static void defaultMutedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void defaultMutedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "defaultMuted");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "defaultMuted");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::mutedAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::mutedAttr, cppValue);
+    }
 
-CORE_EXPORT void defaultMutedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void defaultMutedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMediaElementV8Internal::defaultMutedAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementV8Internal::defaultMutedAttributeSetter(v8Value, info);
+    }
 
-static void audioTracksAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void audioTracksAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->audioTracks()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->audioTracks()), impl);
+    }
 
-CORE_EXPORT void audioTracksAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::audioTracksAttributeGetter(info);
-}
+    CORE_EXPORT void audioTracksAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::audioTracksAttributeGetter(info);
+    }
 
-static void videoTracksAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void videoTracksAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->videoTracks()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->videoTracks()), impl);
+    }
 
-CORE_EXPORT void videoTracksAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::videoTracksAttributeGetter(info);
-}
+    CORE_EXPORT void videoTracksAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::videoTracksAttributeGetter(info);
+    }
 
-static void textTracksAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void textTracksAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->textTracks()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->textTracks()), impl);
+    }
 
-CORE_EXPORT void textTracksAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::textTracksAttributeGetter(info);
-}
+    CORE_EXPORT void textTracksAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::textTracksAttributeGetter(info);
+    }
 
-static void webkitAudioDecodedByteCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webkitAudioDecodedByteCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->webkitAudioDecodedByteCount());
-}
+        v8SetReturnValueUnsigned(info, impl->webkitAudioDecodedByteCount());
+    }
 
-CORE_EXPORT void webkitAudioDecodedByteCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedAudioDecodedByteCount);
+    CORE_EXPORT void webkitAudioDecodedByteCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedAudioDecodedByteCount);
 
-  HTMLMediaElementV8Internal::webkitAudioDecodedByteCountAttributeGetter(info);
-}
+        HTMLMediaElementV8Internal::webkitAudioDecodedByteCountAttributeGetter(info);
+    }
 
-static void webkitVideoDecodedByteCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webkitVideoDecodedByteCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->webkitVideoDecodedByteCount());
-}
+        v8SetReturnValueUnsigned(info, impl->webkitVideoDecodedByteCount());
+    }
 
-CORE_EXPORT void webkitVideoDecodedByteCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedVideoDecodedByteCount);
+    CORE_EXPORT void webkitVideoDecodedByteCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedVideoDecodedByteCount);
 
-  HTMLMediaElementV8Internal::webkitVideoDecodedByteCountAttributeGetter(info);
-}
+        HTMLMediaElementV8Internal::webkitVideoDecodedByteCountAttributeGetter(info);
+    }
 
-static void loadMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
+    static void loadMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
 
-  impl->load();
-}
+        impl->load();
+    }
 
-CORE_EXPORT  void loadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::loadMethod(info);
-}
+    CORE_EXPORT void loadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::loadMethod(info);
+    }
 
-static void canPlayTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
+    static void canPlayTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("canPlayType", "HTMLMediaElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("canPlayType", "HTMLMediaElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> type;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  v8SetReturnValueString(info, impl->canPlayType(type), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->canPlayType(type), info.GetIsolate());
+    }
 
-CORE_EXPORT  void canPlayTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::canPlayTypeMethod(info);
-}
+    CORE_EXPORT void canPlayTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::canPlayTypeMethod(info);
+    }
 
-static void playMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "play");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void playMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "play");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8HTMLMediaElement::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8HTMLMediaElement::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->playForBindings(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->playForBindings(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-CORE_EXPORT  void playMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::playMethod(info);
-}
+    CORE_EXPORT void playMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::playMethod(info);
+    }
 
-static void pauseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
+    static void pauseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
 
-  impl->pause();
-}
+        impl->pause();
+    }
 
-CORE_EXPORT  void pauseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::pauseMethod(info);
-}
+    CORE_EXPORT void pauseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::pauseMethod(info);
+    }
 
-static void addTextTrackMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "addTextTrack");
+    static void addTextTrackMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "addTextTrack");
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> kind;
-  V8StringResource<> label;
-  V8StringResource<> language;
-  kind = info[0];
-  if (!kind.prepare())
-    return;
-  const char* validKindValues[] = {
-      "subtitles",
-      "captions",
-      "descriptions",
-      "chapters",
-      "metadata",
-  };
-  if (!isValidEnum(kind, validKindValues, WTF_ARRAY_LENGTH(validKindValues), "TextTrackKind", exceptionState)) {
-    return;
-  }
+        V8StringResource<> kind;
+        V8StringResource<> label;
+        V8StringResource<> language;
+        kind = info[0];
+        if (!kind.prepare())
+            return;
+        const char* validKindValues[] = {
+            "subtitles",
+            "captions",
+            "descriptions",
+            "chapters",
+            "metadata",
+        };
+        if (!isValidEnum(kind, validKindValues, WTF_ARRAY_LENGTH(validKindValues), "TextTrackKind", exceptionState)) {
+            return;
+        }
 
-  if (!info[1]->IsUndefined()) {
-    label = info[1];
-    if (!label.prepare())
-      return;
-  } else {
-    label = String("");
-  }
-  if (!info[2]->IsUndefined()) {
-    language = info[2];
-    if (!language.prepare())
-      return;
-  } else {
-    language = String("");
-  }
+        if (!info[1]->IsUndefined()) {
+            label = info[1];
+            if (!label.prepare())
+                return;
+        } else {
+            label = String("");
+        }
+        if (!info[2]->IsUndefined()) {
+            language = info[2];
+            if (!language.prepare())
+                return;
+        } else {
+            language = String("");
+        }
 
-  TextTrack* result = impl->addTextTrack(kind, label, language, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        TextTrack* result = impl->addTextTrack(kind, label, language, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void addTextTrackMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementV8Internal::addTextTrackMethod(info);
-}
+    CORE_EXPORT void addTextTrackMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementV8Internal::addTextTrackMethod(info);
+    }
 
 } // namespace HTMLMediaElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLMediaElementAccessors[] = {
-    {"error", HTMLMediaElementV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"src", HTMLMediaElementV8Internal::srcAttributeGetterCallback, HTMLMediaElementV8Internal::srcAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"currentSrc", HTMLMediaElementV8Internal::currentSrcAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"crossOrigin", HTMLMediaElementV8Internal::crossOriginAttributeGetterCallback, HTMLMediaElementV8Internal::crossOriginAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"networkState", HTMLMediaElementV8Internal::networkStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"preload", HTMLMediaElementV8Internal::preloadAttributeGetterCallback, HTMLMediaElementV8Internal::preloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"buffered", HTMLMediaElementV8Internal::bufferedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readyState", HTMLMediaElementV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"seeking", HTMLMediaElementV8Internal::seekingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"currentTime", HTMLMediaElementV8Internal::currentTimeAttributeGetterCallback, HTMLMediaElementV8Internal::currentTimeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"duration", HTMLMediaElementV8Internal::durationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"paused", HTMLMediaElementV8Internal::pausedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"defaultPlaybackRate", HTMLMediaElementV8Internal::defaultPlaybackRateAttributeGetterCallback, HTMLMediaElementV8Internal::defaultPlaybackRateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"playbackRate", HTMLMediaElementV8Internal::playbackRateAttributeGetterCallback, HTMLMediaElementV8Internal::playbackRateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"played", HTMLMediaElementV8Internal::playedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"seekable", HTMLMediaElementV8Internal::seekableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ended", HTMLMediaElementV8Internal::endedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"autoplay", HTMLMediaElementV8Internal::autoplayAttributeGetterCallback, HTMLMediaElementV8Internal::autoplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loop", HTMLMediaElementV8Internal::loopAttributeGetterCallback, HTMLMediaElementV8Internal::loopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"controls", HTMLMediaElementV8Internal::controlsAttributeGetterCallback, HTMLMediaElementV8Internal::controlsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"volume", HTMLMediaElementV8Internal::volumeAttributeGetterCallback, HTMLMediaElementV8Internal::volumeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"muted", HTMLMediaElementV8Internal::mutedAttributeGetterCallback, HTMLMediaElementV8Internal::mutedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"defaultMuted", HTMLMediaElementV8Internal::defaultMutedAttributeGetterCallback, HTMLMediaElementV8Internal::defaultMutedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"textTracks", HTMLMediaElementV8Internal::textTracksAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitAudioDecodedByteCount", HTMLMediaElementV8Internal::webkitAudioDecodedByteCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitVideoDecodedByteCount", HTMLMediaElementV8Internal::webkitVideoDecodedByteCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "error", HTMLMediaElementV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "src", HTMLMediaElementV8Internal::srcAttributeGetterCallback, HTMLMediaElementV8Internal::srcAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "currentSrc", HTMLMediaElementV8Internal::currentSrcAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "crossOrigin", HTMLMediaElementV8Internal::crossOriginAttributeGetterCallback, HTMLMediaElementV8Internal::crossOriginAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "networkState", HTMLMediaElementV8Internal::networkStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "preload", HTMLMediaElementV8Internal::preloadAttributeGetterCallback, HTMLMediaElementV8Internal::preloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "buffered", HTMLMediaElementV8Internal::bufferedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readyState", HTMLMediaElementV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "seeking", HTMLMediaElementV8Internal::seekingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "currentTime", HTMLMediaElementV8Internal::currentTimeAttributeGetterCallback, HTMLMediaElementV8Internal::currentTimeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "duration", HTMLMediaElementV8Internal::durationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "paused", HTMLMediaElementV8Internal::pausedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "defaultPlaybackRate", HTMLMediaElementV8Internal::defaultPlaybackRateAttributeGetterCallback, HTMLMediaElementV8Internal::defaultPlaybackRateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "playbackRate", HTMLMediaElementV8Internal::playbackRateAttributeGetterCallback, HTMLMediaElementV8Internal::playbackRateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "played", HTMLMediaElementV8Internal::playedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "seekable", HTMLMediaElementV8Internal::seekableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ended", HTMLMediaElementV8Internal::endedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "autoplay", HTMLMediaElementV8Internal::autoplayAttributeGetterCallback, HTMLMediaElementV8Internal::autoplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loop", HTMLMediaElementV8Internal::loopAttributeGetterCallback, HTMLMediaElementV8Internal::loopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "controls", HTMLMediaElementV8Internal::controlsAttributeGetterCallback, HTMLMediaElementV8Internal::controlsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "volume", HTMLMediaElementV8Internal::volumeAttributeGetterCallback, HTMLMediaElementV8Internal::volumeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "muted", HTMLMediaElementV8Internal::mutedAttributeGetterCallback, HTMLMediaElementV8Internal::mutedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "defaultMuted", HTMLMediaElementV8Internal::defaultMutedAttributeGetterCallback, HTMLMediaElementV8Internal::defaultMutedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "textTracks", HTMLMediaElementV8Internal::textTracksAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitAudioDecodedByteCount", HTMLMediaElementV8Internal::webkitAudioDecodedByteCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitVideoDecodedByteCount", HTMLMediaElementV8Internal::webkitVideoDecodedByteCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLMediaElementMethods[] = {
-    {"load", HTMLMediaElementV8Internal::loadMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"canPlayType", HTMLMediaElementV8Internal::canPlayTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"play", HTMLMediaElementV8Internal::playMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"pause", HTMLMediaElementV8Internal::pauseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addTextTrack", HTMLMediaElementV8Internal::addTextTrackMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "load", HTMLMediaElementV8Internal::loadMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "canPlayType", HTMLMediaElementV8Internal::canPlayTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "play", HTMLMediaElementV8Internal::playMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "pause", HTMLMediaElementV8Internal::pauseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addTextTrack", HTMLMediaElementV8Internal::addTextTrackMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8HTMLMediaElement::installV8HTMLMediaElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLMediaElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLMediaElement::internalFieldCount);
+void V8HTMLMediaElement::installV8HTMLMediaElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLMediaElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLMediaElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8HTMLMediaElementConstants[] = {
-      {"NETWORK_EMPTY", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"NETWORK_IDLE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"NETWORK_LOADING", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"NETWORK_NO_SOURCE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"HAVE_NOTHING", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"HAVE_METADATA", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"HAVE_CURRENT_DATA", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"HAVE_FUTURE_DATA", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"HAVE_ENOUGH_DATA", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8HTMLMediaElementConstants, WTF_ARRAY_LENGTH(V8HTMLMediaElementConstants));
-  static_assert(0 == HTMLMediaElement::kNetworkEmpty, "the value of HTMLMediaElement_kNetworkEmpty does not match with implementation");
-  static_assert(1 == HTMLMediaElement::kNetworkIdle, "the value of HTMLMediaElement_kNetworkIdle does not match with implementation");
-  static_assert(2 == HTMLMediaElement::kNetworkLoading, "the value of HTMLMediaElement_kNetworkLoading does not match with implementation");
-  static_assert(3 == HTMLMediaElement::kNetworkNoSource, "the value of HTMLMediaElement_kNetworkNoSource does not match with implementation");
-  static_assert(0 == HTMLMediaElement::kHaveNothing, "the value of HTMLMediaElement_kHaveNothing does not match with implementation");
-  static_assert(1 == HTMLMediaElement::kHaveMetadata, "the value of HTMLMediaElement_kHaveMetadata does not match with implementation");
-  static_assert(2 == HTMLMediaElement::kHaveCurrentData, "the value of HTMLMediaElement_kHaveCurrentData does not match with implementation");
-  static_assert(3 == HTMLMediaElement::kHaveFutureData, "the value of HTMLMediaElement_kHaveFutureData does not match with implementation");
-  static_assert(4 == HTMLMediaElement::kHaveEnoughData, "the value of HTMLMediaElement_kHaveEnoughData does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMediaElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMediaElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMediaElementMethods, WTF_ARRAY_LENGTH(V8HTMLMediaElementMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8HTMLMediaElementConstants[] = {
+        { "NETWORK_EMPTY", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "NETWORK_IDLE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "NETWORK_LOADING", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "NETWORK_NO_SOURCE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "HAVE_NOTHING", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "HAVE_METADATA", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "HAVE_CURRENT_DATA", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "HAVE_FUTURE_DATA", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "HAVE_ENOUGH_DATA", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8HTMLMediaElementConstants, WTF_ARRAY_LENGTH(V8HTMLMediaElementConstants));
+    static_assert(0 == HTMLMediaElement::kNetworkEmpty, "the value of HTMLMediaElement_kNetworkEmpty does not match with implementation");
+    static_assert(1 == HTMLMediaElement::kNetworkIdle, "the value of HTMLMediaElement_kNetworkIdle does not match with implementation");
+    static_assert(2 == HTMLMediaElement::kNetworkLoading, "the value of HTMLMediaElement_kNetworkLoading does not match with implementation");
+    static_assert(3 == HTMLMediaElement::kNetworkNoSource, "the value of HTMLMediaElement_kNetworkNoSource does not match with implementation");
+    static_assert(0 == HTMLMediaElement::kHaveNothing, "the value of HTMLMediaElement_kHaveNothing does not match with implementation");
+    static_assert(1 == HTMLMediaElement::kHaveMetadata, "the value of HTMLMediaElement_kHaveMetadata does not match with implementation");
+    static_assert(2 == HTMLMediaElement::kHaveCurrentData, "the value of HTMLMediaElement_kHaveCurrentData does not match with implementation");
+    static_assert(3 == HTMLMediaElement::kHaveFutureData, "the value of HTMLMediaElement_kHaveFutureData does not match with implementation");
+    static_assert(4 == HTMLMediaElement::kHaveEnoughData, "the value of HTMLMediaElement_kHaveEnoughData does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMediaElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMediaElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMediaElementMethods, WTF_ARRAY_LENGTH(V8HTMLMediaElementMethods));
 
-  if (RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoraudioTracksConfiguration = {"audioTracks", HTMLMediaElementV8Internal::audioTracksAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoraudioTracksConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorvideoTracksConfiguration = {"videoTracks", HTMLMediaElementV8Internal::videoTracksAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorvideoTracksConfiguration);
-  }
+    if (RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoraudioTracksConfiguration = { "audioTracks", HTMLMediaElementV8Internal::audioTracksAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoraudioTracksConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorvideoTracksConfiguration = { "videoTracks", HTMLMediaElementV8Internal::videoTracksAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorvideoTracksConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLMediaElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8HTMLMediaElement::installV8HTMLMediaElementTemplateFunction);
+v8::Local<v8::FunctionTemplate> V8HTMLMediaElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8HTMLMediaElement::installV8HTMLMediaElementTemplateFunction);
 }
 
-bool V8HTMLMediaElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLMediaElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLMediaElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLMediaElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLMediaElement* V8HTMLMediaElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLMediaElement* V8HTMLMediaElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
 InstallTemplateFunction V8HTMLMediaElement::installV8HTMLMediaElementTemplateFunction = (InstallTemplateFunction)&V8HTMLMediaElement::installV8HTMLMediaElementTemplate;
 
-void V8HTMLMediaElement::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction) {
-  V8HTMLMediaElement::installV8HTMLMediaElementTemplateFunction = installTemplateFunction;
-  if (preparePrototypeAndInterfaceObjectFunction)
-    V8HTMLMediaElement::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
+void V8HTMLMediaElement::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction)
+{
+    V8HTMLMediaElement::installV8HTMLMediaElementTemplateFunction = installTemplateFunction;
+    if (preparePrototypeAndInterfaceObjectFunction)
+        V8HTMLMediaElement::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
 }
 
-}  // namespace blink
+} // namespace blink

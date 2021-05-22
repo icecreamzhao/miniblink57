@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8SVGFETurbulenceElement_h
 #define V8SVGFETurbulenceElement_h
 
@@ -25,31 +25,35 @@
 namespace blink {
 
 class V8SVGFETurbulenceElement {
-  STATIC_ONLY(V8SVGFETurbulenceElement);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static SVGFETurbulenceElement* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<SVGFETurbulenceElement>();
-  }
-  CORE_EXPORT static SVGFETurbulenceElement* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<SVGFETurbulenceElement>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<SVGFETurbulenceElement>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8SVGFETurbulenceElement);
+
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static SVGFETurbulenceElement* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<SVGFETurbulenceElement>();
+    }
+    CORE_EXPORT static SVGFETurbulenceElement* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<SVGFETurbulenceElement>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<SVGFETurbulenceElement>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<SVGFETurbulenceElement> {
-  typedef V8SVGFETurbulenceElement Type;
+    typedef V8SVGFETurbulenceElement Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8SVGFETurbulenceElement_h
+#endif // V8SVGFETurbulenceElement_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MessageEventInit_h
 #define MessageEventInit_h
 
@@ -24,49 +24,50 @@ class EventTarget;
 class MessagePort;
 
 class CORE_EXPORT MessageEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MessageEventInit();
-  virtual ~MessageEventInit();
-  MessageEventInit(const MessageEventInit&);
-  MessageEventInit& operator=(const MessageEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasData() const;
-  ScriptValue data() const;
-  void setData(ScriptValue);
+public:
+    MessageEventInit();
+    virtual ~MessageEventInit();
+    MessageEventInit(const MessageEventInit&);
+    MessageEventInit& operator=(const MessageEventInit&);
 
-  bool hasLastEventId() const;
-  String lastEventId() const;
-  void setLastEventId(String);
+    bool hasData() const;
+    ScriptValue data() const;
+    void setData(ScriptValue);
 
-  bool hasOrigin() const;
-  String origin() const;
-  void setOrigin(String);
+    bool hasLastEventId() const;
+    String lastEventId() const;
+    void setLastEventId(String);
 
-  bool hasPorts() const;
-  const HeapVector<Member<MessagePort>>& ports() const;
-  void setPorts(const HeapVector<Member<MessagePort>>&);
-  void setPortsToNull();
+    bool hasOrigin() const;
+    String origin() const;
+    void setOrigin(String);
 
-  bool hasSource() const;
-  EventTarget* source() const;
-  void setSource(EventTarget*);
-  void setSourceToNull();
+    bool hasPorts() const;
+    const HeapVector<Member<MessagePort>>& ports() const;
+    void setPorts(const HeapVector<Member<MessagePort>>&);
+    void setPortsToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSource() const;
+    EventTarget* source() const;
+    void setSource(EventTarget*);
+    void setSourceToNull();
 
- private:
-  ScriptValue m_data;
-  String m_lastEventId;
-  String m_origin;
-  bool m_hasPorts = false;
-  HeapVector<Member<MessagePort>> m_ports;
-  Member<EventTarget> m_source;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MessageEventInit;
+private:
+    ScriptValue m_data;
+    String m_lastEventId;
+    String m_origin;
+    bool m_hasPorts = false;
+    HeapVector<Member<MessagePort>> m_ports;
+    Member<EventTarget> m_source;
+
+    friend class V8MessageEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MessageEventInit_h
+#endif // MessageEventInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AssignedNodesOptions_h
 #define V8AssignedNodesOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8AssignedNodesOptions {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AssignedNodesOptions&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AssignedNodesOptions&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8AssignedNodesOptions(const AssignedNodesOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AssignedNodesOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AssignedNodesOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<AssignedNodesOptions> {
-  static AssignedNodesOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static AssignedNodesOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<AssignedNodesOptions> {
-  typedef V8AssignedNodesOptions Type;
+    typedef V8AssignedNodesOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8AssignedNodesOptions_h
+#endif // V8AssignedNodesOptions_h

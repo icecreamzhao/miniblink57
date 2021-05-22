@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaTrackSupportedConstraints_h
 #define MediaTrackSupportedConstraints_h
 
@@ -19,99 +19,100 @@
 namespace blink {
 
 class MODULES_EXPORT MediaTrackSupportedConstraints : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaTrackSupportedConstraints();
-  virtual ~MediaTrackSupportedConstraints();
-  MediaTrackSupportedConstraints(const MediaTrackSupportedConstraints&);
-  MediaTrackSupportedConstraints& operator=(const MediaTrackSupportedConstraints&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAspectRatio() const;
-  bool aspectRatio() const;
-  void setAspectRatio(bool);
+public:
+    MediaTrackSupportedConstraints();
+    virtual ~MediaTrackSupportedConstraints();
+    MediaTrackSupportedConstraints(const MediaTrackSupportedConstraints&);
+    MediaTrackSupportedConstraints& operator=(const MediaTrackSupportedConstraints&);
 
-  bool hasChannelCount() const;
-  bool channelCount() const;
-  void setChannelCount(bool);
+    bool hasAspectRatio() const;
+    bool aspectRatio() const;
+    void setAspectRatio(bool);
 
-  bool hasDeviceId() const;
-  bool deviceId() const;
-  void setDeviceId(bool);
+    bool hasChannelCount() const;
+    bool channelCount() const;
+    void setChannelCount(bool);
 
-  bool hasEchoCancellation() const;
-  bool echoCancellation() const;
-  void setEchoCancellation(bool);
+    bool hasDeviceId() const;
+    bool deviceId() const;
+    void setDeviceId(bool);
 
-  bool hasFacingMode() const;
-  bool facingMode() const;
-  void setFacingMode(bool);
+    bool hasEchoCancellation() const;
+    bool echoCancellation() const;
+    void setEchoCancellation(bool);
 
-  bool hasFrameRate() const;
-  bool frameRate() const;
-  void setFrameRate(bool);
+    bool hasFacingMode() const;
+    bool facingMode() const;
+    void setFacingMode(bool);
 
-  bool hasGroupId() const;
-  bool groupId() const;
-  void setGroupId(bool);
+    bool hasFrameRate() const;
+    bool frameRate() const;
+    void setFrameRate(bool);
 
-  bool hasHeight() const;
-  bool height() const;
-  void setHeight(bool);
+    bool hasGroupId() const;
+    bool groupId() const;
+    void setGroupId(bool);
 
-  bool hasLatency() const;
-  bool latency() const;
-  void setLatency(bool);
+    bool hasHeight() const;
+    bool height() const;
+    void setHeight(bool);
 
-  bool hasSampleRate() const;
-  bool sampleRate() const;
-  void setSampleRate(bool);
+    bool hasLatency() const;
+    bool latency() const;
+    void setLatency(bool);
 
-  bool hasSampleSize() const;
-  bool sampleSize() const;
-  void setSampleSize(bool);
+    bool hasSampleRate() const;
+    bool sampleRate() const;
+    void setSampleRate(bool);
 
-  bool hasVolume() const;
-  bool volume() const;
-  void setVolume(bool);
+    bool hasSampleSize() const;
+    bool sampleSize() const;
+    void setSampleSize(bool);
 
-  bool hasWidth() const;
-  bool width() const;
-  void setWidth(bool);
+    bool hasVolume() const;
+    bool volume() const;
+    void setVolume(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasWidth() const;
+    bool width() const;
+    void setWidth(bool);
 
- private:
-  bool m_hasAspectRatio = false;
-  bool m_aspectRatio;
-  bool m_hasChannelCount = false;
-  bool m_channelCount;
-  bool m_hasDeviceId = false;
-  bool m_deviceId;
-  bool m_hasEchoCancellation = false;
-  bool m_echoCancellation;
-  bool m_hasFacingMode = false;
-  bool m_facingMode;
-  bool m_hasFrameRate = false;
-  bool m_frameRate;
-  bool m_hasGroupId = false;
-  bool m_groupId;
-  bool m_hasHeight = false;
-  bool m_height;
-  bool m_hasLatency = false;
-  bool m_latency;
-  bool m_hasSampleRate = false;
-  bool m_sampleRate;
-  bool m_hasSampleSize = false;
-  bool m_sampleSize;
-  bool m_hasVolume = false;
-  bool m_volume;
-  bool m_hasWidth = false;
-  bool m_width;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaTrackSupportedConstraints;
+private:
+    bool m_hasAspectRatio = false;
+    bool m_aspectRatio;
+    bool m_hasChannelCount = false;
+    bool m_channelCount;
+    bool m_hasDeviceId = false;
+    bool m_deviceId;
+    bool m_hasEchoCancellation = false;
+    bool m_echoCancellation;
+    bool m_hasFacingMode = false;
+    bool m_facingMode;
+    bool m_hasFrameRate = false;
+    bool m_frameRate;
+    bool m_hasGroupId = false;
+    bool m_groupId;
+    bool m_hasHeight = false;
+    bool m_height;
+    bool m_hasLatency = false;
+    bool m_latency;
+    bool m_hasSampleRate = false;
+    bool m_sampleRate;
+    bool m_hasSampleSize = false;
+    bool m_sampleSize;
+    bool m_hasVolume = false;
+    bool m_volume;
+    bool m_hasWidth = false;
+    bool m_width;
+
+    friend class V8MediaTrackSupportedConstraints;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaTrackSupportedConstraints_h
+#endif // MediaTrackSupportedConstraints_h

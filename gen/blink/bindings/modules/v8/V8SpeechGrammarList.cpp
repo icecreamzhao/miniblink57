@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SpeechGrammarList.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,213 +48,230 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SpeechGrammarList::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SpeechGrammarList is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SpeechGrammarListV8Internal {
 
-static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(holder);
+        SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->length());
-}
+        v8SetReturnValueUnsigned(info, impl->length());
+    }
 
-MODULES_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechGrammarListV8Internal::lengthAttributeGetter(info);
-}
+    MODULES_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammarListV8Internal::lengthAttributeGetter(info);
+    }
 
-static void itemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SpeechGrammarList", "item");
+    static void itemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SpeechGrammarList", "item");
 
-  SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(info.Holder());
+        SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned index;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned index;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->item(index));
-}
+        v8SetReturnValue(info, impl->item(index));
+    }
 
-MODULES_EXPORT  void itemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechGrammarListV8Internal::itemMethod(info);
-}
+    MODULES_EXPORT void itemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammarListV8Internal::itemMethod(info);
+    }
 
-static void addFromUriMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SpeechGrammarList", "addFromUri");
+    static void addFromUriMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SpeechGrammarList", "addFromUri");
 
-  SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(info.Holder());
+        SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> src;
-  float weight;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  src = info[0];
-  if (!src.prepare())
-    return;
+        V8StringResource<> src;
+        float weight;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        src = info[0];
+        if (!src.prepare())
+            return;
 
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->addFromUri(scriptState, src);
-    return;
-  }
-  weight = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->addFromUri(scriptState, src);
+            return;
+        }
+        weight = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->addFromUri(scriptState, src, weight);
-}
+        impl->addFromUri(scriptState, src, weight);
+    }
 
-MODULES_EXPORT  void addFromUriMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechGrammarListV8Internal::addFromUriMethod(info);
-}
+    MODULES_EXPORT void addFromUriMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammarListV8Internal::addFromUriMethod(info);
+    }
 
-static void addFromStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SpeechGrammarList", "addFromString");
+    static void addFromStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SpeechGrammarList", "addFromString");
 
-  SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(info.Holder());
+        SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> string;
-  float weight;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  string = info[0];
-  if (!string.prepare())
-    return;
+        V8StringResource<> string;
+        float weight;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        string = info[0];
+        if (!string.prepare())
+            return;
 
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->addFromString(string);
-    return;
-  }
-  weight = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->addFromString(string);
+            return;
+        }
+        weight = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->addFromString(string, weight);
-}
+        impl->addFromString(string, weight);
+    }
 
-MODULES_EXPORT  void addFromStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechGrammarListV8Internal::addFromStringMethod(info);
-}
+    MODULES_EXPORT void addFromStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammarListV8Internal::addFromStringMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechGrammarList* impl = SpeechGrammarList::create();
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SpeechGrammarList::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammarList* impl = SpeechGrammarList::create();
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SpeechGrammarList::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(info.Holder());
+    static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammarList* impl = V8SpeechGrammarList::toImpl(info.Holder());
 
-  // We assume that all the implementations support length() method, although
-  // the spec doesn't require that length() must exist.  It's okay that
-  // the interface does not have length attribute as long as the
-  // implementation supports length() member function.
-  if (index >= impl->length())
-    return;  // Returns undefined due to out-of-range.
+        // We assume that all the implementations support length() method, although
+        // the spec doesn't require that length() must exist.  It's okay that
+        // the interface does not have length attribute as long as the
+        // implementation supports length() member function.
+        if (index >= impl->length())
+            return; // Returns undefined due to out-of-range.
 
-  SpeechGrammar* result = impl->item(index);
-  v8SetReturnValueFast(info, result, impl);
-}
+        SpeechGrammar* result = impl->item(index);
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-MODULES_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  SpeechGrammarListV8Internal::indexedPropertyGetter(index, info);
-}
+    MODULES_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        SpeechGrammarListV8Internal::indexedPropertyGetter(index, info);
+    }
 
 } // namespace SpeechGrammarListV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SpeechGrammarListAccessors[] = {
-    {"length", SpeechGrammarListV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "length", SpeechGrammarListV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SpeechGrammarListMethods[] = {
-    {"item", SpeechGrammarListV8Internal::itemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addFromUri", SpeechGrammarListV8Internal::addFromUriMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addFromString", SpeechGrammarListV8Internal::addFromStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "item", SpeechGrammarListV8Internal::itemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addFromUri", SpeechGrammarListV8Internal::addFromUriMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addFromString", SpeechGrammarListV8Internal::addFromStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8SpeechGrammarList::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SpeechGrammarList"));
-    return;
-  }
+void V8SpeechGrammarList::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SpeechGrammarList"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  SpeechGrammarListV8Internal::constructor(info);
+    SpeechGrammarListV8Internal::constructor(info);
 }
 
-static void installV8SpeechGrammarListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SpeechGrammarList::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SpeechGrammarList::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8SpeechGrammarList::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8SpeechGrammarListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SpeechGrammarList::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SpeechGrammarList::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8SpeechGrammarList::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechGrammarListAccessors, WTF_ARRAY_LENGTH(V8SpeechGrammarListAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechGrammarListMethods, WTF_ARRAY_LENGTH(V8SpeechGrammarListMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechGrammarListAccessors, WTF_ARRAY_LENGTH(V8SpeechGrammarListAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechGrammarListMethods, WTF_ARRAY_LENGTH(V8SpeechGrammarListMethods));
 
-  // Indexed properties
-  v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(SpeechGrammarListV8Internal::indexedPropertyGetterCallback, 0, 0, 0, indexedPropertyEnumerator<SpeechGrammarList>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
-  instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
+    // Indexed properties
+    v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(SpeechGrammarListV8Internal::indexedPropertyGetterCallback, 0, 0, 0, indexedPropertyEnumerator<SpeechGrammarList>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
+    instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
 
-  // Array iterator (@@iterator)
-  prototypeTemplate->SetIntrinsicDataProperty(v8::Symbol::GetIterator(isolate), v8::kArrayProto_values, v8::DontEnum);
+    // Array iterator (@@iterator)
+    prototypeTemplate->SetIntrinsicDataProperty(v8::Symbol::GetIterator(isolate), v8::kArrayProto_values, v8::DontEnum);
 }
 
-v8::Local<v8::FunctionTemplate> V8SpeechGrammarList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SpeechGrammarListTemplate);
+v8::Local<v8::FunctionTemplate> V8SpeechGrammarList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SpeechGrammarListTemplate);
 }
 
-bool V8SpeechGrammarList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SpeechGrammarList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SpeechGrammarList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SpeechGrammarList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SpeechGrammarList* V8SpeechGrammarList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SpeechGrammarList* V8SpeechGrammarList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef TransitionEventInit_h
 #define TransitionEventInit_h
 
@@ -20,37 +20,38 @@
 namespace blink {
 
 class CORE_EXPORT TransitionEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  TransitionEventInit();
-  virtual ~TransitionEventInit();
-  TransitionEventInit(const TransitionEventInit&);
-  TransitionEventInit& operator=(const TransitionEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasElapsedTime() const;
-  double elapsedTime() const;
-  void setElapsedTime(double);
+public:
+    TransitionEventInit();
+    virtual ~TransitionEventInit();
+    TransitionEventInit(const TransitionEventInit&);
+    TransitionEventInit& operator=(const TransitionEventInit&);
 
-  bool hasPropertyName() const;
-  String propertyName() const;
-  void setPropertyName(String);
+    bool hasElapsedTime() const;
+    double elapsedTime() const;
+    void setElapsedTime(double);
 
-  bool hasPseudoElement() const;
-  String pseudoElement() const;
-  void setPseudoElement(String);
+    bool hasPropertyName() const;
+    String propertyName() const;
+    void setPropertyName(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPseudoElement() const;
+    String pseudoElement() const;
+    void setPseudoElement(String);
 
- private:
-  bool m_hasElapsedTime = false;
-  double m_elapsedTime;
-  String m_propertyName;
-  String m_pseudoElement;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8TransitionEventInit;
+private:
+    bool m_hasElapsedTime = false;
+    double m_elapsedTime;
+    String m_propertyName;
+    String m_pseudoElement;
+
+    friend class V8TransitionEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // TransitionEventInit_h
+#endif // TransitionEventInit_h

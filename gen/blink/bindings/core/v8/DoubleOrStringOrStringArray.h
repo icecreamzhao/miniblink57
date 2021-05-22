@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DoubleOrStringOrStringArray_h
 #define DoubleOrStringOrStringArray_h
 
@@ -21,65 +21,67 @@
 namespace blink {
 
 class CORE_EXPORT DoubleOrStringOrStringArray final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DoubleOrStringOrStringArray();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isDouble() const { return m_type == SpecificTypeDouble; }
-  double getAsDouble() const;
-  void setDouble(double);
-  static DoubleOrStringOrStringArray fromDouble(double);
+public:
+    DoubleOrStringOrStringArray();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isString() const { return m_type == SpecificTypeString; }
-  String getAsString() const;
-  void setString(String);
-  static DoubleOrStringOrStringArray fromString(String);
+    bool isDouble() const { return m_type == SpecificTypeDouble; }
+    double getAsDouble() const;
+    void setDouble(double);
+    static DoubleOrStringOrStringArray fromDouble(double);
 
-  bool isStringArray() const { return m_type == SpecificTypeStringArray; }
-  const Vector<String>& getAsStringArray() const;
-  void setStringArray(const Vector<String>&);
-  static DoubleOrStringOrStringArray fromStringArray(const Vector<String>&);
+    bool isString() const { return m_type == SpecificTypeString; }
+    String getAsString() const;
+    void setString(String);
+    static DoubleOrStringOrStringArray fromString(String);
 
-  DoubleOrStringOrStringArray(const DoubleOrStringOrStringArray&);
-  ~DoubleOrStringOrStringArray();
-  DoubleOrStringOrStringArray& operator=(const DoubleOrStringOrStringArray&);
-  DECLARE_TRACE();
+    bool isStringArray() const { return m_type == SpecificTypeStringArray; }
+    const Vector<String>& getAsStringArray() const;
+    void setStringArray(const Vector<String>&);
+    static DoubleOrStringOrStringArray fromStringArray(const Vector<String>&);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeDouble,
-    SpecificTypeString,
-    SpecificTypeStringArray,
-  };
-  SpecificTypes m_type;
+    DoubleOrStringOrStringArray(const DoubleOrStringOrStringArray&);
+    ~DoubleOrStringOrStringArray();
+    DoubleOrStringOrStringArray& operator=(const DoubleOrStringOrStringArray&);
+    DECLARE_TRACE();
 
-  double m_double;
-  String m_string;
-  Vector<String> m_stringArray;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeDouble,
+        SpecificTypeString,
+        SpecificTypeStringArray,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrStringOrStringArray&, v8::Local<v8::Object>, v8::Isolate*);
+    double m_double;
+    String m_string;
+    Vector<String> m_stringArray;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrStringOrStringArray&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8DoubleOrStringOrStringArray final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DoubleOrStringOrStringArray&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DoubleOrStringOrStringArray&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrStringOrStringArray&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DoubleOrStringOrStringArray& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DoubleOrStringOrStringArray& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<DoubleOrStringOrStringArray> {
-  CORE_EXPORT static DoubleOrStringOrStringArray nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static DoubleOrStringOrStringArray nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -87,4 +89,4 @@ struct NativeValueTraits<DoubleOrStringOrStringArray> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::DoubleOrStringOrStringArray);
 
-#endif  // DoubleOrStringOrStringArray_h
+#endif // DoubleOrStringOrStringArray_h

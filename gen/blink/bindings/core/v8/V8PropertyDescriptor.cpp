@@ -8,130 +8,134 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PropertyDescriptor.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8PropertyDescriptor::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PropertyDescriptor& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): name.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8PropertyDescriptor::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PropertyDescriptor& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): name.");
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> inheritsValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "inherits")).ToLocal(&inheritsValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (inheritsValue.IsEmpty() || inheritsValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool inherits = toBoolean(isolate, inheritsValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setInherits(inherits);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> inheritsValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "inherits")).ToLocal(&inheritsValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (inheritsValue.IsEmpty() || inheritsValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool inherits = toBoolean(isolate, inheritsValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setInherits(inherits);
+    }
 
-  v8::Local<v8::Value> initialValueValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "initialValue")).ToLocal(&initialValueValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (initialValueValue.IsEmpty() || initialValueValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> initialValue = initialValueValue;
-    if (!initialValue.prepare(exceptionState))
-      return;
-    impl.setInitialValue(initialValue);
-  }
+    v8::Local<v8::Value> initialValueValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "initialValue")).ToLocal(&initialValueValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (initialValueValue.IsEmpty() || initialValueValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> initialValue = initialValueValue;
+        if (!initialValue.prepare(exceptionState))
+            return;
+        impl.setInitialValue(initialValue);
+    }
 
-  v8::Local<v8::Value> nameValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "name")).ToLocal(&nameValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (nameValue.IsEmpty() || nameValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member name is undefined.");
-    return;
-  } else {
-    V8StringResource<> name = nameValue;
-    if (!name.prepare(exceptionState))
-      return;
-    impl.setName(name);
-  }
+    v8::Local<v8::Value> nameValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "name")).ToLocal(&nameValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (nameValue.IsEmpty() || nameValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member name is undefined.");
+        return;
+    } else {
+        V8StringResource<> name = nameValue;
+        if (!name.prepare(exceptionState))
+            return;
+        impl.setName(name);
+    }
 
-  v8::Local<v8::Value> syntaxValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "syntax")).ToLocal(&syntaxValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (syntaxValue.IsEmpty() || syntaxValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> syntax = syntaxValue;
-    if (!syntax.prepare(exceptionState))
-      return;
-    impl.setSyntax(syntax);
-  }
+    v8::Local<v8::Value> syntaxValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "syntax")).ToLocal(&syntaxValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (syntaxValue.IsEmpty() || syntaxValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> syntax = syntaxValue;
+        if (!syntax.prepare(exceptionState))
+            return;
+        impl.setSyntax(syntax);
+    }
 }
 
-v8::Local<v8::Value> PropertyDescriptor::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8PropertyDescriptor(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> PropertyDescriptor::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8PropertyDescriptor(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8PropertyDescriptor(const PropertyDescriptor& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasInherits()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "inherits"), v8Boolean(impl.inherits(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "inherits"), v8Boolean(false, isolate))))
-      return false;
-  }
+bool toV8PropertyDescriptor(const PropertyDescriptor& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasInherits()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "inherits"), v8Boolean(impl.inherits(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "inherits"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  if (impl.hasInitialValue()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "initialValue"), v8String(isolate, impl.initialValue()))))
-      return false;
-  }
+    if (impl.hasInitialValue()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "initialValue"), v8String(isolate, impl.initialValue()))))
+            return false;
+    }
 
-  if (impl.hasName()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "name"), v8String(isolate, impl.name()))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasName()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "name"), v8String(isolate, impl.name()))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasSyntax()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "syntax"), v8String(isolate, impl.syntax()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "syntax"), v8String(isolate, String("*")))))
-      return false;
-  }
+    if (impl.hasSyntax()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "syntax"), v8String(isolate, impl.syntax()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "syntax"), v8String(isolate, String("*")))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-PropertyDescriptor NativeValueTraits<PropertyDescriptor>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  PropertyDescriptor impl;
-  V8PropertyDescriptor::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+PropertyDescriptor NativeValueTraits<PropertyDescriptor>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    PropertyDescriptor impl;
+    V8PropertyDescriptor::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

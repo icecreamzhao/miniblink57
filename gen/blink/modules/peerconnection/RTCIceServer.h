@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCIceServer_h
 #define RTCIceServer_h
 
@@ -22,41 +22,42 @@
 namespace blink {
 
 class MODULES_EXPORT RTCIceServer : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCIceServer();
-  virtual ~RTCIceServer();
-  RTCIceServer(const RTCIceServer&);
-  RTCIceServer& operator=(const RTCIceServer&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCredential() const;
-  String credential() const;
-  void setCredential(String);
+public:
+    RTCIceServer();
+    virtual ~RTCIceServer();
+    RTCIceServer(const RTCIceServer&);
+    RTCIceServer& operator=(const RTCIceServer&);
 
-  bool hasURL() const;
-  String url() const;
-  void setURL(String);
+    bool hasCredential() const;
+    String credential() const;
+    void setCredential(String);
 
-  bool hasURLs() const;
-  const StringOrStringSequence& urls() const;
-  void setURLs(const StringOrStringSequence&);
+    bool hasURL() const;
+    String url() const;
+    void setURL(String);
 
-  bool hasUsername() const;
-  String username() const;
-  void setUsername(String);
+    bool hasURLs() const;
+    const StringOrStringSequence& urls() const;
+    void setURLs(const StringOrStringSequence&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasUsername() const;
+    String username() const;
+    void setUsername(String);
 
- private:
-  String m_credential;
-  String m_url;
-  StringOrStringSequence m_urls;
-  String m_username;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCIceServer;
+private:
+    String m_credential;
+    String m_url;
+    StringOrStringSequence m_urls;
+    String m_username;
+
+    friend class V8RTCIceServer;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCIceServer_h
+#endif // RTCIceServer_h

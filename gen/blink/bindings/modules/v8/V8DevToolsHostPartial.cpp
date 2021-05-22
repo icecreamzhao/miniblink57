@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DevToolsHostPartial.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -27,84 +27,90 @@ namespace blink {
 
 namespace DevToolsHostPartialV8Internal {
 
-static void isolatedFileSystemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void isolatedFileSystemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isolatedFileSystem", "DevToolsHost", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isolatedFileSystem", "DevToolsHost", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<> fileSystemId;
-  V8StringResource<> registeredName;
-  fileSystemId = info[0];
-  if (!fileSystemId.prepare())
-    return;
+        V8StringResource<> fileSystemId;
+        V8StringResource<> registeredName;
+        fileSystemId = info[0];
+        if (!fileSystemId.prepare())
+            return;
 
-  registeredName = info[1];
-  if (!registeredName.prepare())
-    return;
+        registeredName = info[1];
+        if (!registeredName.prepare())
+            return;
 
-  v8SetReturnValue(info, DevToolsHostFileSystem::isolatedFileSystem(*impl, fileSystemId, registeredName));
-}
+        v8SetReturnValue(info, DevToolsHostFileSystem::isolatedFileSystem(*impl, fileSystemId, registeredName));
+    }
 
- void isolatedFileSystemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostPartialV8Internal::isolatedFileSystemMethod(info);
-}
+    void isolatedFileSystemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostPartialV8Internal::isolatedFileSystemMethod(info);
+    }
 
-static void upgradeDraggedFileSystemPermissionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void upgradeDraggedFileSystemPermissionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("upgradeDraggedFileSystemPermissions", "DevToolsHost", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("upgradeDraggedFileSystemPermissions", "DevToolsHost", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  DOMFileSystem* domFileSystem;
-  domFileSystem = V8DOMFileSystem::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!domFileSystem) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("upgradeDraggedFileSystemPermissions", "DevToolsHost", "parameter 1 is not of type 'DOMFileSystem'."));
+        DOMFileSystem* domFileSystem;
+        domFileSystem = V8DOMFileSystem::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!domFileSystem) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("upgradeDraggedFileSystemPermissions", "DevToolsHost", "parameter 1 is not of type 'DOMFileSystem'."));
 
-    return;
-  }
+            return;
+        }
 
-  DevToolsHostFileSystem::upgradeDraggedFileSystemPermissions(*impl, domFileSystem);
-}
+        DevToolsHostFileSystem::upgradeDraggedFileSystemPermissions(*impl, domFileSystem);
+    }
 
- void upgradeDraggedFileSystemPermissionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostPartialV8Internal::upgradeDraggedFileSystemPermissionsMethod(info);
-}
+    void upgradeDraggedFileSystemPermissionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostPartialV8Internal::upgradeDraggedFileSystemPermissionsMethod(info);
+    }
 
 } // namespace DevToolsHostPartialV8Internal
 
-void V8DevToolsHostPartial::installV8DevToolsHostTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DevToolsHost::installV8DevToolsHostTemplate(isolate, world, interfaceTemplate);
+void V8DevToolsHostPartial::installV8DevToolsHostTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DevToolsHost::installV8DevToolsHostTemplate(isolate, world, interfaceTemplate);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 
-  if (RuntimeEnabledFeatures::fileSystemEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration isolatedFileSystemMethodConfiguration = {"isolatedFileSystem", DevToolsHostPartialV8Internal::isolatedFileSystemMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, isolatedFileSystemMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::fileSystemEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration upgradeDraggedFileSystemPermissionsMethodConfiguration = {"upgradeDraggedFileSystemPermissions", DevToolsHostPartialV8Internal::upgradeDraggedFileSystemPermissionsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, upgradeDraggedFileSystemPermissionsMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::fileSystemEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration isolatedFileSystemMethodConfiguration = { "isolatedFileSystem", DevToolsHostPartialV8Internal::isolatedFileSystemMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, isolatedFileSystemMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::fileSystemEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration upgradeDraggedFileSystemPermissionsMethodConfiguration = { "upgradeDraggedFileSystemPermissions", DevToolsHostPartialV8Internal::upgradeDraggedFileSystemPermissionsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, upgradeDraggedFileSystemPermissionsMethodConfiguration);
+    }
 }
 
-void V8DevToolsHostPartial::initialize() {
-  // Should be invoked from ModulesInitializer.
-  V8DevToolsHost::updateWrapperTypeInfo(
-      &V8DevToolsHostPartial::installV8DevToolsHostTemplate,
-      nullptr);
+void V8DevToolsHostPartial::initialize()
+{
+    // Should be invoked from ModulesInitializer.
+    V8DevToolsHost::updateWrapperTypeInfo(
+        &V8DevToolsHostPartial::installV8DevToolsHostTemplate,
+        nullptr);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ShadowRootInit_h
 #define ShadowRootInit_h
 
@@ -20,32 +20,33 @@
 namespace blink {
 
 class CORE_EXPORT ShadowRootInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ShadowRootInit();
-  virtual ~ShadowRootInit();
-  ShadowRootInit(const ShadowRootInit&);
-  ShadowRootInit& operator=(const ShadowRootInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDelegatesFocus() const;
-  bool delegatesFocus() const;
-  void setDelegatesFocus(bool);
+public:
+    ShadowRootInit();
+    virtual ~ShadowRootInit();
+    ShadowRootInit(const ShadowRootInit&);
+    ShadowRootInit& operator=(const ShadowRootInit&);
 
-  bool hasMode() const;
-  String mode() const;
-  void setMode(String);
+    bool hasDelegatesFocus() const;
+    bool delegatesFocus() const;
+    void setDelegatesFocus(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMode() const;
+    String mode() const;
+    void setMode(String);
 
- private:
-  bool m_hasDelegatesFocus = false;
-  bool m_delegatesFocus;
-  String m_mode;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ShadowRootInit;
+private:
+    bool m_hasDelegatesFocus = false;
+    bool m_delegatesFocus;
+    String m_mode;
+
+    friend class V8ShadowRootInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ShadowRootInit_h
+#endif // ShadowRootInit_h

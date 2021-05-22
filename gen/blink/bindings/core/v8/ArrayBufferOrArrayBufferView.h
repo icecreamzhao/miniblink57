@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ArrayBufferOrArrayBufferView_h
 #define ArrayBufferOrArrayBufferView_h
 
@@ -24,58 +24,60 @@ class DOMArrayBuffer;
 class DOMArrayBufferView;
 
 class CORE_EXPORT ArrayBufferOrArrayBufferView final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ArrayBufferOrArrayBufferView();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isArrayBuffer() const { return m_type == SpecificTypeArrayBuffer; }
-  DOMArrayBuffer* getAsArrayBuffer() const;
-  void setArrayBuffer(DOMArrayBuffer*);
-  static ArrayBufferOrArrayBufferView fromArrayBuffer(DOMArrayBuffer*);
+public:
+    ArrayBufferOrArrayBufferView();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isArrayBufferView() const { return m_type == SpecificTypeArrayBufferView; }
-  DOMArrayBufferView* getAsArrayBufferView() const;
-  void setArrayBufferView(DOMArrayBufferView*);
-  static ArrayBufferOrArrayBufferView fromArrayBufferView(DOMArrayBufferView*);
+    bool isArrayBuffer() const { return m_type == SpecificTypeArrayBuffer; }
+    DOMArrayBuffer* getAsArrayBuffer() const;
+    void setArrayBuffer(DOMArrayBuffer*);
+    static ArrayBufferOrArrayBufferView fromArrayBuffer(DOMArrayBuffer*);
 
-  ArrayBufferOrArrayBufferView(const ArrayBufferOrArrayBufferView&);
-  ~ArrayBufferOrArrayBufferView();
-  ArrayBufferOrArrayBufferView& operator=(const ArrayBufferOrArrayBufferView&);
-  DECLARE_TRACE();
+    bool isArrayBufferView() const { return m_type == SpecificTypeArrayBufferView; }
+    DOMArrayBufferView* getAsArrayBufferView() const;
+    void setArrayBufferView(DOMArrayBufferView*);
+    static ArrayBufferOrArrayBufferView fromArrayBufferView(DOMArrayBufferView*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeArrayBuffer,
-    SpecificTypeArrayBufferView,
-  };
-  SpecificTypes m_type;
+    ArrayBufferOrArrayBufferView(const ArrayBufferOrArrayBufferView&);
+    ~ArrayBufferOrArrayBufferView();
+    ArrayBufferOrArrayBufferView& operator=(const ArrayBufferOrArrayBufferView&);
+    DECLARE_TRACE();
 
-  Member<DOMArrayBuffer> m_arrayBuffer;
-  Member<DOMArrayBufferView> m_arrayBufferView;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeArrayBuffer,
+        SpecificTypeArrayBufferView,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferView&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<DOMArrayBuffer> m_arrayBuffer;
+    Member<DOMArrayBufferView> m_arrayBufferView;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferView&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8ArrayBufferOrArrayBufferView final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ArrayBufferOrArrayBufferView&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ArrayBufferOrArrayBufferView&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferView&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ArrayBufferOrArrayBufferView& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ArrayBufferOrArrayBufferView& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ArrayBufferOrArrayBufferView> {
-  CORE_EXPORT static ArrayBufferOrArrayBufferView nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static ArrayBufferOrArrayBufferView nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -83,4 +85,4 @@ struct NativeValueTraits<ArrayBufferOrArrayBufferView> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::ArrayBufferOrArrayBufferView);
 
-#endif  // ArrayBufferOrArrayBufferView_h
+#endif // ArrayBufferOrArrayBufferView_h

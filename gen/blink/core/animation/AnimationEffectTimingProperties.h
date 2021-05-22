@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AnimationEffectTimingProperties_h
 #define AnimationEffectTimingProperties_h
 
@@ -21,65 +21,66 @@
 namespace blink {
 
 class CORE_EXPORT AnimationEffectTimingProperties : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AnimationEffectTimingProperties();
-  virtual ~AnimationEffectTimingProperties();
-  AnimationEffectTimingProperties(const AnimationEffectTimingProperties&);
-  AnimationEffectTimingProperties& operator=(const AnimationEffectTimingProperties&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDelay() const;
-  double delay() const;
-  void setDelay(double);
+public:
+    AnimationEffectTimingProperties();
+    virtual ~AnimationEffectTimingProperties();
+    AnimationEffectTimingProperties(const AnimationEffectTimingProperties&);
+    AnimationEffectTimingProperties& operator=(const AnimationEffectTimingProperties&);
 
-  bool hasDirection() const;
-  String direction() const;
-  void setDirection(String);
+    bool hasDelay() const;
+    double delay() const;
+    void setDelay(double);
 
-  bool hasDuration() const;
-  const UnrestrictedDoubleOrString& duration() const;
-  void setDuration(const UnrestrictedDoubleOrString&);
+    bool hasDirection() const;
+    String direction() const;
+    void setDirection(String);
 
-  bool hasEasing() const;
-  String easing() const;
-  void setEasing(String);
+    bool hasDuration() const;
+    const UnrestrictedDoubleOrString& duration() const;
+    void setDuration(const UnrestrictedDoubleOrString&);
 
-  bool hasEndDelay() const;
-  double endDelay() const;
-  void setEndDelay(double);
+    bool hasEasing() const;
+    String easing() const;
+    void setEasing(String);
 
-  bool hasFill() const;
-  String fill() const;
-  void setFill(String);
+    bool hasEndDelay() const;
+    double endDelay() const;
+    void setEndDelay(double);
 
-  bool hasIterationStart() const;
-  double iterationStart() const;
-  void setIterationStart(double);
+    bool hasFill() const;
+    String fill() const;
+    void setFill(String);
 
-  bool hasIterations() const;
-  double iterations() const;
-  void setIterations(double);
+    bool hasIterationStart() const;
+    double iterationStart() const;
+    void setIterationStart(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasIterations() const;
+    double iterations() const;
+    void setIterations(double);
 
- private:
-  bool m_hasDelay = false;
-  double m_delay;
-  String m_direction;
-  UnrestrictedDoubleOrString m_duration;
-  String m_easing;
-  bool m_hasEndDelay = false;
-  double m_endDelay;
-  String m_fill;
-  bool m_hasIterationStart = false;
-  double m_iterationStart;
-  bool m_hasIterations = false;
-  double m_iterations;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AnimationEffectTimingProperties;
+private:
+    bool m_hasDelay = false;
+    double m_delay;
+    String m_direction;
+    UnrestrictedDoubleOrString m_duration;
+    String m_easing;
+    bool m_hasEndDelay = false;
+    double m_endDelay;
+    String m_fill;
+    bool m_hasIterationStart = false;
+    double m_iterationStart;
+    bool m_hasIterations = false;
+    double m_iterations;
+
+    friend class V8AnimationEffectTimingProperties;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AnimationEffectTimingProperties_h
+#endif // AnimationEffectTimingProperties_h

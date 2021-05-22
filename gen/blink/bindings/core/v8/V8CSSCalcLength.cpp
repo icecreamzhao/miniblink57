@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CSSCalcLength.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,459 +49,498 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CSSCalcLength::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CSSCalcLength is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CSSCalcLengthV8Internal {
 
-static void pxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->px(isNull));
+        double cppValue(impl->px(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void pxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::pxAttributeGetter(info);
-}
+    CORE_EXPORT void pxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::pxAttributeGetter(info);
+    }
 
-static void percentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void percentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->percent(isNull));
+        double cppValue(impl->percent(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void percentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::percentAttributeGetter(info);
-}
+    CORE_EXPORT void percentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::percentAttributeGetter(info);
+    }
 
-static void emAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void emAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->em(isNull));
+        double cppValue(impl->em(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void emAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::emAttributeGetter(info);
-}
+    CORE_EXPORT void emAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::emAttributeGetter(info);
+    }
 
-static void exAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void exAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->ex(isNull));
+        double cppValue(impl->ex(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void exAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::exAttributeGetter(info);
-}
+    CORE_EXPORT void exAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::exAttributeGetter(info);
+    }
 
-static void chAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void chAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->ch(isNull));
+        double cppValue(impl->ch(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void chAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::chAttributeGetter(info);
-}
+    CORE_EXPORT void chAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::chAttributeGetter(info);
+    }
 
-static void remAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void remAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->rem(isNull));
+        double cppValue(impl->rem(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void remAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::remAttributeGetter(info);
-}
+    CORE_EXPORT void remAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::remAttributeGetter(info);
+    }
 
-static void vwAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void vwAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->vw(isNull));
+        double cppValue(impl->vw(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void vwAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::vwAttributeGetter(info);
-}
+    CORE_EXPORT void vwAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::vwAttributeGetter(info);
+    }
 
-static void vhAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void vhAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->vh(isNull));
+        double cppValue(impl->vh(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void vhAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::vhAttributeGetter(info);
-}
+    CORE_EXPORT void vhAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::vhAttributeGetter(info);
+    }
 
-static void vminAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void vminAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->vmin(isNull));
+        double cppValue(impl->vmin(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void vminAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::vminAttributeGetter(info);
-}
+    CORE_EXPORT void vminAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::vminAttributeGetter(info);
+    }
 
-static void vmaxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void vmaxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->vmax(isNull));
+        double cppValue(impl->vmax(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void vmaxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::vmaxAttributeGetter(info);
-}
+    CORE_EXPORT void vmaxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::vmaxAttributeGetter(info);
+    }
 
-static void cmAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cmAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->cm(isNull));
+        double cppValue(impl->cm(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void cmAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::cmAttributeGetter(info);
-}
+    CORE_EXPORT void cmAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::cmAttributeGetter(info);
+    }
 
-static void mmAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mmAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->mm(isNull));
+        double cppValue(impl->mm(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void mmAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::mmAttributeGetter(info);
-}
+    CORE_EXPORT void mmAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::mmAttributeGetter(info);
+    }
 
-static void inAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void inAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->in(isNull));
+        double cppValue(impl->in(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void inAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::inAttributeGetter(info);
-}
+    CORE_EXPORT void inAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::inAttributeGetter(info);
+    }
 
-static void pcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->pc(isNull));
+        double cppValue(impl->pc(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void pcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::pcAttributeGetter(info);
-}
+    CORE_EXPORT void pcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::pcAttributeGetter(info);
+    }
 
-static void ptAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ptAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
+        CSSCalcLength* impl = V8CSSCalcLength::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->pt(isNull));
+        double cppValue(impl->pt(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void ptAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSCalcLengthV8Internal::ptAttributeGetter(info);
-}
+    CORE_EXPORT void ptAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSCalcLengthV8Internal::ptAttributeGetter(info);
+    }
 
-static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSCalcLength");
+    static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSCalcLength");
 
-  CSSLengthValue* length;
-  length = V8CSSLengthValue::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!length) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'CSSLengthValue'.");
+        CSSLengthValue* length;
+        length = V8CSSLengthValue::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!length) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'CSSLengthValue'.");
 
-    return;
-  }
+            return;
+        }
 
-  CSSCalcLength* impl = CSSCalcLength::create(length, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSCalcLength::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        CSSCalcLength* impl = CSSCalcLength::create(length, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSCalcLength::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSCalcLength");
+    static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSCalcLength");
 
-  CSSCalcDictionary calcDictionary;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('calcDictionary') is not an object.");
+        CSSCalcDictionary calcDictionary;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('calcDictionary') is not an object.");
 
-    return;
-  }
-  V8CSSCalcDictionary::toImpl(info.GetIsolate(), info[0], calcDictionary, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8CSSCalcDictionary::toImpl(info.GetIsolate(), info[0], calcDictionary, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  CSSCalcLength* impl = CSSCalcLength::create(calcDictionary, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSCalcLength::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        CSSCalcLength* impl = CSSCalcLength::create(calcDictionary, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSCalcLength::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSCalcLength");
-  switch (std::min(1, info.Length())) {
-    case 1:
-      if (V8CSSLengthValue::hasInstance(info[0], info.GetIsolate())) {
-        CSSCalcLengthV8Internal::constructor1(info);
-        return;
-      }
-      if (info[0]->IsObject()) {
-        CSSCalcLengthV8Internal::constructor2(info);
-        return;
-      }
-      break;
-    default:
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
-  }
-  exceptionState.throwTypeError("No matching constructor signature.");
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSCalcLength");
+        switch (std::min(1, info.Length())) {
+        case 1:
+            if (V8CSSLengthValue::hasInstance(info[0], info.GetIsolate())) {
+                CSSCalcLengthV8Internal::constructor1(info);
+                return;
+            }
+            if (info[0]->IsObject()) {
+                CSSCalcLengthV8Internal::constructor2(info);
+                return;
+            }
+            break;
+        default:
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+        exceptionState.throwTypeError("No matching constructor signature.");
+    }
 
 } // namespace CSSCalcLengthV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CSSCalcLengthAccessors[] = {
-    {"px", CSSCalcLengthV8Internal::pxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"percent", CSSCalcLengthV8Internal::percentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"em", CSSCalcLengthV8Internal::emAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ex", CSSCalcLengthV8Internal::exAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ch", CSSCalcLengthV8Internal::chAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rem", CSSCalcLengthV8Internal::remAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vw", CSSCalcLengthV8Internal::vwAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vh", CSSCalcLengthV8Internal::vhAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vmin", CSSCalcLengthV8Internal::vminAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vmax", CSSCalcLengthV8Internal::vmaxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cm", CSSCalcLengthV8Internal::cmAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mm", CSSCalcLengthV8Internal::mmAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"in", CSSCalcLengthV8Internal::inAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pc", CSSCalcLengthV8Internal::pcAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pt", CSSCalcLengthV8Internal::ptAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "px", CSSCalcLengthV8Internal::pxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "percent", CSSCalcLengthV8Internal::percentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "em", CSSCalcLengthV8Internal::emAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ex", CSSCalcLengthV8Internal::exAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ch", CSSCalcLengthV8Internal::chAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rem", CSSCalcLengthV8Internal::remAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vw", CSSCalcLengthV8Internal::vwAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vh", CSSCalcLengthV8Internal::vhAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vmin", CSSCalcLengthV8Internal::vminAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vmax", CSSCalcLengthV8Internal::vmaxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cm", CSSCalcLengthV8Internal::cmAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mm", CSSCalcLengthV8Internal::mmAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "in", CSSCalcLengthV8Internal::inAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pc", CSSCalcLengthV8Internal::pcAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pt", CSSCalcLengthV8Internal::ptAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8CSSCalcLength::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CSSCalcLength"));
-    return;
-  }
+void V8CSSCalcLength::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CSSCalcLength"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  CSSCalcLengthV8Internal::constructor(info);
+    CSSCalcLengthV8Internal::constructor(info);
 }
 
-static void installV8CSSCalcLengthTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSCalcLength::wrapperTypeInfo.interfaceName, V8CSSLengthValue::domTemplate(isolate, world), V8CSSCalcLength::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8CSSCalcLength::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8CSSCalcLengthTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSCalcLength::wrapperTypeInfo.interfaceName, V8CSSLengthValue::domTemplate(isolate, world), V8CSSCalcLength::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8CSSCalcLength::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSCalcLengthAccessors, WTF_ARRAY_LENGTH(V8CSSCalcLengthAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSCalcLengthAccessors, WTF_ARRAY_LENGTH(V8CSSCalcLengthAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8CSSCalcLength::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSCalcLengthTemplate);
+v8::Local<v8::FunctionTemplate> V8CSSCalcLength::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSCalcLengthTemplate);
 }
 
-bool V8CSSCalcLength::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CSSCalcLength::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CSSCalcLength::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CSSCalcLength::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CSSCalcLength* V8CSSCalcLength::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CSSCalcLength* V8CSSCalcLength::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

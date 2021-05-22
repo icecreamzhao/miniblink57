@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DOMStringMap.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,180 +48,199 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMStringMap::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMStringMap is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DOMStringMapV8Internal {
 
-static void namedPropertyGetter(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
-  String result = impl->item(name);
-  if (result.isNull())
-    return;
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
+    static void namedPropertyGetter(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
+        String result = impl->item(name);
+        if (result.isNull())
+            return;
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
 
-CORE_EXPORT void namedPropertyGetterCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+    CORE_EXPORT void namedPropertyGetterCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
 
-  DOMStringMapV8Internal::namedPropertyGetter(propertyName, info);
-}
+        DOMStringMapV8Internal::namedPropertyGetter(propertyName, info);
+    }
 
-static void namedPropertySetter(const AtomicString& name, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  const CString& nameInUtf8 = name.utf8();
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMStringMap", nameInUtf8.data());
+    static void namedPropertySetter(const AtomicString& name, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        const CString& nameInUtf8 = name.utf8();
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMStringMap", nameInUtf8.data());
 
-  DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
-  V8StringResource<> propertyValue = v8Value;
-  if (!propertyValue.prepare())
-    return;
+        DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
+        V8StringResource<> propertyValue = v8Value;
+        if (!propertyValue.prepare())
+            return;
 
-  bool result = impl->anonymousNamedSetter(name, propertyValue, exceptionState);
-  if (exceptionState.hadException())
-    return;
-  if (!result)
-    return;
-  v8SetReturnValue(info, v8Value);
-}
+        bool result = impl->anonymousNamedSetter(name, propertyValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        if (!result)
+            return;
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void namedPropertySetterCallback(v8::Local<v8::Name> name, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+    CORE_EXPORT void namedPropertySetterCallback(v8::Local<v8::Name> name, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  DOMStringMapV8Internal::namedPropertySetter(propertyName, v8Value, info);
-}
+        DOMStringMapV8Internal::namedPropertySetter(propertyName, v8Value, info);
+    }
 
-static void namedPropertyDeleter(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Boolean>& info) {
-  DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
+    static void namedPropertyDeleter(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Boolean>& info)
+    {
+        DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
 
-  DeleteResult result = impl->anonymousNamedDeleter(name);
-  if (result == DeleteUnknownProperty)
-    return;
-  v8SetReturnValue(info, result == DeleteSuccess);
-}
+        DeleteResult result = impl->anonymousNamedDeleter(name);
+        if (result == DeleteUnknownProperty)
+            return;
+        v8SetReturnValue(info, result == DeleteSuccess);
+    }
 
-CORE_EXPORT void namedPropertyDeleterCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Boolean>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+    CORE_EXPORT void namedPropertyDeleterCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Boolean>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  DOMStringMapV8Internal::namedPropertyDeleter(propertyName, info);
-}
+        DOMStringMapV8Internal::namedPropertyDeleter(propertyName, info);
+    }
 
-static void namedPropertyQuery(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Integer>& info) {
-  const CString& nameInUtf8 = name.utf8();
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "DOMStringMap", nameInUtf8.data());
+    static void namedPropertyQuery(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Integer>& info)
+    {
+        const CString& nameInUtf8 = name.utf8();
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "DOMStringMap", nameInUtf8.data());
 
-  DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
+        DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
 
-  bool result = impl->namedPropertyQuery(name, exceptionState);
-  if (!result)
-    return;
-  v8SetReturnValueInt(info, v8::None);
-}
+        bool result = impl->namedPropertyQuery(name, exceptionState);
+        if (!result)
+            return;
+        v8SetReturnValueInt(info, v8::None);
+    }
 
-CORE_EXPORT void namedPropertyQueryCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Integer>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+    CORE_EXPORT void namedPropertyQueryCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Integer>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
 
-  DOMStringMapV8Internal::namedPropertyQuery(propertyName, info);
-}
+        DOMStringMapV8Internal::namedPropertyQuery(propertyName, info);
+    }
 
-static void namedPropertyEnumerator(const v8::PropertyCallbackInfo<v8::Array>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::EnumerationContext, "DOMStringMap");
+    static void namedPropertyEnumerator(const v8::PropertyCallbackInfo<v8::Array>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::EnumerationContext, "DOMStringMap");
 
-  DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
+        DOMStringMap* impl = V8DOMStringMap::toImpl(info.Holder());
 
-  Vector<String> names;
-  impl->namedPropertyEnumerator(names, exceptionState);
-  if (exceptionState.hadException())
-    return;
-  v8SetReturnValue(info, ToV8(names, info.Holder(), info.GetIsolate()).As<v8::Array>());
-}
+        Vector<String> names;
+        impl->namedPropertyEnumerator(names, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        v8SetReturnValue(info, ToV8(names, info.Holder(), info.GetIsolate()).As<v8::Array>());
+    }
 
-CORE_EXPORT void namedPropertyEnumeratorCallback(const v8::PropertyCallbackInfo<v8::Array>& info) {
-  DOMStringMapV8Internal::namedPropertyEnumerator(info);
-}
+    CORE_EXPORT void namedPropertyEnumeratorCallback(const v8::PropertyCallbackInfo<v8::Array>& info)
+    {
+        DOMStringMapV8Internal::namedPropertyEnumerator(info);
+    }
 
-CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  const AtomicString& propertyName = AtomicString::number(index);
+    CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        const AtomicString& propertyName = AtomicString::number(index);
 
-  DOMStringMapV8Internal::namedPropertyGetter(propertyName, info);
-}
+        DOMStringMapV8Internal::namedPropertyGetter(propertyName, info);
+    }
 
-CORE_EXPORT void indexedPropertySetterCallback(uint32_t index, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
+    CORE_EXPORT void indexedPropertySetterCallback(uint32_t index, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
 
-  const AtomicString& propertyName = AtomicString::number(index);
+        const AtomicString& propertyName = AtomicString::number(index);
 
-  DOMStringMapV8Internal::namedPropertySetter(propertyName, v8Value, info);
-}
+        DOMStringMapV8Internal::namedPropertySetter(propertyName, v8Value, info);
+    }
 
-CORE_EXPORT void indexedPropertyDeleterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Boolean>& info) {
-  CEReactionsScope ceReactionsScope;
+    CORE_EXPORT void indexedPropertyDeleterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Boolean>& info)
+    {
+        CEReactionsScope ceReactionsScope;
 
-  const AtomicString& propertyName = AtomicString::number(index);
+        const AtomicString& propertyName = AtomicString::number(index);
 
-  DOMStringMapV8Internal::namedPropertyDeleter(propertyName, info);
-}
+        DOMStringMapV8Internal::namedPropertyDeleter(propertyName, info);
+    }
 
 } // namespace DOMStringMapV8Internal
 
-void V8DOMStringMap::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  DOMStringMap* impl = scriptWrappable->toImpl<DOMStringMap>();
-  // The element() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->element())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8DOMStringMap::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    DOMStringMap* impl = scriptWrappable->toImpl<DOMStringMap>();
+    // The element() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->element())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
-static void installV8DOMStringMapTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMStringMap::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DOMStringMap::internalFieldCount);
+static void installV8DOMStringMapTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMStringMap::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DOMStringMap::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 
-  // Indexed properties
-  v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(DOMStringMapV8Internal::indexedPropertyGetterCallback, DOMStringMapV8Internal::indexedPropertySetterCallback, 0, DOMStringMapV8Internal::indexedPropertyDeleterCallback, 0, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
-  instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
-  // Named properties
-  v8::NamedPropertyHandlerConfiguration namedPropertyHandlerConfig(DOMStringMapV8Internal::namedPropertyGetterCallback, DOMStringMapV8Internal::namedPropertySetterCallback, DOMStringMapV8Internal::namedPropertyQueryCallback, DOMStringMapV8Internal::namedPropertyDeleterCallback, DOMStringMapV8Internal::namedPropertyEnumeratorCallback, v8::Local<v8::Value>(), static_cast<v8::PropertyHandlerFlags>(int(v8::PropertyHandlerFlags::kOnlyInterceptStrings)));
-  instanceTemplate->SetHandler(namedPropertyHandlerConfig);
+    // Indexed properties
+    v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(DOMStringMapV8Internal::indexedPropertyGetterCallback, DOMStringMapV8Internal::indexedPropertySetterCallback, 0, DOMStringMapV8Internal::indexedPropertyDeleterCallback, 0, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
+    instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
+    // Named properties
+    v8::NamedPropertyHandlerConfiguration namedPropertyHandlerConfig(DOMStringMapV8Internal::namedPropertyGetterCallback, DOMStringMapV8Internal::namedPropertySetterCallback, DOMStringMapV8Internal::namedPropertyQueryCallback, DOMStringMapV8Internal::namedPropertyDeleterCallback, DOMStringMapV8Internal::namedPropertyEnumeratorCallback, v8::Local<v8::Value>(), static_cast<v8::PropertyHandlerFlags>(int(v8::PropertyHandlerFlags::kOnlyInterceptStrings)));
+    instanceTemplate->SetHandler(namedPropertyHandlerConfig);
 }
 
-v8::Local<v8::FunctionTemplate> V8DOMStringMap::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMStringMapTemplate);
+v8::Local<v8::FunctionTemplate> V8DOMStringMap::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMStringMapTemplate);
 }
 
-bool V8DOMStringMap::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DOMStringMap::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DOMStringMap::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DOMStringMap::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DOMStringMap* V8DOMStringMap::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMStringMap* V8DOMStringMap::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8StaticRange.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,314 +49,345 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&StaticRange::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "StaticRange is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace StaticRangeV8Internal {
 
-static void startContainerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void startContainerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  StaticRange* impl = V8StaticRange::toImpl(holder);
+        StaticRange* impl = V8StaticRange::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->startContainer()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->startContainer()), impl);
+    }
 
-CORE_EXPORT void startContainerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StaticRangeV8Internal::startContainerAttributeGetter(info);
-}
+    CORE_EXPORT void startContainerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StaticRangeV8Internal::startContainerAttributeGetter(info);
+    }
 
-static void startContainerAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  StaticRange* impl = V8StaticRange::toImpl(holder);
+    static void startContainerAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        StaticRange* impl = V8StaticRange::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "StaticRange", "startContainer");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "StaticRange", "startContainer");
 
-  // Prepare the value to be set.
-  Node* cppValue = V8Node::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+        // Prepare the value to be set.
+        Node* cppValue = V8Node::toImplWithTypeCheck(info.GetIsolate(), v8Value);
 
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue) {
-    exceptionState.throwTypeError("The provided value is not of type 'Node'.");
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue) {
+            exceptionState.throwTypeError("The provided value is not of type 'Node'.");
+            return;
+        }
 
-  impl->setStartContainer(cppValue);
-}
+        impl->setStartContainer(cppValue);
+    }
 
-CORE_EXPORT void startContainerAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void startContainerAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  StaticRangeV8Internal::startContainerAttributeSetter(v8Value, info);
-}
+        StaticRangeV8Internal::startContainerAttributeSetter(v8Value, info);
+    }
 
-static void startOffsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void startOffsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  StaticRange* impl = V8StaticRange::toImpl(holder);
+        StaticRange* impl = V8StaticRange::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->startOffset());
-}
+        v8SetReturnValueInt(info, impl->startOffset());
+    }
 
-CORE_EXPORT void startOffsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StaticRangeV8Internal::startOffsetAttributeGetter(info);
-}
+    CORE_EXPORT void startOffsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StaticRangeV8Internal::startOffsetAttributeGetter(info);
+    }
 
-static void startOffsetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  StaticRange* impl = V8StaticRange::toImpl(holder);
+    static void startOffsetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        StaticRange* impl = V8StaticRange::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "StaticRange", "startOffset");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "StaticRange", "startOffset");
 
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setStartOffset(cppValue);
-}
+        impl->setStartOffset(cppValue);
+    }
 
-CORE_EXPORT void startOffsetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void startOffsetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  StaticRangeV8Internal::startOffsetAttributeSetter(v8Value, info);
-}
+        StaticRangeV8Internal::startOffsetAttributeSetter(v8Value, info);
+    }
 
-static void endContainerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void endContainerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  StaticRange* impl = V8StaticRange::toImpl(holder);
+        StaticRange* impl = V8StaticRange::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->endContainer()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->endContainer()), impl);
+    }
 
-CORE_EXPORT void endContainerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StaticRangeV8Internal::endContainerAttributeGetter(info);
-}
+    CORE_EXPORT void endContainerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StaticRangeV8Internal::endContainerAttributeGetter(info);
+    }
 
-static void endContainerAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  StaticRange* impl = V8StaticRange::toImpl(holder);
+    static void endContainerAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        StaticRange* impl = V8StaticRange::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "StaticRange", "endContainer");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "StaticRange", "endContainer");
 
-  // Prepare the value to be set.
-  Node* cppValue = V8Node::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+        // Prepare the value to be set.
+        Node* cppValue = V8Node::toImplWithTypeCheck(info.GetIsolate(), v8Value);
 
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue) {
-    exceptionState.throwTypeError("The provided value is not of type 'Node'.");
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue) {
+            exceptionState.throwTypeError("The provided value is not of type 'Node'.");
+            return;
+        }
 
-  impl->setEndContainer(cppValue);
-}
+        impl->setEndContainer(cppValue);
+    }
 
-CORE_EXPORT void endContainerAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void endContainerAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  StaticRangeV8Internal::endContainerAttributeSetter(v8Value, info);
-}
+        StaticRangeV8Internal::endContainerAttributeSetter(v8Value, info);
+    }
 
-static void endOffsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void endOffsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  StaticRange* impl = V8StaticRange::toImpl(holder);
+        StaticRange* impl = V8StaticRange::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->endOffset());
-}
+        v8SetReturnValueInt(info, impl->endOffset());
+    }
 
-CORE_EXPORT void endOffsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StaticRangeV8Internal::endOffsetAttributeGetter(info);
-}
+    CORE_EXPORT void endOffsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StaticRangeV8Internal::endOffsetAttributeGetter(info);
+    }
 
-static void endOffsetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  StaticRange* impl = V8StaticRange::toImpl(holder);
+    static void endOffsetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        StaticRange* impl = V8StaticRange::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "StaticRange", "endOffset");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "StaticRange", "endOffset");
 
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setEndOffset(cppValue);
-}
+        impl->setEndOffset(cppValue);
+    }
 
-CORE_EXPORT void endOffsetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void endOffsetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  StaticRangeV8Internal::endOffsetAttributeSetter(v8Value, info);
-}
+        StaticRangeV8Internal::endOffsetAttributeSetter(v8Value, info);
+    }
 
-static void collapsedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  StaticRange* impl = V8StaticRange::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->collapsed());
-}
-
-CORE_EXPORT void collapsedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StaticRangeV8Internal::collapsedAttributeGetter(info);
-}
-
-static void setStartMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StaticRange", "setStart");
-
-  StaticRange* impl = V8StaticRange::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Node* node;
-  int offset;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  offset = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setStart(node, offset);
-}
-
-CORE_EXPORT  void setStartMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StaticRangeV8Internal::setStartMethod(info);
-}
-
-static void setEndMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StaticRange", "setEnd");
-
-  StaticRange* impl = V8StaticRange::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Node* node;
-  int offset;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  offset = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setEnd(node, offset);
-}
-
-CORE_EXPORT  void setEndMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StaticRangeV8Internal::setEndMethod(info);
-}
-
-static void toRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StaticRange", "toRange");
-
-  StaticRange* impl = V8StaticRange::toImpl(info.Holder());
-
-  Range* result = impl->toRange(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void toRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StaticRangeV8Internal::toRangeMethod(info);
-}
-
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
-  StaticRange* impl = StaticRange::create(document);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8StaticRange::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void collapsedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        StaticRange* impl = V8StaticRange::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->collapsed());
+    }
+
+    CORE_EXPORT void collapsedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StaticRangeV8Internal::collapsedAttributeGetter(info);
+    }
+
+    static void setStartMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StaticRange", "setStart");
+
+        StaticRange* impl = V8StaticRange::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Node* node;
+        int offset;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        offset = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setStart(node, offset);
+    }
+
+    CORE_EXPORT void setStartMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StaticRangeV8Internal::setStartMethod(info);
+    }
+
+    static void setEndMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StaticRange", "setEnd");
+
+        StaticRange* impl = V8StaticRange::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Node* node;
+        int offset;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        offset = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setEnd(node, offset);
+    }
+
+    CORE_EXPORT void setEndMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StaticRangeV8Internal::setEndMethod(info);
+    }
+
+    static void toRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StaticRange", "toRange");
+
+        StaticRange* impl = V8StaticRange::toImpl(info.Holder());
+
+        Range* result = impl->toRange(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void toRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StaticRangeV8Internal::toRangeMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+        StaticRange* impl = StaticRange::create(document);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8StaticRange::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace StaticRangeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8StaticRangeAccessors[] = {
-    {"startContainer", StaticRangeV8Internal::startContainerAttributeGetterCallback, StaticRangeV8Internal::startContainerAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"startOffset", StaticRangeV8Internal::startOffsetAttributeGetterCallback, StaticRangeV8Internal::startOffsetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"endContainer", StaticRangeV8Internal::endContainerAttributeGetterCallback, StaticRangeV8Internal::endContainerAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"endOffset", StaticRangeV8Internal::endOffsetAttributeGetterCallback, StaticRangeV8Internal::endOffsetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"collapsed", StaticRangeV8Internal::collapsedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "startContainer", StaticRangeV8Internal::startContainerAttributeGetterCallback, StaticRangeV8Internal::startContainerAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "startOffset", StaticRangeV8Internal::startOffsetAttributeGetterCallback, StaticRangeV8Internal::startOffsetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "endContainer", StaticRangeV8Internal::endContainerAttributeGetterCallback, StaticRangeV8Internal::endContainerAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "endOffset", StaticRangeV8Internal::endOffsetAttributeGetterCallback, StaticRangeV8Internal::endOffsetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "collapsed", StaticRangeV8Internal::collapsedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8StaticRangeMethods[] = {
-    {"setStart", StaticRangeV8Internal::setStartMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setEnd", StaticRangeV8Internal::setEndMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"toRange", StaticRangeV8Internal::toRangeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "setStart", StaticRangeV8Internal::setStartMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setEnd", StaticRangeV8Internal::setEndMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "toRange", StaticRangeV8Internal::toRangeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8StaticRange::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("StaticRange"));
-    return;
-  }
+void V8StaticRange::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("StaticRange"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  StaticRangeV8Internal::constructor(info);
+    StaticRangeV8Internal::constructor(info);
 }
 
-static void installV8StaticRangeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8StaticRange::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8StaticRange::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8StaticRange::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8StaticRangeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8StaticRange::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8StaticRange::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8StaticRange::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  if (!RuntimeEnabledFeatures::inputEventEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::inputEventEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StaticRangeAccessors, WTF_ARRAY_LENGTH(V8StaticRangeAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StaticRangeMethods, WTF_ARRAY_LENGTH(V8StaticRangeMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StaticRangeAccessors, WTF_ARRAY_LENGTH(V8StaticRangeAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StaticRangeMethods, WTF_ARRAY_LENGTH(V8StaticRangeMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8StaticRange::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8StaticRangeTemplate);
+v8::Local<v8::FunctionTemplate> V8StaticRange::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8StaticRangeTemplate);
 }
 
-bool V8StaticRange::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8StaticRange::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8StaticRange::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8StaticRange::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-StaticRange* V8StaticRange::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+StaticRange* V8StaticRange::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

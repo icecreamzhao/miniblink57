@@ -8,50 +8,59 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ConvolverOptions.h"
 
 #include "modules/webaudio/AudioBuffer.h"
 
 namespace blink {
 
-ConvolverOptions::ConvolverOptions() {
-  setDisableNormalization(false);
+ConvolverOptions::ConvolverOptions()
+{
+    setDisableNormalization(false);
 }
 
-ConvolverOptions::~ConvolverOptions() {}
+ConvolverOptions::~ConvolverOptions() { }
 
 ConvolverOptions::ConvolverOptions(const ConvolverOptions&) = default;
 
 ConvolverOptions& ConvolverOptions::operator=(const ConvolverOptions&) = default;
 
-bool ConvolverOptions::hasBuffer() const {
-  return m_buffer;
+bool ConvolverOptions::hasBuffer() const
+{
+    return m_buffer;
 }
-AudioBuffer* ConvolverOptions::buffer() const {
-  return m_buffer;
+AudioBuffer* ConvolverOptions::buffer() const
+{
+    return m_buffer;
 }
-void ConvolverOptions::setBuffer(AudioBuffer* value) {
-  m_buffer = value;
+void ConvolverOptions::setBuffer(AudioBuffer* value)
+{
+    m_buffer = value;
 }
-void ConvolverOptions::setBufferToNull() {
-  m_buffer = Member<AudioBuffer>();
+void ConvolverOptions::setBufferToNull()
+{
+    m_buffer = Member<AudioBuffer>();
 }
-bool ConvolverOptions::hasDisableNormalization() const {
-  return m_hasDisableNormalization;
+bool ConvolverOptions::hasDisableNormalization() const
+{
+    return m_hasDisableNormalization;
 }
-bool ConvolverOptions::disableNormalization() const {
-  DCHECK(m_hasDisableNormalization);
-  return m_disableNormalization;
+bool ConvolverOptions::disableNormalization() const
+{
+    DCHECK(m_hasDisableNormalization);
+    return m_disableNormalization;
 }
-void ConvolverOptions::setDisableNormalization(bool value) {
-  m_disableNormalization = value;
-  m_hasDisableNormalization = true;
+void ConvolverOptions::setDisableNormalization(bool value)
+{
+    m_disableNormalization = value;
+    m_hasDisableNormalization = true;
 }
 
-DEFINE_TRACE(ConvolverOptions) {
-  visitor->trace(m_buffer);
-  AudioNodeOptions::trace(visitor);
+DEFINE_TRACE(ConvolverOptions)
+{
+    visitor->trace(m_buffer);
+    AudioNodeOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

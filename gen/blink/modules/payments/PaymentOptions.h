@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentOptions_h
 #define PaymentOptions_h
 
@@ -20,50 +20,51 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentOptions();
-  virtual ~PaymentOptions();
-  PaymentOptions(const PaymentOptions&);
-  PaymentOptions& operator=(const PaymentOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasRequestPayerEmail() const;
-  bool requestPayerEmail() const;
-  void setRequestPayerEmail(bool);
+public:
+    PaymentOptions();
+    virtual ~PaymentOptions();
+    PaymentOptions(const PaymentOptions&);
+    PaymentOptions& operator=(const PaymentOptions&);
 
-  bool hasRequestPayerName() const;
-  bool requestPayerName() const;
-  void setRequestPayerName(bool);
+    bool hasRequestPayerEmail() const;
+    bool requestPayerEmail() const;
+    void setRequestPayerEmail(bool);
 
-  bool hasRequestPayerPhone() const;
-  bool requestPayerPhone() const;
-  void setRequestPayerPhone(bool);
+    bool hasRequestPayerName() const;
+    bool requestPayerName() const;
+    void setRequestPayerName(bool);
 
-  bool hasRequestShipping() const;
-  bool requestShipping() const;
-  void setRequestShipping(bool);
+    bool hasRequestPayerPhone() const;
+    bool requestPayerPhone() const;
+    void setRequestPayerPhone(bool);
 
-  bool hasShippingType() const;
-  String shippingType() const;
-  void setShippingType(String);
+    bool hasRequestShipping() const;
+    bool requestShipping() const;
+    void setRequestShipping(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasShippingType() const;
+    String shippingType() const;
+    void setShippingType(String);
 
- private:
-  bool m_hasRequestPayerEmail = false;
-  bool m_requestPayerEmail;
-  bool m_hasRequestPayerName = false;
-  bool m_requestPayerName;
-  bool m_hasRequestPayerPhone = false;
-  bool m_requestPayerPhone;
-  bool m_hasRequestShipping = false;
-  bool m_requestShipping;
-  String m_shippingType;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentOptions;
+private:
+    bool m_hasRequestPayerEmail = false;
+    bool m_requestPayerEmail;
+    bool m_hasRequestPayerName = false;
+    bool m_requestPayerName;
+    bool m_hasRequestPayerPhone = false;
+    bool m_requestPayerPhone;
+    bool m_hasRequestShipping = false;
+    bool m_requestShipping;
+    String m_shippingType;
+
+    friend class V8PaymentOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentOptions_h
+#endif // PaymentOptions_h

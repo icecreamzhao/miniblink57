@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8BluetoothRemoteGATTServer.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,208 +50,225 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&BluetoothRemoteGATTServer::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "BluetoothRemoteGATTServer is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BluetoothRemoteGATTServerV8Internal {
 
-static void deviceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deviceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(holder);
+        BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(holder);
 
-  BluetoothDevice* cppValue(WTF::getPtr(impl->device()));
+        BluetoothDevice* cppValue(WTF::getPtr(impl->device()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BluetoothRemoteGATTServer#device";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BluetoothRemoteGATTServer#device";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void deviceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTServerV8Internal::deviceAttributeGetter(info);
-}
-
-static void connectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->connected());
-}
-
-MODULES_EXPORT void connectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTServerV8Internal::connectedAttributeGetter(info);
-}
-
-static void connectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTServer", "connect");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BluetoothRemoteGATTServer::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  ScriptPromise result = impl->connect(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void connectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTServerV8Internal::connectMethod(info);
-}
-
-static void disconnectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  impl->disconnect(scriptState);
-}
-
-MODULES_EXPORT  void disconnectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTServerV8Internal::disconnectMethod(info);
-}
-
-static void getPrimaryServiceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTServer", "getPrimaryService");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BluetoothRemoteGATTServer::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  StringOrUnsignedLong service;
-  V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], service, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->getPrimaryService(scriptState, service, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getPrimaryServiceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTServerV8Internal::getPrimaryServiceMethod(info);
-}
-
-static void getPrimaryServicesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTServer", "getPrimaryServices");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BluetoothRemoteGATTServer::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  StringOrUnsignedLong service;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ScriptPromise result = impl->getPrimaryServices(scriptState, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    v8SetReturnValue(info, result.v8Value());
-    return;
-  }
-  V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], service, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  ScriptPromise result = impl->getPrimaryServices(scriptState, service, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+    MODULES_EXPORT void deviceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTServerV8Internal::deviceAttributeGetter(info);
+    }
 
-MODULES_EXPORT  void getPrimaryServicesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothRemoteGATTServerV8Internal::getPrimaryServicesMethod(info);
-}
+    static void connectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->connected());
+    }
+
+    MODULES_EXPORT void connectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTServerV8Internal::connectedAttributeGetter(info);
+    }
+
+    static void connectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTServer", "connect");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BluetoothRemoteGATTServer::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->connect(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void connectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTServerV8Internal::connectMethod(info);
+    }
+
+    static void disconnectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        impl->disconnect(scriptState);
+    }
+
+    MODULES_EXPORT void disconnectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTServerV8Internal::disconnectMethod(info);
+    }
+
+    static void getPrimaryServiceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTServer", "getPrimaryService");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BluetoothRemoteGATTServer::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        StringOrUnsignedLong service;
+        V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], service, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->getPrimaryService(scriptState, service, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getPrimaryServiceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTServerV8Internal::getPrimaryServiceMethod(info);
+    }
+
+    static void getPrimaryServicesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothRemoteGATTServer", "getPrimaryServices");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BluetoothRemoteGATTServer::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BluetoothRemoteGATTServer* impl = V8BluetoothRemoteGATTServer::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        StringOrUnsignedLong service;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ScriptPromise result = impl->getPrimaryServices(scriptState, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result.v8Value());
+            return;
+        }
+        V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], service, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->getPrimaryServices(scriptState, service, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getPrimaryServicesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothRemoteGATTServerV8Internal::getPrimaryServicesMethod(info);
+    }
 
 } // namespace BluetoothRemoteGATTServerV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8BluetoothRemoteGATTServerAccessors[] = {
-    {"device", BluetoothRemoteGATTServerV8Internal::deviceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"connected", BluetoothRemoteGATTServerV8Internal::connectedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "device", BluetoothRemoteGATTServerV8Internal::deviceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "connected", BluetoothRemoteGATTServerV8Internal::connectedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8BluetoothRemoteGATTServerMethods[] = {
-    {"connect", BluetoothRemoteGATTServerV8Internal::connectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"disconnect", BluetoothRemoteGATTServerV8Internal::disconnectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getPrimaryService", BluetoothRemoteGATTServerV8Internal::getPrimaryServiceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"getPrimaryServices", BluetoothRemoteGATTServerV8Internal::getPrimaryServicesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "connect", BluetoothRemoteGATTServerV8Internal::connectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "disconnect", BluetoothRemoteGATTServerV8Internal::disconnectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getPrimaryService", BluetoothRemoteGATTServerV8Internal::getPrimaryServiceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "getPrimaryServices", BluetoothRemoteGATTServerV8Internal::getPrimaryServicesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8BluetoothRemoteGATTServerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BluetoothRemoteGATTServer::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8BluetoothRemoteGATTServer::internalFieldCount);
+static void installV8BluetoothRemoteGATTServerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BluetoothRemoteGATTServer::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8BluetoothRemoteGATTServer::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::webBluetoothEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::webBluetoothEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothRemoteGATTServerAccessors, WTF_ARRAY_LENGTH(V8BluetoothRemoteGATTServerAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothRemoteGATTServerMethods, WTF_ARRAY_LENGTH(V8BluetoothRemoteGATTServerMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothRemoteGATTServerAccessors, WTF_ARRAY_LENGTH(V8BluetoothRemoteGATTServerAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothRemoteGATTServerMethods, WTF_ARRAY_LENGTH(V8BluetoothRemoteGATTServerMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8BluetoothRemoteGATTServer::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BluetoothRemoteGATTServerTemplate);
+v8::Local<v8::FunctionTemplate> V8BluetoothRemoteGATTServer::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BluetoothRemoteGATTServerTemplate);
 }
 
-bool V8BluetoothRemoteGATTServer::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8BluetoothRemoteGATTServer::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8BluetoothRemoteGATTServer::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8BluetoothRemoteGATTServer::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-BluetoothRemoteGATTServer* V8BluetoothRemoteGATTServer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+BluetoothRemoteGATTServer* V8BluetoothRemoteGATTServer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PaymentDetailsModifier.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -18,123 +18,127 @@
 
 namespace blink {
 
-void V8PaymentDetailsModifier::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PaymentDetailsModifier& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): supportedMethods.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> additionalDisplayItemsValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "additionalDisplayItems")).ToLocal(&additionalDisplayItemsValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (additionalDisplayItemsValue.IsEmpty() || additionalDisplayItemsValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    HeapVector<PaymentItem> additionalDisplayItems = toImplArray<HeapVector<PaymentItem>>(additionalDisplayItemsValue, 0, isolate, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setAdditionalDisplayItems(additionalDisplayItems);
-  }
-
-  if (RuntimeEnabledFeatures::paymentDetailsModifierDataEnabled()) {
-    v8::Local<v8::Value> dataValue;
-    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "data")).ToLocal(&dataValue)) {
-      exceptionState.rethrowV8Exception(block.Exception());
-      return;
-    }
-    if (dataValue.IsEmpty() || dataValue->IsUndefined()) {
-      // Do nothing.
-    } else {
-      ScriptValue data = ScriptValue(ScriptState::current(isolate), dataValue);
-      if (!data.isObject()) {
-        exceptionState.throwTypeError("member data is not an object.");
+void V8PaymentDetailsModifier::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PaymentDetailsModifier& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): supportedMethods.");
         return;
-      }
-      impl.setData(data);
     }
-  }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::Local<v8::Value> supportedMethodsValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "supportedMethods")).ToLocal(&supportedMethodsValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (supportedMethodsValue.IsEmpty() || supportedMethodsValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member supportedMethods is undefined.");
-    return;
-  } else {
-    Vector<String> supportedMethods = toImplArray<Vector<String>>(supportedMethodsValue, 0, isolate, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setSupportedMethods(supportedMethods);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> additionalDisplayItemsValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "additionalDisplayItems")).ToLocal(&additionalDisplayItemsValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (additionalDisplayItemsValue.IsEmpty() || additionalDisplayItemsValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        HeapVector<PaymentItem> additionalDisplayItems = toImplArray<HeapVector<PaymentItem>>(additionalDisplayItemsValue, 0, isolate, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setAdditionalDisplayItems(additionalDisplayItems);
+    }
 
-  v8::Local<v8::Value> totalValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "total")).ToLocal(&totalValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (totalValue.IsEmpty() || totalValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    PaymentItem total;
-    V8PaymentItem::toImpl(isolate, totalValue, total, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setTotal(total);
-  }
+    if (RuntimeEnabledFeatures::paymentDetailsModifierDataEnabled()) {
+        v8::Local<v8::Value> dataValue;
+        if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "data")).ToLocal(&dataValue)) {
+            exceptionState.rethrowV8Exception(block.Exception());
+            return;
+        }
+        if (dataValue.IsEmpty() || dataValue->IsUndefined()) {
+            // Do nothing.
+        } else {
+            ScriptValue data = ScriptValue(ScriptState::current(isolate), dataValue);
+            if (!data.isObject()) {
+                exceptionState.throwTypeError("member data is not an object.");
+                return;
+            }
+            impl.setData(data);
+        }
+    }
+
+    v8::Local<v8::Value> supportedMethodsValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "supportedMethods")).ToLocal(&supportedMethodsValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (supportedMethodsValue.IsEmpty() || supportedMethodsValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member supportedMethods is undefined.");
+        return;
+    } else {
+        Vector<String> supportedMethods = toImplArray<Vector<String>>(supportedMethodsValue, 0, isolate, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setSupportedMethods(supportedMethods);
+    }
+
+    v8::Local<v8::Value> totalValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "total")).ToLocal(&totalValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (totalValue.IsEmpty() || totalValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        PaymentItem total;
+        V8PaymentItem::toImpl(isolate, totalValue, total, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setTotal(total);
+    }
 }
 
-v8::Local<v8::Value> PaymentDetailsModifier::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8PaymentDetailsModifier(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> PaymentDetailsModifier::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8PaymentDetailsModifier(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8PaymentDetailsModifier(const PaymentDetailsModifier& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasAdditionalDisplayItems()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "additionalDisplayItems"), ToV8(impl.additionalDisplayItems(), creationContext, isolate))))
-      return false;
-  }
+bool toV8PaymentDetailsModifier(const PaymentDetailsModifier& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasAdditionalDisplayItems()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "additionalDisplayItems"), ToV8(impl.additionalDisplayItems(), creationContext, isolate))))
+            return false;
+    }
 
-  if (impl.hasData()) {
-    DCHECK(impl.data().isObject());
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "data"), impl.data().v8Value())))
-      return false;
-  }
+    if (impl.hasData()) {
+        DCHECK(impl.data().isObject());
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "data"), impl.data().v8Value())))
+            return false;
+    }
 
-  if (impl.hasSupportedMethods()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "supportedMethods"), ToV8(impl.supportedMethods(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasSupportedMethods()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "supportedMethods"), ToV8(impl.supportedMethods(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasTotal()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "total"), ToV8(impl.total(), creationContext, isolate))))
-      return false;
-  }
+    if (impl.hasTotal()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "total"), ToV8(impl.total(), creationContext, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-PaymentDetailsModifier NativeValueTraits<PaymentDetailsModifier>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  PaymentDetailsModifier impl;
-  V8PaymentDetailsModifier::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+PaymentDetailsModifier NativeValueTraits<PaymentDetailsModifier>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    PaymentDetailsModifier impl;
+    V8PaymentDetailsModifier::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

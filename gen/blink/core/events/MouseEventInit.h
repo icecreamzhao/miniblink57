@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MouseEventInit_h
 #define MouseEventInit_h
 
@@ -22,81 +22,82 @@ namespace blink {
 class EventTarget;
 
 class CORE_EXPORT MouseEventInit : public EventModifierInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MouseEventInit();
-  virtual ~MouseEventInit();
-  MouseEventInit(const MouseEventInit&);
-  MouseEventInit& operator=(const MouseEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasButton() const;
-  int button() const;
-  void setButton(int);
+public:
+    MouseEventInit();
+    virtual ~MouseEventInit();
+    MouseEventInit(const MouseEventInit&);
+    MouseEventInit& operator=(const MouseEventInit&);
 
-  bool hasButtons() const;
-  unsigned buttons() const;
-  void setButtons(unsigned);
+    bool hasButton() const;
+    int button() const;
+    void setButton(int);
 
-  bool hasClientX() const;
-  double clientX() const;
-  void setClientX(double);
+    bool hasButtons() const;
+    unsigned buttons() const;
+    void setButtons(unsigned);
 
-  bool hasClientY() const;
-  double clientY() const;
-  void setClientY(double);
+    bool hasClientX() const;
+    double clientX() const;
+    void setClientX(double);
 
-  bool hasMovementX() const;
-  int movementX() const;
-  void setMovementX(int);
+    bool hasClientY() const;
+    double clientY() const;
+    void setClientY(double);
 
-  bool hasMovementY() const;
-  int movementY() const;
-  void setMovementY(int);
+    bool hasMovementX() const;
+    int movementX() const;
+    void setMovementX(int);
 
-  bool hasRegion() const;
-  String region() const;
-  void setRegion(String);
-  void setRegionToNull();
+    bool hasMovementY() const;
+    int movementY() const;
+    void setMovementY(int);
 
-  bool hasRelatedTarget() const;
-  EventTarget* relatedTarget() const;
-  void setRelatedTarget(EventTarget*);
-  void setRelatedTargetToNull();
+    bool hasRegion() const;
+    String region() const;
+    void setRegion(String);
+    void setRegionToNull();
 
-  bool hasScreenX() const;
-  double screenX() const;
-  void setScreenX(double);
+    bool hasRelatedTarget() const;
+    EventTarget* relatedTarget() const;
+    void setRelatedTarget(EventTarget*);
+    void setRelatedTargetToNull();
 
-  bool hasScreenY() const;
-  double screenY() const;
-  void setScreenY(double);
+    bool hasScreenX() const;
+    double screenX() const;
+    void setScreenX(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasScreenY() const;
+    double screenY() const;
+    void setScreenY(double);
 
- private:
-  bool m_hasButton = false;
-  int m_button;
-  bool m_hasButtons = false;
-  unsigned m_buttons;
-  bool m_hasClientX = false;
-  double m_clientX;
-  bool m_hasClientY = false;
-  double m_clientY;
-  bool m_hasMovementX = false;
-  int m_movementX;
-  bool m_hasMovementY = false;
-  int m_movementY;
-  String m_region;
-  Member<EventTarget> m_relatedTarget;
-  bool m_hasScreenX = false;
-  double m_screenX;
-  bool m_hasScreenY = false;
-  double m_screenY;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MouseEventInit;
+private:
+    bool m_hasButton = false;
+    int m_button;
+    bool m_hasButtons = false;
+    unsigned m_buttons;
+    bool m_hasClientX = false;
+    double m_clientX;
+    bool m_hasClientY = false;
+    double m_clientY;
+    bool m_hasMovementX = false;
+    int m_movementX;
+    bool m_hasMovementY = false;
+    int m_movementY;
+    String m_region;
+    Member<EventTarget> m_relatedTarget;
+    bool m_hasScreenX = false;
+    double m_screenX;
+    bool m_hasScreenY = false;
+    double m_screenY;
+
+    friend class V8MouseEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MouseEventInit_h
+#endif // MouseEventInit_h

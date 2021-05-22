@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FederatedCredential.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,120 +48,131 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&FederatedCredential::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "FederatedCredential is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace FederatedCredentialV8Internal {
 
-static void providerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void providerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FederatedCredential* impl = V8FederatedCredential::toImpl(holder);
+        FederatedCredential* impl = V8FederatedCredential::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->provider(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->provider(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void providerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FederatedCredentialV8Internal::providerAttributeGetter(info);
-}
+    MODULES_EXPORT void providerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FederatedCredentialV8Internal::providerAttributeGetter(info);
+    }
 
-static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FederatedCredential* impl = V8FederatedCredential::toImpl(holder);
+        FederatedCredential* impl = V8FederatedCredential::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->protocol(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->protocol(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FederatedCredentialV8Internal::protocolAttributeGetter(info);
-}
+    MODULES_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FederatedCredentialV8Internal::protocolAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "FederatedCredential");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "FederatedCredential");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  FederatedCredentialData data;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('data') is not an object.");
+        FederatedCredentialData data;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('data') is not an object.");
 
-    return;
-  }
-  V8FederatedCredentialData::toImpl(info.GetIsolate(), info[0], data, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8FederatedCredentialData::toImpl(info.GetIsolate(), info[0], data, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  FederatedCredential* impl = FederatedCredential::create(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8FederatedCredential::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        FederatedCredential* impl = FederatedCredential::create(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8FederatedCredential::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace FederatedCredentialV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8FederatedCredentialAccessors[] = {
-    {"provider", FederatedCredentialV8Internal::providerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"protocol", FederatedCredentialV8Internal::protocolAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "provider", FederatedCredentialV8Internal::providerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "protocol", FederatedCredentialV8Internal::protocolAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8FederatedCredential::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("FederatedCredential"));
-    return;
-  }
+void V8FederatedCredential::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("FederatedCredential"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  FederatedCredentialV8Internal::constructor(info);
+    FederatedCredentialV8Internal::constructor(info);
 }
 
-static void installV8FederatedCredentialTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FederatedCredential::wrapperTypeInfo.interfaceName, V8SiteBoundCredential::domTemplate(isolate, world), V8FederatedCredential::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8FederatedCredential::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8FederatedCredentialTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FederatedCredential::wrapperTypeInfo.interfaceName, V8SiteBoundCredential::domTemplate(isolate, world), V8FederatedCredential::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8FederatedCredential::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  if (!RuntimeEnabledFeatures::credentialManagerEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::credentialManagerEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FederatedCredentialAccessors, WTF_ARRAY_LENGTH(V8FederatedCredentialAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FederatedCredentialAccessors, WTF_ARRAY_LENGTH(V8FederatedCredentialAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8FederatedCredential::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FederatedCredentialTemplate);
+v8::Local<v8::FunctionTemplate> V8FederatedCredential::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FederatedCredentialTemplate);
 }
 
-bool V8FederatedCredential::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8FederatedCredential::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8FederatedCredential::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8FederatedCredential::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-FederatedCredential* V8FederatedCredential::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+FederatedCredential* V8FederatedCredential::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

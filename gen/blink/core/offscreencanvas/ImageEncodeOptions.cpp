@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ImageEncodeOptions.h"
 
 namespace blink {
 
-ImageEncodeOptions::ImageEncodeOptions() {
-  setQuality(1);
-  setType(String("image/png"));
+ImageEncodeOptions::ImageEncodeOptions()
+{
+    setQuality(1);
+    setType(String("image/png"));
 }
 
-ImageEncodeOptions::~ImageEncodeOptions() {}
+ImageEncodeOptions::~ImageEncodeOptions() { }
 
 ImageEncodeOptions::ImageEncodeOptions(const ImageEncodeOptions&) = default;
 
 ImageEncodeOptions& ImageEncodeOptions::operator=(const ImageEncodeOptions&) = default;
 
-bool ImageEncodeOptions::hasQuality() const {
-  return m_hasQuality;
+bool ImageEncodeOptions::hasQuality() const
+{
+    return m_hasQuality;
 }
-double ImageEncodeOptions::quality() const {
-  DCHECK(m_hasQuality);
-  return m_quality;
+double ImageEncodeOptions::quality() const
+{
+    DCHECK(m_hasQuality);
+    return m_quality;
 }
-void ImageEncodeOptions::setQuality(double value) {
-  m_quality = value;
-  m_hasQuality = true;
+void ImageEncodeOptions::setQuality(double value)
+{
+    m_quality = value;
+    m_hasQuality = true;
 }
-bool ImageEncodeOptions::hasType() const {
-  return !m_type.isNull();
+bool ImageEncodeOptions::hasType() const
+{
+    return !m_type.isNull();
 }
-String ImageEncodeOptions::type() const {
-  return m_type;
+String ImageEncodeOptions::type() const
+{
+    return m_type;
 }
-void ImageEncodeOptions::setType(String value) {
-  m_type = value;
+void ImageEncodeOptions::setType(String value)
+{
+    m_type = value;
 }
 
-DEFINE_TRACE(ImageEncodeOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ImageEncodeOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

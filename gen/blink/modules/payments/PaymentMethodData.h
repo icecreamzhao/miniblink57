@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentMethodData_h
 #define PaymentMethodData_h
 
@@ -22,32 +22,33 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentMethodData : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentMethodData();
-  virtual ~PaymentMethodData();
-  PaymentMethodData(const PaymentMethodData&);
-  PaymentMethodData& operator=(const PaymentMethodData&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasData() const;
-  ScriptValue data() const;
-  void setData(ScriptValue);
+public:
+    PaymentMethodData();
+    virtual ~PaymentMethodData();
+    PaymentMethodData(const PaymentMethodData&);
+    PaymentMethodData& operator=(const PaymentMethodData&);
 
-  bool hasSupportedMethods() const;
-  const Vector<String>& supportedMethods() const;
-  void setSupportedMethods(const Vector<String>&);
+    bool hasData() const;
+    ScriptValue data() const;
+    void setData(ScriptValue);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSupportedMethods() const;
+    const Vector<String>& supportedMethods() const;
+    void setSupportedMethods(const Vector<String>&);
 
- private:
-  ScriptValue m_data;
-  bool m_hasSupportedMethods = false;
-  Vector<String> m_supportedMethods;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentMethodData;
+private:
+    ScriptValue m_data;
+    bool m_hasSupportedMethods = false;
+    Vector<String> m_supportedMethods;
+
+    friend class V8PaymentMethodData;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentMethodData_h
+#endif // PaymentMethodData_h

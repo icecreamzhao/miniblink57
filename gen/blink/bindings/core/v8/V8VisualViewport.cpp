@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8VisualViewport.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,156 +47,175 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMVisualViewport::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMVisualViewport is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DOMVisualViewportV8Internal {
 
-static void scrollLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
+        DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
 
-  v8SetReturnValue(info, impl->scrollLeft());
-}
+        v8SetReturnValue(info, impl->scrollLeft());
+    }
 
-CORE_EXPORT void scrollLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_ScrollLeft_AttributeGetter);
+    CORE_EXPORT void scrollLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_ScrollLeft_AttributeGetter);
 
-  DOMVisualViewportV8Internal::scrollLeftAttributeGetter(info);
-}
+        DOMVisualViewportV8Internal::scrollLeftAttributeGetter(info);
+    }
 
-static void scrollTopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollTopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
+        DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
 
-  v8SetReturnValue(info, impl->scrollTop());
-}
+        v8SetReturnValue(info, impl->scrollTop());
+    }
 
-CORE_EXPORT void scrollTopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_ScrollTop_AttributeGetter);
+    CORE_EXPORT void scrollTopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_ScrollTop_AttributeGetter);
 
-  DOMVisualViewportV8Internal::scrollTopAttributeGetter(info);
-}
+        DOMVisualViewportV8Internal::scrollTopAttributeGetter(info);
+    }
 
-static void pageXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pageXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
+        DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
 
-  v8SetReturnValue(info, impl->pageX());
-}
+        v8SetReturnValue(info, impl->pageX());
+    }
 
-CORE_EXPORT void pageXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_PageX_AttributeGetter);
+    CORE_EXPORT void pageXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_PageX_AttributeGetter);
 
-  DOMVisualViewportV8Internal::pageXAttributeGetter(info);
-}
+        DOMVisualViewportV8Internal::pageXAttributeGetter(info);
+    }
 
-static void pageYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pageYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
+        DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
 
-  v8SetReturnValue(info, impl->pageY());
-}
+        v8SetReturnValue(info, impl->pageY());
+    }
 
-CORE_EXPORT void pageYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_PageY_AttributeGetter);
+    CORE_EXPORT void pageYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_PageY_AttributeGetter);
 
-  DOMVisualViewportV8Internal::pageYAttributeGetter(info);
-}
+        DOMVisualViewportV8Internal::pageYAttributeGetter(info);
+    }
 
-static void clientWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
+        DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
 
-  v8SetReturnValue(info, impl->clientWidth());
-}
+        v8SetReturnValue(info, impl->clientWidth());
+    }
 
-CORE_EXPORT void clientWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_ClientWidth_AttributeGetter);
+    CORE_EXPORT void clientWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_ClientWidth_AttributeGetter);
 
-  DOMVisualViewportV8Internal::clientWidthAttributeGetter(info);
-}
+        DOMVisualViewportV8Internal::clientWidthAttributeGetter(info);
+    }
 
-static void clientHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
+        DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
 
-  v8SetReturnValue(info, impl->clientHeight());
-}
+        v8SetReturnValue(info, impl->clientHeight());
+    }
 
-CORE_EXPORT void clientHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_ClientHeight_AttributeGetter);
+    CORE_EXPORT void clientHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_ClientHeight_AttributeGetter);
 
-  DOMVisualViewportV8Internal::clientHeightAttributeGetter(info);
-}
+        DOMVisualViewportV8Internal::clientHeightAttributeGetter(info);
+    }
 
-static void scaleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scaleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
+        DOMVisualViewport* impl = V8VisualViewport::toImpl(holder);
 
-  v8SetReturnValue(info, impl->scale());
-}
+        v8SetReturnValue(info, impl->scale());
+    }
 
-CORE_EXPORT void scaleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_Scale_AttributeGetter);
+    CORE_EXPORT void scaleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8VisualViewport_Scale_AttributeGetter);
 
-  DOMVisualViewportV8Internal::scaleAttributeGetter(info);
-}
+        DOMVisualViewportV8Internal::scaleAttributeGetter(info);
+    }
 
 } // namespace DOMVisualViewportV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8VisualViewportAccessors[] = {
-    {"scrollLeft", DOMVisualViewportV8Internal::scrollLeftAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollTop", DOMVisualViewportV8Internal::scrollTopAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageX", DOMVisualViewportV8Internal::pageXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageY", DOMVisualViewportV8Internal::pageYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientWidth", DOMVisualViewportV8Internal::clientWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientHeight", DOMVisualViewportV8Internal::clientHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scale", DOMVisualViewportV8Internal::scaleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "scrollLeft", DOMVisualViewportV8Internal::scrollLeftAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollTop", DOMVisualViewportV8Internal::scrollTopAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageX", DOMVisualViewportV8Internal::pageXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageY", DOMVisualViewportV8Internal::pageYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientWidth", DOMVisualViewportV8Internal::clientWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientHeight", DOMVisualViewportV8Internal::clientHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scale", DOMVisualViewportV8Internal::scaleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8VisualViewportTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VisualViewport::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8VisualViewport::internalFieldCount);
+static void installV8VisualViewportTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VisualViewport::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8VisualViewport::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::visualViewportAPIEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::visualViewportAPIEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VisualViewportAccessors, WTF_ARRAY_LENGTH(V8VisualViewportAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VisualViewportAccessors, WTF_ARRAY_LENGTH(V8VisualViewportAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8VisualViewport::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VisualViewportTemplate);
+v8::Local<v8::FunctionTemplate> V8VisualViewport::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VisualViewportTemplate);
 }
 
-bool V8VisualViewport::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8VisualViewport::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8VisualViewport::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8VisualViewport::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DOMVisualViewport* V8VisualViewport::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMVisualViewport* V8VisualViewport::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

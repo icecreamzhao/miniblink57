@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8USBIsochronousOutTransferResult.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,60 +46,67 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&USBIsochronousOutTransferResult::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "USBIsochronousOutTransferResult is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace USBIsochronousOutTransferResultV8Internal {
 
-static void packetsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void packetsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  USBIsochronousOutTransferResult* impl = V8USBIsochronousOutTransferResult::toImpl(holder);
+        USBIsochronousOutTransferResult* impl = V8USBIsochronousOutTransferResult::toImpl(holder);
 
-  v8SetReturnValue(info, ToV8(impl->packets(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->packets(), info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT void packetsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  USBIsochronousOutTransferResultV8Internal::packetsAttributeGetter(info);
-}
+    MODULES_EXPORT void packetsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        USBIsochronousOutTransferResultV8Internal::packetsAttributeGetter(info);
+    }
 
 } // namespace USBIsochronousOutTransferResultV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8USBIsochronousOutTransferResultAccessors[] = {
-    {"packets", USBIsochronousOutTransferResultV8Internal::packetsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "packets", USBIsochronousOutTransferResultV8Internal::packetsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8USBIsochronousOutTransferResultTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8USBIsochronousOutTransferResult::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8USBIsochronousOutTransferResult::internalFieldCount);
+static void installV8USBIsochronousOutTransferResultTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8USBIsochronousOutTransferResult::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8USBIsochronousOutTransferResult::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8USBIsochronousOutTransferResultAccessors, WTF_ARRAY_LENGTH(V8USBIsochronousOutTransferResultAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8USBIsochronousOutTransferResultAccessors, WTF_ARRAY_LENGTH(V8USBIsochronousOutTransferResultAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8USBIsochronousOutTransferResult::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8USBIsochronousOutTransferResultTemplate);
+v8::Local<v8::FunctionTemplate> V8USBIsochronousOutTransferResult::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8USBIsochronousOutTransferResultTemplate);
 }
 
-bool V8USBIsochronousOutTransferResult::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8USBIsochronousOutTransferResult::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8USBIsochronousOutTransferResult::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8USBIsochronousOutTransferResult::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-USBIsochronousOutTransferResult* V8USBIsochronousOutTransferResult::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+USBIsochronousOutTransferResult* V8USBIsochronousOutTransferResult::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

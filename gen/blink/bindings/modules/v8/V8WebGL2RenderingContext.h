@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8WebGL2RenderingContext_h
 #define V8WebGL2RenderingContext_h
 
@@ -25,33 +25,37 @@
 namespace blink {
 
 class V8WebGL2RenderingContext {
-  STATIC_ONLY(V8WebGL2RenderingContext);
- public:
-  MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static WebGL2RenderingContext* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<WebGL2RenderingContext>();
-  }
-  MODULES_EXPORT static WebGL2RenderingContext* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<WebGL2RenderingContext>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<WebGL2RenderingContext>());
-  }
-  static void visitDOMWrapper(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
-  static void visitDOMWrapperCustom(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8WebGL2RenderingContext);
+
+public:
+    MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static WebGL2RenderingContext* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<WebGL2RenderingContext>();
+    }
+    MODULES_EXPORT static WebGL2RenderingContext* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<WebGL2RenderingContext>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<WebGL2RenderingContext>());
+    }
+    static void visitDOMWrapper(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
+    static void visitDOMWrapperCustom(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<WebGL2RenderingContext> {
-  typedef V8WebGL2RenderingContext Type;
+    typedef V8WebGL2RenderingContext Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8WebGL2RenderingContext_h
+#endif // V8WebGL2RenderingContext_h

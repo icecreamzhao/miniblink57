@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLIFrameElementPartial.h"
 
 #include "bindings/core/v8/BindingSecurity.h"
@@ -30,71 +30,77 @@ namespace blink {
 
 namespace HTMLIFrameElementPartialV8Internal {
 
-static void allowPaymentRequestAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void allowPaymentRequestAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLIFrameElement* impl = V8HTMLIFrameElement::toImpl(holder);
+        HTMLIFrameElement* impl = V8HTMLIFrameElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, HTMLIFrameElementPayments::fastHasAttribute(HTMLNames::allowpaymentrequestAttr, *impl));
-}
+        v8SetReturnValueBool(info, HTMLIFrameElementPayments::fastHasAttribute(HTMLNames::allowpaymentrequestAttr, *impl));
+    }
 
-void allowPaymentRequestAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLIFrameElementPartialV8Internal::allowPaymentRequestAttributeGetter(info);
-}
+    void allowPaymentRequestAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLIFrameElementPartialV8Internal::allowPaymentRequestAttributeGetter(info);
+    }
 
-static void allowPaymentRequestAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLIFrameElement* impl = V8HTMLIFrameElement::toImpl(holder);
+    static void allowPaymentRequestAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLIFrameElement* impl = V8HTMLIFrameElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLIFrameElement", "allowPaymentRequest");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLIFrameElement", "allowPaymentRequest");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  HTMLIFrameElementPayments::setBooleanAttribute(HTMLNames::allowpaymentrequestAttr, *impl, cppValue);
-}
+        HTMLIFrameElementPayments::setBooleanAttribute(HTMLNames::allowpaymentrequestAttr, *impl, cppValue);
+    }
 
-void allowPaymentRequestAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void allowPaymentRequestAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLIFrameElementPartialV8Internal::allowPaymentRequestAttributeSetter(v8Value, info);
-}
+        HTMLIFrameElementPartialV8Internal::allowPaymentRequestAttributeSetter(v8Value, info);
+    }
 
 } // namespace HTMLIFrameElementPartialV8Internal
 
-void V8HTMLIFrameElementPartial::installV8HTMLIFrameElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8HTMLIFrameElement::installV8HTMLIFrameElementTemplate(isolate, world, interfaceTemplate);
+void V8HTMLIFrameElementPartial::installV8HTMLIFrameElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8HTMLIFrameElement::installV8HTMLIFrameElementTemplate(isolate, world, interfaceTemplate);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 
-  if (RuntimeEnabledFeatures::paymentRequestEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorallowPaymentRequestConfiguration = {"allowPaymentRequest", HTMLIFrameElementPartialV8Internal::allowPaymentRequestAttributeGetterCallback, HTMLIFrameElementPartialV8Internal::allowPaymentRequestAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorallowPaymentRequestConfiguration);
-  }
+    if (RuntimeEnabledFeatures::paymentRequestEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorallowPaymentRequestConfiguration = { "allowPaymentRequest", HTMLIFrameElementPartialV8Internal::allowPaymentRequestAttributeGetterCallback, HTMLIFrameElementPartialV8Internal::allowPaymentRequestAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorallowPaymentRequestConfiguration);
+    }
 }
 
-void V8HTMLIFrameElementPartial::initialize() {
-  // Should be invoked from ModulesInitializer.
-  V8HTMLIFrameElement::updateWrapperTypeInfo(
-      &V8HTMLIFrameElementPartial::installV8HTMLIFrameElementTemplate,
-      nullptr);
+void V8HTMLIFrameElementPartial::initialize()
+{
+    // Should be invoked from ModulesInitializer.
+    V8HTMLIFrameElement::updateWrapperTypeInfo(
+        &V8HTMLIFrameElementPartial::installV8HTMLIFrameElementTemplate,
+        nullptr);
 }
 
-}  // namespace blink
+} // namespace blink

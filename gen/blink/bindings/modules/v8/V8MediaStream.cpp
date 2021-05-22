@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaStream.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,408 +51,452 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MediaStream::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaStream is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaStreamV8Internal {
 
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->id(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->id(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::idAttributeGetter(info);
-}
+    MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::idAttributeGetter(info);
+    }
 
-static void activeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void activeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->active());
-}
+        v8SetReturnValueBool(info, impl->active());
+    }
 
-MODULES_EXPORT void activeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaStream_Active_AttributeGetter);
+    MODULES_EXPORT void activeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaStream_Active_AttributeGetter);
 
-  MediaStreamV8Internal::activeAttributeGetter(info);
-}
+        MediaStreamV8Internal::activeAttributeGetter(info);
+    }
 
-static void onaddtrackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onaddtrackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onaddtrack()));
+        EventListener* cppValue(WTF::getPtr(impl->onaddtrack()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onaddtrackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::onaddtrackAttributeGetter(info);
-}
+    MODULES_EXPORT void onaddtrackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::onaddtrackAttributeGetter(info);
+    }
 
-static void onaddtrackAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+    static void onaddtrackAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onaddtrack(), v8Value, V8MediaStream::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onaddtrack(), v8Value, V8MediaStream::eventListenerCacheIndex);
 
-  impl->setOnaddtrack(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnaddtrack(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onaddtrackAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onaddtrackAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MediaStreamV8Internal::onaddtrackAttributeSetter(v8Value, info);
-}
+        MediaStreamV8Internal::onaddtrackAttributeSetter(v8Value, info);
+    }
 
-static void onremovetrackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onremovetrackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onremovetrack()));
+        EventListener* cppValue(WTF::getPtr(impl->onremovetrack()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onremovetrackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::onremovetrackAttributeGetter(info);
-}
+    MODULES_EXPORT void onremovetrackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::onremovetrackAttributeGetter(info);
+    }
 
-static void onremovetrackAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+    static void onremovetrackAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onremovetrack(), v8Value, V8MediaStream::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onremovetrack(), v8Value, V8MediaStream::eventListenerCacheIndex);
 
-  impl->setOnremovetrack(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnremovetrack(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onremovetrackAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onremovetrackAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MediaStreamV8Internal::onremovetrackAttributeSetter(v8Value, info);
-}
+        MediaStreamV8Internal::onremovetrackAttributeSetter(v8Value, info);
+    }
 
-static void onactiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onactiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onactive()));
+        EventListener* cppValue(WTF::getPtr(impl->onactive()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onactiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::onactiveAttributeGetter(info);
-}
+    MODULES_EXPORT void onactiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::onactiveAttributeGetter(info);
+    }
 
-static void onactiveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+    static void onactiveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onactive(), v8Value, V8MediaStream::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onactive(), v8Value, V8MediaStream::eventListenerCacheIndex);
 
-  impl->setOnactive(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnactive(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onactiveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onactiveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MediaStreamV8Internal::onactiveAttributeSetter(v8Value, info);
-}
+        MediaStreamV8Internal::onactiveAttributeSetter(v8Value, info);
+    }
 
-static void oninactiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oninactiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->oninactive()));
+        EventListener* cppValue(WTF::getPtr(impl->oninactive()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void oninactiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::oninactiveAttributeGetter(info);
-}
+    MODULES_EXPORT void oninactiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::oninactiveAttributeGetter(info);
+    }
 
-static void oninactiveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaStream* impl = V8MediaStream::toImpl(holder);
+    static void oninactiveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaStream* impl = V8MediaStream::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oninactive(), v8Value, V8MediaStream::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oninactive(), v8Value, V8MediaStream::eventListenerCacheIndex);
 
-  impl->setOninactive(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOninactive(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void oninactiveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void oninactiveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MediaStreamV8Internal::oninactiveAttributeSetter(v8Value, info);
-}
+        MediaStreamV8Internal::oninactiveAttributeSetter(v8Value, info);
+    }
 
-static void getAudioTracksMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStream* impl = V8MediaStream::toImpl(info.Holder());
+    static void getAudioTracksMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStream* impl = V8MediaStream::toImpl(info.Holder());
 
-  v8SetReturnValue(info, ToV8(impl->getAudioTracks(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->getAudioTracks(), info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT  void getAudioTracksMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::getAudioTracksMethod(info);
-}
+    MODULES_EXPORT void getAudioTracksMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::getAudioTracksMethod(info);
+    }
 
-static void getVideoTracksMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStream* impl = V8MediaStream::toImpl(info.Holder());
+    static void getVideoTracksMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStream* impl = V8MediaStream::toImpl(info.Holder());
 
-  v8SetReturnValue(info, ToV8(impl->getVideoTracks(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->getVideoTracks(), info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT  void getVideoTracksMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::getVideoTracksMethod(info);
-}
+    MODULES_EXPORT void getVideoTracksMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::getVideoTracksMethod(info);
+    }
 
-static void getTracksMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStream* impl = V8MediaStream::toImpl(info.Holder());
+    static void getTracksMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStream* impl = V8MediaStream::toImpl(info.Holder());
 
-  v8SetReturnValue(info, ToV8(impl->getTracks(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->getTracks(), info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT  void getTracksMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::getTracksMethod(info);
-}
+    MODULES_EXPORT void getTracksMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::getTracksMethod(info);
+    }
 
-static void getTrackByIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStream* impl = V8MediaStream::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getTrackById", "MediaStream", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> trackId;
-  trackId = info[0];
-  if (!trackId.prepare())
-    return;
-
-  v8SetReturnValue(info, impl->getTrackById(trackId));
-}
-
-MODULES_EXPORT  void getTrackByIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::getTrackByIdMethod(info);
-}
-
-static void addTrackMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaStream", "addTrack");
-
-  MediaStream* impl = V8MediaStream::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  MediaStreamTrack* track;
-  track = V8MediaStreamTrack::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!track) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'MediaStreamTrack'.");
-
-    return;
-  }
-
-  impl->addTrack(track, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void addTrackMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::addTrackMethod(info);
-}
-
-static void removeTrackMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaStream", "removeTrack");
-
-  MediaStream* impl = V8MediaStream::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  MediaStreamTrack* track;
-  track = V8MediaStreamTrack::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!track) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'MediaStreamTrack'.");
-
-    return;
-  }
-
-  impl->removeTrack(track, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void removeTrackMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::removeTrackMethod(info);
-}
-
-static void cloneMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStream* impl = V8MediaStream::toImpl(info.Holder());
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  v8SetReturnValue(info, impl->clone(executionContext));
-}
-
-MODULES_EXPORT  void cloneMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStreamV8Internal::cloneMethod(info);
-}
-
-static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  MediaStream* impl = MediaStream::create(executionContext);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaStream::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
-
-static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaStream* stream;
-  stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!stream) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToConstruct("MediaStream", "parameter 1 is not of type 'MediaStream'."));
-
-    return;
-  }
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  MediaStream* impl = MediaStream::create(executionContext, stream);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaStream::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
-
-static void constructor3(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaStream");
-
-  HeapVector<Member<MediaStreamTrack>> tracks;
-  tracks = (toMemberNativeArray<MediaStreamTrack>(info[0], 1, info.GetIsolate(), exceptionState));
-  if (exceptionState.hadException())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  MediaStream* impl = MediaStream::create(executionContext, tracks);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaStream::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
-
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaStream");
-  switch (std::min(1, info.Length())) {
-    case 0:
-      if (true) {
-        MediaStreamV8Internal::constructor1(info);
-        return;
-      }
-      break;
-    case 1:
-      if (V8MediaStream::hasInstance(info[0], info.GetIsolate())) {
-        MediaStreamV8Internal::constructor2(info);
-        return;
-      }
-      if (info[0]->IsArray()) {
-        MediaStreamV8Internal::constructor3(info);
-        return;
-      }
-      break;
-    default:
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(0, info.Length()));
-      return;
-  }
-  exceptionState.throwTypeError("No matching constructor signature.");
-}
+    static void getTrackByIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStream* impl = V8MediaStream::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getTrackById", "MediaStream", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> trackId;
+        trackId = info[0];
+        if (!trackId.prepare())
+            return;
+
+        v8SetReturnValue(info, impl->getTrackById(trackId));
+    }
+
+    MODULES_EXPORT void getTrackByIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::getTrackByIdMethod(info);
+    }
+
+    static void addTrackMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaStream", "addTrack");
+
+        MediaStream* impl = V8MediaStream::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        MediaStreamTrack* track;
+        track = V8MediaStreamTrack::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!track) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'MediaStreamTrack'.");
+
+            return;
+        }
+
+        impl->addTrack(track, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void addTrackMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::addTrackMethod(info);
+    }
+
+    static void removeTrackMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaStream", "removeTrack");
+
+        MediaStream* impl = V8MediaStream::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        MediaStreamTrack* track;
+        track = V8MediaStreamTrack::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!track) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'MediaStreamTrack'.");
+
+            return;
+        }
+
+        impl->removeTrack(track, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void removeTrackMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::removeTrackMethod(info);
+    }
+
+    static void cloneMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStream* impl = V8MediaStream::toImpl(info.Holder());
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        v8SetReturnValue(info, impl->clone(executionContext));
+    }
+
+    MODULES_EXPORT void cloneMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStreamV8Internal::cloneMethod(info);
+    }
+
+    static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        MediaStream* impl = MediaStream::create(executionContext);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaStream::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
+
+    static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaStream* stream;
+        stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!stream) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToConstruct("MediaStream", "parameter 1 is not of type 'MediaStream'."));
+
+            return;
+        }
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        MediaStream* impl = MediaStream::create(executionContext, stream);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaStream::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
+
+    static void constructor3(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaStream");
+
+        HeapVector<Member<MediaStreamTrack>> tracks;
+        tracks = (toMemberNativeArray<MediaStreamTrack>(info[0], 1, info.GetIsolate(), exceptionState));
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        MediaStream* impl = MediaStream::create(executionContext, tracks);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaStream::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaStream");
+        switch (std::min(1, info.Length())) {
+        case 0:
+            if (true) {
+                MediaStreamV8Internal::constructor1(info);
+                return;
+            }
+            break;
+        case 1:
+            if (V8MediaStream::hasInstance(info[0], info.GetIsolate())) {
+                MediaStreamV8Internal::constructor2(info);
+                return;
+            }
+            if (info[0]->IsArray()) {
+                MediaStreamV8Internal::constructor3(info);
+                return;
+            }
+            break;
+        default:
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(0, info.Length()));
+            return;
+        }
+        exceptionState.throwTypeError("No matching constructor signature.");
+    }
 
 } // namespace MediaStreamV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaStreamAccessors[] = {
-    {"id", MediaStreamV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"active", MediaStreamV8Internal::activeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onaddtrack", MediaStreamV8Internal::onaddtrackAttributeGetterCallback, MediaStreamV8Internal::onaddtrackAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onremovetrack", MediaStreamV8Internal::onremovetrackAttributeGetterCallback, MediaStreamV8Internal::onremovetrackAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onactive", MediaStreamV8Internal::onactiveAttributeGetterCallback, MediaStreamV8Internal::onactiveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oninactive", MediaStreamV8Internal::oninactiveAttributeGetterCallback, MediaStreamV8Internal::oninactiveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "id", MediaStreamV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "active", MediaStreamV8Internal::activeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onaddtrack", MediaStreamV8Internal::onaddtrackAttributeGetterCallback, MediaStreamV8Internal::onaddtrackAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onremovetrack", MediaStreamV8Internal::onremovetrackAttributeGetterCallback, MediaStreamV8Internal::onremovetrackAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onactive", MediaStreamV8Internal::onactiveAttributeGetterCallback, MediaStreamV8Internal::onactiveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oninactive", MediaStreamV8Internal::oninactiveAttributeGetterCallback, MediaStreamV8Internal::oninactiveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MediaStreamMethods[] = {
-    {"getAudioTracks", MediaStreamV8Internal::getAudioTracksMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getVideoTracks", MediaStreamV8Internal::getVideoTracksMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getTracks", MediaStreamV8Internal::getTracksMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getTrackById", MediaStreamV8Internal::getTrackByIdMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addTrack", MediaStreamV8Internal::addTrackMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeTrack", MediaStreamV8Internal::removeTrackMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clone", MediaStreamV8Internal::cloneMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getAudioTracks", MediaStreamV8Internal::getAudioTracksMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getVideoTracks", MediaStreamV8Internal::getVideoTracksMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getTracks", MediaStreamV8Internal::getTracksMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getTrackById", MediaStreamV8Internal::getTrackByIdMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addTrack", MediaStreamV8Internal::addTrackMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeTrack", MediaStreamV8Internal::removeTrackMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clone", MediaStreamV8Internal::cloneMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8MediaStream::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaStream"));
-    return;
-  }
+void V8MediaStream::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaStream"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  MediaStreamV8Internal::constructor(info);
+    MediaStreamV8Internal::constructor(info);
 }
 
-static void installV8MediaStreamTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaStream::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MediaStream::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8MediaStream::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8MediaStreamTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaStream::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MediaStream::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8MediaStream::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaStreamAccessors, WTF_ARRAY_LENGTH(V8MediaStreamAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaStreamMethods, WTF_ARRAY_LENGTH(V8MediaStreamMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaStreamAccessors, WTF_ARRAY_LENGTH(V8MediaStreamAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaStreamMethods, WTF_ARRAY_LENGTH(V8MediaStreamMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaStream::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaStreamTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaStream::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaStreamTemplate);
 }
 
-bool V8MediaStream::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaStream::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaStream::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaStream::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaStream* V8MediaStream::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaStream* V8MediaStream::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

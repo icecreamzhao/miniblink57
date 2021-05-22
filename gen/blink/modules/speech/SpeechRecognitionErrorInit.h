@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef SpeechRecognitionErrorInit_h
 #define SpeechRecognitionErrorInit_h
 
@@ -20,31 +20,32 @@
 namespace blink {
 
 class MODULES_EXPORT SpeechRecognitionErrorInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  SpeechRecognitionErrorInit();
-  virtual ~SpeechRecognitionErrorInit();
-  SpeechRecognitionErrorInit(const SpeechRecognitionErrorInit&);
-  SpeechRecognitionErrorInit& operator=(const SpeechRecognitionErrorInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasError() const;
-  String error() const;
-  void setError(String);
+public:
+    SpeechRecognitionErrorInit();
+    virtual ~SpeechRecognitionErrorInit();
+    SpeechRecognitionErrorInit(const SpeechRecognitionErrorInit&);
+    SpeechRecognitionErrorInit& operator=(const SpeechRecognitionErrorInit&);
 
-  bool hasMessage() const;
-  String message() const;
-  void setMessage(String);
+    bool hasError() const;
+    String error() const;
+    void setError(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMessage() const;
+    String message() const;
+    void setMessage(String);
 
- private:
-  String m_error;
-  String m_message;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8SpeechRecognitionErrorInit;
+private:
+    String m_error;
+    String m_message;
+
+    friend class V8SpeechRecognitionErrorInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // SpeechRecognitionErrorInit_h
+#endif // SpeechRecognitionErrorInit_h

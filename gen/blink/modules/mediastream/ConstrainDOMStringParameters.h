@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ConstrainDOMStringParameters_h
 #define ConstrainDOMStringParameters_h
 
@@ -22,31 +22,32 @@
 namespace blink {
 
 class MODULES_EXPORT ConstrainDOMStringParameters : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ConstrainDOMStringParameters();
-  virtual ~ConstrainDOMStringParameters();
-  ConstrainDOMStringParameters(const ConstrainDOMStringParameters&);
-  ConstrainDOMStringParameters& operator=(const ConstrainDOMStringParameters&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasExact() const;
-  const StringOrStringSequence& exact() const;
-  void setExact(const StringOrStringSequence&);
+public:
+    ConstrainDOMStringParameters();
+    virtual ~ConstrainDOMStringParameters();
+    ConstrainDOMStringParameters(const ConstrainDOMStringParameters&);
+    ConstrainDOMStringParameters& operator=(const ConstrainDOMStringParameters&);
 
-  bool hasIdeal() const;
-  const StringOrStringSequence& ideal() const;
-  void setIdeal(const StringOrStringSequence&);
+    bool hasExact() const;
+    const StringOrStringSequence& exact() const;
+    void setExact(const StringOrStringSequence&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasIdeal() const;
+    const StringOrStringSequence& ideal() const;
+    void setIdeal(const StringOrStringSequence&);
 
- private:
-  StringOrStringSequence m_exact;
-  StringOrStringSequence m_ideal;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ConstrainDOMStringParameters;
+private:
+    StringOrStringSequence m_exact;
+    StringOrStringSequence m_ideal;
+
+    friend class V8ConstrainDOMStringParameters;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ConstrainDOMStringParameters_h
+#endif // ConstrainDOMStringParameters_h

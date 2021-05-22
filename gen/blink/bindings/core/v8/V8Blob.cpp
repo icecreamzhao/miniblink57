@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Blob.h"
 
 #include "bindings/core/v8/ArrayBufferOrArrayBufferViewOrBlobOrUSVString.h"
@@ -53,238 +53,255 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Blob::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Blob is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BlobV8Internal {
 
-static void sizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Blob* impl = V8Blob::toImpl(holder);
+        Blob* impl = V8Blob::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->size()));
-}
-
-CORE_EXPORT void sizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BlobV8Internal::sizeAttributeGetter(info);
-}
-
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Blob* impl = V8Blob::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
-
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BlobV8Internal::typeAttributeGetter(info);
-}
-
-static void isClosedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Blob* impl = V8Blob::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->isClosed());
-}
-
-CORE_EXPORT void isClosedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BlobV8Internal::isClosedAttributeGetter(info);
-}
-
-static void sliceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Blob", "slice");
-
-  Blob* impl = V8Blob::toImpl(info.Holder());
-
-  long long start;
-  long long end;
-  V8StringResource<> contentType;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    Blob* result = impl->slice(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValue(info, static_cast<double>(impl->size()));
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  start = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    Blob* result = impl->slice(start, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    CORE_EXPORT void sizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BlobV8Internal::sizeAttributeGetter(info);
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  end = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    Blob* result = impl->slice(start, end, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Blob* impl = V8Blob::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  contentType = info[2];
-  if (!contentType.prepare())
-    return;
 
-  Blob* result = impl->slice(start, end, contentType, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void sliceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BlobV8Internal::sliceMethod(info);
-}
-
-static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Blob", "close");
-
-  Blob* impl = V8Blob::toImpl(info.Holder());
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->close(executionContext, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BlobV8Internal::closeMethod(info);
-}
-
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Blob");
-
-  HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString> blobParts;
-  BlobPropertyBag options;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-    Blob* impl = Blob::create(executionContext, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BlobV8Internal::typeAttributeGetter(info);
     }
-    v8::Local<v8::Object> wrapper = info.Holder();
-    wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Blob::wrapperTypeInfo, wrapper);
-    v8SetReturnValue(info, wrapper);
-    return;
-  }
-  blobParts = toImplArray<HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+    static void isClosedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-    return;
-  }
-  V8BlobPropertyBag::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        Blob* impl = V8Blob::toImpl(holder);
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  Blob* impl = Blob::create(executionContext, blobParts, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Blob::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        v8SetReturnValueBool(info, impl->isClosed());
+    }
+
+    CORE_EXPORT void isClosedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BlobV8Internal::isClosedAttributeGetter(info);
+    }
+
+    static void sliceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Blob", "slice");
+
+        Blob* impl = V8Blob::toImpl(info.Holder());
+
+        long long start;
+        long long end;
+        V8StringResource<> contentType;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            Blob* result = impl->slice(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        start = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            Blob* result = impl->slice(start, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        end = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            Blob* result = impl->slice(start, end, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        contentType = info[2];
+        if (!contentType.prepare())
+            return;
+
+        Blob* result = impl->slice(start, end, contentType, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void sliceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BlobV8Internal::sliceMethod(info);
+    }
+
+    static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Blob", "close");
+
+        Blob* impl = V8Blob::toImpl(info.Holder());
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->close(executionContext, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BlobV8Internal::closeMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Blob");
+
+        HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString> blobParts;
+        BlobPropertyBag options;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+            Blob* impl = Blob::create(executionContext, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8::Local<v8::Object> wrapper = info.Holder();
+            wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Blob::wrapperTypeInfo, wrapper);
+            v8SetReturnValue(info, wrapper);
+            return;
+        }
+        blobParts = toImplArray<HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8BlobPropertyBag::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        Blob* impl = Blob::create(executionContext, blobParts, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Blob::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace BlobV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8BlobAccessors[] = {
-    {"size", BlobV8Internal::sizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"type", BlobV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "size", BlobV8Internal::sizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "type", BlobV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8BlobMethods[] = {
-    {"slice", BlobV8Internal::sliceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "slice", BlobV8Internal::sliceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8Blob::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Blob"));
-    return;
-  }
+void V8Blob::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Blob"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  BlobV8Internal::constructor(info);
+    BlobV8Internal::constructor(info);
 }
 
-static void installV8BlobTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Blob::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Blob::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8Blob::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8BlobTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Blob::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Blob::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8Blob::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BlobAccessors, WTF_ARRAY_LENGTH(V8BlobAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BlobMethods, WTF_ARRAY_LENGTH(V8BlobMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BlobAccessors, WTF_ARRAY_LENGTH(V8BlobAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BlobMethods, WTF_ARRAY_LENGTH(V8BlobMethods));
 
-  if (RuntimeEnabledFeatures::fileAPIBlobCloseEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorisClosedConfiguration = {"isClosed", BlobV8Internal::isClosedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorisClosedConfiguration);
-  }
+    if (RuntimeEnabledFeatures::fileAPIBlobCloseEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorisClosedConfiguration = { "isClosed", BlobV8Internal::isClosedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorisClosedConfiguration);
+    }
 
-  if (RuntimeEnabledFeatures::fileAPIBlobCloseEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration closeMethodConfiguration = {"close", BlobV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, closeMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::fileAPIBlobCloseEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration closeMethodConfiguration = { "close", BlobV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, closeMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8Blob::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BlobTemplate);
+v8::Local<v8::FunctionTemplate> V8Blob::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BlobTemplate);
 }
 
-bool V8Blob::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Blob::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Blob::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Blob::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Blob* V8Blob::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Blob* V8Blob::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

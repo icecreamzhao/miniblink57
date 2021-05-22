@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8XPathEvaluator.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,198 +52,211 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&XPathEvaluator::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "XPathEvaluator is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace XPathEvaluatorV8Internal {
 
-static void createExpressionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "XPathEvaluator", "createExpression");
+    static void createExpressionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "XPathEvaluator", "createExpression");
 
-  XPathEvaluator* impl = V8XPathEvaluator::toImpl(info.Holder());
+        XPathEvaluator* impl = V8XPathEvaluator::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> expression;
-  XPathNSResolver* resolver;
-  expression = info[0];
-  if (!expression.prepare())
-    return;
+        V8StringResource<> expression;
+        XPathNSResolver* resolver;
+        expression = info[0];
+        if (!expression.prepare())
+            return;
 
-  if (!info[1]->IsUndefined()) {
-    resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[1]);
-    if (!resolver && !isUndefinedOrNull(info[1])) {
-      exceptionState.throwTypeError("parameter 2 is not of type 'XPathNSResolver'.");
+        if (!info[1]->IsUndefined()) {
+            resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[1]);
+            if (!resolver && !isUndefinedOrNull(info[1])) {
+                exceptionState.throwTypeError("parameter 2 is not of type 'XPathNSResolver'.");
 
-      return;
+                return;
+            }
+        } else {
+            resolver = nullptr;
+        }
+
+        XPathExpression* result = impl->createExpression(expression, resolver, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
     }
-  } else {
-    resolver = nullptr;
-  }
 
-  XPathExpression* result = impl->createExpression(expression, resolver, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void createExpressionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8XPathEvaluator_CreateExpression_Method);
-  XPathEvaluatorV8Internal::createExpressionMethod(info);
-}
-
-static void createNSResolverMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XPathEvaluator* impl = V8XPathEvaluator::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "XPathEvaluator", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* nodeResolver;
-  nodeResolver = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!nodeResolver) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "XPathEvaluator", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->createNSResolver(nodeResolver));
-}
-
-CORE_EXPORT  void createNSResolverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8XPathEvaluator_CreateNSResolver_Method);
-  XPathEvaluatorV8Internal::createNSResolverMethod(info);
-}
-
-static void evaluateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "XPathEvaluator", "evaluate");
-
-  XPathEvaluator* impl = V8XPathEvaluator::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> expression;
-  Node* contextNode;
-  XPathNSResolver* resolver;
-  unsigned type;
-  ScriptValue inResult;
-  expression = info[0];
-  if (!expression.prepare())
-    return;
-
-  contextNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!contextNode) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
-
-    return;
-  }
-
-  if (!info[2]->IsUndefined()) {
-    resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[2]);
-    if (!resolver && !isUndefinedOrNull(info[2])) {
-      exceptionState.throwTypeError("parameter 3 is not of type 'XPathNSResolver'.");
-
-      return;
+    CORE_EXPORT void createExpressionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8XPathEvaluator_CreateExpression_Method);
+        XPathEvaluatorV8Internal::createExpressionMethod(info);
     }
-  } else {
-    resolver = nullptr;
-  }
-  if (!info[3]->IsUndefined()) {
-    type = toUInt16(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    type = 0u;
-  }
-  if (!info[4]->IsUndefined()) {
-    inResult = ScriptValue(ScriptState::current(info.GetIsolate()), info[4]);
-  } else {
-    inResult = ScriptValue();
-  }
 
-  XPathResult* result = impl->evaluate(expression, contextNode, resolver, type, inResult, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+    static void createNSResolverMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XPathEvaluator* impl = V8XPathEvaluator::toImpl(info.Holder());
 
-CORE_EXPORT  void evaluateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8XPathEvaluator_Evaluate_Method);
-  XPathEvaluatorV8Internal::evaluateMethod(info);
-}
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "XPathEvaluator", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XPathEvaluator* impl = XPathEvaluator::create();
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8XPathEvaluator::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Node* nodeResolver;
+        nodeResolver = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!nodeResolver) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "XPathEvaluator", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->createNSResolver(nodeResolver));
+    }
+
+    CORE_EXPORT void createNSResolverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8XPathEvaluator_CreateNSResolver_Method);
+        XPathEvaluatorV8Internal::createNSResolverMethod(info);
+    }
+
+    static void evaluateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "XPathEvaluator", "evaluate");
+
+        XPathEvaluator* impl = V8XPathEvaluator::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> expression;
+        Node* contextNode;
+        XPathNSResolver* resolver;
+        unsigned type;
+        ScriptValue inResult;
+        expression = info[0];
+        if (!expression.prepare())
+            return;
+
+        contextNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!contextNode) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
+
+            return;
+        }
+
+        if (!info[2]->IsUndefined()) {
+            resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[2]);
+            if (!resolver && !isUndefinedOrNull(info[2])) {
+                exceptionState.throwTypeError("parameter 3 is not of type 'XPathNSResolver'.");
+
+                return;
+            }
+        } else {
+            resolver = nullptr;
+        }
+        if (!info[3]->IsUndefined()) {
+            type = toUInt16(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            type = 0u;
+        }
+        if (!info[4]->IsUndefined()) {
+            inResult = ScriptValue(ScriptState::current(info.GetIsolate()), info[4]);
+        } else {
+            inResult = ScriptValue();
+        }
+
+        XPathResult* result = impl->evaluate(expression, contextNode, resolver, type, inResult, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void evaluateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8XPathEvaluator_Evaluate_Method);
+        XPathEvaluatorV8Internal::evaluateMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XPathEvaluator* impl = XPathEvaluator::create();
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8XPathEvaluator::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace XPathEvaluatorV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8XPathEvaluatorMethods[] = {
-    {"createExpression", XPathEvaluatorV8Internal::createExpressionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createNSResolver", XPathEvaluatorV8Internal::createNSResolverMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"evaluate", XPathEvaluatorV8Internal::evaluateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "createExpression", XPathEvaluatorV8Internal::createExpressionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createNSResolver", XPathEvaluatorV8Internal::createNSResolverMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "evaluate", XPathEvaluatorV8Internal::evaluateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8XPathEvaluator::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8XPathEvaluator_Constructor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("XPathEvaluator"));
-    return;
-  }
+void V8XPathEvaluator::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8XPathEvaluator_Constructor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("XPathEvaluator"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  XPathEvaluatorV8Internal::constructor(info);
+    XPathEvaluatorV8Internal::constructor(info);
 }
 
-static void installV8XPathEvaluatorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XPathEvaluator::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8XPathEvaluator::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8XPathEvaluator::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8XPathEvaluatorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XPathEvaluator::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8XPathEvaluator::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8XPathEvaluator::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XPathEvaluatorMethods, WTF_ARRAY_LENGTH(V8XPathEvaluatorMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XPathEvaluatorMethods, WTF_ARRAY_LENGTH(V8XPathEvaluatorMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8XPathEvaluator::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XPathEvaluatorTemplate);
+v8::Local<v8::FunctionTemplate> V8XPathEvaluator::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XPathEvaluatorTemplate);
 }
 
-bool V8XPathEvaluator::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8XPathEvaluator::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8XPathEvaluator::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8XPathEvaluator::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-XPathEvaluator* V8XPathEvaluator::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+XPathEvaluator* V8XPathEvaluator::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

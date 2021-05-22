@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef Point2D_h
 #define Point2D_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT Point2D : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  Point2D();
-  virtual ~Point2D();
-  Point2D(const Point2D&);
-  Point2D& operator=(const Point2D&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasX() const;
-  float x() const;
-  void setX(float);
+public:
+    Point2D();
+    virtual ~Point2D();
+    Point2D(const Point2D&);
+    Point2D& operator=(const Point2D&);
 
-  bool hasY() const;
-  float y() const;
-  void setY(float);
+    bool hasX() const;
+    float x() const;
+    void setX(float);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasY() const;
+    float y() const;
+    void setY(float);
 
- private:
-  bool m_hasX = false;
-  float m_x;
-  bool m_hasY = false;
-  float m_y;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8Point2D;
+private:
+    bool m_hasX = false;
+    float m_x;
+    bool m_hasY = false;
+    float m_y;
+
+    friend class V8Point2D;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // Point2D_h
+#endif // Point2D_h

@@ -8,34 +8,39 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MIDIOptions.h"
 
 namespace blink {
 
-MIDIOptions::MIDIOptions() {
+MIDIOptions::MIDIOptions()
+{
 }
 
-MIDIOptions::~MIDIOptions() {}
+MIDIOptions::~MIDIOptions() { }
 
 MIDIOptions::MIDIOptions(const MIDIOptions&) = default;
 
 MIDIOptions& MIDIOptions::operator=(const MIDIOptions&) = default;
 
-bool MIDIOptions::hasSysex() const {
-  return m_hasSysex;
+bool MIDIOptions::hasSysex() const
+{
+    return m_hasSysex;
 }
-bool MIDIOptions::sysex() const {
-  DCHECK(m_hasSysex);
-  return m_sysex;
+bool MIDIOptions::sysex() const
+{
+    DCHECK(m_hasSysex);
+    return m_sysex;
 }
-void MIDIOptions::setSysex(bool value) {
-  m_sysex = value;
-  m_hasSysex = true;
+void MIDIOptions::setSysex(bool value)
+{
+    m_sysex = value;
+    m_hasSysex = true;
 }
 
-DEFINE_TRACE(MIDIOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(MIDIOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGGeometryElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,146 +49,161 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGGeometryElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGGeometryElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGGeometryElementV8Internal {
 
-static void pathLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pathLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(holder);
+        SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->pathLength()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->pathLength()), impl);
+    }
 
-CORE_EXPORT void pathLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGeometryElementV8Internal::pathLengthAttributeGetter(info);
-}
+    CORE_EXPORT void pathLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGeometryElementV8Internal::pathLengthAttributeGetter(info);
+    }
 
-static void isPointInFillMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(info.Holder());
+    static void isPointInFillMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPointInFill", "SVGGeometryElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPointInFill", "SVGGeometryElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  SVGPointTearOff* point;
-  point = V8SVGPoint::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!point) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPointInFill", "SVGGeometryElement", "parameter 1 is not of type 'SVGPoint'."));
+        SVGPointTearOff* point;
+        point = V8SVGPoint::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!point) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPointInFill", "SVGGeometryElement", "parameter 1 is not of type 'SVGPoint'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValueBool(info, impl->isPointInFill(point));
-}
+        v8SetReturnValueBool(info, impl->isPointInFill(point));
+    }
 
-CORE_EXPORT  void isPointInFillMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGeometryElementV8Internal::isPointInFillMethod(info);
-}
+    CORE_EXPORT void isPointInFillMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGeometryElementV8Internal::isPointInFillMethod(info);
+    }
 
-static void isPointInStrokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(info.Holder());
+    static void isPointInStrokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPointInStroke", "SVGGeometryElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPointInStroke", "SVGGeometryElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  SVGPointTearOff* point;
-  point = V8SVGPoint::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!point) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPointInStroke", "SVGGeometryElement", "parameter 1 is not of type 'SVGPoint'."));
+        SVGPointTearOff* point;
+        point = V8SVGPoint::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!point) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPointInStroke", "SVGGeometryElement", "parameter 1 is not of type 'SVGPoint'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValueBool(info, impl->isPointInStroke(point));
-}
+        v8SetReturnValueBool(info, impl->isPointInStroke(point));
+    }
 
-CORE_EXPORT  void isPointInStrokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGeometryElementV8Internal::isPointInStrokeMethod(info);
-}
+    CORE_EXPORT void isPointInStrokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGeometryElementV8Internal::isPointInStrokeMethod(info);
+    }
 
-static void getTotalLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(info.Holder());
+    static void getTotalLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->getTotalLength());
-}
+        v8SetReturnValue(info, impl->getTotalLength());
+    }
 
-CORE_EXPORT  void getTotalLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGeometryElementV8Internal::getTotalLengthMethod(info);
-}
+    CORE_EXPORT void getTotalLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGeometryElementV8Internal::getTotalLengthMethod(info);
+    }
 
-static void getPointAtLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGGeometryElement", "getPointAtLength");
+    static void getPointAtLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGGeometryElement", "getPointAtLength");
 
-  SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(info.Holder());
+        SVGGeometryElement* impl = V8SVGGeometryElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  float distance;
-  distance = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float distance;
+        distance = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValueFast(info, impl->getPointAtLength(distance), impl);
-}
+        v8SetReturnValueFast(info, impl->getPointAtLength(distance), impl);
+    }
 
-CORE_EXPORT  void getPointAtLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGeometryElementV8Internal::getPointAtLengthMethod(info);
-}
+    CORE_EXPORT void getPointAtLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGeometryElementV8Internal::getPointAtLengthMethod(info);
+    }
 
 } // namespace SVGGeometryElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGGeometryElementAccessors[] = {
-    {"pathLength", SVGGeometryElementV8Internal::pathLengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "pathLength", SVGGeometryElementV8Internal::pathLengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGGeometryElementMethods[] = {
-    {"isPointInFill", SVGGeometryElementV8Internal::isPointInFillMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isPointInStroke", SVGGeometryElementV8Internal::isPointInStrokeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getTotalLength", SVGGeometryElementV8Internal::getTotalLengthMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getPointAtLength", SVGGeometryElementV8Internal::getPointAtLengthMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "isPointInFill", SVGGeometryElementV8Internal::isPointInFillMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isPointInStroke", SVGGeometryElementV8Internal::isPointInStrokeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getTotalLength", SVGGeometryElementV8Internal::getTotalLengthMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getPointAtLength", SVGGeometryElementV8Internal::getPointAtLengthMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGGeometryElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGGeometryElement::wrapperTypeInfo.interfaceName, V8SVGGraphicsElement::domTemplate(isolate, world), V8SVGGeometryElement::internalFieldCount);
+static void installV8SVGGeometryElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGGeometryElement::wrapperTypeInfo.interfaceName, V8SVGGraphicsElement::domTemplate(isolate, world), V8SVGGeometryElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGeometryElementAccessors, WTF_ARRAY_LENGTH(V8SVGGeometryElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGeometryElementMethods, WTF_ARRAY_LENGTH(V8SVGGeometryElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGeometryElementAccessors, WTF_ARRAY_LENGTH(V8SVGGeometryElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGeometryElementMethods, WTF_ARRAY_LENGTH(V8SVGGeometryElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGGeometryElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGGeometryElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGGeometryElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGGeometryElementTemplate);
 }
 
-bool V8SVGGeometryElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGGeometryElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGGeometryElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGGeometryElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGGeometryElement* V8SVGGeometryElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGGeometryElement* V8SVGGeometryElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

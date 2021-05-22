@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Internals.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -85,5975 +85,6415 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Internals::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Internals is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace InternalsV8Internal {
 
-static void pagePopupWindowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pagePopupWindowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Internals* impl = V8Internals::toImpl(holder);
+        Internals* impl = V8Internals::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->pagePopupWindow()), impl);
-}
-
-void pagePopupWindowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::pagePopupWindowAttributeGetter(info);
-}
-
-static void settingsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Internals* impl = V8Internals::toImpl(holder);
-
-  InternalSettings* cppValue(WTF::getPtr(impl->settings()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Internals#settings";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void settingsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::settingsAttributeGetter(info);
-}
-
-static void runtimeFlagsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Internals* impl = V8Internals::toImpl(holder);
-
-  InternalRuntimeFlags* cppValue(WTF::getPtr(impl->runtimeFlags()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Internals#runtimeFlags";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void runtimeFlagsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::runtimeFlagsAttributeGetter(info);
-}
-
-static void workerThreadCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Internals* impl = V8Internals::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->workerThreadCount());
-}
-
-void workerThreadCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::workerThreadCountAttributeGetter(info);
-}
-
-static void cursorUpdatePendingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Internals* impl = V8Internals::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->cursorUpdatePending());
-}
-
-void cursorUpdatePendingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::cursorUpdatePendingAttributeGetter(info);
-}
-
-static void unscopableAttributeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Internals* impl = V8Internals::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->unscopableAttribute(), info.GetIsolate());
-}
-
-void unscopableAttributeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::unscopableAttributeAttributeGetter(info);
-}
-
-static void addressMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("address", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("address", "Internals", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->address(node), info.GetIsolate());
-}
-
- void addressMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::addressMethod(info);
-}
-
-static void observeGCMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("observeGC", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  ScriptValue observed;
-  observed = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
-
-  v8SetReturnValue(info, impl->observeGC(observed));
-}
-
- void observeGCMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::observeGCMethod(info);
-}
-
-static void elementLayoutTreeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "elementLayoutTreeAsText");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  String result = impl->elementLayoutTreeAsText(element, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
- void elementLayoutTreeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::elementLayoutTreeAsTextMethod(info);
-}
-
-static void isPreloadedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPreloaded", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> url;
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  v8SetReturnValueBool(info, impl->isPreloaded(url));
-}
-
- void isPreloadedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isPreloadedMethod(info);
-}
-
-static void isPreloadedByMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPreloadedBy", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  V8StringResource<> url;
-  Document* document;
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPreloadedBy", "Internals", "parameter 2 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isPreloadedBy(url, document));
-}
-
- void isPreloadedByMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isPreloadedByMethod(info);
-}
-
-static void isLoadingMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isLoading", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> url;
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  v8SetReturnValueBool(info, impl->isLoading(url));
-}
-
- void isLoadingMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isLoadingMethod(info);
-}
-
-static void isLoadingFromMemoryCacheMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isLoadingFromMemoryCache", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> url;
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  v8SetReturnValueBool(info, impl->isLoadingFromMemoryCache(url));
-}
-
- void isLoadingFromMemoryCacheMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isLoadingFromMemoryCacheMethod(info);
-}
-
-static void getResourcePriorityMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getResourcePriority", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  V8StringResource<> url;
-  Document* document;
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getResourcePriority", "Internals", "parameter 2 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->getResourcePriority(url, document));
-}
-
- void getResourcePriorityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::getResourcePriorityMethod(info);
-}
-
-static void getResourceHeaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getResourceHeader", "Internals", ExceptionMessages::notEnoughArguments(3, info.Length())));
-    return;
-  }
-
-  V8StringResource<> url;
-  V8StringResource<> header;
-  Document* document;
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  header = info[1];
-  if (!header.prepare())
-    return;
-
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[2]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getResourceHeader", "Internals", "parameter 3 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->getResourceHeader(url, header, document), info.GetIsolate());
-}
-
- void getResourceHeaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::getResourceHeaderMethod(info);
-}
-
-static void isSharingStyleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSharingStyle", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  Element* element1;
-  Element* element2;
-  element1 = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element1) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSharingStyle", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  element2 = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!element2) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSharingStyle", "Internals", "parameter 2 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isSharingStyle(element1, element2));
-}
-
- void isSharingStyleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isSharingStyleMethod(info);
-}
-
-static void computedStyleIncludingVisitedInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("computedStyleIncludingVisitedInfo", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("computedStyleIncludingVisitedInfo", "Internals", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->computedStyleIncludingVisitedInfo(node));
-}
-
- void computedStyleIncludingVisitedInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::computedStyleIncludingVisitedInfoMethod(info);
-}
-
-static void createUserAgentShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createUserAgentShadowRoot", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* host;
-  host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!host) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createUserAgentShadowRoot", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->createUserAgentShadowRoot(host));
-}
-
- void createUserAgentShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::createUserAgentShadowRootMethod(info);
-}
-
-static void shadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shadowRoot", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* host;
-  host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!host) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shadowRoot", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->shadowRoot(host));
-}
-
- void shadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::shadowRootMethod(info);
-}
-
-static void youngestShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("youngestShadowRoot", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* host;
-  host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!host) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("youngestShadowRoot", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->youngestShadowRoot(host));
-}
-
- void youngestShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::youngestShadowRootMethod(info);
-}
-
-static void oldestShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("oldestShadowRoot", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* host;
-  host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!host) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("oldestShadowRoot", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->oldestShadowRoot(host));
-}
-
- void oldestShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::oldestShadowRootMethod(info);
-}
-
-static void youngerShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "youngerShadowRoot");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* root;
-  root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!root) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  ShadowRoot* result = impl->youngerShadowRoot(root, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void youngerShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::youngerShadowRootMethod(info);
-}
-
-static void shadowRootTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "shadowRootType");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* root;
-  root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!root) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  String result = impl->shadowRootType(root, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
- void shadowRootTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::shadowRootTypeMethod(info);
-}
-
-static void hasShadowInsertionPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasShadowInsertionPoint");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* root;
-  root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!root) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  bool result = impl->hasShadowInsertionPoint(root, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void hasShadowInsertionPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hasShadowInsertionPointMethod(info);
-}
-
-static void hasContentElementMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasContentElement");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* root;
-  root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!root) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  bool result = impl->hasContentElement(root, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void hasContentElementMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hasContentElementMethod(info);
-}
-
-static void countElementShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "countElementShadow");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* Root;
-  Root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!Root) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  unsigned result = impl->countElementShadow(Root, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
-
- void countElementShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::countElementShadowMethod(info);
-}
-
-static void shadowPseudoIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shadowPseudoId", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shadowPseudoId", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->shadowPseudoId(element), info.GetIsolate());
-}
-
- void shadowPseudoIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::shadowPseudoIdMethod(info);
-}
-
-static void isValidContentSelectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "isValidContentSelect");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Element* contentElement;
-  contentElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!contentElement) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  bool result = impl->isValidContentSelect(contentElement, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void isValidContentSelectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isValidContentSelectMethod(info);
-}
-
-static void treeScopeRootNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("treeScopeRootNode", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("treeScopeRootNode", "Internals", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->treeScopeRootNode(node));
-}
-
- void treeScopeRootNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::treeScopeRootNodeMethod(info);
-}
-
-static void parentTreeScopeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("parentTreeScope", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("parentTreeScope", "Internals", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->parentTreeScope(node));
-}
-
- void parentTreeScopeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::parentTreeScopeMethod(info);
-}
-
-static void hasSelectorForIdInShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasSelectorForIdInShadow");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Element* host;
-  V8StringResource<> id;
-  host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!host) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  id = info[1];
-  if (!id.prepare())
-    return;
-
-  bool result = impl->hasSelectorForIdInShadow(host, id, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void hasSelectorForIdInShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hasSelectorForIdInShadowMethod(info);
-}
-
-static void hasSelectorForClassInShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasSelectorForClassInShadow");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Element* host;
-  V8StringResource<> className;
-  host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!host) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  className = info[1];
-  if (!className.prepare())
-    return;
-
-  bool result = impl->hasSelectorForClassInShadow(host, className, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void hasSelectorForClassInShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hasSelectorForClassInShadowMethod(info);
-}
-
-static void hasSelectorForAttributeInShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasSelectorForAttributeInShadow");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Element* host;
-  V8StringResource<> attributeName;
-  host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!host) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  attributeName = info[1];
-  if (!attributeName.prepare())
-    return;
-
-  bool result = impl->hasSelectorForAttributeInShadow(host, attributeName, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void hasSelectorForAttributeInShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hasSelectorForAttributeInShadowMethod(info);
-}
-
-static void compareTreeScopePositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "compareTreeScopePosition");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Node* treeScope1;
-  Node* treeScope2;
-  treeScope1 = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!treeScope1) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  treeScope2 = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!treeScope2) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
-
-    return;
-  }
-
-  unsigned result = impl->compareTreeScopePosition(treeScope1, treeScope2, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
-
- void compareTreeScopePositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::compareTreeScopePositionMethod(info);
-}
-
-static void updateStyleAndReturnAffectedElementCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "updateStyleAndReturnAffectedElementCount");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  unsigned result = impl->updateStyleAndReturnAffectedElementCount(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
-
- void updateStyleAndReturnAffectedElementCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::updateStyleAndReturnAffectedElementCountMethod(info);
-}
-
-static void needsLayoutCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "needsLayoutCount");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  unsigned result = impl->needsLayoutCount(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
-
- void needsLayoutCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::needsLayoutCountMethod(info);
-}
-
-static void hitTestCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hitTestCount");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  unsigned result = impl->hitTestCount(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
-
- void hitTestCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hitTestCountMethod(info);
-}
-
-static void hitTestCacheHitsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hitTestCacheHits");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  unsigned result = impl->hitTestCacheHits(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
-
- void hitTestCacheHitsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hitTestCacheHitsMethod(info);
-}
-
-static void elementFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "elementFromPoint");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  Document* document;
-  double x;
-  double y;
-  bool ignoreClipping;
-  bool allowChildFrameContent;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  x = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ignoreClipping = toBoolean(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  allowChildFrameContent = toBoolean(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  Element* result = impl->elementFromPoint(document, x, y, ignoreClipping, allowChildFrameContent, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void elementFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::elementFromPointMethod(info);
-}
-
-static void clearHitTestCacheMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "clearHitTestCache");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  impl->clearHitTestCache(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void clearHitTestCacheMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::clearHitTestCacheMethod(info);
-}
-
-static void pauseAnimationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pauseAnimations");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  double pauseTime;
-  pauseTime = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->pauseAnimations(pauseTime, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void pauseAnimationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::pauseAnimationsMethod(info);
-}
-
-static void isCompositedAnimationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isCompositedAnimation", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Animation* animation;
-  animation = V8Animation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!animation) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isCompositedAnimation", "Internals", "parameter 1 is not of type 'Animation'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->isCompositedAnimation(animation));
-}
-
- void isCompositedAnimationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isCompositedAnimationMethod(info);
-}
-
-static void disableCompositedAnimationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("disableCompositedAnimation", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Animation* animation;
-  animation = V8Animation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!animation) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("disableCompositedAnimation", "Internals", "parameter 1 is not of type 'Animation'."));
-
-    return;
-  }
-
-  impl->disableCompositedAnimation(animation);
-}
-
- void disableCompositedAnimationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::disableCompositedAnimationMethod(info);
-}
-
-static void disableCSSAdditiveAnimationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  impl->disableCSSAdditiveAnimations();
-}
-
- void disableCSSAdditiveAnimationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::disableCSSAdditiveAnimationsMethod(info);
-}
-
-static void advanceTimeForImageMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "advanceTimeForImage");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Element* image;
-  double deltaTimeInSeconds;
-  image = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!image) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  deltaTimeInSeconds = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->advanceTimeForImage(image, deltaTimeInSeconds, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void advanceTimeForImageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::advanceTimeForImageMethod(info);
-}
-
-static void advanceImageAnimationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "advanceImageAnimation");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Element* image;
-  image = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!image) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  impl->advanceImageAnimation(image, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void advanceImageAnimationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::advanceImageAnimationMethod(info);
-}
-
-static void nextSiblingInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nextSiblingInFlatTree");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  Node* result = impl->nextSiblingInFlatTree(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void nextSiblingInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::nextSiblingInFlatTreeMethod(info);
-}
-
-static void firstChildInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "firstChildInFlatTree");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  Node* result = impl->firstChildInFlatTree(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void firstChildInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::firstChildInFlatTreeMethod(info);
-}
-
-static void lastChildInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "lastChildInFlatTree");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  Node* result = impl->lastChildInFlatTree(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void lastChildInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::lastChildInFlatTreeMethod(info);
-}
-
-static void nextInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nextInFlatTree");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  Node* result = impl->nextInFlatTree(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void nextInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::nextInFlatTreeMethod(info);
-}
-
-static void previousInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "previousInFlatTree");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  Node* result = impl->previousInFlatTree(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void previousInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::previousInFlatTreeMethod(info);
-}
-
-static void visiblePlaceholderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("visiblePlaceholder", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("visiblePlaceholder", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->visiblePlaceholder(element), info.GetIsolate());
-}
-
- void visiblePlaceholderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::visiblePlaceholderMethod(info);
-}
-
-static void selectColorInColorChooserMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectColorInColorChooser", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  Element* element;
-  V8StringResource<> colorValue;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectColorInColorChooser", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  colorValue = info[1];
-  if (!colorValue.prepare())
-    return;
-
-  impl->selectColorInColorChooser(element, colorValue);
-}
-
- void selectColorInColorChooserMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::selectColorInColorChooserMethod(info);
-}
-
-static void endColorChooserMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("endColorChooser", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("endColorChooser", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  impl->endColorChooser(element);
-}
-
- void endColorChooserMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::endColorChooserMethod(info);
-}
-
-static void hasAutofocusRequestMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  Document* document;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    v8SetReturnValueBool(info, impl->hasAutofocusRequest());
-    return;
-  }
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("hasAutofocusRequest", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->hasAutofocusRequest(document));
-}
-
- void hasAutofocusRequestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hasAutofocusRequestMethod(info);
-}
-
-static void formControlStateOfHistoryItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "formControlStateOfHistoryItem");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  Vector<String> result = impl->formControlStateOfHistoryItem(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, ToV8(result, info.Holder(), info.GetIsolate()));
-}
-
- void formControlStateOfHistoryItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::formControlStateOfHistoryItemMethod(info);
-}
-
-static void setFormControlStateOfHistoryItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setFormControlStateOfHistoryItem");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Vector<String> values;
-  values = toImplArray<Vector<String>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setFormControlStateOfHistoryItem(values, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setFormControlStateOfHistoryItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setFormControlStateOfHistoryItemMethod(info);
-}
-
-static void absoluteCaretBoundsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "absoluteCaretBounds");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ClientRect* result = impl->absoluteCaretBounds(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void absoluteCaretBoundsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::absoluteCaretBoundsMethod(info);
-}
-
-static void boundingBoxMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("boundingBox", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("boundingBox", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->boundingBox(element));
-}
-
- void boundingBoxMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::boundingBoxMethod(info);
-}
-
-static void setMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setMarker");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  Document* document;
-  Range* range;
-  V8StringResource<> markerType;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!range) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Range'.");
-
-    return;
-  }
-
-  markerType = info[2];
-  if (!markerType.prepare())
-    return;
-
-  impl->setMarker(document, range, markerType, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setMarkerMethod(info);
-}
-
-static void markerCountForNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "markerCountForNode");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Node* node;
-  V8StringResource<> markerType;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  markerType = info[1];
-  if (!markerType.prepare())
-    return;
-
-  unsigned result = impl->markerCountForNode(node, markerType, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
-
- void markerCountForNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::markerCountForNodeMethod(info);
-}
-
-static void activeMarkerCountForNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("activeMarkerCountForNode", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("activeMarkerCountForNode", "Internals", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->activeMarkerCountForNode(node));
-}
-
- void activeMarkerCountForNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::activeMarkerCountForNodeMethod(info);
-}
-
-static void markerRangeForNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "markerRangeForNode");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  Node* node;
-  V8StringResource<> markerType;
-  unsigned index;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  markerType = info[1];
-  if (!markerType.prepare())
-    return;
-
-  index = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  Range* result = impl->markerRangeForNode(node, markerType, index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void markerRangeForNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::markerRangeForNodeMethod(info);
-}
-
-static void markerDescriptionForNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "markerDescriptionForNode");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  Node* node;
-  V8StringResource<> markerType;
-  unsigned index;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  markerType = info[1];
-  if (!markerType.prepare())
-    return;
-
-  index = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  String result = impl->markerDescriptionForNode(node, markerType, index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
- void markerDescriptionForNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::markerDescriptionForNodeMethod(info);
-}
-
-static void addTextMatchMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "addTextMatchMarker");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Range* range;
-  bool isActive;
-  range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!range) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Range'.");
-
-    return;
-  }
-
-  isActive = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->addTextMatchMarker(range, isActive);
-}
-
- void addTextMatchMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::addTextMatchMarkerMethod(info);
-}
-
-static void addCompositionMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "addCompositionMarker");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  Range* range;
-  V8StringResource<> underlineColorValue;
-  bool thick;
-  V8StringResource<> backgroundColorValue;
-  range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!range) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Range'.");
-
-    return;
-  }
-
-  underlineColorValue = info[1];
-  if (!underlineColorValue.prepare())
-    return;
-
-  thick = toBoolean(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  backgroundColorValue = info[3];
-  if (!backgroundColorValue.prepare())
-    return;
-
-  impl->addCompositionMarker(range, underlineColorValue, thick, backgroundColorValue, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void addCompositionMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::addCompositionMarkerMethod(info);
-}
-
-static void setMarkersActiveMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setMarkersActive");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  Node* node;
-  unsigned startOffset;
-  unsigned endOffset;
-  bool active;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  startOffset = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  endOffset = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  active = toBoolean(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setMarkersActive(node, startOffset, endOffset, active);
-}
-
- void setMarkersActiveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setMarkersActiveMethod(info);
-}
-
-static void setMarkedTextMatchesAreHighlightedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setMarkedTextMatchesAreHighlighted");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Document* document;
-  bool highlight;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  highlight = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setMarkedTextMatchesAreHighlighted(document, highlight);
-}
-
- void setMarkedTextMatchesAreHighlightedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setMarkedTextMatchesAreHighlightedMethod(info);
-}
-
-static void setFrameViewPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setFrameViewPosition");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  Document* document;
-  int x;
-  int y;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setFrameViewPosition(document, x, y, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setFrameViewPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setFrameViewPositionMethod(info);
-}
-
-static void viewportAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "viewportAsText");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  Document* document;
-  float devicePixelRatio;
-  int availableWidth;
-  int availableHeight;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  devicePixelRatio = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  availableWidth = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  availableHeight = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  String result = impl->viewportAsText(document, devicePixelRatio, availableWidth, availableHeight, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
- void viewportAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::viewportAsTextMethod(info);
-}
-
-static void elementShouldAutoCompleteMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "elementShouldAutoComplete");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Element* inputElement;
-  inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!inputElement) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  bool result = impl->elementShouldAutoComplete(inputElement, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void elementShouldAutoCompleteMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::elementShouldAutoCompleteMethod(info);
-}
-
-static void suggestedValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "suggestedValue");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Element* inputElement;
-  inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!inputElement) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  String result = impl->suggestedValue(inputElement, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
- void suggestedValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::suggestedValueMethod(info);
-}
-
-static void setSuggestedValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setSuggestedValue");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Element* inputElement;
-  V8StringResource<> value;
-  inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!inputElement) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  value = info[1];
-  if (!value.prepare())
-    return;
-
-  impl->setSuggestedValue(inputElement, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setSuggestedValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setSuggestedValueMethod(info);
-}
-
-static void setEditingValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setEditingValue");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Element* inputElement;
-  V8StringResource<> value;
-  inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!inputElement) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  value = info[1];
-  if (!value.prepare())
-    return;
-
-  impl->setEditingValue(inputElement, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setEditingValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setEditingValueMethod(info);
-}
-
-static void setAutofilledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setAutofilled");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Element* inputElement;
-  bool enabled;
-  inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!inputElement) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  enabled = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setAutofilled(inputElement, enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setAutofilledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setAutofilledMethod(info);
-}
-
-static void rangeFromLocationAndLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "rangeFromLocationAndLength");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  Element* scope;
-  int rangeLocation;
-  int rangeLength;
-  scope = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!scope) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  rangeLocation = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  rangeLength = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->rangeFromLocationAndLength(scope, rangeLocation, rangeLength));
-}
-
- void rangeFromLocationAndLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::rangeFromLocationAndLengthMethod(info);
-}
-
-static void locationFromRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("locationFromRange", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  Element* scope;
-  Range* range;
-  scope = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!scope) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("locationFromRange", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!range) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("locationFromRange", "Internals", "parameter 2 is not of type 'Range'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->locationFromRange(scope, range));
-}
-
- void locationFromRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::locationFromRangeMethod(info);
-}
-
-static void lengthFromRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lengthFromRange", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  Element* scope;
-  Range* range;
-  scope = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!scope) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lengthFromRange", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!range) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lengthFromRange", "Internals", "parameter 2 is not of type 'Range'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->lengthFromRange(scope, range));
-}
-
- void lengthFromRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::lengthFromRangeMethod(info);
-}
-
-static void rangeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("rangeAsText", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Range* range;
-  range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!range) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("rangeAsText", "Internals", "parameter 1 is not of type 'Range'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->rangeAsText(range), info.GetIsolate());
-}
-
- void rangeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::rangeAsTextMethod(info);
-}
-
-static void touchPositionAdjustedToBestClickableNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchPositionAdjustedToBestClickableNode");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  int width;
-  int height;
-  Document* document;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
-
-    return;
-  }
-
-  DOMPoint* result = impl->touchPositionAdjustedToBestClickableNode(x, y, width, height, document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void touchPositionAdjustedToBestClickableNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::touchPositionAdjustedToBestClickableNodeMethod(info);
-}
-
-static void touchNodeAdjustedToBestClickableNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchNodeAdjustedToBestClickableNode");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  int width;
-  int height;
-  Document* document;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
-
-    return;
-  }
-
-  Node* result = impl->touchNodeAdjustedToBestClickableNode(x, y, width, height, document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void touchNodeAdjustedToBestClickableNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::touchNodeAdjustedToBestClickableNodeMethod(info);
-}
-
-static void touchPositionAdjustedToBestContextMenuNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchPositionAdjustedToBestContextMenuNode");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  int width;
-  int height;
-  Document* document;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
-
-    return;
-  }
-
-  DOMPoint* result = impl->touchPositionAdjustedToBestContextMenuNode(x, y, width, height, document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void touchPositionAdjustedToBestContextMenuNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::touchPositionAdjustedToBestContextMenuNodeMethod(info);
-}
-
-static void touchNodeAdjustedToBestContextMenuNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchNodeAdjustedToBestContextMenuNode");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  int width;
-  int height;
-  Document* document;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
-
-    return;
-  }
-
-  Node* result = impl->touchNodeAdjustedToBestContextMenuNode(x, y, width, height, document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void touchNodeAdjustedToBestContextMenuNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::touchNodeAdjustedToBestContextMenuNodeMethod(info);
-}
-
-static void bestZoomableAreaForTouchPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "bestZoomableAreaForTouchPoint");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  int width;
-  int height;
-  Document* document;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
-
-    return;
-  }
-
-  ClientRect* result = impl->bestZoomableAreaForTouchPoint(x, y, width, height, document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void bestZoomableAreaForTouchPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::bestZoomableAreaForTouchPointMethod(info);
-}
-
-static void lastSpellCheckRequestSequenceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "lastSpellCheckRequestSequence");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  int result = impl->lastSpellCheckRequestSequence(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueInt(info, result);
-}
-
- void lastSpellCheckRequestSequenceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::lastSpellCheckRequestSequenceMethod(info);
-}
-
-static void lastSpellCheckProcessedSequenceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "lastSpellCheckProcessedSequence");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  int result = impl->lastSpellCheckProcessedSequence(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueInt(info, result);
-}
-
- void lastSpellCheckProcessedSequenceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::lastSpellCheckProcessedSequenceMethod(info);
-}
-
-static void userPreferredLanguagesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, ToV8(impl->userPreferredLanguages(), info.Holder(), info.GetIsolate()));
-}
-
- void userPreferredLanguagesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::userPreferredLanguagesMethod(info);
-}
-
-static void setUserPreferredLanguagesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setUserPreferredLanguages");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Vector<String> languages;
-  languages = toImplArray<Vector<String>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setUserPreferredLanguages(languages);
-}
-
- void setUserPreferredLanguagesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setUserPreferredLanguagesMethod(info);
-}
-
-static void mediaKeysCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueUnsigned(info, impl->mediaKeysCount());
-}
-
- void mediaKeysCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::mediaKeysCountMethod(info);
-}
-
-static void mediaKeySessionCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueUnsigned(info, impl->mediaKeySessionCount());
-}
-
- void mediaKeySessionCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::mediaKeySessionCountMethod(info);
-}
-
-static void suspendableObjectCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("suspendableObjectCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("suspendableObjectCount", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->suspendableObjectCount(document));
-}
-
- void suspendableObjectCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::suspendableObjectCountMethod(info);
-}
-
-static void wheelEventHandlerCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("wheelEventHandlerCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("wheelEventHandlerCount", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->wheelEventHandlerCount(document));
-}
-
- void wheelEventHandlerCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::wheelEventHandlerCountMethod(info);
-}
-
-static void scrollEventHandlerCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollEventHandlerCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollEventHandlerCount", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->scrollEventHandlerCount(document));
-}
-
- void scrollEventHandlerCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::scrollEventHandlerCountMethod(info);
-}
-
-static void touchStartOrMoveEventHandlerCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("touchStartOrMoveEventHandlerCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("touchStartOrMoveEventHandlerCount", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->touchStartOrMoveEventHandlerCount(document));
-}
-
- void touchStartOrMoveEventHandlerCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::touchStartOrMoveEventHandlerCountMethod(info);
-}
-
-static void touchEndOrCancelEventHandlerCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("touchEndOrCancelEventHandlerCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("touchEndOrCancelEventHandlerCount", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->touchEndOrCancelEventHandlerCount(document));
-}
-
- void touchEndOrCancelEventHandlerCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::touchEndOrCancelEventHandlerCountMethod(info);
-}
-
-static void touchEventTargetLayerRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchEventTargetLayerRects");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  LayerRectList* result = impl->touchEventTargetLayerRects(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void touchEventTargetLayerRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::touchEventTargetLayerRectsMethod(info);
-}
-
-static void executeCommandMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "executeCommand");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  Document* document;
-  V8StringResource<> name;
-  V8StringResource<> value;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  name = info[1];
-  if (!name.prepare())
-    return;
-
-  value = info[2];
-  if (!value.prepare())
-    return;
-
-  bool result = impl->executeCommand(document, name, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void executeCommandMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::executeCommandMethod(info);
-}
-
-static void htmlNamespaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueString(info, impl->htmlNamespace(), info.GetIsolate());
-}
-
- void htmlNamespaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::htmlNamespaceMethod(info);
-}
-
-static void htmlTagsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, ToV8(impl->htmlTags(), info.Holder(), info.GetIsolate()));
-}
-
- void htmlTagsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::htmlTagsMethod(info);
-}
-
-static void svgNamespaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueString(info, impl->svgNamespace(), info.GetIsolate());
-}
-
- void svgNamespaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::svgNamespaceMethod(info);
-}
-
-static void svgTagsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, ToV8(impl->svgTags(), info.Holder(), info.GetIsolate()));
-}
-
- void svgTagsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::svgTagsMethod(info);
-}
-
-static void nodesFromRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nodesFromRect");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 9)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(9, info.Length()));
-    return;
-  }
-
-  Document* document;
-  int x;
-  int y;
-  unsigned topPadding;
-  unsigned rightPadding;
-  unsigned bottomPadding;
-  unsigned leftPadding;
-  bool ignoreClipping;
-  bool allowChildFrameContent;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  topPadding = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  rightPadding = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  bottomPadding = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  leftPadding = toUInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ignoreClipping = toBoolean(info.GetIsolate(), info[7], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  allowChildFrameContent = toBoolean(info.GetIsolate(), info[8], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  NodeList* result = impl->nodesFromRect(document, x, y, topPadding, rightPadding, bottomPadding, leftPadding, ignoreClipping, allowChildFrameContent, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void nodesFromRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::nodesFromRectMethod(info);
-}
-
-static void hasSpellingMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasSpellingMarker");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  Document* document;
-  int from;
-  int length;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  from = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  length = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  bool result = impl->hasSpellingMarker(document, from, length, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void hasSpellingMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hasSpellingMarkerMethod(info);
-}
-
-static void hasGrammarMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasGrammarMarker");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  Document* document;
-  int from;
-  int length;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  from = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  length = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  bool result = impl->hasGrammarMarker(document, from, length, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void hasGrammarMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::hasGrammarMarkerMethod(info);
-}
-
-static void setSpellCheckingEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setSpellCheckingEnabled");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setSpellCheckingEnabled(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setSpellCheckingEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setSpellCheckingEnabledMethod(info);
-}
-
-static void replaceMisspelledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "replaceMisspelled");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Document* document;
-  V8StringResource<> replacement;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  replacement = info[1];
-  if (!replacement.prepare())
-    return;
-
-  impl->replaceMisspelled(document, replacement, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void replaceMisspelledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::replaceMisspelledMethod(info);
-}
-
-static void canHyphenateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("canHyphenate", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> locale;
-  locale = info[0];
-  if (!locale.prepare())
-    return;
-
-  v8SetReturnValue(info, impl->canHyphenate(locale));
-}
-
- void canHyphenateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::canHyphenateMethod(info);
-}
-
-static void setMockHyphenationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setMockHyphenation", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> locale;
-  locale = info[0];
-  if (!locale.prepare())
-    return;
-
-  impl->setMockHyphenation(locale);
-}
-
- void setMockHyphenationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setMockHyphenationMethod(info);
-}
-
-static void isOverwriteModeEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isOverwriteModeEnabled", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isOverwriteModeEnabled", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isOverwriteModeEnabled(document));
-}
-
- void isOverwriteModeEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isOverwriteModeEnabledMethod(info);
-}
-
-static void toggleOverwriteModeEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("toggleOverwriteModeEnabled", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("toggleOverwriteModeEnabled", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  impl->toggleOverwriteModeEnabled(document);
-}
-
- void toggleOverwriteModeEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::toggleOverwriteModeEnabledMethod(info);
-}
-
-static void numberOfScrollableAreasMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("numberOfScrollableAreas", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("numberOfScrollableAreas", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->numberOfScrollableAreas(document));
-}
-
- void numberOfScrollableAreasMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::numberOfScrollableAreasMethod(info);
-}
-
-static void isPageBoxVisibleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "isPageBoxVisible");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Document* document;
-  int pageNumber;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  pageNumber = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueBool(info, impl->isPageBoxVisible(document, pageNumber));
-}
-
- void isPageBoxVisibleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isPageBoxVisibleMethod(info);
-}
-
-static void layerTreeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "layerTreeAsText");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  unsigned flags;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    String result = impl->layerTreeAsText(document, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValueFast(info, WTF::getPtr(impl->pagePopupWindow()), impl);
     }
-    v8SetReturnValueString(info, result, info.GetIsolate());
-    return;
-  }
-  flags = toUInt16(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  String result = impl->layerTreeAsText(document, flags, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
- void layerTreeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::layerTreeAsTextMethod(info);
-}
-
-static void elementLayerTreeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "elementLayerTreeAsText");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Element* element;
-  unsigned flags;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    String result = impl->elementLayerTreeAsText(element, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    void pagePopupWindowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::pagePopupWindowAttributeGetter(info);
     }
-    v8SetReturnValueString(info, result, info.GetIsolate());
-    return;
-  }
-  flags = toUInt16(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  String result = impl->elementLayerTreeAsText(element, flags, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
+    static void settingsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
- void elementLayerTreeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::elementLayerTreeAsTextMethod(info);
-}
+        Internals* impl = V8Internals::toImpl(holder);
 
-static void scrollsWithRespectToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "scrollsWithRespectTo");
+        InternalSettings* cppValue(WTF::getPtr(impl->settings()));
 
-  Internals* impl = V8Internals::toImpl(info.Holder());
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Internals#settings";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Element* element1;
-  Element* element2;
-  element1 = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element1) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  element2 = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!element2) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Element'.");
-
-    return;
-  }
-
-  bool result = impl->scrollsWithRespectTo(element1, element2, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
- void scrollsWithRespectToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::scrollsWithRespectToMethod(info);
-}
-
-static void scrollingStateTreeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollingStateTreeAsText", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollingStateTreeAsText", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->scrollingStateTreeAsText(document), info.GetIsolate());
-}
-
- void scrollingStateTreeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::scrollingStateTreeAsTextMethod(info);
-}
-
-static void mainThreadScrollingReasonsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "mainThreadScrollingReasons");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  String result = impl->mainThreadScrollingReasons(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
- void mainThreadScrollingReasonsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::mainThreadScrollingReasonsMethod(info);
-}
-
-static void nonFastScrollableRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nonFastScrollableRects");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  ClientRectList* result = impl->nonFastScrollableRects(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void nonFastScrollableRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::nonFastScrollableRectsMethod(info);
-}
-
-static void evictAllResourcesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  impl->evictAllResources();
-}
-
- void evictAllResourcesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::evictAllResourcesMethod(info);
-}
-
-static void numberOfLiveNodesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueUnsigned(info, impl->numberOfLiveNodes());
-}
-
- void numberOfLiveNodesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::numberOfLiveNodesMethod(info);
-}
-
-static void numberOfLiveDocumentsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueUnsigned(info, impl->numberOfLiveDocuments());
-}
-
- void numberOfLiveDocumentsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::numberOfLiveDocumentsMethod(info);
-}
-
-static void dumpRefCountedInstanceCountsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueString(info, impl->dumpRefCountedInstanceCounts(), info.GetIsolate());
-}
-
- void dumpRefCountedInstanceCountsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::dumpRefCountedInstanceCountsMethod(info);
-}
-
-static void counterValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("counterValue", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("counterValue", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->counterValue(element), info.GetIsolate());
-}
-
- void counterValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::counterValueMethod(info);
-}
-
-static void pageNumberMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pageNumber");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Element* element;
-  float pageWidth;
-  float pageHeight;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  if (!info[1]->IsUndefined()) {
-    pageWidth = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    pageWidth = 800;
-  }
-  if (!info[2]->IsUndefined()) {
-    pageHeight = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    pageHeight = 600;
-  }
-
-  int result = impl->pageNumber(element, pageWidth, pageHeight, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueInt(info, result);
-}
-
- void pageNumberMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::pageNumberMethod(info);
-}
-
-static void shortcutIconURLsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shortcutIconURLs", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shortcutIconURLs", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, ToV8(impl->shortcutIconURLs(document), info.Holder(), info.GetIsolate()));
-}
-
- void shortcutIconURLsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::shortcutIconURLsMethod(info);
-}
-
-static void allIconURLsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("allIconURLs", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("allIconURLs", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, ToV8(impl->allIconURLs(document), info.Holder(), info.GetIsolate()));
-}
-
- void allIconURLsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::allIconURLsMethod(info);
-}
-
-static void numberOfPagesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "numberOfPages");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  double pageWidthInPixels;
-  double pageHeightInPixels;
-  if (!info[0]->IsUndefined()) {
-    pageWidthInPixels = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    pageWidthInPixels = 800;
-  }
-  if (!info[1]->IsUndefined()) {
-    pageHeightInPixels = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    pageHeightInPixels = 600;
-  }
-
-  int result = impl->numberOfPages(pageWidthInPixels, pageHeightInPixels, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueInt(info, result);
-}
-
- void numberOfPagesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::numberOfPagesMethod(info);
-}
-
-static void pagePropertyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pageProperty");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> propertyName;
-  int pageNumber;
-  propertyName = info[0];
-  if (!propertyName.prepare())
-    return;
-
-  pageNumber = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  String result = impl->pageProperty(propertyName, pageNumber, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
- void pagePropertyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::pagePropertyMethod(info);
-}
-
-static void pageSizeAndMarginsInPixelsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pageSizeAndMarginsInPixels");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 7)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
-    return;
-  }
-
-  int pageIndex;
-  int width;
-  int height;
-  int marginTop;
-  int marginRight;
-  int marginBottom;
-  int marginLeft;
-  pageIndex = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  marginTop = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  marginRight = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  marginBottom = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  marginLeft = toInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  String result = impl->pageSizeAndMarginsInPixels(pageIndex, width, height, marginTop, marginRight, marginBottom, marginLeft, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
- void pageSizeAndMarginsInPixelsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::pageSizeAndMarginsInPixelsMethod(info);
-}
-
-static void pageScaleFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pageScaleFactor");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  float result = impl->pageScaleFactor(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void pageScaleFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::pageScaleFactorMethod(info);
-}
-
-static void setPageScaleFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setPageScaleFactor");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  float scaleFactor;
-  scaleFactor = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setPageScaleFactor(scaleFactor, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setPageScaleFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setPageScaleFactorMethod(info);
-}
-
-static void setPageScaleFactorLimitsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setPageScaleFactorLimits");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  float minScaleFactor;
-  float maxScaleFactor;
-  minScaleFactor = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  maxScaleFactor = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setPageScaleFactorLimits(minScaleFactor, maxScaleFactor, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setPageScaleFactorLimitsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setPageScaleFactorLimitsMethod(info);
-}
-
-static void setIsCursorVisibleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setIsCursorVisible");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Document* document;
-  bool isVisible;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  isVisible = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setIsCursorVisible(document, isVisible, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setIsCursorVisibleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setIsCursorVisibleMethod(info);
-}
-
-static void effectivePreloadMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("effectivePreload", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  HTMLMediaElement* mediaElement;
-  mediaElement = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!mediaElement) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("effectivePreload", "Internals", "parameter 1 is not of type 'HTMLMediaElement'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->effectivePreload(mediaElement), info.GetIsolate());
-}
-
- void effectivePreloadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::effectivePreloadMethod(info);
-}
-
-static void mediaPlayerRemoteRouteAvailabilityChangedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "mediaPlayerRemoteRouteAvailabilityChanged");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  HTMLMediaElement* mediaElement;
-  bool available;
-  mediaElement = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!mediaElement) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'HTMLMediaElement'.");
-
-    return;
-  }
-
-  available = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->mediaPlayerRemoteRouteAvailabilityChanged(mediaElement, available);
-}
-
- void mediaPlayerRemoteRouteAvailabilityChangedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::mediaPlayerRemoteRouteAvailabilityChangedMethod(info);
-}
-
-static void mediaPlayerPlayingRemotelyChangedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "mediaPlayerPlayingRemotelyChanged");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  HTMLMediaElement* mediaElement;
-  bool remote;
-  mediaElement = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!mediaElement) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'HTMLMediaElement'.");
-
-    return;
-  }
-
-  remote = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->mediaPlayerPlayingRemotelyChanged(mediaElement, remote);
-}
-
- void mediaPlayerPlayingRemotelyChangedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::mediaPlayerPlayingRemotelyChangedMethod(info);
-}
-
-static void registerURLSchemeAsBypassingContentSecurityPolicy1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  V8StringResource<> scheme;
-  scheme = info[0];
-  if (!scheme.prepare())
-    return;
-
-  impl->registerURLSchemeAsBypassingContentSecurityPolicy(scheme);
-}
-
-static void registerURLSchemeAsBypassingContentSecurityPolicy2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "registerURLSchemeAsBypassingContentSecurityPolicy");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  V8StringResource<> scheme;
-  Vector<String> policyAreas;
-  scheme = info[0];
-  if (!scheme.prepare())
-    return;
-
-  policyAreas = toImplArray<Vector<String>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->registerURLSchemeAsBypassingContentSecurityPolicy(scheme, policyAreas);
-}
-
-static void registerURLSchemeAsBypassingContentSecurityPolicyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 1:
-      if (true) {
-        registerURLSchemeAsBypassingContentSecurityPolicy1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        registerURLSchemeAsBypassingContentSecurityPolicy2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "registerURLSchemeAsBypassingContentSecurityPolicy");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
- void registerURLSchemeAsBypassingContentSecurityPolicyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::registerURLSchemeAsBypassingContentSecurityPolicyMethod(info);
-}
-
-static void removeURLSchemeRegisteredAsBypassingContentSecurityPolicyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeURLSchemeRegisteredAsBypassingContentSecurityPolicy", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> scheme;
-  scheme = info[0];
-  if (!scheme.prepare())
-    return;
-
-  impl->removeURLSchemeRegisteredAsBypassingContentSecurityPolicy(scheme);
-}
-
- void removeURLSchemeRegisteredAsBypassingContentSecurityPolicyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::removeURLSchemeRegisteredAsBypassingContentSecurityPolicyMethod(info);
-}
-
-static void typeConversionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->typeConversions());
-}
-
- void typeConversionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::typeConversionsMethod(info);
-}
-
-static void getReferencedFilePathsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, ToV8(impl->getReferencedFilePaths(), info.Holder(), info.GetIsolate()));
-}
-
- void getReferencedFilePathsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::getReferencedFilePathsMethod(info);
-}
-
-static void startStoringCompositedLayerDebugInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "startStoringCompositedLayerDebugInfo");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  impl->startStoringCompositedLayerDebugInfo(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void startStoringCompositedLayerDebugInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::startStoringCompositedLayerDebugInfoMethod(info);
-}
-
-static void stopStoringCompositedLayerDebugInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "stopStoringCompositedLayerDebugInfo");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  impl->stopStoringCompositedLayerDebugInfo(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void stopStoringCompositedLayerDebugInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::stopStoringCompositedLayerDebugInfoMethod(info);
-}
-
-static void startTrackingRepaintsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "startTrackingRepaints");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  impl->startTrackingRepaints(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void startTrackingRepaintsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::startTrackingRepaintsMethod(info);
-}
-
-static void stopTrackingRepaintsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "stopTrackingRepaints");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  impl->stopTrackingRepaints(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void stopTrackingRepaintsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::stopTrackingRepaintsMethod(info);
-}
-
-static void updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasksMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasks");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  Node* node;
-  if (!info[0]->IsUndefined()) {
-    node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-    if (!node && !isUndefinedOrNull(info[0])) {
-      exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-      return;
+    void settingsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::settingsAttributeGetter(info);
     }
-  } else {
-    node = nullptr;
-  }
 
-  impl->updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasks(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void runtimeFlagsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
- void updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasksMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasksMethod(info);
-}
+        Internals* impl = V8Internals::toImpl(holder);
 
-static void forceFullRepaintMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "forceFullRepaint");
+        InternalRuntimeFlags* cppValue(WTF::getPtr(impl->runtimeFlags()));
 
-  Internals* impl = V8Internals::toImpl(info.Holder());
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Internals#runtimeFlags";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  impl->forceFullRepaint(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void forceFullRepaintMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::forceFullRepaintMethod(info);
-}
-
-static void draggableRegionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "draggableRegions");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  ClientRectList* result = impl->draggableRegions(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void draggableRegionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::draggableRegionsMethod(info);
-}
-
-static void nonDraggableRegionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nonDraggableRegions");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  ClientRectList* result = impl->nonDraggableRegions(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void nonDraggableRegionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::nonDraggableRegionsMethod(info);
-}
-
-static void getCurrentCursorInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueString(info, impl->getCurrentCursorInfo(), info.GetIsolate());
-}
-
- void getCurrentCursorInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::getCurrentCursorInfoMethod(info);
-}
-
-static void markerTextForListItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("markerTextForListItem", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("markerTextForListItem", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->markerTextForListItem(element), info.GetIsolate());
-}
-
- void markerTextForListItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::markerTextForListItemMethod(info);
-}
-
-static void deserializeBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deserializeBuffer", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  DOMArrayBuffer* buffer;
-  buffer = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
-  if (!buffer) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deserializeBuffer", "Internals", "parameter 1 is not of type 'ArrayBuffer'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, v8Deserialize(info.GetIsolate(), impl->deserializeBuffer(buffer)));
-}
-
- void deserializeBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::deserializeBufferMethod(info);
-}
-
-static void serializeObjectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "serializeObject");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  RefPtr<SerializedScriptValue> obj;
-  obj = SerializedScriptValue::serialize(info.GetIsolate(), info[0], nullptr, nullptr, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->serializeObject(obj));
-}
-
- void serializeObjectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::serializeObjectMethod(info);
-}
-
-static void forceReloadMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "forceReload");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool endToEnd;
-  endToEnd = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->forceReload(endToEnd);
-}
-
- void forceReloadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::forceReloadMethod(info);
-}
-
-static void getImageSourceURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getImageSourceURL", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getImageSourceURL", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->getImageSourceURL(element), info.GetIsolate());
-}
-
- void getImageSourceURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::getImageSourceURLMethod(info);
-}
-
-static void selectMenuListTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectMenuListText", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  HTMLSelectElement* select;
-  select = V8HTMLSelectElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!select) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectMenuListText", "Internals", "parameter 1 is not of type 'HTMLSelectElement'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->selectMenuListText(select), info.GetIsolate());
-}
-
- void selectMenuListTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::selectMenuListTextMethod(info);
-}
-
-static void isSelectPopupVisibleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSelectPopupVisible", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSelectPopupVisible", "Internals", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isSelectPopupVisible(node));
-}
-
- void isSelectPopupVisibleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isSelectPopupVisibleMethod(info);
-}
-
-static void selectPopupItemStyleIsRtlMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "selectPopupItemStyleIsRtl");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Node* select;
-  int itemIndex;
-  select = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!select) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  itemIndex = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueBool(info, impl->selectPopupItemStyleIsRtl(select, itemIndex));
-}
-
- void selectPopupItemStyleIsRtlMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::selectPopupItemStyleIsRtlMethod(info);
-}
-
-static void selectPopupItemStyleFontHeightMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "selectPopupItemStyleFontHeight");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Node* select;
-  int itemIndex;
-  select = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!select) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  itemIndex = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueInt(info, impl->selectPopupItemStyleFontHeight(select, itemIndex));
-}
-
- void selectPopupItemStyleFontHeightMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::selectPopupItemStyleFontHeightMethod(info);
-}
-
-static void resetTypeAheadSessionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("resetTypeAheadSession", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  HTMLSelectElement* select;
-  select = V8HTMLSelectElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!select) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("resetTypeAheadSession", "Internals", "parameter 1 is not of type 'HTMLSelectElement'."));
-
-    return;
-  }
-
-  impl->resetTypeAheadSession(select);
-}
-
- void resetTypeAheadSessionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::resetTypeAheadSessionMethod(info);
-}
-
-static void selectionBoundsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "selectionBounds");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ClientRect* result = impl->selectionBounds(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void selectionBoundsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::selectionBoundsMethod(info);
-}
-
-static void loseSharedGraphicsContext3DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueBool(info, impl->loseSharedGraphicsContext3D());
-}
-
- void loseSharedGraphicsContext3DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::loseSharedGraphicsContext3DMethod(info);
-}
-
-static void forceCompositingUpdateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "forceCompositingUpdate");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  impl->forceCompositingUpdate(document, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void forceCompositingUpdateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::forceCompositingUpdateMethod(info);
-}
-
-static void setZoomFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setZoomFactor");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  float factor;
-  factor = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setZoomFactor(factor);
-}
-
- void setZoomFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setZoomFactorMethod(info);
-}
-
-static void setShouldRevealPasswordMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setShouldRevealPassword");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Element* element;
-  bool reveal;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
-
-    return;
-  }
-
-  reveal = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setShouldRevealPassword(element, reveal, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setShouldRevealPasswordMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setShouldRevealPasswordMethod(info);
-}
-
-static void createResolvedPromiseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "createResolvedPromise");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  ScriptValue value;
-  value = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
-
-  ScriptPromise result = impl->createResolvedPromise(scriptState, value);
-  v8SetReturnValue(info, result.v8Value());
-}
-
- void createResolvedPromiseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::createResolvedPromiseMethod(info);
-}
-
-static void createRejectedPromiseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "createRejectedPromise");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  ScriptValue reason;
-  reason = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
-
-  ScriptPromise result = impl->createRejectedPromise(scriptState, reason);
-  v8SetReturnValue(info, result.v8Value());
-}
-
- void createRejectedPromiseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::createRejectedPromiseMethod(info);
-}
-
-static void addOneToPromiseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "addOneToPromise");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  ScriptPromise promise;
-  promise = ScriptPromise::cast(ScriptState::current(info.GetIsolate()), info[0]);
-  if (!promise.isUndefinedOrNull() && !promise.isObject()) {
-    exceptionState.throwTypeError("parameter 1 ('promise') is not an object.");
-
-    return;
-  }
-
-  ScriptPromise result = impl->addOneToPromise(scriptState, promise);
-  v8SetReturnValue(info, result.v8Value());
-}
-
- void addOneToPromiseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::addOneToPromiseMethod(info);
-}
-
-static void promiseCheckMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheck");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  int arg1;
-  bool arg2;
-  Dictionary arg3;
-  V8StringResource<> arg4;
-  Vector<String> arg5;
-  arg1 = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  arg2 = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('arg3') is not an object.");
-
-    return;
-  }
-  arg3 = Dictionary(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  arg4 = info[3];
-  if (!arg4.prepare(exceptionState))
-    return;
-
-  arg5 = toImplArray<Vector<String>>(info[4], 5, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->promiseCheck(scriptState, arg1, arg2, arg3, arg4, arg5, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
- void promiseCheckMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::promiseCheckMethod(info);
-}
-
-static void promiseCheckWithoutExceptionStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckWithoutExceptionState");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Dictionary arg1;
-  V8StringResource<> arg2;
-  Vector<String> variadic;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('arg1') is not an object.");
-
-    return;
-  }
-  arg1 = Dictionary(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  arg2 = info[1];
-  if (!arg2.prepare(exceptionState))
-    return;
-
-  variadic = toImplArguments<Vector<String>>(info, 2, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->promiseCheckWithoutExceptionState(scriptState, arg1, arg2, variadic);
-  v8SetReturnValue(info, result.v8Value());
-}
-
- void promiseCheckWithoutExceptionStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::promiseCheckWithoutExceptionStateMethod(info);
-}
-
-static void promiseCheckRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckRange");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned arg1;
-  arg1 = toUInt8(info.GetIsolate(), info[0], EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->promiseCheckRange(scriptState, arg1);
-  v8SetReturnValue(info, result.v8Value());
-}
-
- void promiseCheckRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::promiseCheckRangeMethod(info);
-}
-
-static void promiseCheckOverload1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckOverload");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Location* arg1;
-  arg1 = V8Location::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!arg1) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Location'.");
-
-    return;
-  }
-
-  ScriptPromise result = impl->promiseCheckOverload(scriptState, arg1);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void promiseCheckOverload2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckOverload");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Document* arg1;
-  arg1 = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!arg1) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  ScriptPromise result = impl->promiseCheckOverload(scriptState, arg1);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void promiseCheckOverload3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckOverload");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Location* arg1;
-  int arg2;
-  int arg3;
-  arg1 = V8Location::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!arg1) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Location'.");
-
-    return;
-  }
-
-  arg2 = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  arg3 = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->promiseCheckOverload(scriptState, arg1, arg2, arg3);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void promiseCheckOverloadMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 1:
-      if (V8Location::hasInstance(info[0], info.GetIsolate())) {
-        promiseCheckOverload1Method(info);
-        return;
-      }
-      if (V8Document::hasInstance(info[0], info.GetIsolate())) {
-        promiseCheckOverload2Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        promiseCheckOverload3Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckOverload");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    if (info.Length() >= 1) {
-      exceptionState.throwTypeError(ExceptionMessages::invalidArity("[1, 3]", info.Length()));
-      return;
+
+    void runtimeFlagsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::runtimeFlagsAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
- void promiseCheckOverloadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::promiseCheckOverloadMethod(info);
-}
+    static void workerThreadCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void setValueForUserMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
+        Internals* impl = V8Internals::toImpl(holder);
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setValueForUser", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        v8SetReturnValueUnsigned(info, impl->workerThreadCount());
+    }
 
-  HTMLInputElement* element;
-  V8StringResource<> value;
-  element = V8HTMLInputElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setValueForUser", "Internals", "parameter 1 is not of type 'HTMLInputElement'."));
+    void workerThreadCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::workerThreadCountAttributeGetter(info);
+    }
 
-    return;
-  }
+    static void cursorUpdatePendingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  value = info[1];
-  if (!value.prepare())
-    return;
+        Internals* impl = V8Internals::toImpl(holder);
 
-  impl->setValueForUser(element, value);
-}
+        v8SetReturnValueBool(info, impl->cursorUpdatePending());
+    }
 
- void setValueForUserMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setValueForUserMethod(info);
-}
+    void cursorUpdatePendingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::cursorUpdatePendingAttributeGetter(info);
+    }
 
-static void textSurroundingNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "textSurroundingNode");
+    static void unscopableAttributeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Internals* impl = V8Internals::toImpl(info.Holder());
+        Internals* impl = V8Internals::toImpl(holder);
 
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
+        v8SetReturnValueString(info, impl->unscopableAttribute(), info.GetIsolate());
+    }
 
-  Node* node;
-  int x;
-  int y;
-  unsigned maxLength;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+    void unscopableAttributeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::unscopableAttributeAttributeGetter(info);
+    }
 
-    return;
-  }
+    static void addressMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
 
-  x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("address", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("address", "Internals", "parameter 1 is not of type 'Node'."));
 
-  maxLength = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->address(node), info.GetIsolate());
+    }
+
+    void addressMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::addressMethod(info);
+    }
 
-  v8SetReturnValueString(info, impl->textSurroundingNode(node, x, y, maxLength), info.GetIsolate());
-}
+    static void observeGCMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
 
- void textSurroundingNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::textSurroundingNodeMethod(info);
-}
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("observeGC", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-static void setFocusedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setFocused");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool focused;
-  focused = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setFocused(focused);
-}
-
- void setFocusedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setFocusedMethod(info);
-}
-
-static void setInitialFocusMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setInitialFocus");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool reverse;
-  reverse = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setInitialFocus(reverse);
-}
-
- void setInitialFocusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setInitialFocusMethod(info);
-}
-
-static void ignoreLayoutWithPendingStylesheetsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("ignoreLayoutWithPendingStylesheets", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Document* document;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("ignoreLayoutWithPendingStylesheets", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->ignoreLayoutWithPendingStylesheets(document));
-}
-
- void ignoreLayoutWithPendingStylesheetsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::ignoreLayoutWithPendingStylesheetsMethod(info);
-}
-
-static void setNetworkConnectionInfoOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setNetworkConnectionInfoOverride");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  bool onLine;
-  V8StringResource<> type;
-  double downlinkMaxMbps;
-  onLine = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = info[1];
-  if (!type.prepare())
-    return;
-
-  downlinkMaxMbps = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setNetworkConnectionInfoOverride(onLine, type, downlinkMaxMbps, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setNetworkConnectionInfoOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setNetworkConnectionInfoOverrideMethod(info);
-}
-
-static void clearNetworkConnectionInfoOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  impl->clearNetworkConnectionInfoOverride();
-}
-
- void clearNetworkConnectionInfoOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::clearNetworkConnectionInfoOverrideMethod(info);
-}
-
-static void countHitRegionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("countHitRegions", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  CanvasRenderingContext2D* context;
-  context = V8CanvasRenderingContext2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!context) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("countHitRegions", "Internals", "parameter 1 is not of type 'CanvasRenderingContext2D'."));
-
-    return;
-  }
-
-  v8SetReturnValueUnsigned(info, impl->countHitRegions(context));
-}
-
- void countHitRegionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::countHitRegionsMethod(info);
-}
-
-static void isInCanvasFontCacheMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isInCanvasFontCache", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  Document* document;
-  V8StringResource<> fontString;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isInCanvasFontCache", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  fontString = info[1];
-  if (!fontString.prepare())
-    return;
-
-  v8SetReturnValueBool(info, impl->isInCanvasFontCache(document, fontString));
-}
-
- void isInCanvasFontCacheMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isInCanvasFontCacheMethod(info);
-}
-
-static void canvasFontCacheMaxFontsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueUnsigned(info, impl->canvasFontCacheMaxFonts());
-}
-
- void canvasFontCacheMaxFontsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::canvasFontCacheMaxFontsMethod(info);
-}
-
-static void dictionaryTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->dictionaryTest());
-}
-
- void dictionaryTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::dictionaryTestMethod(info);
-}
-
-static void unionTypesTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->unionTypesTest());
-}
-
- void unionTypesTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::unionTypesTestMethod(info);
-}
-
-static void callbackFunctionTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->callbackFunctionTest());
-}
-
- void callbackFunctionTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::callbackFunctionTestMethod(info);
-}
-
-static void setScrollChainMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setScrollChain");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  ScrollState* scrollState;
-  HeapVector<Member<Element>> elements;
-  scrollState = V8ScrollState::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!scrollState) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ScrollState'.");
-
-    return;
-  }
-
-  elements = (toMemberNativeArray<Element>(info[1], 2, info.GetIsolate(), exceptionState));
-  if (exceptionState.hadException())
-    return;
-
-  impl->setScrollChain(scrollState, elements, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setScrollChainMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setScrollChainMethod(info);
-}
-
-static void forceBlinkGCWithoutV8GCMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  impl->forceBlinkGCWithoutV8GC();
-}
-
- void forceBlinkGCWithoutV8GCMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::forceBlinkGCWithoutV8GCMethod(info);
-}
-
-static void selectedHTMLForClipboardMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueString(info, impl->selectedHTMLForClipboard(), info.GetIsolate());
-}
-
- void selectedHTMLForClipboardMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::selectedHTMLForClipboardMethod(info);
-}
-
-static void selectedTextForClipboardMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueString(info, impl->selectedTextForClipboard(), info.GetIsolate());
-}
-
- void selectedTextForClipboardMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::selectedTextForClipboardMethod(info);
-}
-
-static void setVisualViewportOffsetMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setVisualViewportOffset");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setVisualViewportOffset(x, y);
-}
-
- void setVisualViewportOffsetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setVisualViewportOffsetMethod(info);
-}
-
-static void visualViewportHeightMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueInt(info, impl->visualViewportHeight());
-}
-
- void visualViewportHeightMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::visualViewportHeightMethod(info);
-}
-
-static void visualViewportWidthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueInt(info, impl->visualViewportWidth());
-}
-
- void visualViewportWidthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::visualViewportWidthMethod(info);
-}
-
-static void visualViewportScrollXMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->visualViewportScrollX());
-}
-
- void visualViewportScrollXMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::visualViewportScrollXMethod(info);
-}
-
-static void visualViewportScrollYMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->visualViewportScrollY());
-}
-
- void visualViewportScrollYMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::visualViewportScrollYMethod(info);
-}
-
-static void magnifyScaleAroundAnchorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "magnifyScaleAroundAnchor");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  float offset;
-  float x;
-  float y;
-  offset = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->magnifyScaleAroundAnchor(offset, x, y));
-}
-
- void magnifyScaleAroundAnchorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::magnifyScaleAroundAnchorMethod(info);
-}
-
-static void isUseCountedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "isUseCounted");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Document* document;
-  int useCounterId;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
-
-    return;
-  }
-
-  useCounterId = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueBool(info, impl->isUseCounted(document, useCounterId));
-}
-
- void isUseCountedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isUseCountedMethod(info);
-}
-
-static void isCSSPropertyUseCountedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isCSSPropertyUseCounted", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  Document* document;
-  V8StringResource<> propertyName;
-  document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!document) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isCSSPropertyUseCounted", "Internals", "parameter 1 is not of type 'Document'."));
-
-    return;
-  }
-
-  propertyName = info[1];
-  if (!propertyName.prepare())
-    return;
-
-  v8SetReturnValueBool(info, impl->isCSSPropertyUseCounted(document, propertyName));
-}
-
- void isCSSPropertyUseCountedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::isCSSPropertyUseCountedMethod(info);
-}
-
-static void unscopableMethodMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValueString(info, impl->unscopableMethod(), info.GetIsolate());
-}
-
- void unscopableMethodMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::unscopableMethodMethod(info);
-}
-
-static void focusRingRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("focusRingRects", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("focusRingRects", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->focusRingRects(element));
-}
-
- void focusRingRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::focusRingRectsMethod(info);
-}
-
-static void outlineRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("outlineRects", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("outlineRects", "Internals", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->outlineRects(element));
-}
-
- void outlineRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::outlineRectsMethod(info);
-}
-
-static void setCapsLockStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setCapsLockState");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setCapsLockState(enabled);
-}
-
- void setCapsLockStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setCapsLockStateMethod(info);
-}
-
-static void setScrollbarVisibilityInScrollableAreaMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setScrollbarVisibilityInScrollableArea");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Node* node;
-  bool visible;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  visible = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->setScrollbarVisibilityInScrollableArea(node, visible));
-}
-
- void setScrollbarVisibilityInScrollableAreaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setScrollbarVisibilityInScrollableAreaMethod(info);
-}
-
-static void monotonicTimeToZeroBasedDocumentTimeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "monotonicTimeToZeroBasedDocumentTime");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  double platformTime;
-  platformTime = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  double result = impl->monotonicTimeToZeroBasedDocumentTime(platformTime, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void monotonicTimeToZeroBasedDocumentTimeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::monotonicTimeToZeroBasedDocumentTimeMethod(info);
-}
-
-static void setMediaElementNetworkStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setMediaElementNetworkState");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  HTMLMediaElement* element;
-  int state;
-  element = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'HTMLMediaElement'.");
-
-    return;
-  }
-
-  state = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setMediaElementNetworkState(element, state);
-}
-
- void setMediaElementNetworkStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setMediaElementNetworkStateMethod(info);
-}
-
-static void getScrollAnimationStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getScrollAnimationState", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getScrollAnimationState", "Internals", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->getScrollAnimationState(node), info.GetIsolate());
-}
-
- void getScrollAnimationStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::getScrollAnimationStateMethod(info);
-}
-
-static void getProgrammaticScrollAnimationStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getProgrammaticScrollAnimationState", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getProgrammaticScrollAnimationState", "Internals", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->getProgrammaticScrollAnimationState(node), info.GetIsolate());
-}
-
- void getProgrammaticScrollAnimationStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::getProgrammaticScrollAnimationStateMethod(info);
-}
-
-static void visualRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("visualRect", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("visualRect", "Internals", "parameter 1 is not of type 'Node'."));
-
-    return;
-  }
-
-  v8SetReturnValue(info, impl->visualRect(node));
-}
-
- void visualRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::visualRectMethod(info);
-}
-
-static void originTrialsTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->originTrialsTest());
-}
-
- void originTrialsTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::originTrialsTestMethod(info);
-}
-
-static void crashMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  impl->crash();
-}
-
- void crashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::crashMethod(info);
-}
-
-static void setIsLowEndDeviceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setIsLowEndDevice");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool isLowEndDevice;
-  isLowEndDevice = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setIsLowEndDevice(isLowEndDevice);
-}
-
- void setIsLowEndDeviceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::setIsLowEndDeviceMethod(info);
-}
-
-static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "keys");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->keysForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::keysMethod(info);
-}
-
-static void valuesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "values");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->valuesForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void valuesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::valuesMethod(info);
-}
-
-static void entriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "entries");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->entriesForBinding(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void entriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::entriesMethod(info);
-}
-
-static void forEachMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "forEach");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  ScriptValue callback;
-  ScriptValue thisArg;
-  if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  callback = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
-
-  thisArg = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
-
-  impl->forEachForBinding(scriptState, ScriptValue(scriptState, info.Holder()), callback, thisArg, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void forEachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::forEachMethod(info);
-}
-
-static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "iterator");
-
-  Internals* impl = V8Internals::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Iterator* result = impl->iterator(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
- void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalsV8Internal::iteratorMethod(info);
-}
+        ScriptValue observed;
+        observed = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        v8SetReturnValue(info, impl->observeGC(observed));
+    }
+
+    void observeGCMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::observeGCMethod(info);
+    }
+
+    static void elementLayoutTreeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "elementLayoutTreeAsText");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        String result = impl->elementLayoutTreeAsText(element, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void elementLayoutTreeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::elementLayoutTreeAsTextMethod(info);
+    }
+
+    static void isPreloadedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPreloaded", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> url;
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        v8SetReturnValueBool(info, impl->isPreloaded(url));
+    }
+
+    void isPreloadedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isPreloadedMethod(info);
+    }
+
+    static void isPreloadedByMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPreloadedBy", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        V8StringResource<> url;
+        Document* document;
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isPreloadedBy", "Internals", "parameter 2 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isPreloadedBy(url, document));
+    }
+
+    void isPreloadedByMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isPreloadedByMethod(info);
+    }
+
+    static void isLoadingMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isLoading", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> url;
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        v8SetReturnValueBool(info, impl->isLoading(url));
+    }
+
+    void isLoadingMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isLoadingMethod(info);
+    }
+
+    static void isLoadingFromMemoryCacheMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isLoadingFromMemoryCache", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> url;
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        v8SetReturnValueBool(info, impl->isLoadingFromMemoryCache(url));
+    }
+
+    void isLoadingFromMemoryCacheMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isLoadingFromMemoryCacheMethod(info);
+    }
+
+    static void getResourcePriorityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getResourcePriority", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        V8StringResource<> url;
+        Document* document;
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getResourcePriority", "Internals", "parameter 2 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->getResourcePriority(url, document));
+    }
+
+    void getResourcePriorityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::getResourcePriorityMethod(info);
+    }
+
+    static void getResourceHeaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getResourceHeader", "Internals", ExceptionMessages::notEnoughArguments(3, info.Length())));
+            return;
+        }
+
+        V8StringResource<> url;
+        V8StringResource<> header;
+        Document* document;
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        header = info[1];
+        if (!header.prepare())
+            return;
+
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[2]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getResourceHeader", "Internals", "parameter 3 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->getResourceHeader(url, header, document), info.GetIsolate());
+    }
+
+    void getResourceHeaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::getResourceHeaderMethod(info);
+    }
+
+    static void isSharingStyleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSharingStyle", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        Element* element1;
+        Element* element2;
+        element1 = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element1) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSharingStyle", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        element2 = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!element2) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSharingStyle", "Internals", "parameter 2 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isSharingStyle(element1, element2));
+    }
+
+    void isSharingStyleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isSharingStyleMethod(info);
+    }
+
+    static void computedStyleIncludingVisitedInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("computedStyleIncludingVisitedInfo", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("computedStyleIncludingVisitedInfo", "Internals", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->computedStyleIncludingVisitedInfo(node));
+    }
+
+    void computedStyleIncludingVisitedInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::computedStyleIncludingVisitedInfoMethod(info);
+    }
+
+    static void createUserAgentShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createUserAgentShadowRoot", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* host;
+        host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!host) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createUserAgentShadowRoot", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->createUserAgentShadowRoot(host));
+    }
+
+    void createUserAgentShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::createUserAgentShadowRootMethod(info);
+    }
+
+    static void shadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shadowRoot", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* host;
+        host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!host) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shadowRoot", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->shadowRoot(host));
+    }
+
+    void shadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::shadowRootMethod(info);
+    }
+
+    static void youngestShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("youngestShadowRoot", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* host;
+        host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!host) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("youngestShadowRoot", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->youngestShadowRoot(host));
+    }
+
+    void youngestShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::youngestShadowRootMethod(info);
+    }
+
+    static void oldestShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("oldestShadowRoot", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* host;
+        host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!host) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("oldestShadowRoot", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->oldestShadowRoot(host));
+    }
+
+    void oldestShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::oldestShadowRootMethod(info);
+    }
+
+    static void youngerShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "youngerShadowRoot");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* root;
+        root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!root) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        ShadowRoot* result = impl->youngerShadowRoot(root, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void youngerShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::youngerShadowRootMethod(info);
+    }
+
+    static void shadowRootTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "shadowRootType");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* root;
+        root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!root) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        String result = impl->shadowRootType(root, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void shadowRootTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::shadowRootTypeMethod(info);
+    }
+
+    static void hasShadowInsertionPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasShadowInsertionPoint");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* root;
+        root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!root) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        bool result = impl->hasShadowInsertionPoint(root, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void hasShadowInsertionPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hasShadowInsertionPointMethod(info);
+    }
+
+    static void hasContentElementMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasContentElement");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* root;
+        root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!root) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        bool result = impl->hasContentElement(root, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void hasContentElementMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hasContentElementMethod(info);
+    }
+
+    static void countElementShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "countElementShadow");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* Root;
+        Root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!Root) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        unsigned result = impl->countElementShadow(Root, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
+
+    void countElementShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::countElementShadowMethod(info);
+    }
+
+    static void shadowPseudoIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shadowPseudoId", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shadowPseudoId", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->shadowPseudoId(element), info.GetIsolate());
+    }
+
+    void shadowPseudoIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::shadowPseudoIdMethod(info);
+    }
+
+    static void isValidContentSelectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "isValidContentSelect");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Element* contentElement;
+        contentElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!contentElement) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        bool result = impl->isValidContentSelect(contentElement, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void isValidContentSelectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isValidContentSelectMethod(info);
+    }
+
+    static void treeScopeRootNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("treeScopeRootNode", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("treeScopeRootNode", "Internals", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->treeScopeRootNode(node));
+    }
+
+    void treeScopeRootNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::treeScopeRootNodeMethod(info);
+    }
+
+    static void parentTreeScopeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("parentTreeScope", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("parentTreeScope", "Internals", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->parentTreeScope(node));
+    }
+
+    void parentTreeScopeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::parentTreeScopeMethod(info);
+    }
+
+    static void hasSelectorForIdInShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasSelectorForIdInShadow");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Element* host;
+        V8StringResource<> id;
+        host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!host) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        id = info[1];
+        if (!id.prepare())
+            return;
+
+        bool result = impl->hasSelectorForIdInShadow(host, id, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void hasSelectorForIdInShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hasSelectorForIdInShadowMethod(info);
+    }
+
+    static void hasSelectorForClassInShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasSelectorForClassInShadow");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Element* host;
+        V8StringResource<> className;
+        host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!host) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        className = info[1];
+        if (!className.prepare())
+            return;
+
+        bool result = impl->hasSelectorForClassInShadow(host, className, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void hasSelectorForClassInShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hasSelectorForClassInShadowMethod(info);
+    }
+
+    static void hasSelectorForAttributeInShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasSelectorForAttributeInShadow");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Element* host;
+        V8StringResource<> attributeName;
+        host = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!host) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        attributeName = info[1];
+        if (!attributeName.prepare())
+            return;
+
+        bool result = impl->hasSelectorForAttributeInShadow(host, attributeName, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void hasSelectorForAttributeInShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hasSelectorForAttributeInShadowMethod(info);
+    }
+
+    static void compareTreeScopePositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "compareTreeScopePosition");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Node* treeScope1;
+        Node* treeScope2;
+        treeScope1 = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!treeScope1) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        treeScope2 = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!treeScope2) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
+
+            return;
+        }
+
+        unsigned result = impl->compareTreeScopePosition(treeScope1, treeScope2, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
+
+    void compareTreeScopePositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::compareTreeScopePositionMethod(info);
+    }
+
+    static void updateStyleAndReturnAffectedElementCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "updateStyleAndReturnAffectedElementCount");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        unsigned result = impl->updateStyleAndReturnAffectedElementCount(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
+
+    void updateStyleAndReturnAffectedElementCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::updateStyleAndReturnAffectedElementCountMethod(info);
+    }
+
+    static void needsLayoutCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "needsLayoutCount");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        unsigned result = impl->needsLayoutCount(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
+
+    void needsLayoutCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::needsLayoutCountMethod(info);
+    }
+
+    static void hitTestCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hitTestCount");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        unsigned result = impl->hitTestCount(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
+
+    void hitTestCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hitTestCountMethod(info);
+    }
+
+    static void hitTestCacheHitsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hitTestCacheHits");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        unsigned result = impl->hitTestCacheHits(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
+
+    void hitTestCacheHitsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hitTestCacheHitsMethod(info);
+    }
+
+    static void elementFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "elementFromPoint");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        Document* document;
+        double x;
+        double y;
+        bool ignoreClipping;
+        bool allowChildFrameContent;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        x = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ignoreClipping = toBoolean(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        allowChildFrameContent = toBoolean(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        Element* result = impl->elementFromPoint(document, x, y, ignoreClipping, allowChildFrameContent, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void elementFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::elementFromPointMethod(info);
+    }
+
+    static void clearHitTestCacheMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "clearHitTestCache");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        impl->clearHitTestCache(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void clearHitTestCacheMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::clearHitTestCacheMethod(info);
+    }
+
+    static void pauseAnimationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pauseAnimations");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        double pauseTime;
+        pauseTime = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->pauseAnimations(pauseTime, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void pauseAnimationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::pauseAnimationsMethod(info);
+    }
+
+    static void isCompositedAnimationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isCompositedAnimation", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Animation* animation;
+        animation = V8Animation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!animation) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isCompositedAnimation", "Internals", "parameter 1 is not of type 'Animation'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->isCompositedAnimation(animation));
+    }
+
+    void isCompositedAnimationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isCompositedAnimationMethod(info);
+    }
+
+    static void disableCompositedAnimationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("disableCompositedAnimation", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Animation* animation;
+        animation = V8Animation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!animation) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("disableCompositedAnimation", "Internals", "parameter 1 is not of type 'Animation'."));
+
+            return;
+        }
+
+        impl->disableCompositedAnimation(animation);
+    }
+
+    void disableCompositedAnimationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::disableCompositedAnimationMethod(info);
+    }
+
+    static void disableCSSAdditiveAnimationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        impl->disableCSSAdditiveAnimations();
+    }
+
+    void disableCSSAdditiveAnimationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::disableCSSAdditiveAnimationsMethod(info);
+    }
+
+    static void advanceTimeForImageMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "advanceTimeForImage");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Element* image;
+        double deltaTimeInSeconds;
+        image = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!image) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        deltaTimeInSeconds = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->advanceTimeForImage(image, deltaTimeInSeconds, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void advanceTimeForImageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::advanceTimeForImageMethod(info);
+    }
+
+    static void advanceImageAnimationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "advanceImageAnimation");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Element* image;
+        image = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!image) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        impl->advanceImageAnimation(image, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void advanceImageAnimationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::advanceImageAnimationMethod(info);
+    }
+
+    static void nextSiblingInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nextSiblingInFlatTree");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        Node* result = impl->nextSiblingInFlatTree(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void nextSiblingInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::nextSiblingInFlatTreeMethod(info);
+    }
+
+    static void firstChildInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "firstChildInFlatTree");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        Node* result = impl->firstChildInFlatTree(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void firstChildInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::firstChildInFlatTreeMethod(info);
+    }
+
+    static void lastChildInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "lastChildInFlatTree");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        Node* result = impl->lastChildInFlatTree(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void lastChildInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::lastChildInFlatTreeMethod(info);
+    }
+
+    static void nextInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nextInFlatTree");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        Node* result = impl->nextInFlatTree(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void nextInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::nextInFlatTreeMethod(info);
+    }
+
+    static void previousInFlatTreeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "previousInFlatTree");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        Node* result = impl->previousInFlatTree(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void previousInFlatTreeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::previousInFlatTreeMethod(info);
+    }
+
+    static void visiblePlaceholderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("visiblePlaceholder", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("visiblePlaceholder", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->visiblePlaceholder(element), info.GetIsolate());
+    }
+
+    void visiblePlaceholderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::visiblePlaceholderMethod(info);
+    }
+
+    static void selectColorInColorChooserMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectColorInColorChooser", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        Element* element;
+        V8StringResource<> colorValue;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectColorInColorChooser", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        colorValue = info[1];
+        if (!colorValue.prepare())
+            return;
+
+        impl->selectColorInColorChooser(element, colorValue);
+    }
+
+    void selectColorInColorChooserMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::selectColorInColorChooserMethod(info);
+    }
+
+    static void endColorChooserMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("endColorChooser", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("endColorChooser", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        impl->endColorChooser(element);
+    }
+
+    void endColorChooserMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::endColorChooserMethod(info);
+    }
+
+    static void hasAutofocusRequestMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        Document* document;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            v8SetReturnValueBool(info, impl->hasAutofocusRequest());
+            return;
+        }
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("hasAutofocusRequest", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->hasAutofocusRequest(document));
+    }
+
+    void hasAutofocusRequestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hasAutofocusRequestMethod(info);
+    }
+
+    static void formControlStateOfHistoryItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "formControlStateOfHistoryItem");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        Vector<String> result = impl->formControlStateOfHistoryItem(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, ToV8(result, info.Holder(), info.GetIsolate()));
+    }
+
+    void formControlStateOfHistoryItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::formControlStateOfHistoryItemMethod(info);
+    }
+
+    static void setFormControlStateOfHistoryItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setFormControlStateOfHistoryItem");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Vector<String> values;
+        values = toImplArray<Vector<String>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setFormControlStateOfHistoryItem(values, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setFormControlStateOfHistoryItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setFormControlStateOfHistoryItemMethod(info);
+    }
+
+    static void absoluteCaretBoundsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "absoluteCaretBounds");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ClientRect* result = impl->absoluteCaretBounds(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void absoluteCaretBoundsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::absoluteCaretBoundsMethod(info);
+    }
+
+    static void boundingBoxMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("boundingBox", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("boundingBox", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->boundingBox(element));
+    }
+
+    void boundingBoxMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::boundingBoxMethod(info);
+    }
+
+    static void setMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setMarker");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        Document* document;
+        Range* range;
+        V8StringResource<> markerType;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!range) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Range'.");
+
+            return;
+        }
+
+        markerType = info[2];
+        if (!markerType.prepare())
+            return;
+
+        impl->setMarker(document, range, markerType, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setMarkerMethod(info);
+    }
+
+    static void markerCountForNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "markerCountForNode");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Node* node;
+        V8StringResource<> markerType;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        markerType = info[1];
+        if (!markerType.prepare())
+            return;
+
+        unsigned result = impl->markerCountForNode(node, markerType, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
+
+    void markerCountForNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::markerCountForNodeMethod(info);
+    }
+
+    static void activeMarkerCountForNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("activeMarkerCountForNode", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("activeMarkerCountForNode", "Internals", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->activeMarkerCountForNode(node));
+    }
+
+    void activeMarkerCountForNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::activeMarkerCountForNodeMethod(info);
+    }
+
+    static void markerRangeForNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "markerRangeForNode");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        Node* node;
+        V8StringResource<> markerType;
+        unsigned index;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        markerType = info[1];
+        if (!markerType.prepare())
+            return;
+
+        index = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        Range* result = impl->markerRangeForNode(node, markerType, index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void markerRangeForNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::markerRangeForNodeMethod(info);
+    }
+
+    static void markerDescriptionForNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "markerDescriptionForNode");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        Node* node;
+        V8StringResource<> markerType;
+        unsigned index;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        markerType = info[1];
+        if (!markerType.prepare())
+            return;
+
+        index = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        String result = impl->markerDescriptionForNode(node, markerType, index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void markerDescriptionForNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::markerDescriptionForNodeMethod(info);
+    }
+
+    static void addTextMatchMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "addTextMatchMarker");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Range* range;
+        bool isActive;
+        range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!range) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Range'.");
+
+            return;
+        }
+
+        isActive = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->addTextMatchMarker(range, isActive);
+    }
+
+    void addTextMatchMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::addTextMatchMarkerMethod(info);
+    }
+
+    static void addCompositionMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "addCompositionMarker");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        Range* range;
+        V8StringResource<> underlineColorValue;
+        bool thick;
+        V8StringResource<> backgroundColorValue;
+        range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!range) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Range'.");
+
+            return;
+        }
+
+        underlineColorValue = info[1];
+        if (!underlineColorValue.prepare())
+            return;
+
+        thick = toBoolean(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        backgroundColorValue = info[3];
+        if (!backgroundColorValue.prepare())
+            return;
+
+        impl->addCompositionMarker(range, underlineColorValue, thick, backgroundColorValue, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void addCompositionMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::addCompositionMarkerMethod(info);
+    }
+
+    static void setMarkersActiveMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setMarkersActive");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        Node* node;
+        unsigned startOffset;
+        unsigned endOffset;
+        bool active;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        startOffset = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        endOffset = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        active = toBoolean(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setMarkersActive(node, startOffset, endOffset, active);
+    }
+
+    void setMarkersActiveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setMarkersActiveMethod(info);
+    }
+
+    static void setMarkedTextMatchesAreHighlightedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setMarkedTextMatchesAreHighlighted");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Document* document;
+        bool highlight;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        highlight = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setMarkedTextMatchesAreHighlighted(document, highlight);
+    }
+
+    void setMarkedTextMatchesAreHighlightedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setMarkedTextMatchesAreHighlightedMethod(info);
+    }
+
+    static void setFrameViewPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setFrameViewPosition");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        Document* document;
+        int x;
+        int y;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setFrameViewPosition(document, x, y, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setFrameViewPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setFrameViewPositionMethod(info);
+    }
+
+    static void viewportAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "viewportAsText");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        Document* document;
+        float devicePixelRatio;
+        int availableWidth;
+        int availableHeight;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        devicePixelRatio = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        availableWidth = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        availableHeight = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        String result = impl->viewportAsText(document, devicePixelRatio, availableWidth, availableHeight, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void viewportAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::viewportAsTextMethod(info);
+    }
+
+    static void elementShouldAutoCompleteMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "elementShouldAutoComplete");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Element* inputElement;
+        inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!inputElement) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        bool result = impl->elementShouldAutoComplete(inputElement, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void elementShouldAutoCompleteMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::elementShouldAutoCompleteMethod(info);
+    }
+
+    static void suggestedValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "suggestedValue");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Element* inputElement;
+        inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!inputElement) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        String result = impl->suggestedValue(inputElement, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void suggestedValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::suggestedValueMethod(info);
+    }
+
+    static void setSuggestedValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setSuggestedValue");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Element* inputElement;
+        V8StringResource<> value;
+        inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!inputElement) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        value = info[1];
+        if (!value.prepare())
+            return;
+
+        impl->setSuggestedValue(inputElement, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setSuggestedValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setSuggestedValueMethod(info);
+    }
+
+    static void setEditingValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setEditingValue");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Element* inputElement;
+        V8StringResource<> value;
+        inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!inputElement) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        value = info[1];
+        if (!value.prepare())
+            return;
+
+        impl->setEditingValue(inputElement, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setEditingValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setEditingValueMethod(info);
+    }
+
+    static void setAutofilledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setAutofilled");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Element* inputElement;
+        bool enabled;
+        inputElement = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!inputElement) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        enabled = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setAutofilled(inputElement, enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setAutofilledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setAutofilledMethod(info);
+    }
+
+    static void rangeFromLocationAndLengthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "rangeFromLocationAndLength");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        Element* scope;
+        int rangeLocation;
+        int rangeLength;
+        scope = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!scope) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        rangeLocation = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        rangeLength = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->rangeFromLocationAndLength(scope, rangeLocation, rangeLength));
+    }
+
+    void rangeFromLocationAndLengthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::rangeFromLocationAndLengthMethod(info);
+    }
+
+    static void locationFromRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("locationFromRange", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        Element* scope;
+        Range* range;
+        scope = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!scope) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("locationFromRange", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!range) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("locationFromRange", "Internals", "parameter 2 is not of type 'Range'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->locationFromRange(scope, range));
+    }
+
+    void locationFromRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::locationFromRangeMethod(info);
+    }
+
+    static void lengthFromRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lengthFromRange", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        Element* scope;
+        Range* range;
+        scope = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!scope) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lengthFromRange", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!range) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lengthFromRange", "Internals", "parameter 2 is not of type 'Range'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->lengthFromRange(scope, range));
+    }
+
+    void lengthFromRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::lengthFromRangeMethod(info);
+    }
+
+    static void rangeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("rangeAsText", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Range* range;
+        range = V8Range::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!range) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("rangeAsText", "Internals", "parameter 1 is not of type 'Range'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->rangeAsText(range), info.GetIsolate());
+    }
+
+    void rangeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::rangeAsTextMethod(info);
+    }
+
+    static void touchPositionAdjustedToBestClickableNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchPositionAdjustedToBestClickableNode");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        int width;
+        int height;
+        Document* document;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
+
+            return;
+        }
+
+        DOMPoint* result = impl->touchPositionAdjustedToBestClickableNode(x, y, width, height, document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void touchPositionAdjustedToBestClickableNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::touchPositionAdjustedToBestClickableNodeMethod(info);
+    }
+
+    static void touchNodeAdjustedToBestClickableNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchNodeAdjustedToBestClickableNode");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        int width;
+        int height;
+        Document* document;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
+
+            return;
+        }
+
+        Node* result = impl->touchNodeAdjustedToBestClickableNode(x, y, width, height, document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void touchNodeAdjustedToBestClickableNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::touchNodeAdjustedToBestClickableNodeMethod(info);
+    }
+
+    static void touchPositionAdjustedToBestContextMenuNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchPositionAdjustedToBestContextMenuNode");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        int width;
+        int height;
+        Document* document;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
+
+            return;
+        }
+
+        DOMPoint* result = impl->touchPositionAdjustedToBestContextMenuNode(x, y, width, height, document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void touchPositionAdjustedToBestContextMenuNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::touchPositionAdjustedToBestContextMenuNodeMethod(info);
+    }
+
+    static void touchNodeAdjustedToBestContextMenuNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchNodeAdjustedToBestContextMenuNode");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        int width;
+        int height;
+        Document* document;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
+
+            return;
+        }
+
+        Node* result = impl->touchNodeAdjustedToBestContextMenuNode(x, y, width, height, document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void touchNodeAdjustedToBestContextMenuNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::touchNodeAdjustedToBestContextMenuNodeMethod(info);
+    }
+
+    static void bestZoomableAreaForTouchPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "bestZoomableAreaForTouchPoint");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        int width;
+        int height;
+        Document* document;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[4]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 5 is not of type 'Document'.");
+
+            return;
+        }
+
+        ClientRect* result = impl->bestZoomableAreaForTouchPoint(x, y, width, height, document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void bestZoomableAreaForTouchPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::bestZoomableAreaForTouchPointMethod(info);
+    }
+
+    static void lastSpellCheckRequestSequenceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "lastSpellCheckRequestSequence");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        int result = impl->lastSpellCheckRequestSequence(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueInt(info, result);
+    }
+
+    void lastSpellCheckRequestSequenceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::lastSpellCheckRequestSequenceMethod(info);
+    }
+
+    static void lastSpellCheckProcessedSequenceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "lastSpellCheckProcessedSequence");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        int result = impl->lastSpellCheckProcessedSequence(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueInt(info, result);
+    }
+
+    void lastSpellCheckProcessedSequenceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::lastSpellCheckProcessedSequenceMethod(info);
+    }
+
+    static void userPreferredLanguagesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(impl->userPreferredLanguages(), info.Holder(), info.GetIsolate()));
+    }
+
+    void userPreferredLanguagesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::userPreferredLanguagesMethod(info);
+    }
+
+    static void setUserPreferredLanguagesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setUserPreferredLanguages");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Vector<String> languages;
+        languages = toImplArray<Vector<String>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setUserPreferredLanguages(languages);
+    }
+
+    void setUserPreferredLanguagesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setUserPreferredLanguagesMethod(info);
+    }
+
+    static void mediaKeysCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueUnsigned(info, impl->mediaKeysCount());
+    }
+
+    void mediaKeysCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::mediaKeysCountMethod(info);
+    }
+
+    static void mediaKeySessionCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueUnsigned(info, impl->mediaKeySessionCount());
+    }
+
+    void mediaKeySessionCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::mediaKeySessionCountMethod(info);
+    }
+
+    static void suspendableObjectCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("suspendableObjectCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("suspendableObjectCount", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->suspendableObjectCount(document));
+    }
+
+    void suspendableObjectCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::suspendableObjectCountMethod(info);
+    }
+
+    static void wheelEventHandlerCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("wheelEventHandlerCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("wheelEventHandlerCount", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->wheelEventHandlerCount(document));
+    }
+
+    void wheelEventHandlerCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::wheelEventHandlerCountMethod(info);
+    }
+
+    static void scrollEventHandlerCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollEventHandlerCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollEventHandlerCount", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->scrollEventHandlerCount(document));
+    }
+
+    void scrollEventHandlerCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::scrollEventHandlerCountMethod(info);
+    }
+
+    static void touchStartOrMoveEventHandlerCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("touchStartOrMoveEventHandlerCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("touchStartOrMoveEventHandlerCount", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->touchStartOrMoveEventHandlerCount(document));
+    }
+
+    void touchStartOrMoveEventHandlerCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::touchStartOrMoveEventHandlerCountMethod(info);
+    }
+
+    static void touchEndOrCancelEventHandlerCountMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("touchEndOrCancelEventHandlerCount", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("touchEndOrCancelEventHandlerCount", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->touchEndOrCancelEventHandlerCount(document));
+    }
+
+    void touchEndOrCancelEventHandlerCountMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::touchEndOrCancelEventHandlerCountMethod(info);
+    }
+
+    static void touchEventTargetLayerRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "touchEventTargetLayerRects");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        LayerRectList* result = impl->touchEventTargetLayerRects(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void touchEventTargetLayerRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::touchEventTargetLayerRectsMethod(info);
+    }
+
+    static void executeCommandMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "executeCommand");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        Document* document;
+        V8StringResource<> name;
+        V8StringResource<> value;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        name = info[1];
+        if (!name.prepare())
+            return;
+
+        value = info[2];
+        if (!value.prepare())
+            return;
+
+        bool result = impl->executeCommand(document, name, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void executeCommandMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::executeCommandMethod(info);
+    }
+
+    static void htmlNamespaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueString(info, impl->htmlNamespace(), info.GetIsolate());
+    }
+
+    void htmlNamespaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::htmlNamespaceMethod(info);
+    }
+
+    static void htmlTagsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(impl->htmlTags(), info.Holder(), info.GetIsolate()));
+    }
+
+    void htmlTagsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::htmlTagsMethod(info);
+    }
+
+    static void svgNamespaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueString(info, impl->svgNamespace(), info.GetIsolate());
+    }
+
+    void svgNamespaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::svgNamespaceMethod(info);
+    }
+
+    static void svgTagsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(impl->svgTags(), info.Holder(), info.GetIsolate()));
+    }
+
+    void svgTagsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::svgTagsMethod(info);
+    }
+
+    static void nodesFromRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nodesFromRect");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 9)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(9, info.Length()));
+            return;
+        }
+
+        Document* document;
+        int x;
+        int y;
+        unsigned topPadding;
+        unsigned rightPadding;
+        unsigned bottomPadding;
+        unsigned leftPadding;
+        bool ignoreClipping;
+        bool allowChildFrameContent;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        topPadding = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        rightPadding = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        bottomPadding = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        leftPadding = toUInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ignoreClipping = toBoolean(info.GetIsolate(), info[7], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        allowChildFrameContent = toBoolean(info.GetIsolate(), info[8], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        NodeList* result = impl->nodesFromRect(document, x, y, topPadding, rightPadding, bottomPadding, leftPadding, ignoreClipping, allowChildFrameContent, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void nodesFromRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::nodesFromRectMethod(info);
+    }
+
+    static void hasSpellingMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasSpellingMarker");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        Document* document;
+        int from;
+        int length;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        from = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        length = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        bool result = impl->hasSpellingMarker(document, from, length, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void hasSpellingMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hasSpellingMarkerMethod(info);
+    }
+
+    static void hasGrammarMarkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "hasGrammarMarker");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        Document* document;
+        int from;
+        int length;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        from = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        length = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        bool result = impl->hasGrammarMarker(document, from, length, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void hasGrammarMarkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::hasGrammarMarkerMethod(info);
+    }
+
+    static void setSpellCheckingEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setSpellCheckingEnabled");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setSpellCheckingEnabled(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setSpellCheckingEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setSpellCheckingEnabledMethod(info);
+    }
+
+    static void replaceMisspelledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "replaceMisspelled");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Document* document;
+        V8StringResource<> replacement;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        replacement = info[1];
+        if (!replacement.prepare())
+            return;
+
+        impl->replaceMisspelled(document, replacement, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void replaceMisspelledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::replaceMisspelledMethod(info);
+    }
+
+    static void canHyphenateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("canHyphenate", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> locale;
+        locale = info[0];
+        if (!locale.prepare())
+            return;
+
+        v8SetReturnValue(info, impl->canHyphenate(locale));
+    }
+
+    void canHyphenateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::canHyphenateMethod(info);
+    }
+
+    static void setMockHyphenationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setMockHyphenation", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> locale;
+        locale = info[0];
+        if (!locale.prepare())
+            return;
+
+        impl->setMockHyphenation(locale);
+    }
+
+    void setMockHyphenationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setMockHyphenationMethod(info);
+    }
+
+    static void isOverwriteModeEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isOverwriteModeEnabled", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isOverwriteModeEnabled", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isOverwriteModeEnabled(document));
+    }
+
+    void isOverwriteModeEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isOverwriteModeEnabledMethod(info);
+    }
+
+    static void toggleOverwriteModeEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("toggleOverwriteModeEnabled", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("toggleOverwriteModeEnabled", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        impl->toggleOverwriteModeEnabled(document);
+    }
+
+    void toggleOverwriteModeEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::toggleOverwriteModeEnabledMethod(info);
+    }
+
+    static void numberOfScrollableAreasMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("numberOfScrollableAreas", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("numberOfScrollableAreas", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->numberOfScrollableAreas(document));
+    }
+
+    void numberOfScrollableAreasMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::numberOfScrollableAreasMethod(info);
+    }
+
+    static void isPageBoxVisibleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "isPageBoxVisible");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Document* document;
+        int pageNumber;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        pageNumber = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueBool(info, impl->isPageBoxVisible(document, pageNumber));
+    }
+
+    void isPageBoxVisibleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isPageBoxVisibleMethod(info);
+    }
+
+    static void layerTreeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "layerTreeAsText");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        unsigned flags;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            String result = impl->layerTreeAsText(document, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValueString(info, result, info.GetIsolate());
+            return;
+        }
+        flags = toUInt16(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        String result = impl->layerTreeAsText(document, flags, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void layerTreeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::layerTreeAsTextMethod(info);
+    }
+
+    static void elementLayerTreeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "elementLayerTreeAsText");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Element* element;
+        unsigned flags;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            String result = impl->elementLayerTreeAsText(element, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValueString(info, result, info.GetIsolate());
+            return;
+        }
+        flags = toUInt16(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        String result = impl->elementLayerTreeAsText(element, flags, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void elementLayerTreeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::elementLayerTreeAsTextMethod(info);
+    }
+
+    static void scrollsWithRespectToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "scrollsWithRespectTo");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Element* element1;
+        Element* element2;
+        element1 = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element1) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        element2 = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!element2) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Element'.");
+
+            return;
+        }
+
+        bool result = impl->scrollsWithRespectTo(element1, element2, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    void scrollsWithRespectToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::scrollsWithRespectToMethod(info);
+    }
+
+    static void scrollingStateTreeAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollingStateTreeAsText", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollingStateTreeAsText", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->scrollingStateTreeAsText(document), info.GetIsolate());
+    }
+
+    void scrollingStateTreeAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::scrollingStateTreeAsTextMethod(info);
+    }
+
+    static void mainThreadScrollingReasonsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "mainThreadScrollingReasons");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        String result = impl->mainThreadScrollingReasons(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void mainThreadScrollingReasonsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::mainThreadScrollingReasonsMethod(info);
+    }
+
+    static void nonFastScrollableRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nonFastScrollableRects");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        ClientRectList* result = impl->nonFastScrollableRects(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void nonFastScrollableRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::nonFastScrollableRectsMethod(info);
+    }
+
+    static void evictAllResourcesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        impl->evictAllResources();
+    }
+
+    void evictAllResourcesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::evictAllResourcesMethod(info);
+    }
+
+    static void numberOfLiveNodesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueUnsigned(info, impl->numberOfLiveNodes());
+    }
+
+    void numberOfLiveNodesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::numberOfLiveNodesMethod(info);
+    }
+
+    static void numberOfLiveDocumentsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueUnsigned(info, impl->numberOfLiveDocuments());
+    }
+
+    void numberOfLiveDocumentsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::numberOfLiveDocumentsMethod(info);
+    }
+
+    static void dumpRefCountedInstanceCountsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueString(info, impl->dumpRefCountedInstanceCounts(), info.GetIsolate());
+    }
+
+    void dumpRefCountedInstanceCountsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::dumpRefCountedInstanceCountsMethod(info);
+    }
+
+    static void counterValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("counterValue", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("counterValue", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->counterValue(element), info.GetIsolate());
+    }
+
+    void counterValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::counterValueMethod(info);
+    }
+
+    static void pageNumberMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pageNumber");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Element* element;
+        float pageWidth;
+        float pageHeight;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        if (!info[1]->IsUndefined()) {
+            pageWidth = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            pageWidth = 800;
+        }
+        if (!info[2]->IsUndefined()) {
+            pageHeight = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            pageHeight = 600;
+        }
+
+        int result = impl->pageNumber(element, pageWidth, pageHeight, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueInt(info, result);
+    }
+
+    void pageNumberMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::pageNumberMethod(info);
+    }
+
+    static void shortcutIconURLsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shortcutIconURLs", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shortcutIconURLs", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, ToV8(impl->shortcutIconURLs(document), info.Holder(), info.GetIsolate()));
+    }
+
+    void shortcutIconURLsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::shortcutIconURLsMethod(info);
+    }
+
+    static void allIconURLsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("allIconURLs", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("allIconURLs", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, ToV8(impl->allIconURLs(document), info.Holder(), info.GetIsolate()));
+    }
+
+    void allIconURLsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::allIconURLsMethod(info);
+    }
+
+    static void numberOfPagesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "numberOfPages");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        double pageWidthInPixels;
+        double pageHeightInPixels;
+        if (!info[0]->IsUndefined()) {
+            pageWidthInPixels = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            pageWidthInPixels = 800;
+        }
+        if (!info[1]->IsUndefined()) {
+            pageHeightInPixels = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            pageHeightInPixels = 600;
+        }
+
+        int result = impl->numberOfPages(pageWidthInPixels, pageHeightInPixels, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueInt(info, result);
+    }
+
+    void numberOfPagesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::numberOfPagesMethod(info);
+    }
+
+    static void pagePropertyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pageProperty");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> propertyName;
+        int pageNumber;
+        propertyName = info[0];
+        if (!propertyName.prepare())
+            return;
+
+        pageNumber = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        String result = impl->pageProperty(propertyName, pageNumber, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void pagePropertyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::pagePropertyMethod(info);
+    }
+
+    static void pageSizeAndMarginsInPixelsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pageSizeAndMarginsInPixels");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 7)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
+            return;
+        }
+
+        int pageIndex;
+        int width;
+        int height;
+        int marginTop;
+        int marginRight;
+        int marginBottom;
+        int marginLeft;
+        pageIndex = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        marginTop = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        marginRight = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        marginBottom = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        marginLeft = toInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        String result = impl->pageSizeAndMarginsInPixels(pageIndex, width, height, marginTop, marginRight, marginBottom, marginLeft, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    void pageSizeAndMarginsInPixelsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::pageSizeAndMarginsInPixelsMethod(info);
+    }
+
+    static void pageScaleFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "pageScaleFactor");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        float result = impl->pageScaleFactor(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void pageScaleFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::pageScaleFactorMethod(info);
+    }
+
+    static void setPageScaleFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setPageScaleFactor");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        float scaleFactor;
+        scaleFactor = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setPageScaleFactor(scaleFactor, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setPageScaleFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setPageScaleFactorMethod(info);
+    }
+
+    static void setPageScaleFactorLimitsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setPageScaleFactorLimits");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        float minScaleFactor;
+        float maxScaleFactor;
+        minScaleFactor = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        maxScaleFactor = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setPageScaleFactorLimits(minScaleFactor, maxScaleFactor, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setPageScaleFactorLimitsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setPageScaleFactorLimitsMethod(info);
+    }
+
+    static void setIsCursorVisibleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setIsCursorVisible");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Document* document;
+        bool isVisible;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        isVisible = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setIsCursorVisible(document, isVisible, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setIsCursorVisibleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setIsCursorVisibleMethod(info);
+    }
+
+    static void effectivePreloadMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("effectivePreload", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        HTMLMediaElement* mediaElement;
+        mediaElement = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!mediaElement) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("effectivePreload", "Internals", "parameter 1 is not of type 'HTMLMediaElement'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->effectivePreload(mediaElement), info.GetIsolate());
+    }
+
+    void effectivePreloadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::effectivePreloadMethod(info);
+    }
+
+    static void mediaPlayerRemoteRouteAvailabilityChangedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "mediaPlayerRemoteRouteAvailabilityChanged");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        HTMLMediaElement* mediaElement;
+        bool available;
+        mediaElement = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!mediaElement) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'HTMLMediaElement'.");
+
+            return;
+        }
+
+        available = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->mediaPlayerRemoteRouteAvailabilityChanged(mediaElement, available);
+    }
+
+    void mediaPlayerRemoteRouteAvailabilityChangedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::mediaPlayerRemoteRouteAvailabilityChangedMethod(info);
+    }
+
+    static void mediaPlayerPlayingRemotelyChangedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "mediaPlayerPlayingRemotelyChanged");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        HTMLMediaElement* mediaElement;
+        bool remote;
+        mediaElement = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!mediaElement) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'HTMLMediaElement'.");
+
+            return;
+        }
+
+        remote = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->mediaPlayerPlayingRemotelyChanged(mediaElement, remote);
+    }
+
+    void mediaPlayerPlayingRemotelyChangedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::mediaPlayerPlayingRemotelyChangedMethod(info);
+    }
+
+    static void registerURLSchemeAsBypassingContentSecurityPolicy1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        V8StringResource<> scheme;
+        scheme = info[0];
+        if (!scheme.prepare())
+            return;
+
+        impl->registerURLSchemeAsBypassingContentSecurityPolicy(scheme);
+    }
+
+    static void registerURLSchemeAsBypassingContentSecurityPolicy2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "registerURLSchemeAsBypassingContentSecurityPolicy");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        V8StringResource<> scheme;
+        Vector<String> policyAreas;
+        scheme = info[0];
+        if (!scheme.prepare())
+            return;
+
+        policyAreas = toImplArray<Vector<String>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->registerURLSchemeAsBypassingContentSecurityPolicy(scheme, policyAreas);
+    }
+
+    static void registerURLSchemeAsBypassingContentSecurityPolicyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 1:
+            if (true) {
+                registerURLSchemeAsBypassingContentSecurityPolicy1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                registerURLSchemeAsBypassingContentSecurityPolicy2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "registerURLSchemeAsBypassingContentSecurityPolicy");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    void registerURLSchemeAsBypassingContentSecurityPolicyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::registerURLSchemeAsBypassingContentSecurityPolicyMethod(info);
+    }
+
+    static void removeURLSchemeRegisteredAsBypassingContentSecurityPolicyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeURLSchemeRegisteredAsBypassingContentSecurityPolicy", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> scheme;
+        scheme = info[0];
+        if (!scheme.prepare())
+            return;
+
+        impl->removeURLSchemeRegisteredAsBypassingContentSecurityPolicy(scheme);
+    }
+
+    void removeURLSchemeRegisteredAsBypassingContentSecurityPolicyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::removeURLSchemeRegisteredAsBypassingContentSecurityPolicyMethod(info);
+    }
+
+    static void typeConversionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->typeConversions());
+    }
+
+    void typeConversionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::typeConversionsMethod(info);
+    }
+
+    static void getReferencedFilePathsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(impl->getReferencedFilePaths(), info.Holder(), info.GetIsolate()));
+    }
+
+    void getReferencedFilePathsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::getReferencedFilePathsMethod(info);
+    }
+
+    static void startStoringCompositedLayerDebugInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "startStoringCompositedLayerDebugInfo");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        impl->startStoringCompositedLayerDebugInfo(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void startStoringCompositedLayerDebugInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::startStoringCompositedLayerDebugInfoMethod(info);
+    }
+
+    static void stopStoringCompositedLayerDebugInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "stopStoringCompositedLayerDebugInfo");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        impl->stopStoringCompositedLayerDebugInfo(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void stopStoringCompositedLayerDebugInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::stopStoringCompositedLayerDebugInfoMethod(info);
+    }
+
+    static void startTrackingRepaintsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "startTrackingRepaints");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        impl->startTrackingRepaints(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void startTrackingRepaintsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::startTrackingRepaintsMethod(info);
+    }
+
+    static void stopTrackingRepaintsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "stopTrackingRepaints");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        impl->stopTrackingRepaints(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void stopTrackingRepaintsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::stopTrackingRepaintsMethod(info);
+    }
+
+    static void updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasksMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasks");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        Node* node;
+        if (!info[0]->IsUndefined()) {
+            node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+            if (!node && !isUndefinedOrNull(info[0])) {
+                exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+                return;
+            }
+        } else {
+            node = nullptr;
+        }
+
+        impl->updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasks(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasksMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasksMethod(info);
+    }
+
+    static void forceFullRepaintMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "forceFullRepaint");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        impl->forceFullRepaint(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void forceFullRepaintMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::forceFullRepaintMethod(info);
+    }
+
+    static void draggableRegionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "draggableRegions");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        ClientRectList* result = impl->draggableRegions(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void draggableRegionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::draggableRegionsMethod(info);
+    }
+
+    static void nonDraggableRegionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "nonDraggableRegions");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        ClientRectList* result = impl->nonDraggableRegions(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void nonDraggableRegionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::nonDraggableRegionsMethod(info);
+    }
+
+    static void getCurrentCursorInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueString(info, impl->getCurrentCursorInfo(), info.GetIsolate());
+    }
+
+    void getCurrentCursorInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::getCurrentCursorInfoMethod(info);
+    }
+
+    static void markerTextForListItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("markerTextForListItem", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("markerTextForListItem", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->markerTextForListItem(element), info.GetIsolate());
+    }
+
+    void markerTextForListItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::markerTextForListItemMethod(info);
+    }
+
+    static void deserializeBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deserializeBuffer", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        DOMArrayBuffer* buffer;
+        buffer = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
+        if (!buffer) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deserializeBuffer", "Internals", "parameter 1 is not of type 'ArrayBuffer'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, v8Deserialize(info.GetIsolate(), impl->deserializeBuffer(buffer)));
+    }
+
+    void deserializeBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::deserializeBufferMethod(info);
+    }
+
+    static void serializeObjectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "serializeObject");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        RefPtr<SerializedScriptValue> obj;
+        obj = SerializedScriptValue::serialize(info.GetIsolate(), info[0], nullptr, nullptr, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->serializeObject(obj));
+    }
+
+    void serializeObjectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::serializeObjectMethod(info);
+    }
+
+    static void forceReloadMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "forceReload");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool endToEnd;
+        endToEnd = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->forceReload(endToEnd);
+    }
+
+    void forceReloadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::forceReloadMethod(info);
+    }
+
+    static void getImageSourceURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getImageSourceURL", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getImageSourceURL", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->getImageSourceURL(element), info.GetIsolate());
+    }
+
+    void getImageSourceURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::getImageSourceURLMethod(info);
+    }
+
+    static void selectMenuListTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectMenuListText", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        HTMLSelectElement* select;
+        select = V8HTMLSelectElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!select) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectMenuListText", "Internals", "parameter 1 is not of type 'HTMLSelectElement'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->selectMenuListText(select), info.GetIsolate());
+    }
+
+    void selectMenuListTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::selectMenuListTextMethod(info);
+    }
+
+    static void isSelectPopupVisibleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSelectPopupVisible", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSelectPopupVisible", "Internals", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isSelectPopupVisible(node));
+    }
+
+    void isSelectPopupVisibleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isSelectPopupVisibleMethod(info);
+    }
+
+    static void selectPopupItemStyleIsRtlMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "selectPopupItemStyleIsRtl");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Node* select;
+        int itemIndex;
+        select = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!select) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        itemIndex = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueBool(info, impl->selectPopupItemStyleIsRtl(select, itemIndex));
+    }
+
+    void selectPopupItemStyleIsRtlMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::selectPopupItemStyleIsRtlMethod(info);
+    }
+
+    static void selectPopupItemStyleFontHeightMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "selectPopupItemStyleFontHeight");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Node* select;
+        int itemIndex;
+        select = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!select) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        itemIndex = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueInt(info, impl->selectPopupItemStyleFontHeight(select, itemIndex));
+    }
+
+    void selectPopupItemStyleFontHeightMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::selectPopupItemStyleFontHeightMethod(info);
+    }
+
+    static void resetTypeAheadSessionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("resetTypeAheadSession", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        HTMLSelectElement* select;
+        select = V8HTMLSelectElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!select) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("resetTypeAheadSession", "Internals", "parameter 1 is not of type 'HTMLSelectElement'."));
+
+            return;
+        }
+
+        impl->resetTypeAheadSession(select);
+    }
+
+    void resetTypeAheadSessionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::resetTypeAheadSessionMethod(info);
+    }
+
+    static void selectionBoundsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "selectionBounds");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ClientRect* result = impl->selectionBounds(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void selectionBoundsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::selectionBoundsMethod(info);
+    }
+
+    static void loseSharedGraphicsContext3DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueBool(info, impl->loseSharedGraphicsContext3D());
+    }
+
+    void loseSharedGraphicsContext3DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::loseSharedGraphicsContext3DMethod(info);
+    }
+
+    static void forceCompositingUpdateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "forceCompositingUpdate");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        impl->forceCompositingUpdate(document, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void forceCompositingUpdateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::forceCompositingUpdateMethod(info);
+    }
+
+    static void setZoomFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setZoomFactor");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        float factor;
+        factor = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setZoomFactor(factor);
+    }
+
+    void setZoomFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setZoomFactorMethod(info);
+    }
+
+    static void setShouldRevealPasswordMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setShouldRevealPassword");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Element* element;
+        bool reveal;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+
+            return;
+        }
+
+        reveal = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setShouldRevealPassword(element, reveal, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setShouldRevealPasswordMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setShouldRevealPasswordMethod(info);
+    }
+
+    static void createResolvedPromiseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "createResolvedPromise");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        ScriptValue value;
+        value = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        ScriptPromise result = impl->createResolvedPromise(scriptState, value);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    void createResolvedPromiseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::createResolvedPromiseMethod(info);
+    }
+
+    static void createRejectedPromiseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "createRejectedPromise");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        ScriptValue reason;
+        reason = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        ScriptPromise result = impl->createRejectedPromise(scriptState, reason);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    void createRejectedPromiseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::createRejectedPromiseMethod(info);
+    }
+
+    static void addOneToPromiseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "addOneToPromise");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        ScriptPromise promise;
+        promise = ScriptPromise::cast(ScriptState::current(info.GetIsolate()), info[0]);
+        if (!promise.isUndefinedOrNull() && !promise.isObject()) {
+            exceptionState.throwTypeError("parameter 1 ('promise') is not an object.");
+
+            return;
+        }
+
+        ScriptPromise result = impl->addOneToPromise(scriptState, promise);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    void addOneToPromiseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::addOneToPromiseMethod(info);
+    }
+
+    static void promiseCheckMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheck");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        int arg1;
+        bool arg2;
+        Dictionary arg3;
+        V8StringResource<> arg4;
+        Vector<String> arg5;
+        arg1 = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        arg2 = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('arg3') is not an object.");
+
+            return;
+        }
+        arg3 = Dictionary(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        arg4 = info[3];
+        if (!arg4.prepare(exceptionState))
+            return;
+
+        arg5 = toImplArray<Vector<String>>(info[4], 5, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->promiseCheck(scriptState, arg1, arg2, arg3, arg4, arg5, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    void promiseCheckMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::promiseCheckMethod(info);
+    }
+
+    static void promiseCheckWithoutExceptionStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckWithoutExceptionState");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Dictionary arg1;
+        V8StringResource<> arg2;
+        Vector<String> variadic;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('arg1') is not an object.");
+
+            return;
+        }
+        arg1 = Dictionary(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        arg2 = info[1];
+        if (!arg2.prepare(exceptionState))
+            return;
+
+        variadic = toImplArguments<Vector<String>>(info, 2, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->promiseCheckWithoutExceptionState(scriptState, arg1, arg2, variadic);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    void promiseCheckWithoutExceptionStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::promiseCheckWithoutExceptionStateMethod(info);
+    }
+
+    static void promiseCheckRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckRange");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned arg1;
+        arg1 = toUInt8(info.GetIsolate(), info[0], EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->promiseCheckRange(scriptState, arg1);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    void promiseCheckRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::promiseCheckRangeMethod(info);
+    }
+
+    static void promiseCheckOverload1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckOverload");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Location* arg1;
+        arg1 = V8Location::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!arg1) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Location'.");
+
+            return;
+        }
+
+        ScriptPromise result = impl->promiseCheckOverload(scriptState, arg1);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static void promiseCheckOverload2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckOverload");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Document* arg1;
+        arg1 = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!arg1) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        ScriptPromise result = impl->promiseCheckOverload(scriptState, arg1);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static void promiseCheckOverload3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckOverload");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Internals::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Location* arg1;
+        int arg2;
+        int arg3;
+        arg1 = V8Location::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!arg1) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Location'.");
+
+            return;
+        }
+
+        arg2 = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        arg3 = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->promiseCheckOverload(scriptState, arg1, arg2, arg3);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static void promiseCheckOverloadMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 1:
+            if (V8Location::hasInstance(info[0], info.GetIsolate())) {
+                promiseCheckOverload1Method(info);
+                return;
+            }
+            if (V8Document::hasInstance(info[0], info.GetIsolate())) {
+                promiseCheckOverload2Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                promiseCheckOverload3Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "promiseCheckOverload");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+            if (info.Length() >= 1) {
+                exceptionState.throwTypeError(ExceptionMessages::invalidArity("[1, 3]", info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    void promiseCheckOverloadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::promiseCheckOverloadMethod(info);
+    }
+
+    static void setValueForUserMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setValueForUser", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        HTMLInputElement* element;
+        V8StringResource<> value;
+        element = V8HTMLInputElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setValueForUser", "Internals", "parameter 1 is not of type 'HTMLInputElement'."));
+
+            return;
+        }
+
+        value = info[1];
+        if (!value.prepare())
+            return;
+
+        impl->setValueForUser(element, value);
+    }
+
+    void setValueForUserMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setValueForUserMethod(info);
+    }
+
+    static void textSurroundingNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "textSurroundingNode");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        Node* node;
+        int x;
+        int y;
+        unsigned maxLength;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        maxLength = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueString(info, impl->textSurroundingNode(node, x, y, maxLength), info.GetIsolate());
+    }
+
+    void textSurroundingNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::textSurroundingNodeMethod(info);
+    }
+
+    static void setFocusedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setFocused");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool focused;
+        focused = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setFocused(focused);
+    }
+
+    void setFocusedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setFocusedMethod(info);
+    }
+
+    static void setInitialFocusMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setInitialFocus");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool reverse;
+        reverse = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setInitialFocus(reverse);
+    }
+
+    void setInitialFocusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setInitialFocusMethod(info);
+    }
+
+    static void ignoreLayoutWithPendingStylesheetsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("ignoreLayoutWithPendingStylesheets", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Document* document;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("ignoreLayoutWithPendingStylesheets", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->ignoreLayoutWithPendingStylesheets(document));
+    }
+
+    void ignoreLayoutWithPendingStylesheetsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::ignoreLayoutWithPendingStylesheetsMethod(info);
+    }
+
+    static void setNetworkConnectionInfoOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setNetworkConnectionInfoOverride");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        bool onLine;
+        V8StringResource<> type;
+        double downlinkMaxMbps;
+        onLine = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = info[1];
+        if (!type.prepare())
+            return;
+
+        downlinkMaxMbps = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setNetworkConnectionInfoOverride(onLine, type, downlinkMaxMbps, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setNetworkConnectionInfoOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setNetworkConnectionInfoOverrideMethod(info);
+    }
+
+    static void clearNetworkConnectionInfoOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        impl->clearNetworkConnectionInfoOverride();
+    }
+
+    void clearNetworkConnectionInfoOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::clearNetworkConnectionInfoOverrideMethod(info);
+    }
+
+    static void countHitRegionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("countHitRegions", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        CanvasRenderingContext2D* context;
+        context = V8CanvasRenderingContext2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!context) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("countHitRegions", "Internals", "parameter 1 is not of type 'CanvasRenderingContext2D'."));
+
+            return;
+        }
+
+        v8SetReturnValueUnsigned(info, impl->countHitRegions(context));
+    }
+
+    void countHitRegionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::countHitRegionsMethod(info);
+    }
+
+    static void isInCanvasFontCacheMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isInCanvasFontCache", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        Document* document;
+        V8StringResource<> fontString;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isInCanvasFontCache", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        fontString = info[1];
+        if (!fontString.prepare())
+            return;
+
+        v8SetReturnValueBool(info, impl->isInCanvasFontCache(document, fontString));
+    }
+
+    void isInCanvasFontCacheMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isInCanvasFontCacheMethod(info);
+    }
+
+    static void canvasFontCacheMaxFontsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueUnsigned(info, impl->canvasFontCacheMaxFonts());
+    }
+
+    void canvasFontCacheMaxFontsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::canvasFontCacheMaxFontsMethod(info);
+    }
+
+    static void dictionaryTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->dictionaryTest());
+    }
+
+    void dictionaryTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::dictionaryTestMethod(info);
+    }
+
+    static void unionTypesTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->unionTypesTest());
+    }
+
+    void unionTypesTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::unionTypesTestMethod(info);
+    }
+
+    static void callbackFunctionTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->callbackFunctionTest());
+    }
+
+    void callbackFunctionTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::callbackFunctionTestMethod(info);
+    }
+
+    static void setScrollChainMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setScrollChain");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        ScrollState* scrollState;
+        HeapVector<Member<Element>> elements;
+        scrollState = V8ScrollState::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!scrollState) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ScrollState'.");
+
+            return;
+        }
+
+        elements = (toMemberNativeArray<Element>(info[1], 2, info.GetIsolate(), exceptionState));
+        if (exceptionState.hadException())
+            return;
+
+        impl->setScrollChain(scrollState, elements, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setScrollChainMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setScrollChainMethod(info);
+    }
+
+    static void forceBlinkGCWithoutV8GCMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        impl->forceBlinkGCWithoutV8GC();
+    }
+
+    void forceBlinkGCWithoutV8GCMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::forceBlinkGCWithoutV8GCMethod(info);
+    }
+
+    static void selectedHTMLForClipboardMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueString(info, impl->selectedHTMLForClipboard(), info.GetIsolate());
+    }
+
+    void selectedHTMLForClipboardMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::selectedHTMLForClipboardMethod(info);
+    }
+
+    static void selectedTextForClipboardMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueString(info, impl->selectedTextForClipboard(), info.GetIsolate());
+    }
+
+    void selectedTextForClipboardMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::selectedTextForClipboardMethod(info);
+    }
+
+    static void setVisualViewportOffsetMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setVisualViewportOffset");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setVisualViewportOffset(x, y);
+    }
+
+    void setVisualViewportOffsetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setVisualViewportOffsetMethod(info);
+    }
+
+    static void visualViewportHeightMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueInt(info, impl->visualViewportHeight());
+    }
+
+    void visualViewportHeightMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::visualViewportHeightMethod(info);
+    }
+
+    static void visualViewportWidthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueInt(info, impl->visualViewportWidth());
+    }
+
+    void visualViewportWidthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::visualViewportWidthMethod(info);
+    }
+
+    static void visualViewportScrollXMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->visualViewportScrollX());
+    }
+
+    void visualViewportScrollXMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::visualViewportScrollXMethod(info);
+    }
+
+    static void visualViewportScrollYMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->visualViewportScrollY());
+    }
+
+    void visualViewportScrollYMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::visualViewportScrollYMethod(info);
+    }
+
+    static void magnifyScaleAroundAnchorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "magnifyScaleAroundAnchor");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        float offset;
+        float x;
+        float y;
+        offset = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->magnifyScaleAroundAnchor(offset, x, y));
+    }
+
+    void magnifyScaleAroundAnchorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::magnifyScaleAroundAnchorMethod(info);
+    }
+
+    static void isUseCountedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "isUseCounted");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Document* document;
+        int useCounterId;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Document'.");
+
+            return;
+        }
+
+        useCounterId = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueBool(info, impl->isUseCounted(document, useCounterId));
+    }
+
+    void isUseCountedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isUseCountedMethod(info);
+    }
+
+    static void isCSSPropertyUseCountedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isCSSPropertyUseCounted", "Internals", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        Document* document;
+        V8StringResource<> propertyName;
+        document = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!document) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isCSSPropertyUseCounted", "Internals", "parameter 1 is not of type 'Document'."));
+
+            return;
+        }
+
+        propertyName = info[1];
+        if (!propertyName.prepare())
+            return;
+
+        v8SetReturnValueBool(info, impl->isCSSPropertyUseCounted(document, propertyName));
+    }
+
+    void isCSSPropertyUseCountedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::isCSSPropertyUseCountedMethod(info);
+    }
+
+    static void unscopableMethodMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValueString(info, impl->unscopableMethod(), info.GetIsolate());
+    }
+
+    void unscopableMethodMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::unscopableMethodMethod(info);
+    }
+
+    static void focusRingRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("focusRingRects", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("focusRingRects", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->focusRingRects(element));
+    }
+
+    void focusRingRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::focusRingRectsMethod(info);
+    }
+
+    static void outlineRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("outlineRects", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("outlineRects", "Internals", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->outlineRects(element));
+    }
+
+    void outlineRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::outlineRectsMethod(info);
+    }
+
+    static void setCapsLockStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setCapsLockState");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setCapsLockState(enabled);
+    }
+
+    void setCapsLockStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setCapsLockStateMethod(info);
+    }
+
+    static void setScrollbarVisibilityInScrollableAreaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setScrollbarVisibilityInScrollableArea");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Node* node;
+        bool visible;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        visible = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->setScrollbarVisibilityInScrollableArea(node, visible));
+    }
+
+    void setScrollbarVisibilityInScrollableAreaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setScrollbarVisibilityInScrollableAreaMethod(info);
+    }
+
+    static void monotonicTimeToZeroBasedDocumentTimeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "monotonicTimeToZeroBasedDocumentTime");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        double platformTime;
+        platformTime = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        double result = impl->monotonicTimeToZeroBasedDocumentTime(platformTime, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void monotonicTimeToZeroBasedDocumentTimeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::monotonicTimeToZeroBasedDocumentTimeMethod(info);
+    }
+
+    static void setMediaElementNetworkStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setMediaElementNetworkState");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        HTMLMediaElement* element;
+        int state;
+        element = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'HTMLMediaElement'.");
+
+            return;
+        }
+
+        state = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setMediaElementNetworkState(element, state);
+    }
+
+    void setMediaElementNetworkStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setMediaElementNetworkStateMethod(info);
+    }
+
+    static void getScrollAnimationStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getScrollAnimationState", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getScrollAnimationState", "Internals", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->getScrollAnimationState(node), info.GetIsolate());
+    }
+
+    void getScrollAnimationStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::getScrollAnimationStateMethod(info);
+    }
+
+    static void getProgrammaticScrollAnimationStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getProgrammaticScrollAnimationState", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getProgrammaticScrollAnimationState", "Internals", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->getProgrammaticScrollAnimationState(node), info.GetIsolate());
+    }
+
+    void getProgrammaticScrollAnimationStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::getProgrammaticScrollAnimationStateMethod(info);
+    }
+
+    static void visualRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("visualRect", "Internals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("visualRect", "Internals", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValue(info, impl->visualRect(node));
+    }
+
+    void visualRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::visualRectMethod(info);
+    }
+
+    static void originTrialsTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->originTrialsTest());
+    }
+
+    void originTrialsTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::originTrialsTestMethod(info);
+    }
+
+    static void crashMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        impl->crash();
+    }
+
+    void crashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::crashMethod(info);
+    }
+
+    static void setIsLowEndDeviceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "setIsLowEndDevice");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool isLowEndDevice;
+        isLowEndDevice = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setIsLowEndDevice(isLowEndDevice);
+    }
+
+    void setIsLowEndDeviceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::setIsLowEndDeviceMethod(info);
+    }
+
+    static void keysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "keys");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->keysForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void keysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::keysMethod(info);
+    }
+
+    static void valuesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "values");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->valuesForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void valuesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::valuesMethod(info);
+    }
+
+    static void entriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "entries");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->entriesForBinding(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void entriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::entriesMethod(info);
+    }
+
+    static void forEachMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "forEach");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        ScriptValue callback;
+        ScriptValue thisArg;
+        if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+
+            return;
+        }
+        callback = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        thisArg = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
+
+        impl->forEachForBinding(scriptState, ScriptValue(scriptState, info.Holder()), callback, thisArg, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void forEachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::forEachMethod(info);
+    }
+
+    static void iteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Internals", "iterator");
+
+        Internals* impl = V8Internals::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Iterator* result = impl->iterator(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void iteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalsV8Internal::iteratorMethod(info);
+    }
 
 } // namespace InternalsV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8InternalsAccessors[] = {
-    {"pagePopupWindow", InternalsV8Internal::pagePopupWindowAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"settings", InternalsV8Internal::settingsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"runtimeFlags", InternalsV8Internal::runtimeFlagsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"workerThreadCount", InternalsV8Internal::workerThreadCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cursorUpdatePending", InternalsV8Internal::cursorUpdatePendingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"unscopableAttribute", InternalsV8Internal::unscopableAttributeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "pagePopupWindow", InternalsV8Internal::pagePopupWindowAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "settings", InternalsV8Internal::settingsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "runtimeFlags", InternalsV8Internal::runtimeFlagsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "workerThreadCount", InternalsV8Internal::workerThreadCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cursorUpdatePending", InternalsV8Internal::cursorUpdatePendingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "unscopableAttribute", InternalsV8Internal::unscopableAttributeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8InternalsMethods[] = {
-    {"address", InternalsV8Internal::addressMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"observeGC", InternalsV8Internal::observeGCMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"elementLayoutTreeAsText", InternalsV8Internal::elementLayoutTreeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isPreloaded", InternalsV8Internal::isPreloadedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isPreloadedBy", InternalsV8Internal::isPreloadedByMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isLoading", InternalsV8Internal::isLoadingMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isLoadingFromMemoryCache", InternalsV8Internal::isLoadingFromMemoryCacheMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getResourcePriority", InternalsV8Internal::getResourcePriorityMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getResourceHeader", InternalsV8Internal::getResourceHeaderMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isSharingStyle", InternalsV8Internal::isSharingStyleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"computedStyleIncludingVisitedInfo", InternalsV8Internal::computedStyleIncludingVisitedInfoMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createUserAgentShadowRoot", InternalsV8Internal::createUserAgentShadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowRoot", InternalsV8Internal::shadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"youngestShadowRoot", InternalsV8Internal::youngestShadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oldestShadowRoot", InternalsV8Internal::oldestShadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"youngerShadowRoot", InternalsV8Internal::youngerShadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowRootType", InternalsV8Internal::shadowRootTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasShadowInsertionPoint", InternalsV8Internal::hasShadowInsertionPointMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasContentElement", InternalsV8Internal::hasContentElementMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"countElementShadow", InternalsV8Internal::countElementShadowMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowPseudoId", InternalsV8Internal::shadowPseudoIdMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isValidContentSelect", InternalsV8Internal::isValidContentSelectMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"treeScopeRootNode", InternalsV8Internal::treeScopeRootNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"parentTreeScope", InternalsV8Internal::parentTreeScopeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasSelectorForIdInShadow", InternalsV8Internal::hasSelectorForIdInShadowMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasSelectorForClassInShadow", InternalsV8Internal::hasSelectorForClassInShadowMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasSelectorForAttributeInShadow", InternalsV8Internal::hasSelectorForAttributeInShadowMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compareTreeScopePosition", InternalsV8Internal::compareTreeScopePositionMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"updateStyleAndReturnAffectedElementCount", InternalsV8Internal::updateStyleAndReturnAffectedElementCountMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"needsLayoutCount", InternalsV8Internal::needsLayoutCountMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hitTestCount", InternalsV8Internal::hitTestCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hitTestCacheHits", InternalsV8Internal::hitTestCacheHitsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"elementFromPoint", InternalsV8Internal::elementFromPointMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearHitTestCache", InternalsV8Internal::clearHitTestCacheMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pauseAnimations", InternalsV8Internal::pauseAnimationsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isCompositedAnimation", InternalsV8Internal::isCompositedAnimationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disableCompositedAnimation", InternalsV8Internal::disableCompositedAnimationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disableCSSAdditiveAnimations", InternalsV8Internal::disableCSSAdditiveAnimationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"advanceTimeForImage", InternalsV8Internal::advanceTimeForImageMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"advanceImageAnimation", InternalsV8Internal::advanceImageAnimationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nextSiblingInFlatTree", InternalsV8Internal::nextSiblingInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"firstChildInFlatTree", InternalsV8Internal::firstChildInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastChildInFlatTree", InternalsV8Internal::lastChildInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nextInFlatTree", InternalsV8Internal::nextInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"previousInFlatTree", InternalsV8Internal::previousInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"visiblePlaceholder", InternalsV8Internal::visiblePlaceholderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectColorInColorChooser", InternalsV8Internal::selectColorInColorChooserMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"endColorChooser", InternalsV8Internal::endColorChooserMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasAutofocusRequest", InternalsV8Internal::hasAutofocusRequestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"formControlStateOfHistoryItem", InternalsV8Internal::formControlStateOfHistoryItemMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setFormControlStateOfHistoryItem", InternalsV8Internal::setFormControlStateOfHistoryItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"absoluteCaretBounds", InternalsV8Internal::absoluteCaretBoundsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"boundingBox", InternalsV8Internal::boundingBoxMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setMarker", InternalsV8Internal::setMarkerMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"markerCountForNode", InternalsV8Internal::markerCountForNodeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"activeMarkerCountForNode", InternalsV8Internal::activeMarkerCountForNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"markerRangeForNode", InternalsV8Internal::markerRangeForNodeMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"markerDescriptionForNode", InternalsV8Internal::markerDescriptionForNodeMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addTextMatchMarker", InternalsV8Internal::addTextMatchMarkerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addCompositionMarker", InternalsV8Internal::addCompositionMarkerMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setMarkersActive", InternalsV8Internal::setMarkersActiveMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setMarkedTextMatchesAreHighlighted", InternalsV8Internal::setMarkedTextMatchesAreHighlightedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setFrameViewPosition", InternalsV8Internal::setFrameViewPositionMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"viewportAsText", InternalsV8Internal::viewportAsTextMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"elementShouldAutoComplete", InternalsV8Internal::elementShouldAutoCompleteMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"suggestedValue", InternalsV8Internal::suggestedValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setSuggestedValue", InternalsV8Internal::setSuggestedValueMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setEditingValue", InternalsV8Internal::setEditingValueMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setAutofilled", InternalsV8Internal::setAutofilledMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rangeFromLocationAndLength", InternalsV8Internal::rangeFromLocationAndLengthMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"locationFromRange", InternalsV8Internal::locationFromRangeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lengthFromRange", InternalsV8Internal::lengthFromRangeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rangeAsText", InternalsV8Internal::rangeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"touchPositionAdjustedToBestClickableNode", InternalsV8Internal::touchPositionAdjustedToBestClickableNodeMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"touchNodeAdjustedToBestClickableNode", InternalsV8Internal::touchNodeAdjustedToBestClickableNodeMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"touchPositionAdjustedToBestContextMenuNode", InternalsV8Internal::touchPositionAdjustedToBestContextMenuNodeMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"touchNodeAdjustedToBestContextMenuNode", InternalsV8Internal::touchNodeAdjustedToBestContextMenuNodeMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bestZoomableAreaForTouchPoint", InternalsV8Internal::bestZoomableAreaForTouchPointMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastSpellCheckRequestSequence", InternalsV8Internal::lastSpellCheckRequestSequenceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastSpellCheckProcessedSequence", InternalsV8Internal::lastSpellCheckProcessedSequenceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"userPreferredLanguages", InternalsV8Internal::userPreferredLanguagesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setUserPreferredLanguages", InternalsV8Internal::setUserPreferredLanguagesMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaKeysCount", InternalsV8Internal::mediaKeysCountMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaKeySessionCount", InternalsV8Internal::mediaKeySessionCountMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"suspendableObjectCount", InternalsV8Internal::suspendableObjectCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"wheelEventHandlerCount", InternalsV8Internal::wheelEventHandlerCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollEventHandlerCount", InternalsV8Internal::scrollEventHandlerCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"touchStartOrMoveEventHandlerCount", InternalsV8Internal::touchStartOrMoveEventHandlerCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"touchEndOrCancelEventHandlerCount", InternalsV8Internal::touchEndOrCancelEventHandlerCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"touchEventTargetLayerRects", InternalsV8Internal::touchEventTargetLayerRectsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"executeCommand", InternalsV8Internal::executeCommandMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"htmlNamespace", InternalsV8Internal::htmlNamespaceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"htmlTags", InternalsV8Internal::htmlTagsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"svgNamespace", InternalsV8Internal::svgNamespaceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"svgTags", InternalsV8Internal::svgTagsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nodesFromRect", InternalsV8Internal::nodesFromRectMethodCallback, 0, 9, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasSpellingMarker", InternalsV8Internal::hasSpellingMarkerMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasGrammarMarker", InternalsV8Internal::hasGrammarMarkerMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setSpellCheckingEnabled", InternalsV8Internal::setSpellCheckingEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"replaceMisspelled", InternalsV8Internal::replaceMisspelledMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"canHyphenate", InternalsV8Internal::canHyphenateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setMockHyphenation", InternalsV8Internal::setMockHyphenationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isOverwriteModeEnabled", InternalsV8Internal::isOverwriteModeEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"toggleOverwriteModeEnabled", InternalsV8Internal::toggleOverwriteModeEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"numberOfScrollableAreas", InternalsV8Internal::numberOfScrollableAreasMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isPageBoxVisible", InternalsV8Internal::isPageBoxVisibleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"layerTreeAsText", InternalsV8Internal::layerTreeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"elementLayerTreeAsText", InternalsV8Internal::elementLayerTreeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollsWithRespectTo", InternalsV8Internal::scrollsWithRespectToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollingStateTreeAsText", InternalsV8Internal::scrollingStateTreeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mainThreadScrollingReasons", InternalsV8Internal::mainThreadScrollingReasonsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nonFastScrollableRects", InternalsV8Internal::nonFastScrollableRectsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"evictAllResources", InternalsV8Internal::evictAllResourcesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"numberOfLiveNodes", InternalsV8Internal::numberOfLiveNodesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"numberOfLiveDocuments", InternalsV8Internal::numberOfLiveDocumentsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dumpRefCountedInstanceCounts", InternalsV8Internal::dumpRefCountedInstanceCountsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"counterValue", InternalsV8Internal::counterValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageNumber", InternalsV8Internal::pageNumberMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shortcutIconURLs", InternalsV8Internal::shortcutIconURLsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"allIconURLs", InternalsV8Internal::allIconURLsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"numberOfPages", InternalsV8Internal::numberOfPagesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageProperty", InternalsV8Internal::pagePropertyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageSizeAndMarginsInPixels", InternalsV8Internal::pageSizeAndMarginsInPixelsMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageScaleFactor", InternalsV8Internal::pageScaleFactorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setPageScaleFactor", InternalsV8Internal::setPageScaleFactorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setPageScaleFactorLimits", InternalsV8Internal::setPageScaleFactorLimitsMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setIsCursorVisible", InternalsV8Internal::setIsCursorVisibleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"effectivePreload", InternalsV8Internal::effectivePreloadMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaPlayerRemoteRouteAvailabilityChanged", InternalsV8Internal::mediaPlayerRemoteRouteAvailabilityChangedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaPlayerPlayingRemotelyChanged", InternalsV8Internal::mediaPlayerPlayingRemotelyChangedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"registerURLSchemeAsBypassingContentSecurityPolicy", InternalsV8Internal::registerURLSchemeAsBypassingContentSecurityPolicyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeURLSchemeRegisteredAsBypassingContentSecurityPolicy", InternalsV8Internal::removeURLSchemeRegisteredAsBypassingContentSecurityPolicyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"typeConversions", InternalsV8Internal::typeConversionsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getReferencedFilePaths", InternalsV8Internal::getReferencedFilePathsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"startStoringCompositedLayerDebugInfo", InternalsV8Internal::startStoringCompositedLayerDebugInfoMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stopStoringCompositedLayerDebugInfo", InternalsV8Internal::stopStoringCompositedLayerDebugInfoMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"startTrackingRepaints", InternalsV8Internal::startTrackingRepaintsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stopTrackingRepaints", InternalsV8Internal::stopTrackingRepaintsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasks", InternalsV8Internal::updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasksMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forceFullRepaint", InternalsV8Internal::forceFullRepaintMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"draggableRegions", InternalsV8Internal::draggableRegionsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nonDraggableRegions", InternalsV8Internal::nonDraggableRegionsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getCurrentCursorInfo", InternalsV8Internal::getCurrentCursorInfoMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"markerTextForListItem", InternalsV8Internal::markerTextForListItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deserializeBuffer", InternalsV8Internal::deserializeBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"serializeObject", InternalsV8Internal::serializeObjectMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forceReload", InternalsV8Internal::forceReloadMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getImageSourceURL", InternalsV8Internal::getImageSourceURLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectMenuListText", InternalsV8Internal::selectMenuListTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isSelectPopupVisible", InternalsV8Internal::isSelectPopupVisibleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectPopupItemStyleIsRtl", InternalsV8Internal::selectPopupItemStyleIsRtlMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectPopupItemStyleFontHeight", InternalsV8Internal::selectPopupItemStyleFontHeightMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"resetTypeAheadSession", InternalsV8Internal::resetTypeAheadSessionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectionBounds", InternalsV8Internal::selectionBoundsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loseSharedGraphicsContext3D", InternalsV8Internal::loseSharedGraphicsContext3DMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forceCompositingUpdate", InternalsV8Internal::forceCompositingUpdateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setZoomFactor", InternalsV8Internal::setZoomFactorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setShouldRevealPassword", InternalsV8Internal::setShouldRevealPasswordMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createResolvedPromise", InternalsV8Internal::createResolvedPromiseMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"createRejectedPromise", InternalsV8Internal::createRejectedPromiseMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"addOneToPromise", InternalsV8Internal::addOneToPromiseMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"promiseCheck", InternalsV8Internal::promiseCheckMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"promiseCheckWithoutExceptionState", InternalsV8Internal::promiseCheckWithoutExceptionStateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"promiseCheckRange", InternalsV8Internal::promiseCheckRangeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"promiseCheckOverload", InternalsV8Internal::promiseCheckOverloadMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"setValueForUser", InternalsV8Internal::setValueForUserMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"textSurroundingNode", InternalsV8Internal::textSurroundingNodeMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setFocused", InternalsV8Internal::setFocusedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setInitialFocus", InternalsV8Internal::setInitialFocusMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ignoreLayoutWithPendingStylesheets", InternalsV8Internal::ignoreLayoutWithPendingStylesheetsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setNetworkConnectionInfoOverride", InternalsV8Internal::setNetworkConnectionInfoOverrideMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearNetworkConnectionInfoOverride", InternalsV8Internal::clearNetworkConnectionInfoOverrideMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"countHitRegions", InternalsV8Internal::countHitRegionsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isInCanvasFontCache", InternalsV8Internal::isInCanvasFontCacheMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"canvasFontCacheMaxFonts", InternalsV8Internal::canvasFontCacheMaxFontsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dictionaryTest", InternalsV8Internal::dictionaryTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"unionTypesTest", InternalsV8Internal::unionTypesTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"callbackFunctionTest", InternalsV8Internal::callbackFunctionTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setScrollChain", InternalsV8Internal::setScrollChainMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forceBlinkGCWithoutV8GC", InternalsV8Internal::forceBlinkGCWithoutV8GCMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectedHTMLForClipboard", InternalsV8Internal::selectedHTMLForClipboardMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectedTextForClipboard", InternalsV8Internal::selectedTextForClipboardMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setVisualViewportOffset", InternalsV8Internal::setVisualViewportOffsetMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"visualViewportHeight", InternalsV8Internal::visualViewportHeightMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"visualViewportWidth", InternalsV8Internal::visualViewportWidthMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"visualViewportScrollX", InternalsV8Internal::visualViewportScrollXMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"visualViewportScrollY", InternalsV8Internal::visualViewportScrollYMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"magnifyScaleAroundAnchor", InternalsV8Internal::magnifyScaleAroundAnchorMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isUseCounted", InternalsV8Internal::isUseCountedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isCSSPropertyUseCounted", InternalsV8Internal::isCSSPropertyUseCountedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"unscopableMethod", InternalsV8Internal::unscopableMethodMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"focusRingRects", InternalsV8Internal::focusRingRectsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"outlineRects", InternalsV8Internal::outlineRectsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setCapsLockState", InternalsV8Internal::setCapsLockStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setScrollbarVisibilityInScrollableArea", InternalsV8Internal::setScrollbarVisibilityInScrollableAreaMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"monotonicTimeToZeroBasedDocumentTime", InternalsV8Internal::monotonicTimeToZeroBasedDocumentTimeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setMediaElementNetworkState", InternalsV8Internal::setMediaElementNetworkStateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getScrollAnimationState", InternalsV8Internal::getScrollAnimationStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getProgrammaticScrollAnimationState", InternalsV8Internal::getProgrammaticScrollAnimationStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"visualRect", InternalsV8Internal::visualRectMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"originTrialsTest", InternalsV8Internal::originTrialsTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"crash", InternalsV8Internal::crashMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setIsLowEndDevice", InternalsV8Internal::setIsLowEndDeviceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"keys", InternalsV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"values", InternalsV8Internal::valuesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"entries", InternalsV8Internal::entriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forEach", InternalsV8Internal::forEachMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "address", InternalsV8Internal::addressMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "observeGC", InternalsV8Internal::observeGCMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "elementLayoutTreeAsText", InternalsV8Internal::elementLayoutTreeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isPreloaded", InternalsV8Internal::isPreloadedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isPreloadedBy", InternalsV8Internal::isPreloadedByMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isLoading", InternalsV8Internal::isLoadingMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isLoadingFromMemoryCache", InternalsV8Internal::isLoadingFromMemoryCacheMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getResourcePriority", InternalsV8Internal::getResourcePriorityMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getResourceHeader", InternalsV8Internal::getResourceHeaderMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isSharingStyle", InternalsV8Internal::isSharingStyleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "computedStyleIncludingVisitedInfo", InternalsV8Internal::computedStyleIncludingVisitedInfoMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createUserAgentShadowRoot", InternalsV8Internal::createUserAgentShadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowRoot", InternalsV8Internal::shadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "youngestShadowRoot", InternalsV8Internal::youngestShadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oldestShadowRoot", InternalsV8Internal::oldestShadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "youngerShadowRoot", InternalsV8Internal::youngerShadowRootMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowRootType", InternalsV8Internal::shadowRootTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasShadowInsertionPoint", InternalsV8Internal::hasShadowInsertionPointMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasContentElement", InternalsV8Internal::hasContentElementMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "countElementShadow", InternalsV8Internal::countElementShadowMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowPseudoId", InternalsV8Internal::shadowPseudoIdMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isValidContentSelect", InternalsV8Internal::isValidContentSelectMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "treeScopeRootNode", InternalsV8Internal::treeScopeRootNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "parentTreeScope", InternalsV8Internal::parentTreeScopeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasSelectorForIdInShadow", InternalsV8Internal::hasSelectorForIdInShadowMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasSelectorForClassInShadow", InternalsV8Internal::hasSelectorForClassInShadowMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasSelectorForAttributeInShadow", InternalsV8Internal::hasSelectorForAttributeInShadowMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compareTreeScopePosition", InternalsV8Internal::compareTreeScopePositionMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "updateStyleAndReturnAffectedElementCount", InternalsV8Internal::updateStyleAndReturnAffectedElementCountMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "needsLayoutCount", InternalsV8Internal::needsLayoutCountMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hitTestCount", InternalsV8Internal::hitTestCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hitTestCacheHits", InternalsV8Internal::hitTestCacheHitsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "elementFromPoint", InternalsV8Internal::elementFromPointMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearHitTestCache", InternalsV8Internal::clearHitTestCacheMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pauseAnimations", InternalsV8Internal::pauseAnimationsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isCompositedAnimation", InternalsV8Internal::isCompositedAnimationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disableCompositedAnimation", InternalsV8Internal::disableCompositedAnimationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disableCSSAdditiveAnimations", InternalsV8Internal::disableCSSAdditiveAnimationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "advanceTimeForImage", InternalsV8Internal::advanceTimeForImageMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "advanceImageAnimation", InternalsV8Internal::advanceImageAnimationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nextSiblingInFlatTree", InternalsV8Internal::nextSiblingInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "firstChildInFlatTree", InternalsV8Internal::firstChildInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastChildInFlatTree", InternalsV8Internal::lastChildInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nextInFlatTree", InternalsV8Internal::nextInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "previousInFlatTree", InternalsV8Internal::previousInFlatTreeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "visiblePlaceholder", InternalsV8Internal::visiblePlaceholderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectColorInColorChooser", InternalsV8Internal::selectColorInColorChooserMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "endColorChooser", InternalsV8Internal::endColorChooserMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasAutofocusRequest", InternalsV8Internal::hasAutofocusRequestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "formControlStateOfHistoryItem", InternalsV8Internal::formControlStateOfHistoryItemMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setFormControlStateOfHistoryItem", InternalsV8Internal::setFormControlStateOfHistoryItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "absoluteCaretBounds", InternalsV8Internal::absoluteCaretBoundsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "boundingBox", InternalsV8Internal::boundingBoxMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setMarker", InternalsV8Internal::setMarkerMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "markerCountForNode", InternalsV8Internal::markerCountForNodeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "activeMarkerCountForNode", InternalsV8Internal::activeMarkerCountForNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "markerRangeForNode", InternalsV8Internal::markerRangeForNodeMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "markerDescriptionForNode", InternalsV8Internal::markerDescriptionForNodeMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addTextMatchMarker", InternalsV8Internal::addTextMatchMarkerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addCompositionMarker", InternalsV8Internal::addCompositionMarkerMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setMarkersActive", InternalsV8Internal::setMarkersActiveMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setMarkedTextMatchesAreHighlighted", InternalsV8Internal::setMarkedTextMatchesAreHighlightedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setFrameViewPosition", InternalsV8Internal::setFrameViewPositionMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "viewportAsText", InternalsV8Internal::viewportAsTextMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "elementShouldAutoComplete", InternalsV8Internal::elementShouldAutoCompleteMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "suggestedValue", InternalsV8Internal::suggestedValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setSuggestedValue", InternalsV8Internal::setSuggestedValueMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setEditingValue", InternalsV8Internal::setEditingValueMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setAutofilled", InternalsV8Internal::setAutofilledMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rangeFromLocationAndLength", InternalsV8Internal::rangeFromLocationAndLengthMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "locationFromRange", InternalsV8Internal::locationFromRangeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lengthFromRange", InternalsV8Internal::lengthFromRangeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rangeAsText", InternalsV8Internal::rangeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "touchPositionAdjustedToBestClickableNode", InternalsV8Internal::touchPositionAdjustedToBestClickableNodeMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "touchNodeAdjustedToBestClickableNode", InternalsV8Internal::touchNodeAdjustedToBestClickableNodeMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "touchPositionAdjustedToBestContextMenuNode", InternalsV8Internal::touchPositionAdjustedToBestContextMenuNodeMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "touchNodeAdjustedToBestContextMenuNode", InternalsV8Internal::touchNodeAdjustedToBestContextMenuNodeMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bestZoomableAreaForTouchPoint", InternalsV8Internal::bestZoomableAreaForTouchPointMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastSpellCheckRequestSequence", InternalsV8Internal::lastSpellCheckRequestSequenceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastSpellCheckProcessedSequence", InternalsV8Internal::lastSpellCheckProcessedSequenceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "userPreferredLanguages", InternalsV8Internal::userPreferredLanguagesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setUserPreferredLanguages", InternalsV8Internal::setUserPreferredLanguagesMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaKeysCount", InternalsV8Internal::mediaKeysCountMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaKeySessionCount", InternalsV8Internal::mediaKeySessionCountMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "suspendableObjectCount", InternalsV8Internal::suspendableObjectCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "wheelEventHandlerCount", InternalsV8Internal::wheelEventHandlerCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollEventHandlerCount", InternalsV8Internal::scrollEventHandlerCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "touchStartOrMoveEventHandlerCount", InternalsV8Internal::touchStartOrMoveEventHandlerCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "touchEndOrCancelEventHandlerCount", InternalsV8Internal::touchEndOrCancelEventHandlerCountMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "touchEventTargetLayerRects", InternalsV8Internal::touchEventTargetLayerRectsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "executeCommand", InternalsV8Internal::executeCommandMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "htmlNamespace", InternalsV8Internal::htmlNamespaceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "htmlTags", InternalsV8Internal::htmlTagsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "svgNamespace", InternalsV8Internal::svgNamespaceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "svgTags", InternalsV8Internal::svgTagsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nodesFromRect", InternalsV8Internal::nodesFromRectMethodCallback, 0, 9, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasSpellingMarker", InternalsV8Internal::hasSpellingMarkerMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasGrammarMarker", InternalsV8Internal::hasGrammarMarkerMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setSpellCheckingEnabled", InternalsV8Internal::setSpellCheckingEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "replaceMisspelled", InternalsV8Internal::replaceMisspelledMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "canHyphenate", InternalsV8Internal::canHyphenateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setMockHyphenation", InternalsV8Internal::setMockHyphenationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isOverwriteModeEnabled", InternalsV8Internal::isOverwriteModeEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "toggleOverwriteModeEnabled", InternalsV8Internal::toggleOverwriteModeEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "numberOfScrollableAreas", InternalsV8Internal::numberOfScrollableAreasMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isPageBoxVisible", InternalsV8Internal::isPageBoxVisibleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "layerTreeAsText", InternalsV8Internal::layerTreeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "elementLayerTreeAsText", InternalsV8Internal::elementLayerTreeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollsWithRespectTo", InternalsV8Internal::scrollsWithRespectToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollingStateTreeAsText", InternalsV8Internal::scrollingStateTreeAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mainThreadScrollingReasons", InternalsV8Internal::mainThreadScrollingReasonsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nonFastScrollableRects", InternalsV8Internal::nonFastScrollableRectsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "evictAllResources", InternalsV8Internal::evictAllResourcesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "numberOfLiveNodes", InternalsV8Internal::numberOfLiveNodesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "numberOfLiveDocuments", InternalsV8Internal::numberOfLiveDocumentsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dumpRefCountedInstanceCounts", InternalsV8Internal::dumpRefCountedInstanceCountsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "counterValue", InternalsV8Internal::counterValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageNumber", InternalsV8Internal::pageNumberMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shortcutIconURLs", InternalsV8Internal::shortcutIconURLsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "allIconURLs", InternalsV8Internal::allIconURLsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "numberOfPages", InternalsV8Internal::numberOfPagesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageProperty", InternalsV8Internal::pagePropertyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageSizeAndMarginsInPixels", InternalsV8Internal::pageSizeAndMarginsInPixelsMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageScaleFactor", InternalsV8Internal::pageScaleFactorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setPageScaleFactor", InternalsV8Internal::setPageScaleFactorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setPageScaleFactorLimits", InternalsV8Internal::setPageScaleFactorLimitsMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setIsCursorVisible", InternalsV8Internal::setIsCursorVisibleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "effectivePreload", InternalsV8Internal::effectivePreloadMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaPlayerRemoteRouteAvailabilityChanged", InternalsV8Internal::mediaPlayerRemoteRouteAvailabilityChangedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaPlayerPlayingRemotelyChanged", InternalsV8Internal::mediaPlayerPlayingRemotelyChangedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "registerURLSchemeAsBypassingContentSecurityPolicy", InternalsV8Internal::registerURLSchemeAsBypassingContentSecurityPolicyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeURLSchemeRegisteredAsBypassingContentSecurityPolicy", InternalsV8Internal::removeURLSchemeRegisteredAsBypassingContentSecurityPolicyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "typeConversions", InternalsV8Internal::typeConversionsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getReferencedFilePaths", InternalsV8Internal::getReferencedFilePathsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "startStoringCompositedLayerDebugInfo", InternalsV8Internal::startStoringCompositedLayerDebugInfoMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stopStoringCompositedLayerDebugInfo", InternalsV8Internal::stopStoringCompositedLayerDebugInfoMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "startTrackingRepaints", InternalsV8Internal::startTrackingRepaintsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stopTrackingRepaints", InternalsV8Internal::stopTrackingRepaintsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasks", InternalsV8Internal::updateLayoutIgnorePendingStylesheetsAndRunPostLayoutTasksMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forceFullRepaint", InternalsV8Internal::forceFullRepaintMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "draggableRegions", InternalsV8Internal::draggableRegionsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nonDraggableRegions", InternalsV8Internal::nonDraggableRegionsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getCurrentCursorInfo", InternalsV8Internal::getCurrentCursorInfoMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "markerTextForListItem", InternalsV8Internal::markerTextForListItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deserializeBuffer", InternalsV8Internal::deserializeBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "serializeObject", InternalsV8Internal::serializeObjectMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forceReload", InternalsV8Internal::forceReloadMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getImageSourceURL", InternalsV8Internal::getImageSourceURLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectMenuListText", InternalsV8Internal::selectMenuListTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isSelectPopupVisible", InternalsV8Internal::isSelectPopupVisibleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectPopupItemStyleIsRtl", InternalsV8Internal::selectPopupItemStyleIsRtlMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectPopupItemStyleFontHeight", InternalsV8Internal::selectPopupItemStyleFontHeightMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "resetTypeAheadSession", InternalsV8Internal::resetTypeAheadSessionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectionBounds", InternalsV8Internal::selectionBoundsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loseSharedGraphicsContext3D", InternalsV8Internal::loseSharedGraphicsContext3DMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forceCompositingUpdate", InternalsV8Internal::forceCompositingUpdateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setZoomFactor", InternalsV8Internal::setZoomFactorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setShouldRevealPassword", InternalsV8Internal::setShouldRevealPasswordMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createResolvedPromise", InternalsV8Internal::createResolvedPromiseMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "createRejectedPromise", InternalsV8Internal::createRejectedPromiseMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "addOneToPromise", InternalsV8Internal::addOneToPromiseMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "promiseCheck", InternalsV8Internal::promiseCheckMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "promiseCheckWithoutExceptionState", InternalsV8Internal::promiseCheckWithoutExceptionStateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "promiseCheckRange", InternalsV8Internal::promiseCheckRangeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "promiseCheckOverload", InternalsV8Internal::promiseCheckOverloadMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "setValueForUser", InternalsV8Internal::setValueForUserMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "textSurroundingNode", InternalsV8Internal::textSurroundingNodeMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setFocused", InternalsV8Internal::setFocusedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setInitialFocus", InternalsV8Internal::setInitialFocusMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ignoreLayoutWithPendingStylesheets", InternalsV8Internal::ignoreLayoutWithPendingStylesheetsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setNetworkConnectionInfoOverride", InternalsV8Internal::setNetworkConnectionInfoOverrideMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearNetworkConnectionInfoOverride", InternalsV8Internal::clearNetworkConnectionInfoOverrideMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "countHitRegions", InternalsV8Internal::countHitRegionsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isInCanvasFontCache", InternalsV8Internal::isInCanvasFontCacheMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "canvasFontCacheMaxFonts", InternalsV8Internal::canvasFontCacheMaxFontsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dictionaryTest", InternalsV8Internal::dictionaryTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "unionTypesTest", InternalsV8Internal::unionTypesTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "callbackFunctionTest", InternalsV8Internal::callbackFunctionTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setScrollChain", InternalsV8Internal::setScrollChainMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forceBlinkGCWithoutV8GC", InternalsV8Internal::forceBlinkGCWithoutV8GCMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectedHTMLForClipboard", InternalsV8Internal::selectedHTMLForClipboardMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectedTextForClipboard", InternalsV8Internal::selectedTextForClipboardMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setVisualViewportOffset", InternalsV8Internal::setVisualViewportOffsetMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "visualViewportHeight", InternalsV8Internal::visualViewportHeightMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "visualViewportWidth", InternalsV8Internal::visualViewportWidthMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "visualViewportScrollX", InternalsV8Internal::visualViewportScrollXMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "visualViewportScrollY", InternalsV8Internal::visualViewportScrollYMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "magnifyScaleAroundAnchor", InternalsV8Internal::magnifyScaleAroundAnchorMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isUseCounted", InternalsV8Internal::isUseCountedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isCSSPropertyUseCounted", InternalsV8Internal::isCSSPropertyUseCountedMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "unscopableMethod", InternalsV8Internal::unscopableMethodMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "focusRingRects", InternalsV8Internal::focusRingRectsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "outlineRects", InternalsV8Internal::outlineRectsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setCapsLockState", InternalsV8Internal::setCapsLockStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setScrollbarVisibilityInScrollableArea", InternalsV8Internal::setScrollbarVisibilityInScrollableAreaMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "monotonicTimeToZeroBasedDocumentTime", InternalsV8Internal::monotonicTimeToZeroBasedDocumentTimeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setMediaElementNetworkState", InternalsV8Internal::setMediaElementNetworkStateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getScrollAnimationState", InternalsV8Internal::getScrollAnimationStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getProgrammaticScrollAnimationState", InternalsV8Internal::getProgrammaticScrollAnimationStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "visualRect", InternalsV8Internal::visualRectMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "originTrialsTest", InternalsV8Internal::originTrialsTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "crash", InternalsV8Internal::crashMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setIsLowEndDevice", InternalsV8Internal::setIsLowEndDeviceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "keys", InternalsV8Internal::keysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "values", InternalsV8Internal::valuesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "entries", InternalsV8Internal::entriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forEach", InternalsV8Internal::forEachMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8Internals::installV8InternalsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Internals::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Internals::internalFieldCount);
+void V8Internals::installV8InternalsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Internals::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Internals::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8InternalsConstants[] = {
-      {"LAYER_TREE_INCLUDES_DEBUG_INFO", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"LAYER_TREE_INCLUDES_PAINT_INVALIDATIONS", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"LAYER_TREE_INCLUDES_PAINTING_PHASES", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"LAYER_TREE_INCLUDES_ROOT_LAYER", 8, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"LAYER_TREE_INCLUDES_CLIP_AND_SCROLL_PARENTS", 16, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"LAYER_TREE_INCLUDES_COMPOSITING_REASONS", 32, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"OUTPUT_AS_LAYER_TREE", 64, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8InternalsConstants, WTF_ARRAY_LENGTH(V8InternalsConstants));
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InternalsAccessors, WTF_ARRAY_LENGTH(V8InternalsAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InternalsMethods, WTF_ARRAY_LENGTH(V8InternalsMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8InternalsConstants[] = {
+        { "LAYER_TREE_INCLUDES_DEBUG_INFO", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "LAYER_TREE_INCLUDES_PAINT_INVALIDATIONS", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "LAYER_TREE_INCLUDES_PAINTING_PHASES", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "LAYER_TREE_INCLUDES_ROOT_LAYER", 8, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "LAYER_TREE_INCLUDES_CLIP_AND_SCROLL_PARENTS", 16, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "LAYER_TREE_INCLUDES_COMPOSITING_REASONS", 32, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "OUTPUT_AS_LAYER_TREE", 64, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8InternalsConstants, WTF_ARRAY_LENGTH(V8InternalsConstants));
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InternalsAccessors, WTF_ARRAY_LENGTH(V8InternalsAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InternalsMethods, WTF_ARRAY_LENGTH(V8InternalsMethods));
 
-  // Iterator (@@iterator)
-  const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, InternalsV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
-  V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
+    // Iterator (@@iterator)
+    const V8DOMConfiguration::SymbolKeyedMethodConfiguration symbolKeyedIteratorConfiguration = { v8::Symbol::GetIterator, InternalsV8Internal::iteratorMethodCallback, 0, v8::DontEnum, V8DOMConfiguration::OnPrototype };
+    V8DOMConfiguration::installMethod(isolate, world, prototypeTemplate, signature, symbolKeyedIteratorConfiguration);
 }
 
-v8::Local<v8::FunctionTemplate> V8Internals::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8Internals::installV8InternalsTemplateFunction);
+v8::Local<v8::FunctionTemplate> V8Internals::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8Internals::installV8InternalsTemplateFunction);
 }
 
-bool V8Internals::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Internals::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Internals::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Internals::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Internals* V8Internals::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Internals* V8Internals::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-void V8Internals::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  v8::Isolate* isolate = context->GetIsolate();
-  v8::Local<v8::Name> unscopablesSymbol(v8::Symbol::GetUnscopables(isolate));
-  v8::Local<v8::Object> unscopables;
-  if (v8CallBoolean(prototypeObject->HasOwnProperty(context, unscopablesSymbol)))
-    unscopables = prototypeObject->Get(context, unscopablesSymbol).ToLocalChecked().As<v8::Object>();
-  else
-    unscopables = v8::Object::New(isolate);
-  unscopables->CreateDataProperty(context, v8AtomicString(isolate, "unscopableAttribute"), v8::True(isolate)).FromJust();
-  unscopables->CreateDataProperty(context, v8AtomicString(isolate, "unscopableMethod"), v8::True(isolate)).FromJust();
-  prototypeObject->CreateDataProperty(context, unscopablesSymbol, unscopables).FromJust();
+void V8Internals::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::Local<v8::Name> unscopablesSymbol(v8::Symbol::GetUnscopables(isolate));
+    v8::Local<v8::Object> unscopables;
+    if (v8CallBoolean(prototypeObject->HasOwnProperty(context, unscopablesSymbol)))
+        unscopables = prototypeObject->Get(context, unscopablesSymbol).ToLocalChecked().As<v8::Object>();
+    else
+        unscopables = v8::Object::New(isolate);
+    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "unscopableAttribute"), v8::True(isolate)).FromJust();
+    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "unscopableMethod"), v8::True(isolate)).FromJust();
+    prototypeObject->CreateDataProperty(context, unscopablesSymbol, unscopables).FromJust();
 }
 
 InstallTemplateFunction V8Internals::installV8InternalsTemplateFunction = (InstallTemplateFunction)&V8Internals::installV8InternalsTemplate;
 
-void V8Internals::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction) {
-  V8Internals::installV8InternalsTemplateFunction = installTemplateFunction;
-  if (preparePrototypeAndInterfaceObjectFunction)
-    V8Internals::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
+void V8Internals::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction)
+{
+    V8Internals::installV8InternalsTemplateFunction = installTemplateFunction;
+    if (preparePrototypeAndInterfaceObjectFunction)
+        V8Internals::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
 }
 
-}  // namespace blink
+} // namespace blink

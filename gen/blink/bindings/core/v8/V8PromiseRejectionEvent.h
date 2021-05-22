@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PromiseRejectionEvent_h
 #define V8PromiseRejectionEvent_h
 
@@ -25,35 +25,39 @@
 namespace blink {
 
 class V8PromiseRejectionEvent {
-  STATIC_ONLY(V8PromiseRejectionEvent);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static PromiseRejectionEvent* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<PromiseRejectionEvent>();
-  }
-  CORE_EXPORT static PromiseRejectionEvent* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<PromiseRejectionEvent>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<PromiseRejectionEvent>());
-  }
-  static void visitDOMWrapper(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
-  static void visitDOMWrapperCustom(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
-  static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
-  static void promiseAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>&);
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8PromiseRejectionEvent);
+
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static PromiseRejectionEvent* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<PromiseRejectionEvent>();
+    }
+    CORE_EXPORT static PromiseRejectionEvent* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<PromiseRejectionEvent>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<PromiseRejectionEvent>());
+    }
+    static void visitDOMWrapper(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
+    static void visitDOMWrapperCustom(v8::Isolate*, ScriptWrappable*, const v8::Persistent<v8::Object>&);
+    static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
+    static void promiseAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<PromiseRejectionEvent> {
-  typedef V8PromiseRejectionEvent Type;
+    typedef V8PromiseRejectionEvent Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PromiseRejectionEvent_h
+#endif // V8PromiseRejectionEvent_h

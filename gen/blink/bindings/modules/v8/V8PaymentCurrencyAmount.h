@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PaymentCurrencyAmount_h
 #define V8PaymentCurrencyAmount_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8PaymentCurrencyAmount {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PaymentCurrencyAmount&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PaymentCurrencyAmount&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8PaymentCurrencyAmount(const PaymentCurrencyAmount&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PaymentCurrencyAmount& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PaymentCurrencyAmount& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<PaymentCurrencyAmount> {
-  static PaymentCurrencyAmount nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static PaymentCurrencyAmount nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<PaymentCurrencyAmount> {
-  typedef V8PaymentCurrencyAmount Type;
+    typedef V8PaymentCurrencyAmount Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PaymentCurrencyAmount_h
+#endif // V8PaymentCurrencyAmount_h

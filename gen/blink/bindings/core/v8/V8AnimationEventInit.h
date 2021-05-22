@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AnimationEventInit_h
 #define V8AnimationEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8AnimationEventInit {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AnimationEventInit&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AnimationEventInit&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8AnimationEventInit(const AnimationEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AnimationEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AnimationEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<AnimationEventInit> {
-  static AnimationEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static AnimationEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<AnimationEventInit> {
-  typedef V8AnimationEventInit Type;
+    typedef V8AnimationEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8AnimationEventInit_h
+#endif // V8AnimationEventInit_h

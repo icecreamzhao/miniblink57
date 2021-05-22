@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PhotoSettings_h
 #define PhotoSettings_h
 
@@ -22,113 +22,114 @@
 namespace blink {
 
 class MODULES_EXPORT PhotoSettings : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PhotoSettings();
-  virtual ~PhotoSettings();
-  PhotoSettings(const PhotoSettings&);
-  PhotoSettings& operator=(const PhotoSettings&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasBrightness() const;
-  double brightness() const;
-  void setBrightness(double);
+public:
+    PhotoSettings();
+    virtual ~PhotoSettings();
+    PhotoSettings(const PhotoSettings&);
+    PhotoSettings& operator=(const PhotoSettings&);
 
-  bool hasColorTemperature() const;
-  double colorTemperature() const;
-  void setColorTemperature(double);
+    bool hasBrightness() const;
+    double brightness() const;
+    void setBrightness(double);
 
-  bool hasContrast() const;
-  double contrast() const;
-  void setContrast(double);
+    bool hasColorTemperature() const;
+    double colorTemperature() const;
+    void setColorTemperature(double);
 
-  bool hasExposureCompensation() const;
-  double exposureCompensation() const;
-  void setExposureCompensation(double);
+    bool hasContrast() const;
+    double contrast() const;
+    void setContrast(double);
 
-  bool hasExposureMode() const;
-  String exposureMode() const;
-  void setExposureMode(String);
+    bool hasExposureCompensation() const;
+    double exposureCompensation() const;
+    void setExposureCompensation(double);
 
-  bool hasFillLightMode() const;
-  String fillLightMode() const;
-  void setFillLightMode(String);
+    bool hasExposureMode() const;
+    String exposureMode() const;
+    void setExposureMode(String);
 
-  bool hasFocusMode() const;
-  String focusMode() const;
-  void setFocusMode(String);
+    bool hasFillLightMode() const;
+    String fillLightMode() const;
+    void setFillLightMode(String);
 
-  bool hasImageHeight() const;
-  double imageHeight() const;
-  void setImageHeight(double);
+    bool hasFocusMode() const;
+    String focusMode() const;
+    void setFocusMode(String);
 
-  bool hasImageWidth() const;
-  double imageWidth() const;
-  void setImageWidth(double);
+    bool hasImageHeight() const;
+    double imageHeight() const;
+    void setImageHeight(double);
 
-  bool hasIso() const;
-  double iso() const;
-  void setIso(double);
+    bool hasImageWidth() const;
+    double imageWidth() const;
+    void setImageWidth(double);
 
-  bool hasPointsOfInterest() const;
-  const HeapVector<Point2D>& pointsOfInterest() const;
-  void setPointsOfInterest(const HeapVector<Point2D>&);
+    bool hasIso() const;
+    double iso() const;
+    void setIso(double);
 
-  bool hasRedEyeReduction() const;
-  bool redEyeReduction() const;
-  void setRedEyeReduction(bool);
+    bool hasPointsOfInterest() const;
+    const HeapVector<Point2D>& pointsOfInterest() const;
+    void setPointsOfInterest(const HeapVector<Point2D>&);
 
-  bool hasSaturation() const;
-  double saturation() const;
-  void setSaturation(double);
+    bool hasRedEyeReduction() const;
+    bool redEyeReduction() const;
+    void setRedEyeReduction(bool);
 
-  bool hasSharpness() const;
-  double sharpness() const;
-  void setSharpness(double);
+    bool hasSaturation() const;
+    double saturation() const;
+    void setSaturation(double);
 
-  bool hasWhiteBalanceMode() const;
-  String whiteBalanceMode() const;
-  void setWhiteBalanceMode(String);
+    bool hasSharpness() const;
+    double sharpness() const;
+    void setSharpness(double);
 
-  bool hasZoom() const;
-  double zoom() const;
-  void setZoom(double);
+    bool hasWhiteBalanceMode() const;
+    String whiteBalanceMode() const;
+    void setWhiteBalanceMode(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasZoom() const;
+    double zoom() const;
+    void setZoom(double);
 
- private:
-  bool m_hasBrightness = false;
-  double m_brightness;
-  bool m_hasColorTemperature = false;
-  double m_colorTemperature;
-  bool m_hasContrast = false;
-  double m_contrast;
-  bool m_hasExposureCompensation = false;
-  double m_exposureCompensation;
-  String m_exposureMode;
-  String m_fillLightMode;
-  String m_focusMode;
-  bool m_hasImageHeight = false;
-  double m_imageHeight;
-  bool m_hasImageWidth = false;
-  double m_imageWidth;
-  bool m_hasIso = false;
-  double m_iso;
-  bool m_hasPointsOfInterest = false;
-  HeapVector<Point2D> m_pointsOfInterest;
-  bool m_hasRedEyeReduction = false;
-  bool m_redEyeReduction;
-  bool m_hasSaturation = false;
-  double m_saturation;
-  bool m_hasSharpness = false;
-  double m_sharpness;
-  String m_whiteBalanceMode;
-  bool m_hasZoom = false;
-  double m_zoom;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PhotoSettings;
+private:
+    bool m_hasBrightness = false;
+    double m_brightness;
+    bool m_hasColorTemperature = false;
+    double m_colorTemperature;
+    bool m_hasContrast = false;
+    double m_contrast;
+    bool m_hasExposureCompensation = false;
+    double m_exposureCompensation;
+    String m_exposureMode;
+    String m_fillLightMode;
+    String m_focusMode;
+    bool m_hasImageHeight = false;
+    double m_imageHeight;
+    bool m_hasImageWidth = false;
+    double m_imageWidth;
+    bool m_hasIso = false;
+    double m_iso;
+    bool m_hasPointsOfInterest = false;
+    HeapVector<Point2D> m_pointsOfInterest;
+    bool m_hasRedEyeReduction = false;
+    bool m_redEyeReduction;
+    bool m_hasSaturation = false;
+    double m_saturation;
+    bool m_hasSharpness = false;
+    double m_sharpness;
+    String m_whiteBalanceMode;
+    bool m_hasZoom = false;
+    double m_zoom;
+
+    friend class V8PhotoSettings;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PhotoSettings_h
+#endif // PhotoSettings_h

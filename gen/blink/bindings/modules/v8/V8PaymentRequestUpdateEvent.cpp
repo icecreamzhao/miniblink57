@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PaymentRequestUpdateEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,127 +50,136 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PaymentRequestUpdateEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PaymentRequestUpdateEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PaymentRequestUpdateEventV8Internal {
 
-static void updateWithMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaymentRequestUpdateEvent", "updateWith");
+    static void updateWithMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaymentRequestUpdateEvent", "updateWith");
 
-  PaymentRequestUpdateEvent* impl = V8PaymentRequestUpdateEvent::toImpl(info.Holder());
+        PaymentRequestUpdateEvent* impl = V8PaymentRequestUpdateEvent::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  ScriptPromise d;
-  d = ScriptPromise::cast(ScriptState::current(info.GetIsolate()), info[0]);
-  if (!d.isUndefinedOrNull() && !d.isObject()) {
-    exceptionState.throwTypeError("parameter 1 ('d') is not an object.");
+        ScriptPromise d;
+        d = ScriptPromise::cast(ScriptState::current(info.GetIsolate()), info[0]);
+        if (!d.isUndefinedOrNull() && !d.isObject()) {
+            exceptionState.throwTypeError("parameter 1 ('d') is not an object.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->updateWith(scriptState, d, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->updateWith(scriptState, d, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void updateWithMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentRequestUpdateEventV8Internal::updateWithMethod(info);
-}
+    MODULES_EXPORT void updateWithMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentRequestUpdateEventV8Internal::updateWithMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PaymentRequestUpdateEvent");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PaymentRequestUpdateEvent");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  PaymentRequestUpdateEventInit eventInitDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        PaymentRequestUpdateEventInit eventInitDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
 
-    return;
-  }
-  V8PaymentRequestUpdateEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8PaymentRequestUpdateEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  PaymentRequestUpdateEvent* impl = PaymentRequestUpdateEvent::create(type, eventInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PaymentRequestUpdateEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        PaymentRequestUpdateEvent* impl = PaymentRequestUpdateEvent::create(type, eventInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PaymentRequestUpdateEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace PaymentRequestUpdateEventV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8PaymentRequestUpdateEventMethods[] = {
-    {"updateWith", PaymentRequestUpdateEventV8Internal::updateWithMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "updateWith", PaymentRequestUpdateEventV8Internal::updateWithMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8PaymentRequestUpdateEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("PaymentRequestUpdateEvent"));
-    return;
-  }
+void V8PaymentRequestUpdateEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("PaymentRequestUpdateEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  PaymentRequestUpdateEventV8Internal::constructor(info);
+    PaymentRequestUpdateEventV8Internal::constructor(info);
 }
 
-static void installV8PaymentRequestUpdateEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaymentRequestUpdateEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8PaymentRequestUpdateEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8PaymentRequestUpdateEvent::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8PaymentRequestUpdateEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaymentRequestUpdateEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8PaymentRequestUpdateEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8PaymentRequestUpdateEvent::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  if (!RuntimeEnabledFeatures::paymentRequestEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::paymentRequestEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentRequestUpdateEventMethods, WTF_ARRAY_LENGTH(V8PaymentRequestUpdateEventMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentRequestUpdateEventMethods, WTF_ARRAY_LENGTH(V8PaymentRequestUpdateEventMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8PaymentRequestUpdateEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaymentRequestUpdateEventTemplate);
+v8::Local<v8::FunctionTemplate> V8PaymentRequestUpdateEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaymentRequestUpdateEventTemplate);
 }
 
-bool V8PaymentRequestUpdateEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PaymentRequestUpdateEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PaymentRequestUpdateEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PaymentRequestUpdateEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PaymentRequestUpdateEvent* V8PaymentRequestUpdateEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PaymentRequestUpdateEvent* V8PaymentRequestUpdateEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

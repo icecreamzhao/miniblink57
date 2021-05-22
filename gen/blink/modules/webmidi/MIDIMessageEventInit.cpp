@@ -8,36 +8,42 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MIDIMessageEventInit.h"
 
 namespace blink {
 
-MIDIMessageEventInit::MIDIMessageEventInit() {
+MIDIMessageEventInit::MIDIMessageEventInit()
+{
 }
 
-MIDIMessageEventInit::~MIDIMessageEventInit() {}
+MIDIMessageEventInit::~MIDIMessageEventInit() { }
 
 MIDIMessageEventInit::MIDIMessageEventInit(const MIDIMessageEventInit&) = default;
 
 MIDIMessageEventInit& MIDIMessageEventInit::operator=(const MIDIMessageEventInit&) = default;
 
-bool MIDIMessageEventInit::hasData() const {
-  return m_data;
+bool MIDIMessageEventInit::hasData() const
+{
+    return m_data;
 }
-DOMUint8Array* MIDIMessageEventInit::data() const {
-  return m_data;
+DOMUint8Array* MIDIMessageEventInit::data() const
+{
+    return m_data;
 }
-void MIDIMessageEventInit::setData(DOMUint8Array* value) {
-  m_data = value;
+void MIDIMessageEventInit::setData(DOMUint8Array* value)
+{
+    m_data = value;
 }
-void MIDIMessageEventInit::setDataToNull() {
-  m_data = Member<DOMUint8Array>();
+void MIDIMessageEventInit::setDataToNull()
+{
+    m_data = Member<DOMUint8Array>();
 }
 
-DEFINE_TRACE(MIDIMessageEventInit) {
-  visitor->trace(m_data);
-  EventInit::trace(visitor);
+DEFINE_TRACE(MIDIMessageEventInit)
+{
+    visitor->trace(m_data);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

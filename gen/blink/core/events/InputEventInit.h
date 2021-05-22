@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef InputEventInit_h
 #define InputEventInit_h
 
@@ -23,50 +23,51 @@ class Range;
 class DataTransfer;
 
 class CORE_EXPORT InputEventInit : public UIEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  InputEventInit();
-  virtual ~InputEventInit();
-  InputEventInit(const InputEventInit&);
-  InputEventInit& operator=(const InputEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasData() const;
-  String data() const;
-  void setData(String);
-  void setDataToNull();
+public:
+    InputEventInit();
+    virtual ~InputEventInit();
+    InputEventInit(const InputEventInit&);
+    InputEventInit& operator=(const InputEventInit&);
 
-  bool hasDataTransfer() const;
-  DataTransfer* dataTransfer() const;
-  void setDataTransfer(DataTransfer*);
-  void setDataTransferToNull();
+    bool hasData() const;
+    String data() const;
+    void setData(String);
+    void setDataToNull();
 
-  bool hasInputType() const;
-  String inputType() const;
-  void setInputType(String);
+    bool hasDataTransfer() const;
+    DataTransfer* dataTransfer() const;
+    void setDataTransfer(DataTransfer*);
+    void setDataTransferToNull();
 
-  bool hasIsComposing() const;
-  bool isComposing() const;
-  void setIsComposing(bool);
+    bool hasInputType() const;
+    String inputType() const;
+    void setInputType(String);
 
-  bool hasRanges() const;
-  const HeapVector<Member<Range>>& ranges() const;
-  void setRanges(const HeapVector<Member<Range>>&);
+    bool hasIsComposing() const;
+    bool isComposing() const;
+    void setIsComposing(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRanges() const;
+    const HeapVector<Member<Range>>& ranges() const;
+    void setRanges(const HeapVector<Member<Range>>&);
 
- private:
-  String m_data;
-  Member<DataTransfer> m_dataTransfer;
-  String m_inputType;
-  bool m_hasIsComposing = false;
-  bool m_isComposing;
-  bool m_hasRanges = false;
-  HeapVector<Member<Range>> m_ranges;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8InputEventInit;
+private:
+    String m_data;
+    Member<DataTransfer> m_dataTransfer;
+    String m_inputType;
+    bool m_hasIsComposing = false;
+    bool m_isComposing;
+    bool m_hasRanges = false;
+    HeapVector<Member<Range>> m_ranges;
+
+    friend class V8InputEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // InputEventInit_h
+#endif // InputEventInit_h

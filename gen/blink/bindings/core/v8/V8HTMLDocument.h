@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8HTMLDocument_h
 #define V8HTMLDocument_h
 
@@ -25,38 +25,42 @@
 namespace blink {
 
 class V8HTMLDocument {
-  STATIC_ONLY(V8HTMLDocument);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static HTMLDocument* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<HTMLDocument>();
-  }
-  CORE_EXPORT static HTMLDocument* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<HTMLDocument>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<HTMLDocument>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8HTMLDocument);
 
-  CORE_EXPORT static void installRuntimeEnabledFeatures(
-      v8::Isolate* isolate,
-      const DOMWrapperWorld& world,
-      v8::Local<v8::Object> instance,
-      v8::Local<v8::Object> prototype,
-      v8::Local<v8::Function> interface);
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static HTMLDocument* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<HTMLDocument>();
+    }
+    CORE_EXPORT static HTMLDocument* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<HTMLDocument>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<HTMLDocument>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+
+    CORE_EXPORT static void installRuntimeEnabledFeatures(
+        v8::Isolate* isolate,
+        const DOMWrapperWorld& world,
+        v8::Local<v8::Object> instance,
+        v8::Local<v8::Object> prototype,
+        v8::Local<v8::Function> interface);
 };
 
 template <>
 struct V8TypeOf<HTMLDocument> {
-  typedef V8HTMLDocument Type;
+    typedef V8HTMLDocument Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8HTMLDocument_h
+#endif // V8HTMLDocument_h

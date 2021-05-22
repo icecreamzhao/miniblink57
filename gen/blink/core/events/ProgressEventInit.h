@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ProgressEventInit_h
 #define ProgressEventInit_h
 
@@ -19,39 +19,40 @@
 namespace blink {
 
 class CORE_EXPORT ProgressEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ProgressEventInit();
-  virtual ~ProgressEventInit();
-  ProgressEventInit(const ProgressEventInit&);
-  ProgressEventInit& operator=(const ProgressEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasLengthComputable() const;
-  bool lengthComputable() const;
-  void setLengthComputable(bool);
+public:
+    ProgressEventInit();
+    virtual ~ProgressEventInit();
+    ProgressEventInit(const ProgressEventInit&);
+    ProgressEventInit& operator=(const ProgressEventInit&);
 
-  bool hasLoaded() const;
-  unsigned long long loaded() const;
-  void setLoaded(unsigned long long);
+    bool hasLengthComputable() const;
+    bool lengthComputable() const;
+    void setLengthComputable(bool);
 
-  bool hasTotal() const;
-  unsigned long long total() const;
-  void setTotal(unsigned long long);
+    bool hasLoaded() const;
+    unsigned long long loaded() const;
+    void setLoaded(unsigned long long);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTotal() const;
+    unsigned long long total() const;
+    void setTotal(unsigned long long);
 
- private:
-  bool m_hasLengthComputable = false;
-  bool m_lengthComputable;
-  bool m_hasLoaded = false;
-  unsigned long long m_loaded;
-  bool m_hasTotal = false;
-  unsigned long long m_total;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ProgressEventInit;
+private:
+    bool m_hasLengthComputable = false;
+    bool m_lengthComputable;
+    bool m_hasLoaded = false;
+    unsigned long long m_loaded;
+    bool m_hasTotal = false;
+    unsigned long long m_total;
+
+    friend class V8ProgressEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ProgressEventInit_h
+#endif // ProgressEventInit_h

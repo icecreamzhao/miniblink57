@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaTrackConstraints_h
 #define MediaTrackConstraints_h
 
@@ -20,27 +20,28 @@
 namespace blink {
 
 class MODULES_EXPORT MediaTrackConstraints : public MediaTrackConstraintSet {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaTrackConstraints();
-  virtual ~MediaTrackConstraints();
-  MediaTrackConstraints(const MediaTrackConstraints&);
-  MediaTrackConstraints& operator=(const MediaTrackConstraints&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAdvanced() const;
-  const HeapVector<MediaTrackConstraintSet>& advanced() const;
-  void setAdvanced(const HeapVector<MediaTrackConstraintSet>&);
+public:
+    MediaTrackConstraints();
+    virtual ~MediaTrackConstraints();
+    MediaTrackConstraints(const MediaTrackConstraints&);
+    MediaTrackConstraints& operator=(const MediaTrackConstraints&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasAdvanced() const;
+    const HeapVector<MediaTrackConstraintSet>& advanced() const;
+    void setAdvanced(const HeapVector<MediaTrackConstraintSet>&);
 
- private:
-  bool m_hasAdvanced = false;
-  HeapVector<MediaTrackConstraintSet> m_advanced;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaTrackConstraints;
+private:
+    bool m_hasAdvanced = false;
+    HeapVector<MediaTrackConstraintSet> m_advanced;
+
+    friend class V8MediaTrackConstraints;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaTrackConstraints_h
+#endif // MediaTrackConstraints_h

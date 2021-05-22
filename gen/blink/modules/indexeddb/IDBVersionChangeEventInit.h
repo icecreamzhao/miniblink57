@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef IDBVersionChangeEventInit_h
 #define IDBVersionChangeEventInit_h
 
@@ -20,39 +20,40 @@
 namespace blink {
 
 class MODULES_EXPORT IDBVersionChangeEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  IDBVersionChangeEventInit();
-  virtual ~IDBVersionChangeEventInit();
-  IDBVersionChangeEventInit(const IDBVersionChangeEventInit&);
-  IDBVersionChangeEventInit& operator=(const IDBVersionChangeEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDataLoss() const;
-  String dataLoss() const;
-  void setDataLoss(String);
+public:
+    IDBVersionChangeEventInit();
+    virtual ~IDBVersionChangeEventInit();
+    IDBVersionChangeEventInit(const IDBVersionChangeEventInit&);
+    IDBVersionChangeEventInit& operator=(const IDBVersionChangeEventInit&);
 
-  bool hasNewVersion() const;
-  unsigned long long newVersion() const;
-  void setNewVersion(unsigned long long);
-  void setNewVersionToNull();
+    bool hasDataLoss() const;
+    String dataLoss() const;
+    void setDataLoss(String);
 
-  bool hasOldVersion() const;
-  unsigned long long oldVersion() const;
-  void setOldVersion(unsigned long long);
+    bool hasNewVersion() const;
+    unsigned long long newVersion() const;
+    void setNewVersion(unsigned long long);
+    void setNewVersionToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasOldVersion() const;
+    unsigned long long oldVersion() const;
+    void setOldVersion(unsigned long long);
 
- private:
-  String m_dataLoss;
-  bool m_hasNewVersion = false;
-  unsigned long long m_newVersion;
-  bool m_hasOldVersion = false;
-  unsigned long long m_oldVersion;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8IDBVersionChangeEventInit;
+private:
+    String m_dataLoss;
+    bool m_hasNewVersion = false;
+    unsigned long long m_newVersion;
+    bool m_hasOldVersion = false;
+    unsigned long long m_oldVersion;
+
+    friend class V8IDBVersionChangeEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // IDBVersionChangeEventInit_h
+#endif // IDBVersionChangeEventInit_h

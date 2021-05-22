@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ElementDefinitionOptions_h
 #define ElementDefinitionOptions_h
 
@@ -20,27 +20,28 @@
 namespace blink {
 
 class CORE_EXPORT ElementDefinitionOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ElementDefinitionOptions();
-  virtual ~ElementDefinitionOptions();
-  ElementDefinitionOptions(const ElementDefinitionOptions&);
-  ElementDefinitionOptions& operator=(const ElementDefinitionOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasExtends() const;
-  String extends() const;
-  void setExtends(String);
-  void setExtendsToNull();
+public:
+    ElementDefinitionOptions();
+    virtual ~ElementDefinitionOptions();
+    ElementDefinitionOptions(const ElementDefinitionOptions&);
+    ElementDefinitionOptions& operator=(const ElementDefinitionOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasExtends() const;
+    String extends() const;
+    void setExtends(String);
+    void setExtendsToNull();
 
- private:
-  String m_extends;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ElementDefinitionOptions;
+private:
+    String m_extends;
+
+    friend class V8ElementDefinitionOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ElementDefinitionOptions_h
+#endif // ElementDefinitionOptions_h

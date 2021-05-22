@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGFEDropShadowElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,230 +51,257 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGFEDropShadowElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGFEDropShadowElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGFEDropShadowElementV8Internal {
 
-static void in1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void in1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->in1()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->in1()), impl);
+    }
 
-CORE_EXPORT void in1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void in1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::in1AttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::in1AttributeGetter(info);
+    }
 
-static void dxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->dx()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->dx()), impl);
+    }
 
-CORE_EXPORT void dxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void dxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::dxAttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::dxAttributeGetter(info);
+    }
 
-static void dyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->dy()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->dy()), impl);
+    }
 
-CORE_EXPORT void dyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void dyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::dyAttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::dyAttributeGetter(info);
+    }
 
-static void stdDeviationXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void stdDeviationXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->stdDeviationX()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->stdDeviationX()), impl);
+    }
 
-CORE_EXPORT void stdDeviationXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void stdDeviationXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::stdDeviationXAttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::stdDeviationXAttributeGetter(info);
+    }
 
-static void stdDeviationYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void stdDeviationYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->stdDeviationY()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->stdDeviationY()), impl);
+    }
 
-CORE_EXPORT void stdDeviationYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void stdDeviationYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::stdDeviationYAttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::stdDeviationYAttributeGetter(info);
+    }
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::xAttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::xAttributeGetter(info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::yAttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::yAttributeGetter(info);
+    }
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::widthAttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::widthAttributeGetter(info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::heightAttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::heightAttributeGetter(info);
+    }
 
-static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
+    }
 
-CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEDropShadowElementV8Internal::resultAttributeGetter(info);
-}
+        SVGFEDropShadowElementV8Internal::resultAttributeGetter(info);
+    }
 
-static void setStdDeviationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGFEDropShadowElement", "setStdDeviation");
+    static void setStdDeviationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGFEDropShadowElement", "setStdDeviation");
 
-  SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(info.Holder());
+        SVGFEDropShadowElement* impl = V8SVGFEDropShadowElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  float stdDeviationX;
-  float stdDeviationY;
-  stdDeviationX = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float stdDeviationX;
+        float stdDeviationY;
+        stdDeviationX = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  stdDeviationY = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        stdDeviationY = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setStdDeviation(stdDeviationX, stdDeviationY);
-}
+        impl->setStdDeviation(stdDeviationX, stdDeviationY);
+    }
 
-CORE_EXPORT  void setStdDeviationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  SVGFEDropShadowElementV8Internal::setStdDeviationMethod(info);
-}
+    CORE_EXPORT void setStdDeviationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFEDropShadowElementV8Internal::setStdDeviationMethod(info);
+    }
 
 } // namespace SVGFEDropShadowElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGFEDropShadowElementAccessors[] = {
-    {"in1", SVGFEDropShadowElementV8Internal::in1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dx", SVGFEDropShadowElementV8Internal::dxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dy", SVGFEDropShadowElementV8Internal::dyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stdDeviationX", SVGFEDropShadowElementV8Internal::stdDeviationXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stdDeviationY", SVGFEDropShadowElementV8Internal::stdDeviationYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"x", SVGFEDropShadowElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", SVGFEDropShadowElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", SVGFEDropShadowElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", SVGFEDropShadowElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"result", SVGFEDropShadowElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "in1", SVGFEDropShadowElementV8Internal::in1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dx", SVGFEDropShadowElementV8Internal::dxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dy", SVGFEDropShadowElementV8Internal::dyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stdDeviationX", SVGFEDropShadowElementV8Internal::stdDeviationXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stdDeviationY", SVGFEDropShadowElementV8Internal::stdDeviationYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "x", SVGFEDropShadowElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", SVGFEDropShadowElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", SVGFEDropShadowElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", SVGFEDropShadowElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "result", SVGFEDropShadowElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGFEDropShadowElementMethods[] = {
-    {"setStdDeviation", SVGFEDropShadowElementV8Internal::setStdDeviationMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "setStdDeviation", SVGFEDropShadowElementV8Internal::setStdDeviationMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGFEDropShadowElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFEDropShadowElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFEDropShadowElement::internalFieldCount);
+static void installV8SVGFEDropShadowElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFEDropShadowElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFEDropShadowElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFEDropShadowElementAccessors, WTF_ARRAY_LENGTH(V8SVGFEDropShadowElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFEDropShadowElementMethods, WTF_ARRAY_LENGTH(V8SVGFEDropShadowElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFEDropShadowElementAccessors, WTF_ARRAY_LENGTH(V8SVGFEDropShadowElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFEDropShadowElementMethods, WTF_ARRAY_LENGTH(V8SVGFEDropShadowElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGFEDropShadowElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFEDropShadowElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGFEDropShadowElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFEDropShadowElementTemplate);
 }
 
-bool V8SVGFEDropShadowElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGFEDropShadowElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGFEDropShadowElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGFEDropShadowElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGFEDropShadowElement* V8SVGFEDropShadowElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGFEDropShadowElement* V8SVGFEDropShadowElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

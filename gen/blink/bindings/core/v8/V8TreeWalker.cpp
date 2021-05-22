@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TreeWalker.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,254 +47,284 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&TreeWalker::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "TreeWalker is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TreeWalkerV8Internal {
 
-static void rootAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rootAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TreeWalker* impl = V8TreeWalker::toImpl(holder);
+        TreeWalker* impl = V8TreeWalker::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->root()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->root()), impl);
+    }
 
-CORE_EXPORT void rootAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::rootAttributeGetter(info);
-}
+    CORE_EXPORT void rootAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::rootAttributeGetter(info);
+    }
 
-static void whatToShowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void whatToShowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TreeWalker* impl = V8TreeWalker::toImpl(holder);
+        TreeWalker* impl = V8TreeWalker::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->whatToShow());
-}
+        v8SetReturnValueUnsigned(info, impl->whatToShow());
+    }
 
-CORE_EXPORT void whatToShowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::whatToShowAttributeGetter(info);
-}
+    CORE_EXPORT void whatToShowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::whatToShowAttributeGetter(info);
+    }
 
-static void filterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void filterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TreeWalker* impl = V8TreeWalker::toImpl(holder);
+        TreeWalker* impl = V8TreeWalker::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->filter()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->filter()), impl);
+    }
 
-CORE_EXPORT void filterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::filterAttributeGetter(info);
-}
+    CORE_EXPORT void filterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::filterAttributeGetter(info);
+    }
 
-static void currentNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void currentNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TreeWalker* impl = V8TreeWalker::toImpl(holder);
+        TreeWalker* impl = V8TreeWalker::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->currentNode()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->currentNode()), impl);
+    }
 
-CORE_EXPORT void currentNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::currentNodeAttributeGetter(info);
-}
+    CORE_EXPORT void currentNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::currentNodeAttributeGetter(info);
+    }
 
-static void currentNodeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TreeWalker* impl = V8TreeWalker::toImpl(holder);
+    static void currentNodeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TreeWalker* impl = V8TreeWalker::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TreeWalker", "currentNode");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TreeWalker", "currentNode");
 
-  // Prepare the value to be set.
-  Node* cppValue = V8Node::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+        // Prepare the value to be set.
+        Node* cppValue = V8Node::toImplWithTypeCheck(info.GetIsolate(), v8Value);
 
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue) {
-    exceptionState.throwTypeError("The provided value is not of type 'Node'.");
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue) {
+            exceptionState.throwTypeError("The provided value is not of type 'Node'.");
+            return;
+        }
 
-  impl->setCurrentNode(cppValue);
-}
+        impl->setCurrentNode(cppValue);
+    }
 
-CORE_EXPORT void currentNodeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void currentNodeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TreeWalkerV8Internal::currentNodeAttributeSetter(v8Value, info);
-}
+        TreeWalkerV8Internal::currentNodeAttributeSetter(v8Value, info);
+    }
 
-static void parentNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "parentNode");
+    static void parentNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "parentNode");
 
-  TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
+        TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
 
-  Node* result = impl->parentNode(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Node* result = impl->parentNode(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void parentNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::parentNodeMethod(info);
-}
+    CORE_EXPORT void parentNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::parentNodeMethod(info);
+    }
 
-static void firstChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "firstChild");
+    static void firstChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "firstChild");
 
-  TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
+        TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
 
-  Node* result = impl->firstChild(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Node* result = impl->firstChild(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void firstChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::firstChildMethod(info);
-}
+    CORE_EXPORT void firstChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::firstChildMethod(info);
+    }
 
-static void lastChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "lastChild");
+    static void lastChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "lastChild");
 
-  TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
+        TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
 
-  Node* result = impl->lastChild(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Node* result = impl->lastChild(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void lastChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::lastChildMethod(info);
-}
+    CORE_EXPORT void lastChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::lastChildMethod(info);
+    }
 
-static void previousSiblingMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "previousSibling");
+    static void previousSiblingMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "previousSibling");
 
-  TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
+        TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
 
-  Node* result = impl->previousSibling(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Node* result = impl->previousSibling(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void previousSiblingMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::previousSiblingMethod(info);
-}
+    CORE_EXPORT void previousSiblingMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::previousSiblingMethod(info);
+    }
 
-static void nextSiblingMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "nextSibling");
+    static void nextSiblingMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "nextSibling");
 
-  TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
+        TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
 
-  Node* result = impl->nextSibling(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Node* result = impl->nextSibling(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void nextSiblingMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::nextSiblingMethod(info);
-}
+    CORE_EXPORT void nextSiblingMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::nextSiblingMethod(info);
+    }
 
-static void previousNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "previousNode");
+    static void previousNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "previousNode");
 
-  TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
+        TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
 
-  Node* result = impl->previousNode(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Node* result = impl->previousNode(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void previousNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::previousNodeMethod(info);
-}
+    CORE_EXPORT void previousNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::previousNodeMethod(info);
+    }
 
-static void nextNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "nextNode");
+    static void nextNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TreeWalker", "nextNode");
 
-  TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
+        TreeWalker* impl = V8TreeWalker::toImpl(info.Holder());
 
-  Node* result = impl->nextNode(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Node* result = impl->nextNode(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void nextNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TreeWalkerV8Internal::nextNodeMethod(info);
-}
+    CORE_EXPORT void nextNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TreeWalkerV8Internal::nextNodeMethod(info);
+    }
 
 } // namespace TreeWalkerV8Internal
 
-void V8TreeWalker::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  TreeWalker* impl = scriptWrappable->toImpl<TreeWalker>();
-  NodeFilter* filter = impl->filter();
-  if (filter) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, filter, isolate);
-  }
+void V8TreeWalker::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    TreeWalker* impl = scriptWrappable->toImpl<TreeWalker>();
+    NodeFilter* filter = impl->filter();
+    if (filter) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, filter, isolate);
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8TreeWalkerAccessors[] = {
-    {"root", TreeWalkerV8Internal::rootAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"whatToShow", TreeWalkerV8Internal::whatToShowAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"filter", TreeWalkerV8Internal::filterAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"currentNode", TreeWalkerV8Internal::currentNodeAttributeGetterCallback, TreeWalkerV8Internal::currentNodeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "root", TreeWalkerV8Internal::rootAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "whatToShow", TreeWalkerV8Internal::whatToShowAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "filter", TreeWalkerV8Internal::filterAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "currentNode", TreeWalkerV8Internal::currentNodeAttributeGetterCallback, TreeWalkerV8Internal::currentNodeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8TreeWalkerMethods[] = {
-    {"parentNode", TreeWalkerV8Internal::parentNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"firstChild", TreeWalkerV8Internal::firstChildMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastChild", TreeWalkerV8Internal::lastChildMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"previousSibling", TreeWalkerV8Internal::previousSiblingMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nextSibling", TreeWalkerV8Internal::nextSiblingMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"previousNode", TreeWalkerV8Internal::previousNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nextNode", TreeWalkerV8Internal::nextNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "parentNode", TreeWalkerV8Internal::parentNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "firstChild", TreeWalkerV8Internal::firstChildMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastChild", TreeWalkerV8Internal::lastChildMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "previousSibling", TreeWalkerV8Internal::previousSiblingMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nextSibling", TreeWalkerV8Internal::nextSiblingMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "previousNode", TreeWalkerV8Internal::previousNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nextNode", TreeWalkerV8Internal::nextNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8TreeWalkerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TreeWalker::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TreeWalker::internalFieldCount);
+static void installV8TreeWalkerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TreeWalker::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TreeWalker::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TreeWalkerAccessors, WTF_ARRAY_LENGTH(V8TreeWalkerAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TreeWalkerMethods, WTF_ARRAY_LENGTH(V8TreeWalkerMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TreeWalkerAccessors, WTF_ARRAY_LENGTH(V8TreeWalkerAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TreeWalkerMethods, WTF_ARRAY_LENGTH(V8TreeWalkerMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8TreeWalker::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TreeWalkerTemplate);
+v8::Local<v8::FunctionTemplate> V8TreeWalker::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TreeWalkerTemplate);
 }
 
-bool V8TreeWalker::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8TreeWalker::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8TreeWalker::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8TreeWalker::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-TreeWalker* V8TreeWalker::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+TreeWalker* V8TreeWalker::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

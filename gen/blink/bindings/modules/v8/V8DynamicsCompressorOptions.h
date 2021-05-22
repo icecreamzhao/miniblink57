@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8DynamicsCompressorOptions_h
 #define V8DynamicsCompressorOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8DynamicsCompressorOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DynamicsCompressorOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DynamicsCompressorOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8DynamicsCompressorOptions(const DynamicsCompressorOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DynamicsCompressorOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DynamicsCompressorOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<DynamicsCompressorOptions> {
-  static DynamicsCompressorOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static DynamicsCompressorOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<DynamicsCompressorOptions> {
-  typedef V8DynamicsCompressorOptions Type;
+    typedef V8DynamicsCompressorOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8DynamicsCompressorOptions_h
+#endif // V8DynamicsCompressorOptions_h

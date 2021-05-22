@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PageTransitionEventInit_h
 #define V8PageTransitionEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8PageTransitionEventInit {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PageTransitionEventInit&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PageTransitionEventInit&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8PageTransitionEventInit(const PageTransitionEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PageTransitionEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PageTransitionEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<PageTransitionEventInit> {
-  static PageTransitionEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static PageTransitionEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<PageTransitionEventInit> {
-  typedef V8PageTransitionEventInit Type;
+    typedef V8PageTransitionEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PageTransitionEventInit_h
+#endif // V8PageTransitionEventInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaKeySystemMediaCapability_h
 #define MediaKeySystemMediaCapability_h
 
@@ -20,31 +20,32 @@
 namespace blink {
 
 class MODULES_EXPORT MediaKeySystemMediaCapability : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaKeySystemMediaCapability();
-  virtual ~MediaKeySystemMediaCapability();
-  MediaKeySystemMediaCapability(const MediaKeySystemMediaCapability&);
-  MediaKeySystemMediaCapability& operator=(const MediaKeySystemMediaCapability&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasContentType() const;
-  String contentType() const;
-  void setContentType(String);
+public:
+    MediaKeySystemMediaCapability();
+    virtual ~MediaKeySystemMediaCapability();
+    MediaKeySystemMediaCapability(const MediaKeySystemMediaCapability&);
+    MediaKeySystemMediaCapability& operator=(const MediaKeySystemMediaCapability&);
 
-  bool hasRobustness() const;
-  String robustness() const;
-  void setRobustness(String);
+    bool hasContentType() const;
+    String contentType() const;
+    void setContentType(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRobustness() const;
+    String robustness() const;
+    void setRobustness(String);
 
- private:
-  String m_contentType;
-  String m_robustness;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaKeySystemMediaCapability;
+private:
+    String m_contentType;
+    String m_robustness;
+
+    friend class V8MediaKeySystemMediaCapability;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaKeySystemMediaCapability_h
+#endif // MediaKeySystemMediaCapability_h

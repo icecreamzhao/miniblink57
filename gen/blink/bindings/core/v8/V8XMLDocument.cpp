@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8XMLDocument.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,83 +51,92 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&XMLDocument::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "XMLDocument is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace XMLDocumentV8Internal {
 
-static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  XMLDocument* impl = V8XMLDocument::toImpl(holder);
+        XMLDocument* impl = V8XMLDocument::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->location()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->location()), impl);
+    }
 
-CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XMLDocumentV8Internal::locationAttributeGetter(info);
-}
+    CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XMLDocumentV8Internal::locationAttributeGetter(info);
+    }
 
-static void locationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  XMLDocument* proxyImpl = V8XMLDocument::toImpl(holder);
-  Location* impl = WTF::getPtr(proxyImpl->location());
-  if (!impl)
-    return;
+    static void locationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        XMLDocument* proxyImpl = V8XMLDocument::toImpl(holder);
+        Location* impl = WTF::getPtr(proxyImpl->location());
+        if (!impl)
+            return;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "XMLDocument", "location");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "XMLDocument", "location");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setHref(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
+        impl->setHref(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
 
-CORE_EXPORT void locationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void locationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  XMLDocumentV8Internal::locationAttributeSetter(v8Value, info);
-}
+        XMLDocumentV8Internal::locationAttributeSetter(v8Value, info);
+    }
 
 } // namespace XMLDocumentV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8XMLDocumentAccessors[] = {
-    {"location", XMLDocumentV8Internal::locationAttributeGetterCallback, XMLDocumentV8Internal::locationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "location", XMLDocumentV8Internal::locationAttributeGetterCallback, XMLDocumentV8Internal::locationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8XMLDocumentTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XMLDocument::wrapperTypeInfo.interfaceName, V8Document::domTemplate(isolate, world), V8XMLDocument::internalFieldCount);
+static void installV8XMLDocumentTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XMLDocument::wrapperTypeInfo.interfaceName, V8Document::domTemplate(isolate, world), V8XMLDocument::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XMLDocumentAccessors, WTF_ARRAY_LENGTH(V8XMLDocumentAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XMLDocumentAccessors, WTF_ARRAY_LENGTH(V8XMLDocumentAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8XMLDocument::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XMLDocumentTemplate);
+v8::Local<v8::FunctionTemplate> V8XMLDocument::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XMLDocumentTemplate);
 }
 
-bool V8XMLDocument::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8XMLDocument::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8XMLDocument::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8XMLDocument::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-XMLDocument* V8XMLDocument::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+XMLDocument* V8XMLDocument::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

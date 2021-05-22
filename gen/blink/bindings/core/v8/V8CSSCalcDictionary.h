@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8CSSCalcDictionary_h
 #define V8CSSCalcDictionary_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8CSSCalcDictionary {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CSSCalcDictionary&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CSSCalcDictionary&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8CSSCalcDictionary(const CSSCalcDictionary&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CSSCalcDictionary& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CSSCalcDictionary& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<CSSCalcDictionary> {
-  static CSSCalcDictionary nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static CSSCalcDictionary nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<CSSCalcDictionary> {
-  typedef V8CSSCalcDictionary Type;
+    typedef V8CSSCalcDictionary Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8CSSCalcDictionary_h
+#endif // V8CSSCalcDictionary_h

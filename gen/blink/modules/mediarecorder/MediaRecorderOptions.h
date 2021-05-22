@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaRecorderOptions_h
 #define MediaRecorderOptions_h
 
@@ -20,44 +20,45 @@
 namespace blink {
 
 class MODULES_EXPORT MediaRecorderOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaRecorderOptions();
-  virtual ~MediaRecorderOptions();
-  MediaRecorderOptions(const MediaRecorderOptions&);
-  MediaRecorderOptions& operator=(const MediaRecorderOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAudioBitsPerSecond() const;
-  unsigned audioBitsPerSecond() const;
-  void setAudioBitsPerSecond(unsigned);
+public:
+    MediaRecorderOptions();
+    virtual ~MediaRecorderOptions();
+    MediaRecorderOptions(const MediaRecorderOptions&);
+    MediaRecorderOptions& operator=(const MediaRecorderOptions&);
 
-  bool hasBitsPerSecond() const;
-  unsigned bitsPerSecond() const;
-  void setBitsPerSecond(unsigned);
+    bool hasAudioBitsPerSecond() const;
+    unsigned audioBitsPerSecond() const;
+    void setAudioBitsPerSecond(unsigned);
 
-  bool hasMimeType() const;
-  String mimeType() const;
-  void setMimeType(String);
+    bool hasBitsPerSecond() const;
+    unsigned bitsPerSecond() const;
+    void setBitsPerSecond(unsigned);
 
-  bool hasVideoBitsPerSecond() const;
-  unsigned videoBitsPerSecond() const;
-  void setVideoBitsPerSecond(unsigned);
+    bool hasMimeType() const;
+    String mimeType() const;
+    void setMimeType(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasVideoBitsPerSecond() const;
+    unsigned videoBitsPerSecond() const;
+    void setVideoBitsPerSecond(unsigned);
 
- private:
-  bool m_hasAudioBitsPerSecond = false;
-  unsigned m_audioBitsPerSecond;
-  bool m_hasBitsPerSecond = false;
-  unsigned m_bitsPerSecond;
-  String m_mimeType;
-  bool m_hasVideoBitsPerSecond = false;
-  unsigned m_videoBitsPerSecond;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaRecorderOptions;
+private:
+    bool m_hasAudioBitsPerSecond = false;
+    unsigned m_audioBitsPerSecond;
+    bool m_hasBitsPerSecond = false;
+    unsigned m_bitsPerSecond;
+    String m_mimeType;
+    bool m_hasVideoBitsPerSecond = false;
+    unsigned m_videoBitsPerSecond;
+
+    friend class V8MediaRecorderOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaRecorderOptions_h
+#endif // MediaRecorderOptions_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8BudgetService.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,152 +48,163 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&BudgetService::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "BudgetService is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BudgetServiceV8Internal {
 
-static void getCostMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BudgetService", "getCost");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void getCostMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BudgetService", "getCost");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BudgetService::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BudgetService* impl = V8BudgetService::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BudgetService::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BudgetService* impl = V8BudgetService::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> operation;
-  operation = info[0];
-  if (!operation.prepare(exceptionState))
-    return;
-  const char* validOperationValues[] = {
-      "silent-push",
-  };
-  if (!isValidEnum(operation, validOperationValues, WTF_ARRAY_LENGTH(validOperationValues), "OperationType", exceptionState)) {
-    return;
-  }
+        V8StringResource<> operation;
+        operation = info[0];
+        if (!operation.prepare(exceptionState))
+            return;
+        const char* validOperationValues[] = {
+            "silent-push",
+        };
+        if (!isValidEnum(operation, validOperationValues, WTF_ARRAY_LENGTH(validOperationValues), "OperationType", exceptionState)) {
+            return;
+        }
 
-  ScriptPromise result = impl->getCost(scriptState, operation);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->getCost(scriptState, operation);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void getCostMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BudgetServiceV8Internal::getCostMethod(info);
-}
+    MODULES_EXPORT void getCostMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BudgetServiceV8Internal::getCostMethod(info);
+    }
 
-static void getBudgetMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BudgetService", "getBudget");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void getBudgetMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BudgetService", "getBudget");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BudgetService::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BudgetService* impl = V8BudgetService::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BudgetService::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BudgetService* impl = V8BudgetService::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->getBudget(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->getBudget(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void getBudgetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BudgetServiceV8Internal::getBudgetMethod(info);
-}
+    MODULES_EXPORT void getBudgetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BudgetServiceV8Internal::getBudgetMethod(info);
+    }
 
-static void reserveMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BudgetService", "reserve");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void reserveMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BudgetService", "reserve");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BudgetService::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BudgetService* impl = V8BudgetService::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BudgetService::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BudgetService* impl = V8BudgetService::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> operation;
-  operation = info[0];
-  if (!operation.prepare(exceptionState))
-    return;
-  const char* validOperationValues[] = {
-      "silent-push",
-  };
-  if (!isValidEnum(operation, validOperationValues, WTF_ARRAY_LENGTH(validOperationValues), "OperationType", exceptionState)) {
-    return;
-  }
+        V8StringResource<> operation;
+        operation = info[0];
+        if (!operation.prepare(exceptionState))
+            return;
+        const char* validOperationValues[] = {
+            "silent-push",
+        };
+        if (!isValidEnum(operation, validOperationValues, WTF_ARRAY_LENGTH(validOperationValues), "OperationType", exceptionState)) {
+            return;
+        }
 
-  ScriptPromise result = impl->reserve(scriptState, operation);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->reserve(scriptState, operation);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void reserveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BudgetServiceV8Internal::reserveMethod(info);
-}
+    MODULES_EXPORT void reserveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BudgetServiceV8Internal::reserveMethod(info);
+    }
 
 } // namespace BudgetServiceV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8BudgetServiceMethods[] = {
-    {"getCost", BudgetServiceV8Internal::getCostMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"getBudget", BudgetServiceV8Internal::getBudgetMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"reserve", BudgetServiceV8Internal::reserveMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "getCost", BudgetServiceV8Internal::getCostMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "getBudget", BudgetServiceV8Internal::getBudgetMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "reserve", BudgetServiceV8Internal::reserveMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8BudgetServiceTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BudgetService::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8BudgetService::internalFieldCount);
+static void installV8BudgetServiceTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BudgetService::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8BudgetService::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::budgetEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::budgetEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BudgetServiceMethods, WTF_ARRAY_LENGTH(V8BudgetServiceMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BudgetServiceMethods, WTF_ARRAY_LENGTH(V8BudgetServiceMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8BudgetService::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BudgetServiceTemplate);
+v8::Local<v8::FunctionTemplate> V8BudgetService::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BudgetServiceTemplate);
 }
 
-bool V8BudgetService::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8BudgetService::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8BudgetService::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8BudgetService::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-BudgetService* V8BudgetService::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+BudgetService* V8BudgetService::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

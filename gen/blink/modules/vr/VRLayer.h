@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef VRLayer_h
 #define VRLayer_h
 
@@ -22,39 +22,40 @@ namespace blink {
 class HTMLCanvasElement;
 
 class MODULES_EXPORT VRLayer : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  VRLayer();
-  virtual ~VRLayer();
-  VRLayer(const VRLayer&);
-  VRLayer& operator=(const VRLayer&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasLeftBounds() const;
-  const Vector<float>& leftBounds() const;
-  void setLeftBounds(const Vector<float>&);
+public:
+    VRLayer();
+    virtual ~VRLayer();
+    VRLayer(const VRLayer&);
+    VRLayer& operator=(const VRLayer&);
 
-  bool hasRightBounds() const;
-  const Vector<float>& rightBounds() const;
-  void setRightBounds(const Vector<float>&);
+    bool hasLeftBounds() const;
+    const Vector<float>& leftBounds() const;
+    void setLeftBounds(const Vector<float>&);
 
-  bool hasSource() const;
-  HTMLCanvasElement* source() const;
-  void setSource(HTMLCanvasElement*);
-  void setSourceToNull();
+    bool hasRightBounds() const;
+    const Vector<float>& rightBounds() const;
+    void setRightBounds(const Vector<float>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSource() const;
+    HTMLCanvasElement* source() const;
+    void setSource(HTMLCanvasElement*);
+    void setSourceToNull();
 
- private:
-  bool m_hasLeftBounds = false;
-  Vector<float> m_leftBounds;
-  bool m_hasRightBounds = false;
-  Vector<float> m_rightBounds;
-  Member<HTMLCanvasElement> m_source;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8VRLayer;
+private:
+    bool m_hasLeftBounds = false;
+    Vector<float> m_leftBounds;
+    bool m_hasRightBounds = false;
+    Vector<float> m_rightBounds;
+    Member<HTMLCanvasElement> m_source;
+
+    friend class V8VRLayer;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // VRLayer_h
+#endif // VRLayer_h

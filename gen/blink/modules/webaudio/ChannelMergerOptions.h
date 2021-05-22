@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ChannelMergerOptions_h
 #define ChannelMergerOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT ChannelMergerOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ChannelMergerOptions();
-  virtual ~ChannelMergerOptions();
-  ChannelMergerOptions(const ChannelMergerOptions&);
-  ChannelMergerOptions& operator=(const ChannelMergerOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasNumberOfInputs() const;
-  unsigned numberOfInputs() const;
-  void setNumberOfInputs(unsigned);
+public:
+    ChannelMergerOptions();
+    virtual ~ChannelMergerOptions();
+    ChannelMergerOptions(const ChannelMergerOptions&);
+    ChannelMergerOptions& operator=(const ChannelMergerOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasNumberOfInputs() const;
+    unsigned numberOfInputs() const;
+    void setNumberOfInputs(unsigned);
 
- private:
-  bool m_hasNumberOfInputs = false;
-  unsigned m_numberOfInputs;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ChannelMergerOptions;
+private:
+    bool m_hasNumberOfInputs = false;
+    unsigned m_numberOfInputs;
+
+    friend class V8ChannelMergerOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ChannelMergerOptions_h
+#endif // ChannelMergerOptions_h

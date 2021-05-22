@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ImageBitmapOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,199 +16,203 @@
 
 namespace blink {
 
-void V8ImageBitmapOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ImageBitmapOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> colorSpaceConversionValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "colorSpaceConversion")).ToLocal(&colorSpaceConversionValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (colorSpaceConversionValue.IsEmpty() || colorSpaceConversionValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> colorSpaceConversion = colorSpaceConversionValue;
-    if (!colorSpaceConversion.prepare(exceptionState))
-      return;
-    const char* validValues[] = {
-        "none",
-        "default",
-        "srgb",
-        "linear-rgb",
-    };
-    if (!isValidEnum(colorSpaceConversion, validValues, WTF_ARRAY_LENGTH(validValues), "CanvasColorSpace", exceptionState))
-      return;
-    impl.setColorSpaceConversion(colorSpaceConversion);
-  }
-
-  v8::Local<v8::Value> imageOrientationValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "imageOrientation")).ToLocal(&imageOrientationValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (imageOrientationValue.IsEmpty() || imageOrientationValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> imageOrientation = imageOrientationValue;
-    if (!imageOrientation.prepare(exceptionState))
-      return;
-    const char* validValues[] = {
-        "none",
-        "flipY",
-    };
-    if (!isValidEnum(imageOrientation, validValues, WTF_ARRAY_LENGTH(validValues), "ImageOrientation", exceptionState))
-      return;
-    impl.setImageOrientation(imageOrientation);
-  }
-
-  v8::Local<v8::Value> premultiplyAlphaValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "premultiplyAlpha")).ToLocal(&premultiplyAlphaValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (premultiplyAlphaValue.IsEmpty() || premultiplyAlphaValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> premultiplyAlpha = premultiplyAlphaValue;
-    if (!premultiplyAlpha.prepare(exceptionState))
-      return;
-    const char* validValues[] = {
-        "none",
-        "premultiply",
-        "default",
-    };
-    if (!isValidEnum(premultiplyAlpha, validValues, WTF_ARRAY_LENGTH(validValues), "PremultiplyAlpha", exceptionState))
-      return;
-    impl.setPremultiplyAlpha(premultiplyAlpha);
-  }
-
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    v8::Local<v8::Value> resizeHeightValue;
-    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "resizeHeight")).ToLocal(&resizeHeightValue)) {
-      exceptionState.rethrowV8Exception(block.Exception());
-      return;
+void V8ImageBitmapOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ImageBitmapOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
     }
-    if (resizeHeightValue.IsEmpty() || resizeHeightValue->IsUndefined()) {
-      // Do nothing.
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> colorSpaceConversionValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "colorSpaceConversion")).ToLocal(&colorSpaceConversionValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (colorSpaceConversionValue.IsEmpty() || colorSpaceConversionValue->IsUndefined()) {
+        // Do nothing.
     } else {
-      unsigned resizeHeight = toUInt32(isolate, resizeHeightValue, EnforceRange, exceptionState);
-      if (exceptionState.hadException())
-        return;
-      impl.setResizeHeight(resizeHeight);
+        V8StringResource<> colorSpaceConversion = colorSpaceConversionValue;
+        if (!colorSpaceConversion.prepare(exceptionState))
+            return;
+        const char* validValues[] = {
+            "none",
+            "default",
+            "srgb",
+            "linear-rgb",
+        };
+        if (!isValidEnum(colorSpaceConversion, validValues, WTF_ARRAY_LENGTH(validValues), "CanvasColorSpace", exceptionState))
+            return;
+        impl.setColorSpaceConversion(colorSpaceConversion);
     }
-  }
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    v8::Local<v8::Value> resizeQualityValue;
-    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "resizeQuality")).ToLocal(&resizeQualityValue)) {
-      exceptionState.rethrowV8Exception(block.Exception());
-      return;
+    v8::Local<v8::Value> imageOrientationValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "imageOrientation")).ToLocal(&imageOrientationValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
     }
-    if (resizeQualityValue.IsEmpty() || resizeQualityValue->IsUndefined()) {
-      // Do nothing.
+    if (imageOrientationValue.IsEmpty() || imageOrientationValue->IsUndefined()) {
+        // Do nothing.
     } else {
-      V8StringResource<> resizeQuality = resizeQualityValue;
-      if (!resizeQuality.prepare(exceptionState))
-        return;
-      const char* validValues[] = {
-          "pixelated",
-          "low",
-          "medium",
-          "high",
-          "None",
-      };
-      if (!isValidEnum(resizeQuality, validValues, WTF_ARRAY_LENGTH(validValues), "ResizeQuality", exceptionState))
-        return;
-      impl.setResizeQuality(resizeQuality);
+        V8StringResource<> imageOrientation = imageOrientationValue;
+        if (!imageOrientation.prepare(exceptionState))
+            return;
+        const char* validValues[] = {
+            "none",
+            "flipY",
+        };
+        if (!isValidEnum(imageOrientation, validValues, WTF_ARRAY_LENGTH(validValues), "ImageOrientation", exceptionState))
+            return;
+        impl.setImageOrientation(imageOrientation);
     }
-  }
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    v8::Local<v8::Value> resizeWidthValue;
-    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "resizeWidth")).ToLocal(&resizeWidthValue)) {
-      exceptionState.rethrowV8Exception(block.Exception());
-      return;
+    v8::Local<v8::Value> premultiplyAlphaValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "premultiplyAlpha")).ToLocal(&premultiplyAlphaValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
     }
-    if (resizeWidthValue.IsEmpty() || resizeWidthValue->IsUndefined()) {
-      // Do nothing.
+    if (premultiplyAlphaValue.IsEmpty() || premultiplyAlphaValue->IsUndefined()) {
+        // Do nothing.
     } else {
-      unsigned resizeWidth = toUInt32(isolate, resizeWidthValue, EnforceRange, exceptionState);
-      if (exceptionState.hadException())
-        return;
-      impl.setResizeWidth(resizeWidth);
+        V8StringResource<> premultiplyAlpha = premultiplyAlphaValue;
+        if (!premultiplyAlpha.prepare(exceptionState))
+            return;
+        const char* validValues[] = {
+            "none",
+            "premultiply",
+            "default",
+        };
+        if (!isValidEnum(premultiplyAlpha, validValues, WTF_ARRAY_LENGTH(validValues), "PremultiplyAlpha", exceptionState))
+            return;
+        impl.setPremultiplyAlpha(premultiplyAlpha);
     }
-  }
+
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        v8::Local<v8::Value> resizeHeightValue;
+        if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "resizeHeight")).ToLocal(&resizeHeightValue)) {
+            exceptionState.rethrowV8Exception(block.Exception());
+            return;
+        }
+        if (resizeHeightValue.IsEmpty() || resizeHeightValue->IsUndefined()) {
+            // Do nothing.
+        } else {
+            unsigned resizeHeight = toUInt32(isolate, resizeHeightValue, EnforceRange, exceptionState);
+            if (exceptionState.hadException())
+                return;
+            impl.setResizeHeight(resizeHeight);
+        }
+    }
+
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        v8::Local<v8::Value> resizeQualityValue;
+        if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "resizeQuality")).ToLocal(&resizeQualityValue)) {
+            exceptionState.rethrowV8Exception(block.Exception());
+            return;
+        }
+        if (resizeQualityValue.IsEmpty() || resizeQualityValue->IsUndefined()) {
+            // Do nothing.
+        } else {
+            V8StringResource<> resizeQuality = resizeQualityValue;
+            if (!resizeQuality.prepare(exceptionState))
+                return;
+            const char* validValues[] = {
+                "pixelated",
+                "low",
+                "medium",
+                "high",
+                "None",
+            };
+            if (!isValidEnum(resizeQuality, validValues, WTF_ARRAY_LENGTH(validValues), "ResizeQuality", exceptionState))
+                return;
+            impl.setResizeQuality(resizeQuality);
+        }
+    }
+
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        v8::Local<v8::Value> resizeWidthValue;
+        if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "resizeWidth")).ToLocal(&resizeWidthValue)) {
+            exceptionState.rethrowV8Exception(block.Exception());
+            return;
+        }
+        if (resizeWidthValue.IsEmpty() || resizeWidthValue->IsUndefined()) {
+            // Do nothing.
+        } else {
+            unsigned resizeWidth = toUInt32(isolate, resizeWidthValue, EnforceRange, exceptionState);
+            if (exceptionState.hadException())
+                return;
+            impl.setResizeWidth(resizeWidth);
+        }
+    }
 }
 
-v8::Local<v8::Value> ImageBitmapOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ImageBitmapOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ImageBitmapOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ImageBitmapOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ImageBitmapOptions(const ImageBitmapOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasColorSpaceConversion()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "colorSpaceConversion"), v8String(isolate, impl.colorSpaceConversion()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "colorSpaceConversion"), v8String(isolate, String("default")))))
-      return false;
-  }
+bool toV8ImageBitmapOptions(const ImageBitmapOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasColorSpaceConversion()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "colorSpaceConversion"), v8String(isolate, impl.colorSpaceConversion()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "colorSpaceConversion"), v8String(isolate, String("default")))))
+            return false;
+    }
 
-  if (impl.hasImageOrientation()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "imageOrientation"), v8String(isolate, impl.imageOrientation()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "imageOrientation"), v8String(isolate, String("none")))))
-      return false;
-  }
+    if (impl.hasImageOrientation()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "imageOrientation"), v8String(isolate, impl.imageOrientation()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "imageOrientation"), v8String(isolate, String("none")))))
+            return false;
+    }
 
-  if (impl.hasPremultiplyAlpha()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "premultiplyAlpha"), v8String(isolate, impl.premultiplyAlpha()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "premultiplyAlpha"), v8String(isolate, String("default")))))
-      return false;
-  }
+    if (impl.hasPremultiplyAlpha()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "premultiplyAlpha"), v8String(isolate, impl.premultiplyAlpha()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "premultiplyAlpha"), v8String(isolate, String("default")))))
+            return false;
+    }
 
-  if (impl.hasResizeHeight()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "resizeHeight"), v8::Integer::NewFromUnsigned(isolate, impl.resizeHeight()))))
-      return false;
-  }
+    if (impl.hasResizeHeight()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "resizeHeight"), v8::Integer::NewFromUnsigned(isolate, impl.resizeHeight()))))
+            return false;
+    }
 
-  if (impl.hasResizeQuality()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "resizeQuality"), v8String(isolate, impl.resizeQuality()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "resizeQuality"), v8String(isolate, String("low")))))
-      return false;
-  }
+    if (impl.hasResizeQuality()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "resizeQuality"), v8String(isolate, impl.resizeQuality()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "resizeQuality"), v8String(isolate, String("low")))))
+            return false;
+    }
 
-  if (impl.hasResizeWidth()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "resizeWidth"), v8::Integer::NewFromUnsigned(isolate, impl.resizeWidth()))))
-      return false;
-  }
+    if (impl.hasResizeWidth()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "resizeWidth"), v8::Integer::NewFromUnsigned(isolate, impl.resizeWidth()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-ImageBitmapOptions NativeValueTraits<ImageBitmapOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ImageBitmapOptions impl;
-  V8ImageBitmapOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ImageBitmapOptions NativeValueTraits<ImageBitmapOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ImageBitmapOptions impl;
+    V8ImageBitmapOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TrackDefault.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,186 +48,203 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&TrackDefault::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "TrackDefault is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TrackDefaultV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TrackDefault* impl = V8TrackDefault::toImpl(holder);
+        TrackDefault* impl = V8TrackDefault::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TrackDefaultV8Internal::typeAttributeGetter(info);
-}
+    MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TrackDefaultV8Internal::typeAttributeGetter(info);
+    }
 
-static void byteStreamTrackIDAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void byteStreamTrackIDAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TrackDefault* impl = V8TrackDefault::toImpl(holder);
+        TrackDefault* impl = V8TrackDefault::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->byteStreamTrackID(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->byteStreamTrackID(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void byteStreamTrackIDAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TrackDefaultV8Internal::byteStreamTrackIDAttributeGetter(info);
-}
+    MODULES_EXPORT void byteStreamTrackIDAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TrackDefaultV8Internal::byteStreamTrackIDAttributeGetter(info);
+    }
 
-static void languageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void languageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TrackDefault* impl = V8TrackDefault::toImpl(holder);
+        TrackDefault* impl = V8TrackDefault::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->language(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->language(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void languageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TrackDefaultV8Internal::languageAttributeGetter(info);
-}
+    MODULES_EXPORT void languageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TrackDefaultV8Internal::languageAttributeGetter(info);
+    }
 
-static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TrackDefault* impl = V8TrackDefault::toImpl(holder);
+        TrackDefault* impl = V8TrackDefault::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->label(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->label(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TrackDefaultV8Internal::labelAttributeGetter(info);
-}
+    MODULES_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TrackDefaultV8Internal::labelAttributeGetter(info);
+    }
 
-static void kindsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void kindsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TrackDefault* impl = V8TrackDefault::toImpl(holder);
+        TrackDefault* impl = V8TrackDefault::toImpl(holder);
 
-  v8SetReturnValue(info, ToV8(impl->kinds(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->kinds(), info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT void kindsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TrackDefaultV8Internal::kindsAttributeGetter(info);
-}
+    MODULES_EXPORT void kindsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TrackDefaultV8Internal::kindsAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "TrackDefault");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "TrackDefault");
 
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  V8StringResource<> language;
-  V8StringResource<> label;
-  Vector<String> kinds;
-  V8StringResource<> byteStreamTrackID;
-  type = info[0];
-  if (!type.prepare())
-    return;
-  const char* validTypeValues[] = {
-      "audio",
-      "video",
-      "text",
-  };
-  if (!isValidEnum(type, validTypeValues, WTF_ARRAY_LENGTH(validTypeValues), "TrackDefaultType", exceptionState)) {
-    return;
-  }
+        V8StringResource<> type;
+        V8StringResource<> language;
+        V8StringResource<> label;
+        Vector<String> kinds;
+        V8StringResource<> byteStreamTrackID;
+        type = info[0];
+        if (!type.prepare())
+            return;
+        const char* validTypeValues[] = {
+            "audio",
+            "video",
+            "text",
+        };
+        if (!isValidEnum(type, validTypeValues, WTF_ARRAY_LENGTH(validTypeValues), "TrackDefaultType", exceptionState)) {
+            return;
+        }
 
-  language = info[1];
-  if (!language.prepare())
-    return;
+        language = info[1];
+        if (!language.prepare())
+            return;
 
-  label = info[2];
-  if (!label.prepare())
-    return;
+        label = info[2];
+        if (!label.prepare())
+            return;
 
-  kinds = toImplArray<Vector<String>>(info[3], 4, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
+        kinds = toImplArray<Vector<String>>(info[3], 4, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!info[4]->IsUndefined()) {
-    byteStreamTrackID = info[4];
-    if (!byteStreamTrackID.prepare())
-      return;
-  } else {
-    byteStreamTrackID = String("");
-  }
+        if (!info[4]->IsUndefined()) {
+            byteStreamTrackID = info[4];
+            if (!byteStreamTrackID.prepare())
+                return;
+        } else {
+            byteStreamTrackID = String("");
+        }
 
-  TrackDefault* impl = TrackDefault::create(type, language, label, kinds, byteStreamTrackID, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8TrackDefault::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        TrackDefault* impl = TrackDefault::create(type, language, label, kinds, byteStreamTrackID, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8TrackDefault::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace TrackDefaultV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8TrackDefaultAccessors[] = {
-    {"type", TrackDefaultV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"byteStreamTrackID", TrackDefaultV8Internal::byteStreamTrackIDAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"language", TrackDefaultV8Internal::languageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"label", TrackDefaultV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"kinds", TrackDefaultV8Internal::kindsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", TrackDefaultV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "byteStreamTrackID", TrackDefaultV8Internal::byteStreamTrackIDAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "language", TrackDefaultV8Internal::languageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "label", TrackDefaultV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "kinds", TrackDefaultV8Internal::kindsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8TrackDefault::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("TrackDefault"));
-    return;
-  }
+void V8TrackDefault::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("TrackDefault"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  TrackDefaultV8Internal::constructor(info);
+    TrackDefaultV8Internal::constructor(info);
 }
 
-static void installV8TrackDefaultTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TrackDefault::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TrackDefault::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8TrackDefault::constructorCallback);
-  interfaceTemplate->SetLength(4);
+static void installV8TrackDefaultTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TrackDefault::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TrackDefault::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8TrackDefault::constructorCallback);
+    interfaceTemplate->SetLength(4);
 
-  if (!RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TrackDefaultAccessors, WTF_ARRAY_LENGTH(V8TrackDefaultAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TrackDefaultAccessors, WTF_ARRAY_LENGTH(V8TrackDefaultAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8TrackDefault::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TrackDefaultTemplate);
+v8::Local<v8::FunctionTemplate> V8TrackDefault::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TrackDefaultTemplate);
 }
 
-bool V8TrackDefault::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8TrackDefault::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8TrackDefault::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8TrackDefault::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-TrackDefault* V8TrackDefault::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+TrackDefault* V8TrackDefault::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

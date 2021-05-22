@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef TouchEventInit_h
 #define TouchEventInit_h
 
@@ -21,39 +21,40 @@ namespace blink {
 class Touch;
 
 class CORE_EXPORT TouchEventInit : public EventModifierInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  TouchEventInit();
-  virtual ~TouchEventInit();
-  TouchEventInit(const TouchEventInit&);
-  TouchEventInit& operator=(const TouchEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasChangedTouches() const;
-  const HeapVector<Member<Touch>>& changedTouches() const;
-  void setChangedTouches(const HeapVector<Member<Touch>>&);
+public:
+    TouchEventInit();
+    virtual ~TouchEventInit();
+    TouchEventInit(const TouchEventInit&);
+    TouchEventInit& operator=(const TouchEventInit&);
 
-  bool hasTargetTouches() const;
-  const HeapVector<Member<Touch>>& targetTouches() const;
-  void setTargetTouches(const HeapVector<Member<Touch>>&);
+    bool hasChangedTouches() const;
+    const HeapVector<Member<Touch>>& changedTouches() const;
+    void setChangedTouches(const HeapVector<Member<Touch>>&);
 
-  bool hasTouches() const;
-  const HeapVector<Member<Touch>>& touches() const;
-  void setTouches(const HeapVector<Member<Touch>>&);
+    bool hasTargetTouches() const;
+    const HeapVector<Member<Touch>>& targetTouches() const;
+    void setTargetTouches(const HeapVector<Member<Touch>>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTouches() const;
+    const HeapVector<Member<Touch>>& touches() const;
+    void setTouches(const HeapVector<Member<Touch>>&);
 
- private:
-  bool m_hasChangedTouches = false;
-  HeapVector<Member<Touch>> m_changedTouches;
-  bool m_hasTargetTouches = false;
-  HeapVector<Member<Touch>> m_targetTouches;
-  bool m_hasTouches = false;
-  HeapVector<Member<Touch>> m_touches;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8TouchEventInit;
+private:
+    bool m_hasChangedTouches = false;
+    HeapVector<Member<Touch>> m_changedTouches;
+    bool m_hasTargetTouches = false;
+    HeapVector<Member<Touch>> m_targetTouches;
+    bool m_hasTouches = false;
+    HeapVector<Member<Touch>> m_touches;
+
+    friend class V8TouchEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // TouchEventInit_h
+#endif // TouchEventInit_h

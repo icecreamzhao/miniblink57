@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8InternalRuntimeFlags.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,3276 +45,3767 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&InternalRuntimeFlags::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "InternalRuntimeFlags is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace InternalRuntimeFlagsV8Internal {
 
-static void accelerated2dCanvasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void accelerated2dCanvasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->accelerated2dCanvasEnabled());
-}
+        v8SetReturnValueBool(info, impl->accelerated2dCanvasEnabled());
+    }
 
-void accelerated2dCanvasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::accelerated2dCanvasEnabledAttributeGetter(info);
-}
+    void accelerated2dCanvasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::accelerated2dCanvasEnabledAttributeGetter(info);
+    }
 
-static void accelerated2dCanvasEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void accelerated2dCanvasEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "accelerated2dCanvasEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "accelerated2dCanvasEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setAccelerated2dCanvasEnabled(cppValue);
-}
+        impl->setAccelerated2dCanvasEnabled(cppValue);
+    }
 
-void accelerated2dCanvasEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void accelerated2dCanvasEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::accelerated2dCanvasEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::accelerated2dCanvasEnabledAttributeSetter(v8Value, info);
+    }
 
-static void audioOutputDevicesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void audioOutputDevicesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->audioOutputDevicesEnabled());
-}
+        v8SetReturnValueBool(info, impl->audioOutputDevicesEnabled());
+    }
 
-void audioOutputDevicesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::audioOutputDevicesEnabledAttributeGetter(info);
-}
+    void audioOutputDevicesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::audioOutputDevicesEnabledAttributeGetter(info);
+    }
 
-static void audioVideoTracksEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void audioVideoTracksEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->audioVideoTracksEnabled());
-}
+        v8SetReturnValueBool(info, impl->audioVideoTracksEnabled());
+    }
 
-void audioVideoTracksEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::audioVideoTracksEnabledAttributeGetter(info);
-}
+    void audioVideoTracksEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::audioVideoTracksEnabledAttributeGetter(info);
+    }
 
-static void audioWorkletEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void audioWorkletEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->audioWorkletEnabled());
-}
+        v8SetReturnValueBool(info, impl->audioWorkletEnabled());
+    }
 
-void audioWorkletEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::audioWorkletEnabledAttributeGetter(info);
-}
+    void audioWorkletEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::audioWorkletEnabledAttributeGetter(info);
+    }
 
-static void auxclickEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void auxclickEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->auxclickEnabled());
-}
+        v8SetReturnValueBool(info, impl->auxclickEnabled());
+    }
 
-void auxclickEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::auxclickEnabledAttributeGetter(info);
-}
+    void auxclickEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::auxclickEnabledAttributeGetter(info);
+    }
 
-static void coalescedEventsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void coalescedEventsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->coalescedEventsEnabled());
-}
+        v8SetReturnValueBool(info, impl->coalescedEventsEnabled());
+    }
 
-void coalescedEventsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::coalescedEventsEnabledAttributeGetter(info);
-}
+    void coalescedEventsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::coalescedEventsEnabledAttributeGetter(info);
+    }
 
-static void backgroundSyncEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void backgroundSyncEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->backgroundSyncEnabled());
-}
+        v8SetReturnValueBool(info, impl->backgroundSyncEnabled());
+    }
 
-void backgroundSyncEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::backgroundSyncEnabledAttributeGetter(info);
-}
+    void backgroundSyncEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::backgroundSyncEnabledAttributeGetter(info);
+    }
 
-static void backspaceDefaultHandlerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void backspaceDefaultHandlerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->backspaceDefaultHandlerEnabled());
-}
+        v8SetReturnValueBool(info, impl->backspaceDefaultHandlerEnabled());
+    }
 
-void backspaceDefaultHandlerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::backspaceDefaultHandlerEnabledAttributeGetter(info);
-}
+    void backspaceDefaultHandlerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::backspaceDefaultHandlerEnabledAttributeGetter(info);
+    }
 
-static void broadcastChannelEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void broadcastChannelEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->broadcastChannelEnabled());
-}
+        v8SetReturnValueBool(info, impl->broadcastChannelEnabled());
+    }
 
-void broadcastChannelEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::broadcastChannelEnabledAttributeGetter(info);
-}
+    void broadcastChannelEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::broadcastChannelEnabledAttributeGetter(info);
+    }
 
-static void budgetEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void budgetEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->budgetEnabled());
-}
+        v8SetReturnValueBool(info, impl->budgetEnabled());
+    }
 
-void budgetEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::budgetEnabledAttributeGetter(info);
-}
+    void budgetEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::budgetEnabledAttributeGetter(info);
+    }
 
-static void canvas2dFixedRenderingModeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void canvas2dFixedRenderingModeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->canvas2dFixedRenderingModeEnabled());
-}
+        v8SetReturnValueBool(info, impl->canvas2dFixedRenderingModeEnabled());
+    }
 
-void canvas2dFixedRenderingModeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::canvas2dFixedRenderingModeEnabledAttributeGetter(info);
-}
+    void canvas2dFixedRenderingModeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::canvas2dFixedRenderingModeEnabledAttributeGetter(info);
+    }
 
-static void enableCanvas2dDynamicRenderingModeSwitchingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void enableCanvas2dDynamicRenderingModeSwitchingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->enableCanvas2dDynamicRenderingModeSwitchingEnabled());
-}
+        v8SetReturnValueBool(info, impl->enableCanvas2dDynamicRenderingModeSwitchingEnabled());
+    }
 
-void enableCanvas2dDynamicRenderingModeSwitchingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::enableCanvas2dDynamicRenderingModeSwitchingEnabledAttributeGetter(info);
-}
+    void enableCanvas2dDynamicRenderingModeSwitchingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::enableCanvas2dDynamicRenderingModeSwitchingEnabledAttributeGetter(info);
+    }
 
-static void canMakePaymentEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void canMakePaymentEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->canMakePaymentEnabled());
-}
+        v8SetReturnValueBool(info, impl->canMakePaymentEnabled());
+    }
 
-void canMakePaymentEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::canMakePaymentEnabledAttributeGetter(info);
-}
+    void canMakePaymentEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::canMakePaymentEnabledAttributeGetter(info);
+    }
 
-static void canvas2dImageChromiumEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void canvas2dImageChromiumEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->canvas2dImageChromiumEnabled());
-}
+        v8SetReturnValueBool(info, impl->canvas2dImageChromiumEnabled());
+    }
 
-void canvas2dImageChromiumEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::canvas2dImageChromiumEnabledAttributeGetter(info);
-}
+    void canvas2dImageChromiumEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::canvas2dImageChromiumEnabledAttributeGetter(info);
+    }
 
-static void clientHintsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientHintsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->clientHintsEnabled());
-}
+        v8SetReturnValueBool(info, impl->clientHintsEnabled());
+    }
 
-void clientHintsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::clientHintsEnabledAttributeGetter(info);
-}
+    void clientHintsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::clientHintsEnabledAttributeGetter(info);
+    }
 
-static void compositeOpaqueFixedPositionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void compositeOpaqueFixedPositionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->compositeOpaqueFixedPositionEnabled());
-}
+        v8SetReturnValueBool(info, impl->compositeOpaqueFixedPositionEnabled());
+    }
 
-void compositeOpaqueFixedPositionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::compositeOpaqueFixedPositionEnabledAttributeGetter(info);
-}
+    void compositeOpaqueFixedPositionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::compositeOpaqueFixedPositionEnabledAttributeGetter(info);
+    }
 
-static void compositeOpaqueFixedPositionEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void compositeOpaqueFixedPositionEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "compositeOpaqueFixedPositionEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "compositeOpaqueFixedPositionEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setCompositeOpaqueFixedPositionEnabled(cppValue);
-}
+        impl->setCompositeOpaqueFixedPositionEnabled(cppValue);
+    }
 
-void compositeOpaqueFixedPositionEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void compositeOpaqueFixedPositionEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::compositeOpaqueFixedPositionEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::compositeOpaqueFixedPositionEnabledAttributeSetter(v8Value, info);
+    }
 
-static void compositeOpaqueScrollersEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void compositeOpaqueScrollersEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->compositeOpaqueScrollersEnabled());
-}
+        v8SetReturnValueBool(info, impl->compositeOpaqueScrollersEnabled());
+    }
 
-void compositeOpaqueScrollersEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::compositeOpaqueScrollersEnabledAttributeGetter(info);
-}
+    void compositeOpaqueScrollersEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::compositeOpaqueScrollersEnabledAttributeGetter(info);
+    }
 
-static void compositeOpaqueScrollersEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void compositeOpaqueScrollersEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "compositeOpaqueScrollersEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "compositeOpaqueScrollersEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setCompositeOpaqueScrollersEnabled(cppValue);
-}
+        impl->setCompositeOpaqueScrollersEnabled(cppValue);
+    }
 
-void compositeOpaqueScrollersEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void compositeOpaqueScrollersEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::compositeOpaqueScrollersEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::compositeOpaqueScrollersEnabledAttributeSetter(v8Value, info);
+    }
 
-static void colorCorrectRenderingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void colorCorrectRenderingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->colorCorrectRenderingEnabled());
-}
+        v8SetReturnValueBool(info, impl->colorCorrectRenderingEnabled());
+    }
 
-void colorCorrectRenderingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::colorCorrectRenderingEnabledAttributeGetter(info);
-}
+    void colorCorrectRenderingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::colorCorrectRenderingEnabledAttributeGetter(info);
+    }
 
-static void colorCorrectRenderingDefaultModeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void colorCorrectRenderingDefaultModeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->colorCorrectRenderingDefaultModeEnabled());
-}
+        v8SetReturnValueBool(info, impl->colorCorrectRenderingDefaultModeEnabled());
+    }
 
-void colorCorrectRenderingDefaultModeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::colorCorrectRenderingDefaultModeEnabledAttributeGetter(info);
-}
+    void colorCorrectRenderingDefaultModeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::colorCorrectRenderingDefaultModeEnabledAttributeGetter(info);
+    }
 
-static void compositedSelectionUpdateEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void compositedSelectionUpdateEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->compositedSelectionUpdateEnabled());
-}
+        v8SetReturnValueBool(info, impl->compositedSelectionUpdateEnabled());
+    }
 
-void compositedSelectionUpdateEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::compositedSelectionUpdateEnabledAttributeGetter(info);
-}
+    void compositedSelectionUpdateEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::compositedSelectionUpdateEnabledAttributeGetter(info);
+    }
 
-static void compositorWorkerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void compositorWorkerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->compositorWorkerEnabled());
-}
+        v8SetReturnValueBool(info, impl->compositorWorkerEnabled());
+    }
 
-void compositorWorkerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::compositorWorkerEnabledAttributeGetter(info);
-}
+    void compositorWorkerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::compositorWorkerEnabledAttributeGetter(info);
+    }
 
-static void contextMenuEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void contextMenuEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->contextMenuEnabled());
-}
+        v8SetReturnValueBool(info, impl->contextMenuEnabled());
+    }
 
-void contextMenuEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::contextMenuEnabledAttributeGetter(info);
-}
+    void contextMenuEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::contextMenuEnabledAttributeGetter(info);
+    }
 
-static void corsRFC1918EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void corsRFC1918EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->corsRFC1918Enabled());
-}
+        v8SetReturnValueBool(info, impl->corsRFC1918Enabled());
+    }
 
-void corsRFC1918EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::corsRFC1918EnabledAttributeGetter(info);
-}
+    void corsRFC1918EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::corsRFC1918EnabledAttributeGetter(info);
+    }
 
-static void credentialManagerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void credentialManagerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->credentialManagerEnabled());
-}
+        v8SetReturnValueBool(info, impl->credentialManagerEnabled());
+    }
 
-void credentialManagerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::credentialManagerEnabledAttributeGetter(info);
-}
+    void credentialManagerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::credentialManagerEnabledAttributeGetter(info);
+    }
 
-static void css3TextEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void css3TextEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->css3TextEnabled());
-}
+        v8SetReturnValueBool(info, impl->css3TextEnabled());
+    }
 
-void css3TextEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::css3TextEnabledAttributeGetter(info);
-}
+    void css3TextEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::css3TextEnabledAttributeGetter(info);
+    }
 
-static void css3TextDecorationsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void css3TextDecorationsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->css3TextDecorationsEnabled());
-}
+        v8SetReturnValueBool(info, impl->css3TextDecorationsEnabled());
+    }
 
-void css3TextDecorationsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::css3TextDecorationsEnabledAttributeGetter(info);
-}
+    void css3TextDecorationsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::css3TextDecorationsEnabledAttributeGetter(info);
+    }
 
-static void cssApplyAtRulesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssApplyAtRulesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssApplyAtRulesEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssApplyAtRulesEnabled());
+    }
 
-void cssApplyAtRulesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssApplyAtRulesEnabledAttributeGetter(info);
-}
+    void cssApplyAtRulesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssApplyAtRulesEnabledAttributeGetter(info);
+    }
 
-static void cssAdditiveAnimationsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssAdditiveAnimationsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssAdditiveAnimationsEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssAdditiveAnimationsEnabled());
+    }
 
-void cssAdditiveAnimationsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssAdditiveAnimationsEnabledAttributeGetter(info);
-}
+    void cssAdditiveAnimationsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssAdditiveAnimationsEnabledAttributeGetter(info);
+    }
 
-static void cssBackdropFilterEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssBackdropFilterEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssBackdropFilterEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssBackdropFilterEnabled());
+    }
 
-void cssBackdropFilterEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssBackdropFilterEnabledAttributeGetter(info);
-}
+    void cssBackdropFilterEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssBackdropFilterEnabledAttributeGetter(info);
+    }
 
-static void cssHexAlphaColorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssHexAlphaColorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssHexAlphaColorEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssHexAlphaColorEnabled());
+    }
 
-void cssHexAlphaColorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssHexAlphaColorEnabledAttributeGetter(info);
-}
+    void cssHexAlphaColorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssHexAlphaColorEnabledAttributeGetter(info);
+    }
 
-static void cssContainmentEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssContainmentEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssContainmentEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssContainmentEnabled());
+    }
 
-void cssContainmentEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssContainmentEnabledAttributeGetter(info);
-}
+    void cssContainmentEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssContainmentEnabledAttributeGetter(info);
+    }
 
-static void cssFontDisplayEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssFontDisplayEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssFontDisplayEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssFontDisplayEnabled());
+    }
 
-void cssFontDisplayEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssFontDisplayEnabledAttributeGetter(info);
-}
+    void cssFontDisplayEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssFontDisplayEnabledAttributeGetter(info);
+    }
 
-static void cssFontSizeAdjustEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssFontSizeAdjustEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssFontSizeAdjustEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssFontSizeAdjustEnabled());
+    }
 
-void cssFontSizeAdjustEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssFontSizeAdjustEnabledAttributeGetter(info);
-}
+    void cssFontSizeAdjustEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssFontSizeAdjustEnabledAttributeGetter(info);
+    }
 
-static void cssGridLayoutEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssGridLayoutEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssGridLayoutEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssGridLayoutEnabled());
+    }
 
-void cssGridLayoutEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssGridLayoutEnabledAttributeGetter(info);
-}
+    void cssGridLayoutEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssGridLayoutEnabledAttributeGetter(info);
+    }
 
-static void cssGridLayoutEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void cssGridLayoutEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "cssGridLayoutEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "cssGridLayoutEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setCSSGridLayoutEnabled(cppValue);
-}
+        impl->setCSSGridLayoutEnabled(cppValue);
+    }
 
-void cssGridLayoutEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void cssGridLayoutEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::cssGridLayoutEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::cssGridLayoutEnabledAttributeSetter(v8Value, info);
+    }
 
-static void cssDisplayContentsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssDisplayContentsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssDisplayContentsEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssDisplayContentsEnabled());
+    }
 
-void cssDisplayContentsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssDisplayContentsEnabledAttributeGetter(info);
-}
+    void cssDisplayContentsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssDisplayContentsEnabledAttributeGetter(info);
+    }
 
-static void cssHyphensEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssHyphensEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssHyphensEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssHyphensEnabled());
+    }
 
-void cssHyphensEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssHyphensEnabledAttributeGetter(info);
-}
+    void cssHyphensEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssHyphensEnabledAttributeGetter(info);
+    }
 
-static void cssInBodyDoesNotBlockPaintEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssInBodyDoesNotBlockPaintEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssInBodyDoesNotBlockPaintEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssInBodyDoesNotBlockPaintEnabled());
+    }
 
-void cssInBodyDoesNotBlockPaintEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssInBodyDoesNotBlockPaintEnabledAttributeGetter(info);
-}
+    void cssInBodyDoesNotBlockPaintEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssInBodyDoesNotBlockPaintEnabledAttributeGetter(info);
+    }
 
-static void cssIndependentTransformPropertiesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssIndependentTransformPropertiesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssIndependentTransformPropertiesEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssIndependentTransformPropertiesEnabled());
+    }
 
-void cssIndependentTransformPropertiesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssIndependentTransformPropertiesEnabledAttributeGetter(info);
-}
+    void cssIndependentTransformPropertiesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssIndependentTransformPropertiesEnabledAttributeGetter(info);
+    }
 
-static void cssMaskSourceTypeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssMaskSourceTypeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssMaskSourceTypeEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssMaskSourceTypeEnabled());
+    }
 
-void cssMaskSourceTypeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssMaskSourceTypeEnabledAttributeGetter(info);
-}
+    void cssMaskSourceTypeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssMaskSourceTypeEnabledAttributeGetter(info);
+    }
 
-static void cssomSmoothScrollEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssomSmoothScrollEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssomSmoothScrollEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssomSmoothScrollEnabled());
+    }
 
-void cssomSmoothScrollEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssomSmoothScrollEnabledAttributeGetter(info);
-}
+    void cssomSmoothScrollEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssomSmoothScrollEnabledAttributeGetter(info);
+    }
 
-static void cssOffsetPositionAnchorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssOffsetPositionAnchorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssOffsetPositionAnchorEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssOffsetPositionAnchorEnabled());
+    }
 
-void cssOffsetPositionAnchorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssOffsetPositionAnchorEnabledAttributeGetter(info);
-}
+    void cssOffsetPositionAnchorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssOffsetPositionAnchorEnabledAttributeGetter(info);
+    }
 
-static void cssOffsetRotateEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssOffsetRotateEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssOffsetRotateEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssOffsetRotateEnabled());
+    }
 
-void cssOffsetRotateEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssOffsetRotateEnabledAttributeGetter(info);
-}
+    void cssOffsetRotateEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssOffsetRotateEnabledAttributeGetter(info);
+    }
 
-static void cssOffsetRotationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssOffsetRotationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssOffsetRotationEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssOffsetRotationEnabled());
+    }
 
-void cssOffsetRotationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssOffsetRotationEnabledAttributeGetter(info);
-}
+    void cssOffsetRotationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssOffsetRotationEnabledAttributeGetter(info);
+    }
 
-static void cssPaintAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssPaintAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssPaintAPIEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssPaintAPIEnabled());
+    }
 
-void cssPaintAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssPaintAPIEnabledAttributeGetter(info);
-}
+    void cssPaintAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssPaintAPIEnabledAttributeGetter(info);
+    }
 
-static void cssPaintAPIArgumentsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssPaintAPIArgumentsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssPaintAPIArgumentsEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssPaintAPIArgumentsEnabled());
+    }
 
-void cssPaintAPIArgumentsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssPaintAPIArgumentsEnabledAttributeGetter(info);
-}
+    void cssPaintAPIArgumentsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssPaintAPIArgumentsEnabledAttributeGetter(info);
+    }
 
-static void cssSnapSizeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssSnapSizeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssSnapSizeEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssSnapSizeEnabled());
+    }
 
-void cssSnapSizeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssSnapSizeEnabledAttributeGetter(info);
-}
+    void cssSnapSizeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssSnapSizeEnabledAttributeGetter(info);
+    }
 
-static void cssStickyPositionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssStickyPositionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssStickyPositionEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssStickyPositionEnabled());
+    }
 
-void cssStickyPositionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssStickyPositionEnabledAttributeGetter(info);
-}
+    void cssStickyPositionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssStickyPositionEnabledAttributeGetter(info);
+    }
 
-static void cssTouchActionPanDirectionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssTouchActionPanDirectionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssTouchActionPanDirectionsEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssTouchActionPanDirectionsEnabled());
+    }
 
-void cssTouchActionPanDirectionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssTouchActionPanDirectionsEnabledAttributeGetter(info);
-}
+    void cssTouchActionPanDirectionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssTouchActionPanDirectionsEnabledAttributeGetter(info);
+    }
 
-static void cssTouchActionPinchZoomEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssTouchActionPinchZoomEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssTouchActionPinchZoomEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssTouchActionPinchZoomEnabled());
+    }
 
-void cssTouchActionPinchZoomEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssTouchActionPinchZoomEnabledAttributeGetter(info);
-}
+    void cssTouchActionPinchZoomEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssTouchActionPinchZoomEnabledAttributeGetter(info);
+    }
 
-static void cssTypedOMEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssTypedOMEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssTypedOMEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssTypedOMEnabled());
+    }
 
-void cssTypedOMEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssTypedOMEnabledAttributeGetter(info);
-}
+    void cssTypedOMEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssTypedOMEnabledAttributeGetter(info);
+    }
 
-static void cssVariableFontsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssVariableFontsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssVariableFontsEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssVariableFontsEnabled());
+    }
 
-void cssVariableFontsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssVariableFontsEnabledAttributeGetter(info);
-}
+    void cssVariableFontsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssVariableFontsEnabledAttributeGetter(info);
+    }
 
-static void cssVariables2EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssVariables2EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssVariables2Enabled());
-}
+        v8SetReturnValueBool(info, impl->cssVariables2Enabled());
+    }
 
-void cssVariables2EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssVariables2EnabledAttributeGetter(info);
-}
+    void cssVariables2EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssVariables2EnabledAttributeGetter(info);
+    }
 
-static void cssViewportEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssViewportEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssViewportEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssViewportEnabled());
+    }
 
-void cssViewportEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssViewportEnabledAttributeGetter(info);
-}
+    void cssViewportEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssViewportEnabledAttributeGetter(info);
+    }
 
-static void cssScrollSnapPointsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cssScrollSnapPointsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->cssScrollSnapPointsEnabled());
-}
+        v8SetReturnValueBool(info, impl->cssScrollSnapPointsEnabled());
+    }
 
-void cssScrollSnapPointsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::cssScrollSnapPointsEnabledAttributeGetter(info);
-}
+    void cssScrollSnapPointsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::cssScrollSnapPointsEnabledAttributeGetter(info);
+    }
 
-static void customElementsBuiltinEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void customElementsBuiltinEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->customElementsBuiltinEnabled());
-}
+        v8SetReturnValueBool(info, impl->customElementsBuiltinEnabled());
+    }
 
-void customElementsBuiltinEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::customElementsBuiltinEnabledAttributeGetter(info);
-}
+    void customElementsBuiltinEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::customElementsBuiltinEnabledAttributeGetter(info);
+    }
 
-static void customElementsV1EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void customElementsV1EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->customElementsV1Enabled());
-}
+        v8SetReturnValueBool(info, impl->customElementsV1Enabled());
+    }
 
-void customElementsV1EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::customElementsV1EnabledAttributeGetter(info);
-}
+    void customElementsV1EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::customElementsV1EnabledAttributeGetter(info);
+    }
 
-static void customSchemeHandlerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void customSchemeHandlerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->customSchemeHandlerEnabled());
-}
+        v8SetReturnValueBool(info, impl->customSchemeHandlerEnabled());
+    }
 
-void customSchemeHandlerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::customSchemeHandlerEnabledAttributeGetter(info);
-}
+    void customSchemeHandlerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::customSchemeHandlerEnabledAttributeGetter(info);
+    }
 
-static void databaseEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void databaseEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->databaseEnabled());
-}
+        v8SetReturnValueBool(info, impl->databaseEnabled());
+    }
 
-void databaseEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::databaseEnabledAttributeGetter(info);
-}
+    void databaseEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::databaseEnabledAttributeGetter(info);
+    }
 
-static void decodeToYUVEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void decodeToYUVEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->decodeToYUVEnabled());
-}
+        v8SetReturnValueBool(info, impl->decodeToYUVEnabled());
+    }
 
-void decodeToYUVEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::decodeToYUVEnabledAttributeGetter(info);
-}
+    void decodeToYUVEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::decodeToYUVEnabledAttributeGetter(info);
+    }
 
-static void desktopCaptureDisableLocalEchoControlEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void desktopCaptureDisableLocalEchoControlEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->desktopCaptureDisableLocalEchoControlEnabled());
-}
+        v8SetReturnValueBool(info, impl->desktopCaptureDisableLocalEchoControlEnabled());
+    }
 
-void desktopCaptureDisableLocalEchoControlEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::desktopCaptureDisableLocalEchoControlEnabledAttributeGetter(info);
-}
+    void desktopCaptureDisableLocalEchoControlEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::desktopCaptureDisableLocalEchoControlEnabledAttributeGetter(info);
+    }
 
-static void deviceLightEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deviceLightEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->deviceLightEnabled());
-}
+        v8SetReturnValueBool(info, impl->deviceLightEnabled());
+    }
 
-void deviceLightEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::deviceLightEnabledAttributeGetter(info);
-}
+    void deviceLightEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::deviceLightEnabledAttributeGetter(info);
+    }
 
-static void displayList2dCanvasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void displayList2dCanvasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->displayList2dCanvasEnabled());
-}
+        v8SetReturnValueBool(info, impl->displayList2dCanvasEnabled());
+    }
 
-void displayList2dCanvasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::displayList2dCanvasEnabledAttributeGetter(info);
-}
+    void displayList2dCanvasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::displayList2dCanvasEnabledAttributeGetter(info);
+    }
 
-static void documentCookieEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void documentCookieEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->documentCookieEnabled());
-}
+        v8SetReturnValueBool(info, impl->documentCookieEnabled());
+    }
 
-void documentCookieEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::documentCookieEnabledAttributeGetter(info);
-}
+    void documentCookieEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::documentCookieEnabledAttributeGetter(info);
+    }
 
-static void documentDomainEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void documentDomainEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->documentDomainEnabled());
-}
+        v8SetReturnValueBool(info, impl->documentDomainEnabled());
+    }
 
-void documentDomainEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::documentDomainEnabledAttributeGetter(info);
-}
+    void documentDomainEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::documentDomainEnabledAttributeGetter(info);
+    }
 
-static void documentWriteEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void documentWriteEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->documentWriteEnabled());
-}
+        v8SetReturnValueBool(info, impl->documentWriteEnabled());
+    }
 
-void documentWriteEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::documentWriteEnabledAttributeGetter(info);
-}
+    void documentWriteEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::documentWriteEnabledAttributeGetter(info);
+    }
 
-static void documentWriteEvaluatorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void documentWriteEvaluatorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->documentWriteEvaluatorEnabled());
-}
+        v8SetReturnValueBool(info, impl->documentWriteEvaluatorEnabled());
+    }
 
-void documentWriteEvaluatorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::documentWriteEvaluatorEnabledAttributeGetter(info);
-}
+    void documentWriteEvaluatorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::documentWriteEvaluatorEnabledAttributeGetter(info);
+    }
 
-static void dOMConvenienceAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dOMConvenienceAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->dOMConvenienceAPIEnabled());
-}
+        v8SetReturnValueBool(info, impl->dOMConvenienceAPIEnabled());
+    }
 
-void dOMConvenienceAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::dOMConvenienceAPIEnabledAttributeGetter(info);
-}
+    void dOMConvenienceAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::dOMConvenienceAPIEnabledAttributeGetter(info);
+    }
 
-static void durableStorageEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void durableStorageEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->durableStorageEnabled());
-}
+        v8SetReturnValueBool(info, impl->durableStorageEnabled());
+    }
 
-void durableStorageEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::durableStorageEnabledAttributeGetter(info);
-}
+    void durableStorageEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::durableStorageEnabledAttributeGetter(info);
+    }
 
-static void expensiveBackgroundTimerThrottlingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void expensiveBackgroundTimerThrottlingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->expensiveBackgroundTimerThrottlingEnabled());
-}
+        v8SetReturnValueBool(info, impl->expensiveBackgroundTimerThrottlingEnabled());
+    }
 
-void expensiveBackgroundTimerThrottlingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::expensiveBackgroundTimerThrottlingEnabledAttributeGetter(info);
-}
+    void expensiveBackgroundTimerThrottlingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::expensiveBackgroundTimerThrottlingEnabledAttributeGetter(info);
+    }
 
-static void fasterLocationReloadEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fasterLocationReloadEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fasterLocationReloadEnabled());
-}
+        v8SetReturnValueBool(info, impl->fasterLocationReloadEnabled());
+    }
 
-void fasterLocationReloadEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::fasterLocationReloadEnabledAttributeGetter(info);
-}
+    void fasterLocationReloadEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::fasterLocationReloadEnabledAttributeGetter(info);
+    }
 
-static void fontCacheScalingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fontCacheScalingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fontCacheScalingEnabled());
-}
+        v8SetReturnValueBool(info, impl->fontCacheScalingEnabled());
+    }
 
-void fontCacheScalingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::fontCacheScalingEnabledAttributeGetter(info);
-}
+    void fontCacheScalingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::fontCacheScalingEnabledAttributeGetter(info);
+    }
 
-static void forceDisplayList2dCanvasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void forceDisplayList2dCanvasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->forceDisplayList2dCanvasEnabled());
-}
+        v8SetReturnValueBool(info, impl->forceDisplayList2dCanvasEnabled());
+    }
 
-void forceDisplayList2dCanvasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::forceDisplayList2dCanvasEnabledAttributeGetter(info);
-}
+    void forceDisplayList2dCanvasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::forceDisplayList2dCanvasEnabledAttributeGetter(info);
+    }
 
-static void forceDisable2dCanvasCopyOnWriteEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void forceDisable2dCanvasCopyOnWriteEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->forceDisable2dCanvasCopyOnWriteEnabled());
-}
+        v8SetReturnValueBool(info, impl->forceDisable2dCanvasCopyOnWriteEnabled());
+    }
 
-void forceDisable2dCanvasCopyOnWriteEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::forceDisable2dCanvasCopyOnWriteEnabledAttributeGetter(info);
-}
+    void forceDisable2dCanvasCopyOnWriteEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::forceDisable2dCanvasCopyOnWriteEnabledAttributeGetter(info);
+    }
 
-static void embedderCSPEnforcementEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void embedderCSPEnforcementEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->embedderCSPEnforcementEnabled());
-}
+        v8SetReturnValueBool(info, impl->embedderCSPEnforcementEnabled());
+    }
 
-void embedderCSPEnforcementEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::embedderCSPEnforcementEnabledAttributeGetter(info);
-}
+    void embedderCSPEnforcementEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::embedderCSPEnforcementEnabledAttributeGetter(info);
+    }
 
-static void execCommandInJavaScriptEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void execCommandInJavaScriptEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->execCommandInJavaScriptEnabled());
-}
+        v8SetReturnValueBool(info, impl->execCommandInJavaScriptEnabled());
+    }
 
-void execCommandInJavaScriptEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::execCommandInJavaScriptEnabledAttributeGetter(info);
-}
+    void execCommandInJavaScriptEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::execCommandInJavaScriptEnabledAttributeGetter(info);
+    }
 
-static void computedAccessibilityInfoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void computedAccessibilityInfoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->computedAccessibilityInfoEnabled());
-}
+        v8SetReturnValueBool(info, impl->computedAccessibilityInfoEnabled());
+    }
 
-void computedAccessibilityInfoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::computedAccessibilityInfoEnabledAttributeGetter(info);
-}
+    void computedAccessibilityInfoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::computedAccessibilityInfoEnabledAttributeGetter(info);
+    }
 
-static void experimentalCanvasFeaturesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void experimentalCanvasFeaturesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->experimentalCanvasFeaturesEnabled());
-}
+        v8SetReturnValueBool(info, impl->experimentalCanvasFeaturesEnabled());
+    }
 
-void experimentalCanvasFeaturesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::experimentalCanvasFeaturesEnabledAttributeGetter(info);
-}
+    void experimentalCanvasFeaturesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::experimentalCanvasFeaturesEnabledAttributeGetter(info);
+    }
 
-static void experimentalContentSecurityPolicyFeaturesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void experimentalContentSecurityPolicyFeaturesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->experimentalContentSecurityPolicyFeaturesEnabled());
-}
+        v8SetReturnValueBool(info, impl->experimentalContentSecurityPolicyFeaturesEnabled());
+    }
 
-void experimentalContentSecurityPolicyFeaturesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::experimentalContentSecurityPolicyFeaturesEnabledAttributeGetter(info);
-}
+    void experimentalContentSecurityPolicyFeaturesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::experimentalContentSecurityPolicyFeaturesEnabledAttributeGetter(info);
+    }
 
-static void experimentalV8ExtrasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void experimentalV8ExtrasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->experimentalV8ExtrasEnabled());
-}
+        v8SetReturnValueBool(info, impl->experimentalV8ExtrasEnabled());
+    }
 
-void experimentalV8ExtrasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::experimentalV8ExtrasEnabledAttributeGetter(info);
-}
+    void experimentalV8ExtrasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::experimentalV8ExtrasEnabledAttributeGetter(info);
+    }
 
-static void fastMobileScrollingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fastMobileScrollingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastMobileScrollingEnabled());
-}
+        v8SetReturnValueBool(info, impl->fastMobileScrollingEnabled());
+    }
 
-void fastMobileScrollingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::fastMobileScrollingEnabledAttributeGetter(info);
-}
+    void fastMobileScrollingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::fastMobileScrollingEnabledAttributeGetter(info);
+    }
 
-static void featurePolicyEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void featurePolicyEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->featurePolicyEnabled());
-}
+        v8SetReturnValueBool(info, impl->featurePolicyEnabled());
+    }
 
-void featurePolicyEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::featurePolicyEnabledAttributeGetter(info);
-}
+    void featurePolicyEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::featurePolicyEnabledAttributeGetter(info);
+    }
 
-static void fileAPIBlobCloseEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fileAPIBlobCloseEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fileAPIBlobCloseEnabled());
-}
+        v8SetReturnValueBool(info, impl->fileAPIBlobCloseEnabled());
+    }
 
-void fileAPIBlobCloseEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::fileAPIBlobCloseEnabledAttributeGetter(info);
-}
+    void fileAPIBlobCloseEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::fileAPIBlobCloseEnabledAttributeGetter(info);
+    }
 
-static void fileSystemEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fileSystemEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fileSystemEnabled());
-}
+        v8SetReturnValueBool(info, impl->fileSystemEnabled());
+    }
 
-void fileSystemEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::fileSystemEnabledAttributeGetter(info);
-}
+    void fileSystemEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::fileSystemEnabledAttributeGetter(info);
+    }
 
-static void foreignFetchEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void foreignFetchEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->foreignFetchEnabled());
-}
+        v8SetReturnValueBool(info, impl->foreignFetchEnabled());
+    }
 
-void foreignFetchEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::foreignFetchEnabledAttributeGetter(info);
-}
+    void foreignFetchEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::foreignFetchEnabledAttributeGetter(info);
+    }
 
-static void framebustingNeedsSameOriginOrUserGestureEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void framebustingNeedsSameOriginOrUserGestureEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->framebustingNeedsSameOriginOrUserGestureEnabled());
-}
+        v8SetReturnValueBool(info, impl->framebustingNeedsSameOriginOrUserGestureEnabled());
+    }
 
-void framebustingNeedsSameOriginOrUserGestureEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::framebustingNeedsSameOriginOrUserGestureEnabledAttributeGetter(info);
-}
+    void framebustingNeedsSameOriginOrUserGestureEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::framebustingNeedsSameOriginOrUserGestureEnabledAttributeGetter(info);
+    }
 
-static void framebustingNeedsSameOriginOrUserGestureEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void framebustingNeedsSameOriginOrUserGestureEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "framebustingNeedsSameOriginOrUserGestureEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "framebustingNeedsSameOriginOrUserGestureEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setFramebustingNeedsSameOriginOrUserGestureEnabled(cppValue);
-}
+        impl->setFramebustingNeedsSameOriginOrUserGestureEnabled(cppValue);
+    }
 
-void framebustingNeedsSameOriginOrUserGestureEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void framebustingNeedsSameOriginOrUserGestureEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::framebustingNeedsSameOriginOrUserGestureEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::framebustingNeedsSameOriginOrUserGestureEnabledAttributeSetter(v8Value, info);
+    }
 
-static void fullscreenUnprefixedEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fullscreenUnprefixedEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fullscreenUnprefixedEnabled());
-}
+        v8SetReturnValueBool(info, impl->fullscreenUnprefixedEnabled());
+    }
 
-void fullscreenUnprefixedEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::fullscreenUnprefixedEnabledAttributeGetter(info);
-}
+    void fullscreenUnprefixedEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::fullscreenUnprefixedEnabledAttributeGetter(info);
+    }
 
-static void fullscreenUnprefixedEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void fullscreenUnprefixedEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "fullscreenUnprefixedEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "fullscreenUnprefixedEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setFullscreenUnprefixedEnabled(cppValue);
-}
+        impl->setFullscreenUnprefixedEnabled(cppValue);
+    }
 
-void fullscreenUnprefixedEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void fullscreenUnprefixedEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::fullscreenUnprefixedEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::fullscreenUnprefixedEnabledAttributeSetter(v8Value, info);
+    }
 
-static void frameTimingSupportEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void frameTimingSupportEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->frameTimingSupportEnabled());
-}
+        v8SetReturnValueBool(info, impl->frameTimingSupportEnabled());
+    }
 
-void frameTimingSupportEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::frameTimingSupportEnabledAttributeGetter(info);
-}
+    void frameTimingSupportEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::frameTimingSupportEnabledAttributeGetter(info);
+    }
 
-static void gamepadExtensionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void gamepadExtensionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->gamepadExtensionsEnabled());
-}
+        v8SetReturnValueBool(info, impl->gamepadExtensionsEnabled());
+    }
 
-void gamepadExtensionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::gamepadExtensionsEnabledAttributeGetter(info);
-}
+    void gamepadExtensionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::gamepadExtensionsEnabledAttributeGetter(info);
+    }
 
-static void geometryInterfacesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void geometryInterfacesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->geometryInterfacesEnabled());
-}
+        v8SetReturnValueBool(info, impl->geometryInterfacesEnabled());
+    }
 
-void geometryInterfacesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::geometryInterfacesEnabledAttributeGetter(info);
-}
+    void geometryInterfacesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::geometryInterfacesEnabledAttributeGetter(info);
+    }
 
-static void getUserMediaEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void getUserMediaEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->getUserMediaEnabled());
-}
+        v8SetReturnValueBool(info, impl->getUserMediaEnabled());
+    }
 
-void getUserMediaEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::getUserMediaEnabledAttributeGetter(info);
-}
+    void getUserMediaEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::getUserMediaEnabledAttributeGetter(info);
+    }
 
-static void globalCacheStorageEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void globalCacheStorageEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->globalCacheStorageEnabled());
-}
+        v8SetReturnValueBool(info, impl->globalCacheStorageEnabled());
+    }
 
-void globalCacheStorageEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::globalCacheStorageEnabledAttributeGetter(info);
-}
+    void globalCacheStorageEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::globalCacheStorageEnabledAttributeGetter(info);
+    }
 
-static void heapCompactionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heapCompactionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->heapCompactionEnabled());
-}
+        v8SetReturnValueBool(info, impl->heapCompactionEnabled());
+    }
 
-void heapCompactionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::heapCompactionEnabledAttributeGetter(info);
-}
+    void heapCompactionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::heapCompactionEnabledAttributeGetter(info);
+    }
 
-static void iDBObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void iDBObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->iDBObserverEnabled());
-}
+        v8SetReturnValueBool(info, impl->iDBObserverEnabled());
+    }
 
-void iDBObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::iDBObserverEnabledAttributeGetter(info);
-}
+    void iDBObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::iDBObserverEnabledAttributeGetter(info);
+    }
 
-static void idleTimeSpellCheckingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idleTimeSpellCheckingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->idleTimeSpellCheckingEnabled());
-}
+        v8SetReturnValueBool(info, impl->idleTimeSpellCheckingEnabled());
+    }
 
-void idleTimeSpellCheckingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::idleTimeSpellCheckingEnabledAttributeGetter(info);
-}
+    void idleTimeSpellCheckingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::idleTimeSpellCheckingEnabledAttributeGetter(info);
+    }
 
-static void imageCaptureEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void imageCaptureEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->imageCaptureEnabled());
-}
+        v8SetReturnValueBool(info, impl->imageCaptureEnabled());
+    }
 
-void imageCaptureEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::imageCaptureEnabledAttributeGetter(info);
-}
+    void imageCaptureEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::imageCaptureEnabledAttributeGetter(info);
+    }
 
-static void imageOrientationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void imageOrientationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->imageOrientationEnabled());
-}
+        v8SetReturnValueBool(info, impl->imageOrientationEnabled());
+    }
 
-void imageOrientationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::imageOrientationEnabledAttributeGetter(info);
-}
+    void imageOrientationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::imageOrientationEnabledAttributeGetter(info);
+    }
 
-static void indexedDBExperimentalEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void indexedDBExperimentalEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->indexedDBExperimentalEnabled());
-}
+        v8SetReturnValueBool(info, impl->indexedDBExperimentalEnabled());
+    }
 
-void indexedDBExperimentalEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::indexedDBExperimentalEnabledAttributeGetter(info);
-}
+    void indexedDBExperimentalEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::indexedDBExperimentalEnabledAttributeGetter(info);
+    }
 
-static void inertTopControlsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void inertTopControlsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->inertTopControlsEnabled());
-}
+        v8SetReturnValueBool(info, impl->inertTopControlsEnabled());
+    }
 
-void inertTopControlsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::inertTopControlsEnabledAttributeGetter(info);
-}
+    void inertTopControlsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::inertTopControlsEnabledAttributeGetter(info);
+    }
 
-static void inputEventEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void inputEventEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->inputEventEnabled());
-}
+        v8SetReturnValueBool(info, impl->inputEventEnabled());
+    }
 
-void inputEventEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::inputEventEnabledAttributeGetter(info);
-}
+    void inputEventEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::inputEventEnabledAttributeGetter(info);
+    }
 
-static void inputModeAttributeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void inputModeAttributeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->inputModeAttributeEnabled());
-}
+        v8SetReturnValueBool(info, impl->inputModeAttributeEnabled());
+    }
 
-void inputModeAttributeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::inputModeAttributeEnabledAttributeGetter(info);
-}
+    void inputModeAttributeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::inputModeAttributeEnabledAttributeGetter(info);
+    }
 
-static void inputMultipleFieldsUIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void inputMultipleFieldsUIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->inputMultipleFieldsUIEnabled());
-}
+        v8SetReturnValueBool(info, impl->inputMultipleFieldsUIEnabled());
+    }
 
-void inputMultipleFieldsUIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::inputMultipleFieldsUIEnabledAttributeGetter(info);
-}
+    void inputMultipleFieldsUIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::inputMultipleFieldsUIEnabledAttributeGetter(info);
+    }
 
-static void installedAppEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void installedAppEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->installedAppEnabled());
-}
+        v8SetReturnValueBool(info, impl->installedAppEnabled());
+    }
 
-void installedAppEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::installedAppEnabledAttributeGetter(info);
-}
+    void installedAppEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::installedAppEnabledAttributeGetter(info);
+    }
 
-static void intersectionObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void intersectionObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->intersectionObserverEnabled());
-}
+        v8SetReturnValueBool(info, impl->intersectionObserverEnabled());
+    }
 
-void intersectionObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::intersectionObserverEnabledAttributeGetter(info);
-}
+    void intersectionObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::intersectionObserverEnabledAttributeGetter(info);
+    }
 
-static void langAttributeAwareFormControlUIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void langAttributeAwareFormControlUIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->langAttributeAwareFormControlUIEnabled());
-}
+        v8SetReturnValueBool(info, impl->langAttributeAwareFormControlUIEnabled());
+    }
 
-void langAttributeAwareFormControlUIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::langAttributeAwareFormControlUIEnabledAttributeGetter(info);
-}
+    void langAttributeAwareFormControlUIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::langAttributeAwareFormControlUIEnabledAttributeGetter(info);
+    }
 
-static void layoutNGEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void layoutNGEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->layoutNGEnabled());
-}
+        v8SetReturnValueBool(info, impl->layoutNGEnabled());
+    }
 
-void layoutNGEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::layoutNGEnabledAttributeGetter(info);
-}
+    void layoutNGEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::layoutNGEnabledAttributeGetter(info);
+    }
 
-static void layoutNGInlineEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void layoutNGInlineEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->layoutNGInlineEnabled());
-}
+        v8SetReturnValueBool(info, impl->layoutNGInlineEnabled());
+    }
 
-void layoutNGInlineEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::layoutNGInlineEnabledAttributeGetter(info);
-}
+    void layoutNGInlineEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::layoutNGInlineEnabledAttributeGetter(info);
+    }
 
-static void linkServiceWorkerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void linkServiceWorkerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->linkServiceWorkerEnabled());
-}
+        v8SetReturnValueBool(info, impl->linkServiceWorkerEnabled());
+    }
 
-void linkServiceWorkerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::linkServiceWorkerEnabledAttributeGetter(info);
-}
+    void linkServiceWorkerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::linkServiceWorkerEnabledAttributeGetter(info);
+    }
 
-static void longTaskObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void longTaskObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->longTaskObserverEnabled());
-}
+        v8SetReturnValueBool(info, impl->longTaskObserverEnabled());
+    }
 
-void longTaskObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::longTaskObserverEnabledAttributeGetter(info);
-}
+    void longTaskObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::longTaskObserverEnabledAttributeGetter(info);
+    }
 
-static void fractionalScrollOffsetsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fractionalScrollOffsetsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fractionalScrollOffsetsEnabled());
-}
+        v8SetReturnValueBool(info, impl->fractionalScrollOffsetsEnabled());
+    }
 
-void fractionalScrollOffsetsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::fractionalScrollOffsetsEnabledAttributeGetter(info);
-}
+    void fractionalScrollOffsetsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::fractionalScrollOffsetsEnabledAttributeGetter(info);
+    }
 
-static void loadingWithMojoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void loadingWithMojoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->loadingWithMojoEnabled());
-}
+        v8SetReturnValueBool(info, impl->loadingWithMojoEnabled());
+    }
 
-void loadingWithMojoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::loadingWithMojoEnabledAttributeGetter(info);
-}
+    void loadingWithMojoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::loadingWithMojoEnabledAttributeGetter(info);
+    }
 
-static void mediaCaptureEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaCaptureEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaCaptureEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaCaptureEnabled());
+    }
 
-void mediaCaptureEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaCaptureEnabledAttributeGetter(info);
-}
+    void mediaCaptureEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaCaptureEnabledAttributeGetter(info);
+    }
 
-static void mediaCaptureFromCanvasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaCaptureFromCanvasEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaCaptureFromCanvasEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaCaptureFromCanvasEnabled());
+    }
 
-void mediaCaptureFromCanvasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaCaptureFromCanvasEnabledAttributeGetter(info);
-}
+    void mediaCaptureFromCanvasEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaCaptureFromCanvasEnabledAttributeGetter(info);
+    }
 
-static void mediaCaptureFromVideoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaCaptureFromVideoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaCaptureFromVideoEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaCaptureFromVideoEnabled());
+    }
 
-void mediaCaptureFromVideoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaCaptureFromVideoEnabledAttributeGetter(info);
-}
+    void mediaCaptureFromVideoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaCaptureFromVideoEnabledAttributeGetter(info);
+    }
 
-static void mediaConstraintsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaConstraintsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaConstraintsEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaConstraintsEnabled());
+    }
 
-void mediaConstraintsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaConstraintsEnabledAttributeGetter(info);
-}
+    void mediaConstraintsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaConstraintsEnabledAttributeGetter(info);
+    }
 
-static void mediaDocumentDownloadButtonEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaDocumentDownloadButtonEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaDocumentDownloadButtonEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaDocumentDownloadButtonEnabled());
+    }
 
-void mediaDocumentDownloadButtonEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaDocumentDownloadButtonEnabledAttributeGetter(info);
-}
+    void mediaDocumentDownloadButtonEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaDocumentDownloadButtonEnabledAttributeGetter(info);
+    }
 
-static void mediaGetSettingsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaGetSettingsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaGetSettingsEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaGetSettingsEnabled());
+    }
 
-void mediaGetSettingsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaGetSettingsEnabledAttributeGetter(info);
-}
+    void mediaGetSettingsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaGetSettingsEnabledAttributeGetter(info);
+    }
 
-static void mediaSessionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaSessionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaSessionEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaSessionEnabled());
+    }
 
-void mediaSessionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaSessionEnabledAttributeGetter(info);
-}
+    void mediaSessionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaSessionEnabledAttributeGetter(info);
+    }
 
-static void mediaSourceExperimentalEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaSourceExperimentalEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaSourceExperimentalEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaSourceExperimentalEnabled());
+    }
 
-void mediaSourceExperimentalEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaSourceExperimentalEnabledAttributeGetter(info);
-}
+    void mediaSourceExperimentalEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaSourceExperimentalEnabledAttributeGetter(info);
+    }
 
-static void mediaSourceNewAbortAndDurationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaSourceNewAbortAndDurationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaSourceNewAbortAndDurationEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaSourceNewAbortAndDurationEnabled());
+    }
 
-void mediaSourceNewAbortAndDurationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaSourceNewAbortAndDurationEnabledAttributeGetter(info);
-}
+    void mediaSourceNewAbortAndDurationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaSourceNewAbortAndDurationEnabledAttributeGetter(info);
+    }
 
-static void mediaStreamSpeechEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaStreamSpeechEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaStreamSpeechEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaStreamSpeechEnabled());
+    }
 
-void mediaStreamSpeechEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaStreamSpeechEnabledAttributeGetter(info);
-}
+    void mediaStreamSpeechEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaStreamSpeechEnabledAttributeGetter(info);
+    }
 
-static void mediaQueryShapeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaQueryShapeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaQueryShapeEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaQueryShapeEnabled());
+    }
 
-void mediaQueryShapeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaQueryShapeEnabledAttributeGetter(info);
-}
+    void mediaQueryShapeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaQueryShapeEnabledAttributeGetter(info);
+    }
 
-static void mediaStreamTrackContentHintEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaStreamTrackContentHintEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mediaStreamTrackContentHintEnabled());
-}
+        v8SetReturnValueBool(info, impl->mediaStreamTrackContentHintEnabled());
+    }
 
-void mediaStreamTrackContentHintEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mediaStreamTrackContentHintEnabledAttributeGetter(info);
-}
+    void mediaStreamTrackContentHintEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mediaStreamTrackContentHintEnabledAttributeGetter(info);
+    }
 
-static void memoryInfoInWorkersEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void memoryInfoInWorkersEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->memoryInfoInWorkersEnabled());
-}
+        v8SetReturnValueBool(info, impl->memoryInfoInWorkersEnabled());
+    }
 
-void memoryInfoInWorkersEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::memoryInfoInWorkersEnabledAttributeGetter(info);
-}
+    void memoryInfoInWorkersEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::memoryInfoInWorkersEnabledAttributeGetter(info);
+    }
 
-static void middleClickAutoscrollEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void middleClickAutoscrollEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->middleClickAutoscrollEnabled());
-}
+        v8SetReturnValueBool(info, impl->middleClickAutoscrollEnabled());
+    }
 
-void middleClickAutoscrollEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::middleClickAutoscrollEnabledAttributeGetter(info);
-}
+    void middleClickAutoscrollEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::middleClickAutoscrollEnabledAttributeGetter(info);
+    }
 
-static void mobileLayoutThemeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mobileLayoutThemeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->mobileLayoutThemeEnabled());
-}
+        v8SetReturnValueBool(info, impl->mobileLayoutThemeEnabled());
+    }
 
-void mobileLayoutThemeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::mobileLayoutThemeEnabledAttributeGetter(info);
-}
+    void mobileLayoutThemeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::mobileLayoutThemeEnabledAttributeGetter(info);
+    }
 
-static void moduleScriptsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void moduleScriptsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->moduleScriptsEnabled());
-}
+        v8SetReturnValueBool(info, impl->moduleScriptsEnabled());
+    }
 
-void moduleScriptsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::moduleScriptsEnabledAttributeGetter(info);
-}
+    void moduleScriptsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::moduleScriptsEnabledAttributeGetter(info);
+    }
 
-static void navigatorContentUtilsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void navigatorContentUtilsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->navigatorContentUtilsEnabled());
-}
+        v8SetReturnValueBool(info, impl->navigatorContentUtilsEnabled());
+    }
 
-void navigatorContentUtilsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::navigatorContentUtilsEnabledAttributeGetter(info);
-}
+    void navigatorContentUtilsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::navigatorContentUtilsEnabledAttributeGetter(info);
+    }
 
-static void webNFCEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webNFCEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webNFCEnabled());
-}
+        v8SetReturnValueBool(info, impl->webNFCEnabled());
+    }
 
-void webNFCEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webNFCEnabledAttributeGetter(info);
-}
+    void webNFCEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webNFCEnabledAttributeGetter(info);
+    }
 
-static void networkInformationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void networkInformationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->networkInformationEnabled());
-}
+        v8SetReturnValueBool(info, impl->networkInformationEnabled());
+    }
 
-void networkInformationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::networkInformationEnabledAttributeGetter(info);
-}
+    void networkInformationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::networkInformationEnabledAttributeGetter(info);
+    }
 
-static void netInfoDownlinkMaxEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void netInfoDownlinkMaxEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->netInfoDownlinkMaxEnabled());
-}
+        v8SetReturnValueBool(info, impl->netInfoDownlinkMaxEnabled());
+    }
 
-void netInfoDownlinkMaxEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::netInfoDownlinkMaxEnabledAttributeGetter(info);
-}
+    void netInfoDownlinkMaxEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::netInfoDownlinkMaxEnabledAttributeGetter(info);
+    }
 
-static void notificationConstructorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void notificationConstructorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->notificationConstructorEnabled());
-}
+        v8SetReturnValueBool(info, impl->notificationConstructorEnabled());
+    }
 
-void notificationConstructorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::notificationConstructorEnabledAttributeGetter(info);
-}
+    void notificationConstructorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::notificationConstructorEnabledAttributeGetter(info);
+    }
 
-static void notificationBadgeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void notificationBadgeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->notificationBadgeEnabled());
-}
+        v8SetReturnValueBool(info, impl->notificationBadgeEnabled());
+    }
 
-void notificationBadgeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::notificationBadgeEnabledAttributeGetter(info);
-}
+    void notificationBadgeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::notificationBadgeEnabledAttributeGetter(info);
+    }
 
-static void notificationContentImageEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void notificationContentImageEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->notificationContentImageEnabled());
-}
+        v8SetReturnValueBool(info, impl->notificationContentImageEnabled());
+    }
 
-void notificationContentImageEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::notificationContentImageEnabledAttributeGetter(info);
-}
+    void notificationContentImageEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::notificationContentImageEnabledAttributeGetter(info);
+    }
 
-static void notificationInlineRepliesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void notificationInlineRepliesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->notificationInlineRepliesEnabled());
-}
+        v8SetReturnValueBool(info, impl->notificationInlineRepliesEnabled());
+    }
 
-void notificationInlineRepliesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::notificationInlineRepliesEnabledAttributeGetter(info);
-}
+    void notificationInlineRepliesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::notificationInlineRepliesEnabledAttributeGetter(info);
+    }
 
-static void notificationsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void notificationsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->notificationsEnabled());
-}
+        v8SetReturnValueBool(info, impl->notificationsEnabled());
+    }
 
-void notificationsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::notificationsEnabledAttributeGetter(info);
-}
+    void notificationsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::notificationsEnabledAttributeGetter(info);
+    }
 
-static void onDeviceChangeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onDeviceChangeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->onDeviceChangeEnabled());
-}
+        v8SetReturnValueBool(info, impl->onDeviceChangeEnabled());
+    }
 
-void onDeviceChangeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::onDeviceChangeEnabledAttributeGetter(info);
-}
+    void onDeviceChangeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::onDeviceChangeEnabledAttributeGetter(info);
+    }
 
-static void orientationEventEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void orientationEventEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->orientationEventEnabled());
-}
+        v8SetReturnValueBool(info, impl->orientationEventEnabled());
+    }
 
-void orientationEventEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::orientationEventEnabledAttributeGetter(info);
-}
+    void orientationEventEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::orientationEventEnabledAttributeGetter(info);
+    }
 
-static void originTrialsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void originTrialsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->originTrialsEnabled());
-}
+        v8SetReturnValueBool(info, impl->originTrialsEnabled());
+    }
 
-void originTrialsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::originTrialsEnabledAttributeGetter(info);
-}
+    void originTrialsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::originTrialsEnabledAttributeGetter(info);
+    }
 
-static void originTrialsSampleAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void originTrialsSampleAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->originTrialsSampleAPIEnabled());
-}
+        v8SetReturnValueBool(info, impl->originTrialsSampleAPIEnabled());
+    }
 
-void originTrialsSampleAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::originTrialsSampleAPIEnabledAttributeGetter(info);
-}
+    void originTrialsSampleAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::originTrialsSampleAPIEnabledAttributeGetter(info);
+    }
 
-static void forceOverlayFullscreenVideoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void forceOverlayFullscreenVideoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->forceOverlayFullscreenVideoEnabled());
-}
+        v8SetReturnValueBool(info, impl->forceOverlayFullscreenVideoEnabled());
+    }
 
-void forceOverlayFullscreenVideoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::forceOverlayFullscreenVideoEnabledAttributeGetter(info);
-}
+    void forceOverlayFullscreenVideoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::forceOverlayFullscreenVideoEnabledAttributeGetter(info);
+    }
 
-static void overlayScrollbarsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void overlayScrollbarsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->overlayScrollbarsEnabled());
-}
+        v8SetReturnValueBool(info, impl->overlayScrollbarsEnabled());
+    }
 
-void overlayScrollbarsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::overlayScrollbarsEnabledAttributeGetter(info);
-}
+    void overlayScrollbarsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::overlayScrollbarsEnabledAttributeGetter(info);
+    }
 
-static void pagePopupEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pagePopupEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->pagePopupEnabled());
-}
+        v8SetReturnValueBool(info, impl->pagePopupEnabled());
+    }
 
-void pagePopupEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::pagePopupEnabledAttributeGetter(info);
-}
+    void pagePopupEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::pagePopupEnabledAttributeGetter(info);
+    }
 
-static void paintUnderInvalidationCheckingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void paintUnderInvalidationCheckingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->paintUnderInvalidationCheckingEnabled());
-}
+        v8SetReturnValueBool(info, impl->paintUnderInvalidationCheckingEnabled());
+    }
 
-void paintUnderInvalidationCheckingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::paintUnderInvalidationCheckingEnabledAttributeGetter(info);
-}
+    void paintUnderInvalidationCheckingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::paintUnderInvalidationCheckingEnabledAttributeGetter(info);
+    }
 
-static void paintUnderInvalidationCheckingEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void paintUnderInvalidationCheckingEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "paintUnderInvalidationCheckingEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "paintUnderInvalidationCheckingEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setPaintUnderInvalidationCheckingEnabled(cppValue);
-}
+        impl->setPaintUnderInvalidationCheckingEnabled(cppValue);
+    }
 
-void paintUnderInvalidationCheckingEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void paintUnderInvalidationCheckingEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::paintUnderInvalidationCheckingEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::paintUnderInvalidationCheckingEnabledAttributeSetter(v8Value, info);
+    }
 
-static void passiveDocumentEventListenersEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void passiveDocumentEventListenersEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->passiveDocumentEventListenersEnabled());
-}
+        v8SetReturnValueBool(info, impl->passiveDocumentEventListenersEnabled());
+    }
 
-void passiveDocumentEventListenersEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::passiveDocumentEventListenersEnabledAttributeGetter(info);
-}
+    void passiveDocumentEventListenersEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::passiveDocumentEventListenersEnabledAttributeGetter(info);
+    }
 
-static void passPaintVisualRectToCompositorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void passPaintVisualRectToCompositorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->passPaintVisualRectToCompositorEnabled());
-}
+        v8SetReturnValueBool(info, impl->passPaintVisualRectToCompositorEnabled());
+    }
 
-void passPaintVisualRectToCompositorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::passPaintVisualRectToCompositorEnabledAttributeGetter(info);
-}
+    void passPaintVisualRectToCompositorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::passPaintVisualRectToCompositorEnabledAttributeGetter(info);
+    }
 
-static void paymentAppEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void paymentAppEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->paymentAppEnabled());
-}
+        v8SetReturnValueBool(info, impl->paymentAppEnabled());
+    }
 
-void paymentAppEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::paymentAppEnabledAttributeGetter(info);
-}
+    void paymentAppEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::paymentAppEnabledAttributeGetter(info);
+    }
 
-static void paymentDetailsErrorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void paymentDetailsErrorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->paymentDetailsErrorEnabled());
-}
+        v8SetReturnValueBool(info, impl->paymentDetailsErrorEnabled());
+    }
 
-void paymentDetailsErrorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::paymentDetailsErrorEnabledAttributeGetter(info);
-}
+    void paymentDetailsErrorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::paymentDetailsErrorEnabledAttributeGetter(info);
+    }
 
-static void paymentDetailsModifierDataEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void paymentDetailsModifierDataEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->paymentDetailsModifierDataEnabled());
-}
+        v8SetReturnValueBool(info, impl->paymentDetailsModifierDataEnabled());
+    }
 
-void paymentDetailsModifierDataEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::paymentDetailsModifierDataEnabledAttributeGetter(info);
-}
+    void paymentDetailsModifierDataEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::paymentDetailsModifierDataEnabledAttributeGetter(info);
+    }
 
-static void paymentRequestEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void paymentRequestEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->paymentRequestEnabled());
-}
+        v8SetReturnValueBool(info, impl->paymentRequestEnabled());
+    }
 
-void paymentRequestEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::paymentRequestEnabledAttributeGetter(info);
-}
+    void paymentRequestEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::paymentRequestEnabledAttributeGetter(info);
+    }
 
-static void paymentRequestBasicCardEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void paymentRequestBasicCardEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->paymentRequestBasicCardEnabled());
-}
+        v8SetReturnValueBool(info, impl->paymentRequestBasicCardEnabled());
+    }
 
-void paymentRequestBasicCardEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::paymentRequestBasicCardEnabledAttributeGetter(info);
-}
+    void paymentRequestBasicCardEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::paymentRequestBasicCardEnabledAttributeGetter(info);
+    }
 
-static void paymentRequestPayerNameEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void paymentRequestPayerNameEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->paymentRequestPayerNameEnabled());
-}
+        v8SetReturnValueBool(info, impl->paymentRequestPayerNameEnabled());
+    }
 
-void paymentRequestPayerNameEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::paymentRequestPayerNameEnabledAttributeGetter(info);
-}
+    void paymentRequestPayerNameEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::paymentRequestPayerNameEnabledAttributeGetter(info);
+    }
 
-static void performanceObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void performanceObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->performanceObserverEnabled());
-}
+        v8SetReturnValueBool(info, impl->performanceObserverEnabled());
+    }
 
-void performanceObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::performanceObserverEnabledAttributeGetter(info);
-}
+    void performanceObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::performanceObserverEnabledAttributeGetter(info);
+    }
 
-static void permissionDelegationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void permissionDelegationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->permissionDelegationEnabled());
-}
+        v8SetReturnValueBool(info, impl->permissionDelegationEnabled());
+    }
 
-void permissionDelegationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::permissionDelegationEnabledAttributeGetter(info);
-}
+    void permissionDelegationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::permissionDelegationEnabledAttributeGetter(info);
+    }
 
-static void permissionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void permissionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->permissionsEnabled());
-}
+        v8SetReturnValueBool(info, impl->permissionsEnabled());
+    }
 
-void permissionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::permissionsEnabledAttributeGetter(info);
-}
+    void permissionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::permissionsEnabledAttributeGetter(info);
+    }
 
-static void permissionsRequestRevokeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void permissionsRequestRevokeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->permissionsRequestRevokeEnabled());
-}
+        v8SetReturnValueBool(info, impl->permissionsRequestRevokeEnabled());
+    }
 
-void permissionsRequestRevokeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::permissionsRequestRevokeEnabledAttributeGetter(info);
-}
+    void permissionsRequestRevokeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::permissionsRequestRevokeEnabledAttributeGetter(info);
+    }
 
-static void pointerEventEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pointerEventEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->pointerEventEnabled());
-}
+        v8SetReturnValueBool(info, impl->pointerEventEnabled());
+    }
 
-void pointerEventEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::pointerEventEnabledAttributeGetter(info);
-}
+    void pointerEventEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::pointerEventEnabledAttributeGetter(info);
+    }
 
-static void preciseMemoryInfoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void preciseMemoryInfoEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->preciseMemoryInfoEnabled());
-}
+        v8SetReturnValueBool(info, impl->preciseMemoryInfoEnabled());
+    }
 
-void preciseMemoryInfoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::preciseMemoryInfoEnabledAttributeGetter(info);
-}
+    void preciseMemoryInfoEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::preciseMemoryInfoEnabledAttributeGetter(info);
+    }
 
-static void preferredImageRasterBoundsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void preferredImageRasterBoundsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->preferredImageRasterBoundsEnabled());
-}
+        v8SetReturnValueBool(info, impl->preferredImageRasterBoundsEnabled());
+    }
 
-void preferredImageRasterBoundsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::preferredImageRasterBoundsEnabledAttributeGetter(info);
-}
+    void preferredImageRasterBoundsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::preferredImageRasterBoundsEnabledAttributeGetter(info);
+    }
 
-static void preferredImageRasterBoundsEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void preferredImageRasterBoundsEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "preferredImageRasterBoundsEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "preferredImageRasterBoundsEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setPreferredImageRasterBoundsEnabled(cppValue);
-}
+        impl->setPreferredImageRasterBoundsEnabled(cppValue);
+    }
 
-void preferredImageRasterBoundsEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void preferredImageRasterBoundsEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::preferredImageRasterBoundsEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::preferredImageRasterBoundsEnabledAttributeSetter(v8Value, info);
+    }
 
-static void prefixedVideoFullscreenEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void prefixedVideoFullscreenEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->prefixedVideoFullscreenEnabled());
-}
+        v8SetReturnValueBool(info, impl->prefixedVideoFullscreenEnabled());
+    }
 
-void prefixedVideoFullscreenEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::prefixedVideoFullscreenEnabledAttributeGetter(info);
-}
+    void prefixedVideoFullscreenEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::prefixedVideoFullscreenEnabledAttributeGetter(info);
+    }
 
-static void presentationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void presentationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->presentationEnabled());
-}
+        v8SetReturnValueBool(info, impl->presentationEnabled());
+    }
 
-void presentationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::presentationEnabledAttributeGetter(info);
-}
+    void presentationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::presentationEnabledAttributeGetter(info);
+    }
 
-static void presentationReceiverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void presentationReceiverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->presentationReceiverEnabled());
-}
+        v8SetReturnValueBool(info, impl->presentationReceiverEnabled());
+    }
 
-void presentationReceiverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::presentationReceiverEnabledAttributeGetter(info);
-}
+    void presentationReceiverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::presentationReceiverEnabledAttributeGetter(info);
+    }
 
-static void pushMessagingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pushMessagingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->pushMessagingEnabled());
-}
+        v8SetReturnValueBool(info, impl->pushMessagingEnabled());
+    }
 
-void pushMessagingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::pushMessagingEnabledAttributeGetter(info);
-}
+    void pushMessagingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::pushMessagingEnabledAttributeGetter(info);
+    }
 
-static void quotaPromiseEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void quotaPromiseEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->quotaPromiseEnabled());
-}
+        v8SetReturnValueBool(info, impl->quotaPromiseEnabled());
+    }
 
-void quotaPromiseEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::quotaPromiseEnabledAttributeGetter(info);
-}
+    void quotaPromiseEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::quotaPromiseEnabledAttributeGetter(info);
+    }
 
-static void reducedReferrerGranularityEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void reducedReferrerGranularityEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->reducedReferrerGranularityEnabled());
-}
+        v8SetReturnValueBool(info, impl->reducedReferrerGranularityEnabled());
+    }
 
-void reducedReferrerGranularityEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::reducedReferrerGranularityEnabledAttributeGetter(info);
-}
+    void reducedReferrerGranularityEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::reducedReferrerGranularityEnabledAttributeGetter(info);
+    }
 
-static void remotePlaybackEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void remotePlaybackEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->remotePlaybackEnabled());
-}
+        v8SetReturnValueBool(info, impl->remotePlaybackEnabled());
+    }
 
-void remotePlaybackEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::remotePlaybackEnabledAttributeGetter(info);
-}
+    void remotePlaybackEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::remotePlaybackEnabledAttributeGetter(info);
+    }
 
-static void renderingPipelineThrottlingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void renderingPipelineThrottlingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->renderingPipelineThrottlingEnabled());
-}
+        v8SetReturnValueBool(info, impl->renderingPipelineThrottlingEnabled());
+    }
 
-void renderingPipelineThrottlingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::renderingPipelineThrottlingEnabledAttributeGetter(info);
-}
+    void renderingPipelineThrottlingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::renderingPipelineThrottlingEnabledAttributeGetter(info);
+    }
 
-static void renderingPipelineThrottlingLoadingIframesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void renderingPipelineThrottlingLoadingIframesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->renderingPipelineThrottlingLoadingIframesEnabled());
-}
+        v8SetReturnValueBool(info, impl->renderingPipelineThrottlingLoadingIframesEnabled());
+    }
 
-void renderingPipelineThrottlingLoadingIframesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::renderingPipelineThrottlingLoadingIframesEnabledAttributeGetter(info);
-}
+    void renderingPipelineThrottlingLoadingIframesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::renderingPipelineThrottlingLoadingIframesEnabledAttributeGetter(info);
+    }
 
-static void renderUnicodeControlCharactersEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void renderUnicodeControlCharactersEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->renderUnicodeControlCharactersEnabled());
-}
+        v8SetReturnValueBool(info, impl->renderUnicodeControlCharactersEnabled());
+    }
 
-void renderUnicodeControlCharactersEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::renderUnicodeControlCharactersEnabledAttributeGetter(info);
-}
+    void renderUnicodeControlCharactersEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::renderUnicodeControlCharactersEnabledAttributeGetter(info);
+    }
 
-static void resizeObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void resizeObserverEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->resizeObserverEnabled());
-}
+        v8SetReturnValueBool(info, impl->resizeObserverEnabled());
+    }
 
-void resizeObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::resizeObserverEnabledAttributeGetter(info);
-}
+    void resizeObserverEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::resizeObserverEnabledAttributeGetter(info);
+    }
 
-static void rootLayerScrollingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rootLayerScrollingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->rootLayerScrollingEnabled());
-}
+        v8SetReturnValueBool(info, impl->rootLayerScrollingEnabled());
+    }
 
-void rootLayerScrollingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::rootLayerScrollingEnabledAttributeGetter(info);
-}
+    void rootLayerScrollingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::rootLayerScrollingEnabledAttributeGetter(info);
+    }
 
-static void rTCPeerConnectionNewGetStatsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rTCPeerConnectionNewGetStatsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->rTCPeerConnectionNewGetStatsEnabled());
-}
+        v8SetReturnValueBool(info, impl->rTCPeerConnectionNewGetStatsEnabled());
+    }
 
-void rTCPeerConnectionNewGetStatsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::rTCPeerConnectionNewGetStatsEnabledAttributeGetter(info);
-}
+    void rTCPeerConnectionNewGetStatsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::rTCPeerConnectionNewGetStatsEnabledAttributeGetter(info);
+    }
 
-static void scriptedSpeechEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scriptedSpeechEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->scriptedSpeechEnabled());
-}
+        v8SetReturnValueBool(info, impl->scriptedSpeechEnabled());
+    }
 
-void scriptedSpeechEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::scriptedSpeechEnabledAttributeGetter(info);
-}
+    void scriptedSpeechEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::scriptedSpeechEnabledAttributeGetter(info);
+    }
 
-static void scrollAnchoringEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollAnchoringEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->scrollAnchoringEnabled());
-}
+        v8SetReturnValueBool(info, impl->scrollAnchoringEnabled());
+    }
 
-void scrollAnchoringEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::scrollAnchoringEnabledAttributeGetter(info);
-}
+    void scrollAnchoringEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::scrollAnchoringEnabledAttributeGetter(info);
+    }
 
-static void scrollAnchoringEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void scrollAnchoringEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "scrollAnchoringEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "scrollAnchoringEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setScrollAnchoringEnabled(cppValue);
-}
+        impl->setScrollAnchoringEnabled(cppValue);
+    }
 
-void scrollAnchoringEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void scrollAnchoringEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::scrollAnchoringEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::scrollAnchoringEnabledAttributeSetter(v8Value, info);
+    }
 
-static void scrollTopLeftInteropEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollTopLeftInteropEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->scrollTopLeftInteropEnabled());
-}
+        v8SetReturnValueBool(info, impl->scrollTopLeftInteropEnabled());
+    }
 
-void scrollTopLeftInteropEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::scrollTopLeftInteropEnabledAttributeGetter(info);
-}
+    void scrollTopLeftInteropEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::scrollTopLeftInteropEnabledAttributeGetter(info);
+    }
 
-static void sensorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sensorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->sensorEnabled());
-}
+        v8SetReturnValueBool(info, impl->sensorEnabled());
+    }
 
-void sensorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::sensorEnabledAttributeGetter(info);
-}
+    void sensorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::sensorEnabledAttributeGetter(info);
+    }
 
-static void serviceWorkerNavigationPreloadEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void serviceWorkerNavigationPreloadEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->serviceWorkerNavigationPreloadEnabled());
-}
+        v8SetReturnValueBool(info, impl->serviceWorkerNavigationPreloadEnabled());
+    }
 
-void serviceWorkerNavigationPreloadEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::serviceWorkerNavigationPreloadEnabledAttributeGetter(info);
-}
+    void serviceWorkerNavigationPreloadEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::serviceWorkerNavigationPreloadEnabledAttributeGetter(info);
+    }
 
-static void setRootScrollerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void setRootScrollerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->setRootScrollerEnabled());
-}
+        v8SetReturnValueBool(info, impl->setRootScrollerEnabled());
+    }
 
-void setRootScrollerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::setRootScrollerEnabledAttributeGetter(info);
-}
+    void setRootScrollerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::setRootScrollerEnabledAttributeGetter(info);
+    }
 
-static void shadowPiercingDescendantCombinatorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shadowPiercingDescendantCombinatorEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->shadowPiercingDescendantCombinatorEnabled());
-}
+        v8SetReturnValueBool(info, impl->shadowPiercingDescendantCombinatorEnabled());
+    }
 
-void shadowPiercingDescendantCombinatorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::shadowPiercingDescendantCombinatorEnabledAttributeGetter(info);
-}
+    void shadowPiercingDescendantCombinatorEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::shadowPiercingDescendantCombinatorEnabledAttributeGetter(info);
+    }
 
-static void shapeDetectionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shapeDetectionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->shapeDetectionEnabled());
-}
+        v8SetReturnValueBool(info, impl->shapeDetectionEnabled());
+    }
 
-void shapeDetectionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::shapeDetectionEnabledAttributeGetter(info);
-}
+    void shapeDetectionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::shapeDetectionEnabledAttributeGetter(info);
+    }
 
-static void sharedArrayBufferEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sharedArrayBufferEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->sharedArrayBufferEnabled());
-}
+        v8SetReturnValueBool(info, impl->sharedArrayBufferEnabled());
+    }
 
-void sharedArrayBufferEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::sharedArrayBufferEnabledAttributeGetter(info);
-}
+    void sharedArrayBufferEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::sharedArrayBufferEnabledAttributeGetter(info);
+    }
 
-static void sharedWorkerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sharedWorkerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->sharedWorkerEnabled());
-}
+        v8SetReturnValueBool(info, impl->sharedWorkerEnabled());
+    }
 
-void sharedWorkerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::sharedWorkerEnabledAttributeGetter(info);
-}
+    void sharedWorkerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::sharedWorkerEnabledAttributeGetter(info);
+    }
 
-static void slimmingPaintInvalidationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void slimmingPaintInvalidationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->slimmingPaintInvalidationEnabled());
-}
+        v8SetReturnValueBool(info, impl->slimmingPaintInvalidationEnabled());
+    }
 
-void slimmingPaintInvalidationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::slimmingPaintInvalidationEnabledAttributeGetter(info);
-}
+    void slimmingPaintInvalidationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::slimmingPaintInvalidationEnabledAttributeGetter(info);
+    }
 
-static void slimmingPaintV2EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void slimmingPaintV2EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->slimmingPaintV2Enabled());
-}
+        v8SetReturnValueBool(info, impl->slimmingPaintV2Enabled());
+    }
 
-void slimmingPaintV2EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::slimmingPaintV2EnabledAttributeGetter(info);
-}
+    void slimmingPaintV2EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::slimmingPaintV2EnabledAttributeGetter(info);
+    }
 
-static void slimmingPaintStrictCullRectClippingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void slimmingPaintStrictCullRectClippingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->slimmingPaintStrictCullRectClippingEnabled());
-}
+        v8SetReturnValueBool(info, impl->slimmingPaintStrictCullRectClippingEnabled());
+    }
 
-void slimmingPaintStrictCullRectClippingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::slimmingPaintStrictCullRectClippingEnabledAttributeGetter(info);
-}
+    void slimmingPaintStrictCullRectClippingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::slimmingPaintStrictCullRectClippingEnabledAttributeGetter(info);
+    }
 
-static void stableBlinkFeaturesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void stableBlinkFeaturesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->stableBlinkFeaturesEnabled());
-}
+        v8SetReturnValueBool(info, impl->stableBlinkFeaturesEnabled());
+    }
 
-void stableBlinkFeaturesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::stableBlinkFeaturesEnabledAttributeGetter(info);
-}
+    void stableBlinkFeaturesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::stableBlinkFeaturesEnabledAttributeGetter(info);
+    }
 
-static void stackedCSSPropertyAnimationsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void stackedCSSPropertyAnimationsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->stackedCSSPropertyAnimationsEnabled());
-}
+        v8SetReturnValueBool(info, impl->stackedCSSPropertyAnimationsEnabled());
+    }
 
-void stackedCSSPropertyAnimationsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::stackedCSSPropertyAnimationsEnabledAttributeGetter(info);
-}
+    void stackedCSSPropertyAnimationsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::stackedCSSPropertyAnimationsEnabledAttributeGetter(info);
+    }
 
-static void styleSharingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void styleSharingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->styleSharingEnabled());
-}
+        v8SetReturnValueBool(info, impl->styleSharingEnabled());
+    }
 
-void styleSharingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::styleSharingEnabledAttributeGetter(info);
-}
+    void styleSharingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::styleSharingEnabledAttributeGetter(info);
+    }
 
-static void speculativeLaunchServiceWorkerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void speculativeLaunchServiceWorkerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->speculativeLaunchServiceWorkerEnabled());
-}
+        v8SetReturnValueBool(info, impl->speculativeLaunchServiceWorkerEnabled());
+    }
 
-void speculativeLaunchServiceWorkerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::speculativeLaunchServiceWorkerEnabledAttributeGetter(info);
-}
+    void speculativeLaunchServiceWorkerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::speculativeLaunchServiceWorkerEnabledAttributeGetter(info);
+    }
 
-static void storageEstimateEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void storageEstimateEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->storageEstimateEnabled());
-}
+        v8SetReturnValueBool(info, impl->storageEstimateEnabled());
+    }
 
-void storageEstimateEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::storageEstimateEnabledAttributeGetter(info);
-}
+    void storageEstimateEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::storageEstimateEnabledAttributeGetter(info);
+    }
 
-static void suboriginsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void suboriginsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->suboriginsEnabled());
-}
+        v8SetReturnValueBool(info, impl->suboriginsEnabled());
+    }
 
-void suboriginsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::suboriginsEnabledAttributeGetter(info);
-}
+    void suboriginsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::suboriginsEnabledAttributeGetter(info);
+    }
 
-static void timerThrottlingForBackgroundTabsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void timerThrottlingForBackgroundTabsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->timerThrottlingForBackgroundTabsEnabled());
-}
+        v8SetReturnValueBool(info, impl->timerThrottlingForBackgroundTabsEnabled());
+    }
 
-void timerThrottlingForBackgroundTabsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::timerThrottlingForBackgroundTabsEnabledAttributeGetter(info);
-}
+    void timerThrottlingForBackgroundTabsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::timerThrottlingForBackgroundTabsEnabledAttributeGetter(info);
+    }
 
-static void timerThrottlingForHiddenFramesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void timerThrottlingForHiddenFramesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->timerThrottlingForHiddenFramesEnabled());
-}
+        v8SetReturnValueBool(info, impl->timerThrottlingForHiddenFramesEnabled());
+    }
 
-void timerThrottlingForHiddenFramesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::timerThrottlingForHiddenFramesEnabledAttributeGetter(info);
-}
+    void timerThrottlingForHiddenFramesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::timerThrottlingForHiddenFramesEnabledAttributeGetter(info);
+    }
 
-static void topNavWithUserActivationInSandboxEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void topNavWithUserActivationInSandboxEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->topNavWithUserActivationInSandboxEnabled());
-}
+        v8SetReturnValueBool(info, impl->topNavWithUserActivationInSandboxEnabled());
+    }
 
-void topNavWithUserActivationInSandboxEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::topNavWithUserActivationInSandboxEnabledAttributeGetter(info);
-}
+    void topNavWithUserActivationInSandboxEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::topNavWithUserActivationInSandboxEnabledAttributeGetter(info);
+    }
 
-static void touchEventFeatureDetectionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void touchEventFeatureDetectionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->touchEventFeatureDetectionEnabled());
-}
+        v8SetReturnValueBool(info, impl->touchEventFeatureDetectionEnabled());
+    }
 
-void touchEventFeatureDetectionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::touchEventFeatureDetectionEnabledAttributeGetter(info);
-}
+    void touchEventFeatureDetectionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::touchEventFeatureDetectionEnabledAttributeGetter(info);
+    }
 
-static void traceWrappablesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void traceWrappablesEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->traceWrappablesEnabled());
-}
+        v8SetReturnValueBool(info, impl->traceWrappablesEnabled());
+    }
 
-void traceWrappablesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::traceWrappablesEnabledAttributeGetter(info);
-}
+    void traceWrappablesEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::traceWrappablesEnabledAttributeGetter(info);
+    }
 
-static void trueColorRenderingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void trueColorRenderingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->trueColorRenderingEnabled());
-}
+        v8SetReturnValueBool(info, impl->trueColorRenderingEnabled());
+    }
 
-void trueColorRenderingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::trueColorRenderingEnabledAttributeGetter(info);
-}
+    void trueColorRenderingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::trueColorRenderingEnabledAttributeGetter(info);
+    }
 
-static void trustedEventsDefaultActionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void trustedEventsDefaultActionEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->trustedEventsDefaultActionEnabled());
-}
+        v8SetReturnValueBool(info, impl->trustedEventsDefaultActionEnabled());
+    }
 
-void trustedEventsDefaultActionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::trustedEventsDefaultActionEnabledAttributeGetter(info);
-}
+    void trustedEventsDefaultActionEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::trustedEventsDefaultActionEnabledAttributeGetter(info);
+    }
 
-static void userSelectAllEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void userSelectAllEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->userSelectAllEnabled());
-}
+        v8SetReturnValueBool(info, impl->userSelectAllEnabled());
+    }
 
-void userSelectAllEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::userSelectAllEnabledAttributeGetter(info);
-}
+    void userSelectAllEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::userSelectAllEnabledAttributeGetter(info);
+    }
 
-static void webAnimationsAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webAnimationsAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webAnimationsAPIEnabled());
-}
+        v8SetReturnValueBool(info, impl->webAnimationsAPIEnabled());
+    }
 
-void webAnimationsAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webAnimationsAPIEnabledAttributeGetter(info);
-}
+    void webAnimationsAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webAnimationsAPIEnabledAttributeGetter(info);
+    }
 
-static void webAnimationsSVGEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webAnimationsSVGEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webAnimationsSVGEnabled());
-}
+        v8SetReturnValueBool(info, impl->webAnimationsSVGEnabled());
+    }
 
-void webAnimationsSVGEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webAnimationsSVGEnabledAttributeGetter(info);
-}
+    void webAnimationsSVGEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webAnimationsSVGEnabledAttributeGetter(info);
+    }
 
-static void webAssemblySerializationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webAssemblySerializationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webAssemblySerializationEnabled());
-}
+        v8SetReturnValueBool(info, impl->webAssemblySerializationEnabled());
+    }
 
-void webAssemblySerializationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webAssemblySerializationEnabledAttributeGetter(info);
-}
+    void webAssemblySerializationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webAssemblySerializationEnabledAttributeGetter(info);
+    }
 
-static void webBluetoothEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webBluetoothEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webBluetoothEnabled());
-}
+        v8SetReturnValueBool(info, impl->webBluetoothEnabled());
+    }
 
-void webBluetoothEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webBluetoothEnabledAttributeGetter(info);
-}
+    void webBluetoothEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webBluetoothEnabledAttributeGetter(info);
+    }
 
-static void webGLDraftExtensionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webGLDraftExtensionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webGLDraftExtensionsEnabled());
-}
+        v8SetReturnValueBool(info, impl->webGLDraftExtensionsEnabled());
+    }
 
-void webGLDraftExtensionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webGLDraftExtensionsEnabledAttributeGetter(info);
-}
+    void webGLDraftExtensionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webGLDraftExtensionsEnabledAttributeGetter(info);
+    }
 
-static void webGLImageChromiumEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webGLImageChromiumEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webGLImageChromiumEnabled());
-}
+        v8SetReturnValueBool(info, impl->webGLImageChromiumEnabled());
+    }
 
-void webGLImageChromiumEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webGLImageChromiumEnabledAttributeGetter(info);
-}
+    void webGLImageChromiumEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webGLImageChromiumEnabledAttributeGetter(info);
+    }
 
-static void webUSBEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webUSBEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webUSBEnabled());
-}
+        v8SetReturnValueBool(info, impl->webUSBEnabled());
+    }
 
-void webUSBEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webUSBEnabledAttributeGetter(info);
-}
+    void webUSBEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webUSBEnabledAttributeGetter(info);
+    }
 
-static void webVREnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webVREnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webVREnabled());
-}
+        v8SetReturnValueBool(info, impl->webVREnabled());
+    }
 
-void webVREnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webVREnabledAttributeGetter(info);
-}
+    void webVREnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webVREnabledAttributeGetter(info);
+    }
 
-static void webVTTRegionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webVTTRegionsEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webVTTRegionsEnabled());
-}
+        v8SetReturnValueBool(info, impl->webVTTRegionsEnabled());
+    }
 
-void webVTTRegionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webVTTRegionsEnabledAttributeGetter(info);
-}
+    void webVTTRegionsEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webVTTRegionsEnabledAttributeGetter(info);
+    }
 
-static void v8BasedStructuredCloneEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void v8BasedStructuredCloneEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->v8BasedStructuredCloneEnabled());
-}
+        v8SetReturnValueBool(info, impl->v8BasedStructuredCloneEnabled());
+    }
 
-void v8BasedStructuredCloneEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::v8BasedStructuredCloneEnabledAttributeGetter(info);
-}
+    void v8BasedStructuredCloneEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::v8BasedStructuredCloneEnabledAttributeGetter(info);
+    }
 
-static void v8IdleTasksEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void v8IdleTasksEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->v8IdleTasksEnabled());
-}
+        v8SetReturnValueBool(info, impl->v8IdleTasksEnabled());
+    }
 
-void v8IdleTasksEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::v8IdleTasksEnabledAttributeGetter(info);
-}
+    void v8IdleTasksEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::v8IdleTasksEnabledAttributeGetter(info);
+    }
 
-static void videoFullscreenOrientationLockEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void videoFullscreenOrientationLockEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->videoFullscreenOrientationLockEnabled());
-}
+        v8SetReturnValueBool(info, impl->videoFullscreenOrientationLockEnabled());
+    }
 
-void videoFullscreenOrientationLockEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::videoFullscreenOrientationLockEnabledAttributeGetter(info);
-}
+    void videoFullscreenOrientationLockEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::videoFullscreenOrientationLockEnabledAttributeGetter(info);
+    }
 
-static void visibilityChangeOnUnloadEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void visibilityChangeOnUnloadEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->visibilityChangeOnUnloadEnabled());
-}
+        v8SetReturnValueBool(info, impl->visibilityChangeOnUnloadEnabled());
+    }
 
-void visibilityChangeOnUnloadEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::visibilityChangeOnUnloadEnabledAttributeGetter(info);
-}
+    void visibilityChangeOnUnloadEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::visibilityChangeOnUnloadEnabledAttributeGetter(info);
+    }
 
-static void xsltEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xsltEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->xsltEnabled());
-}
+        v8SetReturnValueBool(info, impl->xsltEnabled());
+    }
 
-void xsltEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::xsltEnabledAttributeGetter(info);
-}
+    void xsltEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::xsltEnabledAttributeGetter(info);
+    }
 
-static void smilEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void smilEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->smilEnabled());
-}
+        v8SetReturnValueBool(info, impl->smilEnabled());
+    }
 
-void smilEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::smilEnabledAttributeGetter(info);
-}
+    void smilEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::smilEnabledAttributeGetter(info);
+    }
 
-static void scrollCustomizationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollCustomizationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->scrollCustomizationEnabled());
-}
+        v8SetReturnValueBool(info, impl->scrollCustomizationEnabled());
+    }
 
-void scrollCustomizationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::scrollCustomizationEnabledAttributeGetter(info);
-}
+    void scrollCustomizationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::scrollCustomizationEnabledAttributeGetter(info);
+    }
 
-static void autoplayMutedVideosEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void autoplayMutedVideosEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->autoplayMutedVideosEnabled());
-}
+        v8SetReturnValueBool(info, impl->autoplayMutedVideosEnabled());
+    }
 
-void autoplayMutedVideosEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::autoplayMutedVideosEnabledAttributeGetter(info);
-}
+    void autoplayMutedVideosEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::autoplayMutedVideosEnabledAttributeGetter(info);
+    }
 
-static void autoplayMutedVideosEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+    static void autoplayMutedVideosEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "autoplayMutedVideosEnabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "InternalRuntimeFlags", "autoplayMutedVideosEnabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setAutoplayMutedVideosEnabled(cppValue);
-}
+        impl->setAutoplayMutedVideosEnabled(cppValue);
+    }
 
-void autoplayMutedVideosEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void autoplayMutedVideosEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  InternalRuntimeFlagsV8Internal::autoplayMutedVideosEnabledAttributeSetter(v8Value, info);
-}
+        InternalRuntimeFlagsV8Internal::autoplayMutedVideosEnabledAttributeSetter(v8Value, info);
+    }
 
-static void visualViewportAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void visualViewportAPIEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->visualViewportAPIEnabled());
-}
+        v8SetReturnValueBool(info, impl->visualViewportAPIEnabled());
+    }
 
-void visualViewportAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::visualViewportAPIEnabledAttributeGetter(info);
-}
+    void visualViewportAPIEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::visualViewportAPIEnabledAttributeGetter(info);
+    }
 
-static void wakeLockEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void wakeLockEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->wakeLockEnabled());
-}
+        v8SetReturnValueBool(info, impl->wakeLockEnabled());
+    }
 
-void wakeLockEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::wakeLockEnabledAttributeGetter(info);
-}
+    void wakeLockEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::wakeLockEnabledAttributeGetter(info);
+    }
 
-static void webFontsCacheAwareTimeoutAdaptationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webFontsCacheAwareTimeoutAdaptationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webFontsCacheAwareTimeoutAdaptationEnabled());
-}
+        v8SetReturnValueBool(info, impl->webFontsCacheAwareTimeoutAdaptationEnabled());
+    }
 
-void webFontsCacheAwareTimeoutAdaptationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webFontsCacheAwareTimeoutAdaptationEnabledAttributeGetter(info);
-}
+    void webFontsCacheAwareTimeoutAdaptationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webFontsCacheAwareTimeoutAdaptationEnabledAttributeGetter(info);
+    }
 
-static void webFontsInterventionV2With2GEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webFontsInterventionV2With2GEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webFontsInterventionV2With2GEnabled());
-}
+        v8SetReturnValueBool(info, impl->webFontsInterventionV2With2GEnabled());
+    }
 
-void webFontsInterventionV2With2GEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webFontsInterventionV2With2GEnabledAttributeGetter(info);
-}
+    void webFontsInterventionV2With2GEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webFontsInterventionV2With2GEnabledAttributeGetter(info);
+    }
 
-static void webFontsInterventionV2With3GEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webFontsInterventionV2With3GEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webFontsInterventionV2With3GEnabled());
-}
+        v8SetReturnValueBool(info, impl->webFontsInterventionV2With3GEnabled());
+    }
 
-void webFontsInterventionV2With3GEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webFontsInterventionV2With3GEnabledAttributeGetter(info);
-}
+    void webFontsInterventionV2With3GEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webFontsInterventionV2With3GEnabledAttributeGetter(info);
+    }
 
-static void webFontsInterventionV2WithSlow2GEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webFontsInterventionV2WithSlow2GEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webFontsInterventionV2WithSlow2GEnabled());
-}
+        v8SetReturnValueBool(info, impl->webFontsInterventionV2WithSlow2GEnabled());
+    }
 
-void webFontsInterventionV2WithSlow2GEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webFontsInterventionV2WithSlow2GEnabledAttributeGetter(info);
-}
+    void webFontsInterventionV2WithSlow2GEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webFontsInterventionV2WithSlow2GEnabledAttributeGetter(info);
+    }
 
-static void webFontsInterventionTriggerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webFontsInterventionTriggerEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webFontsInterventionTriggerEnabled());
-}
+        v8SetReturnValueBool(info, impl->webFontsInterventionTriggerEnabled());
+    }
 
-void webFontsInterventionTriggerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webFontsInterventionTriggerEnabledAttributeGetter(info);
-}
+    void webFontsInterventionTriggerEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webFontsInterventionTriggerEnabledAttributeGetter(info);
+    }
 
-static void webShareEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webShareEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->webShareEnabled());
-}
+        v8SetReturnValueBool(info, impl->webShareEnabled());
+    }
 
-void webShareEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::webShareEnabledAttributeGetter(info);
-}
+    void webShareEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::webShareEnabledAttributeGetter(info);
+    }
 
-static void workletEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void workletEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->workletEnabled());
-}
+        v8SetReturnValueBool(info, impl->workletEnabled());
+    }
 
-void workletEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::workletEnabledAttributeGetter(info);
-}
+    void workletEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::workletEnabledAttributeGetter(info);
+    }
 
-static void lazyParseCSSEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lazyParseCSSEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->lazyParseCSSEnabled());
-}
+        v8SetReturnValueBool(info, impl->lazyParseCSSEnabled());
+    }
 
-void lazyParseCSSEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::lazyParseCSSEnabledAttributeGetter(info);
-}
+    void lazyParseCSSEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::lazyParseCSSEnabledAttributeGetter(info);
+    }
 
-static void parseHTMLOnMainThreadEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void parseHTMLOnMainThreadEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->parseHTMLOnMainThreadEnabled());
-}
+        v8SetReturnValueBool(info, impl->parseHTMLOnMainThreadEnabled());
+    }
 
-void parseHTMLOnMainThreadEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::parseHTMLOnMainThreadEnabledAttributeGetter(info);
-}
+    void parseHTMLOnMainThreadEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::parseHTMLOnMainThreadEnabledAttributeGetter(info);
+    }
 
-static void sendBeaconThrowForBlobWithNonSimpleTypeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sendBeaconThrowForBlobWithNonSimpleTypeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->sendBeaconThrowForBlobWithNonSimpleTypeEnabled());
-}
+        v8SetReturnValueBool(info, impl->sendBeaconThrowForBlobWithNonSimpleTypeEnabled());
+    }
 
-void sendBeaconThrowForBlobWithNonSimpleTypeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::sendBeaconThrowForBlobWithNonSimpleTypeEnabledAttributeGetter(info);
-}
+    void sendBeaconThrowForBlobWithNonSimpleTypeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::sendBeaconThrowForBlobWithNonSimpleTypeEnabledAttributeGetter(info);
+    }
 
-static void performanceNavigationTiming2EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void performanceNavigationTiming2EnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->performanceNavigationTiming2Enabled());
-}
+        v8SetReturnValueBool(info, impl->performanceNavigationTiming2Enabled());
+    }
 
-void performanceNavigationTiming2EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::performanceNavigationTiming2EnabledAttributeGetter(info);
-}
+    void performanceNavigationTiming2EnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::performanceNavigationTiming2EnabledAttributeGetter(info);
+    }
 
-static void backgroundVideoTrackOptimizationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void backgroundVideoTrackOptimizationEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->backgroundVideoTrackOptimizationEnabled());
-}
+        v8SetReturnValueBool(info, impl->backgroundVideoTrackOptimizationEnabled());
+    }
 
-void backgroundVideoTrackOptimizationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::backgroundVideoTrackOptimizationEnabledAttributeGetter(info);
-}
+    void backgroundVideoTrackOptimizationEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::backgroundVideoTrackOptimizationEnabledAttributeGetter(info);
+    }
 
-static void performancePaintTimingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void performancePaintTimingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->performancePaintTimingEnabled());
-}
+        v8SetReturnValueBool(info, impl->performancePaintTimingEnabled());
+    }
 
-void performancePaintTimingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::performancePaintTimingEnabledAttributeGetter(info);
-}
+    void performancePaintTimingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::performancePaintTimingEnabledAttributeGetter(info);
+    }
 
-static void hideNonceContentAttributeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hideNonceContentAttributeEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->hideNonceContentAttributeEnabled());
-}
+        v8SetReturnValueBool(info, impl->hideNonceContentAttributeEnabled());
+    }
 
-void hideNonceContentAttributeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::hideNonceContentAttributeEnabledAttributeGetter(info);
-}
+    void hideNonceContentAttributeEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::hideNonceContentAttributeEnabledAttributeGetter(info);
+    }
 
-static void unclosedFormControlIsInvalidEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void unclosedFormControlIsInvalidEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->unclosedFormControlIsInvalidEnabled());
-}
+        v8SetReturnValueBool(info, impl->unclosedFormControlIsInvalidEnabled());
+    }
 
-void unclosedFormControlIsInvalidEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::unclosedFormControlIsInvalidEnabledAttributeGetter(info);
-}
+    void unclosedFormControlIsInvalidEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::unclosedFormControlIsInvalidEnabledAttributeGetter(info);
+    }
 
-static void restrictCompleteURLCharacterSetEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void restrictCompleteURLCharacterSetEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
+        InternalRuntimeFlags* impl = V8InternalRuntimeFlags::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->restrictCompleteURLCharacterSetEnabled());
-}
+        v8SetReturnValueBool(info, impl->restrictCompleteURLCharacterSetEnabled());
+    }
 
-void restrictCompleteURLCharacterSetEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalRuntimeFlagsV8Internal::restrictCompleteURLCharacterSetEnabledAttributeGetter(info);
-}
+    void restrictCompleteURLCharacterSetEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalRuntimeFlagsV8Internal::restrictCompleteURLCharacterSetEnabledAttributeGetter(info);
+    }
 
 } // namespace InternalRuntimeFlagsV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8InternalRuntimeFlagsAccessors[] = {
-    {"accelerated2dCanvasEnabled", InternalRuntimeFlagsV8Internal::accelerated2dCanvasEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::accelerated2dCanvasEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"audioOutputDevicesEnabled", InternalRuntimeFlagsV8Internal::audioOutputDevicesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"audioVideoTracksEnabled", InternalRuntimeFlagsV8Internal::audioVideoTracksEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"audioWorkletEnabled", InternalRuntimeFlagsV8Internal::audioWorkletEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"auxclickEnabled", InternalRuntimeFlagsV8Internal::auxclickEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"coalescedEventsEnabled", InternalRuntimeFlagsV8Internal::coalescedEventsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"backgroundSyncEnabled", InternalRuntimeFlagsV8Internal::backgroundSyncEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"backspaceDefaultHandlerEnabled", InternalRuntimeFlagsV8Internal::backspaceDefaultHandlerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"broadcastChannelEnabled", InternalRuntimeFlagsV8Internal::broadcastChannelEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"budgetEnabled", InternalRuntimeFlagsV8Internal::budgetEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"canvas2dFixedRenderingModeEnabled", InternalRuntimeFlagsV8Internal::canvas2dFixedRenderingModeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"enableCanvas2dDynamicRenderingModeSwitchingEnabled", InternalRuntimeFlagsV8Internal::enableCanvas2dDynamicRenderingModeSwitchingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"canMakePaymentEnabled", InternalRuntimeFlagsV8Internal::canMakePaymentEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"canvas2dImageChromiumEnabled", InternalRuntimeFlagsV8Internal::canvas2dImageChromiumEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientHintsEnabled", InternalRuntimeFlagsV8Internal::clientHintsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compositeOpaqueFixedPositionEnabled", InternalRuntimeFlagsV8Internal::compositeOpaqueFixedPositionEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::compositeOpaqueFixedPositionEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compositeOpaqueScrollersEnabled", InternalRuntimeFlagsV8Internal::compositeOpaqueScrollersEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::compositeOpaqueScrollersEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"colorCorrectRenderingEnabled", InternalRuntimeFlagsV8Internal::colorCorrectRenderingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"colorCorrectRenderingDefaultModeEnabled", InternalRuntimeFlagsV8Internal::colorCorrectRenderingDefaultModeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compositedSelectionUpdateEnabled", InternalRuntimeFlagsV8Internal::compositedSelectionUpdateEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compositorWorkerEnabled", InternalRuntimeFlagsV8Internal::compositorWorkerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"contextMenuEnabled", InternalRuntimeFlagsV8Internal::contextMenuEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"corsRFC1918Enabled", InternalRuntimeFlagsV8Internal::corsRFC1918EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"credentialManagerEnabled", InternalRuntimeFlagsV8Internal::credentialManagerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"css3TextEnabled", InternalRuntimeFlagsV8Internal::css3TextEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"css3TextDecorationsEnabled", InternalRuntimeFlagsV8Internal::css3TextDecorationsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssApplyAtRulesEnabled", InternalRuntimeFlagsV8Internal::cssApplyAtRulesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssAdditiveAnimationsEnabled", InternalRuntimeFlagsV8Internal::cssAdditiveAnimationsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssBackdropFilterEnabled", InternalRuntimeFlagsV8Internal::cssBackdropFilterEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssHexAlphaColorEnabled", InternalRuntimeFlagsV8Internal::cssHexAlphaColorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssContainmentEnabled", InternalRuntimeFlagsV8Internal::cssContainmentEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssFontDisplayEnabled", InternalRuntimeFlagsV8Internal::cssFontDisplayEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssFontSizeAdjustEnabled", InternalRuntimeFlagsV8Internal::cssFontSizeAdjustEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssGridLayoutEnabled", InternalRuntimeFlagsV8Internal::cssGridLayoutEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::cssGridLayoutEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssDisplayContentsEnabled", InternalRuntimeFlagsV8Internal::cssDisplayContentsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssHyphensEnabled", InternalRuntimeFlagsV8Internal::cssHyphensEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssInBodyDoesNotBlockPaintEnabled", InternalRuntimeFlagsV8Internal::cssInBodyDoesNotBlockPaintEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssIndependentTransformPropertiesEnabled", InternalRuntimeFlagsV8Internal::cssIndependentTransformPropertiesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssMaskSourceTypeEnabled", InternalRuntimeFlagsV8Internal::cssMaskSourceTypeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssomSmoothScrollEnabled", InternalRuntimeFlagsV8Internal::cssomSmoothScrollEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssOffsetPositionAnchorEnabled", InternalRuntimeFlagsV8Internal::cssOffsetPositionAnchorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssOffsetRotateEnabled", InternalRuntimeFlagsV8Internal::cssOffsetRotateEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssOffsetRotationEnabled", InternalRuntimeFlagsV8Internal::cssOffsetRotationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssPaintAPIEnabled", InternalRuntimeFlagsV8Internal::cssPaintAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssPaintAPIArgumentsEnabled", InternalRuntimeFlagsV8Internal::cssPaintAPIArgumentsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssSnapSizeEnabled", InternalRuntimeFlagsV8Internal::cssSnapSizeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssStickyPositionEnabled", InternalRuntimeFlagsV8Internal::cssStickyPositionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssTouchActionPanDirectionsEnabled", InternalRuntimeFlagsV8Internal::cssTouchActionPanDirectionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssTouchActionPinchZoomEnabled", InternalRuntimeFlagsV8Internal::cssTouchActionPinchZoomEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssTypedOMEnabled", InternalRuntimeFlagsV8Internal::cssTypedOMEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssVariableFontsEnabled", InternalRuntimeFlagsV8Internal::cssVariableFontsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssVariables2Enabled", InternalRuntimeFlagsV8Internal::cssVariables2EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssViewportEnabled", InternalRuntimeFlagsV8Internal::cssViewportEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssScrollSnapPointsEnabled", InternalRuntimeFlagsV8Internal::cssScrollSnapPointsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"customElementsBuiltinEnabled", InternalRuntimeFlagsV8Internal::customElementsBuiltinEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"customElementsV1Enabled", InternalRuntimeFlagsV8Internal::customElementsV1EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"customSchemeHandlerEnabled", InternalRuntimeFlagsV8Internal::customSchemeHandlerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"databaseEnabled", InternalRuntimeFlagsV8Internal::databaseEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"decodeToYUVEnabled", InternalRuntimeFlagsV8Internal::decodeToYUVEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"desktopCaptureDisableLocalEchoControlEnabled", InternalRuntimeFlagsV8Internal::desktopCaptureDisableLocalEchoControlEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deviceLightEnabled", InternalRuntimeFlagsV8Internal::deviceLightEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"displayList2dCanvasEnabled", InternalRuntimeFlagsV8Internal::displayList2dCanvasEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"documentCookieEnabled", InternalRuntimeFlagsV8Internal::documentCookieEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"documentDomainEnabled", InternalRuntimeFlagsV8Internal::documentDomainEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"documentWriteEnabled", InternalRuntimeFlagsV8Internal::documentWriteEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"documentWriteEvaluatorEnabled", InternalRuntimeFlagsV8Internal::documentWriteEvaluatorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dOMConvenienceAPIEnabled", InternalRuntimeFlagsV8Internal::dOMConvenienceAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"durableStorageEnabled", InternalRuntimeFlagsV8Internal::durableStorageEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"expensiveBackgroundTimerThrottlingEnabled", InternalRuntimeFlagsV8Internal::expensiveBackgroundTimerThrottlingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fasterLocationReloadEnabled", InternalRuntimeFlagsV8Internal::fasterLocationReloadEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fontCacheScalingEnabled", InternalRuntimeFlagsV8Internal::fontCacheScalingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forceDisplayList2dCanvasEnabled", InternalRuntimeFlagsV8Internal::forceDisplayList2dCanvasEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forceDisable2dCanvasCopyOnWriteEnabled", InternalRuntimeFlagsV8Internal::forceDisable2dCanvasCopyOnWriteEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"embedderCSPEnforcementEnabled", InternalRuntimeFlagsV8Internal::embedderCSPEnforcementEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"execCommandInJavaScriptEnabled", InternalRuntimeFlagsV8Internal::execCommandInJavaScriptEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"computedAccessibilityInfoEnabled", InternalRuntimeFlagsV8Internal::computedAccessibilityInfoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"experimentalCanvasFeaturesEnabled", InternalRuntimeFlagsV8Internal::experimentalCanvasFeaturesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"experimentalContentSecurityPolicyFeaturesEnabled", InternalRuntimeFlagsV8Internal::experimentalContentSecurityPolicyFeaturesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"experimentalV8ExtrasEnabled", InternalRuntimeFlagsV8Internal::experimentalV8ExtrasEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fastMobileScrollingEnabled", InternalRuntimeFlagsV8Internal::fastMobileScrollingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"featurePolicyEnabled", InternalRuntimeFlagsV8Internal::featurePolicyEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fileAPIBlobCloseEnabled", InternalRuntimeFlagsV8Internal::fileAPIBlobCloseEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fileSystemEnabled", InternalRuntimeFlagsV8Internal::fileSystemEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"foreignFetchEnabled", InternalRuntimeFlagsV8Internal::foreignFetchEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"framebustingNeedsSameOriginOrUserGestureEnabled", InternalRuntimeFlagsV8Internal::framebustingNeedsSameOriginOrUserGestureEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::framebustingNeedsSameOriginOrUserGestureEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fullscreenUnprefixedEnabled", InternalRuntimeFlagsV8Internal::fullscreenUnprefixedEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::fullscreenUnprefixedEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"frameTimingSupportEnabled", InternalRuntimeFlagsV8Internal::frameTimingSupportEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"gamepadExtensionsEnabled", InternalRuntimeFlagsV8Internal::gamepadExtensionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"geometryInterfacesEnabled", InternalRuntimeFlagsV8Internal::geometryInterfacesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getUserMediaEnabled", InternalRuntimeFlagsV8Internal::getUserMediaEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"globalCacheStorageEnabled", InternalRuntimeFlagsV8Internal::globalCacheStorageEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"heapCompactionEnabled", InternalRuntimeFlagsV8Internal::heapCompactionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"iDBObserverEnabled", InternalRuntimeFlagsV8Internal::iDBObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"idleTimeSpellCheckingEnabled", InternalRuntimeFlagsV8Internal::idleTimeSpellCheckingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"imageCaptureEnabled", InternalRuntimeFlagsV8Internal::imageCaptureEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"imageOrientationEnabled", InternalRuntimeFlagsV8Internal::imageOrientationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"indexedDBExperimentalEnabled", InternalRuntimeFlagsV8Internal::indexedDBExperimentalEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"inertTopControlsEnabled", InternalRuntimeFlagsV8Internal::inertTopControlsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"inputEventEnabled", InternalRuntimeFlagsV8Internal::inputEventEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"inputModeAttributeEnabled", InternalRuntimeFlagsV8Internal::inputModeAttributeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"inputMultipleFieldsUIEnabled", InternalRuntimeFlagsV8Internal::inputMultipleFieldsUIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"installedAppEnabled", InternalRuntimeFlagsV8Internal::installedAppEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"intersectionObserverEnabled", InternalRuntimeFlagsV8Internal::intersectionObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"langAttributeAwareFormControlUIEnabled", InternalRuntimeFlagsV8Internal::langAttributeAwareFormControlUIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"layoutNGEnabled", InternalRuntimeFlagsV8Internal::layoutNGEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"layoutNGInlineEnabled", InternalRuntimeFlagsV8Internal::layoutNGInlineEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"linkServiceWorkerEnabled", InternalRuntimeFlagsV8Internal::linkServiceWorkerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"longTaskObserverEnabled", InternalRuntimeFlagsV8Internal::longTaskObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fractionalScrollOffsetsEnabled", InternalRuntimeFlagsV8Internal::fractionalScrollOffsetsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loadingWithMojoEnabled", InternalRuntimeFlagsV8Internal::loadingWithMojoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaCaptureEnabled", InternalRuntimeFlagsV8Internal::mediaCaptureEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaCaptureFromCanvasEnabled", InternalRuntimeFlagsV8Internal::mediaCaptureFromCanvasEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaCaptureFromVideoEnabled", InternalRuntimeFlagsV8Internal::mediaCaptureFromVideoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaConstraintsEnabled", InternalRuntimeFlagsV8Internal::mediaConstraintsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaDocumentDownloadButtonEnabled", InternalRuntimeFlagsV8Internal::mediaDocumentDownloadButtonEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaGetSettingsEnabled", InternalRuntimeFlagsV8Internal::mediaGetSettingsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaSessionEnabled", InternalRuntimeFlagsV8Internal::mediaSessionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaSourceExperimentalEnabled", InternalRuntimeFlagsV8Internal::mediaSourceExperimentalEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaSourceNewAbortAndDurationEnabled", InternalRuntimeFlagsV8Internal::mediaSourceNewAbortAndDurationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaStreamSpeechEnabled", InternalRuntimeFlagsV8Internal::mediaStreamSpeechEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaQueryShapeEnabled", InternalRuntimeFlagsV8Internal::mediaQueryShapeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mediaStreamTrackContentHintEnabled", InternalRuntimeFlagsV8Internal::mediaStreamTrackContentHintEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"memoryInfoInWorkersEnabled", InternalRuntimeFlagsV8Internal::memoryInfoInWorkersEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"middleClickAutoscrollEnabled", InternalRuntimeFlagsV8Internal::middleClickAutoscrollEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mobileLayoutThemeEnabled", InternalRuntimeFlagsV8Internal::mobileLayoutThemeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"moduleScriptsEnabled", InternalRuntimeFlagsV8Internal::moduleScriptsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"navigatorContentUtilsEnabled", InternalRuntimeFlagsV8Internal::navigatorContentUtilsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webNFCEnabled", InternalRuntimeFlagsV8Internal::webNFCEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"networkInformationEnabled", InternalRuntimeFlagsV8Internal::networkInformationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"netInfoDownlinkMaxEnabled", InternalRuntimeFlagsV8Internal::netInfoDownlinkMaxEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"notificationConstructorEnabled", InternalRuntimeFlagsV8Internal::notificationConstructorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"notificationBadgeEnabled", InternalRuntimeFlagsV8Internal::notificationBadgeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"notificationContentImageEnabled", InternalRuntimeFlagsV8Internal::notificationContentImageEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"notificationInlineRepliesEnabled", InternalRuntimeFlagsV8Internal::notificationInlineRepliesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"notificationsEnabled", InternalRuntimeFlagsV8Internal::notificationsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onDeviceChangeEnabled", InternalRuntimeFlagsV8Internal::onDeviceChangeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"orientationEventEnabled", InternalRuntimeFlagsV8Internal::orientationEventEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"originTrialsEnabled", InternalRuntimeFlagsV8Internal::originTrialsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"originTrialsSampleAPIEnabled", InternalRuntimeFlagsV8Internal::originTrialsSampleAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forceOverlayFullscreenVideoEnabled", InternalRuntimeFlagsV8Internal::forceOverlayFullscreenVideoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"overlayScrollbarsEnabled", InternalRuntimeFlagsV8Internal::overlayScrollbarsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pagePopupEnabled", InternalRuntimeFlagsV8Internal::pagePopupEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"paintUnderInvalidationCheckingEnabled", InternalRuntimeFlagsV8Internal::paintUnderInvalidationCheckingEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::paintUnderInvalidationCheckingEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"passiveDocumentEventListenersEnabled", InternalRuntimeFlagsV8Internal::passiveDocumentEventListenersEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"passPaintVisualRectToCompositorEnabled", InternalRuntimeFlagsV8Internal::passPaintVisualRectToCompositorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"paymentAppEnabled", InternalRuntimeFlagsV8Internal::paymentAppEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"paymentDetailsErrorEnabled", InternalRuntimeFlagsV8Internal::paymentDetailsErrorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"paymentDetailsModifierDataEnabled", InternalRuntimeFlagsV8Internal::paymentDetailsModifierDataEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"paymentRequestEnabled", InternalRuntimeFlagsV8Internal::paymentRequestEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"paymentRequestBasicCardEnabled", InternalRuntimeFlagsV8Internal::paymentRequestBasicCardEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"paymentRequestPayerNameEnabled", InternalRuntimeFlagsV8Internal::paymentRequestPayerNameEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"performanceObserverEnabled", InternalRuntimeFlagsV8Internal::performanceObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"permissionDelegationEnabled", InternalRuntimeFlagsV8Internal::permissionDelegationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"permissionsEnabled", InternalRuntimeFlagsV8Internal::permissionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"permissionsRequestRevokeEnabled", InternalRuntimeFlagsV8Internal::permissionsRequestRevokeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pointerEventEnabled", InternalRuntimeFlagsV8Internal::pointerEventEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"preciseMemoryInfoEnabled", InternalRuntimeFlagsV8Internal::preciseMemoryInfoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"preferredImageRasterBoundsEnabled", InternalRuntimeFlagsV8Internal::preferredImageRasterBoundsEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::preferredImageRasterBoundsEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"prefixedVideoFullscreenEnabled", InternalRuntimeFlagsV8Internal::prefixedVideoFullscreenEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"presentationEnabled", InternalRuntimeFlagsV8Internal::presentationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"presentationReceiverEnabled", InternalRuntimeFlagsV8Internal::presentationReceiverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pushMessagingEnabled", InternalRuntimeFlagsV8Internal::pushMessagingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"quotaPromiseEnabled", InternalRuntimeFlagsV8Internal::quotaPromiseEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"reducedReferrerGranularityEnabled", InternalRuntimeFlagsV8Internal::reducedReferrerGranularityEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"remotePlaybackEnabled", InternalRuntimeFlagsV8Internal::remotePlaybackEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"renderingPipelineThrottlingEnabled", InternalRuntimeFlagsV8Internal::renderingPipelineThrottlingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"renderingPipelineThrottlingLoadingIframesEnabled", InternalRuntimeFlagsV8Internal::renderingPipelineThrottlingLoadingIframesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"renderUnicodeControlCharactersEnabled", InternalRuntimeFlagsV8Internal::renderUnicodeControlCharactersEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"resizeObserverEnabled", InternalRuntimeFlagsV8Internal::resizeObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rootLayerScrollingEnabled", InternalRuntimeFlagsV8Internal::rootLayerScrollingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rTCPeerConnectionNewGetStatsEnabled", InternalRuntimeFlagsV8Internal::rTCPeerConnectionNewGetStatsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scriptedSpeechEnabled", InternalRuntimeFlagsV8Internal::scriptedSpeechEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollAnchoringEnabled", InternalRuntimeFlagsV8Internal::scrollAnchoringEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::scrollAnchoringEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollTopLeftInteropEnabled", InternalRuntimeFlagsV8Internal::scrollTopLeftInteropEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sensorEnabled", InternalRuntimeFlagsV8Internal::sensorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"serviceWorkerNavigationPreloadEnabled", InternalRuntimeFlagsV8Internal::serviceWorkerNavigationPreloadEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setRootScrollerEnabled", InternalRuntimeFlagsV8Internal::setRootScrollerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowPiercingDescendantCombinatorEnabled", InternalRuntimeFlagsV8Internal::shadowPiercingDescendantCombinatorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shapeDetectionEnabled", InternalRuntimeFlagsV8Internal::shapeDetectionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sharedArrayBufferEnabled", InternalRuntimeFlagsV8Internal::sharedArrayBufferEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sharedWorkerEnabled", InternalRuntimeFlagsV8Internal::sharedWorkerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"slimmingPaintInvalidationEnabled", InternalRuntimeFlagsV8Internal::slimmingPaintInvalidationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"slimmingPaintV2Enabled", InternalRuntimeFlagsV8Internal::slimmingPaintV2EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"slimmingPaintStrictCullRectClippingEnabled", InternalRuntimeFlagsV8Internal::slimmingPaintStrictCullRectClippingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stableBlinkFeaturesEnabled", InternalRuntimeFlagsV8Internal::stableBlinkFeaturesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stackedCSSPropertyAnimationsEnabled", InternalRuntimeFlagsV8Internal::stackedCSSPropertyAnimationsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"styleSharingEnabled", InternalRuntimeFlagsV8Internal::styleSharingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"speculativeLaunchServiceWorkerEnabled", InternalRuntimeFlagsV8Internal::speculativeLaunchServiceWorkerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"storageEstimateEnabled", InternalRuntimeFlagsV8Internal::storageEstimateEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"suboriginsEnabled", InternalRuntimeFlagsV8Internal::suboriginsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"timerThrottlingForBackgroundTabsEnabled", InternalRuntimeFlagsV8Internal::timerThrottlingForBackgroundTabsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"timerThrottlingForHiddenFramesEnabled", InternalRuntimeFlagsV8Internal::timerThrottlingForHiddenFramesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"topNavWithUserActivationInSandboxEnabled", InternalRuntimeFlagsV8Internal::topNavWithUserActivationInSandboxEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"touchEventFeatureDetectionEnabled", InternalRuntimeFlagsV8Internal::touchEventFeatureDetectionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"traceWrappablesEnabled", InternalRuntimeFlagsV8Internal::traceWrappablesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"trueColorRenderingEnabled", InternalRuntimeFlagsV8Internal::trueColorRenderingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"trustedEventsDefaultActionEnabled", InternalRuntimeFlagsV8Internal::trustedEventsDefaultActionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"userSelectAllEnabled", InternalRuntimeFlagsV8Internal::userSelectAllEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webAnimationsAPIEnabled", InternalRuntimeFlagsV8Internal::webAnimationsAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webAnimationsSVGEnabled", InternalRuntimeFlagsV8Internal::webAnimationsSVGEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webAssemblySerializationEnabled", InternalRuntimeFlagsV8Internal::webAssemblySerializationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webBluetoothEnabled", InternalRuntimeFlagsV8Internal::webBluetoothEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webGLDraftExtensionsEnabled", InternalRuntimeFlagsV8Internal::webGLDraftExtensionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webGLImageChromiumEnabled", InternalRuntimeFlagsV8Internal::webGLImageChromiumEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webUSBEnabled", InternalRuntimeFlagsV8Internal::webUSBEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webVREnabled", InternalRuntimeFlagsV8Internal::webVREnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webVTTRegionsEnabled", InternalRuntimeFlagsV8Internal::webVTTRegionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"v8BasedStructuredCloneEnabled", InternalRuntimeFlagsV8Internal::v8BasedStructuredCloneEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"v8IdleTasksEnabled", InternalRuntimeFlagsV8Internal::v8IdleTasksEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"videoFullscreenOrientationLockEnabled", InternalRuntimeFlagsV8Internal::videoFullscreenOrientationLockEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"visibilityChangeOnUnloadEnabled", InternalRuntimeFlagsV8Internal::visibilityChangeOnUnloadEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"xsltEnabled", InternalRuntimeFlagsV8Internal::xsltEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"smilEnabled", InternalRuntimeFlagsV8Internal::smilEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollCustomizationEnabled", InternalRuntimeFlagsV8Internal::scrollCustomizationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"autoplayMutedVideosEnabled", InternalRuntimeFlagsV8Internal::autoplayMutedVideosEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::autoplayMutedVideosEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"visualViewportAPIEnabled", InternalRuntimeFlagsV8Internal::visualViewportAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"wakeLockEnabled", InternalRuntimeFlagsV8Internal::wakeLockEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webFontsCacheAwareTimeoutAdaptationEnabled", InternalRuntimeFlagsV8Internal::webFontsCacheAwareTimeoutAdaptationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webFontsInterventionV2With2GEnabled", InternalRuntimeFlagsV8Internal::webFontsInterventionV2With2GEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webFontsInterventionV2With3GEnabled", InternalRuntimeFlagsV8Internal::webFontsInterventionV2With3GEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webFontsInterventionV2WithSlow2GEnabled", InternalRuntimeFlagsV8Internal::webFontsInterventionV2WithSlow2GEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webFontsInterventionTriggerEnabled", InternalRuntimeFlagsV8Internal::webFontsInterventionTriggerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webShareEnabled", InternalRuntimeFlagsV8Internal::webShareEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"workletEnabled", InternalRuntimeFlagsV8Internal::workletEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lazyParseCSSEnabled", InternalRuntimeFlagsV8Internal::lazyParseCSSEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"parseHTMLOnMainThreadEnabled", InternalRuntimeFlagsV8Internal::parseHTMLOnMainThreadEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sendBeaconThrowForBlobWithNonSimpleTypeEnabled", InternalRuntimeFlagsV8Internal::sendBeaconThrowForBlobWithNonSimpleTypeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"performanceNavigationTiming2Enabled", InternalRuntimeFlagsV8Internal::performanceNavigationTiming2EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"backgroundVideoTrackOptimizationEnabled", InternalRuntimeFlagsV8Internal::backgroundVideoTrackOptimizationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"performancePaintTimingEnabled", InternalRuntimeFlagsV8Internal::performancePaintTimingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hideNonceContentAttributeEnabled", InternalRuntimeFlagsV8Internal::hideNonceContentAttributeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"unclosedFormControlIsInvalidEnabled", InternalRuntimeFlagsV8Internal::unclosedFormControlIsInvalidEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"restrictCompleteURLCharacterSetEnabled", InternalRuntimeFlagsV8Internal::restrictCompleteURLCharacterSetEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "accelerated2dCanvasEnabled", InternalRuntimeFlagsV8Internal::accelerated2dCanvasEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::accelerated2dCanvasEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "audioOutputDevicesEnabled", InternalRuntimeFlagsV8Internal::audioOutputDevicesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "audioVideoTracksEnabled", InternalRuntimeFlagsV8Internal::audioVideoTracksEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "audioWorkletEnabled", InternalRuntimeFlagsV8Internal::audioWorkletEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "auxclickEnabled", InternalRuntimeFlagsV8Internal::auxclickEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "coalescedEventsEnabled", InternalRuntimeFlagsV8Internal::coalescedEventsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "backgroundSyncEnabled", InternalRuntimeFlagsV8Internal::backgroundSyncEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "backspaceDefaultHandlerEnabled", InternalRuntimeFlagsV8Internal::backspaceDefaultHandlerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "broadcastChannelEnabled", InternalRuntimeFlagsV8Internal::broadcastChannelEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "budgetEnabled", InternalRuntimeFlagsV8Internal::budgetEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "canvas2dFixedRenderingModeEnabled", InternalRuntimeFlagsV8Internal::canvas2dFixedRenderingModeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "enableCanvas2dDynamicRenderingModeSwitchingEnabled", InternalRuntimeFlagsV8Internal::enableCanvas2dDynamicRenderingModeSwitchingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "canMakePaymentEnabled", InternalRuntimeFlagsV8Internal::canMakePaymentEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "canvas2dImageChromiumEnabled", InternalRuntimeFlagsV8Internal::canvas2dImageChromiumEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientHintsEnabled", InternalRuntimeFlagsV8Internal::clientHintsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compositeOpaqueFixedPositionEnabled", InternalRuntimeFlagsV8Internal::compositeOpaqueFixedPositionEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::compositeOpaqueFixedPositionEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compositeOpaqueScrollersEnabled", InternalRuntimeFlagsV8Internal::compositeOpaqueScrollersEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::compositeOpaqueScrollersEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "colorCorrectRenderingEnabled", InternalRuntimeFlagsV8Internal::colorCorrectRenderingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "colorCorrectRenderingDefaultModeEnabled", InternalRuntimeFlagsV8Internal::colorCorrectRenderingDefaultModeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compositedSelectionUpdateEnabled", InternalRuntimeFlagsV8Internal::compositedSelectionUpdateEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compositorWorkerEnabled", InternalRuntimeFlagsV8Internal::compositorWorkerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "contextMenuEnabled", InternalRuntimeFlagsV8Internal::contextMenuEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "corsRFC1918Enabled", InternalRuntimeFlagsV8Internal::corsRFC1918EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "credentialManagerEnabled", InternalRuntimeFlagsV8Internal::credentialManagerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "css3TextEnabled", InternalRuntimeFlagsV8Internal::css3TextEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "css3TextDecorationsEnabled", InternalRuntimeFlagsV8Internal::css3TextDecorationsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssApplyAtRulesEnabled", InternalRuntimeFlagsV8Internal::cssApplyAtRulesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssAdditiveAnimationsEnabled", InternalRuntimeFlagsV8Internal::cssAdditiveAnimationsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssBackdropFilterEnabled", InternalRuntimeFlagsV8Internal::cssBackdropFilterEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssHexAlphaColorEnabled", InternalRuntimeFlagsV8Internal::cssHexAlphaColorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssContainmentEnabled", InternalRuntimeFlagsV8Internal::cssContainmentEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssFontDisplayEnabled", InternalRuntimeFlagsV8Internal::cssFontDisplayEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssFontSizeAdjustEnabled", InternalRuntimeFlagsV8Internal::cssFontSizeAdjustEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssGridLayoutEnabled", InternalRuntimeFlagsV8Internal::cssGridLayoutEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::cssGridLayoutEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssDisplayContentsEnabled", InternalRuntimeFlagsV8Internal::cssDisplayContentsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssHyphensEnabled", InternalRuntimeFlagsV8Internal::cssHyphensEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssInBodyDoesNotBlockPaintEnabled", InternalRuntimeFlagsV8Internal::cssInBodyDoesNotBlockPaintEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssIndependentTransformPropertiesEnabled", InternalRuntimeFlagsV8Internal::cssIndependentTransformPropertiesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssMaskSourceTypeEnabled", InternalRuntimeFlagsV8Internal::cssMaskSourceTypeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssomSmoothScrollEnabled", InternalRuntimeFlagsV8Internal::cssomSmoothScrollEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssOffsetPositionAnchorEnabled", InternalRuntimeFlagsV8Internal::cssOffsetPositionAnchorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssOffsetRotateEnabled", InternalRuntimeFlagsV8Internal::cssOffsetRotateEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssOffsetRotationEnabled", InternalRuntimeFlagsV8Internal::cssOffsetRotationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssPaintAPIEnabled", InternalRuntimeFlagsV8Internal::cssPaintAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssPaintAPIArgumentsEnabled", InternalRuntimeFlagsV8Internal::cssPaintAPIArgumentsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssSnapSizeEnabled", InternalRuntimeFlagsV8Internal::cssSnapSizeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssStickyPositionEnabled", InternalRuntimeFlagsV8Internal::cssStickyPositionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssTouchActionPanDirectionsEnabled", InternalRuntimeFlagsV8Internal::cssTouchActionPanDirectionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssTouchActionPinchZoomEnabled", InternalRuntimeFlagsV8Internal::cssTouchActionPinchZoomEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssTypedOMEnabled", InternalRuntimeFlagsV8Internal::cssTypedOMEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssVariableFontsEnabled", InternalRuntimeFlagsV8Internal::cssVariableFontsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssVariables2Enabled", InternalRuntimeFlagsV8Internal::cssVariables2EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssViewportEnabled", InternalRuntimeFlagsV8Internal::cssViewportEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssScrollSnapPointsEnabled", InternalRuntimeFlagsV8Internal::cssScrollSnapPointsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "customElementsBuiltinEnabled", InternalRuntimeFlagsV8Internal::customElementsBuiltinEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "customElementsV1Enabled", InternalRuntimeFlagsV8Internal::customElementsV1EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "customSchemeHandlerEnabled", InternalRuntimeFlagsV8Internal::customSchemeHandlerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "databaseEnabled", InternalRuntimeFlagsV8Internal::databaseEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "decodeToYUVEnabled", InternalRuntimeFlagsV8Internal::decodeToYUVEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "desktopCaptureDisableLocalEchoControlEnabled", InternalRuntimeFlagsV8Internal::desktopCaptureDisableLocalEchoControlEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deviceLightEnabled", InternalRuntimeFlagsV8Internal::deviceLightEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "displayList2dCanvasEnabled", InternalRuntimeFlagsV8Internal::displayList2dCanvasEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "documentCookieEnabled", InternalRuntimeFlagsV8Internal::documentCookieEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "documentDomainEnabled", InternalRuntimeFlagsV8Internal::documentDomainEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "documentWriteEnabled", InternalRuntimeFlagsV8Internal::documentWriteEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "documentWriteEvaluatorEnabled", InternalRuntimeFlagsV8Internal::documentWriteEvaluatorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dOMConvenienceAPIEnabled", InternalRuntimeFlagsV8Internal::dOMConvenienceAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "durableStorageEnabled", InternalRuntimeFlagsV8Internal::durableStorageEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "expensiveBackgroundTimerThrottlingEnabled", InternalRuntimeFlagsV8Internal::expensiveBackgroundTimerThrottlingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fasterLocationReloadEnabled", InternalRuntimeFlagsV8Internal::fasterLocationReloadEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fontCacheScalingEnabled", InternalRuntimeFlagsV8Internal::fontCacheScalingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forceDisplayList2dCanvasEnabled", InternalRuntimeFlagsV8Internal::forceDisplayList2dCanvasEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forceDisable2dCanvasCopyOnWriteEnabled", InternalRuntimeFlagsV8Internal::forceDisable2dCanvasCopyOnWriteEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "embedderCSPEnforcementEnabled", InternalRuntimeFlagsV8Internal::embedderCSPEnforcementEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "execCommandInJavaScriptEnabled", InternalRuntimeFlagsV8Internal::execCommandInJavaScriptEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "computedAccessibilityInfoEnabled", InternalRuntimeFlagsV8Internal::computedAccessibilityInfoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "experimentalCanvasFeaturesEnabled", InternalRuntimeFlagsV8Internal::experimentalCanvasFeaturesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "experimentalContentSecurityPolicyFeaturesEnabled", InternalRuntimeFlagsV8Internal::experimentalContentSecurityPolicyFeaturesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "experimentalV8ExtrasEnabled", InternalRuntimeFlagsV8Internal::experimentalV8ExtrasEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fastMobileScrollingEnabled", InternalRuntimeFlagsV8Internal::fastMobileScrollingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "featurePolicyEnabled", InternalRuntimeFlagsV8Internal::featurePolicyEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fileAPIBlobCloseEnabled", InternalRuntimeFlagsV8Internal::fileAPIBlobCloseEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fileSystemEnabled", InternalRuntimeFlagsV8Internal::fileSystemEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "foreignFetchEnabled", InternalRuntimeFlagsV8Internal::foreignFetchEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "framebustingNeedsSameOriginOrUserGestureEnabled", InternalRuntimeFlagsV8Internal::framebustingNeedsSameOriginOrUserGestureEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::framebustingNeedsSameOriginOrUserGestureEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fullscreenUnprefixedEnabled", InternalRuntimeFlagsV8Internal::fullscreenUnprefixedEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::fullscreenUnprefixedEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "frameTimingSupportEnabled", InternalRuntimeFlagsV8Internal::frameTimingSupportEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "gamepadExtensionsEnabled", InternalRuntimeFlagsV8Internal::gamepadExtensionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "geometryInterfacesEnabled", InternalRuntimeFlagsV8Internal::geometryInterfacesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getUserMediaEnabled", InternalRuntimeFlagsV8Internal::getUserMediaEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "globalCacheStorageEnabled", InternalRuntimeFlagsV8Internal::globalCacheStorageEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "heapCompactionEnabled", InternalRuntimeFlagsV8Internal::heapCompactionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "iDBObserverEnabled", InternalRuntimeFlagsV8Internal::iDBObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "idleTimeSpellCheckingEnabled", InternalRuntimeFlagsV8Internal::idleTimeSpellCheckingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "imageCaptureEnabled", InternalRuntimeFlagsV8Internal::imageCaptureEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "imageOrientationEnabled", InternalRuntimeFlagsV8Internal::imageOrientationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "indexedDBExperimentalEnabled", InternalRuntimeFlagsV8Internal::indexedDBExperimentalEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "inertTopControlsEnabled", InternalRuntimeFlagsV8Internal::inertTopControlsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "inputEventEnabled", InternalRuntimeFlagsV8Internal::inputEventEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "inputModeAttributeEnabled", InternalRuntimeFlagsV8Internal::inputModeAttributeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "inputMultipleFieldsUIEnabled", InternalRuntimeFlagsV8Internal::inputMultipleFieldsUIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "installedAppEnabled", InternalRuntimeFlagsV8Internal::installedAppEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "intersectionObserverEnabled", InternalRuntimeFlagsV8Internal::intersectionObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "langAttributeAwareFormControlUIEnabled", InternalRuntimeFlagsV8Internal::langAttributeAwareFormControlUIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "layoutNGEnabled", InternalRuntimeFlagsV8Internal::layoutNGEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "layoutNGInlineEnabled", InternalRuntimeFlagsV8Internal::layoutNGInlineEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "linkServiceWorkerEnabled", InternalRuntimeFlagsV8Internal::linkServiceWorkerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "longTaskObserverEnabled", InternalRuntimeFlagsV8Internal::longTaskObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fractionalScrollOffsetsEnabled", InternalRuntimeFlagsV8Internal::fractionalScrollOffsetsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loadingWithMojoEnabled", InternalRuntimeFlagsV8Internal::loadingWithMojoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaCaptureEnabled", InternalRuntimeFlagsV8Internal::mediaCaptureEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaCaptureFromCanvasEnabled", InternalRuntimeFlagsV8Internal::mediaCaptureFromCanvasEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaCaptureFromVideoEnabled", InternalRuntimeFlagsV8Internal::mediaCaptureFromVideoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaConstraintsEnabled", InternalRuntimeFlagsV8Internal::mediaConstraintsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaDocumentDownloadButtonEnabled", InternalRuntimeFlagsV8Internal::mediaDocumentDownloadButtonEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaGetSettingsEnabled", InternalRuntimeFlagsV8Internal::mediaGetSettingsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaSessionEnabled", InternalRuntimeFlagsV8Internal::mediaSessionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaSourceExperimentalEnabled", InternalRuntimeFlagsV8Internal::mediaSourceExperimentalEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaSourceNewAbortAndDurationEnabled", InternalRuntimeFlagsV8Internal::mediaSourceNewAbortAndDurationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaStreamSpeechEnabled", InternalRuntimeFlagsV8Internal::mediaStreamSpeechEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaQueryShapeEnabled", InternalRuntimeFlagsV8Internal::mediaQueryShapeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mediaStreamTrackContentHintEnabled", InternalRuntimeFlagsV8Internal::mediaStreamTrackContentHintEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "memoryInfoInWorkersEnabled", InternalRuntimeFlagsV8Internal::memoryInfoInWorkersEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "middleClickAutoscrollEnabled", InternalRuntimeFlagsV8Internal::middleClickAutoscrollEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mobileLayoutThemeEnabled", InternalRuntimeFlagsV8Internal::mobileLayoutThemeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "moduleScriptsEnabled", InternalRuntimeFlagsV8Internal::moduleScriptsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "navigatorContentUtilsEnabled", InternalRuntimeFlagsV8Internal::navigatorContentUtilsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webNFCEnabled", InternalRuntimeFlagsV8Internal::webNFCEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "networkInformationEnabled", InternalRuntimeFlagsV8Internal::networkInformationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "netInfoDownlinkMaxEnabled", InternalRuntimeFlagsV8Internal::netInfoDownlinkMaxEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "notificationConstructorEnabled", InternalRuntimeFlagsV8Internal::notificationConstructorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "notificationBadgeEnabled", InternalRuntimeFlagsV8Internal::notificationBadgeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "notificationContentImageEnabled", InternalRuntimeFlagsV8Internal::notificationContentImageEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "notificationInlineRepliesEnabled", InternalRuntimeFlagsV8Internal::notificationInlineRepliesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "notificationsEnabled", InternalRuntimeFlagsV8Internal::notificationsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onDeviceChangeEnabled", InternalRuntimeFlagsV8Internal::onDeviceChangeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "orientationEventEnabled", InternalRuntimeFlagsV8Internal::orientationEventEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "originTrialsEnabled", InternalRuntimeFlagsV8Internal::originTrialsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "originTrialsSampleAPIEnabled", InternalRuntimeFlagsV8Internal::originTrialsSampleAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forceOverlayFullscreenVideoEnabled", InternalRuntimeFlagsV8Internal::forceOverlayFullscreenVideoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "overlayScrollbarsEnabled", InternalRuntimeFlagsV8Internal::overlayScrollbarsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pagePopupEnabled", InternalRuntimeFlagsV8Internal::pagePopupEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "paintUnderInvalidationCheckingEnabled", InternalRuntimeFlagsV8Internal::paintUnderInvalidationCheckingEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::paintUnderInvalidationCheckingEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "passiveDocumentEventListenersEnabled", InternalRuntimeFlagsV8Internal::passiveDocumentEventListenersEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "passPaintVisualRectToCompositorEnabled", InternalRuntimeFlagsV8Internal::passPaintVisualRectToCompositorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "paymentAppEnabled", InternalRuntimeFlagsV8Internal::paymentAppEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "paymentDetailsErrorEnabled", InternalRuntimeFlagsV8Internal::paymentDetailsErrorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "paymentDetailsModifierDataEnabled", InternalRuntimeFlagsV8Internal::paymentDetailsModifierDataEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "paymentRequestEnabled", InternalRuntimeFlagsV8Internal::paymentRequestEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "paymentRequestBasicCardEnabled", InternalRuntimeFlagsV8Internal::paymentRequestBasicCardEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "paymentRequestPayerNameEnabled", InternalRuntimeFlagsV8Internal::paymentRequestPayerNameEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "performanceObserverEnabled", InternalRuntimeFlagsV8Internal::performanceObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "permissionDelegationEnabled", InternalRuntimeFlagsV8Internal::permissionDelegationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "permissionsEnabled", InternalRuntimeFlagsV8Internal::permissionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "permissionsRequestRevokeEnabled", InternalRuntimeFlagsV8Internal::permissionsRequestRevokeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pointerEventEnabled", InternalRuntimeFlagsV8Internal::pointerEventEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "preciseMemoryInfoEnabled", InternalRuntimeFlagsV8Internal::preciseMemoryInfoEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "preferredImageRasterBoundsEnabled", InternalRuntimeFlagsV8Internal::preferredImageRasterBoundsEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::preferredImageRasterBoundsEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "prefixedVideoFullscreenEnabled", InternalRuntimeFlagsV8Internal::prefixedVideoFullscreenEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "presentationEnabled", InternalRuntimeFlagsV8Internal::presentationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "presentationReceiverEnabled", InternalRuntimeFlagsV8Internal::presentationReceiverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pushMessagingEnabled", InternalRuntimeFlagsV8Internal::pushMessagingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "quotaPromiseEnabled", InternalRuntimeFlagsV8Internal::quotaPromiseEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "reducedReferrerGranularityEnabled", InternalRuntimeFlagsV8Internal::reducedReferrerGranularityEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "remotePlaybackEnabled", InternalRuntimeFlagsV8Internal::remotePlaybackEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "renderingPipelineThrottlingEnabled", InternalRuntimeFlagsV8Internal::renderingPipelineThrottlingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "renderingPipelineThrottlingLoadingIframesEnabled", InternalRuntimeFlagsV8Internal::renderingPipelineThrottlingLoadingIframesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "renderUnicodeControlCharactersEnabled", InternalRuntimeFlagsV8Internal::renderUnicodeControlCharactersEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "resizeObserverEnabled", InternalRuntimeFlagsV8Internal::resizeObserverEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rootLayerScrollingEnabled", InternalRuntimeFlagsV8Internal::rootLayerScrollingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rTCPeerConnectionNewGetStatsEnabled", InternalRuntimeFlagsV8Internal::rTCPeerConnectionNewGetStatsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scriptedSpeechEnabled", InternalRuntimeFlagsV8Internal::scriptedSpeechEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollAnchoringEnabled", InternalRuntimeFlagsV8Internal::scrollAnchoringEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::scrollAnchoringEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollTopLeftInteropEnabled", InternalRuntimeFlagsV8Internal::scrollTopLeftInteropEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sensorEnabled", InternalRuntimeFlagsV8Internal::sensorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "serviceWorkerNavigationPreloadEnabled", InternalRuntimeFlagsV8Internal::serviceWorkerNavigationPreloadEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setRootScrollerEnabled", InternalRuntimeFlagsV8Internal::setRootScrollerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowPiercingDescendantCombinatorEnabled", InternalRuntimeFlagsV8Internal::shadowPiercingDescendantCombinatorEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shapeDetectionEnabled", InternalRuntimeFlagsV8Internal::shapeDetectionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sharedArrayBufferEnabled", InternalRuntimeFlagsV8Internal::sharedArrayBufferEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sharedWorkerEnabled", InternalRuntimeFlagsV8Internal::sharedWorkerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "slimmingPaintInvalidationEnabled", InternalRuntimeFlagsV8Internal::slimmingPaintInvalidationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "slimmingPaintV2Enabled", InternalRuntimeFlagsV8Internal::slimmingPaintV2EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "slimmingPaintStrictCullRectClippingEnabled", InternalRuntimeFlagsV8Internal::slimmingPaintStrictCullRectClippingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stableBlinkFeaturesEnabled", InternalRuntimeFlagsV8Internal::stableBlinkFeaturesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stackedCSSPropertyAnimationsEnabled", InternalRuntimeFlagsV8Internal::stackedCSSPropertyAnimationsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "styleSharingEnabled", InternalRuntimeFlagsV8Internal::styleSharingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "speculativeLaunchServiceWorkerEnabled", InternalRuntimeFlagsV8Internal::speculativeLaunchServiceWorkerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "storageEstimateEnabled", InternalRuntimeFlagsV8Internal::storageEstimateEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "suboriginsEnabled", InternalRuntimeFlagsV8Internal::suboriginsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "timerThrottlingForBackgroundTabsEnabled", InternalRuntimeFlagsV8Internal::timerThrottlingForBackgroundTabsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "timerThrottlingForHiddenFramesEnabled", InternalRuntimeFlagsV8Internal::timerThrottlingForHiddenFramesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "topNavWithUserActivationInSandboxEnabled", InternalRuntimeFlagsV8Internal::topNavWithUserActivationInSandboxEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "touchEventFeatureDetectionEnabled", InternalRuntimeFlagsV8Internal::touchEventFeatureDetectionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "traceWrappablesEnabled", InternalRuntimeFlagsV8Internal::traceWrappablesEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "trueColorRenderingEnabled", InternalRuntimeFlagsV8Internal::trueColorRenderingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "trustedEventsDefaultActionEnabled", InternalRuntimeFlagsV8Internal::trustedEventsDefaultActionEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "userSelectAllEnabled", InternalRuntimeFlagsV8Internal::userSelectAllEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webAnimationsAPIEnabled", InternalRuntimeFlagsV8Internal::webAnimationsAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webAnimationsSVGEnabled", InternalRuntimeFlagsV8Internal::webAnimationsSVGEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webAssemblySerializationEnabled", InternalRuntimeFlagsV8Internal::webAssemblySerializationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webBluetoothEnabled", InternalRuntimeFlagsV8Internal::webBluetoothEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webGLDraftExtensionsEnabled", InternalRuntimeFlagsV8Internal::webGLDraftExtensionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webGLImageChromiumEnabled", InternalRuntimeFlagsV8Internal::webGLImageChromiumEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webUSBEnabled", InternalRuntimeFlagsV8Internal::webUSBEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webVREnabled", InternalRuntimeFlagsV8Internal::webVREnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webVTTRegionsEnabled", InternalRuntimeFlagsV8Internal::webVTTRegionsEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "v8BasedStructuredCloneEnabled", InternalRuntimeFlagsV8Internal::v8BasedStructuredCloneEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "v8IdleTasksEnabled", InternalRuntimeFlagsV8Internal::v8IdleTasksEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "videoFullscreenOrientationLockEnabled", InternalRuntimeFlagsV8Internal::videoFullscreenOrientationLockEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "visibilityChangeOnUnloadEnabled", InternalRuntimeFlagsV8Internal::visibilityChangeOnUnloadEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "xsltEnabled", InternalRuntimeFlagsV8Internal::xsltEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "smilEnabled", InternalRuntimeFlagsV8Internal::smilEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollCustomizationEnabled", InternalRuntimeFlagsV8Internal::scrollCustomizationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "autoplayMutedVideosEnabled", InternalRuntimeFlagsV8Internal::autoplayMutedVideosEnabledAttributeGetterCallback, InternalRuntimeFlagsV8Internal::autoplayMutedVideosEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "visualViewportAPIEnabled", InternalRuntimeFlagsV8Internal::visualViewportAPIEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "wakeLockEnabled", InternalRuntimeFlagsV8Internal::wakeLockEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webFontsCacheAwareTimeoutAdaptationEnabled", InternalRuntimeFlagsV8Internal::webFontsCacheAwareTimeoutAdaptationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webFontsInterventionV2With2GEnabled", InternalRuntimeFlagsV8Internal::webFontsInterventionV2With2GEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webFontsInterventionV2With3GEnabled", InternalRuntimeFlagsV8Internal::webFontsInterventionV2With3GEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webFontsInterventionV2WithSlow2GEnabled", InternalRuntimeFlagsV8Internal::webFontsInterventionV2WithSlow2GEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webFontsInterventionTriggerEnabled", InternalRuntimeFlagsV8Internal::webFontsInterventionTriggerEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webShareEnabled", InternalRuntimeFlagsV8Internal::webShareEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "workletEnabled", InternalRuntimeFlagsV8Internal::workletEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lazyParseCSSEnabled", InternalRuntimeFlagsV8Internal::lazyParseCSSEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "parseHTMLOnMainThreadEnabled", InternalRuntimeFlagsV8Internal::parseHTMLOnMainThreadEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sendBeaconThrowForBlobWithNonSimpleTypeEnabled", InternalRuntimeFlagsV8Internal::sendBeaconThrowForBlobWithNonSimpleTypeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "performanceNavigationTiming2Enabled", InternalRuntimeFlagsV8Internal::performanceNavigationTiming2EnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "backgroundVideoTrackOptimizationEnabled", InternalRuntimeFlagsV8Internal::backgroundVideoTrackOptimizationEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "performancePaintTimingEnabled", InternalRuntimeFlagsV8Internal::performancePaintTimingEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hideNonceContentAttributeEnabled", InternalRuntimeFlagsV8Internal::hideNonceContentAttributeEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "unclosedFormControlIsInvalidEnabled", InternalRuntimeFlagsV8Internal::unclosedFormControlIsInvalidEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "restrictCompleteURLCharacterSetEnabled", InternalRuntimeFlagsV8Internal::restrictCompleteURLCharacterSetEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8InternalRuntimeFlagsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8InternalRuntimeFlags::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8InternalRuntimeFlags::internalFieldCount);
+static void installV8InternalRuntimeFlagsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8InternalRuntimeFlags::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8InternalRuntimeFlags::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InternalRuntimeFlagsAccessors, WTF_ARRAY_LENGTH(V8InternalRuntimeFlagsAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InternalRuntimeFlagsAccessors, WTF_ARRAY_LENGTH(V8InternalRuntimeFlagsAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8InternalRuntimeFlags::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8InternalRuntimeFlagsTemplate);
+v8::Local<v8::FunctionTemplate> V8InternalRuntimeFlags::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8InternalRuntimeFlagsTemplate);
 }
 
-bool V8InternalRuntimeFlags::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8InternalRuntimeFlags::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8InternalRuntimeFlags::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8InternalRuntimeFlags::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-InternalRuntimeFlags* V8InternalRuntimeFlags::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+InternalRuntimeFlags* V8InternalRuntimeFlags::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

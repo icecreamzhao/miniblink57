@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SiteBoundCredential.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,77 +46,86 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SiteBoundCredential::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SiteBoundCredential is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SiteBoundCredentialV8Internal {
 
-static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SiteBoundCredential* impl = V8SiteBoundCredential::toImpl(holder);
+        SiteBoundCredential* impl = V8SiteBoundCredential::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->name(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->name(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SiteBoundCredentialV8Internal::nameAttributeGetter(info);
-}
+    MODULES_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SiteBoundCredentialV8Internal::nameAttributeGetter(info);
+    }
 
-static void iconURLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void iconURLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SiteBoundCredential* impl = V8SiteBoundCredential::toImpl(holder);
+        SiteBoundCredential* impl = V8SiteBoundCredential::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->iconURL(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->iconURL(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void iconURLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SiteBoundCredentialV8Internal::iconURLAttributeGetter(info);
-}
+    MODULES_EXPORT void iconURLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SiteBoundCredentialV8Internal::iconURLAttributeGetter(info);
+    }
 
 } // namespace SiteBoundCredentialV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SiteBoundCredentialAccessors[] = {
-    {"name", SiteBoundCredentialV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"iconURL", SiteBoundCredentialV8Internal::iconURLAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "name", SiteBoundCredentialV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "iconURL", SiteBoundCredentialV8Internal::iconURLAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SiteBoundCredentialTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SiteBoundCredential::wrapperTypeInfo.interfaceName, V8Credential::domTemplate(isolate, world), V8SiteBoundCredential::internalFieldCount);
+static void installV8SiteBoundCredentialTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SiteBoundCredential::wrapperTypeInfo.interfaceName, V8Credential::domTemplate(isolate, world), V8SiteBoundCredential::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::credentialManagerEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::credentialManagerEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SiteBoundCredentialAccessors, WTF_ARRAY_LENGTH(V8SiteBoundCredentialAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SiteBoundCredentialAccessors, WTF_ARRAY_LENGTH(V8SiteBoundCredentialAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SiteBoundCredential::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SiteBoundCredentialTemplate);
+v8::Local<v8::FunctionTemplate> V8SiteBoundCredential::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SiteBoundCredentialTemplate);
 }
 
-bool V8SiteBoundCredential::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SiteBoundCredential::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SiteBoundCredential::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SiteBoundCredential::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SiteBoundCredential* V8SiteBoundCredential::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SiteBoundCredential* V8SiteBoundCredential::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

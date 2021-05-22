@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8NavigationPreloadManager.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,164 +47,178 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&NavigationPreloadManager::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "NavigationPreloadManager is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace NavigationPreloadManagerV8Internal {
 
-static void enableMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NavigationPreloadManager", "enable");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void enableMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NavigationPreloadManager", "enable");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8NavigationPreloadManager::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  NavigationPreloadManager* impl = V8NavigationPreloadManager::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8NavigationPreloadManager::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        NavigationPreloadManager* impl = V8NavigationPreloadManager::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->enable(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->enable(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void enableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NavigationPreloadManagerV8Internal::enableMethod(info);
-}
+    MODULES_EXPORT void enableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NavigationPreloadManagerV8Internal::enableMethod(info);
+    }
 
-static void disableMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NavigationPreloadManager", "disable");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void disableMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NavigationPreloadManager", "disable");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8NavigationPreloadManager::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  NavigationPreloadManager* impl = V8NavigationPreloadManager::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8NavigationPreloadManager::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        NavigationPreloadManager* impl = V8NavigationPreloadManager::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->disable(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->disable(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void disableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NavigationPreloadManagerV8Internal::disableMethod(info);
-}
+    MODULES_EXPORT void disableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NavigationPreloadManagerV8Internal::disableMethod(info);
+    }
 
-static void setHeaderValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NavigationPreloadManager", "setHeaderValue");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void setHeaderValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NavigationPreloadManager", "setHeaderValue");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8NavigationPreloadManager::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  NavigationPreloadManager* impl = V8NavigationPreloadManager::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8NavigationPreloadManager::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        NavigationPreloadManager* impl = V8NavigationPreloadManager::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> value;
-  value = toByteString(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        V8StringResource<> value;
+        value = toByteString(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = impl->setHeaderValue(scriptState, value);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->setHeaderValue(scriptState, value);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void setHeaderValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NavigationPreloadManagerV8Internal::setHeaderValueMethod(info);
-}
+    MODULES_EXPORT void setHeaderValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NavigationPreloadManagerV8Internal::setHeaderValueMethod(info);
+    }
 
-static void getStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NavigationPreloadManager", "getState");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void getStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NavigationPreloadManager", "getState");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8NavigationPreloadManager::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  NavigationPreloadManager* impl = V8NavigationPreloadManager::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8NavigationPreloadManager::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        NavigationPreloadManager* impl = V8NavigationPreloadManager::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->getState(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->getState(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void getStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NavigationPreloadManagerV8Internal::getStateMethod(info);
-}
+    MODULES_EXPORT void getStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NavigationPreloadManagerV8Internal::getStateMethod(info);
+    }
 
 } // namespace NavigationPreloadManagerV8Internal
 
-static void installV8NavigationPreloadManagerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NavigationPreloadManager::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NavigationPreloadManager::internalFieldCount);
+static void installV8NavigationPreloadManagerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NavigationPreloadManager::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NavigationPreloadManager::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 }
 
-v8::Local<v8::FunctionTemplate> V8NavigationPreloadManager::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NavigationPreloadManagerTemplate);
+v8::Local<v8::FunctionTemplate> V8NavigationPreloadManager::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NavigationPreloadManagerTemplate);
 }
 
-bool V8NavigationPreloadManager::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8NavigationPreloadManager::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8NavigationPreloadManager::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8NavigationPreloadManager::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-NavigationPreloadManager* V8NavigationPreloadManager::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+NavigationPreloadManager* V8NavigationPreloadManager::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-void V8NavigationPreloadManager::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  v8::Isolate* isolate = context->GetIsolate();
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ExecutionContext* executionContext = toExecutionContext(prototypeObject->CreationContext());
-  DCHECK(executionContext);
-  if (executionContext && (executionContext->isSecureContext())) {
-    const V8DOMConfiguration::MethodConfiguration enableMethodConfiguration = {"enable", NavigationPreloadManagerV8Internal::enableMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, enableMethodConfiguration);
-  }
-  if (executionContext && (executionContext->isSecureContext())) {
-    const V8DOMConfiguration::MethodConfiguration disableMethodConfiguration = {"disable", NavigationPreloadManagerV8Internal::disableMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, disableMethodConfiguration);
-  }
-  if (executionContext && (executionContext->isSecureContext())) {
-    const V8DOMConfiguration::MethodConfiguration setHeaderValueMethodConfiguration = {"setHeaderValue", NavigationPreloadManagerV8Internal::setHeaderValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, setHeaderValueMethodConfiguration);
-  }
-  if (executionContext && (executionContext->isSecureContext())) {
-    const V8DOMConfiguration::MethodConfiguration getStateMethodConfiguration = {"getState", NavigationPreloadManagerV8Internal::getStateMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, getStateMethodConfiguration);
-  }
+void V8NavigationPreloadManager::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ExecutionContext* executionContext = toExecutionContext(prototypeObject->CreationContext());
+    DCHECK(executionContext);
+    if (executionContext && (executionContext->isSecureContext())) {
+        const V8DOMConfiguration::MethodConfiguration enableMethodConfiguration = { "enable", NavigationPreloadManagerV8Internal::enableMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, enableMethodConfiguration);
+    }
+    if (executionContext && (executionContext->isSecureContext())) {
+        const V8DOMConfiguration::MethodConfiguration disableMethodConfiguration = { "disable", NavigationPreloadManagerV8Internal::disableMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, disableMethodConfiguration);
+    }
+    if (executionContext && (executionContext->isSecureContext())) {
+        const V8DOMConfiguration::MethodConfiguration setHeaderValueMethodConfiguration = { "setHeaderValue", NavigationPreloadManagerV8Internal::setHeaderValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, setHeaderValueMethodConfiguration);
+    }
+    if (executionContext && (executionContext->isSecureContext())) {
+        const V8DOMConfiguration::MethodConfiguration getStateMethodConfiguration = { "getState", NavigationPreloadManagerV8Internal::getStateMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, getStateMethodConfiguration);
+    }
 }
 
-}  // namespace blink
+} // namespace blink

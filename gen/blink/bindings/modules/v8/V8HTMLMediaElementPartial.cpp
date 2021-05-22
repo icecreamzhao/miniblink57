@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLMediaElementPartial.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -41,316 +41,346 @@ namespace blink {
 
 namespace HTMLMediaElementPartialV8Internal {
 
-static void sinkIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sinkIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, HTMLMediaElementAudioOutputDevice::sinkId(*impl), info.GetIsolate());
-}
+        v8SetReturnValueString(info, HTMLMediaElementAudioOutputDevice::sinkId(*impl), info.GetIsolate());
+    }
 
-void sinkIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementPartialV8Internal::sinkIdAttributeGetter(info);
-}
+    void sinkIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementPartialV8Internal::sinkIdAttributeGetter(info);
+    }
 
-static void mediaKeysAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaKeysAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, HTMLMediaElementEncryptedMedia::mediaKeys(*impl), impl);
-}
+        v8SetReturnValueFast(info, HTMLMediaElementEncryptedMedia::mediaKeys(*impl), impl);
+    }
 
-void mediaKeysAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementPartialV8Internal::mediaKeysAttributeGetter(info);
-}
+    void mediaKeysAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementPartialV8Internal::mediaKeysAttributeGetter(info);
+    }
 
-static void onencryptedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onencryptedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  EventListener* cppValue(HTMLMediaElementEncryptedMedia::onencrypted(*impl));
+        EventListener* cppValue(HTMLMediaElementEncryptedMedia::onencrypted(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-void onencryptedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementPartialV8Internal::onencryptedAttributeGetter(info);
-}
+    void onencryptedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementPartialV8Internal::onencryptedAttributeGetter(info);
+    }
 
-static void onencryptedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void onencryptedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  HTMLMediaElementEncryptedMedia::setOnencrypted(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        HTMLMediaElementEncryptedMedia::setOnencrypted(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-void onencryptedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void onencryptedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMediaElementPartialV8Internal::onencryptedAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementPartialV8Internal::onencryptedAttributeSetter(v8Value, info);
+    }
 
-static void onwaitingforkeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onwaitingforkeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  EventListener* cppValue(HTMLMediaElementEncryptedMedia::onwaitingforkey(*impl));
+        EventListener* cppValue(HTMLMediaElementEncryptedMedia::onwaitingforkey(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-void onwaitingforkeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementPartialV8Internal::onwaitingforkeyAttributeGetter(info);
-}
+    void onwaitingforkeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementPartialV8Internal::onwaitingforkeyAttributeGetter(info);
+    }
 
-static void onwaitingforkeyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void onwaitingforkeyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  HTMLMediaElementEncryptedMedia::setOnwaitingforkey(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        HTMLMediaElementEncryptedMedia::setOnwaitingforkey(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-void onwaitingforkeyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void onwaitingforkeyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLMediaElementPartialV8Internal::onwaitingforkeyAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementPartialV8Internal::onwaitingforkeyAttributeSetter(v8Value, info);
+    }
 
-static void remoteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void remoteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, HTMLMediaElementRemotePlayback::remote(*impl), impl);
-}
+        v8SetReturnValueFast(info, HTMLMediaElementRemotePlayback::remote(*impl), impl);
+    }
 
-void remoteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementPartialV8Internal::remoteAttributeGetter(info);
-}
+    void remoteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementPartialV8Internal::remoteAttributeGetter(info);
+    }
 
-static void disableRemotePlaybackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void disableRemotePlaybackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, HTMLMediaElementRemotePlayback::fastHasAttribute(HTMLNames::disableremoteplaybackAttr, *impl));
-}
+        v8SetReturnValueBool(info, HTMLMediaElementRemotePlayback::fastHasAttribute(HTMLNames::disableremoteplaybackAttr, *impl));
+    }
 
-void disableRemotePlaybackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementPartialV8Internal::disableRemotePlaybackAttributeGetter(info);
-}
+    void disableRemotePlaybackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementPartialV8Internal::disableRemotePlaybackAttributeGetter(info);
+    }
 
-static void disableRemotePlaybackAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void disableRemotePlaybackAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "disableRemotePlayback");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "disableRemotePlayback");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  HTMLMediaElementRemotePlayback::setBooleanAttribute(HTMLNames::disableremoteplaybackAttr, *impl, cppValue);
-}
+        HTMLMediaElementRemotePlayback::setBooleanAttribute(HTMLNames::disableremoteplaybackAttr, *impl, cppValue);
+    }
 
-void disableRemotePlaybackAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void disableRemotePlaybackAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLMediaElementPartialV8Internal::disableRemotePlaybackAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementPartialV8Internal::disableRemotePlaybackAttributeSetter(v8Value, info);
+    }
 
-static void srcObjectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void srcObjectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, HTMLMediaElementSrcObject::srcObject(*impl), impl);
-}
+        v8SetReturnValueFast(info, HTMLMediaElementSrcObject::srcObject(*impl), impl);
+    }
 
-void srcObjectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLMediaElement_SrcObject_AttributeGetter);
+    void srcObjectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLMediaElement_SrcObject_AttributeGetter);
 
-  HTMLMediaElementPartialV8Internal::srcObjectAttributeGetter(info);
-}
+        HTMLMediaElementPartialV8Internal::srcObjectAttributeGetter(info);
+    }
 
-static void srcObjectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
+    static void srcObjectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "srcObject");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMediaElement", "srcObject");
 
-  // Prepare the value to be set.
-  MediaStream* cppValue = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+        // Prepare the value to be set.
+        MediaStream* cppValue = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), v8Value);
 
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue && !isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("The provided value is not of type 'MediaStream'.");
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue && !isUndefinedOrNull(v8Value)) {
+            exceptionState.throwTypeError("The provided value is not of type 'MediaStream'.");
+            return;
+        }
 
-  HTMLMediaElementSrcObject::setSrcObject(*impl, cppValue);
-}
+        HTMLMediaElementSrcObject::setSrcObject(*impl, cppValue);
+    }
 
-void srcObjectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    void srcObjectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLMediaElement_SrcObject_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLMediaElement_SrcObject_AttributeSetter);
 
-  HTMLMediaElementPartialV8Internal::srcObjectAttributeSetter(v8Value, info);
-}
+        HTMLMediaElementPartialV8Internal::srcObjectAttributeSetter(v8Value, info);
+    }
 
-static void setSinkIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "setSinkId");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void setSinkIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "setSinkId");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8HTMLMediaElement::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8HTMLMediaElement::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> sinkId;
-  sinkId = info[0];
-  if (!sinkId.prepare(exceptionState))
-    return;
+        V8StringResource<> sinkId;
+        sinkId = info[0];
+        if (!sinkId.prepare(exceptionState))
+            return;
 
-  ScriptPromise result = HTMLMediaElementAudioOutputDevice::setSinkId(scriptState, *impl, sinkId);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = HTMLMediaElementAudioOutputDevice::setSinkId(scriptState, *impl, sinkId);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
- void setSinkIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementPartialV8Internal::setSinkIdMethod(info);
-}
+    void setSinkIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementPartialV8Internal::setSinkIdMethod(info);
+    }
 
-static void setMediaKeysMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "setMediaKeys");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void setMediaKeysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "setMediaKeys");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8HTMLMediaElement::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8HTMLMediaElement::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  MediaKeys* mediaKeys;
-  mediaKeys = V8MediaKeys::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!mediaKeys && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'MediaKeys'.");
+        MediaKeys* mediaKeys;
+        mediaKeys = V8MediaKeys::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!mediaKeys && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'MediaKeys'.");
 
-    return;
-  }
+            return;
+        }
 
-  ScriptPromise result = HTMLMediaElementEncryptedMedia::setMediaKeys(scriptState, *impl, mediaKeys);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = HTMLMediaElementEncryptedMedia::setMediaKeys(scriptState, *impl, mediaKeys);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
- void setMediaKeysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementPartialV8Internal::setMediaKeysMethod(info);
-}
+    void setMediaKeysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementPartialV8Internal::setMediaKeysMethod(info);
+    }
 
-static void captureStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "captureStream");
+    static void captureStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLMediaElement", "captureStream");
 
-  HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
+        HTMLMediaElement* impl = V8HTMLMediaElement::toImpl(info.Holder());
 
-  MediaStream* result = HTMLMediaElementCapture::captureStream(*impl, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        MediaStream* result = HTMLMediaElementCapture::captureStream(*impl, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
- void captureStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMediaElementPartialV8Internal::captureStreamMethod(info);
-}
+    void captureStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMediaElementPartialV8Internal::captureStreamMethod(info);
+    }
 
 } // namespace HTMLMediaElementPartialV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLMediaElementAccessors[] = {
-    {"mediaKeys", HTMLMediaElementPartialV8Internal::mediaKeysAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onencrypted", HTMLMediaElementPartialV8Internal::onencryptedAttributeGetterCallback, HTMLMediaElementPartialV8Internal::onencryptedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwaitingforkey", HTMLMediaElementPartialV8Internal::onwaitingforkeyAttributeGetterCallback, HTMLMediaElementPartialV8Internal::onwaitingforkeyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"srcObject", HTMLMediaElementPartialV8Internal::srcObjectAttributeGetterCallback, HTMLMediaElementPartialV8Internal::srcObjectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "mediaKeys", HTMLMediaElementPartialV8Internal::mediaKeysAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onencrypted", HTMLMediaElementPartialV8Internal::onencryptedAttributeGetterCallback, HTMLMediaElementPartialV8Internal::onencryptedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwaitingforkey", HTMLMediaElementPartialV8Internal::onwaitingforkeyAttributeGetterCallback, HTMLMediaElementPartialV8Internal::onwaitingforkeyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "srcObject", HTMLMediaElementPartialV8Internal::srcObjectAttributeGetterCallback, HTMLMediaElementPartialV8Internal::srcObjectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLMediaElementMethods[] = {
-    {"setMediaKeys", HTMLMediaElementPartialV8Internal::setMediaKeysMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "setMediaKeys", HTMLMediaElementPartialV8Internal::setMediaKeysMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-void V8HTMLMediaElementPartial::installV8HTMLMediaElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8HTMLMediaElement::installV8HTMLMediaElementTemplate(isolate, world, interfaceTemplate);
+void V8HTMLMediaElementPartial::installV8HTMLMediaElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8HTMLMediaElement::installV8HTMLMediaElementTemplate(isolate, world, interfaceTemplate);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMediaElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMediaElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMediaElementMethods, WTF_ARRAY_LENGTH(V8HTMLMediaElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMediaElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMediaElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMediaElementMethods, WTF_ARRAY_LENGTH(V8HTMLMediaElementMethods));
 
-  if (RuntimeEnabledFeatures::audioOutputDevicesEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorsinkIdConfiguration = {"sinkId", HTMLMediaElementPartialV8Internal::sinkIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorsinkIdConfiguration);
-  }
-  if (RuntimeEnabledFeatures::remotePlaybackEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorremoteConfiguration = {"remote", HTMLMediaElementPartialV8Internal::remoteAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorremoteConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessordisableRemotePlaybackConfiguration = {"disableRemotePlayback", HTMLMediaElementPartialV8Internal::disableRemotePlaybackAttributeGetterCallback, HTMLMediaElementPartialV8Internal::disableRemotePlaybackAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessordisableRemotePlaybackConfiguration);
-  }
+    if (RuntimeEnabledFeatures::audioOutputDevicesEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorsinkIdConfiguration = { "sinkId", HTMLMediaElementPartialV8Internal::sinkIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorsinkIdConfiguration);
+    }
+    if (RuntimeEnabledFeatures::remotePlaybackEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorremoteConfiguration = { "remote", HTMLMediaElementPartialV8Internal::remoteAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorremoteConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessordisableRemotePlaybackConfiguration = { "disableRemotePlayback", HTMLMediaElementPartialV8Internal::disableRemotePlaybackAttributeGetterCallback, HTMLMediaElementPartialV8Internal::disableRemotePlaybackAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessordisableRemotePlaybackConfiguration);
+    }
 
-  if (RuntimeEnabledFeatures::audioOutputDevicesEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration setSinkIdMethodConfiguration = {"setSinkId", HTMLMediaElementPartialV8Internal::setSinkIdMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setSinkIdMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::mediaCaptureFromVideoEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration captureStreamMethodConfiguration = {"captureStream", HTMLMediaElementPartialV8Internal::captureStreamMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, captureStreamMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::audioOutputDevicesEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration setSinkIdMethodConfiguration = { "setSinkId", HTMLMediaElementPartialV8Internal::setSinkIdMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setSinkIdMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::mediaCaptureFromVideoEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration captureStreamMethodConfiguration = { "captureStream", HTMLMediaElementPartialV8Internal::captureStreamMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, captureStreamMethodConfiguration);
+    }
 }
 
-void V8HTMLMediaElementPartial::initialize() {
-  // Should be invoked from ModulesInitializer.
-  V8HTMLMediaElement::updateWrapperTypeInfo(
-      &V8HTMLMediaElementPartial::installV8HTMLMediaElementTemplate,
-      nullptr);
+void V8HTMLMediaElementPartial::initialize()
+{
+    // Should be invoked from ModulesInitializer.
+    V8HTMLMediaElement::updateWrapperTypeInfo(
+        &V8HTMLMediaElementPartial::installV8HTMLMediaElementTemplate,
+        nullptr);
 }
 
-}  // namespace blink
+} // namespace blink

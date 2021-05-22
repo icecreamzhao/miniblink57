@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ChannelMergerOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,66 +16,70 @@
 
 namespace blink {
 
-void V8ChannelMergerOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ChannelMergerOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8ChannelMergerOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ChannelMergerOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8AudioNodeOptions::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> numberOfInputsValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "numberOfInputs")).ToLocal(&numberOfInputsValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (numberOfInputsValue.IsEmpty() || numberOfInputsValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned numberOfInputs = toUInt32(isolate, numberOfInputsValue, NormalConversion, exceptionState);
+    V8AudioNodeOptions::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setNumberOfInputs(numberOfInputs);
-  }
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> numberOfInputsValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "numberOfInputs")).ToLocal(&numberOfInputsValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (numberOfInputsValue.IsEmpty() || numberOfInputsValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned numberOfInputs = toUInt32(isolate, numberOfInputsValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setNumberOfInputs(numberOfInputs);
+    }
 }
 
-v8::Local<v8::Value> ChannelMergerOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ChannelMergerOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ChannelMergerOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ChannelMergerOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ChannelMergerOptions(const ChannelMergerOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8AudioNodeOptions(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8ChannelMergerOptions(const ChannelMergerOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8AudioNodeOptions(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasNumberOfInputs()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "numberOfInputs"), v8::Integer::NewFromUnsigned(isolate, impl.numberOfInputs()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "numberOfInputs"), v8::Integer::NewFromUnsigned(isolate, 6u))))
-      return false;
-  }
+    if (impl.hasNumberOfInputs()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "numberOfInputs"), v8::Integer::NewFromUnsigned(isolate, impl.numberOfInputs()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "numberOfInputs"), v8::Integer::NewFromUnsigned(isolate, 6u))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-ChannelMergerOptions NativeValueTraits<ChannelMergerOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ChannelMergerOptions impl;
-  V8ChannelMergerOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ChannelMergerOptions NativeValueTraits<ChannelMergerOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ChannelMergerOptions impl;
+    V8ChannelMergerOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

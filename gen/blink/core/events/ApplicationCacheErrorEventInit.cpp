@@ -8,61 +8,75 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ApplicationCacheErrorEventInit.h"
 
 namespace blink {
 
-ApplicationCacheErrorEventInit::ApplicationCacheErrorEventInit() {
+ApplicationCacheErrorEventInit::ApplicationCacheErrorEventInit()
+{
 }
 
-ApplicationCacheErrorEventInit::~ApplicationCacheErrorEventInit() {}
+ApplicationCacheErrorEventInit::~ApplicationCacheErrorEventInit() { }
 
 ApplicationCacheErrorEventInit::ApplicationCacheErrorEventInit(const ApplicationCacheErrorEventInit&) = default;
 
 ApplicationCacheErrorEventInit& ApplicationCacheErrorEventInit::operator=(const ApplicationCacheErrorEventInit&) = default;
 
-bool ApplicationCacheErrorEventInit::hasMessage() const {
-  return !m_message.isNull();
+bool ApplicationCacheErrorEventInit::hasMessage() const
+{
+    return !m_message.isNull();
 }
-String ApplicationCacheErrorEventInit::message() const {
-  return m_message;
+String ApplicationCacheErrorEventInit::message() const
+{
+    return m_message;
 }
-void ApplicationCacheErrorEventInit::setMessage(String value) {
-  m_message = value;
+void ApplicationCacheErrorEventInit::setMessage(String value)
+{
+    m_message = value;
 }
-bool ApplicationCacheErrorEventInit::hasReason() const {
-  return !m_reason.isNull();
+bool ApplicationCacheErrorEventInit::hasReason() const
+{
+    return !m_reason.isNull();
 }
-String ApplicationCacheErrorEventInit::reason() const {
-  return m_reason;
+String ApplicationCacheErrorEventInit::reason() const
+{
+    return m_reason;
 }
-void ApplicationCacheErrorEventInit::setReason(String value) {
-  m_reason = value;
+void ApplicationCacheErrorEventInit::setReason(String value)
+{
+    m_reason = value;
 }
-bool ApplicationCacheErrorEventInit::hasStatus() const {
-  return m_hasStatus;
+bool ApplicationCacheErrorEventInit::hasStatus() const
+{
+    return m_hasStatus;
 }
-unsigned ApplicationCacheErrorEventInit::status() const {
-  DCHECK(m_hasStatus);
-  return m_status;
+unsigned ApplicationCacheErrorEventInit::status() const
+{
+    DCHECK(m_hasStatus);
+    return m_status;
 }
-void ApplicationCacheErrorEventInit::setStatus(unsigned value) {
-  m_status = value;
-  m_hasStatus = true;
+void ApplicationCacheErrorEventInit::setStatus(unsigned value)
+{
+    m_status = value;
+    m_hasStatus = true;
 }
-bool ApplicationCacheErrorEventInit::hasURL() const {
-  return !m_url.isNull();
+bool ApplicationCacheErrorEventInit::hasURL() const
+{
+    return !m_url.isNull();
 }
-String ApplicationCacheErrorEventInit::url() const {
-  return m_url;
+String ApplicationCacheErrorEventInit::url() const
+{
+    return m_url;
 }
-void ApplicationCacheErrorEventInit::setURL(String value) {
-  m_url = value;
+void ApplicationCacheErrorEventInit::setURL(String value)
+{
+    m_url = value;
 }
 
-DEFINE_TRACE(ApplicationCacheErrorEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(ApplicationCacheErrorEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

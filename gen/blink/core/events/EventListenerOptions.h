@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef EventListenerOptions_h
 #define EventListenerOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class CORE_EXPORT EventListenerOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  EventListenerOptions();
-  virtual ~EventListenerOptions();
-  EventListenerOptions(const EventListenerOptions&);
-  EventListenerOptions& operator=(const EventListenerOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCapture() const;
-  bool capture() const;
-  void setCapture(bool);
+public:
+    EventListenerOptions();
+    virtual ~EventListenerOptions();
+    EventListenerOptions(const EventListenerOptions&);
+    EventListenerOptions& operator=(const EventListenerOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasCapture() const;
+    bool capture() const;
+    void setCapture(bool);
 
- private:
-  bool m_hasCapture = false;
-  bool m_capture;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8EventListenerOptions;
+private:
+    bool m_hasCapture = false;
+    bool m_capture;
+
+    friend class V8EventListenerOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // EventListenerOptions_h
+#endif // EventListenerOptions_h

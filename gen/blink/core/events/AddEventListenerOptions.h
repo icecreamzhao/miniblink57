@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AddEventListenerOptions_h
 #define AddEventListenerOptions_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class CORE_EXPORT AddEventListenerOptions : public EventListenerOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AddEventListenerOptions();
-  virtual ~AddEventListenerOptions();
-  AddEventListenerOptions(const AddEventListenerOptions&);
-  AddEventListenerOptions& operator=(const AddEventListenerOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasOnce() const;
-  bool once() const;
-  void setOnce(bool);
+public:
+    AddEventListenerOptions();
+    virtual ~AddEventListenerOptions();
+    AddEventListenerOptions(const AddEventListenerOptions&);
+    AddEventListenerOptions& operator=(const AddEventListenerOptions&);
 
-  bool hasPassive() const;
-  bool passive() const;
-  void setPassive(bool);
+    bool hasOnce() const;
+    bool once() const;
+    void setOnce(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPassive() const;
+    bool passive() const;
+    void setPassive(bool);
 
- private:
-  bool m_hasOnce = false;
-  bool m_once;
-  bool m_hasPassive = false;
-  bool m_passive;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AddEventListenerOptions;
+private:
+    bool m_hasOnce = false;
+    bool m_once;
+    bool m_hasPassive = false;
+    bool m_passive;
+
+    friend class V8AddEventListenerOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AddEventListenerOptions_h
+#endif // AddEventListenerOptions_h

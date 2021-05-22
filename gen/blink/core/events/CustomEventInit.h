@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CustomEventInit_h
 #define CustomEventInit_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class CORE_EXPORT CustomEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CustomEventInit();
-  virtual ~CustomEventInit();
-  CustomEventInit(const CustomEventInit&);
-  CustomEventInit& operator=(const CustomEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDetail() const;
-  ScriptValue detail() const;
-  void setDetail(ScriptValue);
+public:
+    CustomEventInit();
+    virtual ~CustomEventInit();
+    CustomEventInit(const CustomEventInit&);
+    CustomEventInit& operator=(const CustomEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasDetail() const;
+    ScriptValue detail() const;
+    void setDetail(ScriptValue);
 
- private:
-  ScriptValue m_detail;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8CustomEventInit;
+private:
+    ScriptValue m_detail;
+
+    friend class V8CustomEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // CustomEventInit_h
+#endif // CustomEventInit_h

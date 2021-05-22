@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PhotoSettings_h
 #define V8PhotoSettings_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8PhotoSettings {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PhotoSettings&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PhotoSettings&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8PhotoSettings(const PhotoSettings&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PhotoSettings& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PhotoSettings& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<PhotoSettings> {
-  static PhotoSettings nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static PhotoSettings nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<PhotoSettings> {
-  typedef V8PhotoSettings Type;
+    typedef V8PhotoSettings Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PhotoSettings_h
+#endif // V8PhotoSettings_h

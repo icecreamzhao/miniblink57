@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8KeyframeEffectReadOnly_h
 #define V8KeyframeEffectReadOnly_h
 
@@ -26,32 +26,36 @@
 namespace blink {
 
 class V8KeyframeEffectReadOnly {
-  STATIC_ONLY(V8KeyframeEffectReadOnly);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static KeyframeEffectReadOnly* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<KeyframeEffectReadOnly>();
-  }
-  CORE_EXPORT static KeyframeEffectReadOnly* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<KeyframeEffectReadOnly>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<KeyframeEffectReadOnly>());
-  }
-  static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8KeyframeEffectReadOnly);
+
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static KeyframeEffectReadOnly* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<KeyframeEffectReadOnly>();
+    }
+    CORE_EXPORT static KeyframeEffectReadOnly* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<KeyframeEffectReadOnly>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<KeyframeEffectReadOnly>());
+    }
+    static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<KeyframeEffectReadOnly> {
-  typedef V8KeyframeEffectReadOnly Type;
+    typedef V8KeyframeEffectReadOnly Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8KeyframeEffectReadOnly_h
+#endif // V8KeyframeEffectReadOnly_h

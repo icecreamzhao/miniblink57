@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCSessionDescriptionInit_h
 #define RTCSessionDescriptionInit_h
 
@@ -20,31 +20,32 @@
 namespace blink {
 
 class MODULES_EXPORT RTCSessionDescriptionInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCSessionDescriptionInit();
-  virtual ~RTCSessionDescriptionInit();
-  RTCSessionDescriptionInit(const RTCSessionDescriptionInit&);
-  RTCSessionDescriptionInit& operator=(const RTCSessionDescriptionInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasSdp() const;
-  String sdp() const;
-  void setSdp(String);
+public:
+    RTCSessionDescriptionInit();
+    virtual ~RTCSessionDescriptionInit();
+    RTCSessionDescriptionInit(const RTCSessionDescriptionInit&);
+    RTCSessionDescriptionInit& operator=(const RTCSessionDescriptionInit&);
 
-  bool hasType() const;
-  String type() const;
-  void setType(String);
+    bool hasSdp() const;
+    String sdp() const;
+    void setSdp(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasType() const;
+    String type() const;
+    void setType(String);
 
- private:
-  String m_sdp;
-  String m_type;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCSessionDescriptionInit;
+private:
+    String m_sdp;
+    String m_type;
+
+    friend class V8RTCSessionDescriptionInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCSessionDescriptionInit_h
+#endif // RTCSessionDescriptionInit_h

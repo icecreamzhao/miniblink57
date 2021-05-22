@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DevToolsHost.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,188 +48,212 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DevToolsHost::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DevToolsHost is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DevToolsHostV8Internal {
 
-static void zoomFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void zoomFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->zoomFactor());
-}
+        v8SetReturnValue(info, impl->zoomFactor());
+    }
 
-CORE_EXPORT  void zoomFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostV8Internal::zoomFactorMethod(info);
-}
+    CORE_EXPORT void zoomFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostV8Internal::zoomFactorMethod(info);
+    }
 
-static void setInjectedScriptForOriginMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void setInjectedScriptForOriginMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setInjectedScriptForOrigin", "DevToolsHost", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setInjectedScriptForOrigin", "DevToolsHost", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<> origin;
-  V8StringResource<> script;
-  origin = info[0];
-  if (!origin.prepare())
-    return;
+        V8StringResource<> origin;
+        V8StringResource<> script;
+        origin = info[0];
+        if (!origin.prepare())
+            return;
 
-  script = info[1];
-  if (!script.prepare())
-    return;
+        script = info[1];
+        if (!script.prepare())
+            return;
 
-  impl->setInjectedScriptForOrigin(origin, script);
-}
+        impl->setInjectedScriptForOrigin(origin, script);
+    }
 
-CORE_EXPORT  void setInjectedScriptForOriginMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostV8Internal::setInjectedScriptForOriginMethod(info);
-}
+    CORE_EXPORT void setInjectedScriptForOriginMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostV8Internal::setInjectedScriptForOriginMethod(info);
+    }
 
-static void copyTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void copyTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("copyText", "DevToolsHost", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("copyText", "DevToolsHost", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> text;
-  text = info[0];
-  if (!text.prepare())
-    return;
+        V8StringResource<> text;
+        text = info[0];
+        if (!text.prepare())
+            return;
 
-  impl->copyText(text);
-}
+        impl->copyText(text);
+    }
 
-CORE_EXPORT  void copyTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostV8Internal::copyTextMethod(info);
-}
+    CORE_EXPORT void copyTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostV8Internal::copyTextMethod(info);
+    }
 
-CORE_EXPORT  void platformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  V8DevToolsHost::platformMethodCustom(info);
-}
+    CORE_EXPORT void platformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        V8DevToolsHost::platformMethodCustom(info);
+    }
 
-CORE_EXPORT  void showContextMenuAtPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  V8DevToolsHost::showContextMenuAtPointMethodCustom(info);
-}
+    CORE_EXPORT void showContextMenuAtPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        V8DevToolsHost::showContextMenuAtPointMethodCustom(info);
+    }
 
-static void sendMessageToEmbedderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void sendMessageToEmbedderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("sendMessageToEmbedder", "DevToolsHost", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("sendMessageToEmbedder", "DevToolsHost", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> message;
-  message = info[0];
-  if (!message.prepare())
-    return;
+        V8StringResource<> message;
+        message = info[0];
+        if (!message.prepare())
+            return;
 
-  impl->sendMessageToEmbedder(message);
-}
+        impl->sendMessageToEmbedder(message);
+    }
 
-CORE_EXPORT  void sendMessageToEmbedderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostV8Internal::sendMessageToEmbedderMethod(info);
-}
+    CORE_EXPORT void sendMessageToEmbedderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostV8Internal::sendMessageToEmbedderMethod(info);
+    }
 
-static void getSelectionBackgroundColorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void getSelectionBackgroundColorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  v8SetReturnValueString(info, impl->getSelectionBackgroundColor(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getSelectionBackgroundColor(), info.GetIsolate());
+    }
 
-CORE_EXPORT  void getSelectionBackgroundColorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostV8Internal::getSelectionBackgroundColorMethod(info);
-}
+    CORE_EXPORT void getSelectionBackgroundColorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostV8Internal::getSelectionBackgroundColorMethod(info);
+    }
 
-static void getSelectionForegroundColorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void getSelectionForegroundColorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  v8SetReturnValueString(info, impl->getSelectionForegroundColor(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getSelectionForegroundColor(), info.GetIsolate());
+    }
 
-CORE_EXPORT  void getSelectionForegroundColorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostV8Internal::getSelectionForegroundColorMethod(info);
-}
+    CORE_EXPORT void getSelectionForegroundColorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostV8Internal::getSelectionForegroundColorMethod(info);
+    }
 
-static void isUnderTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void isUnderTestMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  v8SetReturnValueBool(info, impl->isUnderTest());
-}
+        v8SetReturnValueBool(info, impl->isUnderTest());
+    }
 
-CORE_EXPORT  void isUnderTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostV8Internal::isUnderTestMethod(info);
-}
+    CORE_EXPORT void isUnderTestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostV8Internal::isUnderTestMethod(info);
+    }
 
-static void isHostedModeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
+    static void isHostedModeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHost* impl = V8DevToolsHost::toImpl(info.Holder());
 
-  v8SetReturnValueBool(info, impl->isHostedMode());
-}
+        v8SetReturnValueBool(info, impl->isHostedMode());
+    }
 
-CORE_EXPORT  void isHostedModeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DevToolsHostV8Internal::isHostedModeMethod(info);
-}
+    CORE_EXPORT void isHostedModeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DevToolsHostV8Internal::isHostedModeMethod(info);
+    }
 
 } // namespace DevToolsHostV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8DevToolsHostMethods[] = {
-    {"zoomFactor", DevToolsHostV8Internal::zoomFactorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setInjectedScriptForOrigin", DevToolsHostV8Internal::setInjectedScriptForOriginMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"copyText", DevToolsHostV8Internal::copyTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"platform", DevToolsHostV8Internal::platformMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"showContextMenuAtPoint", DevToolsHostV8Internal::showContextMenuAtPointMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sendMessageToEmbedder", DevToolsHostV8Internal::sendMessageToEmbedderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getSelectionBackgroundColor", DevToolsHostV8Internal::getSelectionBackgroundColorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getSelectionForegroundColor", DevToolsHostV8Internal::getSelectionForegroundColorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isUnderTest", DevToolsHostV8Internal::isUnderTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isHostedMode", DevToolsHostV8Internal::isHostedModeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "zoomFactor", DevToolsHostV8Internal::zoomFactorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setInjectedScriptForOrigin", DevToolsHostV8Internal::setInjectedScriptForOriginMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "copyText", DevToolsHostV8Internal::copyTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "platform", DevToolsHostV8Internal::platformMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "showContextMenuAtPoint", DevToolsHostV8Internal::showContextMenuAtPointMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sendMessageToEmbedder", DevToolsHostV8Internal::sendMessageToEmbedderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getSelectionBackgroundColor", DevToolsHostV8Internal::getSelectionBackgroundColorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getSelectionForegroundColor", DevToolsHostV8Internal::getSelectionForegroundColorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isUnderTest", DevToolsHostV8Internal::isUnderTestMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isHostedMode", DevToolsHostV8Internal::isHostedModeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8DevToolsHost::installV8DevToolsHostTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DevToolsHost::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DevToolsHost::internalFieldCount);
+void V8DevToolsHost::installV8DevToolsHostTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DevToolsHost::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DevToolsHost::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DevToolsHostMethods, WTF_ARRAY_LENGTH(V8DevToolsHostMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DevToolsHostMethods, WTF_ARRAY_LENGTH(V8DevToolsHostMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DevToolsHost::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8DevToolsHost::installV8DevToolsHostTemplateFunction);
+v8::Local<v8::FunctionTemplate> V8DevToolsHost::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8DevToolsHost::installV8DevToolsHostTemplateFunction);
 }
 
-bool V8DevToolsHost::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DevToolsHost::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DevToolsHost::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DevToolsHost::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DevToolsHost* V8DevToolsHost::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DevToolsHost* V8DevToolsHost::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
 InstallTemplateFunction V8DevToolsHost::installV8DevToolsHostTemplateFunction = (InstallTemplateFunction)&V8DevToolsHost::installV8DevToolsHostTemplate;
 
-void V8DevToolsHost::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction) {
-  V8DevToolsHost::installV8DevToolsHostTemplateFunction = installTemplateFunction;
-  if (preparePrototypeAndInterfaceObjectFunction)
-    V8DevToolsHost::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
+void V8DevToolsHost::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction)
+{
+    V8DevToolsHost::installV8DevToolsHostTemplateFunction = installTemplateFunction;
+    if (preparePrototypeAndInterfaceObjectFunction)
+        V8DevToolsHost::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
 }
 
-}  // namespace blink
+} // namespace blink

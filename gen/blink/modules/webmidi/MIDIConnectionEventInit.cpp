@@ -8,38 +8,44 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MIDIConnectionEventInit.h"
 
 #include "modules/webmidi/MIDIPort.h"
 
 namespace blink {
 
-MIDIConnectionEventInit::MIDIConnectionEventInit() {
+MIDIConnectionEventInit::MIDIConnectionEventInit()
+{
 }
 
-MIDIConnectionEventInit::~MIDIConnectionEventInit() {}
+MIDIConnectionEventInit::~MIDIConnectionEventInit() { }
 
 MIDIConnectionEventInit::MIDIConnectionEventInit(const MIDIConnectionEventInit&) = default;
 
 MIDIConnectionEventInit& MIDIConnectionEventInit::operator=(const MIDIConnectionEventInit&) = default;
 
-bool MIDIConnectionEventInit::hasPort() const {
-  return m_port;
+bool MIDIConnectionEventInit::hasPort() const
+{
+    return m_port;
 }
-MIDIPort* MIDIConnectionEventInit::port() const {
-  return m_port;
+MIDIPort* MIDIConnectionEventInit::port() const
+{
+    return m_port;
 }
-void MIDIConnectionEventInit::setPort(MIDIPort* value) {
-  m_port = value;
+void MIDIConnectionEventInit::setPort(MIDIPort* value)
+{
+    m_port = value;
 }
-void MIDIConnectionEventInit::setPortToNull() {
-  m_port = Member<MIDIPort>();
+void MIDIConnectionEventInit::setPortToNull()
+{
+    m_port = Member<MIDIPort>();
 }
 
-DEFINE_TRACE(MIDIConnectionEventInit) {
-  visitor->trace(m_port);
-  EventInit::trace(visitor);
+DEFINE_TRACE(MIDIConnectionEventInit)
+{
+    visitor->trace(m_port);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "StringOrStringSequenceOrDOMStringList.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -16,117 +16,133 @@
 
 namespace blink {
 
-StringOrStringSequenceOrDOMStringList::StringOrStringSequenceOrDOMStringList() : m_type(SpecificTypeNone) {}
-
-String StringOrStringSequenceOrDOMStringList::getAsString() const {
-  DCHECK(isString());
-  return m_string;
+StringOrStringSequenceOrDOMStringList::StringOrStringSequenceOrDOMStringList()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void StringOrStringSequenceOrDOMStringList::setString(String value) {
-  DCHECK(isNull());
-  m_string = value;
-  m_type = SpecificTypeString;
+String StringOrStringSequenceOrDOMStringList::getAsString() const
+{
+    DCHECK(isString());
+    return m_string;
 }
 
-StringOrStringSequenceOrDOMStringList StringOrStringSequenceOrDOMStringList::fromString(String value) {
-  StringOrStringSequenceOrDOMStringList container;
-  container.setString(value);
-  return container;
+void StringOrStringSequenceOrDOMStringList::setString(String value)
+{
+    DCHECK(isNull());
+    m_string = value;
+    m_type = SpecificTypeString;
 }
 
-const Vector<String>& StringOrStringSequenceOrDOMStringList::getAsStringSequence() const {
-  DCHECK(isStringSequence());
-  return m_stringSequence;
+StringOrStringSequenceOrDOMStringList StringOrStringSequenceOrDOMStringList::fromString(String value)
+{
+    StringOrStringSequenceOrDOMStringList container;
+    container.setString(value);
+    return container;
 }
 
-void StringOrStringSequenceOrDOMStringList::setStringSequence(const Vector<String>& value) {
-  DCHECK(isNull());
-  m_stringSequence = value;
-  m_type = SpecificTypeStringSequence;
+const Vector<String>& StringOrStringSequenceOrDOMStringList::getAsStringSequence() const
+{
+    DCHECK(isStringSequence());
+    return m_stringSequence;
 }
 
-StringOrStringSequenceOrDOMStringList StringOrStringSequenceOrDOMStringList::fromStringSequence(const Vector<String>& value) {
-  StringOrStringSequenceOrDOMStringList container;
-  container.setStringSequence(value);
-  return container;
+void StringOrStringSequenceOrDOMStringList::setStringSequence(const Vector<String>& value)
+{
+    DCHECK(isNull());
+    m_stringSequence = value;
+    m_type = SpecificTypeStringSequence;
 }
 
-DOMStringList* StringOrStringSequenceOrDOMStringList::getAsDOMStringList() const {
-  DCHECK(isDOMStringList());
-  return m_dOMStringList;
+StringOrStringSequenceOrDOMStringList StringOrStringSequenceOrDOMStringList::fromStringSequence(const Vector<String>& value)
+{
+    StringOrStringSequenceOrDOMStringList container;
+    container.setStringSequence(value);
+    return container;
 }
 
-void StringOrStringSequenceOrDOMStringList::setDOMStringList(DOMStringList* value) {
-  DCHECK(isNull());
-  m_dOMStringList = value;
-  m_type = SpecificTypeDOMStringList;
+DOMStringList* StringOrStringSequenceOrDOMStringList::getAsDOMStringList() const
+{
+    DCHECK(isDOMStringList());
+    return m_dOMStringList;
 }
 
-StringOrStringSequenceOrDOMStringList StringOrStringSequenceOrDOMStringList::fromDOMStringList(DOMStringList* value) {
-  StringOrStringSequenceOrDOMStringList container;
-  container.setDOMStringList(value);
-  return container;
+void StringOrStringSequenceOrDOMStringList::setDOMStringList(DOMStringList* value)
+{
+    DCHECK(isNull());
+    m_dOMStringList = value;
+    m_type = SpecificTypeDOMStringList;
+}
+
+StringOrStringSequenceOrDOMStringList StringOrStringSequenceOrDOMStringList::fromDOMStringList(DOMStringList* value)
+{
+    StringOrStringSequenceOrDOMStringList container;
+    container.setDOMStringList(value);
+    return container;
 }
 
 StringOrStringSequenceOrDOMStringList::StringOrStringSequenceOrDOMStringList(const StringOrStringSequenceOrDOMStringList&) = default;
 StringOrStringSequenceOrDOMStringList::~StringOrStringSequenceOrDOMStringList() = default;
 StringOrStringSequenceOrDOMStringList& StringOrStringSequenceOrDOMStringList::operator=(const StringOrStringSequenceOrDOMStringList&) = default;
 
-DEFINE_TRACE(StringOrStringSequenceOrDOMStringList) {
-  visitor->trace(m_dOMStringList);
+DEFINE_TRACE(StringOrStringSequenceOrDOMStringList)
+{
+    visitor->trace(m_dOMStringList);
 }
 
-void V8StringOrStringSequenceOrDOMStringList::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, StringOrStringSequenceOrDOMStringList& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8StringOrStringSequenceOrDOMStringList::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, StringOrStringSequenceOrDOMStringList& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8DOMStringList::hasInstance(v8Value, isolate)) {
-    DOMStringList* cppValue = V8DOMStringList::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setDOMStringList(cppValue);
-    return;
-  }
+    if (V8DOMStringList::hasInstance(v8Value, isolate)) {
+        DOMStringList* cppValue = V8DOMStringList::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setDOMStringList(cppValue);
+        return;
+    }
 
-  if (v8Value->IsArray()) {
-    Vector<String> cppValue = toImplArray<Vector<String>>(v8Value, 0, isolate, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setStringSequence(cppValue);
-    return;
-  }
+    if (v8Value->IsArray()) {
+        Vector<String> cppValue = toImplArray<Vector<String>>(v8Value, 0, isolate, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setStringSequence(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = v8Value;
-    if (!cppValue.prepare(exceptionState))
-      return;
-    impl.setString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare(exceptionState))
+            return;
+        impl.setString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const StringOrStringSequenceOrDOMStringList& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const StringOrStringSequenceOrDOMStringList& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case StringOrStringSequenceOrDOMStringList::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case StringOrStringSequenceOrDOMStringList::SpecificTypeString:
-      return v8String(isolate, impl.getAsString());
+        return v8String(isolate, impl.getAsString());
     case StringOrStringSequenceOrDOMStringList::SpecificTypeStringSequence:
-      return ToV8(impl.getAsStringSequence(), creationContext, isolate);
+        return ToV8(impl.getAsStringSequence(), creationContext, isolate);
     case StringOrStringSequenceOrDOMStringList::SpecificTypeDOMStringList:
-      return ToV8(impl.getAsDOMStringList(), creationContext, isolate);
+        return ToV8(impl.getAsDOMStringList(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-StringOrStringSequenceOrDOMStringList NativeValueTraits<StringOrStringSequenceOrDOMStringList>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  StringOrStringSequenceOrDOMStringList impl;
-  V8StringOrStringSequenceOrDOMStringList::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+StringOrStringSequenceOrDOMStringList NativeValueTraits<StringOrStringSequenceOrDOMStringList>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    StringOrStringSequenceOrDOMStringList impl;
+    V8StringOrStringSequenceOrDOMStringList::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

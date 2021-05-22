@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AccelerometerReadingInit_h
 #define V8AccelerometerReadingInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8AccelerometerReadingInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AccelerometerReadingInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AccelerometerReadingInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8AccelerometerReadingInit(const AccelerometerReadingInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AccelerometerReadingInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AccelerometerReadingInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<AccelerometerReadingInit> {
-  static AccelerometerReadingInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static AccelerometerReadingInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<AccelerometerReadingInit> {
-  typedef V8AccelerometerReadingInit Type;
+    typedef V8AccelerometerReadingInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8AccelerometerReadingInit_h
+#endif // V8AccelerometerReadingInit_h

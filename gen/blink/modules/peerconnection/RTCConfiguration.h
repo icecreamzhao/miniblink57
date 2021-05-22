@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCConfiguration_h
 #define RTCConfiguration_h
 
@@ -24,53 +24,54 @@ namespace blink {
 class RTCCertificate;
 
 class MODULES_EXPORT RTCConfiguration : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCConfiguration();
-  virtual ~RTCConfiguration();
-  RTCConfiguration(const RTCConfiguration&);
-  RTCConfiguration& operator=(const RTCConfiguration&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasBundlePolicy() const;
-  String bundlePolicy() const;
-  void setBundlePolicy(String);
+public:
+    RTCConfiguration();
+    virtual ~RTCConfiguration();
+    RTCConfiguration(const RTCConfiguration&);
+    RTCConfiguration& operator=(const RTCConfiguration&);
 
-  bool hasCertificates() const;
-  const HeapVector<Member<RTCCertificate>>& certificates() const;
-  void setCertificates(const HeapVector<Member<RTCCertificate>>&);
+    bool hasBundlePolicy() const;
+    String bundlePolicy() const;
+    void setBundlePolicy(String);
 
-  bool hasIceServers() const;
-  const HeapVector<RTCIceServer>& iceServers() const;
-  void setIceServers(const HeapVector<RTCIceServer>&);
+    bool hasCertificates() const;
+    const HeapVector<Member<RTCCertificate>>& certificates() const;
+    void setCertificates(const HeapVector<Member<RTCCertificate>>&);
 
-  bool hasIceTransportPolicy() const;
-  String iceTransportPolicy() const;
-  void setIceTransportPolicy(String);
+    bool hasIceServers() const;
+    const HeapVector<RTCIceServer>& iceServers() const;
+    void setIceServers(const HeapVector<RTCIceServer>&);
 
-  bool hasIceTransports() const;
-  String iceTransports() const;
-  void setIceTransports(String);
+    bool hasIceTransportPolicy() const;
+    String iceTransportPolicy() const;
+    void setIceTransportPolicy(String);
 
-  bool hasRtcpMuxPolicy() const;
-  String rtcpMuxPolicy() const;
-  void setRtcpMuxPolicy(String);
+    bool hasIceTransports() const;
+    String iceTransports() const;
+    void setIceTransports(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRtcpMuxPolicy() const;
+    String rtcpMuxPolicy() const;
+    void setRtcpMuxPolicy(String);
 
- private:
-  String m_bundlePolicy;
-  bool m_hasCertificates = false;
-  HeapVector<Member<RTCCertificate>> m_certificates;
-  bool m_hasIceServers = false;
-  HeapVector<RTCIceServer> m_iceServers;
-  String m_iceTransportPolicy;
-  String m_iceTransports;
-  String m_rtcpMuxPolicy;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCConfiguration;
+private:
+    String m_bundlePolicy;
+    bool m_hasCertificates = false;
+    HeapVector<Member<RTCCertificate>> m_certificates;
+    bool m_hasIceServers = false;
+    HeapVector<RTCIceServer> m_iceServers;
+    String m_iceTransportPolicy;
+    String m_iceTransports;
+    String m_rtcpMuxPolicy;
+
+    friend class V8RTCConfiguration;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCConfiguration_h
+#endif // RTCConfiguration_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CSSNamespaceRule.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,75 +45,84 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CSSNamespaceRule::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CSSNamespaceRule is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CSSNamespaceRuleV8Internal {
 
-static void namespaceURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    static void namespaceURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
 
-  v8::Local<v8::Object> holder = info.Holder();
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSNamespaceRule* impl = V8CSSNamespaceRule::toImpl(holder);
+        CSSNamespaceRule* impl = V8CSSNamespaceRule::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->namespaceURI(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->namespaceURI(), info.GetIsolate());
+    }
 
-CORE_EXPORT void namespaceURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    CORE_EXPORT void namespaceURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
 
-  CSSNamespaceRuleV8Internal::namespaceURIAttributeGetter(info);
-}
+        CSSNamespaceRuleV8Internal::namespaceURIAttributeGetter(info);
+    }
 
-static void prefixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void prefixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSNamespaceRule* impl = V8CSSNamespaceRule::toImpl(holder);
+        CSSNamespaceRule* impl = V8CSSNamespaceRule::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->prefix(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->prefix(), info.GetIsolate());
+    }
 
-CORE_EXPORT void prefixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSNamespaceRuleV8Internal::prefixAttributeGetter(info);
-}
+    CORE_EXPORT void prefixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSNamespaceRuleV8Internal::prefixAttributeGetter(info);
+    }
 
 } // namespace CSSNamespaceRuleV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CSSNamespaceRuleAccessors[] = {
-    {"namespaceURI", CSSNamespaceRuleV8Internal::namespaceURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"prefix", CSSNamespaceRuleV8Internal::prefixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "namespaceURI", CSSNamespaceRuleV8Internal::namespaceURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "prefix", CSSNamespaceRuleV8Internal::prefixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CSSNamespaceRuleTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSNamespaceRule::wrapperTypeInfo.interfaceName, V8CSSRule::domTemplate(isolate, world), V8CSSNamespaceRule::internalFieldCount);
+static void installV8CSSNamespaceRuleTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSNamespaceRule::wrapperTypeInfo.interfaceName, V8CSSRule::domTemplate(isolate, world), V8CSSNamespaceRule::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSNamespaceRuleAccessors, WTF_ARRAY_LENGTH(V8CSSNamespaceRuleAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSNamespaceRuleAccessors, WTF_ARRAY_LENGTH(V8CSSNamespaceRuleAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8CSSNamespaceRule::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSNamespaceRuleTemplate);
+v8::Local<v8::FunctionTemplate> V8CSSNamespaceRule::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSNamespaceRuleTemplate);
 }
 
-bool V8CSSNamespaceRule::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CSSNamespaceRule::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CSSNamespaceRule::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CSSNamespaceRule::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CSSNamespaceRule* V8CSSNamespaceRule::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CSSNamespaceRule* V8CSSNamespaceRule::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

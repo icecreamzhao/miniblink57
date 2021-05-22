@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Float32ImageData.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,320 +52,340 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Float32ImageData::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Float32ImageData is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace Float32ImageDataV8Internal {
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Float32ImageData* impl = V8Float32ImageData::toImpl(holder);
+        Float32ImageData* impl = V8Float32ImageData::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->width());
-}
+        v8SetReturnValueUnsigned(info, impl->width());
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Float32ImageDataV8Internal::widthAttributeGetter(info);
-}
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Float32ImageDataV8Internal::widthAttributeGetter(info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Float32ImageData* impl = V8Float32ImageData::toImpl(holder);
+        Float32ImageData* impl = V8Float32ImageData::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->height());
-}
+        v8SetReturnValueUnsigned(info, impl->height());
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Float32ImageDataV8Internal::heightAttributeGetter(info);
-}
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Float32ImageDataV8Internal::heightAttributeGetter(info);
+    }
 
-static void dataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Float32ImageData* impl = V8Float32ImageData::toImpl(holder);
+        Float32ImageData* impl = V8Float32ImageData::toImpl(holder);
 
-  DOMFloat32Array* cppValue(WTF::getPtr(impl->data()));
+        DOMFloat32Array* cppValue(WTF::getPtr(impl->data()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Float32ImageData#data";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Float32ImageData#data";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void dataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Float32ImageDataV8Internal::dataAttributeGetter(info);
-}
+    CORE_EXPORT void dataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Float32ImageDataV8Internal::dataAttributeGetter(info);
+    }
 
-static void colorSpaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void colorSpaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Float32ImageData* impl = V8Float32ImageData::toImpl(holder);
+        Float32ImageData* impl = V8Float32ImageData::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->colorSpace(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->colorSpace(), info.GetIsolate());
+    }
 
-CORE_EXPORT void colorSpaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Float32ImageDataV8Internal::colorSpaceAttributeGetter(info);
-}
+    CORE_EXPORT void colorSpaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Float32ImageDataV8Internal::colorSpaceAttributeGetter(info);
+    }
 
-static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
+    static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
 
-  unsigned sw;
-  unsigned sh;
-  sw = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned sw;
+        unsigned sh;
+        sw = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  sh = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        sh = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  Float32ImageData* impl = Float32ImageData::create(sw, sh, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Float32ImageData* impl = Float32ImageData::create(sw, sh, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
+    static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
 
-  unsigned sw;
-  unsigned sh;
-  V8StringResource<> colorSpace;
-  sw = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned sw;
+        unsigned sh;
+        V8StringResource<> colorSpace;
+        sw = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  sh = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        sh = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  colorSpace = info[2];
-  if (!colorSpace.prepare())
-    return;
-  const char* validColorSpaceValues[] = {
-      "legacy-srgb",
-      "srgb",
-      "linear-rgb",
-  };
-  if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
-    return;
-  }
+        colorSpace = info[2];
+        if (!colorSpace.prepare())
+            return;
+        const char* validColorSpaceValues[] = {
+            "legacy-srgb",
+            "srgb",
+            "linear-rgb",
+        };
+        if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
+            return;
+        }
 
-  Float32ImageData* impl = Float32ImageData::create(sw, sh, colorSpace, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Float32ImageData* impl = Float32ImageData::create(sw, sh, colorSpace, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor3(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
+    static void constructor3(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
 
-  DOMFloat32Array* data;
-  unsigned sw;
-  data = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
+        DOMFloat32Array* data;
+        unsigned sw;
+        data = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
 
-    return;
-  }
+            return;
+        }
 
-  sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  Float32ImageData* impl = Float32ImageData::create(data, sw, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Float32ImageData* impl = Float32ImageData::create(data, sw, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor4(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
+    static void constructor4(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
 
-  DOMFloat32Array* data;
-  unsigned sw;
-  unsigned sh;
-  data = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
+        DOMFloat32Array* data;
+        unsigned sw;
+        unsigned sh;
+        data = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
 
-    return;
-  }
+            return;
+        }
 
-  sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  sh = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        sh = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  Float32ImageData* impl = Float32ImageData::create(data, sw, sh, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Float32ImageData* impl = Float32ImageData::create(data, sw, sh, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor5(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
+    static void constructor5(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
 
-  DOMFloat32Array* data;
-  unsigned sw;
-  unsigned sh;
-  V8StringResource<> colorSpace;
-  data = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
+        DOMFloat32Array* data;
+        unsigned sw;
+        unsigned sh;
+        V8StringResource<> colorSpace;
+        data = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
 
-    return;
-  }
+            return;
+        }
 
-  sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  sh = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        sh = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  colorSpace = info[3];
-  if (!colorSpace.prepare())
-    return;
-  const char* validColorSpaceValues[] = {
-      "legacy-srgb",
-      "srgb",
-      "linear-rgb",
-  };
-  if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
-    return;
-  }
+        colorSpace = info[3];
+        if (!colorSpace.prepare())
+            return;
+        const char* validColorSpaceValues[] = {
+            "legacy-srgb",
+            "srgb",
+            "linear-rgb",
+        };
+        if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
+            return;
+        }
 
-  Float32ImageData* impl = Float32ImageData::create(data, sw, sh, colorSpace, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Float32ImageData* impl = Float32ImageData::create(data, sw, sh, colorSpace, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Float32ImageData::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
-  switch (std::min(4, info.Length())) {
-    case 2:
-      if (info[0]->IsFloat32Array()) {
-        Float32ImageDataV8Internal::constructor3(info);
-        return;
-      }
-      if (true) {
-        Float32ImageDataV8Internal::constructor1(info);
-        return;
-      }
-      break;
-    case 3:
-      if (info[0]->IsFloat32Array()) {
-        Float32ImageDataV8Internal::constructor4(info);
-        return;
-      }
-      if (true) {
-        Float32ImageDataV8Internal::constructor2(info);
-        return;
-      }
-      break;
-    case 4:
-      if (true) {
-        Float32ImageDataV8Internal::constructor5(info);
-        return;
-      }
-      break;
-    default:
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
-  }
-  exceptionState.throwTypeError("No matching constructor signature.");
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Float32ImageData");
+        switch (std::min(4, info.Length())) {
+        case 2:
+            if (info[0]->IsFloat32Array()) {
+                Float32ImageDataV8Internal::constructor3(info);
+                return;
+            }
+            if (true) {
+                Float32ImageDataV8Internal::constructor1(info);
+                return;
+            }
+            break;
+        case 3:
+            if (info[0]->IsFloat32Array()) {
+                Float32ImageDataV8Internal::constructor4(info);
+                return;
+            }
+            if (true) {
+                Float32ImageDataV8Internal::constructor2(info);
+                return;
+            }
+            break;
+        case 4:
+            if (true) {
+                Float32ImageDataV8Internal::constructor5(info);
+                return;
+            }
+            break;
+        default:
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+        exceptionState.throwTypeError("No matching constructor signature.");
+    }
 
 } // namespace Float32ImageDataV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8Float32ImageDataAccessors[] = {
-    {"width", Float32ImageDataV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", Float32ImageDataV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"data", Float32ImageDataV8Internal::dataAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"colorSpace", Float32ImageDataV8Internal::colorSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "width", Float32ImageDataV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", Float32ImageDataV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "data", Float32ImageDataV8Internal::dataAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "colorSpace", Float32ImageDataV8Internal::colorSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8Float32ImageData::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Float32ImageData"));
-    return;
-  }
+void V8Float32ImageData::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Float32ImageData"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  Float32ImageDataV8Internal::constructor(info);
+    Float32ImageDataV8Internal::constructor(info);
 }
 
-static void installV8Float32ImageDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Float32ImageData::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Float32ImageData::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8Float32ImageData::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8Float32ImageDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Float32ImageData::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Float32ImageData::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8Float32ImageData::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  if (!RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8Float32ImageDataAccessors, WTF_ARRAY_LENGTH(V8Float32ImageDataAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8Float32ImageDataAccessors, WTF_ARRAY_LENGTH(V8Float32ImageDataAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8Float32ImageData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8Float32ImageDataTemplate);
+v8::Local<v8::FunctionTemplate> V8Float32ImageData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8Float32ImageDataTemplate);
 }
 
-bool V8Float32ImageData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Float32ImageData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Float32ImageData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Float32ImageData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Float32ImageData* V8Float32ImageData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Float32ImageData* V8Float32ImageData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

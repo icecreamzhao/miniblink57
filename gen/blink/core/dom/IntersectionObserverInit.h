@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef IntersectionObserverInit_h
 #define IntersectionObserverInit_h
 
@@ -24,37 +24,38 @@ namespace blink {
 class Element;
 
 class CORE_EXPORT IntersectionObserverInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  IntersectionObserverInit();
-  virtual ~IntersectionObserverInit();
-  IntersectionObserverInit(const IntersectionObserverInit&);
-  IntersectionObserverInit& operator=(const IntersectionObserverInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasRoot() const;
-  Element* root() const;
-  void setRoot(Element*);
-  void setRootToNull();
+public:
+    IntersectionObserverInit();
+    virtual ~IntersectionObserverInit();
+    IntersectionObserverInit(const IntersectionObserverInit&);
+    IntersectionObserverInit& operator=(const IntersectionObserverInit&);
 
-  bool hasRootMargin() const;
-  String rootMargin() const;
-  void setRootMargin(String);
+    bool hasRoot() const;
+    Element* root() const;
+    void setRoot(Element*);
+    void setRootToNull();
 
-  bool hasThreshold() const;
-  const DoubleOrDoubleSequence& threshold() const;
-  void setThreshold(const DoubleOrDoubleSequence&);
+    bool hasRootMargin() const;
+    String rootMargin() const;
+    void setRootMargin(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasThreshold() const;
+    const DoubleOrDoubleSequence& threshold() const;
+    void setThreshold(const DoubleOrDoubleSequence&);
 
- private:
-  Member<Element> m_root;
-  String m_rootMargin;
-  DoubleOrDoubleSequence m_threshold;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8IntersectionObserverInit;
+private:
+    Member<Element> m_root;
+    String m_rootMargin;
+    DoubleOrDoubleSequence m_threshold;
+
+    friend class V8IntersectionObserverInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // IntersectionObserverInit_h
+#endif // IntersectionObserverInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WebGLCompressedTextureETC1.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,7 +47,7 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WebGLCompressedTextureETC1::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WebGLCompressedTextureETC1 is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
@@ -56,48 +56,54 @@ namespace WebGLCompressedTextureETC1V8Internal {
 
 } // namespace WebGLCompressedTextureETC1V8Internal
 
-void V8WebGLCompressedTextureETC1::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  WebGLCompressedTextureETC1* impl = scriptWrappable->toImpl<WebGLCompressedTextureETC1>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8WebGLCompressedTextureETC1::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    WebGLCompressedTextureETC1* impl = scriptWrappable->toImpl<WebGLCompressedTextureETC1>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
-static void installV8WebGLCompressedTextureETC1Template(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLCompressedTextureETC1::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLCompressedTextureETC1::internalFieldCount);
+static void installV8WebGLCompressedTextureETC1Template(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLCompressedTextureETC1::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLCompressedTextureETC1::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8WebGLCompressedTextureETC1Constants[] = {
-      {"COMPRESSED_RGB_ETC1_WEBGL", 0x8D64, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebGLCompressedTextureETC1Constants, WTF_ARRAY_LENGTH(V8WebGLCompressedTextureETC1Constants));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8WebGLCompressedTextureETC1Constants[] = {
+        { "COMPRESSED_RGB_ETC1_WEBGL", 0x8D64, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebGLCompressedTextureETC1Constants, WTF_ARRAY_LENGTH(V8WebGLCompressedTextureETC1Constants));
 }
 
-v8::Local<v8::FunctionTemplate> V8WebGLCompressedTextureETC1::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLCompressedTextureETC1Template);
+v8::Local<v8::FunctionTemplate> V8WebGLCompressedTextureETC1::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLCompressedTextureETC1Template);
 }
 
-bool V8WebGLCompressedTextureETC1::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WebGLCompressedTextureETC1::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WebGLCompressedTextureETC1::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WebGLCompressedTextureETC1::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WebGLCompressedTextureETC1* V8WebGLCompressedTextureETC1::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WebGLCompressedTextureETC1* V8WebGLCompressedTextureETC1::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

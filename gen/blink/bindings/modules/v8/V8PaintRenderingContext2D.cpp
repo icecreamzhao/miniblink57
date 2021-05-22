@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PaintRenderingContext2D.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -58,2099 +58,2245 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PaintRenderingContext2D::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PaintRenderingContext2D is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PaintRenderingContext2DV8Internal {
 
-static void currentTransformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void currentTransformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->currentTransform()), impl);
-}
-
-MODULES_EXPORT void currentTransformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::currentTransformAttributeGetter(info);
-}
-
-static void currentTransformAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "currentTransform");
-
-  // Prepare the value to be set.
-  SVGMatrixTearOff* cppValue = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), v8Value);
-
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue) {
-    exceptionState.throwTypeError("The provided value is not of type 'SVGMatrix'.");
-    return;
-  }
-
-  impl->setCurrentTransform(cppValue);
-}
-
-MODULES_EXPORT void currentTransformAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::currentTransformAttributeSetter(v8Value, info);
-}
-
-static void globalAlphaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->globalAlpha());
-}
-
-MODULES_EXPORT void globalAlphaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::globalAlphaAttributeGetter(info);
-}
-
-static void globalAlphaAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "globalAlpha");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setGlobalAlpha(cppValue);
-}
-
-MODULES_EXPORT void globalAlphaAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::globalAlphaAttributeSetter(v8Value, info);
-}
-
-static void globalCompositeOperationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->globalCompositeOperation(), info.GetIsolate());
-}
-
-MODULES_EXPORT void globalCompositeOperationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::globalCompositeOperationAttributeGetter(info);
-}
-
-static void globalCompositeOperationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setGlobalCompositeOperation(cppValue);
-}
-
-MODULES_EXPORT void globalCompositeOperationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::globalCompositeOperationAttributeSetter(v8Value, info);
-}
-
-static void imageSmoothingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->imageSmoothingEnabled());
-}
-
-MODULES_EXPORT void imageSmoothingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::imageSmoothingEnabledAttributeGetter(info);
-}
-
-static void imageSmoothingEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "imageSmoothingEnabled");
-
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setImageSmoothingEnabled(cppValue);
-}
-
-MODULES_EXPORT void imageSmoothingEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::imageSmoothingEnabledAttributeSetter(v8Value, info);
-}
-
-static void imageSmoothingQualityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->imageSmoothingQuality(), info.GetIsolate());
-}
-
-MODULES_EXPORT void imageSmoothingQualityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::imageSmoothingQualityAttributeGetter(info);
-}
-
-static void imageSmoothingQualityAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "imageSmoothingQuality");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "low",
-      "medium",
-      "high",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "ImageSmoothingQuality", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
-
-  impl->setImageSmoothingQuality(cppValue);
-}
-
-MODULES_EXPORT void imageSmoothingQualityAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::imageSmoothingQualityAttributeSetter(v8Value, info);
-}
-
-static void strokeStyleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  StringOrCanvasGradientOrCanvasPattern result;
-  impl->strokeStyle(result);
-
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT void strokeStyleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::strokeStyleAttributeGetter(info);
-}
-
-static void strokeStyleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "strokeStyle");
-
-  // Prepare the value to be set.
-  StringOrCanvasGradientOrCanvasPattern cppValue;
-  V8StringOrCanvasGradientOrCanvasPattern::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setStrokeStyle(cppValue);
-}
-
-MODULES_EXPORT void strokeStyleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::strokeStyleAttributeSetter(v8Value, info);
-}
-
-static void fillStyleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  StringOrCanvasGradientOrCanvasPattern result;
-  impl->fillStyle(result);
-
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT void fillStyleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::fillStyleAttributeGetter(info);
-}
-
-static void fillStyleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "fillStyle");
-
-  // Prepare the value to be set.
-  StringOrCanvasGradientOrCanvasPattern cppValue;
-  V8StringOrCanvasGradientOrCanvasPattern::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setFillStyle(cppValue);
-}
-
-MODULES_EXPORT void fillStyleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::fillStyleAttributeSetter(v8Value, info);
-}
-
-static void shadowOffsetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->shadowOffsetX());
-}
-
-MODULES_EXPORT void shadowOffsetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::shadowOffsetXAttributeGetter(info);
-}
-
-static void shadowOffsetXAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "shadowOffsetX");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setShadowOffsetX(cppValue);
-}
-
-MODULES_EXPORT void shadowOffsetXAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::shadowOffsetXAttributeSetter(v8Value, info);
-}
-
-static void shadowOffsetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->shadowOffsetY());
-}
-
-MODULES_EXPORT void shadowOffsetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::shadowOffsetYAttributeGetter(info);
-}
-
-static void shadowOffsetYAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "shadowOffsetY");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setShadowOffsetY(cppValue);
-}
-
-MODULES_EXPORT void shadowOffsetYAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::shadowOffsetYAttributeSetter(v8Value, info);
-}
-
-static void shadowBlurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->shadowBlur());
-}
-
-MODULES_EXPORT void shadowBlurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::shadowBlurAttributeGetter(info);
-}
-
-static void shadowBlurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "shadowBlur");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setShadowBlur(cppValue);
-}
-
-MODULES_EXPORT void shadowBlurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::shadowBlurAttributeSetter(v8Value, info);
-}
-
-static void shadowColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->shadowColor(), info.GetIsolate());
-}
-
-MODULES_EXPORT void shadowColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::shadowColorAttributeGetter(info);
-}
-
-static void shadowColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setShadowColor(cppValue);
-}
-
-MODULES_EXPORT void shadowColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::shadowColorAttributeSetter(v8Value, info);
-}
-
-static void lineWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->lineWidth());
-}
-
-MODULES_EXPORT void lineWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::lineWidthAttributeGetter(info);
-}
-
-static void lineWidthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "lineWidth");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setLineWidth(cppValue);
-}
-
-MODULES_EXPORT void lineWidthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::lineWidthAttributeSetter(v8Value, info);
-}
-
-static void lineCapAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->lineCap(), info.GetIsolate());
-}
-
-MODULES_EXPORT void lineCapAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::lineCapAttributeGetter(info);
-}
-
-static void lineCapAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setLineCap(cppValue);
-}
-
-MODULES_EXPORT void lineCapAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::lineCapAttributeSetter(v8Value, info);
-}
-
-static void lineJoinAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->lineJoin(), info.GetIsolate());
-}
-
-MODULES_EXPORT void lineJoinAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::lineJoinAttributeGetter(info);
-}
-
-static void lineJoinAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setLineJoin(cppValue);
-}
-
-MODULES_EXPORT void lineJoinAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::lineJoinAttributeSetter(v8Value, info);
-}
-
-static void miterLimitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->miterLimit());
-}
-
-MODULES_EXPORT void miterLimitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::miterLimitAttributeGetter(info);
-}
-
-static void miterLimitAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "miterLimit");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setMiterLimit(cppValue);
-}
-
-MODULES_EXPORT void miterLimitAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::miterLimitAttributeSetter(v8Value, info);
-}
-
-static void lineDashOffsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->lineDashOffset());
-}
-
-MODULES_EXPORT void lineDashOffsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::lineDashOffsetAttributeGetter(info);
-}
-
-static void lineDashOffsetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "lineDashOffset");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setLineDashOffset(cppValue);
-}
-
-MODULES_EXPORT void lineDashOffsetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PaintRenderingContext2DV8Internal::lineDashOffsetAttributeSetter(v8Value, info);
-}
-
-static void saveMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  impl->save();
-}
-
-MODULES_EXPORT  void saveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::saveMethod(info);
-}
-
-static void restoreMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  impl->restore();
-}
-
-MODULES_EXPORT  void restoreMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::restoreMethod(info);
-}
-
-static void scaleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "scale");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scale(x, y);
-}
-
-MODULES_EXPORT  void scaleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::scaleMethod(info);
-}
-
-static void rotateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "rotate");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  double angle;
-  angle = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->rotate(angle);
-}
-
-MODULES_EXPORT  void rotateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::rotateMethod(info);
-}
-
-static void translateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "translate");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->translate(x, y);
-}
-
-MODULES_EXPORT  void translateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::translateMethod(info);
-}
-
-static void transformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "transform");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 6)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-    return;
-  }
-
-  double a;
-  double b;
-  double c;
-  double d;
-  double e;
-  double f;
-  a = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  b = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  c = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  d = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  e = toDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  f = toDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->transform(a, b, c, d, e, f);
-}
-
-MODULES_EXPORT  void transformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::transformMethod(info);
-}
-
-static void setTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "setTransform");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 6)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-    return;
-  }
-
-  double a;
-  double b;
-  double c;
-  double d;
-  double e;
-  double f;
-  a = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  b = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  c = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  d = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  e = toDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  f = toDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setTransform(a, b, c, d, e, f);
-}
-
-MODULES_EXPORT  void setTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::setTransformMethod(info);
-}
-
-static void resetTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  impl->resetTransform();
-}
-
-MODULES_EXPORT  void resetTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::resetTransformMethod(info);
-}
-
-static void createLinearGradientMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "createLinearGradient");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  double x0;
-  double y0;
-  double x1;
-  double y1;
-  x0 = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y0 = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x1 = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y1 = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->createLinearGradient(x0, y0, x1, y1));
-}
-
-MODULES_EXPORT  void createLinearGradientMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::createLinearGradientMethod(info);
-}
-
-static void createRadialGradientMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "createRadialGradient");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 6)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-    return;
-  }
-
-  double x0;
-  double y0;
-  double r0;
-  double x1;
-  double y1;
-  double r1;
-  x0 = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y0 = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  r0 = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x1 = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y1 = toRestrictedDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  r1 = toRestrictedDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  CanvasGradient* result = impl->createRadialGradient(x0, y0, r0, x1, y1, r1, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createRadialGradientMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::createRadialGradientMethod(info);
-}
-
-static void createPatternMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "createPattern");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
-  V8StringResource<TreatNullAsNullString> repetitionType;
-  V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  repetitionType = info[1];
-  if (!repetitionType.prepare())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  CanvasPattern* result = impl->createPattern(executionContext, image, repetitionType, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createPatternMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::createPatternMethod(info);
-}
-
-static void clearRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "clearRect");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  double width;
-  double height;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->clearRect(x, y, width, height);
-}
-
-MODULES_EXPORT  void clearRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::clearRectMethod(info);
-}
-
-static void fillRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "fillRect");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  double width;
-  double height;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->fillRect(x, y, width, height);
-}
-
-MODULES_EXPORT  void fillRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::fillRectMethod(info);
-}
-
-static void strokeRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "strokeRect");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  double width;
-  double height;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->strokeRect(x, y, width, height);
-}
-
-MODULES_EXPORT  void strokeRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::strokeRectMethod(info);
-}
-
-static void beginPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  impl->beginPath();
-}
-
-MODULES_EXPORT  void beginPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::beginPathMethod(info);
-}
-
-static void fill1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "fill");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->fill();
-    return;
-  }
-  winding = info[0];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  impl->fill(winding);
-}
-
-static void fill2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "fill");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
-
-    return;
-  }
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->fill(path);
-    return;
-  }
-  winding = info[1];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  impl->fill(path, winding);
-}
-
-static void fillMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 0:
-      if (true) {
-        fill1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (info[0]->IsUndefined()) {
-        fill1Method(info);
-        return;
-      }
-      if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
-        fill2Method(info);
-        return;
-      }
-      if (true) {
-        fill1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        fill2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "fill");
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-MODULES_EXPORT  void fillMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::fillMethod(info);
-}
-
-static void stroke1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  impl->stroke();
-}
-
-static void stroke2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("stroke", "PaintRenderingContext2D", "parameter 1 is not of type 'Path2D'."));
-
-    return;
-  }
-
-  impl->stroke(path);
-}
-
-static void strokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(1, info.Length())) {
-    case 0:
-      if (true) {
-        stroke1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (true) {
-        stroke2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "stroke");
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-MODULES_EXPORT  void strokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::strokeMethod(info);
-}
-
-static void clip1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "clip");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->clip();
-    return;
-  }
-  winding = info[0];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  impl->clip(winding);
-}
-
-static void clip2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "clip");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
-
-    return;
-  }
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->clip(path);
-    return;
-  }
-  winding = info[1];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  impl->clip(path, winding);
-}
-
-static void clipMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 0:
-      if (true) {
-        clip1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (info[0]->IsUndefined()) {
-        clip1Method(info);
-        return;
-      }
-      if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
-        clip2Method(info);
-        return;
-      }
-      if (true) {
-        clip1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        clip2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "clip");
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-MODULES_EXPORT  void clipMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::clipMethod(info);
-}
-
-static void isPointInPath1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInPath");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  double x;
-  double y;
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    v8SetReturnValueBool(info, impl->isPointInPath(x, y));
-    return;
-  }
-  winding = info[2];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isPointInPath(x, y, winding));
-}
-
-static void isPointInPath2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInPath");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  double x;
-  double y;
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
-
-    return;
-  }
-
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 3)) {
-    v8SetReturnValueBool(info, impl->isPointInPath(path, x, y));
-    return;
-  }
-  winding = info[3];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isPointInPath(path, x, y, winding));
-}
-
-static void isPointInPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(4, info.Length())) {
-    case 2:
-      if (true) {
-        isPointInPath1Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
-        isPointInPath2Method(info);
-        return;
-      }
-      if (true) {
-        isPointInPath1Method(info);
-        return;
-      }
-      break;
-    case 4:
-      if (true) {
-        isPointInPath2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInPath");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+        v8SetReturnValueFast(info, WTF::getPtr(impl->currentTransform()), impl);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void isPointInPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::isPointInPathMethod(info);
-}
-
-static void isPointInStroke1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInStroke");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  double x;
-  double y;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueBool(info, impl->isPointInStroke(x, y));
-}
-
-static void isPointInStroke2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInStroke");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  double x;
-  double y;
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
-
-    return;
-  }
-
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueBool(info, impl->isPointInStroke(path, x, y));
-}
-
-static void isPointInStrokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 2:
-      if (true) {
-        isPointInStroke1Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        isPointInStroke2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInStroke");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+    MODULES_EXPORT void currentTransformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::currentTransformAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void isPointInStrokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::isPointInStrokeMethod(info);
-}
+    static void currentTransformAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
 
-static void drawImage1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "drawImage");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "currentTransform");
 
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+        // Prepare the value to be set.
+        SVGMatrixTearOff* cppValue = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), v8Value);
 
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
-  double x;
-  double y;
-  V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue) {
+            exceptionState.throwTypeError("The provided value is not of type 'SVGMatrix'.");
+            return;
+        }
 
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->drawImage(executionContext, image, x, y, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void drawImage2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "drawImage");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
-  double x;
-  double y;
-  double width;
-  double height;
-  V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->drawImage(executionContext, image, x, y, width, height, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void drawImage3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "drawImage");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
-  double sx;
-  double sy;
-  double sw;
-  double sh;
-  double dx;
-  double dy;
-  double dw;
-  double dh;
-  V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sx = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sy = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sw = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sh = toDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dx = toDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dy = toDouble(info.GetIsolate(), info[6], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dw = toDouble(info.GetIsolate(), info[7], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dh = toDouble(info.GetIsolate(), info[8], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->drawImage(executionContext, image, sx, sy, sw, sh, dx, dy, dw, dh, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void drawImageMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(9, info.Length())) {
-    case 3:
-      if (true) {
-        drawImage1Method(info);
-        return;
-      }
-      break;
-    case 5:
-      if (true) {
-        drawImage2Method(info);
-        return;
-      }
-      break;
-    case 9:
-      if (true) {
-        drawImage3Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "drawImage");
-
-  if (isArityError) {
-    if (info.Length() < 3) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-      return;
+        impl->setCurrentTransform(cppValue);
     }
-    if (info.Length() >= 3) {
-      exceptionState.throwTypeError(ExceptionMessages::invalidArity("[3, 5, 9]", info.Length()));
-      return;
+
+    MODULES_EXPORT void currentTransformAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::currentTransformAttributeSetter(v8Value, info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void drawImageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::drawImageMethod(info);
-}
+    static void globalAlphaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void setLineDashMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "setLineDash");
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
 
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+        v8SetReturnValue(info, impl->globalAlpha());
+    }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+    MODULES_EXPORT void globalAlphaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::globalAlphaAttributeGetter(info);
+    }
 
-  Vector<double> dash;
-  dash = toImplArray<Vector<double>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void globalAlphaAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
 
-  impl->setLineDash(dash);
-}
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "globalAlpha");
 
-MODULES_EXPORT  void setLineDashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::setLineDashMethod(info);
-}
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-static void getLineDashMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+        impl->setGlobalAlpha(cppValue);
+    }
 
-  v8SetReturnValue(info, ToV8(impl->getLineDash(), info.Holder(), info.GetIsolate()));
-}
+    MODULES_EXPORT void globalAlphaAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-MODULES_EXPORT  void getLineDashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::getLineDashMethod(info);
-}
+        PaintRenderingContext2DV8Internal::globalAlphaAttributeSetter(v8Value, info);
+    }
 
-static void closePathMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+    static void globalCompositeOperationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  impl->closePath();
-}
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
 
-MODULES_EXPORT  void closePathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::closePathMethod(info);
-}
+        v8SetReturnValueString(info, impl->globalCompositeOperation(), info.GetIsolate());
+    }
 
-static void moveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "moveTo");
+    MODULES_EXPORT void globalCompositeOperationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::globalCompositeOperationAttributeGetter(info);
+    }
 
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+    static void globalCompositeOperationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  float x;
-  float y;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        impl->setGlobalCompositeOperation(cppValue);
+    }
 
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+    MODULES_EXPORT void globalCompositeOperationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  impl->moveTo(x, y);
-}
+        PaintRenderingContext2DV8Internal::globalCompositeOperationAttributeSetter(v8Value, info);
+    }
 
-MODULES_EXPORT  void moveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::moveToMethod(info);
-}
+    static void imageSmoothingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void lineToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "lineTo");
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
 
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+        v8SetReturnValueBool(info, impl->imageSmoothingEnabled());
+    }
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+    MODULES_EXPORT void imageSmoothingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::imageSmoothingEnabledAttributeGetter(info);
+    }
 
-  float x;
-  float y;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void imageSmoothingEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
 
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "imageSmoothingEnabled");
 
-  impl->lineTo(x, y);
-}
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-MODULES_EXPORT  void lineToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::lineToMethod(info);
-}
-
-static void quadraticCurveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "quadraticCurveTo");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  float cpx;
-  float cpy;
-  float x;
-  float y;
-  cpx = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  cpy = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->quadraticCurveTo(cpx, cpy, x, y);
-}
-
-MODULES_EXPORT  void quadraticCurveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::quadraticCurveToMethod(info);
-}
-
-static void bezierCurveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "bezierCurveTo");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 6)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-    return;
-  }
-
-  float cp1x;
-  float cp1y;
-  float cp2x;
-  float cp2y;
-  float x;
-  float y;
-  cp1x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  cp1y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  cp2x = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  cp2y = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
-}
-
-MODULES_EXPORT  void bezierCurveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::bezierCurveToMethod(info);
-}
-
-static void arcToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "arcTo");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  float x1;
-  float y1;
-  float x2;
-  float y2;
-  float radius;
-  x1 = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y1 = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x2 = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y2 = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radius = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->arcTo(x1, y1, x2, y2, radius, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void arcToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::arcToMethod(info);
-}
-
-static void rectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "rect");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  float x;
-  float y;
-  float width;
-  float height;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->rect(x, y, width, height);
-}
-
-MODULES_EXPORT  void rectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::rectMethod(info);
-}
-
-static void arcMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "arc");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  float x;
-  float y;
-  float radius;
-  float startAngle;
-  float endAngle;
-  bool anticlockwise;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radius = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  startAngle = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  endAngle = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  anticlockwise = toBoolean(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->arc(x, y, radius, startAngle, endAngle, anticlockwise, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void arcMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::arcMethod(info);
-}
-
-static void ellipseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "ellipse");
-
-  PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 7)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
-    return;
-  }
-
-  float x;
-  float y;
-  float radiusX;
-  float radiusY;
-  float rotation;
-  float startAngle;
-  float endAngle;
-  bool anticlockwise;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radiusX = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radiusY = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  rotation = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  startAngle = toFloat(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  endAngle = toFloat(info.GetIsolate(), info[6], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  anticlockwise = toBoolean(info.GetIsolate(), info[7], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void ellipseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintRenderingContext2DV8Internal::ellipseMethod(info);
-}
+        impl->setImageSmoothingEnabled(cppValue);
+    }
+
+    MODULES_EXPORT void imageSmoothingEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::imageSmoothingEnabledAttributeSetter(v8Value, info);
+    }
+
+    static void imageSmoothingQualityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->imageSmoothingQuality(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void imageSmoothingQualityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::imageSmoothingQualityAttributeGetter(info);
+    }
+
+    static void imageSmoothingQualityAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "imageSmoothingQuality");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "low",
+            "medium",
+            "high",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "ImageSmoothingQuality", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
+
+        impl->setImageSmoothingQuality(cppValue);
+    }
+
+    MODULES_EXPORT void imageSmoothingQualityAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::imageSmoothingQualityAttributeSetter(v8Value, info);
+    }
+
+    static void strokeStyleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        StringOrCanvasGradientOrCanvasPattern result;
+        impl->strokeStyle(result);
+
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void strokeStyleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::strokeStyleAttributeGetter(info);
+    }
+
+    static void strokeStyleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "strokeStyle");
+
+        // Prepare the value to be set.
+        StringOrCanvasGradientOrCanvasPattern cppValue;
+        V8StringOrCanvasGradientOrCanvasPattern::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setStrokeStyle(cppValue);
+    }
+
+    MODULES_EXPORT void strokeStyleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::strokeStyleAttributeSetter(v8Value, info);
+    }
+
+    static void fillStyleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        StringOrCanvasGradientOrCanvasPattern result;
+        impl->fillStyle(result);
+
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void fillStyleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::fillStyleAttributeGetter(info);
+    }
+
+    static void fillStyleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "fillStyle");
+
+        // Prepare the value to be set.
+        StringOrCanvasGradientOrCanvasPattern cppValue;
+        V8StringOrCanvasGradientOrCanvasPattern::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setFillStyle(cppValue);
+    }
+
+    MODULES_EXPORT void fillStyleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::fillStyleAttributeSetter(v8Value, info);
+    }
+
+    static void shadowOffsetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->shadowOffsetX());
+    }
+
+    MODULES_EXPORT void shadowOffsetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::shadowOffsetXAttributeGetter(info);
+    }
+
+    static void shadowOffsetXAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "shadowOffsetX");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setShadowOffsetX(cppValue);
+    }
+
+    MODULES_EXPORT void shadowOffsetXAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::shadowOffsetXAttributeSetter(v8Value, info);
+    }
+
+    static void shadowOffsetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->shadowOffsetY());
+    }
+
+    MODULES_EXPORT void shadowOffsetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::shadowOffsetYAttributeGetter(info);
+    }
+
+    static void shadowOffsetYAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "shadowOffsetY");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setShadowOffsetY(cppValue);
+    }
+
+    MODULES_EXPORT void shadowOffsetYAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::shadowOffsetYAttributeSetter(v8Value, info);
+    }
+
+    static void shadowBlurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->shadowBlur());
+    }
+
+    MODULES_EXPORT void shadowBlurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::shadowBlurAttributeGetter(info);
+    }
+
+    static void shadowBlurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "shadowBlur");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setShadowBlur(cppValue);
+    }
+
+    MODULES_EXPORT void shadowBlurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::shadowBlurAttributeSetter(v8Value, info);
+    }
+
+    static void shadowColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->shadowColor(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void shadowColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::shadowColorAttributeGetter(info);
+    }
+
+    static void shadowColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setShadowColor(cppValue);
+    }
+
+    MODULES_EXPORT void shadowColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::shadowColorAttributeSetter(v8Value, info);
+    }
+
+    static void lineWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->lineWidth());
+    }
+
+    MODULES_EXPORT void lineWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::lineWidthAttributeGetter(info);
+    }
+
+    static void lineWidthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "lineWidth");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLineWidth(cppValue);
+    }
+
+    MODULES_EXPORT void lineWidthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::lineWidthAttributeSetter(v8Value, info);
+    }
+
+    static void lineCapAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->lineCap(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void lineCapAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::lineCapAttributeGetter(info);
+    }
+
+    static void lineCapAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setLineCap(cppValue);
+    }
+
+    MODULES_EXPORT void lineCapAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::lineCapAttributeSetter(v8Value, info);
+    }
+
+    static void lineJoinAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->lineJoin(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void lineJoinAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::lineJoinAttributeGetter(info);
+    }
+
+    static void lineJoinAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setLineJoin(cppValue);
+    }
+
+    MODULES_EXPORT void lineJoinAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::lineJoinAttributeSetter(v8Value, info);
+    }
+
+    static void miterLimitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->miterLimit());
+    }
+
+    MODULES_EXPORT void miterLimitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::miterLimitAttributeGetter(info);
+    }
+
+    static void miterLimitAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "miterLimit");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setMiterLimit(cppValue);
+    }
+
+    MODULES_EXPORT void miterLimitAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::miterLimitAttributeSetter(v8Value, info);
+    }
+
+    static void lineDashOffsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->lineDashOffset());
+    }
+
+    MODULES_EXPORT void lineDashOffsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::lineDashOffsetAttributeGetter(info);
+    }
+
+    static void lineDashOffsetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PaintRenderingContext2D", "lineDashOffset");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLineDashOffset(cppValue);
+    }
+
+    MODULES_EXPORT void lineDashOffsetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PaintRenderingContext2DV8Internal::lineDashOffsetAttributeSetter(v8Value, info);
+    }
+
+    static void saveMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        impl->save();
+    }
+
+    MODULES_EXPORT void saveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::saveMethod(info);
+    }
+
+    static void restoreMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        impl->restore();
+    }
+
+    MODULES_EXPORT void restoreMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::restoreMethod(info);
+    }
+
+    static void scaleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "scale");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->scale(x, y);
+    }
+
+    MODULES_EXPORT void scaleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::scaleMethod(info);
+    }
+
+    static void rotateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "rotate");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        double angle;
+        angle = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->rotate(angle);
+    }
+
+    MODULES_EXPORT void rotateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::rotateMethod(info);
+    }
+
+    static void translateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "translate");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->translate(x, y);
+    }
+
+    MODULES_EXPORT void translateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::translateMethod(info);
+    }
+
+    static void transformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "transform");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 6)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+            return;
+        }
+
+        double a;
+        double b;
+        double c;
+        double d;
+        double e;
+        double f;
+        a = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        b = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        c = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        d = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        e = toDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        f = toDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->transform(a, b, c, d, e, f);
+    }
+
+    MODULES_EXPORT void transformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::transformMethod(info);
+    }
+
+    static void setTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "setTransform");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 6)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+            return;
+        }
+
+        double a;
+        double b;
+        double c;
+        double d;
+        double e;
+        double f;
+        a = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        b = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        c = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        d = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        e = toDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        f = toDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setTransform(a, b, c, d, e, f);
+    }
+
+    MODULES_EXPORT void setTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::setTransformMethod(info);
+    }
+
+    static void resetTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        impl->resetTransform();
+    }
+
+    MODULES_EXPORT void resetTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::resetTransformMethod(info);
+    }
+
+    static void createLinearGradientMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "createLinearGradient");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        double x0;
+        double y0;
+        double x1;
+        double y1;
+        x0 = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y0 = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x1 = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y1 = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->createLinearGradient(x0, y0, x1, y1));
+    }
+
+    MODULES_EXPORT void createLinearGradientMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::createLinearGradientMethod(info);
+    }
+
+    static void createRadialGradientMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "createRadialGradient");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 6)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+            return;
+        }
+
+        double x0;
+        double y0;
+        double r0;
+        double x1;
+        double y1;
+        double r1;
+        x0 = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y0 = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        r0 = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x1 = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y1 = toRestrictedDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        r1 = toRestrictedDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        CanvasGradient* result = impl->createRadialGradient(x0, y0, r0, x1, y1, r1, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createRadialGradientMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::createRadialGradientMethod(info);
+    }
+
+    static void createPatternMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "createPattern");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
+        V8StringResource<TreatNullAsNullString> repetitionType;
+        V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        repetitionType = info[1];
+        if (!repetitionType.prepare())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        CanvasPattern* result = impl->createPattern(executionContext, image, repetitionType, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createPatternMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::createPatternMethod(info);
+    }
+
+    static void clearRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "clearRect");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        double width;
+        double height;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->clearRect(x, y, width, height);
+    }
+
+    MODULES_EXPORT void clearRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::clearRectMethod(info);
+    }
+
+    static void fillRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "fillRect");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        double width;
+        double height;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->fillRect(x, y, width, height);
+    }
+
+    MODULES_EXPORT void fillRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::fillRectMethod(info);
+    }
+
+    static void strokeRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "strokeRect");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        double width;
+        double height;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->strokeRect(x, y, width, height);
+    }
+
+    MODULES_EXPORT void strokeRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::strokeRectMethod(info);
+    }
+
+    static void beginPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        impl->beginPath();
+    }
+
+    MODULES_EXPORT void beginPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::beginPathMethod(info);
+    }
+
+    static void fill1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "fill");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->fill();
+            return;
+        }
+        winding = info[0];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        impl->fill(winding);
+    }
+
+    static void fill2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "fill");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
+
+            return;
+        }
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->fill(path);
+            return;
+        }
+        winding = info[1];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        impl->fill(path, winding);
+    }
+
+    static void fillMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 0:
+            if (true) {
+                fill1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (info[0]->IsUndefined()) {
+                fill1Method(info);
+                return;
+            }
+            if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
+                fill2Method(info);
+                return;
+            }
+            if (true) {
+                fill1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                fill2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "fill");
+
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void fillMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::fillMethod(info);
+    }
+
+    static void stroke1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        impl->stroke();
+    }
+
+    static void stroke2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("stroke", "PaintRenderingContext2D", "parameter 1 is not of type 'Path2D'."));
+
+            return;
+        }
+
+        impl->stroke(path);
+    }
+
+    static void strokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(1, info.Length())) {
+        case 0:
+            if (true) {
+                stroke1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (true) {
+                stroke2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "stroke");
+
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void strokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::strokeMethod(info);
+    }
+
+    static void clip1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "clip");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->clip();
+            return;
+        }
+        winding = info[0];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        impl->clip(winding);
+    }
+
+    static void clip2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "clip");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
+
+            return;
+        }
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->clip(path);
+            return;
+        }
+        winding = info[1];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        impl->clip(path, winding);
+    }
+
+    static void clipMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 0:
+            if (true) {
+                clip1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (info[0]->IsUndefined()) {
+                clip1Method(info);
+                return;
+            }
+            if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
+                clip2Method(info);
+                return;
+            }
+            if (true) {
+                clip1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                clip2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "clip");
+
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void clipMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::clipMethod(info);
+    }
+
+    static void isPointInPath1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInPath");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        double x;
+        double y;
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            v8SetReturnValueBool(info, impl->isPointInPath(x, y));
+            return;
+        }
+        winding = info[2];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isPointInPath(x, y, winding));
+    }
+
+    static void isPointInPath2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInPath");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        double x;
+        double y;
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
+
+            return;
+        }
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 3)) {
+            v8SetReturnValueBool(info, impl->isPointInPath(path, x, y));
+            return;
+        }
+        winding = info[3];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isPointInPath(path, x, y, winding));
+    }
+
+    static void isPointInPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(4, info.Length())) {
+        case 2:
+            if (true) {
+                isPointInPath1Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
+                isPointInPath2Method(info);
+                return;
+            }
+            if (true) {
+                isPointInPath1Method(info);
+                return;
+            }
+            break;
+        case 4:
+            if (true) {
+                isPointInPath2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInPath");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void isPointInPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::isPointInPathMethod(info);
+    }
+
+    static void isPointInStroke1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInStroke");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        double x;
+        double y;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueBool(info, impl->isPointInStroke(x, y));
+    }
+
+    static void isPointInStroke2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInStroke");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        double x;
+        double y;
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
+
+            return;
+        }
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueBool(info, impl->isPointInStroke(path, x, y));
+    }
+
+    static void isPointInStrokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 2:
+            if (true) {
+                isPointInStroke1Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                isPointInStroke2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "isPointInStroke");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void isPointInStrokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::isPointInStrokeMethod(info);
+    }
+
+    static void drawImage1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "drawImage");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
+        double x;
+        double y;
+        V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->drawImage(executionContext, image, x, y, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void drawImage2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "drawImage");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
+        double x;
+        double y;
+        double width;
+        double height;
+        V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->drawImage(executionContext, image, x, y, width, height, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void drawImage3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "drawImage");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
+        double sx;
+        double sy;
+        double sw;
+        double sh;
+        double dx;
+        double dy;
+        double dw;
+        double dh;
+        V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sx = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sy = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sw = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sh = toDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dx = toDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dy = toDouble(info.GetIsolate(), info[6], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dw = toDouble(info.GetIsolate(), info[7], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dh = toDouble(info.GetIsolate(), info[8], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->drawImage(executionContext, image, sx, sy, sw, sh, dx, dy, dw, dh, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void drawImageMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(9, info.Length())) {
+        case 3:
+            if (true) {
+                drawImage1Method(info);
+                return;
+            }
+            break;
+        case 5:
+            if (true) {
+                drawImage2Method(info);
+                return;
+            }
+            break;
+        case 9:
+            if (true) {
+                drawImage3Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "drawImage");
+
+        if (isArityError) {
+            if (info.Length() < 3) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+                return;
+            }
+            if (info.Length() >= 3) {
+                exceptionState.throwTypeError(ExceptionMessages::invalidArity("[3, 5, 9]", info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void drawImageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::drawImageMethod(info);
+    }
+
+    static void setLineDashMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "setLineDash");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Vector<double> dash;
+        dash = toImplArray<Vector<double>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLineDash(dash);
+    }
+
+    MODULES_EXPORT void setLineDashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::setLineDashMethod(info);
+    }
+
+    static void getLineDashMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(impl->getLineDash(), info.Holder(), info.GetIsolate()));
+    }
+
+    MODULES_EXPORT void getLineDashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::getLineDashMethod(info);
+    }
+
+    static void closePathMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        impl->closePath();
+    }
+
+    MODULES_EXPORT void closePathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::closePathMethod(info);
+    }
+
+    static void moveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "moveTo");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->moveTo(x, y);
+    }
+
+    MODULES_EXPORT void moveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::moveToMethod(info);
+    }
+
+    static void lineToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "lineTo");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->lineTo(x, y);
+    }
+
+    MODULES_EXPORT void lineToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::lineToMethod(info);
+    }
+
+    static void quadraticCurveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "quadraticCurveTo");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        float cpx;
+        float cpy;
+        float x;
+        float y;
+        cpx = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        cpy = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->quadraticCurveTo(cpx, cpy, x, y);
+    }
+
+    MODULES_EXPORT void quadraticCurveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::quadraticCurveToMethod(info);
+    }
+
+    static void bezierCurveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "bezierCurveTo");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 6)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+            return;
+        }
+
+        float cp1x;
+        float cp1y;
+        float cp2x;
+        float cp2y;
+        float x;
+        float y;
+        cp1x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        cp1y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        cp2x = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        cp2y = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+    }
+
+    MODULES_EXPORT void bezierCurveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::bezierCurveToMethod(info);
+    }
+
+    static void arcToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "arcTo");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        float radius;
+        x1 = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y1 = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x2 = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y2 = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radius = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->arcTo(x1, y1, x2, y2, radius, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void arcToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::arcToMethod(info);
+    }
+
+    static void rectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "rect");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        float width;
+        float height;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->rect(x, y, width, height);
+    }
+
+    MODULES_EXPORT void rectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::rectMethod(info);
+    }
+
+    static void arcMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "arc");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        float radius;
+        float startAngle;
+        float endAngle;
+        bool anticlockwise;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radius = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        startAngle = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        endAngle = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        anticlockwise = toBoolean(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->arc(x, y, radius, startAngle, endAngle, anticlockwise, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void arcMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::arcMethod(info);
+    }
+
+    static void ellipseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintRenderingContext2D", "ellipse");
+
+        PaintRenderingContext2D* impl = V8PaintRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 7)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        float radiusX;
+        float radiusY;
+        float rotation;
+        float startAngle;
+        float endAngle;
+        bool anticlockwise;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radiusX = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radiusY = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        rotation = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        startAngle = toFloat(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        endAngle = toFloat(info.GetIsolate(), info[6], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        anticlockwise = toBoolean(info.GetIsolate(), info[7], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void ellipseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintRenderingContext2DV8Internal::ellipseMethod(info);
+    }
 
 } // namespace PaintRenderingContext2DV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PaintRenderingContext2DAccessors[] = {
-    {"globalAlpha", PaintRenderingContext2DV8Internal::globalAlphaAttributeGetterCallback, PaintRenderingContext2DV8Internal::globalAlphaAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"globalCompositeOperation", PaintRenderingContext2DV8Internal::globalCompositeOperationAttributeGetterCallback, PaintRenderingContext2DV8Internal::globalCompositeOperationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"imageSmoothingEnabled", PaintRenderingContext2DV8Internal::imageSmoothingEnabledAttributeGetterCallback, PaintRenderingContext2DV8Internal::imageSmoothingEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"strokeStyle", PaintRenderingContext2DV8Internal::strokeStyleAttributeGetterCallback, PaintRenderingContext2DV8Internal::strokeStyleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fillStyle", PaintRenderingContext2DV8Internal::fillStyleAttributeGetterCallback, PaintRenderingContext2DV8Internal::fillStyleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowOffsetX", PaintRenderingContext2DV8Internal::shadowOffsetXAttributeGetterCallback, PaintRenderingContext2DV8Internal::shadowOffsetXAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowOffsetY", PaintRenderingContext2DV8Internal::shadowOffsetYAttributeGetterCallback, PaintRenderingContext2DV8Internal::shadowOffsetYAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowBlur", PaintRenderingContext2DV8Internal::shadowBlurAttributeGetterCallback, PaintRenderingContext2DV8Internal::shadowBlurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowColor", PaintRenderingContext2DV8Internal::shadowColorAttributeGetterCallback, PaintRenderingContext2DV8Internal::shadowColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineWidth", PaintRenderingContext2DV8Internal::lineWidthAttributeGetterCallback, PaintRenderingContext2DV8Internal::lineWidthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineCap", PaintRenderingContext2DV8Internal::lineCapAttributeGetterCallback, PaintRenderingContext2DV8Internal::lineCapAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineJoin", PaintRenderingContext2DV8Internal::lineJoinAttributeGetterCallback, PaintRenderingContext2DV8Internal::lineJoinAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"miterLimit", PaintRenderingContext2DV8Internal::miterLimitAttributeGetterCallback, PaintRenderingContext2DV8Internal::miterLimitAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineDashOffset", PaintRenderingContext2DV8Internal::lineDashOffsetAttributeGetterCallback, PaintRenderingContext2DV8Internal::lineDashOffsetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "globalAlpha", PaintRenderingContext2DV8Internal::globalAlphaAttributeGetterCallback, PaintRenderingContext2DV8Internal::globalAlphaAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "globalCompositeOperation", PaintRenderingContext2DV8Internal::globalCompositeOperationAttributeGetterCallback, PaintRenderingContext2DV8Internal::globalCompositeOperationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "imageSmoothingEnabled", PaintRenderingContext2DV8Internal::imageSmoothingEnabledAttributeGetterCallback, PaintRenderingContext2DV8Internal::imageSmoothingEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "strokeStyle", PaintRenderingContext2DV8Internal::strokeStyleAttributeGetterCallback, PaintRenderingContext2DV8Internal::strokeStyleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fillStyle", PaintRenderingContext2DV8Internal::fillStyleAttributeGetterCallback, PaintRenderingContext2DV8Internal::fillStyleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowOffsetX", PaintRenderingContext2DV8Internal::shadowOffsetXAttributeGetterCallback, PaintRenderingContext2DV8Internal::shadowOffsetXAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowOffsetY", PaintRenderingContext2DV8Internal::shadowOffsetYAttributeGetterCallback, PaintRenderingContext2DV8Internal::shadowOffsetYAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowBlur", PaintRenderingContext2DV8Internal::shadowBlurAttributeGetterCallback, PaintRenderingContext2DV8Internal::shadowBlurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowColor", PaintRenderingContext2DV8Internal::shadowColorAttributeGetterCallback, PaintRenderingContext2DV8Internal::shadowColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineWidth", PaintRenderingContext2DV8Internal::lineWidthAttributeGetterCallback, PaintRenderingContext2DV8Internal::lineWidthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineCap", PaintRenderingContext2DV8Internal::lineCapAttributeGetterCallback, PaintRenderingContext2DV8Internal::lineCapAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineJoin", PaintRenderingContext2DV8Internal::lineJoinAttributeGetterCallback, PaintRenderingContext2DV8Internal::lineJoinAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "miterLimit", PaintRenderingContext2DV8Internal::miterLimitAttributeGetterCallback, PaintRenderingContext2DV8Internal::miterLimitAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineDashOffset", PaintRenderingContext2DV8Internal::lineDashOffsetAttributeGetterCallback, PaintRenderingContext2DV8Internal::lineDashOffsetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8PaintRenderingContext2DMethods[] = {
-    {"save", PaintRenderingContext2DV8Internal::saveMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"restore", PaintRenderingContext2DV8Internal::restoreMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scale", PaintRenderingContext2DV8Internal::scaleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rotate", PaintRenderingContext2DV8Internal::rotateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"translate", PaintRenderingContext2DV8Internal::translateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"transform", PaintRenderingContext2DV8Internal::transformMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTransform", PaintRenderingContext2DV8Internal::setTransformMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"resetTransform", PaintRenderingContext2DV8Internal::resetTransformMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createLinearGradient", PaintRenderingContext2DV8Internal::createLinearGradientMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createRadialGradient", PaintRenderingContext2DV8Internal::createRadialGradientMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createPattern", PaintRenderingContext2DV8Internal::createPatternMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearRect", PaintRenderingContext2DV8Internal::clearRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fillRect", PaintRenderingContext2DV8Internal::fillRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"strokeRect", PaintRenderingContext2DV8Internal::strokeRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"beginPath", PaintRenderingContext2DV8Internal::beginPathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fill", PaintRenderingContext2DV8Internal::fillMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stroke", PaintRenderingContext2DV8Internal::strokeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clip", PaintRenderingContext2DV8Internal::clipMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isPointInPath", PaintRenderingContext2DV8Internal::isPointInPathMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isPointInStroke", PaintRenderingContext2DV8Internal::isPointInStrokeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"drawImage", PaintRenderingContext2DV8Internal::drawImageMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setLineDash", PaintRenderingContext2DV8Internal::setLineDashMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getLineDash", PaintRenderingContext2DV8Internal::getLineDashMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"closePath", PaintRenderingContext2DV8Internal::closePathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"moveTo", PaintRenderingContext2DV8Internal::moveToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineTo", PaintRenderingContext2DV8Internal::lineToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"quadraticCurveTo", PaintRenderingContext2DV8Internal::quadraticCurveToMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bezierCurveTo", PaintRenderingContext2DV8Internal::bezierCurveToMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"arcTo", PaintRenderingContext2DV8Internal::arcToMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rect", PaintRenderingContext2DV8Internal::rectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"arc", PaintRenderingContext2DV8Internal::arcMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ellipse", PaintRenderingContext2DV8Internal::ellipseMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "save", PaintRenderingContext2DV8Internal::saveMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "restore", PaintRenderingContext2DV8Internal::restoreMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scale", PaintRenderingContext2DV8Internal::scaleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rotate", PaintRenderingContext2DV8Internal::rotateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "translate", PaintRenderingContext2DV8Internal::translateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "transform", PaintRenderingContext2DV8Internal::transformMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTransform", PaintRenderingContext2DV8Internal::setTransformMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "resetTransform", PaintRenderingContext2DV8Internal::resetTransformMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createLinearGradient", PaintRenderingContext2DV8Internal::createLinearGradientMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createRadialGradient", PaintRenderingContext2DV8Internal::createRadialGradientMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createPattern", PaintRenderingContext2DV8Internal::createPatternMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearRect", PaintRenderingContext2DV8Internal::clearRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fillRect", PaintRenderingContext2DV8Internal::fillRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "strokeRect", PaintRenderingContext2DV8Internal::strokeRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "beginPath", PaintRenderingContext2DV8Internal::beginPathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fill", PaintRenderingContext2DV8Internal::fillMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stroke", PaintRenderingContext2DV8Internal::strokeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clip", PaintRenderingContext2DV8Internal::clipMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isPointInPath", PaintRenderingContext2DV8Internal::isPointInPathMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isPointInStroke", PaintRenderingContext2DV8Internal::isPointInStrokeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "drawImage", PaintRenderingContext2DV8Internal::drawImageMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setLineDash", PaintRenderingContext2DV8Internal::setLineDashMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getLineDash", PaintRenderingContext2DV8Internal::getLineDashMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "closePath", PaintRenderingContext2DV8Internal::closePathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "moveTo", PaintRenderingContext2DV8Internal::moveToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineTo", PaintRenderingContext2DV8Internal::lineToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "quadraticCurveTo", PaintRenderingContext2DV8Internal::quadraticCurveToMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bezierCurveTo", PaintRenderingContext2DV8Internal::bezierCurveToMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "arcTo", PaintRenderingContext2DV8Internal::arcToMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rect", PaintRenderingContext2DV8Internal::rectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "arc", PaintRenderingContext2DV8Internal::arcMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ellipse", PaintRenderingContext2DV8Internal::ellipseMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PaintRenderingContext2DTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaintRenderingContext2D::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PaintRenderingContext2D::internalFieldCount);
+static void installV8PaintRenderingContext2DTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaintRenderingContext2D::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PaintRenderingContext2D::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaintRenderingContext2DAccessors, WTF_ARRAY_LENGTH(V8PaintRenderingContext2DAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaintRenderingContext2DMethods, WTF_ARRAY_LENGTH(V8PaintRenderingContext2DMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaintRenderingContext2DAccessors, WTF_ARRAY_LENGTH(V8PaintRenderingContext2DAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaintRenderingContext2DMethods, WTF_ARRAY_LENGTH(V8PaintRenderingContext2DMethods));
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorcurrentTransformConfiguration = {"currentTransform", PaintRenderingContext2DV8Internal::currentTransformAttributeGetterCallback, PaintRenderingContext2DV8Internal::currentTransformAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcurrentTransformConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorimageSmoothingQualityConfiguration = {"imageSmoothingQuality", PaintRenderingContext2DV8Internal::imageSmoothingQualityAttributeGetterCallback, PaintRenderingContext2DV8Internal::imageSmoothingQualityAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorimageSmoothingQualityConfiguration);
-  }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorcurrentTransformConfiguration = { "currentTransform", PaintRenderingContext2DV8Internal::currentTransformAttributeGetterCallback, PaintRenderingContext2DV8Internal::currentTransformAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcurrentTransformConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorimageSmoothingQualityConfiguration = { "imageSmoothingQuality", PaintRenderingContext2DV8Internal::imageSmoothingQualityAttributeGetterCallback, PaintRenderingContext2DV8Internal::imageSmoothingQualityAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorimageSmoothingQualityConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8PaintRenderingContext2D::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaintRenderingContext2DTemplate);
+v8::Local<v8::FunctionTemplate> V8PaintRenderingContext2D::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaintRenderingContext2DTemplate);
 }
 
-bool V8PaintRenderingContext2D::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PaintRenderingContext2D::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PaintRenderingContext2D::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PaintRenderingContext2D::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PaintRenderingContext2D* V8PaintRenderingContext2D::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PaintRenderingContext2D* V8PaintRenderingContext2D::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8OriginTrialsTest_h
 #define V8OriginTrialsTest_h
 
@@ -24,35 +24,39 @@ namespace blink {
 
 class ScriptState;
 class V8OriginTrialsTest {
-  STATIC_ONLY(V8OriginTrialsTest);
- public:
-  static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static OriginTrialsTest* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<OriginTrialsTest>();
-  }
-  static OriginTrialsTest* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<OriginTrialsTest>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<OriginTrialsTest>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8OriginTrialsTest);
 
-  static void installOriginTrialsSampleAPI(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installOriginTrialsSampleAPI(ScriptState*, v8::Local<v8::Object> instance);
-  static void installOriginTrialsSampleAPI(ScriptState*);
+public:
+    static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static OriginTrialsTest* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<OriginTrialsTest>();
+    }
+    static OriginTrialsTest* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<OriginTrialsTest>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<OriginTrialsTest>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+
+    static void installOriginTrialsSampleAPI(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installOriginTrialsSampleAPI(ScriptState*, v8::Local<v8::Object> instance);
+    static void installOriginTrialsSampleAPI(ScriptState*);
 };
 
 template <>
 struct V8TypeOf<OriginTrialsTest> {
-  typedef V8OriginTrialsTest Type;
+    typedef V8OriginTrialsTest Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8OriginTrialsTest_h
+#endif // V8OriginTrialsTest_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WebGLDrawBuffers.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,117 +47,125 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WebGLDrawBuffers::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WebGLDrawBuffers is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace WebGLDrawBuffersV8Internal {
 
-static void drawBuffersWEBGLMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLDrawBuffers", "drawBuffersWEBGL");
+    static void drawBuffersWEBGLMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLDrawBuffers", "drawBuffersWEBGL");
 
-  WebGLDrawBuffers* impl = V8WebGLDrawBuffers::toImpl(info.Holder());
+        WebGLDrawBuffers* impl = V8WebGLDrawBuffers::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Vector<unsigned> buffers;
-  buffers = toImplArray<Vector<unsigned>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
+        Vector<unsigned> buffers;
+        buffers = toImplArray<Vector<unsigned>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->drawBuffersWEBGL(buffers);
-}
+        impl->drawBuffersWEBGL(buffers);
+    }
 
-MODULES_EXPORT  void drawBuffersWEBGLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLDrawBuffersV8Internal::drawBuffersWEBGLMethod(info);
-}
+    MODULES_EXPORT void drawBuffersWEBGLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLDrawBuffersV8Internal::drawBuffersWEBGLMethod(info);
+    }
 
 } // namespace WebGLDrawBuffersV8Internal
 
-void V8WebGLDrawBuffers::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  WebGLDrawBuffers* impl = scriptWrappable->toImpl<WebGLDrawBuffers>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8WebGLDrawBuffers::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    WebGLDrawBuffers* impl = scriptWrappable->toImpl<WebGLDrawBuffers>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::MethodConfiguration V8WebGLDrawBuffersMethods[] = {
-    {"drawBuffersWEBGL", WebGLDrawBuffersV8Internal::drawBuffersWEBGLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "drawBuffersWEBGL", WebGLDrawBuffersV8Internal::drawBuffersWEBGLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8WebGLDrawBuffersTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLDrawBuffers::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLDrawBuffers::internalFieldCount);
+static void installV8WebGLDrawBuffersTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLDrawBuffers::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLDrawBuffers::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8WebGLDrawBuffersConstants[] = {
-      {"COLOR_ATTACHMENT0_WEBGL", 0x8CE0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT1_WEBGL", 0x8CE1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT2_WEBGL", 0x8CE2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT3_WEBGL", 0x8CE3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT4_WEBGL", 0x8CE4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT5_WEBGL", 0x8CE5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT6_WEBGL", 0x8CE6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT7_WEBGL", 0x8CE7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT8_WEBGL", 0x8CE8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT9_WEBGL", 0x8CE9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT10_WEBGL", 0x8CEA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT11_WEBGL", 0x8CEB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT12_WEBGL", 0x8CEC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT13_WEBGL", 0x8CED, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT14_WEBGL", 0x8CEE, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT15_WEBGL", 0x8CEF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER0_WEBGL", 0x8825, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER1_WEBGL", 0x8826, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER2_WEBGL", 0x8827, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER3_WEBGL", 0x8828, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER4_WEBGL", 0x8829, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER5_WEBGL", 0x882A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER6_WEBGL", 0x882B, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER7_WEBGL", 0x882C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER8_WEBGL", 0x882D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER9_WEBGL", 0x882E, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER10_WEBGL", 0x882F, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER11_WEBGL", 0x8830, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER12_WEBGL", 0x8831, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER13_WEBGL", 0x8832, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER14_WEBGL", 0x8833, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DRAW_BUFFER15_WEBGL", 0x8834, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_COLOR_ATTACHMENTS_WEBGL", 0x8CDF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_DRAW_BUFFERS_WEBGL", 0x8824, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebGLDrawBuffersConstants, WTF_ARRAY_LENGTH(V8WebGLDrawBuffersConstants));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLDrawBuffersMethods, WTF_ARRAY_LENGTH(V8WebGLDrawBuffersMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8WebGLDrawBuffersConstants[] = {
+        { "COLOR_ATTACHMENT0_WEBGL", 0x8CE0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT1_WEBGL", 0x8CE1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT2_WEBGL", 0x8CE2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT3_WEBGL", 0x8CE3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT4_WEBGL", 0x8CE4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT5_WEBGL", 0x8CE5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT6_WEBGL", 0x8CE6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT7_WEBGL", 0x8CE7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT8_WEBGL", 0x8CE8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT9_WEBGL", 0x8CE9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT10_WEBGL", 0x8CEA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT11_WEBGL", 0x8CEB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT12_WEBGL", 0x8CEC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT13_WEBGL", 0x8CED, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT14_WEBGL", 0x8CEE, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT15_WEBGL", 0x8CEF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER0_WEBGL", 0x8825, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER1_WEBGL", 0x8826, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER2_WEBGL", 0x8827, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER3_WEBGL", 0x8828, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER4_WEBGL", 0x8829, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER5_WEBGL", 0x882A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER6_WEBGL", 0x882B, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER7_WEBGL", 0x882C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER8_WEBGL", 0x882D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER9_WEBGL", 0x882E, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER10_WEBGL", 0x882F, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER11_WEBGL", 0x8830, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER12_WEBGL", 0x8831, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER13_WEBGL", 0x8832, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER14_WEBGL", 0x8833, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DRAW_BUFFER15_WEBGL", 0x8834, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_COLOR_ATTACHMENTS_WEBGL", 0x8CDF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_DRAW_BUFFERS_WEBGL", 0x8824, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebGLDrawBuffersConstants, WTF_ARRAY_LENGTH(V8WebGLDrawBuffersConstants));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLDrawBuffersMethods, WTF_ARRAY_LENGTH(V8WebGLDrawBuffersMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8WebGLDrawBuffers::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLDrawBuffersTemplate);
+v8::Local<v8::FunctionTemplate> V8WebGLDrawBuffers::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLDrawBuffersTemplate);
 }
 
-bool V8WebGLDrawBuffers::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WebGLDrawBuffers::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WebGLDrawBuffers::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WebGLDrawBuffers::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WebGLDrawBuffers* V8WebGLDrawBuffers::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WebGLDrawBuffers* V8WebGLDrawBuffers::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

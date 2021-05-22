@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "IntersectionObserverInit.h"
 
 #include "bindings/core/v8/DoubleOrDoubleSequence.h"
@@ -16,52 +16,64 @@
 
 namespace blink {
 
-IntersectionObserverInit::IntersectionObserverInit() {
-  setRootMargin(String("0px"));
-  setThreshold(DoubleOrDoubleSequence::fromDouble(0));
+IntersectionObserverInit::IntersectionObserverInit()
+{
+    setRootMargin(String("0px"));
+    setThreshold(DoubleOrDoubleSequence::fromDouble(0));
 }
 
-IntersectionObserverInit::~IntersectionObserverInit() {}
+IntersectionObserverInit::~IntersectionObserverInit() { }
 
 IntersectionObserverInit::IntersectionObserverInit(const IntersectionObserverInit&) = default;
 
 IntersectionObserverInit& IntersectionObserverInit::operator=(const IntersectionObserverInit&) = default;
 
-bool IntersectionObserverInit::hasRoot() const {
-  return m_root;
+bool IntersectionObserverInit::hasRoot() const
+{
+    return m_root;
 }
-Element* IntersectionObserverInit::root() const {
-  return m_root;
+Element* IntersectionObserverInit::root() const
+{
+    return m_root;
 }
-void IntersectionObserverInit::setRoot(Element* value) {
-  m_root = value;
+void IntersectionObserverInit::setRoot(Element* value)
+{
+    m_root = value;
 }
-void IntersectionObserverInit::setRootToNull() {
-  m_root = Member<Element>();
+void IntersectionObserverInit::setRootToNull()
+{
+    m_root = Member<Element>();
 }
-bool IntersectionObserverInit::hasRootMargin() const {
-  return !m_rootMargin.isNull();
+bool IntersectionObserverInit::hasRootMargin() const
+{
+    return !m_rootMargin.isNull();
 }
-String IntersectionObserverInit::rootMargin() const {
-  return m_rootMargin;
+String IntersectionObserverInit::rootMargin() const
+{
+    return m_rootMargin;
 }
-void IntersectionObserverInit::setRootMargin(String value) {
-  m_rootMargin = value;
+void IntersectionObserverInit::setRootMargin(String value)
+{
+    m_rootMargin = value;
 }
-bool IntersectionObserverInit::hasThreshold() const {
-  return !m_threshold.isNull();
+bool IntersectionObserverInit::hasThreshold() const
+{
+    return !m_threshold.isNull();
 }
-const DoubleOrDoubleSequence& IntersectionObserverInit::threshold() const {
-  return m_threshold;
+const DoubleOrDoubleSequence& IntersectionObserverInit::threshold() const
+{
+    return m_threshold;
 }
-void IntersectionObserverInit::setThreshold(const DoubleOrDoubleSequence& value) {
-  m_threshold = value;
+void IntersectionObserverInit::setThreshold(const DoubleOrDoubleSequence& value)
+{
+    m_threshold = value;
 }
 
-DEFINE_TRACE(IntersectionObserverInit) {
-  visitor->trace(m_root);
-  visitor->trace(m_threshold);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(IntersectionObserverInit)
+{
+    visitor->trace(m_root);
+    visitor->trace(m_threshold);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

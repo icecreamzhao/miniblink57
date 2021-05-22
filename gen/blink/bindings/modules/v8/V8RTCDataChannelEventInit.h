@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8RTCDataChannelEventInit_h
 #define V8RTCDataChannelEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8RTCDataChannelEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCDataChannelEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCDataChannelEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8RTCDataChannelEventInit(const RTCDataChannelEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCDataChannelEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCDataChannelEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<RTCDataChannelEventInit> {
-  static RTCDataChannelEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static RTCDataChannelEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<RTCDataChannelEventInit> {
-  typedef V8RTCDataChannelEventInit Type;
+    typedef V8RTCDataChannelEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8RTCDataChannelEventInit_h
+#endif // V8RTCDataChannelEventInit_h

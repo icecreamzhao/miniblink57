@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8IDBVersionChangeEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,118 +16,122 @@
 
 namespace blink {
 
-void V8IDBVersionChangeEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, IDBVersionChangeEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8IDBVersionChangeEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, IDBVersionChangeEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> dataLossValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "dataLoss")).ToLocal(&dataLossValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (dataLossValue.IsEmpty() || dataLossValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> dataLoss = dataLossValue;
-    if (!dataLoss.prepare(exceptionState))
-      return;
-    const char* validValues[] = {
-        "none",
-        "total",
-    };
-    if (!isValidEnum(dataLoss, validValues, WTF_ARRAY_LENGTH(validValues), "IDBDataLossAmount", exceptionState))
-      return;
-    impl.setDataLoss(dataLoss);
-  }
-
-  v8::Local<v8::Value> newVersionValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "newVersion")).ToLocal(&newVersionValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (newVersionValue.IsEmpty() || newVersionValue->IsUndefined()) {
-    // Do nothing.
-  } else if (newVersionValue->IsNull()) {
-    impl.setNewVersionToNull();
-  } else {
-    unsigned long long newVersion = toUInt64(isolate, newVersionValue, NormalConversion, exceptionState);
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setNewVersion(newVersion);
-  }
+        return;
 
-  v8::Local<v8::Value> oldVersionValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "oldVersion")).ToLocal(&oldVersionValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (oldVersionValue.IsEmpty() || oldVersionValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned long long oldVersion = toUInt64(isolate, oldVersionValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setOldVersion(oldVersion);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> dataLossValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "dataLoss")).ToLocal(&dataLossValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (dataLossValue.IsEmpty() || dataLossValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> dataLoss = dataLossValue;
+        if (!dataLoss.prepare(exceptionState))
+            return;
+        const char* validValues[] = {
+            "none",
+            "total",
+        };
+        if (!isValidEnum(dataLoss, validValues, WTF_ARRAY_LENGTH(validValues), "IDBDataLossAmount", exceptionState))
+            return;
+        impl.setDataLoss(dataLoss);
+    }
+
+    v8::Local<v8::Value> newVersionValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "newVersion")).ToLocal(&newVersionValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (newVersionValue.IsEmpty() || newVersionValue->IsUndefined()) {
+        // Do nothing.
+    } else if (newVersionValue->IsNull()) {
+        impl.setNewVersionToNull();
+    } else {
+        unsigned long long newVersion = toUInt64(isolate, newVersionValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setNewVersion(newVersion);
+    }
+
+    v8::Local<v8::Value> oldVersionValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "oldVersion")).ToLocal(&oldVersionValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (oldVersionValue.IsEmpty() || oldVersionValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned long long oldVersion = toUInt64(isolate, oldVersionValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setOldVersion(oldVersion);
+    }
 }
 
-v8::Local<v8::Value> IDBVersionChangeEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8IDBVersionChangeEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> IDBVersionChangeEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8IDBVersionChangeEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8IDBVersionChangeEventInit(const IDBVersionChangeEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8IDBVersionChangeEventInit(const IDBVersionChangeEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasDataLoss()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "dataLoss"), v8String(isolate, impl.dataLoss()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "dataLoss"), v8String(isolate, String("none")))))
-      return false;
-  }
+    if (impl.hasDataLoss()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "dataLoss"), v8String(isolate, impl.dataLoss()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "dataLoss"), v8String(isolate, String("none")))))
+            return false;
+    }
 
-  if (impl.hasNewVersion()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "newVersion"), v8::Number::New(isolate, static_cast<double>(impl.newVersion())))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "newVersion"), v8::Null(isolate))))
-      return false;
-  }
+    if (impl.hasNewVersion()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "newVersion"), v8::Number::New(isolate, static_cast<double>(impl.newVersion())))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "newVersion"), v8::Null(isolate))))
+            return false;
+    }
 
-  if (impl.hasOldVersion()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "oldVersion"), v8::Number::New(isolate, static_cast<double>(impl.oldVersion())))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "oldVersion"), v8::Number::New(isolate, static_cast<double>(0)))))
-      return false;
-  }
+    if (impl.hasOldVersion()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "oldVersion"), v8::Number::New(isolate, static_cast<double>(impl.oldVersion())))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "oldVersion"), v8::Number::New(isolate, static_cast<double>(0)))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-IDBVersionChangeEventInit NativeValueTraits<IDBVersionChangeEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  IDBVersionChangeEventInit impl;
-  V8IDBVersionChangeEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+IDBVersionChangeEventInit NativeValueTraits<IDBVersionChangeEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    IDBVersionChangeEventInit impl;
+    V8IDBVersionChangeEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

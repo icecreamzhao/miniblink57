@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ConstrainLongRange_h
 #define ConstrainLongRange_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT ConstrainLongRange : public LongRange {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ConstrainLongRange();
-  virtual ~ConstrainLongRange();
-  ConstrainLongRange(const ConstrainLongRange&);
-  ConstrainLongRange& operator=(const ConstrainLongRange&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasExact() const;
-  int exact() const;
-  void setExact(int);
+public:
+    ConstrainLongRange();
+    virtual ~ConstrainLongRange();
+    ConstrainLongRange(const ConstrainLongRange&);
+    ConstrainLongRange& operator=(const ConstrainLongRange&);
 
-  bool hasIdeal() const;
-  int ideal() const;
-  void setIdeal(int);
+    bool hasExact() const;
+    int exact() const;
+    void setExact(int);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasIdeal() const;
+    int ideal() const;
+    void setIdeal(int);
 
- private:
-  bool m_hasExact = false;
-  int m_exact;
-  bool m_hasIdeal = false;
-  int m_ideal;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ConstrainLongRange;
+private:
+    bool m_hasExact = false;
+    int m_exact;
+    bool m_hasIdeal = false;
+    int m_ideal;
+
+    friend class V8ConstrainLongRange;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ConstrainLongRange_h
+#endif // ConstrainLongRange_h

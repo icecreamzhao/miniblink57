@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RTCDataChannelEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -17,69 +17,73 @@
 
 namespace blink {
 
-void V8RTCDataChannelEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RTCDataChannelEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): channel.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> channelValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "channel")).ToLocal(&channelValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (channelValue.IsEmpty() || channelValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member channel is undefined.");
-    return;
-  } else {
-    RTCDataChannel* channel = V8RTCDataChannel::toImplWithTypeCheck(isolate, channelValue);
-    if (!channel) {
-      exceptionState.throwTypeError("member channel is not of type RTCDataChannel.");
-      return;
+void V8RTCDataChannelEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RTCDataChannelEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): channel.");
+        return;
     }
-    impl.setChannel(channel);
-  }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
+
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
+    if (exceptionState.hadException())
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> channelValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "channel")).ToLocal(&channelValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (channelValue.IsEmpty() || channelValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member channel is undefined.");
+        return;
+    } else {
+        RTCDataChannel* channel = V8RTCDataChannel::toImplWithTypeCheck(isolate, channelValue);
+        if (!channel) {
+            exceptionState.throwTypeError("member channel is not of type RTCDataChannel.");
+            return;
+        }
+        impl.setChannel(channel);
+    }
 }
 
-v8::Local<v8::Value> RTCDataChannelEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8RTCDataChannelEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> RTCDataChannelEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8RTCDataChannelEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8RTCDataChannelEventInit(const RTCDataChannelEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8RTCDataChannelEventInit(const RTCDataChannelEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasChannel()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "channel"), ToV8(impl.channel(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasChannel()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "channel"), ToV8(impl.channel(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  return true;
+    return true;
 }
 
-RTCDataChannelEventInit NativeValueTraits<RTCDataChannelEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  RTCDataChannelEventInit impl;
-  V8RTCDataChannelEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+RTCDataChannelEventInit NativeValueTraits<RTCDataChannelEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    RTCDataChannelEventInit impl;
+    V8RTCDataChannelEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

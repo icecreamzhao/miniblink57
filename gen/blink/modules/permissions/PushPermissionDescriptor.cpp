@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PushPermissionDescriptor.h"
 
 namespace blink {
 
-PushPermissionDescriptor::PushPermissionDescriptor() {
-  setUserVisibleOnly(false);
+PushPermissionDescriptor::PushPermissionDescriptor()
+{
+    setUserVisibleOnly(false);
 }
 
-PushPermissionDescriptor::~PushPermissionDescriptor() {}
+PushPermissionDescriptor::~PushPermissionDescriptor() { }
 
 PushPermissionDescriptor::PushPermissionDescriptor(const PushPermissionDescriptor&) = default;
 
 PushPermissionDescriptor& PushPermissionDescriptor::operator=(const PushPermissionDescriptor&) = default;
 
-bool PushPermissionDescriptor::hasUserVisibleOnly() const {
-  return m_hasUserVisibleOnly;
+bool PushPermissionDescriptor::hasUserVisibleOnly() const
+{
+    return m_hasUserVisibleOnly;
 }
-bool PushPermissionDescriptor::userVisibleOnly() const {
-  DCHECK(m_hasUserVisibleOnly);
-  return m_userVisibleOnly;
+bool PushPermissionDescriptor::userVisibleOnly() const
+{
+    DCHECK(m_hasUserVisibleOnly);
+    return m_userVisibleOnly;
 }
-void PushPermissionDescriptor::setUserVisibleOnly(bool value) {
-  m_userVisibleOnly = value;
-  m_hasUserVisibleOnly = true;
+void PushPermissionDescriptor::setUserVisibleOnly(bool value)
+{
+    m_userVisibleOnly = value;
+    m_hasUserVisibleOnly = true;
 }
 
-DEFINE_TRACE(PushPermissionDescriptor) {
-  PermissionDescriptor::trace(visitor);
+DEFINE_TRACE(PushPermissionDescriptor)
+{
+    PermissionDescriptor::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

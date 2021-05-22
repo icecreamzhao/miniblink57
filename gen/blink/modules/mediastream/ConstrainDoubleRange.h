@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ConstrainDoubleRange_h
 #define ConstrainDoubleRange_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT ConstrainDoubleRange : public DoubleRange {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ConstrainDoubleRange();
-  virtual ~ConstrainDoubleRange();
-  ConstrainDoubleRange(const ConstrainDoubleRange&);
-  ConstrainDoubleRange& operator=(const ConstrainDoubleRange&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasExact() const;
-  double exact() const;
-  void setExact(double);
+public:
+    ConstrainDoubleRange();
+    virtual ~ConstrainDoubleRange();
+    ConstrainDoubleRange(const ConstrainDoubleRange&);
+    ConstrainDoubleRange& operator=(const ConstrainDoubleRange&);
 
-  bool hasIdeal() const;
-  double ideal() const;
-  void setIdeal(double);
+    bool hasExact() const;
+    double exact() const;
+    void setExact(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasIdeal() const;
+    double ideal() const;
+    void setIdeal(double);
 
- private:
-  bool m_hasExact = false;
-  double m_exact;
-  bool m_hasIdeal = false;
-  double m_ideal;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ConstrainDoubleRange;
+private:
+    bool m_hasExact = false;
+    double m_exact;
+    bool m_hasIdeal = false;
+    double m_ideal;
+
+    friend class V8ConstrainDoubleRange;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ConstrainDoubleRange_h
+#endif // ConstrainDoubleRange_h

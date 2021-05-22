@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ArrayBuffer_h
 #define V8ArrayBuffer_h
 
@@ -24,26 +24,29 @@
 namespace blink {
 
 class V8ArrayBuffer {
-  STATIC_ONLY(V8ArrayBuffer);
- public:
-  CORE_EXPORT static DOMArrayBuffer* toImpl(v8::Local<v8::Object> object);
-  CORE_EXPORT static DOMArrayBuffer* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<DOMArrayBuffer>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<DOMArrayBuffer>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8ArrayBuffer);
+
+public:
+    CORE_EXPORT static DOMArrayBuffer* toImpl(v8::Local<v8::Object> object);
+    CORE_EXPORT static DOMArrayBuffer* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<DOMArrayBuffer>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<DOMArrayBuffer>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<DOMArrayBuffer> {
-  typedef V8ArrayBuffer Type;
+    typedef V8ArrayBuffer Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ArrayBuffer_h
+#endif // V8ArrayBuffer_h

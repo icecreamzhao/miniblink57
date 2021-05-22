@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "CredentialData.h"
 
 namespace blink {
 
-CredentialData::CredentialData() {
+CredentialData::CredentialData()
+{
 }
 
-CredentialData::~CredentialData() {}
+CredentialData::~CredentialData() { }
 
 CredentialData::CredentialData(const CredentialData&) = default;
 
 CredentialData& CredentialData::operator=(const CredentialData&) = default;
 
-bool CredentialData::hasId() const {
-  return !m_id.isNull();
+bool CredentialData::hasId() const
+{
+    return !m_id.isNull();
 }
-String CredentialData::id() const {
-  return m_id;
+String CredentialData::id() const
+{
+    return m_id;
 }
-void CredentialData::setId(String value) {
-  m_id = value;
+void CredentialData::setId(String value)
+{
+    m_id = value;
 }
 
-DEFINE_TRACE(CredentialData) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(CredentialData)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

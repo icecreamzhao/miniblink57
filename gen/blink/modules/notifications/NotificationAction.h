@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef NotificationAction_h
 #define NotificationAction_h
 
@@ -20,47 +20,48 @@
 namespace blink {
 
 class MODULES_EXPORT NotificationAction : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  NotificationAction();
-  virtual ~NotificationAction();
-  NotificationAction(const NotificationAction&);
-  NotificationAction& operator=(const NotificationAction&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAction() const;
-  String action() const;
-  void setAction(String);
+public:
+    NotificationAction();
+    virtual ~NotificationAction();
+    NotificationAction(const NotificationAction&);
+    NotificationAction& operator=(const NotificationAction&);
 
-  bool hasIcon() const;
-  String icon() const;
-  void setIcon(String);
+    bool hasAction() const;
+    String action() const;
+    void setAction(String);
 
-  bool hasPlaceholder() const;
-  String placeholder() const;
-  void setPlaceholder(String);
-  void setPlaceholderToNull();
+    bool hasIcon() const;
+    String icon() const;
+    void setIcon(String);
 
-  bool hasTitle() const;
-  String title() const;
-  void setTitle(String);
+    bool hasPlaceholder() const;
+    String placeholder() const;
+    void setPlaceholder(String);
+    void setPlaceholderToNull();
 
-  bool hasType() const;
-  String type() const;
-  void setType(String);
+    bool hasTitle() const;
+    String title() const;
+    void setTitle(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasType() const;
+    String type() const;
+    void setType(String);
 
- private:
-  String m_action;
-  String m_icon;
-  String m_placeholder;
-  String m_title;
-  String m_type;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8NotificationAction;
+private:
+    String m_action;
+    String m_icon;
+    String m_placeholder;
+    String m_title;
+    String m_type;
+
+    friend class V8NotificationAction;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // NotificationAction_h
+#endif // NotificationAction_h

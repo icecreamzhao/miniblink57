@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RTCDataChannelEventInit.h"
 
 #include "modules/peerconnection/RTCDataChannel.h"
 
 namespace blink {
 
-RTCDataChannelEventInit::RTCDataChannelEventInit() {
+RTCDataChannelEventInit::RTCDataChannelEventInit()
+{
 }
 
-RTCDataChannelEventInit::~RTCDataChannelEventInit() {}
+RTCDataChannelEventInit::~RTCDataChannelEventInit() { }
 
 RTCDataChannelEventInit::RTCDataChannelEventInit(const RTCDataChannelEventInit&) = default;
 
 RTCDataChannelEventInit& RTCDataChannelEventInit::operator=(const RTCDataChannelEventInit&) = default;
 
-bool RTCDataChannelEventInit::hasChannel() const {
-  return m_channel;
+bool RTCDataChannelEventInit::hasChannel() const
+{
+    return m_channel;
 }
-RTCDataChannel* RTCDataChannelEventInit::channel() const {
-  return m_channel;
+RTCDataChannel* RTCDataChannelEventInit::channel() const
+{
+    return m_channel;
 }
-void RTCDataChannelEventInit::setChannel(RTCDataChannel* value) {
-  m_channel = value;
-}
-
-DEFINE_TRACE(RTCDataChannelEventInit) {
-  visitor->trace(m_channel);
-  EventInit::trace(visitor);
+void RTCDataChannelEventInit::setChannel(RTCDataChannel* value)
+{
+    m_channel = value;
 }
 
-}  // namespace blink
+DEFINE_TRACE(RTCDataChannelEventInit)
+{
+    visitor->trace(m_channel);
+    EventInit::trace(visitor);
+}
+
+} // namespace blink

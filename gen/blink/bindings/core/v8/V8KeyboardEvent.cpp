@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8KeyboardEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,367 +50,404 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&KeyboardEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "KeyboardEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace KeyboardEventV8Internal {
 
-static void keyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void keyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->key(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->key(), info.GetIsolate());
+    }
 
-CORE_EXPORT void keyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::keyAttributeGetter(info);
-}
+    CORE_EXPORT void keyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::keyAttributeGetter(info);
+    }
 
-static void codeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void codeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->code(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->code(), info.GetIsolate());
+    }
 
-CORE_EXPORT void codeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::codeAttributeGetter(info);
-}
+    CORE_EXPORT void codeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::codeAttributeGetter(info);
+    }
 
-static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->location());
-}
+        v8SetReturnValueUnsigned(info, impl->location());
+    }
 
-CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::locationAttributeGetter(info);
-}
+    CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::locationAttributeGetter(info);
+    }
 
-static void ctrlKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ctrlKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->ctrlKey());
-}
+        v8SetReturnValueBool(info, impl->ctrlKey());
+    }
 
-CORE_EXPORT void ctrlKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::ctrlKeyAttributeGetter(info);
-}
+    CORE_EXPORT void ctrlKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::ctrlKeyAttributeGetter(info);
+    }
 
-static void shiftKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shiftKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->shiftKey());
-}
+        v8SetReturnValueBool(info, impl->shiftKey());
+    }
 
-CORE_EXPORT void shiftKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::shiftKeyAttributeGetter(info);
-}
+    CORE_EXPORT void shiftKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::shiftKeyAttributeGetter(info);
+    }
 
-static void altKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void altKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->altKey());
-}
+        v8SetReturnValueBool(info, impl->altKey());
+    }
 
-CORE_EXPORT void altKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::altKeyAttributeGetter(info);
-}
+    CORE_EXPORT void altKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::altKeyAttributeGetter(info);
+    }
 
-static void metaKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void metaKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->metaKey());
-}
+        v8SetReturnValueBool(info, impl->metaKey());
+    }
 
-CORE_EXPORT void metaKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::metaKeyAttributeGetter(info);
-}
+    CORE_EXPORT void metaKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::metaKeyAttributeGetter(info);
+    }
 
-static void repeatAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void repeatAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->repeat());
-}
+        v8SetReturnValueBool(info, impl->repeat());
+    }
 
-CORE_EXPORT void repeatAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::repeatAttributeGetter(info);
-}
+    CORE_EXPORT void repeatAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::repeatAttributeGetter(info);
+    }
 
-static void isComposingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isComposingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isComposing());
-}
+        v8SetReturnValueBool(info, impl->isComposing());
+    }
 
-CORE_EXPORT void isComposingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::isComposingAttributeGetter(info);
-}
+    CORE_EXPORT void isComposingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::isComposingAttributeGetter(info);
+    }
 
-static void charCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void charCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->charCode());
-}
+        v8SetReturnValueInt(info, impl->charCode());
+    }
 
-CORE_EXPORT void charCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::charCodeAttributeGetter(info);
-}
+    CORE_EXPORT void charCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::charCodeAttributeGetter(info);
+    }
 
-static void keyCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void keyCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->keyCode());
-}
+        v8SetReturnValueInt(info, impl->keyCode());
+    }
 
-CORE_EXPORT void keyCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::keyCodeAttributeGetter(info);
-}
+    CORE_EXPORT void keyCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::keyCodeAttributeGetter(info);
+    }
 
-static void whichAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void whichAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->which());
-}
+        v8SetReturnValueInt(info, impl->which());
+    }
 
-CORE_EXPORT void whichAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::whichAttributeGetter(info);
-}
+    CORE_EXPORT void whichAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::whichAttributeGetter(info);
+    }
 
-static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isTrusted());
-}
+        v8SetReturnValueBool(info, impl->isTrusted());
+    }
 
-CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::isTrustedAttributeGetter(info);
-}
+    CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::isTrustedAttributeGetter(info);
+    }
 
-static void getModifierStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(info.Holder());
+    static void getModifierStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getModifierState", "KeyboardEvent", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getModifierState", "KeyboardEvent", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> keyArg;
-  keyArg = info[0];
-  if (!keyArg.prepare())
-    return;
+        V8StringResource<> keyArg;
+        keyArg = info[0];
+        if (!keyArg.prepare())
+            return;
 
-  v8SetReturnValueBool(info, impl->getModifierState(keyArg));
-}
-
-CORE_EXPORT  void getModifierStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  KeyboardEventV8Internal::getModifierStateMethod(info);
-}
-
-static void initKeyboardEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "KeyboardEvent", "initKeyboardEvent");
-
-  KeyboardEvent* impl = V8KeyboardEvent::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  V8StringResource<> type;
-  bool bubbles;
-  bool cancelable;
-  DOMWindow* view;
-  V8StringResource<> keyIdentifier;
-  unsigned location;
-  bool ctrlKey;
-  bool altKey;
-  bool shiftKey;
-  bool metaKey;
-  type = info[0];
-  if (!type.prepare())
-    return;
-
-  bubbles = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  cancelable = toBoolean(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  view = toDOMWindow(info.GetIsolate(), info[3]);
-  if (!view && !isUndefinedOrNull(info[3])) {
-    exceptionState.throwTypeError("parameter 4 is not of type 'Window'.");
-
-    return;
-  }
-
-  keyIdentifier = info[4];
-  if (!keyIdentifier.prepare())
-    return;
-
-  location = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ctrlKey = toBoolean(info.GetIsolate(), info[6], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  altKey = toBoolean(info.GetIsolate(), info[7], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  shiftKey = toBoolean(info.GetIsolate(), info[8], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  metaKey = toBoolean(info.GetIsolate(), info[9], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->initKeyboardEvent(scriptState, type, bubbles, cancelable, view, keyIdentifier, location, ctrlKey, altKey, shiftKey, metaKey);
-}
-
-CORE_EXPORT  void initKeyboardEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8KeyboardEvent_InitKeyboardEvent_Method);
-  KeyboardEventV8Internal::initKeyboardEventMethod(info);
-}
-
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "KeyboardEvent");
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> type;
-  KeyboardEventInit eventInitDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
-
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
-
-    return;
-  }
-  V8KeyboardEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  KeyboardEvent* impl = KeyboardEvent::create(scriptState, type, eventInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8KeyboardEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        v8SetReturnValueBool(info, impl->getModifierState(keyArg));
+    }
+
+    CORE_EXPORT void getModifierStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        KeyboardEventV8Internal::getModifierStateMethod(info);
+    }
+
+    static void initKeyboardEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "KeyboardEvent", "initKeyboardEvent");
+
+        KeyboardEvent* impl = V8KeyboardEvent::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        V8StringResource<> type;
+        bool bubbles;
+        bool cancelable;
+        DOMWindow* view;
+        V8StringResource<> keyIdentifier;
+        unsigned location;
+        bool ctrlKey;
+        bool altKey;
+        bool shiftKey;
+        bool metaKey;
+        type = info[0];
+        if (!type.prepare())
+            return;
+
+        bubbles = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        cancelable = toBoolean(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        view = toDOMWindow(info.GetIsolate(), info[3]);
+        if (!view && !isUndefinedOrNull(info[3])) {
+            exceptionState.throwTypeError("parameter 4 is not of type 'Window'.");
+
+            return;
+        }
+
+        keyIdentifier = info[4];
+        if (!keyIdentifier.prepare())
+            return;
+
+        location = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ctrlKey = toBoolean(info.GetIsolate(), info[6], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        altKey = toBoolean(info.GetIsolate(), info[7], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        shiftKey = toBoolean(info.GetIsolate(), info[8], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        metaKey = toBoolean(info.GetIsolate(), info[9], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->initKeyboardEvent(scriptState, type, bubbles, cancelable, view, keyIdentifier, location, ctrlKey, altKey, shiftKey, metaKey);
+    }
+
+    CORE_EXPORT void initKeyboardEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8KeyboardEvent_InitKeyboardEvent_Method);
+        KeyboardEventV8Internal::initKeyboardEventMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "KeyboardEvent");
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> type;
+        KeyboardEventInit eventInitDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
+
+            return;
+        }
+        V8KeyboardEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        KeyboardEvent* impl = KeyboardEvent::create(scriptState, type, eventInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8KeyboardEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace KeyboardEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8KeyboardEventAccessors[] = {
-    {"key", KeyboardEventV8Internal::keyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"code", KeyboardEventV8Internal::codeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"location", KeyboardEventV8Internal::locationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ctrlKey", KeyboardEventV8Internal::ctrlKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shiftKey", KeyboardEventV8Internal::shiftKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"altKey", KeyboardEventV8Internal::altKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"metaKey", KeyboardEventV8Internal::metaKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"repeat", KeyboardEventV8Internal::repeatAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isComposing", KeyboardEventV8Internal::isComposingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"charCode", KeyboardEventV8Internal::charCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"keyCode", KeyboardEventV8Internal::keyCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"which", KeyboardEventV8Internal::whichAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTrusted", KeyboardEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "key", KeyboardEventV8Internal::keyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "code", KeyboardEventV8Internal::codeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "location", KeyboardEventV8Internal::locationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ctrlKey", KeyboardEventV8Internal::ctrlKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shiftKey", KeyboardEventV8Internal::shiftKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "altKey", KeyboardEventV8Internal::altKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "metaKey", KeyboardEventV8Internal::metaKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "repeat", KeyboardEventV8Internal::repeatAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isComposing", KeyboardEventV8Internal::isComposingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "charCode", KeyboardEventV8Internal::charCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "keyCode", KeyboardEventV8Internal::keyCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "which", KeyboardEventV8Internal::whichAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTrusted", KeyboardEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8KeyboardEventMethods[] = {
-    {"getModifierState", KeyboardEventV8Internal::getModifierStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"initKeyboardEvent", KeyboardEventV8Internal::initKeyboardEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getModifierState", KeyboardEventV8Internal::getModifierStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "initKeyboardEvent", KeyboardEventV8Internal::initKeyboardEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8KeyboardEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("KeyboardEvent"));
-    return;
-  }
+void V8KeyboardEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("KeyboardEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  KeyboardEventV8Internal::constructor(info);
+    KeyboardEventV8Internal::constructor(info);
 }
 
-static void installV8KeyboardEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8KeyboardEvent::wrapperTypeInfo.interfaceName, V8UIEvent::domTemplate(isolate, world), V8KeyboardEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8KeyboardEvent::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8KeyboardEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8KeyboardEvent::wrapperTypeInfo.interfaceName, V8UIEvent::domTemplate(isolate, world), V8KeyboardEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8KeyboardEvent::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8KeyboardEventConstants[] = {
-      {"DOM_KEY_LOCATION_STANDARD", 0x00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DOM_KEY_LOCATION_LEFT", 0x01, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DOM_KEY_LOCATION_RIGHT", 0x02, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DOM_KEY_LOCATION_NUMPAD", 0x03, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8KeyboardEventConstants, WTF_ARRAY_LENGTH(V8KeyboardEventConstants));
-  static_assert(0x00 == KeyboardEvent::kDomKeyLocationStandard, "the value of KeyboardEvent_kDomKeyLocationStandard does not match with implementation");
-  static_assert(0x01 == KeyboardEvent::kDomKeyLocationLeft, "the value of KeyboardEvent_kDomKeyLocationLeft does not match with implementation");
-  static_assert(0x02 == KeyboardEvent::kDomKeyLocationRight, "the value of KeyboardEvent_kDomKeyLocationRight does not match with implementation");
-  static_assert(0x03 == KeyboardEvent::kDomKeyLocationNumpad, "the value of KeyboardEvent_kDomKeyLocationNumpad does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8KeyboardEventAccessors, WTF_ARRAY_LENGTH(V8KeyboardEventAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8KeyboardEventMethods, WTF_ARRAY_LENGTH(V8KeyboardEventMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8KeyboardEventConstants[] = {
+        { "DOM_KEY_LOCATION_STANDARD", 0x00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DOM_KEY_LOCATION_LEFT", 0x01, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DOM_KEY_LOCATION_RIGHT", 0x02, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DOM_KEY_LOCATION_NUMPAD", 0x03, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8KeyboardEventConstants, WTF_ARRAY_LENGTH(V8KeyboardEventConstants));
+    static_assert(0x00 == KeyboardEvent::kDomKeyLocationStandard, "the value of KeyboardEvent_kDomKeyLocationStandard does not match with implementation");
+    static_assert(0x01 == KeyboardEvent::kDomKeyLocationLeft, "the value of KeyboardEvent_kDomKeyLocationLeft does not match with implementation");
+    static_assert(0x02 == KeyboardEvent::kDomKeyLocationRight, "the value of KeyboardEvent_kDomKeyLocationRight does not match with implementation");
+    static_assert(0x03 == KeyboardEvent::kDomKeyLocationNumpad, "the value of KeyboardEvent_kDomKeyLocationNumpad does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8KeyboardEventAccessors, WTF_ARRAY_LENGTH(V8KeyboardEventAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8KeyboardEventMethods, WTF_ARRAY_LENGTH(V8KeyboardEventMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8KeyboardEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8KeyboardEventTemplate);
+v8::Local<v8::FunctionTemplate> V8KeyboardEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8KeyboardEventTemplate);
 }
 
-bool V8KeyboardEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8KeyboardEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8KeyboardEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8KeyboardEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-KeyboardEvent* V8KeyboardEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+KeyboardEvent* V8KeyboardEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

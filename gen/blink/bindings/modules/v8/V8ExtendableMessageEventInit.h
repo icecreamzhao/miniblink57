@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ExtendableMessageEventInit_h
 #define V8ExtendableMessageEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ExtendableMessageEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ExtendableMessageEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ExtendableMessageEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ExtendableMessageEventInit(const ExtendableMessageEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ExtendableMessageEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ExtendableMessageEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ExtendableMessageEventInit> {
-  static ExtendableMessageEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ExtendableMessageEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ExtendableMessageEventInit> {
-  typedef V8ExtendableMessageEventInit Type;
+    typedef V8ExtendableMessageEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ExtendableMessageEventInit_h
+#endif // V8ExtendableMessageEventInit_h

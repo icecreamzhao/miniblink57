@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef LocallyStoredCredentialData_h
 #define LocallyStoredCredentialData_h
 
@@ -20,31 +20,32 @@
 namespace blink {
 
 class MODULES_EXPORT LocallyStoredCredentialData : public CredentialData {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  LocallyStoredCredentialData();
-  virtual ~LocallyStoredCredentialData();
-  LocallyStoredCredentialData(const LocallyStoredCredentialData&);
-  LocallyStoredCredentialData& operator=(const LocallyStoredCredentialData&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasIconURL() const;
-  String iconURL() const;
-  void setIconURL(String);
+public:
+    LocallyStoredCredentialData();
+    virtual ~LocallyStoredCredentialData();
+    LocallyStoredCredentialData(const LocallyStoredCredentialData&);
+    LocallyStoredCredentialData& operator=(const LocallyStoredCredentialData&);
 
-  bool hasName() const;
-  String name() const;
-  void setName(String);
+    bool hasIconURL() const;
+    String iconURL() const;
+    void setIconURL(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasName() const;
+    String name() const;
+    void setName(String);
 
- private:
-  String m_iconURL;
-  String m_name;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8LocallyStoredCredentialData;
+private:
+    String m_iconURL;
+    String m_name;
+
+    friend class V8LocallyStoredCredentialData;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // LocallyStoredCredentialData_h
+#endif // LocallyStoredCredentialData_h

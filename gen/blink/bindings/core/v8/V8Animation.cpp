@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Animation.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -54,477 +54,528 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&Animation::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Animation is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace AnimationV8Internal {
 
-static void effectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void effectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->effect()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->effect()), impl);
+    }
 
-CORE_EXPORT void effectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationV8Internal::effectAttributeGetter(info);
-}
+    CORE_EXPORT void effectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationV8Internal::effectAttributeGetter(info);
+    }
 
-static void effectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Animation* impl = V8Animation::toImpl(holder);
+    static void effectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Animation* impl = V8Animation::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Animation", "effect");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Animation", "effect");
 
-  // Prepare the value to be set.
-  AnimationEffectReadOnly* cppValue = V8AnimationEffectReadOnly::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+        // Prepare the value to be set.
+        AnimationEffectReadOnly* cppValue = V8AnimationEffectReadOnly::toImplWithTypeCheck(info.GetIsolate(), v8Value);
 
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue && !isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("The provided value is not of type 'AnimationEffectReadOnly'.");
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue && !isUndefinedOrNull(v8Value)) {
+            exceptionState.throwTypeError("The provided value is not of type 'AnimationEffectReadOnly'.");
+            return;
+        }
 
-  impl->setEffect(cppValue);
-}
+        impl->setEffect(cppValue);
+    }
 
-CORE_EXPORT void effectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void effectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  AnimationV8Internal::effectAttributeSetter(v8Value, info);
-}
+        AnimationV8Internal::effectAttributeSetter(v8Value, info);
+    }
 
-static void timelineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void timelineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  AnimationTimeline* cppValue(WTF::getPtr(impl->timeline()));
+        AnimationTimeline* cppValue(WTF::getPtr(impl->timeline()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Animation#timeline";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Animation#timeline";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void timelineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationV8Internal::timelineAttributeGetter(info);
-}
+    CORE_EXPORT void timelineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationV8Internal::timelineAttributeGetter(info);
+    }
 
-static void startTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void startTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->startTime(isNull));
+        double cppValue(impl->startTime(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void startTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_StartTime_AttributeGetter);
+    CORE_EXPORT void startTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_StartTime_AttributeGetter);
 
-  AnimationV8Internal::startTimeAttributeGetter(info);
-}
+        AnimationV8Internal::startTimeAttributeGetter(info);
+    }
 
-static void startTimeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Animation* impl = V8Animation::toImpl(holder);
+    static void startTimeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Animation* impl = V8Animation::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Animation", "startTime");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Animation", "startTime");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setStartTime(cppValue);
-}
+        impl->setStartTime(cppValue);
+    }
 
-CORE_EXPORT void startTimeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void startTimeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_StartTime_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_StartTime_AttributeSetter);
 
-  AnimationV8Internal::startTimeAttributeSetter(v8Value, info);
-}
+        AnimationV8Internal::startTimeAttributeSetter(v8Value, info);
+    }
 
-static void currentTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void currentTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->currentTime(isNull));
+        double cppValue(impl->currentTime(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void currentTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_CurrentTime_AttributeGetter);
+    CORE_EXPORT void currentTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_CurrentTime_AttributeGetter);
 
-  AnimationV8Internal::currentTimeAttributeGetter(info);
-}
+        AnimationV8Internal::currentTimeAttributeGetter(info);
+    }
 
-static void currentTimeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Animation* impl = V8Animation::toImpl(holder);
+    static void currentTimeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Animation* impl = V8Animation::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Animation", "currentTime");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Animation", "currentTime");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setCurrentTime(cppValue);
-}
+        impl->setCurrentTime(cppValue);
+    }
 
-CORE_EXPORT void currentTimeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void currentTimeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_CurrentTime_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_CurrentTime_AttributeSetter);
 
-  AnimationV8Internal::currentTimeAttributeSetter(v8Value, info);
-}
+        AnimationV8Internal::currentTimeAttributeSetter(v8Value, info);
+    }
 
-static void playbackRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void playbackRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  v8SetReturnValue(info, impl->playbackRate());
-}
+        v8SetReturnValue(info, impl->playbackRate());
+    }
 
-CORE_EXPORT void playbackRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_PlaybackRate_AttributeGetter);
+    CORE_EXPORT void playbackRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_PlaybackRate_AttributeGetter);
 
-  AnimationV8Internal::playbackRateAttributeGetter(info);
-}
+        AnimationV8Internal::playbackRateAttributeGetter(info);
+    }
 
-static void playbackRateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Animation* impl = V8Animation::toImpl(holder);
+    static void playbackRateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Animation* impl = V8Animation::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Animation", "playbackRate");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Animation", "playbackRate");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setPlaybackRate(cppValue);
-}
+        impl->setPlaybackRate(cppValue);
+    }
 
-CORE_EXPORT void playbackRateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void playbackRateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_PlaybackRate_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_PlaybackRate_AttributeSetter);
 
-  AnimationV8Internal::playbackRateAttributeSetter(v8Value, info);
-}
+        AnimationV8Internal::playbackRateAttributeSetter(v8Value, info);
+    }
 
-static void playStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void playStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->playState(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->playState(), info.GetIsolate());
+    }
 
-CORE_EXPORT void playStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_PlayState_AttributeGetter);
+    CORE_EXPORT void playStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_PlayState_AttributeGetter);
 
-  AnimationV8Internal::playStateAttributeGetter(info);
-}
+        AnimationV8Internal::playStateAttributeGetter(info);
+    }
 
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->id(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->id(), info.GetIsolate());
+    }
 
-CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Id_AttributeGetter);
+    CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Id_AttributeGetter);
 
-  AnimationV8Internal::idAttributeGetter(info);
-}
+        AnimationV8Internal::idAttributeGetter(info);
+    }
 
-static void idAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Animation* impl = V8Animation::toImpl(holder);
+    static void idAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Animation* impl = V8Animation::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setId(cppValue);
-}
+        impl->setId(cppValue);
+    }
 
-CORE_EXPORT void idAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void idAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Id_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Id_AttributeSetter);
 
-  AnimationV8Internal::idAttributeSetter(v8Value, info);
-}
+        AnimationV8Internal::idAttributeSetter(v8Value, info);
+    }
 
-static void onfinishAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onfinishAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onfinish()));
+        EventListener* cppValue(WTF::getPtr(impl->onfinish()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onfinishAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Onfinish_AttributeGetter);
+    CORE_EXPORT void onfinishAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Onfinish_AttributeGetter);
 
-  AnimationV8Internal::onfinishAttributeGetter(info);
-}
+        AnimationV8Internal::onfinishAttributeGetter(info);
+    }
 
-static void onfinishAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Animation* impl = V8Animation::toImpl(holder);
+    static void onfinishAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Animation* impl = V8Animation::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onfinish(), v8Value, V8Animation::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onfinish(), v8Value, V8Animation::eventListenerCacheIndex);
 
-  impl->setOnfinish(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnfinish(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onfinishAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onfinishAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Onfinish_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Onfinish_AttributeSetter);
 
-  AnimationV8Internal::onfinishAttributeSetter(v8Value, info);
-}
+        AnimationV8Internal::onfinishAttributeSetter(v8Value, info);
+    }
 
-static void oncancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->oncancel()));
+        EventListener* cppValue(WTF::getPtr(impl->oncancel()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Oncancel_AttributeGetter);
+    CORE_EXPORT void oncancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Oncancel_AttributeGetter);
 
-  AnimationV8Internal::oncancelAttributeGetter(info);
-}
+        AnimationV8Internal::oncancelAttributeGetter(info);
+    }
 
-static void oncancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Animation* impl = V8Animation::toImpl(holder);
+    static void oncancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Animation* impl = V8Animation::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncancel(), v8Value, V8Animation::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncancel(), v8Value, V8Animation::eventListenerCacheIndex);
 
-  impl->setOncancel(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOncancel(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Oncancel_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Oncancel_AttributeSetter);
 
-  AnimationV8Internal::oncancelAttributeSetter(v8Value, info);
-}
+        AnimationV8Internal::oncancelAttributeSetter(v8Value, info);
+    }
 
-static void finishedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void finishedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, impl->finished(scriptState).v8Value());
-}
+        v8SetReturnValue(info, impl->finished(scriptState).v8Value());
+    }
 
-CORE_EXPORT void finishedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationV8Internal::finishedAttributeGetter(info);
-}
+    CORE_EXPORT void finishedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationV8Internal::finishedAttributeGetter(info);
+    }
 
-static void readyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void readyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Animation* impl = V8Animation::toImpl(holder);
+        Animation* impl = V8Animation::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, impl->ready(scriptState).v8Value());
-}
+        v8SetReturnValue(info, impl->ready(scriptState).v8Value());
+    }
 
-CORE_EXPORT void readyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationV8Internal::readyAttributeGetter(info);
-}
+    CORE_EXPORT void readyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationV8Internal::readyAttributeGetter(info);
+    }
 
-static void finishMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Animation", "finish");
+    static void finishMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Animation", "finish");
 
-  Animation* impl = V8Animation::toImpl(info.Holder());
+        Animation* impl = V8Animation::toImpl(info.Holder());
 
-  impl->finish(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->finish(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void finishMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Finish_Method);
-  AnimationV8Internal::finishMethod(info);
-}
+    CORE_EXPORT void finishMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Finish_Method);
+        AnimationV8Internal::finishMethod(info);
+    }
 
-static void playMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Animation", "play");
+    static void playMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Animation", "play");
 
-  Animation* impl = V8Animation::toImpl(info.Holder());
+        Animation* impl = V8Animation::toImpl(info.Holder());
 
-  impl->play(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->play(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void playMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Play_Method);
-  AnimationV8Internal::playMethod(info);
-}
+    CORE_EXPORT void playMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Play_Method);
+        AnimationV8Internal::playMethod(info);
+    }
 
-static void pauseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Animation", "pause");
+    static void pauseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Animation", "pause");
 
-  Animation* impl = V8Animation::toImpl(info.Holder());
+        Animation* impl = V8Animation::toImpl(info.Holder());
 
-  impl->pause(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->pause(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void pauseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Pause_Method);
-  AnimationV8Internal::pauseMethod(info);
-}
+    CORE_EXPORT void pauseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Pause_Method);
+        AnimationV8Internal::pauseMethod(info);
+    }
 
-static void reverseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Animation", "reverse");
+    static void reverseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Animation", "reverse");
 
-  Animation* impl = V8Animation::toImpl(info.Holder());
+        Animation* impl = V8Animation::toImpl(info.Holder());
 
-  impl->reverse(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->reverse(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void reverseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Reverse_Method);
-  AnimationV8Internal::reverseMethod(info);
-}
+    CORE_EXPORT void reverseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Reverse_Method);
+        AnimationV8Internal::reverseMethod(info);
+    }
 
-static void cancelMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Animation* impl = V8Animation::toImpl(info.Holder());
+    static void cancelMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Animation* impl = V8Animation::toImpl(info.Holder());
 
-  impl->cancel();
-}
+        impl->cancel();
+    }
 
-CORE_EXPORT  void cancelMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Cancel_Method);
-  AnimationV8Internal::cancelMethod(info);
-}
+    CORE_EXPORT void cancelMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Animation_Cancel_Method);
+        AnimationV8Internal::cancelMethod(info);
+    }
 
 } // namespace AnimationV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8AnimationAccessors[] = {
-    {"startTime", AnimationV8Internal::startTimeAttributeGetterCallback, AnimationV8Internal::startTimeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"currentTime", AnimationV8Internal::currentTimeAttributeGetterCallback, AnimationV8Internal::currentTimeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"playbackRate", AnimationV8Internal::playbackRateAttributeGetterCallback, AnimationV8Internal::playbackRateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"playState", AnimationV8Internal::playStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"id", AnimationV8Internal::idAttributeGetterCallback, AnimationV8Internal::idAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onfinish", AnimationV8Internal::onfinishAttributeGetterCallback, AnimationV8Internal::onfinishAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncancel", AnimationV8Internal::oncancelAttributeGetterCallback, AnimationV8Internal::oncancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "startTime", AnimationV8Internal::startTimeAttributeGetterCallback, AnimationV8Internal::startTimeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "currentTime", AnimationV8Internal::currentTimeAttributeGetterCallback, AnimationV8Internal::currentTimeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "playbackRate", AnimationV8Internal::playbackRateAttributeGetterCallback, AnimationV8Internal::playbackRateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "playState", AnimationV8Internal::playStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "id", AnimationV8Internal::idAttributeGetterCallback, AnimationV8Internal::idAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onfinish", AnimationV8Internal::onfinishAttributeGetterCallback, AnimationV8Internal::onfinishAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncancel", AnimationV8Internal::oncancelAttributeGetterCallback, AnimationV8Internal::oncancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8AnimationMethods[] = {
-    {"finish", AnimationV8Internal::finishMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"play", AnimationV8Internal::playMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pause", AnimationV8Internal::pauseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"reverse", AnimationV8Internal::reverseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cancel", AnimationV8Internal::cancelMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "finish", AnimationV8Internal::finishMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "play", AnimationV8Internal::playMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pause", AnimationV8Internal::pauseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "reverse", AnimationV8Internal::reverseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cancel", AnimationV8Internal::cancelMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8AnimationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Animation::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8Animation::internalFieldCount);
+static void installV8AnimationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Animation::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8Animation::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationAccessors, WTF_ARRAY_LENGTH(V8AnimationAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationMethods, WTF_ARRAY_LENGTH(V8AnimationMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationAccessors, WTF_ARRAY_LENGTH(V8AnimationAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationMethods, WTF_ARRAY_LENGTH(V8AnimationMethods));
 
-  if (RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorfinishedConfiguration = {"finished", AnimationV8Internal::finishedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfinishedConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorreadyConfiguration = {"ready", AnimationV8Internal::readyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorreadyConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessortimelineConfiguration = {"timeline", AnimationV8Internal::timelineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessortimelineConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoreffectConfiguration = {"effect", AnimationV8Internal::effectAttributeGetterCallback, AnimationV8Internal::effectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoreffectConfiguration);
-  }
+    if (RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorfinishedConfiguration = { "finished", AnimationV8Internal::finishedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfinishedConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorreadyConfiguration = { "ready", AnimationV8Internal::readyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorreadyConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessortimelineConfiguration = { "timeline", AnimationV8Internal::timelineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessortimelineConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoreffectConfiguration = { "effect", AnimationV8Internal::effectAttributeGetterCallback, AnimationV8Internal::effectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoreffectConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8Animation::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AnimationTemplate);
+v8::Local<v8::FunctionTemplate> V8Animation::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AnimationTemplate);
 }
 
-bool V8Animation::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Animation::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Animation::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Animation::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Animation* V8Animation::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Animation* V8Animation::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

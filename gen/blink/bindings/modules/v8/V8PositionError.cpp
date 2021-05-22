@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PositionError.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,82 +45,91 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PositionError::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PositionError is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PositionErrorV8Internal {
 
-static void codeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void codeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PositionError* impl = V8PositionError::toImpl(holder);
+        PositionError* impl = V8PositionError::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->code());
-}
+        v8SetReturnValueUnsigned(info, impl->code());
+    }
 
-MODULES_EXPORT void codeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PositionErrorV8Internal::codeAttributeGetter(info);
-}
+    MODULES_EXPORT void codeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PositionErrorV8Internal::codeAttributeGetter(info);
+    }
 
-static void messageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void messageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PositionError* impl = V8PositionError::toImpl(holder);
+        PositionError* impl = V8PositionError::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->message(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->message(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void messageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PositionErrorV8Internal::messageAttributeGetter(info);
-}
+    MODULES_EXPORT void messageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PositionErrorV8Internal::messageAttributeGetter(info);
+    }
 
 } // namespace PositionErrorV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PositionErrorAccessors[] = {
-    {"code", PositionErrorV8Internal::codeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"message", PositionErrorV8Internal::messageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "code", PositionErrorV8Internal::codeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "message", PositionErrorV8Internal::messageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PositionErrorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PositionError::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PositionError::internalFieldCount);
+static void installV8PositionErrorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PositionError::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PositionError::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8PositionErrorConstants[] = {
-      {"PERMISSION_DENIED", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"POSITION_UNAVAILABLE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"TIMEOUT", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8PositionErrorConstants, WTF_ARRAY_LENGTH(V8PositionErrorConstants));
-  static_assert(1 == PositionError::kPermissionDenied, "the value of PositionError_kPermissionDenied does not match with implementation");
-  static_assert(2 == PositionError::kPositionUnavailable, "the value of PositionError_kPositionUnavailable does not match with implementation");
-  static_assert(3 == PositionError::kTimeout, "the value of PositionError_kTimeout does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PositionErrorAccessors, WTF_ARRAY_LENGTH(V8PositionErrorAccessors));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8PositionErrorConstants[] = {
+        { "PERMISSION_DENIED", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "POSITION_UNAVAILABLE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "TIMEOUT", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8PositionErrorConstants, WTF_ARRAY_LENGTH(V8PositionErrorConstants));
+    static_assert(1 == PositionError::kPermissionDenied, "the value of PositionError_kPermissionDenied does not match with implementation");
+    static_assert(2 == PositionError::kPositionUnavailable, "the value of PositionError_kPositionUnavailable does not match with implementation");
+    static_assert(3 == PositionError::kTimeout, "the value of PositionError_kTimeout does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PositionErrorAccessors, WTF_ARRAY_LENGTH(V8PositionErrorAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8PositionError::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PositionErrorTemplate);
+v8::Local<v8::FunctionTemplate> V8PositionError::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PositionErrorTemplate);
 }
 
-bool V8PositionError::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PositionError::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PositionError::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PositionError::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PositionError* V8PositionError::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PositionError* V8PositionError::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

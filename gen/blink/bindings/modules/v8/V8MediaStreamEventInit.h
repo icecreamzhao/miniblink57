@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8MediaStreamEventInit_h
 #define V8MediaStreamEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8MediaStreamEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaStreamEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaStreamEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8MediaStreamEventInit(const MediaStreamEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaStreamEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaStreamEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<MediaStreamEventInit> {
-  static MediaStreamEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static MediaStreamEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<MediaStreamEventInit> {
-  typedef V8MediaStreamEventInit Type;
+    typedef V8MediaStreamEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8MediaStreamEventInit_h
+#endif // V8MediaStreamEventInit_h

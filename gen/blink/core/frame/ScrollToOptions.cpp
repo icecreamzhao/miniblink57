@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ScrollToOptions.h"
 
 namespace blink {
 
-ScrollToOptions::ScrollToOptions() {
+ScrollToOptions::ScrollToOptions()
+{
 }
 
-ScrollToOptions::~ScrollToOptions() {}
+ScrollToOptions::~ScrollToOptions() { }
 
 ScrollToOptions::ScrollToOptions(const ScrollToOptions&) = default;
 
 ScrollToOptions& ScrollToOptions::operator=(const ScrollToOptions&) = default;
 
-bool ScrollToOptions::hasLeft() const {
-  return m_hasLeft;
+bool ScrollToOptions::hasLeft() const
+{
+    return m_hasLeft;
 }
-double ScrollToOptions::left() const {
-  DCHECK(m_hasLeft);
-  return m_left;
+double ScrollToOptions::left() const
+{
+    DCHECK(m_hasLeft);
+    return m_left;
 }
-void ScrollToOptions::setLeft(double value) {
-  m_left = value;
-  m_hasLeft = true;
+void ScrollToOptions::setLeft(double value)
+{
+    m_left = value;
+    m_hasLeft = true;
 }
-bool ScrollToOptions::hasTop() const {
-  return m_hasTop;
+bool ScrollToOptions::hasTop() const
+{
+    return m_hasTop;
 }
-double ScrollToOptions::top() const {
-  DCHECK(m_hasTop);
-  return m_top;
+double ScrollToOptions::top() const
+{
+    DCHECK(m_hasTop);
+    return m_top;
 }
-void ScrollToOptions::setTop(double value) {
-  m_top = value;
-  m_hasTop = true;
+void ScrollToOptions::setTop(double value)
+{
+    m_top = value;
+    m_hasTop = true;
 }
 
-DEFINE_TRACE(ScrollToOptions) {
-  ScrollOptions::trace(visitor);
+DEFINE_TRACE(ScrollToOptions)
+{
+    ScrollOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

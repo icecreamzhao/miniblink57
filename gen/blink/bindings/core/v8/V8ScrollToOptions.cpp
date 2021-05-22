@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ScrollToOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,82 +16,86 @@
 
 namespace blink {
 
-void V8ScrollToOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ScrollToOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8ScrollToOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ScrollToOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8ScrollOptions::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> leftValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "left")).ToLocal(&leftValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (leftValue.IsEmpty() || leftValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    double left = toDouble(isolate, leftValue, exceptionState);
+    V8ScrollOptions::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setLeft(left);
-  }
+        return;
 
-  v8::Local<v8::Value> topValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "top")).ToLocal(&topValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (topValue.IsEmpty() || topValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    double top = toDouble(isolate, topValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setTop(top);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> leftValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "left")).ToLocal(&leftValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (leftValue.IsEmpty() || leftValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        double left = toDouble(isolate, leftValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setLeft(left);
+    }
+
+    v8::Local<v8::Value> topValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "top")).ToLocal(&topValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (topValue.IsEmpty() || topValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        double top = toDouble(isolate, topValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setTop(top);
+    }
 }
 
-v8::Local<v8::Value> ScrollToOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ScrollToOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ScrollToOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ScrollToOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ScrollToOptions(const ScrollToOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8ScrollOptions(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8ScrollToOptions(const ScrollToOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8ScrollOptions(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasLeft()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "left"), v8::Number::New(isolate, impl.left()))))
-      return false;
-  }
+    if (impl.hasLeft()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "left"), v8::Number::New(isolate, impl.left()))))
+            return false;
+    }
 
-  if (impl.hasTop()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "top"), v8::Number::New(isolate, impl.top()))))
-      return false;
-  }
+    if (impl.hasTop()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "top"), v8::Number::New(isolate, impl.top()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-ScrollToOptions NativeValueTraits<ScrollToOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ScrollToOptions impl;
-  V8ScrollToOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ScrollToOptions NativeValueTraits<ScrollToOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ScrollToOptions impl;
+    V8ScrollToOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

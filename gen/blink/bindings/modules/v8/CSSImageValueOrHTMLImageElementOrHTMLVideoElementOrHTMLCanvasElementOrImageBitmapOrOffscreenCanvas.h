@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas_h
 #define CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas_h
 
@@ -28,86 +28,88 @@ class ImageBitmap;
 class OffscreenCanvas;
 
 class MODULES_EXPORT CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isCSSImageValue() const { return m_type == SpecificTypeCSSImageValue; }
-  CSSStyleImageValue* getAsCSSImageValue() const;
-  void setCSSImageValue(CSSStyleImageValue*);
-  static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromCSSImageValue(CSSStyleImageValue*);
+public:
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isHTMLImageElement() const { return m_type == SpecificTypeHTMLImageElement; }
-  HTMLImageElement* getAsHTMLImageElement() const;
-  void setHTMLImageElement(HTMLImageElement*);
-  static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromHTMLImageElement(HTMLImageElement*);
+    bool isCSSImageValue() const { return m_type == SpecificTypeCSSImageValue; }
+    CSSStyleImageValue* getAsCSSImageValue() const;
+    void setCSSImageValue(CSSStyleImageValue*);
+    static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromCSSImageValue(CSSStyleImageValue*);
 
-  bool isHTMLVideoElement() const { return m_type == SpecificTypeHTMLVideoElement; }
-  HTMLVideoElement* getAsHTMLVideoElement() const;
-  void setHTMLVideoElement(HTMLVideoElement*);
-  static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromHTMLVideoElement(HTMLVideoElement*);
+    bool isHTMLImageElement() const { return m_type == SpecificTypeHTMLImageElement; }
+    HTMLImageElement* getAsHTMLImageElement() const;
+    void setHTMLImageElement(HTMLImageElement*);
+    static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromHTMLImageElement(HTMLImageElement*);
 
-  bool isHTMLCanvasElement() const { return m_type == SpecificTypeHTMLCanvasElement; }
-  HTMLCanvasElement* getAsHTMLCanvasElement() const;
-  void setHTMLCanvasElement(HTMLCanvasElement*);
-  static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromHTMLCanvasElement(HTMLCanvasElement*);
+    bool isHTMLVideoElement() const { return m_type == SpecificTypeHTMLVideoElement; }
+    HTMLVideoElement* getAsHTMLVideoElement() const;
+    void setHTMLVideoElement(HTMLVideoElement*);
+    static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromHTMLVideoElement(HTMLVideoElement*);
 
-  bool isImageBitmap() const { return m_type == SpecificTypeImageBitmap; }
-  ImageBitmap* getAsImageBitmap() const;
-  void setImageBitmap(ImageBitmap*);
-  static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromImageBitmap(ImageBitmap*);
+    bool isHTMLCanvasElement() const { return m_type == SpecificTypeHTMLCanvasElement; }
+    HTMLCanvasElement* getAsHTMLCanvasElement() const;
+    void setHTMLCanvasElement(HTMLCanvasElement*);
+    static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromHTMLCanvasElement(HTMLCanvasElement*);
 
-  bool isOffscreenCanvas() const { return m_type == SpecificTypeOffscreenCanvas; }
-  OffscreenCanvas* getAsOffscreenCanvas() const;
-  void setOffscreenCanvas(OffscreenCanvas*);
-  static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromOffscreenCanvas(OffscreenCanvas*);
+    bool isImageBitmap() const { return m_type == SpecificTypeImageBitmap; }
+    ImageBitmap* getAsImageBitmap() const;
+    void setImageBitmap(ImageBitmap*);
+    static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromImageBitmap(ImageBitmap*);
 
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&);
-  ~CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas();
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas& operator=(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&);
-  DECLARE_TRACE();
+    bool isOffscreenCanvas() const { return m_type == SpecificTypeOffscreenCanvas; }
+    OffscreenCanvas* getAsOffscreenCanvas() const;
+    void setOffscreenCanvas(OffscreenCanvas*);
+    static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas fromOffscreenCanvas(OffscreenCanvas*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeCSSImageValue,
-    SpecificTypeHTMLImageElement,
-    SpecificTypeHTMLVideoElement,
-    SpecificTypeHTMLCanvasElement,
-    SpecificTypeImageBitmap,
-    SpecificTypeOffscreenCanvas,
-  };
-  SpecificTypes m_type;
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&);
+    ~CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas();
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas& operator=(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&);
+    DECLARE_TRACE();
 
-  Member<CSSStyleImageValue> m_cssImageValue;
-  Member<HTMLImageElement> m_htmlImageElement;
-  Member<HTMLVideoElement> m_htmlVideoElement;
-  Member<HTMLCanvasElement> m_htmlCanvasElement;
-  Member<ImageBitmap> m_imageBitmap;
-  Member<OffscreenCanvas> m_offscreenCanvas;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeCSSImageValue,
+        SpecificTypeHTMLImageElement,
+        SpecificTypeHTMLVideoElement,
+        SpecificTypeHTMLCanvasElement,
+        SpecificTypeImageBitmap,
+        SpecificTypeOffscreenCanvas,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<CSSStyleImageValue> m_cssImageValue;
+    Member<HTMLImageElement> m_htmlImageElement;
+    Member<HTMLVideoElement> m_htmlVideoElement;
+    Member<HTMLCanvasElement> m_htmlCanvasElement;
+    Member<ImageBitmap> m_imageBitmap;
+    Member<OffscreenCanvas> m_offscreenCanvas;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas> {
-  MODULES_EXPORT static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -115,4 +117,4 @@ struct NativeValueTraits<CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTML
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas);
 
-#endif  // CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas_h
+#endif // CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas_h

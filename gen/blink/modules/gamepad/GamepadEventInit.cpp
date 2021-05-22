@@ -8,38 +8,44 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "GamepadEventInit.h"
 
 #include "modules/gamepad/Gamepad.h"
 
 namespace blink {
 
-GamepadEventInit::GamepadEventInit() {
+GamepadEventInit::GamepadEventInit()
+{
 }
 
-GamepadEventInit::~GamepadEventInit() {}
+GamepadEventInit::~GamepadEventInit() { }
 
 GamepadEventInit::GamepadEventInit(const GamepadEventInit&) = default;
 
 GamepadEventInit& GamepadEventInit::operator=(const GamepadEventInit&) = default;
 
-bool GamepadEventInit::hasGamepad() const {
-  return m_gamepad;
+bool GamepadEventInit::hasGamepad() const
+{
+    return m_gamepad;
 }
-Gamepad* GamepadEventInit::gamepad() const {
-  return m_gamepad;
+Gamepad* GamepadEventInit::gamepad() const
+{
+    return m_gamepad;
 }
-void GamepadEventInit::setGamepad(Gamepad* value) {
-  m_gamepad = value;
+void GamepadEventInit::setGamepad(Gamepad* value)
+{
+    m_gamepad = value;
 }
-void GamepadEventInit::setGamepadToNull() {
-  m_gamepad = Member<Gamepad>();
+void GamepadEventInit::setGamepadToNull()
+{
+    m_gamepad = Member<Gamepad>();
 }
 
-DEFINE_TRACE(GamepadEventInit) {
-  visitor->trace(m_gamepad);
-  EventInit::trace(visitor);
+DEFINE_TRACE(GamepadEventInit)
+{
+    visitor->trace(m_gamepad);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

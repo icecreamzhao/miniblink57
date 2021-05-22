@@ -8,88 +8,92 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FileSystemFlags.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8FileSystemFlags::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, FileSystemFlags& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8FileSystemFlags::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, FileSystemFlags& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> createValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "create")).ToLocal(&createValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (createValue.IsEmpty() || createValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool create = toBoolean(isolate, createValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setCreateFlag(create);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> createValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "create")).ToLocal(&createValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (createValue.IsEmpty() || createValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool create = toBoolean(isolate, createValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setCreateFlag(create);
+    }
 
-  v8::Local<v8::Value> exclusiveValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "exclusive")).ToLocal(&exclusiveValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (exclusiveValue.IsEmpty() || exclusiveValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool exclusive = toBoolean(isolate, exclusiveValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setExclusive(exclusive);
-  }
+    v8::Local<v8::Value> exclusiveValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "exclusive")).ToLocal(&exclusiveValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (exclusiveValue.IsEmpty() || exclusiveValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool exclusive = toBoolean(isolate, exclusiveValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setExclusive(exclusive);
+    }
 }
 
-v8::Local<v8::Value> FileSystemFlags::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8FileSystemFlags(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> FileSystemFlags::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8FileSystemFlags(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8FileSystemFlags(const FileSystemFlags& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasCreateFlag()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "create"), v8Boolean(impl.createFlag(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "create"), v8Boolean(false, isolate))))
-      return false;
-  }
+bool toV8FileSystemFlags(const FileSystemFlags& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasCreateFlag()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "create"), v8Boolean(impl.createFlag(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "create"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  if (impl.hasExclusive()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "exclusive"), v8Boolean(impl.exclusive(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "exclusive"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasExclusive()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "exclusive"), v8Boolean(impl.exclusive(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "exclusive"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-FileSystemFlags NativeValueTraits<FileSystemFlags>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  FileSystemFlags impl;
-  V8FileSystemFlags::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+FileSystemFlags NativeValueTraits<FileSystemFlags>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    FileSystemFlags impl;
+    V8FileSystemFlags::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

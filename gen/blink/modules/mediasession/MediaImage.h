@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaImage_h
 #define MediaImage_h
 
@@ -20,36 +20,37 @@
 namespace blink {
 
 class MODULES_EXPORT MediaImage : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaImage();
-  virtual ~MediaImage();
-  MediaImage(const MediaImage&);
-  MediaImage& operator=(const MediaImage&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasSizes() const;
-  String sizes() const;
-  void setSizes(String);
+public:
+    MediaImage();
+    virtual ~MediaImage();
+    MediaImage(const MediaImage&);
+    MediaImage& operator=(const MediaImage&);
 
-  bool hasSrc() const;
-  String src() const;
-  void setSrc(String);
+    bool hasSizes() const;
+    String sizes() const;
+    void setSizes(String);
 
-  bool hasType() const;
-  String type() const;
-  void setType(String);
+    bool hasSrc() const;
+    String src() const;
+    void setSrc(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasType() const;
+    String type() const;
+    void setType(String);
 
- private:
-  String m_sizes;
-  String m_src;
-  String m_type;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaImage;
+private:
+    String m_sizes;
+    String m_src;
+    String m_type;
+
+    friend class V8MediaImage;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaImage_h
+#endif // MediaImage_h

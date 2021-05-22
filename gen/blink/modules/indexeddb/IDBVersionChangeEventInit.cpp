@@ -8,59 +8,71 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "IDBVersionChangeEventInit.h"
 
 namespace blink {
 
-IDBVersionChangeEventInit::IDBVersionChangeEventInit() {
-  setDataLoss(String("none"));
-  setOldVersion(0);
+IDBVersionChangeEventInit::IDBVersionChangeEventInit()
+{
+    setDataLoss(String("none"));
+    setOldVersion(0);
 }
 
-IDBVersionChangeEventInit::~IDBVersionChangeEventInit() {}
+IDBVersionChangeEventInit::~IDBVersionChangeEventInit() { }
 
 IDBVersionChangeEventInit::IDBVersionChangeEventInit(const IDBVersionChangeEventInit&) = default;
 
 IDBVersionChangeEventInit& IDBVersionChangeEventInit::operator=(const IDBVersionChangeEventInit&) = default;
 
-bool IDBVersionChangeEventInit::hasDataLoss() const {
-  return !m_dataLoss.isNull();
+bool IDBVersionChangeEventInit::hasDataLoss() const
+{
+    return !m_dataLoss.isNull();
 }
-String IDBVersionChangeEventInit::dataLoss() const {
-  return m_dataLoss;
+String IDBVersionChangeEventInit::dataLoss() const
+{
+    return m_dataLoss;
 }
-void IDBVersionChangeEventInit::setDataLoss(String value) {
-  m_dataLoss = value;
+void IDBVersionChangeEventInit::setDataLoss(String value)
+{
+    m_dataLoss = value;
 }
-bool IDBVersionChangeEventInit::hasNewVersion() const {
-  return m_hasNewVersion;
+bool IDBVersionChangeEventInit::hasNewVersion() const
+{
+    return m_hasNewVersion;
 }
-unsigned long long IDBVersionChangeEventInit::newVersion() const {
-  DCHECK(m_hasNewVersion);
-  return m_newVersion;
+unsigned long long IDBVersionChangeEventInit::newVersion() const
+{
+    DCHECK(m_hasNewVersion);
+    return m_newVersion;
 }
-void IDBVersionChangeEventInit::setNewVersion(unsigned long long value) {
-  m_newVersion = value;
-  m_hasNewVersion = true;
+void IDBVersionChangeEventInit::setNewVersion(unsigned long long value)
+{
+    m_newVersion = value;
+    m_hasNewVersion = true;
 }
-void IDBVersionChangeEventInit::setNewVersionToNull() {
-  m_hasNewVersion = false;
+void IDBVersionChangeEventInit::setNewVersionToNull()
+{
+    m_hasNewVersion = false;
 }
-bool IDBVersionChangeEventInit::hasOldVersion() const {
-  return m_hasOldVersion;
+bool IDBVersionChangeEventInit::hasOldVersion() const
+{
+    return m_hasOldVersion;
 }
-unsigned long long IDBVersionChangeEventInit::oldVersion() const {
-  DCHECK(m_hasOldVersion);
-  return m_oldVersion;
+unsigned long long IDBVersionChangeEventInit::oldVersion() const
+{
+    DCHECK(m_hasOldVersion);
+    return m_oldVersion;
 }
-void IDBVersionChangeEventInit::setOldVersion(unsigned long long value) {
-  m_oldVersion = value;
-  m_hasOldVersion = true;
+void IDBVersionChangeEventInit::setOldVersion(unsigned long long value)
+{
+    m_oldVersion = value;
+    m_hasOldVersion = true;
 }
 
-DEFINE_TRACE(IDBVersionChangeEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(IDBVersionChangeEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

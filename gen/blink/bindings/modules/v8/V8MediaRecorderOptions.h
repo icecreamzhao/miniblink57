@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8MediaRecorderOptions_h
 #define V8MediaRecorderOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8MediaRecorderOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaRecorderOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaRecorderOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8MediaRecorderOptions(const MediaRecorderOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaRecorderOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaRecorderOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<MediaRecorderOptions> {
-  static MediaRecorderOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static MediaRecorderOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<MediaRecorderOptions> {
-  typedef V8MediaRecorderOptions Type;
+    typedef V8MediaRecorderOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8MediaRecorderOptions_h
+#endif // V8MediaRecorderOptions_h

@@ -8,47 +8,55 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "Point2D.h"
 
 namespace blink {
 
-Point2D::Point2D() {
-  setX(0);
-  setY(0);
+Point2D::Point2D()
+{
+    setX(0);
+    setY(0);
 }
 
-Point2D::~Point2D() {}
+Point2D::~Point2D() { }
 
 Point2D::Point2D(const Point2D&) = default;
 
 Point2D& Point2D::operator=(const Point2D&) = default;
 
-bool Point2D::hasX() const {
-  return m_hasX;
+bool Point2D::hasX() const
+{
+    return m_hasX;
 }
-float Point2D::x() const {
-  DCHECK(m_hasX);
-  return m_x;
+float Point2D::x() const
+{
+    DCHECK(m_hasX);
+    return m_x;
 }
-void Point2D::setX(float value) {
-  m_x = value;
-  m_hasX = true;
+void Point2D::setX(float value)
+{
+    m_x = value;
+    m_hasX = true;
 }
-bool Point2D::hasY() const {
-  return m_hasY;
+bool Point2D::hasY() const
+{
+    return m_hasY;
 }
-float Point2D::y() const {
-  DCHECK(m_hasY);
-  return m_y;
+float Point2D::y() const
+{
+    DCHECK(m_hasY);
+    return m_y;
 }
-void Point2D::setY(float value) {
-  m_y = value;
-  m_hasY = true;
+void Point2D::setY(float value)
+{
+    m_y = value;
+    m_hasY = true;
 }
 
-DEFINE_TRACE(Point2D) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(Point2D)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

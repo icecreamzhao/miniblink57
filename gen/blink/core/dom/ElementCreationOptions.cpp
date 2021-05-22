@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ElementCreationOptions.h"
 
 namespace blink {
 
-ElementCreationOptions::ElementCreationOptions() {
+ElementCreationOptions::ElementCreationOptions()
+{
 }
 
-ElementCreationOptions::~ElementCreationOptions() {}
+ElementCreationOptions::~ElementCreationOptions() { }
 
 ElementCreationOptions::ElementCreationOptions(const ElementCreationOptions&) = default;
 
 ElementCreationOptions& ElementCreationOptions::operator=(const ElementCreationOptions&) = default;
 
-bool ElementCreationOptions::hasIs() const {
-  return !m_is.isNull();
+bool ElementCreationOptions::hasIs() const
+{
+    return !m_is.isNull();
 }
-String ElementCreationOptions::is() const {
-  return m_is;
+String ElementCreationOptions::is() const
+{
+    return m_is;
 }
-void ElementCreationOptions::setIs(String value) {
-  m_is = value;
+void ElementCreationOptions::setIs(String value)
+{
+    m_is = value;
 }
 
-DEFINE_TRACE(ElementCreationOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ElementCreationOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

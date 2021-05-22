@@ -8,88 +8,92 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FormDataOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8FormDataOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, FormDataOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8FormDataOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, FormDataOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> idNameValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "idName")).ToLocal(&idNameValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (idNameValue.IsEmpty() || idNameValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> idName = idNameValue;
-    if (!idName.prepare(exceptionState))
-      return;
-    impl.setIdName(idName);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> idNameValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "idName")).ToLocal(&idNameValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (idNameValue.IsEmpty() || idNameValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> idName = idNameValue;
+        if (!idName.prepare(exceptionState))
+            return;
+        impl.setIdName(idName);
+    }
 
-  v8::Local<v8::Value> passwordNameValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "passwordName")).ToLocal(&passwordNameValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (passwordNameValue.IsEmpty() || passwordNameValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> passwordName = passwordNameValue;
-    if (!passwordName.prepare(exceptionState))
-      return;
-    impl.setPasswordName(passwordName);
-  }
+    v8::Local<v8::Value> passwordNameValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "passwordName")).ToLocal(&passwordNameValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (passwordNameValue.IsEmpty() || passwordNameValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> passwordName = passwordNameValue;
+        if (!passwordName.prepare(exceptionState))
+            return;
+        impl.setPasswordName(passwordName);
+    }
 }
 
-v8::Local<v8::Value> FormDataOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8FormDataOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> FormDataOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8FormDataOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8FormDataOptions(const FormDataOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasIdName()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "idName"), v8String(isolate, impl.idName()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "idName"), v8String(isolate, String("username")))))
-      return false;
-  }
+bool toV8FormDataOptions(const FormDataOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasIdName()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "idName"), v8String(isolate, impl.idName()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "idName"), v8String(isolate, String("username")))))
+            return false;
+    }
 
-  if (impl.hasPasswordName()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "passwordName"), v8String(isolate, impl.passwordName()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "passwordName"), v8String(isolate, String("password")))))
-      return false;
-  }
+    if (impl.hasPasswordName()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "passwordName"), v8String(isolate, impl.passwordName()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "passwordName"), v8String(isolate, String("password")))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-FormDataOptions NativeValueTraits<FormDataOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  FormDataOptions impl;
-  V8FormDataOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+FormDataOptions NativeValueTraits<FormDataOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    FormDataOptions impl;
+    V8FormDataOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MIDIOutput.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,169 +49,179 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&MIDIOutput::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MIDIOutput is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MIDIOutputV8Internal {
 
-static void send1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIOutput", "send");
+    static void send1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIOutput", "send");
 
-  MIDIOutput* impl = V8MIDIOutput::toImpl(info.Holder());
+        MIDIOutput* impl = V8MIDIOutput::toImpl(info.Holder());
 
-  DOMUint8Array* data;
-  double timestamp;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  data = info[0]->IsUint8Array() ? V8Uint8Array::toImpl(v8::Local<v8::Uint8Array>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Uint8Array'.");
+        DOMUint8Array* data;
+        double timestamp;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        data = info[0]->IsUint8Array() ? V8Uint8Array::toImpl(v8::Local<v8::Uint8Array>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Uint8Array'.");
 
-    return;
-  }
+            return;
+        }
 
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->send(data, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->send(data, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        timestamp = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->send(data, timestamp, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
     }
-    return;
-  }
-  timestamp = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  impl->send(data, timestamp, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void send2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIOutput", "send");
 
-static void send2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIOutput", "send");
+        MIDIOutput* impl = V8MIDIOutput::toImpl(info.Holder());
 
-  MIDIOutput* impl = V8MIDIOutput::toImpl(info.Holder());
+        Vector<unsigned> data;
+        double timestamp;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        data = toImplArray<Vector<unsigned>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  Vector<unsigned> data;
-  double timestamp;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  data = toImplArray<Vector<unsigned>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->send(data, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        timestamp = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->send(data, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        impl->send(data, timestamp, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
     }
-    return;
-  }
-  timestamp = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  impl->send(data, timestamp, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void sendMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 1:
+            if (info[0]->IsUint8Array()) {
+                send1Method(info);
+                return;
+            }
+            if (info[0]->IsArray()) {
+                send2Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (info[0]->IsUint8Array()) {
+                send1Method(info);
+                return;
+            }
+            if (info[0]->IsArray()) {
+                send2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
 
-static void sendMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 1:
-      if (info[0]->IsUint8Array()) {
-        send1Method(info);
-        return;
-      }
-      if (info[0]->IsArray()) {
-        send2Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (info[0]->IsUint8Array()) {
-        send1Method(info);
-        return;
-      }
-      if (info[0]->IsArray()) {
-        send2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIOutput", "send");
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIOutput", "send");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void sendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIOutputV8Internal::sendMethod(info);
-}
+    MODULES_EXPORT void sendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIOutputV8Internal::sendMethod(info);
+    }
 
 } // namespace MIDIOutputV8Internal
 
-void V8MIDIOutput::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  MIDIOutput* impl = scriptWrappable->toImpl<MIDIOutput>();
-  MIDIAccess* midiAccess = impl->midiAccess();
-  if (midiAccess) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, midiAccess, isolate);
-  }
+void V8MIDIOutput::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    MIDIOutput* impl = scriptWrappable->toImpl<MIDIOutput>();
+    MIDIAccess* midiAccess = impl->midiAccess();
+    if (midiAccess) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, midiAccess, isolate);
+    }
 }
 
 const V8DOMConfiguration::MethodConfiguration V8MIDIOutputMethods[] = {
-    {"send", MIDIOutputV8Internal::sendMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "send", MIDIOutputV8Internal::sendMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8MIDIOutputTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MIDIOutput::wrapperTypeInfo.interfaceName, V8MIDIPort::domTemplate(isolate, world), V8MIDIOutput::internalFieldCount);
+static void installV8MIDIOutputTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MIDIOutput::wrapperTypeInfo.interfaceName, V8MIDIPort::domTemplate(isolate, world), V8MIDIOutput::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MIDIOutputMethods, WTF_ARRAY_LENGTH(V8MIDIOutputMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MIDIOutputMethods, WTF_ARRAY_LENGTH(V8MIDIOutputMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MIDIOutput::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MIDIOutputTemplate);
+v8::Local<v8::FunctionTemplate> V8MIDIOutput::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MIDIOutputTemplate);
 }
 
-bool V8MIDIOutput::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MIDIOutput::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MIDIOutput::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MIDIOutput::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MIDIOutput* V8MIDIOutput::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MIDIOutput* V8MIDIOutput::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

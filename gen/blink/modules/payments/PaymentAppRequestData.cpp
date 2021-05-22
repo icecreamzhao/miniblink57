@@ -8,77 +8,94 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PaymentAppRequestData.h"
 
 namespace blink {
 
-PaymentAppRequestData::PaymentAppRequestData() {
+PaymentAppRequestData::PaymentAppRequestData()
+{
 }
 
-PaymentAppRequestData::~PaymentAppRequestData() {}
+PaymentAppRequestData::~PaymentAppRequestData() { }
 
 PaymentAppRequestData::PaymentAppRequestData(const PaymentAppRequestData&) = default;
 
 PaymentAppRequestData& PaymentAppRequestData::operator=(const PaymentAppRequestData&) = default;
 
-bool PaymentAppRequestData::hasMethodData() const {
-  return m_hasMethodData;
+bool PaymentAppRequestData::hasMethodData() const
+{
+    return m_hasMethodData;
 }
-const HeapVector<PaymentMethodData>& PaymentAppRequestData::methodData() const {
-  DCHECK(m_hasMethodData);
-  return m_methodData;
+const HeapVector<PaymentMethodData>& PaymentAppRequestData::methodData() const
+{
+    DCHECK(m_hasMethodData);
+    return m_methodData;
 }
-void PaymentAppRequestData::setMethodData(const HeapVector<PaymentMethodData>& value) {
-  m_methodData = value;
-  m_hasMethodData = true;
+void PaymentAppRequestData::setMethodData(const HeapVector<PaymentMethodData>& value)
+{
+    m_methodData = value;
+    m_hasMethodData = true;
 }
-bool PaymentAppRequestData::hasModifiers() const {
-  return m_hasModifiers;
+bool PaymentAppRequestData::hasModifiers() const
+{
+    return m_hasModifiers;
 }
-const HeapVector<PaymentDetailsModifier>& PaymentAppRequestData::modifiers() const {
-  DCHECK(m_hasModifiers);
-  return m_modifiers;
+const HeapVector<PaymentDetailsModifier>& PaymentAppRequestData::modifiers() const
+{
+    DCHECK(m_hasModifiers);
+    return m_modifiers;
 }
-void PaymentAppRequestData::setModifiers(const HeapVector<PaymentDetailsModifier>& value) {
-  m_modifiers = value;
-  m_hasModifiers = true;
+void PaymentAppRequestData::setModifiers(const HeapVector<PaymentDetailsModifier>& value)
+{
+    m_modifiers = value;
+    m_hasModifiers = true;
 }
-bool PaymentAppRequestData::hasOptionId() const {
-  return !m_optionId.isNull();
+bool PaymentAppRequestData::hasOptionId() const
+{
+    return !m_optionId.isNull();
 }
-String PaymentAppRequestData::optionId() const {
-  return m_optionId;
+String PaymentAppRequestData::optionId() const
+{
+    return m_optionId;
 }
-void PaymentAppRequestData::setOptionId(String value) {
-  m_optionId = value;
+void PaymentAppRequestData::setOptionId(String value)
+{
+    m_optionId = value;
 }
-bool PaymentAppRequestData::hasOrigin() const {
-  return !m_origin.isNull();
+bool PaymentAppRequestData::hasOrigin() const
+{
+    return !m_origin.isNull();
 }
-String PaymentAppRequestData::origin() const {
-  return m_origin;
+String PaymentAppRequestData::origin() const
+{
+    return m_origin;
 }
-void PaymentAppRequestData::setOrigin(String value) {
-  m_origin = value;
+void PaymentAppRequestData::setOrigin(String value)
+{
+    m_origin = value;
 }
-bool PaymentAppRequestData::hasTotal() const {
-  return m_hasTotal;
+bool PaymentAppRequestData::hasTotal() const
+{
+    return m_hasTotal;
 }
-const PaymentItem& PaymentAppRequestData::total() const {
-  DCHECK(m_hasTotal);
-  return m_total;
+const PaymentItem& PaymentAppRequestData::total() const
+{
+    DCHECK(m_hasTotal);
+    return m_total;
 }
-void PaymentAppRequestData::setTotal(const PaymentItem& value) {
-  m_total = value;
-  m_hasTotal = true;
+void PaymentAppRequestData::setTotal(const PaymentItem& value)
+{
+    m_total = value;
+    m_hasTotal = true;
 }
 
-DEFINE_TRACE(PaymentAppRequestData) {
-  visitor->trace(m_methodData);
-  visitor->trace(m_modifiers);
-  visitor->trace(m_total);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PaymentAppRequestData)
+{
+    visitor->trace(m_methodData);
+    visitor->trace(m_modifiers);
+    visitor->trace(m_total);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

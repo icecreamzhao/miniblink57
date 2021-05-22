@@ -2313,8 +2313,8 @@ namespace audio_network_adaptor {
             // @@protoc_insertion_point(field_set:webrtc.audio_network_adaptor.config.ControllerManager.min_reordering_squared_distance)
         }
 
-#endif // !PROTOBUF_INLINE_NOT_IN_HEADERS
-        // -------------------------------------------------------------------
+#endif // !PROTOBUF_INLINE_NOT_IN_HEADERS \
+    // -------------------------------------------------------------------
 
         // -------------------------------------------------------------------
 

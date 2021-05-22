@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ArrayBuffer.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,34 +47,36 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMArrayBuffer::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMArrayBuffer is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
-DOMArrayBuffer* V8ArrayBuffer::toImpl(v8::Local<v8::Object> object) {
-  DCHECK(object->IsArrayBuffer());
-  v8::Local<v8::ArrayBuffer> v8buffer = object.As<v8::ArrayBuffer>();
-  if (v8buffer->IsExternal()) {
-    const WrapperTypeInfo* wrapperTypeInfo = toWrapperTypeInfo(object);
-    CHECK(wrapperTypeInfo);
-    CHECK_EQ(wrapperTypeInfo->ginEmbedder, gin::kEmbedderBlink);
-    return toScriptWrappable(object)->toImpl<DOMArrayBuffer>();
-  }
+DOMArrayBuffer* V8ArrayBuffer::toImpl(v8::Local<v8::Object> object)
+{
+    DCHECK(object->IsArrayBuffer());
+    v8::Local<v8::ArrayBuffer> v8buffer = object.As<v8::ArrayBuffer>();
+    if (v8buffer->IsExternal()) {
+        const WrapperTypeInfo* wrapperTypeInfo = toWrapperTypeInfo(object);
+        CHECK(wrapperTypeInfo);
+        CHECK_EQ(wrapperTypeInfo->ginEmbedder, gin::kEmbedderBlink);
+        return toScriptWrappable(object)->toImpl<DOMArrayBuffer>();
+    }
 
-  // Transfer the ownership of the allocated memory to an ArrayBuffer without
-  // copying.
-  v8::ArrayBuffer::Contents v8Contents = v8buffer->Externalize();
-  WTF::ArrayBufferContents contents(v8Contents.Data(), v8Contents.ByteLength(), WTF::ArrayBufferContents::NotShared);
-  DOMArrayBuffer* buffer = DOMArrayBuffer::create(contents);
-  v8::Local<v8::Object> associatedWrapper = buffer->associateWithWrapper(v8::Isolate::GetCurrent(), buffer->wrapperTypeInfo(), object);
-  DCHECK(associatedWrapper == object);
+    // Transfer the ownership of the allocated memory to an ArrayBuffer without
+    // copying.
+    v8::ArrayBuffer::Contents v8Contents = v8buffer->Externalize();
+    WTF::ArrayBufferContents contents(v8Contents.Data(), v8Contents.ByteLength(), WTF::ArrayBufferContents::NotShared);
+    DOMArrayBuffer* buffer = DOMArrayBuffer::create(contents);
+    v8::Local<v8::Object> associatedWrapper = buffer->associateWithWrapper(v8::Isolate::GetCurrent(), buffer->wrapperTypeInfo(), object);
+    DCHECK(associatedWrapper == object);
 
-  return buffer;
+    return buffer;
 }
 
-DOMArrayBuffer* V8ArrayBuffer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return value->IsArrayBuffer() ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMArrayBuffer* V8ArrayBuffer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return value->IsArrayBuffer() ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

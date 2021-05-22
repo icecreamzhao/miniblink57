@@ -8,44 +8,52 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "NavigationPreloadState.h"
 
 namespace blink {
 
-NavigationPreloadState::NavigationPreloadState() {
-  setEnabled(false);
+NavigationPreloadState::NavigationPreloadState()
+{
+    setEnabled(false);
 }
 
-NavigationPreloadState::~NavigationPreloadState() {}
+NavigationPreloadState::~NavigationPreloadState() { }
 
 NavigationPreloadState::NavigationPreloadState(const NavigationPreloadState&) = default;
 
 NavigationPreloadState& NavigationPreloadState::operator=(const NavigationPreloadState&) = default;
 
-bool NavigationPreloadState::hasEnabled() const {
-  return m_hasEnabled;
+bool NavigationPreloadState::hasEnabled() const
+{
+    return m_hasEnabled;
 }
-bool NavigationPreloadState::enabled() const {
-  DCHECK(m_hasEnabled);
-  return m_enabled;
+bool NavigationPreloadState::enabled() const
+{
+    DCHECK(m_hasEnabled);
+    return m_enabled;
 }
-void NavigationPreloadState::setEnabled(bool value) {
-  m_enabled = value;
-  m_hasEnabled = true;
+void NavigationPreloadState::setEnabled(bool value)
+{
+    m_enabled = value;
+    m_hasEnabled = true;
 }
-bool NavigationPreloadState::hasHeaderValue() const {
-  return !m_headerValue.isNull();
+bool NavigationPreloadState::hasHeaderValue() const
+{
+    return !m_headerValue.isNull();
 }
-String NavigationPreloadState::headerValue() const {
-  return m_headerValue;
+String NavigationPreloadState::headerValue() const
+{
+    return m_headerValue;
 }
-void NavigationPreloadState::setHeaderValue(String value) {
-  m_headerValue = value;
+void NavigationPreloadState::setHeaderValue(String value)
+{
+    m_headerValue = value;
 }
 
-DEFINE_TRACE(NavigationPreloadState) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(NavigationPreloadState)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

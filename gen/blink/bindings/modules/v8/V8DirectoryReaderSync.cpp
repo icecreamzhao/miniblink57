@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DirectoryReaderSync.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,64 +46,71 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DirectoryReaderSync::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DirectoryReaderSync is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DirectoryReaderSyncV8Internal {
 
-static void readEntriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryReaderSync", "readEntries");
+    static void readEntriesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryReaderSync", "readEntries");
 
-  DirectoryReaderSync* impl = V8DirectoryReaderSync::toImpl(info.Holder());
+        DirectoryReaderSync* impl = V8DirectoryReaderSync::toImpl(info.Holder());
 
-  HeapVector<Member<EntrySync>> result = impl->readEntries(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, ToV8(result, info.Holder(), info.GetIsolate()));
-}
+        HeapVector<Member<EntrySync>> result = impl->readEntries(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, ToV8(result, info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT  void readEntriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryReaderSyncV8Internal::readEntriesMethod(info);
-}
+    MODULES_EXPORT void readEntriesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryReaderSyncV8Internal::readEntriesMethod(info);
+    }
 
 } // namespace DirectoryReaderSyncV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8DirectoryReaderSyncMethods[] = {
-    {"readEntries", DirectoryReaderSyncV8Internal::readEntriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "readEntries", DirectoryReaderSyncV8Internal::readEntriesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8DirectoryReaderSyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DirectoryReaderSync::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DirectoryReaderSync::internalFieldCount);
+static void installV8DirectoryReaderSyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DirectoryReaderSync::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DirectoryReaderSync::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DirectoryReaderSyncMethods, WTF_ARRAY_LENGTH(V8DirectoryReaderSyncMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DirectoryReaderSyncMethods, WTF_ARRAY_LENGTH(V8DirectoryReaderSyncMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DirectoryReaderSync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DirectoryReaderSyncTemplate);
+v8::Local<v8::FunctionTemplate> V8DirectoryReaderSync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DirectoryReaderSyncTemplate);
 }
 
-bool V8DirectoryReaderSync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DirectoryReaderSync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DirectoryReaderSync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DirectoryReaderSync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DirectoryReaderSync* V8DirectoryReaderSync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DirectoryReaderSync* V8DirectoryReaderSync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

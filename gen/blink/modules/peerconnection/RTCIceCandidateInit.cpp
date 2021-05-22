@@ -8,52 +8,63 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RTCIceCandidateInit.h"
 
 namespace blink {
 
-RTCIceCandidateInit::RTCIceCandidateInit() {
+RTCIceCandidateInit::RTCIceCandidateInit()
+{
 }
 
-RTCIceCandidateInit::~RTCIceCandidateInit() {}
+RTCIceCandidateInit::~RTCIceCandidateInit() { }
 
 RTCIceCandidateInit::RTCIceCandidateInit(const RTCIceCandidateInit&) = default;
 
 RTCIceCandidateInit& RTCIceCandidateInit::operator=(const RTCIceCandidateInit&) = default;
 
-bool RTCIceCandidateInit::hasCandidate() const {
-  return !m_candidate.isNull();
+bool RTCIceCandidateInit::hasCandidate() const
+{
+    return !m_candidate.isNull();
 }
-String RTCIceCandidateInit::candidate() const {
-  return m_candidate;
+String RTCIceCandidateInit::candidate() const
+{
+    return m_candidate;
 }
-void RTCIceCandidateInit::setCandidate(String value) {
-  m_candidate = value;
+void RTCIceCandidateInit::setCandidate(String value)
+{
+    m_candidate = value;
 }
-bool RTCIceCandidateInit::hasSdpMLineIndex() const {
-  return m_hasSdpMLineIndex;
+bool RTCIceCandidateInit::hasSdpMLineIndex() const
+{
+    return m_hasSdpMLineIndex;
 }
-unsigned RTCIceCandidateInit::sdpMLineIndex() const {
-  DCHECK(m_hasSdpMLineIndex);
-  return m_sdpMLineIndex;
+unsigned RTCIceCandidateInit::sdpMLineIndex() const
+{
+    DCHECK(m_hasSdpMLineIndex);
+    return m_sdpMLineIndex;
 }
-void RTCIceCandidateInit::setSdpMLineIndex(unsigned value) {
-  m_sdpMLineIndex = value;
-  m_hasSdpMLineIndex = true;
+void RTCIceCandidateInit::setSdpMLineIndex(unsigned value)
+{
+    m_sdpMLineIndex = value;
+    m_hasSdpMLineIndex = true;
 }
-bool RTCIceCandidateInit::hasSdpMid() const {
-  return !m_sdpMid.isNull();
+bool RTCIceCandidateInit::hasSdpMid() const
+{
+    return !m_sdpMid.isNull();
 }
-String RTCIceCandidateInit::sdpMid() const {
-  return m_sdpMid;
+String RTCIceCandidateInit::sdpMid() const
+{
+    return m_sdpMid;
 }
-void RTCIceCandidateInit::setSdpMid(String value) {
-  m_sdpMid = value;
+void RTCIceCandidateInit::setSdpMid(String value)
+{
+    m_sdpMid = value;
 }
 
-DEFINE_TRACE(RTCIceCandidateInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(RTCIceCandidateInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

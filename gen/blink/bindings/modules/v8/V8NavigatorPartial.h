@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8NavigatorPartial_h
 #define V8NavigatorPartial_h
 
@@ -26,24 +26,25 @@ namespace blink {
 class ScriptState;
 
 class V8NavigatorPartial {
-  STATIC_ONLY(V8NavigatorPartial);
- public:
-  static void initialize();
+    STATIC_ONLY(V8NavigatorPartial);
 
-  static void installWebVR(ScriptState*, v8::Local<v8::Object> instance);
-  static void installWebVR(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installWebVR(ScriptState*);
-  static void installWebShare(ScriptState*, v8::Local<v8::Object> instance);
-  static void installWebShare(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installWebShare(ScriptState*);
-  static void installWebUSB(ScriptState*, v8::Local<v8::Object> instance);
-  static void installWebUSB(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installWebUSB(ScriptState*);
+public:
+    static void initialize();
 
- private:
-  static void installV8NavigatorTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+    static void installWebVR(ScriptState*, v8::Local<v8::Object> instance);
+    static void installWebVR(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installWebVR(ScriptState*);
+    static void installWebShare(ScriptState*, v8::Local<v8::Object> instance);
+    static void installWebShare(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installWebShare(ScriptState*);
+    static void installWebUSB(ScriptState*, v8::Local<v8::Object> instance);
+    static void installWebUSB(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installWebUSB(ScriptState*);
+
+private:
+    static void installV8NavigatorTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8NavigatorPartial_h
+#endif // V8NavigatorPartial_h

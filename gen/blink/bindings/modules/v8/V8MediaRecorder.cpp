@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaRecorder.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,482 +53,535 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&MediaRecorder::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaRecorder is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaRecorderV8Internal {
 
-static void streamAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  MediaStream* cppValue(WTF::getPtr(impl->stream()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#MediaRecorder#stream";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void streamAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::streamAttributeGetter(info);
-}
-
-static void mimeTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->mimeType(), info.GetIsolate());
-}
-
-MODULES_EXPORT void mimeTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::mimeTypeAttributeGetter(info);
-}
-
-static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->state(), info.GetIsolate());
-}
-
-MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::stateAttributeGetter(info);
-}
-
-static void onstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onstart()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::onstartAttributeGetter(info);
-}
-
-static void onstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onstart(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
-
-  impl->setOnstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaRecorderV8Internal::onstartAttributeSetter(v8Value, info);
-}
-
-static void onstopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onstop()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onstopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::onstopAttributeGetter(info);
-}
-
-static void onstopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onstop(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
-
-  impl->setOnstop(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onstopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaRecorderV8Internal::onstopAttributeSetter(v8Value, info);
-}
-
-static void ondataavailableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->ondataavailable()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void ondataavailableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::ondataavailableAttributeGetter(info);
-}
-
-static void ondataavailableAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondataavailable(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
-
-  impl->setOndataavailable(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void ondataavailableAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaRecorderV8Internal::ondataavailableAttributeSetter(v8Value, info);
-}
-
-static void onpauseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onpause()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onpauseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::onpauseAttributeGetter(info);
-}
-
-static void onpauseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onpause(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
-
-  impl->setOnpause(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onpauseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaRecorderV8Internal::onpauseAttributeSetter(v8Value, info);
-}
-
-static void onresumeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onresume()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onresumeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::onresumeAttributeGetter(info);
-}
-
-static void onresumeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onresume(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
-
-  impl->setOnresume(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onresumeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaRecorderV8Internal::onresumeAttributeSetter(v8Value, info);
-}
-
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::onerrorAttributeGetter(info);
-}
-
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
-
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaRecorderV8Internal::onerrorAttributeSetter(v8Value, info);
-}
-
-static void videoBitsPerSecondAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->videoBitsPerSecond());
-}
-
-MODULES_EXPORT void videoBitsPerSecondAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::videoBitsPerSecondAttributeGetter(info);
-}
-
-static void audioBitsPerSecondAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->audioBitsPerSecond());
-}
-
-MODULES_EXPORT void audioBitsPerSecondAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::audioBitsPerSecondAttributeGetter(info);
-}
-
-static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "start");
-
-  MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
-
-  int timeslice;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->start(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    static void streamAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        MediaStream* cppValue(WTF::getPtr(impl->stream()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#MediaRecorder#stream";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
     }
-    return;
-  }
-  timeslice = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  impl->start(timeslice, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    MODULES_EXPORT void streamAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::streamAttributeGetter(info);
+    }
 
-MODULES_EXPORT  void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaRecorder_Start_Method);
-  MediaRecorderV8Internal::startMethod(info);
-}
+    static void mimeTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void stopMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "stop");
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
 
-  MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
+        v8SetReturnValueString(info, impl->mimeType(), info.GetIsolate());
+    }
 
-  impl->stop(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    MODULES_EXPORT void mimeTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::mimeTypeAttributeGetter(info);
+    }
 
-MODULES_EXPORT  void stopMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::stopMethod(info);
-}
+    static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void pauseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "pause");
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
 
-  MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
+        v8SetReturnValueString(info, impl->state(), info.GetIsolate());
+    }
 
-  impl->pause(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::stateAttributeGetter(info);
+    }
 
-MODULES_EXPORT  void pauseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::pauseMethod(info);
-}
+    static void onstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void resumeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "resume");
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
 
-  MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
+        EventListener* cppValue(WTF::getPtr(impl->onstart()));
 
-  impl->resume(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT  void resumeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::resumeMethod(info);
-}
+    MODULES_EXPORT void onstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::onstartAttributeGetter(info);
+    }
 
-static void requestDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "requestData");
+    static void onstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
 
-  MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onstart(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
 
-  impl->requestData(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setOnstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT  void requestDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::requestDataMethod(info);
-}
+    MODULES_EXPORT void onstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-static void isTypeSupportedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isTypeSupported", "MediaRecorder", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        MediaRecorderV8Internal::onstartAttributeSetter(v8Value, info);
+    }
 
-  V8StringResource<> type;
-  type = info[0];
-  if (!type.prepare())
-    return;
+    static void onstopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  v8SetReturnValueBool(info, MediaRecorder::isTypeSupported(type));
-}
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
 
-MODULES_EXPORT  void isTypeSupportedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaRecorderV8Internal::isTypeSupportedMethod(info);
-}
+        EventListener* cppValue(WTF::getPtr(impl->onstop()));
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaRecorder");
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+    MODULES_EXPORT void onstopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::onstopAttributeGetter(info);
+    }
 
-  MediaStream* stream;
-  MediaRecorderOptions options;
-  stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!stream) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'MediaStream'.");
+    static void onstopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
 
-    return;
-  }
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onstop(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        impl->setOnstop(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-    return;
-  }
-  V8MediaRecorderOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    MODULES_EXPORT void onstopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  MediaRecorder* impl = MediaRecorder::create(executionContext, stream, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaRecorder::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        MediaRecorderV8Internal::onstopAttributeSetter(v8Value, info);
+    }
+
+    static void ondataavailableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->ondataavailable()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void ondataavailableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::ondataavailableAttributeGetter(info);
+    }
+
+    static void ondataavailableAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondataavailable(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
+
+        impl->setOndataavailable(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void ondataavailableAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        MediaRecorderV8Internal::ondataavailableAttributeSetter(v8Value, info);
+    }
+
+    static void onpauseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onpause()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onpauseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::onpauseAttributeGetter(info);
+    }
+
+    static void onpauseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onpause(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
+
+        impl->setOnpause(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onpauseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        MediaRecorderV8Internal::onpauseAttributeSetter(v8Value, info);
+    }
+
+    static void onresumeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onresume()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onresumeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::onresumeAttributeGetter(info);
+    }
+
+    static void onresumeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onresume(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
+
+        impl->setOnresume(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onresumeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        MediaRecorderV8Internal::onresumeAttributeSetter(v8Value, info);
+    }
+
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::onerrorAttributeGetter(info);
+    }
+
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8MediaRecorder::eventListenerCacheIndex);
+
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        MediaRecorderV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
+
+    static void videoBitsPerSecondAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->videoBitsPerSecond());
+    }
+
+    MODULES_EXPORT void videoBitsPerSecondAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::videoBitsPerSecondAttributeGetter(info);
+    }
+
+    static void audioBitsPerSecondAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->audioBitsPerSecond());
+    }
+
+    MODULES_EXPORT void audioBitsPerSecondAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::audioBitsPerSecondAttributeGetter(info);
+    }
+
+    static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "start");
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
+
+        int timeslice;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->start(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        timeslice = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->start(timeslice, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaRecorder_Start_Method);
+        MediaRecorderV8Internal::startMethod(info);
+    }
+
+    static void stopMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "stop");
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
+
+        impl->stop(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void stopMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::stopMethod(info);
+    }
+
+    static void pauseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "pause");
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
+
+        impl->pause(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void pauseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::pauseMethod(info);
+    }
+
+    static void resumeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "resume");
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
+
+        impl->resume(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void resumeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::resumeMethod(info);
+    }
+
+    static void requestDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaRecorder", "requestData");
+
+        MediaRecorder* impl = V8MediaRecorder::toImpl(info.Holder());
+
+        impl->requestData(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void requestDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::requestDataMethod(info);
+    }
+
+    static void isTypeSupportedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isTypeSupported", "MediaRecorder", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> type;
+        type = info[0];
+        if (!type.prepare())
+            return;
+
+        v8SetReturnValueBool(info, MediaRecorder::isTypeSupported(type));
+    }
+
+    MODULES_EXPORT void isTypeSupportedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaRecorderV8Internal::isTypeSupportedMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaRecorder");
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        MediaStream* stream;
+        MediaRecorderOptions options;
+        stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!stream) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'MediaStream'.");
+
+            return;
+        }
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8MediaRecorderOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        MediaRecorder* impl = MediaRecorder::create(executionContext, stream, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaRecorder::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace MediaRecorderV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaRecorderAccessors[] = {
-    {"stream", MediaRecorderV8Internal::streamAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mimeType", MediaRecorderV8Internal::mimeTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"state", MediaRecorderV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onstart", MediaRecorderV8Internal::onstartAttributeGetterCallback, MediaRecorderV8Internal::onstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onstop", MediaRecorderV8Internal::onstopAttributeGetterCallback, MediaRecorderV8Internal::onstopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondataavailable", MediaRecorderV8Internal::ondataavailableAttributeGetterCallback, MediaRecorderV8Internal::ondataavailableAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpause", MediaRecorderV8Internal::onpauseAttributeGetterCallback, MediaRecorderV8Internal::onpauseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onresume", MediaRecorderV8Internal::onresumeAttributeGetterCallback, MediaRecorderV8Internal::onresumeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", MediaRecorderV8Internal::onerrorAttributeGetterCallback, MediaRecorderV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"videoBitsPerSecond", MediaRecorderV8Internal::videoBitsPerSecondAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"audioBitsPerSecond", MediaRecorderV8Internal::audioBitsPerSecondAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "stream", MediaRecorderV8Internal::streamAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mimeType", MediaRecorderV8Internal::mimeTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "state", MediaRecorderV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onstart", MediaRecorderV8Internal::onstartAttributeGetterCallback, MediaRecorderV8Internal::onstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onstop", MediaRecorderV8Internal::onstopAttributeGetterCallback, MediaRecorderV8Internal::onstopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondataavailable", MediaRecorderV8Internal::ondataavailableAttributeGetterCallback, MediaRecorderV8Internal::ondataavailableAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpause", MediaRecorderV8Internal::onpauseAttributeGetterCallback, MediaRecorderV8Internal::onpauseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onresume", MediaRecorderV8Internal::onresumeAttributeGetterCallback, MediaRecorderV8Internal::onresumeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", MediaRecorderV8Internal::onerrorAttributeGetterCallback, MediaRecorderV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "videoBitsPerSecond", MediaRecorderV8Internal::videoBitsPerSecondAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "audioBitsPerSecond", MediaRecorderV8Internal::audioBitsPerSecondAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MediaRecorderMethods[] = {
-    {"start", MediaRecorderV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stop", MediaRecorderV8Internal::stopMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pause", MediaRecorderV8Internal::pauseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"resume", MediaRecorderV8Internal::resumeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"requestData", MediaRecorderV8Internal::requestDataMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTypeSupported", MediaRecorderV8Internal::isTypeSupportedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
+    { "start", MediaRecorderV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stop", MediaRecorderV8Internal::stopMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pause", MediaRecorderV8Internal::pauseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "resume", MediaRecorderV8Internal::resumeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "requestData", MediaRecorderV8Internal::requestDataMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTypeSupported", MediaRecorderV8Internal::isTypeSupportedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
 };
 
-void V8MediaRecorder::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaRecorder"));
-    return;
-  }
+void V8MediaRecorder::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaRecorder"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  MediaRecorderV8Internal::constructor(info);
+    MediaRecorderV8Internal::constructor(info);
 }
 
-static void installV8MediaRecorderTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaRecorder::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MediaRecorder::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8MediaRecorder::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8MediaRecorderTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaRecorder::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MediaRecorder::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8MediaRecorder::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaRecorderAccessors, WTF_ARRAY_LENGTH(V8MediaRecorderAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaRecorderMethods, WTF_ARRAY_LENGTH(V8MediaRecorderMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaRecorderAccessors, WTF_ARRAY_LENGTH(V8MediaRecorderAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaRecorderMethods, WTF_ARRAY_LENGTH(V8MediaRecorderMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaRecorder::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaRecorderTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaRecorder::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaRecorderTemplate);
 }
 
-bool V8MediaRecorder::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaRecorder::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaRecorder::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaRecorder::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaRecorder* V8MediaRecorder::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaRecorder* V8MediaRecorder::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

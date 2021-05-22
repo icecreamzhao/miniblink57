@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8StorageUsageCallback.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -21,29 +21,31 @@
 namespace blink {
 
 V8StorageUsageCallback::V8StorageUsageCallback(v8::Local<v8::Function> callback, ScriptState* scriptState)
-    : m_scriptState(scriptState) {
-  m_callback.set(scriptState->isolate(), callback);
+    : m_scriptState(scriptState)
+{
+    m_callback.set(scriptState->isolate(), callback);
 }
 
-V8StorageUsageCallback::~V8StorageUsageCallback() {}
+V8StorageUsageCallback::~V8StorageUsageCallback() { }
 
-DEFINE_TRACE(V8StorageUsageCallback) {
-  StorageUsageCallback::trace(visitor);
+DEFINE_TRACE(V8StorageUsageCallback)
+{
+    StorageUsageCallback::trace(visitor);
 }
 
-void V8StorageUsageCallback::handleEvent(unsigned long long currentUsageInBytes, unsigned long long currentQuotaInBytes) {
-  ExecutionContext* executionContext = m_scriptState->getExecutionContext();
-  if (!executionContext || executionContext->isContextSuspended() ||
-      executionContext->isContextDestroyed())
-    return;
-  if (!m_scriptState->contextIsValid())
-    return;
-  ScriptState::Scope scope(m_scriptState.get());
-  v8::Local<v8::Value> currentUsageInBytesHandle = v8::Number::New(m_scriptState->isolate(), static_cast<double>(currentUsageInBytes));
-  v8::Local<v8::Value> currentQuotaInBytesHandle = v8::Number::New(m_scriptState->isolate(), static_cast<double>(currentQuotaInBytes));
-  v8::Local<v8::Value> argv[] = { currentUsageInBytesHandle, currentQuotaInBytesHandle };
+void V8StorageUsageCallback::handleEvent(unsigned long long currentUsageInBytes, unsigned long long currentQuotaInBytes)
+{
+    ExecutionContext* executionContext = m_scriptState->getExecutionContext();
+    if (!executionContext || executionContext->isContextSuspended() || executionContext->isContextDestroyed())
+        return;
+    if (!m_scriptState->contextIsValid())
+        return;
+    ScriptState::Scope scope(m_scriptState.get());
+    v8::Local<v8::Value> currentUsageInBytesHandle = v8::Number::New(m_scriptState->isolate(), static_cast<double>(currentUsageInBytes));
+    v8::Local<v8::Value> currentQuotaInBytesHandle = v8::Number::New(m_scriptState->isolate(), static_cast<double>(currentQuotaInBytes));
+    v8::Local<v8::Value> argv[] = { currentUsageInBytesHandle, currentQuotaInBytesHandle };
 
-  V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 2, argv, m_scriptState->isolate());
+    V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 2, argv, m_scriptState->isolate());
 }
 
-}  // namespace blink
+} // namespace blink

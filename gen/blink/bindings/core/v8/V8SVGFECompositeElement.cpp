@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGFECompositeElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,269 +52,305 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGFECompositeElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGFECompositeElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGFECompositeElementV8Internal {
 
-CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 0);
-}
+    CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 0);
+    }
+
+    CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_OVERConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 1);
+    }
 
-CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_OVERConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 1);
-}
+    CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_INConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 2);
+    }
 
-CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_INConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 2);
-}
+    CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_OUTConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 3);
+    }
 
-CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_OUTConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 3);
-}
+    CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_ATOPConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 4);
+    }
 
-CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_ATOPConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 4);
-}
+    CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_XORConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 5);
+    }
 
-CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_XORConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 5);
-}
+    CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_ARITHMETICConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 6);
+    }
 
-CORE_EXPORT void SVG_FECOMPOSITE_OPERATOR_ARITHMETICConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 6);
-}
+    static void in2AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void in2AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->in2()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->in2()), impl);
-}
+    CORE_EXPORT void in2AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void in2AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::in2AttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::in2AttributeGetter(info);
-}
+    static void in1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void in1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->in1()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->in1()), impl);
-}
+    CORE_EXPORT void in1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void in1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::in1AttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::in1AttributeGetter(info);
-}
+    static void operatorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void operatorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->svgOperator()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->svgOperator()), impl);
-}
+    CORE_EXPORT void operatorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void operatorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::operatorAttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::operatorAttributeGetter(info);
-}
+    static void k1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void k1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->k1()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->k1()), impl);
-}
+    CORE_EXPORT void k1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void k1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::k1AttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::k1AttributeGetter(info);
-}
+    static void k2AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void k2AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->k2()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->k2()), impl);
-}
+    CORE_EXPORT void k2AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void k2AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::k2AttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::k2AttributeGetter(info);
-}
+    static void k3AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void k3AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->k3()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->k3()), impl);
-}
+    CORE_EXPORT void k3AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void k3AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::k3AttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::k3AttributeGetter(info);
-}
+    static void k4AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void k4AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->k4()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->k4()), impl);
-}
+    CORE_EXPORT void k4AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void k4AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::k4AttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::k4AttributeGetter(info);
-}
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
-}
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::xAttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::xAttributeGetter(info);
-}
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
-}
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::yAttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::yAttributeGetter(info);
-}
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
-}
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::widthAttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::widthAttributeGetter(info);
-}
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
-}
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        SVGFECompositeElementV8Internal::heightAttributeGetter(info);
+    }
 
-  SVGFECompositeElementV8Internal::heightAttributeGetter(info);
-}
+    static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
 
-  SVGFECompositeElement* impl = V8SVGFECompositeElement::toImpl(holder);
+        v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
+    }
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
-}
+    CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-
-  SVGFECompositeElementV8Internal::resultAttributeGetter(info);
-}
+        SVGFECompositeElementV8Internal::resultAttributeGetter(info);
+    }
 
 } // namespace SVGFECompositeElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGFECompositeElementAccessors[] = {
-    {"in2", SVGFECompositeElementV8Internal::in2AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"in1", SVGFECompositeElementV8Internal::in1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"operator", SVGFECompositeElementV8Internal::operatorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"k1", SVGFECompositeElementV8Internal::k1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"k2", SVGFECompositeElementV8Internal::k2AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"k3", SVGFECompositeElementV8Internal::k3AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"k4", SVGFECompositeElementV8Internal::k4AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"x", SVGFECompositeElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", SVGFECompositeElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", SVGFECompositeElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", SVGFECompositeElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"result", SVGFECompositeElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "in2", SVGFECompositeElementV8Internal::in2AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "in1", SVGFECompositeElementV8Internal::in1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "operator", SVGFECompositeElementV8Internal::operatorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "k1", SVGFECompositeElementV8Internal::k1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "k2", SVGFECompositeElementV8Internal::k2AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "k3", SVGFECompositeElementV8Internal::k3AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "k4", SVGFECompositeElementV8Internal::k4AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "x", SVGFECompositeElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", SVGFECompositeElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", SVGFECompositeElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", SVGFECompositeElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "result", SVGFECompositeElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGFECompositeElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFECompositeElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFECompositeElement::internalFieldCount);
+static void installV8SVGFECompositeElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFECompositeElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFECompositeElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_UNKNOWN", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_UNKNOWNConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_OVER", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_OVERConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_IN", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_INConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_OUT", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_OUTConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_ATOP", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_ATOPConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_XOR", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_XORConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_ARITHMETIC", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_ARITHMETICConstantGetterCallback);
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFECompositeElementAccessors, WTF_ARRAY_LENGTH(V8SVGFECompositeElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_UNKNOWN", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_UNKNOWNConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_OVER", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_OVERConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_IN", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_INConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_OUT", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_OUTConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_ATOP", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_ATOPConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_XOR", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_XORConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_FECOMPOSITE_OPERATOR_ARITHMETIC", SVGFECompositeElementV8Internal::SVG_FECOMPOSITE_OPERATOR_ARITHMETICConstantGetterCallback);
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFECompositeElementAccessors, WTF_ARRAY_LENGTH(V8SVGFECompositeElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGFECompositeElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFECompositeElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGFECompositeElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFECompositeElementTemplate);
 }
 
-bool V8SVGFECompositeElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGFECompositeElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGFECompositeElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGFECompositeElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGFECompositeElement* V8SVGFECompositeElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGFECompositeElement* V8SVGFECompositeElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

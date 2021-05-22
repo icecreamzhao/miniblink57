@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ConstrainDOMStringParameters_h
 #define V8ConstrainDOMStringParameters_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ConstrainDOMStringParameters {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstrainDOMStringParameters&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstrainDOMStringParameters&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ConstrainDOMStringParameters(const ConstrainDOMStringParameters&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstrainDOMStringParameters& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstrainDOMStringParameters& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ConstrainDOMStringParameters> {
-  static ConstrainDOMStringParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ConstrainDOMStringParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ConstrainDOMStringParameters> {
-  typedef V8ConstrainDOMStringParameters Type;
+    typedef V8ConstrainDOMStringParameters Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ConstrainDOMStringParameters_h
+#endif // V8ConstrainDOMStringParameters_h

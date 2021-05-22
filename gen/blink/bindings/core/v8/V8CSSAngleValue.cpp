@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CSSAngleValue.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,152 +47,167 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CSSAngleValue::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CSSAngleValue is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CSSAngleValueV8Internal {
 
-static void degreesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void degreesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSAngleValue* impl = V8CSSAngleValue::toImpl(holder);
+        CSSAngleValue* impl = V8CSSAngleValue::toImpl(holder);
 
-  v8SetReturnValue(info, impl->degrees());
-}
+        v8SetReturnValue(info, impl->degrees());
+    }
 
-CORE_EXPORT void degreesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSAngleValueV8Internal::degreesAttributeGetter(info);
-}
+    CORE_EXPORT void degreesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSAngleValueV8Internal::degreesAttributeGetter(info);
+    }
 
-static void radiansAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void radiansAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSAngleValue* impl = V8CSSAngleValue::toImpl(holder);
+        CSSAngleValue* impl = V8CSSAngleValue::toImpl(holder);
 
-  v8SetReturnValue(info, impl->radians());
-}
+        v8SetReturnValue(info, impl->radians());
+    }
 
-CORE_EXPORT void radiansAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSAngleValueV8Internal::radiansAttributeGetter(info);
-}
+    CORE_EXPORT void radiansAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSAngleValueV8Internal::radiansAttributeGetter(info);
+    }
 
-static void gradiansAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void gradiansAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSAngleValue* impl = V8CSSAngleValue::toImpl(holder);
+        CSSAngleValue* impl = V8CSSAngleValue::toImpl(holder);
 
-  v8SetReturnValue(info, impl->gradians());
-}
+        v8SetReturnValue(info, impl->gradians());
+    }
 
-CORE_EXPORT void gradiansAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSAngleValueV8Internal::gradiansAttributeGetter(info);
-}
+    CORE_EXPORT void gradiansAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSAngleValueV8Internal::gradiansAttributeGetter(info);
+    }
 
-static void turnsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void turnsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSAngleValue* impl = V8CSSAngleValue::toImpl(holder);
+        CSSAngleValue* impl = V8CSSAngleValue::toImpl(holder);
 
-  v8SetReturnValue(info, impl->turns());
-}
+        v8SetReturnValue(info, impl->turns());
+    }
 
-CORE_EXPORT void turnsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSAngleValueV8Internal::turnsAttributeGetter(info);
-}
+    CORE_EXPORT void turnsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSAngleValueV8Internal::turnsAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSAngleValue");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CSSAngleValue");
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  double value;
-  V8StringResource<> unit;
-  value = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        double value;
+        V8StringResource<> unit;
+        value = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  unit = info[1];
-  if (!unit.prepare())
-    return;
-  const char* validUnitValues[] = {
-      "deg",
-      "rad",
-      "grad",
-      "turn",
-  };
-  if (!isValidEnum(unit, validUnitValues, WTF_ARRAY_LENGTH(validUnitValues), "CSSAngleUnit", exceptionState)) {
-    return;
-  }
+        unit = info[1];
+        if (!unit.prepare())
+            return;
+        const char* validUnitValues[] = {
+            "deg",
+            "rad",
+            "grad",
+            "turn",
+        };
+        if (!isValidEnum(unit, validUnitValues, WTF_ARRAY_LENGTH(validUnitValues), "CSSAngleUnit", exceptionState)) {
+            return;
+        }
 
-  CSSAngleValue* impl = CSSAngleValue::create(value, unit);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSAngleValue::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        CSSAngleValue* impl = CSSAngleValue::create(value, unit);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CSSAngleValue::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace CSSAngleValueV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CSSAngleValueAccessors[] = {
-    {"degrees", CSSAngleValueV8Internal::degreesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"radians", CSSAngleValueV8Internal::radiansAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"gradians", CSSAngleValueV8Internal::gradiansAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"turns", CSSAngleValueV8Internal::turnsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "degrees", CSSAngleValueV8Internal::degreesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "radians", CSSAngleValueV8Internal::radiansAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "gradians", CSSAngleValueV8Internal::gradiansAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "turns", CSSAngleValueV8Internal::turnsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8CSSAngleValue::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CSSAngleValue"));
-    return;
-  }
+void V8CSSAngleValue::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CSSAngleValue"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  CSSAngleValueV8Internal::constructor(info);
+    CSSAngleValueV8Internal::constructor(info);
 }
 
-static void installV8CSSAngleValueTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSAngleValue::wrapperTypeInfo.interfaceName, V8CSSStyleValue::domTemplate(isolate, world), V8CSSAngleValue::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8CSSAngleValue::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8CSSAngleValueTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSAngleValue::wrapperTypeInfo.interfaceName, V8CSSStyleValue::domTemplate(isolate, world), V8CSSAngleValue::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8CSSAngleValue::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::cssTypedOMEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSAngleValueAccessors, WTF_ARRAY_LENGTH(V8CSSAngleValueAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSAngleValueAccessors, WTF_ARRAY_LENGTH(V8CSSAngleValueAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8CSSAngleValue::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSAngleValueTemplate);
+v8::Local<v8::FunctionTemplate> V8CSSAngleValue::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSAngleValueTemplate);
 }
 
-bool V8CSSAngleValue::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CSSAngleValue::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CSSAngleValue::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CSSAngleValue::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CSSAngleValue* V8CSSAngleValue::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CSSAngleValue* V8CSSAngleValue::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

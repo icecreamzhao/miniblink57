@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Coordinates.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,174 +45,193 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Coordinates::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Coordinates is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CoordinatesV8Internal {
 
-static void latitudeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void latitudeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Coordinates* impl = V8Coordinates::toImpl(holder);
+        Coordinates* impl = V8Coordinates::toImpl(holder);
 
-  v8SetReturnValue(info, impl->latitude());
-}
+        v8SetReturnValue(info, impl->latitude());
+    }
 
-MODULES_EXPORT void latitudeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CoordinatesV8Internal::latitudeAttributeGetter(info);
-}
+    MODULES_EXPORT void latitudeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CoordinatesV8Internal::latitudeAttributeGetter(info);
+    }
 
-static void longitudeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void longitudeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Coordinates* impl = V8Coordinates::toImpl(holder);
+        Coordinates* impl = V8Coordinates::toImpl(holder);
 
-  v8SetReturnValue(info, impl->longitude());
-}
+        v8SetReturnValue(info, impl->longitude());
+    }
 
-MODULES_EXPORT void longitudeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CoordinatesV8Internal::longitudeAttributeGetter(info);
-}
+    MODULES_EXPORT void longitudeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CoordinatesV8Internal::longitudeAttributeGetter(info);
+    }
 
-static void altitudeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void altitudeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Coordinates* impl = V8Coordinates::toImpl(holder);
+        Coordinates* impl = V8Coordinates::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->altitude(isNull));
+        double cppValue(impl->altitude(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-MODULES_EXPORT void altitudeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CoordinatesV8Internal::altitudeAttributeGetter(info);
-}
+    MODULES_EXPORT void altitudeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CoordinatesV8Internal::altitudeAttributeGetter(info);
+    }
 
-static void accuracyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void accuracyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Coordinates* impl = V8Coordinates::toImpl(holder);
+        Coordinates* impl = V8Coordinates::toImpl(holder);
 
-  v8SetReturnValue(info, impl->accuracy());
-}
+        v8SetReturnValue(info, impl->accuracy());
+    }
 
-MODULES_EXPORT void accuracyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CoordinatesV8Internal::accuracyAttributeGetter(info);
-}
+    MODULES_EXPORT void accuracyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CoordinatesV8Internal::accuracyAttributeGetter(info);
+    }
 
-static void altitudeAccuracyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void altitudeAccuracyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Coordinates* impl = V8Coordinates::toImpl(holder);
+        Coordinates* impl = V8Coordinates::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->altitudeAccuracy(isNull));
+        double cppValue(impl->altitudeAccuracy(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-MODULES_EXPORT void altitudeAccuracyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CoordinatesV8Internal::altitudeAccuracyAttributeGetter(info);
-}
+    MODULES_EXPORT void altitudeAccuracyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CoordinatesV8Internal::altitudeAccuracyAttributeGetter(info);
+    }
 
-static void headingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void headingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Coordinates* impl = V8Coordinates::toImpl(holder);
+        Coordinates* impl = V8Coordinates::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->heading(isNull));
+        double cppValue(impl->heading(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-MODULES_EXPORT void headingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CoordinatesV8Internal::headingAttributeGetter(info);
-}
+    MODULES_EXPORT void headingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CoordinatesV8Internal::headingAttributeGetter(info);
+    }
 
-static void speedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void speedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Coordinates* impl = V8Coordinates::toImpl(holder);
+        Coordinates* impl = V8Coordinates::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->speed(isNull));
+        double cppValue(impl->speed(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-MODULES_EXPORT void speedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CoordinatesV8Internal::speedAttributeGetter(info);
-}
+    MODULES_EXPORT void speedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CoordinatesV8Internal::speedAttributeGetter(info);
+    }
 
 } // namespace CoordinatesV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CoordinatesAccessors[] = {
-    {"latitude", CoordinatesV8Internal::latitudeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"longitude", CoordinatesV8Internal::longitudeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"altitude", CoordinatesV8Internal::altitudeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"accuracy", CoordinatesV8Internal::accuracyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"altitudeAccuracy", CoordinatesV8Internal::altitudeAccuracyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"heading", CoordinatesV8Internal::headingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"speed", CoordinatesV8Internal::speedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "latitude", CoordinatesV8Internal::latitudeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "longitude", CoordinatesV8Internal::longitudeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "altitude", CoordinatesV8Internal::altitudeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "accuracy", CoordinatesV8Internal::accuracyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "altitudeAccuracy", CoordinatesV8Internal::altitudeAccuracyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "heading", CoordinatesV8Internal::headingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "speed", CoordinatesV8Internal::speedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CoordinatesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Coordinates::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Coordinates::internalFieldCount);
+static void installV8CoordinatesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Coordinates::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Coordinates::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CoordinatesAccessors, WTF_ARRAY_LENGTH(V8CoordinatesAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CoordinatesAccessors, WTF_ARRAY_LENGTH(V8CoordinatesAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8Coordinates::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CoordinatesTemplate);
+v8::Local<v8::FunctionTemplate> V8Coordinates::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CoordinatesTemplate);
 }
 
-bool V8Coordinates::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Coordinates::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Coordinates::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Coordinates::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Coordinates* V8Coordinates::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Coordinates* V8Coordinates::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

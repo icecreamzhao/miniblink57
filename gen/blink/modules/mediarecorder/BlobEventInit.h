@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef BlobEventInit_h
 #define BlobEventInit_h
 
@@ -21,32 +21,33 @@ namespace blink {
 class Blob;
 
 class MODULES_EXPORT BlobEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  BlobEventInit();
-  virtual ~BlobEventInit();
-  BlobEventInit(const BlobEventInit&);
-  BlobEventInit& operator=(const BlobEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasData() const;
-  Blob* data() const;
-  void setData(Blob*);
+public:
+    BlobEventInit();
+    virtual ~BlobEventInit();
+    BlobEventInit(const BlobEventInit&);
+    BlobEventInit& operator=(const BlobEventInit&);
 
-  bool hasTimecode() const;
-  double timecode() const;
-  void setTimecode(double);
+    bool hasData() const;
+    Blob* data() const;
+    void setData(Blob*);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTimecode() const;
+    double timecode() const;
+    void setTimecode(double);
 
- private:
-  Member<Blob> m_data;
-  bool m_hasTimecode = false;
-  double m_timecode;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8BlobEventInit;
+private:
+    Member<Blob> m_data;
+    bool m_hasTimecode = false;
+    double m_timecode;
+
+    friend class V8BlobEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // BlobEventInit_h
+#endif // BlobEventInit_h

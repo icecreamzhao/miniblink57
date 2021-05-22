@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -58,2475 +58,2798 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGElementV8Internal {
 
-static void classNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void classNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->className()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->className()), impl);
+    }
 
-CORE_EXPORT void classNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGClassName);
+    CORE_EXPORT void classNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGClassName);
 
-  SVGElementV8Internal::classNameAttributeGetter(info);
-}
+        SVGElementV8Internal::classNameAttributeGetter(info);
+    }
 
-static void datasetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void datasetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->dataset()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->dataset()), impl);
+    }
 
-CORE_EXPORT void datasetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::datasetAttributeGetter(info);
-}
+    CORE_EXPORT void datasetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::datasetAttributeGetter(info);
+    }
 
-static void datasetAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void datasetAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->dataset()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->dataset()));
+    }
 
-CORE_EXPORT void datasetAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::datasetAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void datasetAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::datasetAttributeGetterForMainWorld(info);
+    }
 
-static void styleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void styleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->style()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->style()), impl);
+    }
 
-CORE_EXPORT void styleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::styleAttributeGetter(info);
-}
+    CORE_EXPORT void styleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::styleAttributeGetter(info);
+    }
 
-static void styleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* proxyImpl = V8SVGElement::toImpl(holder);
-  CSSStyleDeclaration* impl = WTF::getPtr(proxyImpl->style());
-  if (!impl)
-    return;
+    static void styleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* proxyImpl = V8SVGElement::toImpl(holder);
+        CSSStyleDeclaration* impl = WTF::getPtr(proxyImpl->style());
+        if (!impl)
+            return;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGElement", "style");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGElement", "style");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setCSSText(cppValue, exceptionState);
-}
+        impl->setCSSText(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void styleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void styleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::styleAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::styleAttributeSetter(v8Value, info);
+    }
 
-static void ownerSVGElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ownerSVGElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->ownerSVGElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->ownerSVGElement()), impl);
+    }
 
-CORE_EXPORT void ownerSVGElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ownerSVGElementAttributeGetter(info);
-}
+    CORE_EXPORT void ownerSVGElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ownerSVGElementAttributeGetter(info);
+    }
 
-static void viewportElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void viewportElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->viewportElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->viewportElement()), impl);
+    }
 
-CORE_EXPORT void viewportElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::viewportElementAttributeGetter(info);
-}
+    CORE_EXPORT void viewportElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::viewportElementAttributeGetter(info);
+    }
 
-static void tabIndexAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void tabIndexAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->tabIndex());
-}
+        v8SetReturnValueInt(info, impl->tabIndex());
+    }
 
-CORE_EXPORT void tabIndexAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::tabIndexAttributeGetter(info);
-}
+    CORE_EXPORT void tabIndexAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::tabIndexAttributeGetter(info);
+    }
 
-static void tabIndexAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void tabIndexAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGElement", "tabIndex");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGElement", "tabIndex");
 
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTabIndex(cppValue);
-}
+        impl->setTabIndex(cppValue);
+    }
 
-CORE_EXPORT void tabIndexAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void tabIndexAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  SVGElementV8Internal::tabIndexAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::tabIndexAttributeSetter(v8Value, info);
+    }
 
-static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onabort(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onabort(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onabortAttributeGetter(info);
-}
+    CORE_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onabortAttributeGetter(info);
+    }
 
-static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnabort(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnabort(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onabortAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onabortAttributeSetter(v8Value, info);
+    }
 
-static void onblurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onblurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onblur(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onblur(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onblurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onblurAttributeGetter(info);
-}
+    CORE_EXPORT void onblurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onblurAttributeGetter(info);
+    }
 
-static void onblurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onblurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnblur(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnblur(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onblurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onblurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onblurAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onblurAttributeSetter(v8Value, info);
+    }
 
-static void oncancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::oncancel(*impl));
+        EventListener* cppValue(GlobalEventHandlers::oncancel(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::oncancelAttributeGetter(info);
-}
+    CORE_EXPORT void oncancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::oncancelAttributeGetter(info);
+    }
 
-static void oncancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void oncancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOncancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOncancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::oncancelAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::oncancelAttributeSetter(v8Value, info);
+    }
 
-static void oncanplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncanplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::oncanplay(*impl));
+        EventListener* cppValue(GlobalEventHandlers::oncanplay(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncanplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::oncanplayAttributeGetter(info);
-}
+    CORE_EXPORT void oncanplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::oncanplayAttributeGetter(info);
+    }
 
-static void oncanplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void oncanplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOncanplay(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOncanplay(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncanplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncanplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::oncanplayAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::oncanplayAttributeSetter(v8Value, info);
+    }
 
-static void oncanplaythroughAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncanplaythroughAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::oncanplaythrough(*impl));
+        EventListener* cppValue(GlobalEventHandlers::oncanplaythrough(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncanplaythroughAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::oncanplaythroughAttributeGetter(info);
-}
+    CORE_EXPORT void oncanplaythroughAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::oncanplaythroughAttributeGetter(info);
+    }
 
-static void oncanplaythroughAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void oncanplaythroughAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOncanplaythrough(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOncanplaythrough(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncanplaythroughAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncanplaythroughAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::oncanplaythroughAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::oncanplaythroughAttributeSetter(v8Value, info);
+    }
 
-static void onchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onchange(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onchange(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onchangeAttributeGetter(info);
-}
+    CORE_EXPORT void onchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onchangeAttributeGetter(info);
+    }
 
-static void onchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onchangeAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onchangeAttributeSetter(v8Value, info);
+    }
 
-static void onclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onclick(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onclick(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onclickAttributeGetter(info);
-}
+    CORE_EXPORT void onclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onclickAttributeGetter(info);
+    }
 
-static void onclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onclickAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onclickAttributeSetter(v8Value, info);
+    }
 
-static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onclose(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onclose(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::oncloseAttributeGetter(info);
-}
+    CORE_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::oncloseAttributeGetter(info);
+    }
 
-static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnclose(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnclose(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::oncloseAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::oncloseAttributeSetter(v8Value, info);
+    }
 
-static void oncontextmenuAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncontextmenuAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::oncontextmenu(*impl));
+        EventListener* cppValue(GlobalEventHandlers::oncontextmenu(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncontextmenuAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::oncontextmenuAttributeGetter(info);
-}
+    CORE_EXPORT void oncontextmenuAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::oncontextmenuAttributeGetter(info);
+    }
 
-static void oncontextmenuAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void oncontextmenuAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOncontextmenu(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOncontextmenu(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncontextmenuAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncontextmenuAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::oncontextmenuAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::oncontextmenuAttributeSetter(v8Value, info);
+    }
 
-static void oncuechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncuechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::oncuechange(*impl));
+        EventListener* cppValue(GlobalEventHandlers::oncuechange(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncuechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::oncuechangeAttributeGetter(info);
-}
+    CORE_EXPORT void oncuechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::oncuechangeAttributeGetter(info);
+    }
 
-static void oncuechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void oncuechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOncuechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOncuechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncuechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncuechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::oncuechangeAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::oncuechangeAttributeSetter(v8Value, info);
+    }
 
-static void ondblclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondblclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ondblclick(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ondblclick(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondblclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ondblclickAttributeGetter(info);
-}
+    CORE_EXPORT void ondblclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ondblclickAttributeGetter(info);
+    }
 
-static void ondblclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ondblclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOndblclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOndblclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondblclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondblclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ondblclickAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ondblclickAttributeSetter(v8Value, info);
+    }
 
-static void ondragAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondragAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ondrag(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ondrag(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondragAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ondragAttributeGetter(info);
-}
+    CORE_EXPORT void ondragAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ondragAttributeGetter(info);
+    }
 
-static void ondragAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ondragAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOndrag(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOndrag(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondragAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondragAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ondragAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ondragAttributeSetter(v8Value, info);
+    }
 
-static void ondragendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondragendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ondragend(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ondragend(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondragendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ondragendAttributeGetter(info);
-}
+    CORE_EXPORT void ondragendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ondragendAttributeGetter(info);
+    }
 
-static void ondragendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ondragendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOndragend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOndragend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondragendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondragendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ondragendAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ondragendAttributeSetter(v8Value, info);
+    }
 
-static void ondragenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondragenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ondragenter(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ondragenter(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondragenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ondragenterAttributeGetter(info);
-}
+    CORE_EXPORT void ondragenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ondragenterAttributeGetter(info);
+    }
 
-static void ondragenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ondragenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOndragenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOndragenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondragenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondragenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ondragenterAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ondragenterAttributeSetter(v8Value, info);
+    }
 
-static void ondragleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondragleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ondragleave(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ondragleave(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondragleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ondragleaveAttributeGetter(info);
-}
+    CORE_EXPORT void ondragleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ondragleaveAttributeGetter(info);
+    }
 
-static void ondragleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ondragleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOndragleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOndragleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondragleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondragleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ondragleaveAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ondragleaveAttributeSetter(v8Value, info);
+    }
 
-static void ondragoverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondragoverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ondragover(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ondragover(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondragoverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ondragoverAttributeGetter(info);
-}
+    CORE_EXPORT void ondragoverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ondragoverAttributeGetter(info);
+    }
 
-static void ondragoverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ondragoverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOndragover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOndragover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondragoverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondragoverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ondragoverAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ondragoverAttributeSetter(v8Value, info);
+    }
 
-static void ondragstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondragstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ondragstart(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ondragstart(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondragstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ondragstartAttributeGetter(info);
-}
+    CORE_EXPORT void ondragstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ondragstartAttributeGetter(info);
+    }
 
-static void ondragstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ondragstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOndragstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOndragstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondragstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondragstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ondragstartAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ondragstartAttributeSetter(v8Value, info);
+    }
 
-static void ondropAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondropAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ondrop(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ondrop(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondropAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ondropAttributeGetter(info);
-}
+    CORE_EXPORT void ondropAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ondropAttributeGetter(info);
+    }
 
-static void ondropAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ondropAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOndrop(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOndrop(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondropAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondropAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ondropAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ondropAttributeSetter(v8Value, info);
+    }
 
-static void ondurationchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondurationchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ondurationchange(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ondurationchange(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondurationchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ondurationchangeAttributeGetter(info);
-}
+    CORE_EXPORT void ondurationchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ondurationchangeAttributeGetter(info);
+    }
 
-static void ondurationchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ondurationchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOndurationchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOndurationchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondurationchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondurationchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ondurationchangeAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ondurationchangeAttributeSetter(v8Value, info);
+    }
 
-static void onemptiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onemptiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onemptied(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onemptied(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onemptiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onemptiedAttributeGetter(info);
-}
+    CORE_EXPORT void onemptiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onemptiedAttributeGetter(info);
+    }
 
-static void onemptiedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onemptiedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnemptied(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnemptied(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onemptiedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onemptiedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onemptiedAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onemptiedAttributeSetter(v8Value, info);
+    }
 
-static void onendedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onendedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onended(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onended(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onendedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onendedAttributeGetter(info);
-}
+    CORE_EXPORT void onendedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onendedAttributeGetter(info);
+    }
 
-static void onendedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onendedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnended(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnended(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onendedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onendedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onendedAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onendedAttributeSetter(v8Value, info);
+    }
 
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onerror(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onerror(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onerrorAttributeGetter(info);
-}
+    CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onerrorAttributeGetter(info);
+    }
 
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onerrorAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
 
-static void onfocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onfocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onfocus(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onfocus(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onfocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onfocusAttributeGetter(info);
-}
+    CORE_EXPORT void onfocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onfocusAttributeGetter(info);
+    }
 
-static void onfocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onfocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnfocus(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnfocus(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onfocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onfocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onfocusAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onfocusAttributeSetter(v8Value, info);
+    }
 
-static void oninputAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oninputAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::oninput(*impl));
+        EventListener* cppValue(GlobalEventHandlers::oninput(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oninputAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::oninputAttributeGetter(info);
-}
+    CORE_EXPORT void oninputAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::oninputAttributeGetter(info);
+    }
 
-static void oninputAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void oninputAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOninput(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOninput(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oninputAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oninputAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::oninputAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::oninputAttributeSetter(v8Value, info);
+    }
 
-static void oninvalidAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oninvalidAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::oninvalid(*impl));
+        EventListener* cppValue(GlobalEventHandlers::oninvalid(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oninvalidAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::oninvalidAttributeGetter(info);
-}
+    CORE_EXPORT void oninvalidAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::oninvalidAttributeGetter(info);
+    }
 
-static void oninvalidAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void oninvalidAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOninvalid(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOninvalid(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oninvalidAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oninvalidAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::oninvalidAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::oninvalidAttributeSetter(v8Value, info);
+    }
 
-static void onkeydownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onkeydownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onkeydown(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onkeydown(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onkeydownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onkeydownAttributeGetter(info);
-}
+    CORE_EXPORT void onkeydownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onkeydownAttributeGetter(info);
+    }
 
-static void onkeydownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onkeydownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnkeydown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnkeydown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onkeydownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onkeydownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onkeydownAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onkeydownAttributeSetter(v8Value, info);
+    }
 
-static void onkeypressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onkeypressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onkeypress(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onkeypress(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onkeypressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onkeypressAttributeGetter(info);
-}
+    CORE_EXPORT void onkeypressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onkeypressAttributeGetter(info);
+    }
 
-static void onkeypressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onkeypressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnkeypress(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnkeypress(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onkeypressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onkeypressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onkeypressAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onkeypressAttributeSetter(v8Value, info);
+    }
 
-static void onkeyupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onkeyupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onkeyup(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onkeyup(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onkeyupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onkeyupAttributeGetter(info);
-}
+    CORE_EXPORT void onkeyupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onkeyupAttributeGetter(info);
+    }
 
-static void onkeyupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onkeyupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnkeyup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnkeyup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onkeyupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onkeyupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onkeyupAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onkeyupAttributeSetter(v8Value, info);
+    }
 
-static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onload(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onload(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onloadAttributeGetter(info);
-}
+    CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onloadAttributeGetter(info);
+    }
 
-static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnload(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnload(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onloadAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onloadAttributeSetter(v8Value, info);
+    }
 
-static void onloadeddataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadeddataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onloadeddata(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onloadeddata(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadeddataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onloadeddataAttributeGetter(info);
-}
+    CORE_EXPORT void onloadeddataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onloadeddataAttributeGetter(info);
+    }
 
-static void onloadeddataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onloadeddataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnloadeddata(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnloadeddata(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadeddataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadeddataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onloadeddataAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onloadeddataAttributeSetter(v8Value, info);
+    }
 
-static void onloadedmetadataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadedmetadataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onloadedmetadata(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onloadedmetadata(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadedmetadataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onloadedmetadataAttributeGetter(info);
-}
+    CORE_EXPORT void onloadedmetadataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onloadedmetadataAttributeGetter(info);
+    }
 
-static void onloadedmetadataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onloadedmetadataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnloadedmetadata(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnloadedmetadata(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadedmetadataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadedmetadataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onloadedmetadataAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onloadedmetadataAttributeSetter(v8Value, info);
+    }
 
-static void onloadstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onloadstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onloadstart(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onloadstart(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onloadstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onloadstartAttributeGetter(info);
-}
+    CORE_EXPORT void onloadstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onloadstartAttributeGetter(info);
+    }
 
-static void onloadstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onloadstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnloadstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnloadstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onloadstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onloadstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onloadstartAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onloadstartAttributeSetter(v8Value, info);
+    }
 
-static void onmousedownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onmousedownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onmousedown(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onmousedown(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onmousedownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onmousedownAttributeGetter(info);
-}
+    CORE_EXPORT void onmousedownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onmousedownAttributeGetter(info);
+    }
 
-static void onmousedownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onmousedownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnmousedown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnmousedown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onmousedownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onmousedownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onmousedownAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onmousedownAttributeSetter(v8Value, info);
+    }
 
-static void onmouseenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8SVGElement::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
+    static void onmouseenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8SVGElement::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
 
-  v8::Local<v8::Object> holder = info.Holder();
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onmouseenter(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onmouseenter(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onmouseenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onmouseenterAttributeGetter(info);
-}
+    CORE_EXPORT void onmouseenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onmouseenterAttributeGetter(info);
+    }
 
-static void onmouseenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8SVGElement::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
+    static void onmouseenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8SVGElement::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
 
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnmouseenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnmouseenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onmouseenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onmouseenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onmouseenterAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onmouseenterAttributeSetter(v8Value, info);
+    }
 
-static void onmouseleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8SVGElement::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
+    static void onmouseleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8SVGElement::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
 
-  v8::Local<v8::Object> holder = info.Holder();
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onmouseleave(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onmouseleave(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onmouseleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onmouseleaveAttributeGetter(info);
-}
+    CORE_EXPORT void onmouseleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onmouseleaveAttributeGetter(info);
+    }
 
-static void onmouseleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8SVGElement::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
+    static void onmouseleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8SVGElement::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
 
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnmouseleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnmouseleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onmouseleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onmouseleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onmouseleaveAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onmouseleaveAttributeSetter(v8Value, info);
+    }
 
-static void onmousemoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onmousemoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onmousemove(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onmousemove(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onmousemoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onmousemoveAttributeGetter(info);
-}
+    CORE_EXPORT void onmousemoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onmousemoveAttributeGetter(info);
+    }
 
-static void onmousemoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onmousemoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnmousemove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnmousemove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onmousemoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onmousemoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onmousemoveAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onmousemoveAttributeSetter(v8Value, info);
+    }
 
-static void onmouseoutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onmouseoutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onmouseout(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onmouseout(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onmouseoutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onmouseoutAttributeGetter(info);
-}
+    CORE_EXPORT void onmouseoutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onmouseoutAttributeGetter(info);
+    }
 
-static void onmouseoutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onmouseoutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnmouseout(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnmouseout(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onmouseoutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onmouseoutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onmouseoutAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onmouseoutAttributeSetter(v8Value, info);
+    }
 
-static void onmouseoverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onmouseoverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onmouseover(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onmouseover(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onmouseoverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onmouseoverAttributeGetter(info);
-}
+    CORE_EXPORT void onmouseoverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onmouseoverAttributeGetter(info);
+    }
 
-static void onmouseoverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onmouseoverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnmouseover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnmouseover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onmouseoverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onmouseoverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onmouseoverAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onmouseoverAttributeSetter(v8Value, info);
+    }
 
-static void onmouseupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onmouseupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onmouseup(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onmouseup(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onmouseupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onmouseupAttributeGetter(info);
-}
+    CORE_EXPORT void onmouseupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onmouseupAttributeGetter(info);
+    }
 
-static void onmouseupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onmouseupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnmouseup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnmouseup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onmouseupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onmouseupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onmouseupAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onmouseupAttributeSetter(v8Value, info);
+    }
 
-static void onmousewheelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onmousewheelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onmousewheel(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onmousewheel(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onmousewheelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onmousewheelAttributeGetter(info);
-}
+    CORE_EXPORT void onmousewheelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onmousewheelAttributeGetter(info);
+    }
 
-static void onmousewheelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onmousewheelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnmousewheel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnmousewheel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onmousewheelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onmousewheelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onmousewheelAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onmousewheelAttributeSetter(v8Value, info);
+    }
 
-static void onpauseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpauseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onpause(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onpause(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpauseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onpauseAttributeGetter(info);
-}
+    CORE_EXPORT void onpauseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onpauseAttributeGetter(info);
+    }
 
-static void onpauseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onpauseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnpause(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnpause(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpauseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpauseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onpauseAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onpauseAttributeSetter(v8Value, info);
+    }
 
-static void onplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onplay(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onplay(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onplayAttributeGetter(info);
-}
+    CORE_EXPORT void onplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onplayAttributeGetter(info);
+    }
 
-static void onplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnplay(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnplay(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onplayAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onplayAttributeSetter(v8Value, info);
+    }
 
-static void onplayingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onplayingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onplaying(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onplaying(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onplayingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onplayingAttributeGetter(info);
-}
+    CORE_EXPORT void onplayingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onplayingAttributeGetter(info);
+    }
 
-static void onplayingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onplayingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnplaying(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnplaying(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onplayingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onplayingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onplayingAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onplayingAttributeSetter(v8Value, info);
+    }
 
-static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onprogress(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onprogress(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onprogressAttributeGetter(info);
-}
+    CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onprogressAttributeGetter(info);
+    }
 
-static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnprogress(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnprogress(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onprogressAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onprogressAttributeSetter(v8Value, info);
+    }
 
-static void onratechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onratechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onratechange(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onratechange(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onratechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onratechangeAttributeGetter(info);
-}
+    CORE_EXPORT void onratechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onratechangeAttributeGetter(info);
+    }
 
-static void onratechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onratechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnratechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnratechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onratechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onratechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onratechangeAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onratechangeAttributeSetter(v8Value, info);
+    }
 
-static void onresetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onresetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onreset(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onreset(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onresetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onresetAttributeGetter(info);
-}
+    CORE_EXPORT void onresetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onresetAttributeGetter(info);
+    }
 
-static void onresetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onresetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnreset(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnreset(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onresetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onresetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onresetAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onresetAttributeSetter(v8Value, info);
+    }
 
-static void onresizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onresizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onresize(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onresize(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onresizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onresizeAttributeGetter(info);
-}
+    CORE_EXPORT void onresizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onresizeAttributeGetter(info);
+    }
 
-static void onresizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onresizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnresize(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnresize(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onresizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onresizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onresizeAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onresizeAttributeSetter(v8Value, info);
+    }
 
-static void onscrollAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onscrollAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onscroll(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onscroll(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onscrollAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onscrollAttributeGetter(info);
-}
+    CORE_EXPORT void onscrollAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onscrollAttributeGetter(info);
+    }
 
-static void onscrollAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onscrollAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnscroll(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnscroll(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onscrollAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onscrollAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onscrollAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onscrollAttributeSetter(v8Value, info);
+    }
 
-static void onseekedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onseekedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onseeked(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onseeked(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onseekedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onseekedAttributeGetter(info);
-}
+    CORE_EXPORT void onseekedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onseekedAttributeGetter(info);
+    }
 
-static void onseekedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onseekedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnseeked(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnseeked(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onseekedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onseekedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onseekedAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onseekedAttributeSetter(v8Value, info);
+    }
 
-static void onseekingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onseekingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onseeking(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onseeking(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onseekingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onseekingAttributeGetter(info);
-}
+    CORE_EXPORT void onseekingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onseekingAttributeGetter(info);
+    }
 
-static void onseekingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onseekingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnseeking(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnseeking(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onseekingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onseekingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onseekingAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onseekingAttributeSetter(v8Value, info);
+    }
 
-static void onselectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onselectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onselect(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onselect(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onselectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onselectAttributeGetter(info);
-}
+    CORE_EXPORT void onselectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onselectAttributeGetter(info);
+    }
 
-static void onselectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onselectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnselect(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnselect(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onselectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onselectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onselectAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onselectAttributeSetter(v8Value, info);
+    }
 
-static void onshowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onshowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onshow(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onshow(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onshowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onshowAttributeGetter(info);
-}
+    CORE_EXPORT void onshowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onshowAttributeGetter(info);
+    }
 
-static void onshowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onshowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnshow(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnshow(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onshowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onshowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onshowAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onshowAttributeSetter(v8Value, info);
+    }
 
-static void onstalledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onstalledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onstalled(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onstalled(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onstalledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onstalledAttributeGetter(info);
-}
+    CORE_EXPORT void onstalledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onstalledAttributeGetter(info);
+    }
 
-static void onstalledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onstalledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnstalled(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnstalled(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onstalledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onstalledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onstalledAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onstalledAttributeSetter(v8Value, info);
+    }
 
-static void onsubmitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onsubmitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onsubmit(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onsubmit(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onsubmitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onsubmitAttributeGetter(info);
-}
+    CORE_EXPORT void onsubmitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onsubmitAttributeGetter(info);
+    }
 
-static void onsubmitAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onsubmitAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnsubmit(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnsubmit(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onsubmitAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onsubmitAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onsubmitAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onsubmitAttributeSetter(v8Value, info);
+    }
 
-static void onsuspendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onsuspendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onsuspend(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onsuspend(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onsuspendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onsuspendAttributeGetter(info);
-}
+    CORE_EXPORT void onsuspendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onsuspendAttributeGetter(info);
+    }
 
-static void onsuspendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onsuspendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnsuspend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnsuspend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onsuspendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onsuspendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onsuspendAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onsuspendAttributeSetter(v8Value, info);
+    }
 
-static void ontimeupdateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ontimeupdateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ontimeupdate(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ontimeupdate(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ontimeupdateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ontimeupdateAttributeGetter(info);
-}
+    CORE_EXPORT void ontimeupdateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ontimeupdateAttributeGetter(info);
+    }
 
-static void ontimeupdateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ontimeupdateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOntimeupdate(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOntimeupdate(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ontimeupdateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ontimeupdateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ontimeupdateAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ontimeupdateAttributeSetter(v8Value, info);
+    }
 
-static void ontoggleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ontoggleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ontoggle(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ontoggle(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ontoggleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ontoggleAttributeGetter(info);
-}
+    CORE_EXPORT void ontoggleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ontoggleAttributeGetter(info);
+    }
 
-static void ontoggleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ontoggleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOntoggle(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOntoggle(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ontoggleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ontoggleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ontoggleAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ontoggleAttributeSetter(v8Value, info);
+    }
 
-static void onvolumechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onvolumechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onvolumechange(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onvolumechange(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onvolumechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onvolumechangeAttributeGetter(info);
-}
+    CORE_EXPORT void onvolumechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onvolumechangeAttributeGetter(info);
+    }
 
-static void onvolumechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onvolumechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnvolumechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnvolumechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onvolumechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onvolumechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onvolumechangeAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onvolumechangeAttributeSetter(v8Value, info);
+    }
 
-static void onwaitingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onwaitingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onwaiting(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onwaiting(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onwaitingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onwaitingAttributeGetter(info);
-}
+    CORE_EXPORT void onwaitingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onwaitingAttributeGetter(info);
+    }
 
-static void onwaitingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onwaitingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnwaiting(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnwaiting(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onwaitingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onwaitingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onwaitingAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onwaitingAttributeSetter(v8Value, info);
+    }
 
-static void onauxclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onauxclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onauxclick(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onauxclick(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onauxclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onauxclickAttributeGetter(info);
-}
+    CORE_EXPORT void onauxclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onauxclickAttributeGetter(info);
+    }
 
-static void onauxclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onauxclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnauxclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnauxclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onauxclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onauxclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onauxclickAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onauxclickAttributeSetter(v8Value, info);
+    }
 
-static void ongotpointercaptureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ongotpointercaptureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ongotpointercapture(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ongotpointercapture(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ongotpointercaptureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ongotpointercaptureAttributeGetter(info);
-}
+    CORE_EXPORT void ongotpointercaptureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ongotpointercaptureAttributeGetter(info);
+    }
 
-static void ongotpointercaptureAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ongotpointercaptureAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOngotpointercapture(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOngotpointercapture(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ongotpointercaptureAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ongotpointercaptureAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ongotpointercaptureAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ongotpointercaptureAttributeSetter(v8Value, info);
+    }
 
-static void onlostpointercaptureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onlostpointercaptureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onlostpointercapture(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onlostpointercapture(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onlostpointercaptureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onlostpointercaptureAttributeGetter(info);
-}
+    CORE_EXPORT void onlostpointercaptureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onlostpointercaptureAttributeGetter(info);
+    }
 
-static void onlostpointercaptureAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onlostpointercaptureAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnlostpointercapture(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnlostpointercapture(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onlostpointercaptureAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onlostpointercaptureAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onlostpointercaptureAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onlostpointercaptureAttributeSetter(v8Value, info);
+    }
 
-static void onpointerdownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpointerdownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onpointerdown(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onpointerdown(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpointerdownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onpointerdownAttributeGetter(info);
-}
+    CORE_EXPORT void onpointerdownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onpointerdownAttributeGetter(info);
+    }
 
-static void onpointerdownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onpointerdownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnpointerdown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnpointerdown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpointerdownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpointerdownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onpointerdownAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onpointerdownAttributeSetter(v8Value, info);
+    }
 
-static void onpointermoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpointermoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onpointermove(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onpointermove(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpointermoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onpointermoveAttributeGetter(info);
-}
+    CORE_EXPORT void onpointermoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onpointermoveAttributeGetter(info);
+    }
 
-static void onpointermoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onpointermoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnpointermove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnpointermove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpointermoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpointermoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onpointermoveAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onpointermoveAttributeSetter(v8Value, info);
+    }
 
-static void onpointerupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpointerupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onpointerup(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onpointerup(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpointerupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onpointerupAttributeGetter(info);
-}
+    CORE_EXPORT void onpointerupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onpointerupAttributeGetter(info);
+    }
 
-static void onpointerupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onpointerupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnpointerup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnpointerup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpointerupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpointerupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onpointerupAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onpointerupAttributeSetter(v8Value, info);
+    }
 
-static void onpointercancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpointercancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onpointercancel(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onpointercancel(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpointercancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onpointercancelAttributeGetter(info);
-}
+    CORE_EXPORT void onpointercancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onpointercancelAttributeGetter(info);
+    }
 
-static void onpointercancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onpointercancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnpointercancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnpointercancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpointercancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpointercancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onpointercancelAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onpointercancelAttributeSetter(v8Value, info);
+    }
 
-static void onpointeroverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpointeroverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onpointerover(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onpointerover(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpointeroverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onpointeroverAttributeGetter(info);
-}
+    CORE_EXPORT void onpointeroverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onpointeroverAttributeGetter(info);
+    }
 
-static void onpointeroverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onpointeroverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnpointerover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnpointerover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpointeroverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpointeroverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onpointeroverAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onpointeroverAttributeSetter(v8Value, info);
+    }
 
-static void onpointeroutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpointeroutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onpointerout(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onpointerout(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpointeroutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onpointeroutAttributeGetter(info);
-}
+    CORE_EXPORT void onpointeroutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onpointeroutAttributeGetter(info);
+    }
 
-static void onpointeroutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onpointeroutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnpointerout(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnpointerout(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpointeroutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpointeroutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onpointeroutAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onpointeroutAttributeSetter(v8Value, info);
+    }
 
-static void onpointerenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpointerenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onpointerenter(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onpointerenter(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpointerenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onpointerenterAttributeGetter(info);
-}
+    CORE_EXPORT void onpointerenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onpointerenterAttributeGetter(info);
+    }
 
-static void onpointerenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onpointerenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnpointerenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnpointerenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpointerenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpointerenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onpointerenterAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onpointerenterAttributeSetter(v8Value, info);
+    }
 
-static void onpointerleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpointerleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::onpointerleave(*impl));
+        EventListener* cppValue(GlobalEventHandlers::onpointerleave(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpointerleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::onpointerleaveAttributeGetter(info);
-}
+    CORE_EXPORT void onpointerleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::onpointerleaveAttributeGetter(info);
+    }
 
-static void onpointerleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void onpointerleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOnpointerleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOnpointerleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpointerleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpointerleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::onpointerleaveAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::onpointerleaveAttributeSetter(v8Value, info);
+    }
 
-static void ontouchcancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ontouchcancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ontouchcancel(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ontouchcancel(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ontouchcancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ontouchcancelAttributeGetter(info);
-}
+    CORE_EXPORT void ontouchcancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ontouchcancelAttributeGetter(info);
+    }
 
-static void ontouchcancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ontouchcancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOntouchcancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOntouchcancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ontouchcancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ontouchcancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ontouchcancelAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ontouchcancelAttributeSetter(v8Value, info);
+    }
 
-static void ontouchendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ontouchendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ontouchend(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ontouchend(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ontouchendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ontouchendAttributeGetter(info);
-}
+    CORE_EXPORT void ontouchendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ontouchendAttributeGetter(info);
+    }
 
-static void ontouchendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ontouchendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOntouchend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOntouchend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ontouchendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ontouchendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ontouchendAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ontouchendAttributeSetter(v8Value, info);
+    }
 
-static void ontouchmoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ontouchmoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ontouchmove(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ontouchmove(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ontouchmoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ontouchmoveAttributeGetter(info);
-}
+    CORE_EXPORT void ontouchmoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ontouchmoveAttributeGetter(info);
+    }
 
-static void ontouchmoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ontouchmoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOntouchmove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOntouchmove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ontouchmoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ontouchmoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ontouchmoveAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ontouchmoveAttributeSetter(v8Value, info);
+    }
 
-static void ontouchstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ontouchstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  EventListener* cppValue(GlobalEventHandlers::ontouchstart(*impl));
+        EventListener* cppValue(GlobalEventHandlers::ontouchstart(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ontouchstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::ontouchstartAttributeGetter(info);
-}
+    CORE_EXPORT void ontouchstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::ontouchstartAttributeGetter(info);
+    }
 
-static void ontouchstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGElement* impl = V8SVGElement::toImpl(holder);
+    static void ontouchstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGElement* impl = V8SVGElement::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  GlobalEventHandlers::setOntouchstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        GlobalEventHandlers::setOntouchstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ontouchstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ontouchstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGElementV8Internal::ontouchstartAttributeSetter(v8Value, info);
-}
+        SVGElementV8Internal::ontouchstartAttributeSetter(v8Value, info);
+    }
 
-static void focusMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElement* impl = V8SVGElement::toImpl(info.Holder());
+    static void focusMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElement* impl = V8SVGElement::toImpl(info.Holder());
 
-  impl->focus();
-}
+        impl->focus();
+    }
 
-CORE_EXPORT  void focusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::focusMethod(info);
-}
+    CORE_EXPORT void focusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::focusMethod(info);
+    }
 
-static void blurMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElement* impl = V8SVGElement::toImpl(info.Holder());
+    static void blurMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElement* impl = V8SVGElement::toImpl(info.Holder());
 
-  impl->blur();
-}
+        impl->blur();
+    }
 
-CORE_EXPORT  void blurMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGElementV8Internal::blurMethod(info);
-}
+    CORE_EXPORT void blurMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGElementV8Internal::blurMethod(info);
+    }
 
 } // namespace SVGElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGElementAccessors[] = {
-    {"className", SVGElementV8Internal::classNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dataset", SVGElementV8Internal::datasetAttributeGetterCallback, 0, SVGElementV8Internal::datasetAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"style", SVGElementV8Internal::styleAttributeGetterCallback, SVGElementV8Internal::styleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ownerSVGElement", SVGElementV8Internal::ownerSVGElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"viewportElement", SVGElementV8Internal::viewportElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"tabIndex", SVGElementV8Internal::tabIndexAttributeGetterCallback, SVGElementV8Internal::tabIndexAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onabort", SVGElementV8Internal::onabortAttributeGetterCallback, SVGElementV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onblur", SVGElementV8Internal::onblurAttributeGetterCallback, SVGElementV8Internal::onblurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncancel", SVGElementV8Internal::oncancelAttributeGetterCallback, SVGElementV8Internal::oncancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncanplay", SVGElementV8Internal::oncanplayAttributeGetterCallback, SVGElementV8Internal::oncanplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncanplaythrough", SVGElementV8Internal::oncanplaythroughAttributeGetterCallback, SVGElementV8Internal::oncanplaythroughAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onchange", SVGElementV8Internal::onchangeAttributeGetterCallback, SVGElementV8Internal::onchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onclick", SVGElementV8Internal::onclickAttributeGetterCallback, SVGElementV8Internal::onclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onclose", SVGElementV8Internal::oncloseAttributeGetterCallback, SVGElementV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncontextmenu", SVGElementV8Internal::oncontextmenuAttributeGetterCallback, SVGElementV8Internal::oncontextmenuAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncuechange", SVGElementV8Internal::oncuechangeAttributeGetterCallback, SVGElementV8Internal::oncuechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondblclick", SVGElementV8Internal::ondblclickAttributeGetterCallback, SVGElementV8Internal::ondblclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondrag", SVGElementV8Internal::ondragAttributeGetterCallback, SVGElementV8Internal::ondragAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragend", SVGElementV8Internal::ondragendAttributeGetterCallback, SVGElementV8Internal::ondragendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragenter", SVGElementV8Internal::ondragenterAttributeGetterCallback, SVGElementV8Internal::ondragenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragleave", SVGElementV8Internal::ondragleaveAttributeGetterCallback, SVGElementV8Internal::ondragleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragover", SVGElementV8Internal::ondragoverAttributeGetterCallback, SVGElementV8Internal::ondragoverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragstart", SVGElementV8Internal::ondragstartAttributeGetterCallback, SVGElementV8Internal::ondragstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondrop", SVGElementV8Internal::ondropAttributeGetterCallback, SVGElementV8Internal::ondropAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondurationchange", SVGElementV8Internal::ondurationchangeAttributeGetterCallback, SVGElementV8Internal::ondurationchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onemptied", SVGElementV8Internal::onemptiedAttributeGetterCallback, SVGElementV8Internal::onemptiedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onended", SVGElementV8Internal::onendedAttributeGetterCallback, SVGElementV8Internal::onendedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", SVGElementV8Internal::onerrorAttributeGetterCallback, SVGElementV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onfocus", SVGElementV8Internal::onfocusAttributeGetterCallback, SVGElementV8Internal::onfocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oninput", SVGElementV8Internal::oninputAttributeGetterCallback, SVGElementV8Internal::oninputAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oninvalid", SVGElementV8Internal::oninvalidAttributeGetterCallback, SVGElementV8Internal::oninvalidAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onkeydown", SVGElementV8Internal::onkeydownAttributeGetterCallback, SVGElementV8Internal::onkeydownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onkeypress", SVGElementV8Internal::onkeypressAttributeGetterCallback, SVGElementV8Internal::onkeypressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onkeyup", SVGElementV8Internal::onkeyupAttributeGetterCallback, SVGElementV8Internal::onkeyupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onload", SVGElementV8Internal::onloadAttributeGetterCallback, SVGElementV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadeddata", SVGElementV8Internal::onloadeddataAttributeGetterCallback, SVGElementV8Internal::onloadeddataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadedmetadata", SVGElementV8Internal::onloadedmetadataAttributeGetterCallback, SVGElementV8Internal::onloadedmetadataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadstart", SVGElementV8Internal::onloadstartAttributeGetterCallback, SVGElementV8Internal::onloadstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmousedown", SVGElementV8Internal::onmousedownAttributeGetterCallback, SVGElementV8Internal::onmousedownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmouseenter", SVGElementV8Internal::onmouseenterAttributeGetterCallback, SVGElementV8Internal::onmouseenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"onmouseleave", SVGElementV8Internal::onmouseleaveAttributeGetterCallback, SVGElementV8Internal::onmouseleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"onmousemove", SVGElementV8Internal::onmousemoveAttributeGetterCallback, SVGElementV8Internal::onmousemoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmouseout", SVGElementV8Internal::onmouseoutAttributeGetterCallback, SVGElementV8Internal::onmouseoutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmouseover", SVGElementV8Internal::onmouseoverAttributeGetterCallback, SVGElementV8Internal::onmouseoverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmouseup", SVGElementV8Internal::onmouseupAttributeGetterCallback, SVGElementV8Internal::onmouseupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmousewheel", SVGElementV8Internal::onmousewheelAttributeGetterCallback, SVGElementV8Internal::onmousewheelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpause", SVGElementV8Internal::onpauseAttributeGetterCallback, SVGElementV8Internal::onpauseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onplay", SVGElementV8Internal::onplayAttributeGetterCallback, SVGElementV8Internal::onplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onplaying", SVGElementV8Internal::onplayingAttributeGetterCallback, SVGElementV8Internal::onplayingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onprogress", SVGElementV8Internal::onprogressAttributeGetterCallback, SVGElementV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onratechange", SVGElementV8Internal::onratechangeAttributeGetterCallback, SVGElementV8Internal::onratechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onreset", SVGElementV8Internal::onresetAttributeGetterCallback, SVGElementV8Internal::onresetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onresize", SVGElementV8Internal::onresizeAttributeGetterCallback, SVGElementV8Internal::onresizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onscroll", SVGElementV8Internal::onscrollAttributeGetterCallback, SVGElementV8Internal::onscrollAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onseeked", SVGElementV8Internal::onseekedAttributeGetterCallback, SVGElementV8Internal::onseekedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onseeking", SVGElementV8Internal::onseekingAttributeGetterCallback, SVGElementV8Internal::onseekingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onselect", SVGElementV8Internal::onselectAttributeGetterCallback, SVGElementV8Internal::onselectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onshow", SVGElementV8Internal::onshowAttributeGetterCallback, SVGElementV8Internal::onshowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onstalled", SVGElementV8Internal::onstalledAttributeGetterCallback, SVGElementV8Internal::onstalledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsubmit", SVGElementV8Internal::onsubmitAttributeGetterCallback, SVGElementV8Internal::onsubmitAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsuspend", SVGElementV8Internal::onsuspendAttributeGetterCallback, SVGElementV8Internal::onsuspendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ontimeupdate", SVGElementV8Internal::ontimeupdateAttributeGetterCallback, SVGElementV8Internal::ontimeupdateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ontoggle", SVGElementV8Internal::ontoggleAttributeGetterCallback, SVGElementV8Internal::ontoggleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onvolumechange", SVGElementV8Internal::onvolumechangeAttributeGetterCallback, SVGElementV8Internal::onvolumechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwaiting", SVGElementV8Internal::onwaitingAttributeGetterCallback, SVGElementV8Internal::onwaitingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "className", SVGElementV8Internal::classNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dataset", SVGElementV8Internal::datasetAttributeGetterCallback, 0, SVGElementV8Internal::datasetAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "style", SVGElementV8Internal::styleAttributeGetterCallback, SVGElementV8Internal::styleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ownerSVGElement", SVGElementV8Internal::ownerSVGElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "viewportElement", SVGElementV8Internal::viewportElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "tabIndex", SVGElementV8Internal::tabIndexAttributeGetterCallback, SVGElementV8Internal::tabIndexAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onabort", SVGElementV8Internal::onabortAttributeGetterCallback, SVGElementV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onblur", SVGElementV8Internal::onblurAttributeGetterCallback, SVGElementV8Internal::onblurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncancel", SVGElementV8Internal::oncancelAttributeGetterCallback, SVGElementV8Internal::oncancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncanplay", SVGElementV8Internal::oncanplayAttributeGetterCallback, SVGElementV8Internal::oncanplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncanplaythrough", SVGElementV8Internal::oncanplaythroughAttributeGetterCallback, SVGElementV8Internal::oncanplaythroughAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onchange", SVGElementV8Internal::onchangeAttributeGetterCallback, SVGElementV8Internal::onchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onclick", SVGElementV8Internal::onclickAttributeGetterCallback, SVGElementV8Internal::onclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onclose", SVGElementV8Internal::oncloseAttributeGetterCallback, SVGElementV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncontextmenu", SVGElementV8Internal::oncontextmenuAttributeGetterCallback, SVGElementV8Internal::oncontextmenuAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncuechange", SVGElementV8Internal::oncuechangeAttributeGetterCallback, SVGElementV8Internal::oncuechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondblclick", SVGElementV8Internal::ondblclickAttributeGetterCallback, SVGElementV8Internal::ondblclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondrag", SVGElementV8Internal::ondragAttributeGetterCallback, SVGElementV8Internal::ondragAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragend", SVGElementV8Internal::ondragendAttributeGetterCallback, SVGElementV8Internal::ondragendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragenter", SVGElementV8Internal::ondragenterAttributeGetterCallback, SVGElementV8Internal::ondragenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragleave", SVGElementV8Internal::ondragleaveAttributeGetterCallback, SVGElementV8Internal::ondragleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragover", SVGElementV8Internal::ondragoverAttributeGetterCallback, SVGElementV8Internal::ondragoverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragstart", SVGElementV8Internal::ondragstartAttributeGetterCallback, SVGElementV8Internal::ondragstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondrop", SVGElementV8Internal::ondropAttributeGetterCallback, SVGElementV8Internal::ondropAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondurationchange", SVGElementV8Internal::ondurationchangeAttributeGetterCallback, SVGElementV8Internal::ondurationchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onemptied", SVGElementV8Internal::onemptiedAttributeGetterCallback, SVGElementV8Internal::onemptiedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onended", SVGElementV8Internal::onendedAttributeGetterCallback, SVGElementV8Internal::onendedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", SVGElementV8Internal::onerrorAttributeGetterCallback, SVGElementV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onfocus", SVGElementV8Internal::onfocusAttributeGetterCallback, SVGElementV8Internal::onfocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oninput", SVGElementV8Internal::oninputAttributeGetterCallback, SVGElementV8Internal::oninputAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oninvalid", SVGElementV8Internal::oninvalidAttributeGetterCallback, SVGElementV8Internal::oninvalidAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onkeydown", SVGElementV8Internal::onkeydownAttributeGetterCallback, SVGElementV8Internal::onkeydownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onkeypress", SVGElementV8Internal::onkeypressAttributeGetterCallback, SVGElementV8Internal::onkeypressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onkeyup", SVGElementV8Internal::onkeyupAttributeGetterCallback, SVGElementV8Internal::onkeyupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onload", SVGElementV8Internal::onloadAttributeGetterCallback, SVGElementV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadeddata", SVGElementV8Internal::onloadeddataAttributeGetterCallback, SVGElementV8Internal::onloadeddataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadedmetadata", SVGElementV8Internal::onloadedmetadataAttributeGetterCallback, SVGElementV8Internal::onloadedmetadataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadstart", SVGElementV8Internal::onloadstartAttributeGetterCallback, SVGElementV8Internal::onloadstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmousedown", SVGElementV8Internal::onmousedownAttributeGetterCallback, SVGElementV8Internal::onmousedownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmouseenter", SVGElementV8Internal::onmouseenterAttributeGetterCallback, SVGElementV8Internal::onmouseenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "onmouseleave", SVGElementV8Internal::onmouseleaveAttributeGetterCallback, SVGElementV8Internal::onmouseleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "onmousemove", SVGElementV8Internal::onmousemoveAttributeGetterCallback, SVGElementV8Internal::onmousemoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmouseout", SVGElementV8Internal::onmouseoutAttributeGetterCallback, SVGElementV8Internal::onmouseoutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmouseover", SVGElementV8Internal::onmouseoverAttributeGetterCallback, SVGElementV8Internal::onmouseoverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmouseup", SVGElementV8Internal::onmouseupAttributeGetterCallback, SVGElementV8Internal::onmouseupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmousewheel", SVGElementV8Internal::onmousewheelAttributeGetterCallback, SVGElementV8Internal::onmousewheelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpause", SVGElementV8Internal::onpauseAttributeGetterCallback, SVGElementV8Internal::onpauseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onplay", SVGElementV8Internal::onplayAttributeGetterCallback, SVGElementV8Internal::onplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onplaying", SVGElementV8Internal::onplayingAttributeGetterCallback, SVGElementV8Internal::onplayingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onprogress", SVGElementV8Internal::onprogressAttributeGetterCallback, SVGElementV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onratechange", SVGElementV8Internal::onratechangeAttributeGetterCallback, SVGElementV8Internal::onratechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onreset", SVGElementV8Internal::onresetAttributeGetterCallback, SVGElementV8Internal::onresetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onresize", SVGElementV8Internal::onresizeAttributeGetterCallback, SVGElementV8Internal::onresizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onscroll", SVGElementV8Internal::onscrollAttributeGetterCallback, SVGElementV8Internal::onscrollAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onseeked", SVGElementV8Internal::onseekedAttributeGetterCallback, SVGElementV8Internal::onseekedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onseeking", SVGElementV8Internal::onseekingAttributeGetterCallback, SVGElementV8Internal::onseekingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onselect", SVGElementV8Internal::onselectAttributeGetterCallback, SVGElementV8Internal::onselectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onshow", SVGElementV8Internal::onshowAttributeGetterCallback, SVGElementV8Internal::onshowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onstalled", SVGElementV8Internal::onstalledAttributeGetterCallback, SVGElementV8Internal::onstalledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsubmit", SVGElementV8Internal::onsubmitAttributeGetterCallback, SVGElementV8Internal::onsubmitAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsuspend", SVGElementV8Internal::onsuspendAttributeGetterCallback, SVGElementV8Internal::onsuspendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ontimeupdate", SVGElementV8Internal::ontimeupdateAttributeGetterCallback, SVGElementV8Internal::ontimeupdateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ontoggle", SVGElementV8Internal::ontoggleAttributeGetterCallback, SVGElementV8Internal::ontoggleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onvolumechange", SVGElementV8Internal::onvolumechangeAttributeGetterCallback, SVGElementV8Internal::onvolumechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwaiting", SVGElementV8Internal::onwaitingAttributeGetterCallback, SVGElementV8Internal::onwaitingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGElementMethods[] = {
-    {"focus", SVGElementV8Internal::focusMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"blur", SVGElementV8Internal::blurMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "focus", SVGElementV8Internal::focusMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "blur", SVGElementV8Internal::blurMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGElement::wrapperTypeInfo.interfaceName, V8Element::domTemplate(isolate, world), V8SVGElement::internalFieldCount);
+static void installV8SVGElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGElement::wrapperTypeInfo.interfaceName, V8Element::domTemplate(isolate, world), V8SVGElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGElementAccessors, WTF_ARRAY_LENGTH(V8SVGElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGElementMethods, WTF_ARRAY_LENGTH(V8SVGElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGElementAccessors, WTF_ARRAY_LENGTH(V8SVGElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGElementMethods, WTF_ARRAY_LENGTH(V8SVGElementMethods));
 
-  if (RuntimeEnabledFeatures::auxclickEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoronauxclickConfiguration = {"onauxclick", SVGElementV8Internal::onauxclickAttributeGetterCallback, SVGElementV8Internal::onauxclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronauxclickConfiguration);
-  }
-  if (RuntimeEnabledFeatures::pointerEventEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorongotpointercaptureConfiguration = {"ongotpointercapture", SVGElementV8Internal::ongotpointercaptureAttributeGetterCallback, SVGElementV8Internal::ongotpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorongotpointercaptureConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronlostpointercaptureConfiguration = {"onlostpointercapture", SVGElementV8Internal::onlostpointercaptureAttributeGetterCallback, SVGElementV8Internal::onlostpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronlostpointercaptureConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointercancelConfiguration = {"onpointercancel", SVGElementV8Internal::onpointercancelAttributeGetterCallback, SVGElementV8Internal::onpointercancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointercancelConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerdownConfiguration = {"onpointerdown", SVGElementV8Internal::onpointerdownAttributeGetterCallback, SVGElementV8Internal::onpointerdownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerdownConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerenterConfiguration = {"onpointerenter", SVGElementV8Internal::onpointerenterAttributeGetterCallback, SVGElementV8Internal::onpointerenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerenterConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerleaveConfiguration = {"onpointerleave", SVGElementV8Internal::onpointerleaveAttributeGetterCallback, SVGElementV8Internal::onpointerleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerleaveConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointermoveConfiguration = {"onpointermove", SVGElementV8Internal::onpointermoveAttributeGetterCallback, SVGElementV8Internal::onpointermoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointermoveConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointeroutConfiguration = {"onpointerout", SVGElementV8Internal::onpointeroutAttributeGetterCallback, SVGElementV8Internal::onpointeroutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointeroutConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointeroverConfiguration = {"onpointerover", SVGElementV8Internal::onpointeroverAttributeGetterCallback, SVGElementV8Internal::onpointeroverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointeroverConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerupConfiguration = {"onpointerup", SVGElementV8Internal::onpointerupAttributeGetterCallback, SVGElementV8Internal::onpointerupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerupConfiguration);
-  }
-  if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchcancelConfiguration = {"ontouchcancel", SVGElementV8Internal::ontouchcancelAttributeGetterCallback, SVGElementV8Internal::ontouchcancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchcancelConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchendConfiguration = {"ontouchend", SVGElementV8Internal::ontouchendAttributeGetterCallback, SVGElementV8Internal::ontouchendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchendConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchmoveConfiguration = {"ontouchmove", SVGElementV8Internal::ontouchmoveAttributeGetterCallback, SVGElementV8Internal::ontouchmoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchmoveConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchstartConfiguration = {"ontouchstart", SVGElementV8Internal::ontouchstartAttributeGetterCallback, SVGElementV8Internal::ontouchstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchstartConfiguration);
-  }
+    if (RuntimeEnabledFeatures::auxclickEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoronauxclickConfiguration = { "onauxclick", SVGElementV8Internal::onauxclickAttributeGetterCallback, SVGElementV8Internal::onauxclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronauxclickConfiguration);
+    }
+    if (RuntimeEnabledFeatures::pointerEventEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorongotpointercaptureConfiguration = { "ongotpointercapture", SVGElementV8Internal::ongotpointercaptureAttributeGetterCallback, SVGElementV8Internal::ongotpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorongotpointercaptureConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronlostpointercaptureConfiguration = { "onlostpointercapture", SVGElementV8Internal::onlostpointercaptureAttributeGetterCallback, SVGElementV8Internal::onlostpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronlostpointercaptureConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointercancelConfiguration = { "onpointercancel", SVGElementV8Internal::onpointercancelAttributeGetterCallback, SVGElementV8Internal::onpointercancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointercancelConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerdownConfiguration = { "onpointerdown", SVGElementV8Internal::onpointerdownAttributeGetterCallback, SVGElementV8Internal::onpointerdownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerdownConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerenterConfiguration = { "onpointerenter", SVGElementV8Internal::onpointerenterAttributeGetterCallback, SVGElementV8Internal::onpointerenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerenterConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerleaveConfiguration = { "onpointerleave", SVGElementV8Internal::onpointerleaveAttributeGetterCallback, SVGElementV8Internal::onpointerleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerleaveConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointermoveConfiguration = { "onpointermove", SVGElementV8Internal::onpointermoveAttributeGetterCallback, SVGElementV8Internal::onpointermoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointermoveConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointeroutConfiguration = { "onpointerout", SVGElementV8Internal::onpointeroutAttributeGetterCallback, SVGElementV8Internal::onpointeroutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointeroutConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointeroverConfiguration = { "onpointerover", SVGElementV8Internal::onpointeroverAttributeGetterCallback, SVGElementV8Internal::onpointeroverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointeroverConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerupConfiguration = { "onpointerup", SVGElementV8Internal::onpointerupAttributeGetterCallback, SVGElementV8Internal::onpointerupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerupConfiguration);
+    }
+    if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchcancelConfiguration = { "ontouchcancel", SVGElementV8Internal::ontouchcancelAttributeGetterCallback, SVGElementV8Internal::ontouchcancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchcancelConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchendConfiguration = { "ontouchend", SVGElementV8Internal::ontouchendAttributeGetterCallback, SVGElementV8Internal::ontouchendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchendConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchmoveConfiguration = { "ontouchmove", SVGElementV8Internal::ontouchmoveAttributeGetterCallback, SVGElementV8Internal::ontouchmoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchmoveConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchstartConfiguration = { "ontouchstart", SVGElementV8Internal::ontouchstartAttributeGetterCallback, SVGElementV8Internal::ontouchstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchstartConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGElementTemplate);
 }
 
-bool V8SVGElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGElement* V8SVGElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGElement* V8SVGElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

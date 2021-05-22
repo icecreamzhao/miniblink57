@@ -8,76 +8,93 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "BiquadFilterOptions.h"
 
 namespace blink {
 
-BiquadFilterOptions::BiquadFilterOptions() {
+BiquadFilterOptions::BiquadFilterOptions()
+{
 }
 
-BiquadFilterOptions::~BiquadFilterOptions() {}
+BiquadFilterOptions::~BiquadFilterOptions() { }
 
 BiquadFilterOptions::BiquadFilterOptions(const BiquadFilterOptions&) = default;
 
 BiquadFilterOptions& BiquadFilterOptions::operator=(const BiquadFilterOptions&) = default;
 
-bool BiquadFilterOptions::hasQ() const {
-  return m_hasQ;
+bool BiquadFilterOptions::hasQ() const
+{
+    return m_hasQ;
 }
-float BiquadFilterOptions::Q() const {
-  DCHECK(m_hasQ);
-  return m_Q;
+float BiquadFilterOptions::Q() const
+{
+    DCHECK(m_hasQ);
+    return m_Q;
 }
-void BiquadFilterOptions::setQ(float value) {
-  m_Q = value;
-  m_hasQ = true;
+void BiquadFilterOptions::setQ(float value)
+{
+    m_Q = value;
+    m_hasQ = true;
 }
-bool BiquadFilterOptions::hasDetune() const {
-  return m_hasDetune;
+bool BiquadFilterOptions::hasDetune() const
+{
+    return m_hasDetune;
 }
-float BiquadFilterOptions::detune() const {
-  DCHECK(m_hasDetune);
-  return m_detune;
+float BiquadFilterOptions::detune() const
+{
+    DCHECK(m_hasDetune);
+    return m_detune;
 }
-void BiquadFilterOptions::setDetune(float value) {
-  m_detune = value;
-  m_hasDetune = true;
+void BiquadFilterOptions::setDetune(float value)
+{
+    m_detune = value;
+    m_hasDetune = true;
 }
-bool BiquadFilterOptions::hasFrequency() const {
-  return m_hasFrequency;
+bool BiquadFilterOptions::hasFrequency() const
+{
+    return m_hasFrequency;
 }
-float BiquadFilterOptions::frequency() const {
-  DCHECK(m_hasFrequency);
-  return m_frequency;
+float BiquadFilterOptions::frequency() const
+{
+    DCHECK(m_hasFrequency);
+    return m_frequency;
 }
-void BiquadFilterOptions::setFrequency(float value) {
-  m_frequency = value;
-  m_hasFrequency = true;
+void BiquadFilterOptions::setFrequency(float value)
+{
+    m_frequency = value;
+    m_hasFrequency = true;
 }
-bool BiquadFilterOptions::hasGain() const {
-  return m_hasGain;
+bool BiquadFilterOptions::hasGain() const
+{
+    return m_hasGain;
 }
-float BiquadFilterOptions::gain() const {
-  DCHECK(m_hasGain);
-  return m_gain;
+float BiquadFilterOptions::gain() const
+{
+    DCHECK(m_hasGain);
+    return m_gain;
 }
-void BiquadFilterOptions::setGain(float value) {
-  m_gain = value;
-  m_hasGain = true;
+void BiquadFilterOptions::setGain(float value)
+{
+    m_gain = value;
+    m_hasGain = true;
 }
-bool BiquadFilterOptions::hasType() const {
-  return !m_type.isNull();
+bool BiquadFilterOptions::hasType() const
+{
+    return !m_type.isNull();
 }
-String BiquadFilterOptions::type() const {
-  return m_type;
+String BiquadFilterOptions::type() const
+{
+    return m_type;
 }
-void BiquadFilterOptions::setType(String value) {
-  m_type = value;
+void BiquadFilterOptions::setType(String value)
+{
+    m_type = value;
 }
 
-DEFINE_TRACE(BiquadFilterOptions) {
-  AudioNodeOptions::trace(visitor);
+DEFINE_TRACE(BiquadFilterOptions)
+{
+    AudioNodeOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

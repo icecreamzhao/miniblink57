@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8BiquadFilterNode.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -55,286 +55,307 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&BiquadFilterNode::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "BiquadFilterNode is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BiquadFilterNodeV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
+        BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BiquadFilterNodeV8Internal::typeAttributeGetter(info);
-}
+    MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BiquadFilterNodeV8Internal::typeAttributeGetter(info);
+    }
 
-static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
+    static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "BiquadFilterNode", "type");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "BiquadFilterNode", "type");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "lowpass",
-      "highpass",
-      "bandpass",
-      "lowshelf",
-      "highshelf",
-      "peaking",
-      "notch",
-      "allpass",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "BiquadFilterType", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "lowpass",
+            "highpass",
+            "bandpass",
+            "lowshelf",
+            "highshelf",
+            "peaking",
+            "notch",
+            "allpass",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "BiquadFilterType", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
 
-  impl->setType(cppValue);
-}
+        impl->setType(cppValue);
+    }
 
-MODULES_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  BiquadFilterNodeV8Internal::typeAttributeSetter(v8Value, info);
-}
+        BiquadFilterNodeV8Internal::typeAttributeSetter(v8Value, info);
+    }
 
-static void frequencyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void frequencyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
+        BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
 
-  AudioParam* cppValue(WTF::getPtr(impl->frequency()));
+        AudioParam* cppValue(WTF::getPtr(impl->frequency()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BiquadFilterNode#frequency";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BiquadFilterNode#frequency";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void frequencyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BiquadFilterNodeV8Internal::frequencyAttributeGetter(info);
-}
+    MODULES_EXPORT void frequencyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BiquadFilterNodeV8Internal::frequencyAttributeGetter(info);
+    }
 
-static void detuneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void detuneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
+        BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
 
-  AudioParam* cppValue(WTF::getPtr(impl->detune()));
+        AudioParam* cppValue(WTF::getPtr(impl->detune()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BiquadFilterNode#detune";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BiquadFilterNode#detune";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void detuneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BiquadFilterNodeV8Internal::detuneAttributeGetter(info);
-}
+    MODULES_EXPORT void detuneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BiquadFilterNodeV8Internal::detuneAttributeGetter(info);
+    }
 
-static void QAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void QAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
+        BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
 
-  AudioParam* cppValue(WTF::getPtr(impl->q()));
+        AudioParam* cppValue(WTF::getPtr(impl->q()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BiquadFilterNode#Q";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BiquadFilterNode#Q";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void QAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BiquadFilterNodeV8Internal::QAttributeGetter(info);
-}
+    MODULES_EXPORT void QAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BiquadFilterNodeV8Internal::QAttributeGetter(info);
+    }
 
-static void gainAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void gainAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
+        BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(holder);
 
-  AudioParam* cppValue(WTF::getPtr(impl->gain()));
+        AudioParam* cppValue(WTF::getPtr(impl->gain()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BiquadFilterNode#gain";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BiquadFilterNode#gain";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void gainAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BiquadFilterNodeV8Internal::gainAttributeGetter(info);
-}
+    MODULES_EXPORT void gainAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BiquadFilterNodeV8Internal::gainAttributeGetter(info);
+    }
 
-static void getFrequencyResponseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(info.Holder());
+    static void getFrequencyResponseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BiquadFilterNode* impl = V8BiquadFilterNode::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 3)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getFrequencyResponse", "BiquadFilterNode", ExceptionMessages::notEnoughArguments(3, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getFrequencyResponse", "BiquadFilterNode", ExceptionMessages::notEnoughArguments(3, info.Length())));
+            return;
+        }
 
-  DOMFloat32Array* frequencyHz;
-  DOMFloat32Array* magResponse;
-  DOMFloat32Array* phaseResponse;
-  frequencyHz = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
-  if (!frequencyHz) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getFrequencyResponse", "BiquadFilterNode", "parameter 1 is not of type 'Float32Array'."));
+        DOMFloat32Array* frequencyHz;
+        DOMFloat32Array* magResponse;
+        DOMFloat32Array* phaseResponse;
+        frequencyHz = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
+        if (!frequencyHz) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getFrequencyResponse", "BiquadFilterNode", "parameter 1 is not of type 'Float32Array'."));
 
-    return;
-  }
+            return;
+        }
 
-  magResponse = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
-  if (!magResponse) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getFrequencyResponse", "BiquadFilterNode", "parameter 2 is not of type 'Float32Array'."));
+        magResponse = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
+        if (!magResponse) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getFrequencyResponse", "BiquadFilterNode", "parameter 2 is not of type 'Float32Array'."));
 
-    return;
-  }
+            return;
+        }
 
-  phaseResponse = info[2]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[2])) : 0;
-  if (!phaseResponse) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getFrequencyResponse", "BiquadFilterNode", "parameter 3 is not of type 'Float32Array'."));
+        phaseResponse = info[2]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[2])) : 0;
+        if (!phaseResponse) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getFrequencyResponse", "BiquadFilterNode", "parameter 3 is not of type 'Float32Array'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->getFrequencyResponse(frequencyHz, magResponse, phaseResponse);
-}
+        impl->getFrequencyResponse(frequencyHz, magResponse, phaseResponse);
+    }
 
-MODULES_EXPORT  void getFrequencyResponseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BiquadFilterNodeV8Internal::getFrequencyResponseMethod(info);
-}
+    MODULES_EXPORT void getFrequencyResponseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BiquadFilterNodeV8Internal::getFrequencyResponseMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "BiquadFilterNode");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "BiquadFilterNode");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  BaseAudioContext* context;
-  BiquadFilterOptions options;
-  context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!context) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
+        BaseAudioContext* context;
+        BiquadFilterOptions options;
+        context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!context) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
 
-    return;
-  }
+            return;
+        }
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-    return;
-  }
-  V8BiquadFilterOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8BiquadFilterOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  BiquadFilterNode* impl = BiquadFilterNode::create(context, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8BiquadFilterNode::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        BiquadFilterNode* impl = BiquadFilterNode::create(context, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8BiquadFilterNode::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace BiquadFilterNodeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8BiquadFilterNodeAccessors[] = {
-    {"type", BiquadFilterNodeV8Internal::typeAttributeGetterCallback, BiquadFilterNodeV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"frequency", BiquadFilterNodeV8Internal::frequencyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"detune", BiquadFilterNodeV8Internal::detuneAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"Q", BiquadFilterNodeV8Internal::QAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"gain", BiquadFilterNodeV8Internal::gainAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", BiquadFilterNodeV8Internal::typeAttributeGetterCallback, BiquadFilterNodeV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "frequency", BiquadFilterNodeV8Internal::frequencyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "detune", BiquadFilterNodeV8Internal::detuneAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "Q", BiquadFilterNodeV8Internal::QAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "gain", BiquadFilterNodeV8Internal::gainAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8BiquadFilterNodeMethods[] = {
-    {"getFrequencyResponse", BiquadFilterNodeV8Internal::getFrequencyResponseMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getFrequencyResponse", BiquadFilterNodeV8Internal::getFrequencyResponseMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8BiquadFilterNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8BiquadFilterNode_Constructor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("BiquadFilterNode"));
-    return;
-  }
+void V8BiquadFilterNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8BiquadFilterNode_Constructor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("BiquadFilterNode"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  BiquadFilterNodeV8Internal::constructor(info);
+    BiquadFilterNodeV8Internal::constructor(info);
 }
 
-static void installV8BiquadFilterNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BiquadFilterNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8BiquadFilterNode::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8BiquadFilterNode::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8BiquadFilterNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BiquadFilterNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8BiquadFilterNode::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8BiquadFilterNode::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BiquadFilterNodeAccessors, WTF_ARRAY_LENGTH(V8BiquadFilterNodeAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BiquadFilterNodeMethods, WTF_ARRAY_LENGTH(V8BiquadFilterNodeMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BiquadFilterNodeAccessors, WTF_ARRAY_LENGTH(V8BiquadFilterNodeAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BiquadFilterNodeMethods, WTF_ARRAY_LENGTH(V8BiquadFilterNodeMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8BiquadFilterNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BiquadFilterNodeTemplate);
+v8::Local<v8::FunctionTemplate> V8BiquadFilterNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BiquadFilterNodeTemplate);
 }
 
-bool V8BiquadFilterNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8BiquadFilterNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8BiquadFilterNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8BiquadFilterNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-BiquadFilterNode* V8BiquadFilterNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+BiquadFilterNode* V8BiquadFilterNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PaymentAddress.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,212 +48,241 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PaymentAddress::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PaymentAddress is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PaymentAddressV8Internal {
 
-static void countryAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void countryAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->country(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->country(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void countryAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::countryAttributeGetter(info);
-}
+    MODULES_EXPORT void countryAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::countryAttributeGetter(info);
+    }
 
-static void addressLineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void addressLineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValue(info, freezeV8Object(ToV8(impl->addressLine(), info.Holder(), info.GetIsolate()), info.GetIsolate()));
-}
+        v8SetReturnValue(info, freezeV8Object(ToV8(impl->addressLine(), info.Holder(), info.GetIsolate()), info.GetIsolate()));
+    }
 
-MODULES_EXPORT void addressLineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::addressLineAttributeGetter(info);
-}
+    MODULES_EXPORT void addressLineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::addressLineAttributeGetter(info);
+    }
 
-static void regionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void regionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->region(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->region(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void regionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::regionAttributeGetter(info);
-}
+    MODULES_EXPORT void regionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::regionAttributeGetter(info);
+    }
 
-static void cityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->city(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->city(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void cityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::cityAttributeGetter(info);
-}
+    MODULES_EXPORT void cityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::cityAttributeGetter(info);
+    }
 
-static void dependentLocalityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dependentLocalityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->dependentLocality(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->dependentLocality(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void dependentLocalityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::dependentLocalityAttributeGetter(info);
-}
+    MODULES_EXPORT void dependentLocalityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::dependentLocalityAttributeGetter(info);
+    }
 
-static void postalCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void postalCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->postalCode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->postalCode(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void postalCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::postalCodeAttributeGetter(info);
-}
+    MODULES_EXPORT void postalCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::postalCodeAttributeGetter(info);
+    }
 
-static void sortingCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sortingCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->sortingCode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->sortingCode(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void sortingCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::sortingCodeAttributeGetter(info);
-}
+    MODULES_EXPORT void sortingCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::sortingCodeAttributeGetter(info);
+    }
 
-static void languageCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void languageCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->languageCode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->languageCode(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void languageCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::languageCodeAttributeGetter(info);
-}
+    MODULES_EXPORT void languageCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::languageCodeAttributeGetter(info);
+    }
 
-static void organizationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void organizationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->organization(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->organization(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void organizationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::organizationAttributeGetter(info);
-}
+    MODULES_EXPORT void organizationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::organizationAttributeGetter(info);
+    }
 
-static void recipientAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void recipientAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->recipient(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->recipient(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void recipientAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::recipientAttributeGetter(info);
-}
+    MODULES_EXPORT void recipientAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::recipientAttributeGetter(info);
+    }
 
-static void phoneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void phoneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
+        PaymentAddress* impl = V8PaymentAddress::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->phone(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->phone(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void phoneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::phoneAttributeGetter(info);
-}
+    MODULES_EXPORT void phoneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::phoneAttributeGetter(info);
+    }
 
-static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddress* impl = V8PaymentAddress::toImpl(info.Holder());
+    static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddress* impl = V8PaymentAddress::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue result = impl->toJSONForBinding(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->toJSONForBinding(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaymentAddressV8Internal::toJSONMethod(info);
-}
+    MODULES_EXPORT void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaymentAddressV8Internal::toJSONMethod(info);
+    }
 
 } // namespace PaymentAddressV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PaymentAddressAccessors[] = {
-    {"country", PaymentAddressV8Internal::countryAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addressLine", PaymentAddressV8Internal::addressLineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"region", PaymentAddressV8Internal::regionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"city", PaymentAddressV8Internal::cityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dependentLocality", PaymentAddressV8Internal::dependentLocalityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"postalCode", PaymentAddressV8Internal::postalCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sortingCode", PaymentAddressV8Internal::sortingCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"languageCode", PaymentAddressV8Internal::languageCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"organization", PaymentAddressV8Internal::organizationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"recipient", PaymentAddressV8Internal::recipientAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"phone", PaymentAddressV8Internal::phoneAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "country", PaymentAddressV8Internal::countryAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addressLine", PaymentAddressV8Internal::addressLineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "region", PaymentAddressV8Internal::regionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "city", PaymentAddressV8Internal::cityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dependentLocality", PaymentAddressV8Internal::dependentLocalityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "postalCode", PaymentAddressV8Internal::postalCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sortingCode", PaymentAddressV8Internal::sortingCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "languageCode", PaymentAddressV8Internal::languageCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "organization", PaymentAddressV8Internal::organizationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "recipient", PaymentAddressV8Internal::recipientAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "phone", PaymentAddressV8Internal::phoneAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8PaymentAddressMethods[] = {
-    {"toJSON", PaymentAddressV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "toJSON", PaymentAddressV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PaymentAddressTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaymentAddress::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PaymentAddress::internalFieldCount);
+static void installV8PaymentAddressTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaymentAddress::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PaymentAddress::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::paymentRequestEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::paymentRequestEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentAddressAccessors, WTF_ARRAY_LENGTH(V8PaymentAddressAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentAddressMethods, WTF_ARRAY_LENGTH(V8PaymentAddressMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentAddressAccessors, WTF_ARRAY_LENGTH(V8PaymentAddressAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaymentAddressMethods, WTF_ARRAY_LENGTH(V8PaymentAddressMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8PaymentAddress::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaymentAddressTemplate);
+v8::Local<v8::FunctionTemplate> V8PaymentAddress::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaymentAddressTemplate);
 }
 
-bool V8PaymentAddress::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PaymentAddress::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PaymentAddress::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PaymentAddress::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PaymentAddress* V8PaymentAddress::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PaymentAddress* V8PaymentAddress::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

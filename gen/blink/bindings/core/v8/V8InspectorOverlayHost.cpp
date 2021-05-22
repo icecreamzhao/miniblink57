@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8InspectorOverlayHost.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,69 +45,78 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&InspectorOverlayHost::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "InspectorOverlayHost is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace InspectorOverlayHostV8Internal {
 
-static void resumeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InspectorOverlayHost* impl = V8InspectorOverlayHost::toImpl(info.Holder());
+    static void resumeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InspectorOverlayHost* impl = V8InspectorOverlayHost::toImpl(info.Holder());
 
-  impl->resume();
-}
+        impl->resume();
+    }
 
-CORE_EXPORT  void resumeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InspectorOverlayHostV8Internal::resumeMethod(info);
-}
+    CORE_EXPORT void resumeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InspectorOverlayHostV8Internal::resumeMethod(info);
+    }
 
-static void stepOverMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InspectorOverlayHost* impl = V8InspectorOverlayHost::toImpl(info.Holder());
+    static void stepOverMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InspectorOverlayHost* impl = V8InspectorOverlayHost::toImpl(info.Holder());
 
-  impl->stepOver();
-}
+        impl->stepOver();
+    }
 
-CORE_EXPORT  void stepOverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InspectorOverlayHostV8Internal::stepOverMethod(info);
-}
+    CORE_EXPORT void stepOverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InspectorOverlayHostV8Internal::stepOverMethod(info);
+    }
 
 } // namespace InspectorOverlayHostV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8InspectorOverlayHostMethods[] = {
-    {"resume", InspectorOverlayHostV8Internal::resumeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stepOver", InspectorOverlayHostV8Internal::stepOverMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "resume", InspectorOverlayHostV8Internal::resumeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stepOver", InspectorOverlayHostV8Internal::stepOverMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8InspectorOverlayHostTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8InspectorOverlayHost::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8InspectorOverlayHost::internalFieldCount);
+static void installV8InspectorOverlayHostTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8InspectorOverlayHost::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8InspectorOverlayHost::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InspectorOverlayHostMethods, WTF_ARRAY_LENGTH(V8InspectorOverlayHostMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InspectorOverlayHostMethods, WTF_ARRAY_LENGTH(V8InspectorOverlayHostMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8InspectorOverlayHost::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8InspectorOverlayHostTemplate);
+v8::Local<v8::FunctionTemplate> V8InspectorOverlayHost::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8InspectorOverlayHostTemplate);
 }
 
-bool V8InspectorOverlayHost::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8InspectorOverlayHost::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8InspectorOverlayHost::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8InspectorOverlayHost::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-InspectorOverlayHost* V8InspectorOverlayHost::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+InspectorOverlayHost* V8InspectorOverlayHost::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

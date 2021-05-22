@@ -8,44 +8,52 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaKeyMessageEventInit.h"
 
 #include "core/dom/DOMArrayBuffer.h"
 
 namespace blink {
 
-MediaKeyMessageEventInit::MediaKeyMessageEventInit() {
+MediaKeyMessageEventInit::MediaKeyMessageEventInit()
+{
 }
 
-MediaKeyMessageEventInit::~MediaKeyMessageEventInit() {}
+MediaKeyMessageEventInit::~MediaKeyMessageEventInit() { }
 
 MediaKeyMessageEventInit::MediaKeyMessageEventInit(const MediaKeyMessageEventInit&) = default;
 
 MediaKeyMessageEventInit& MediaKeyMessageEventInit::operator=(const MediaKeyMessageEventInit&) = default;
 
-bool MediaKeyMessageEventInit::hasMessage() const {
-  return m_message;
+bool MediaKeyMessageEventInit::hasMessage() const
+{
+    return m_message;
 }
-DOMArrayBuffer* MediaKeyMessageEventInit::message() const {
-  return m_message;
+DOMArrayBuffer* MediaKeyMessageEventInit::message() const
+{
+    return m_message;
 }
-void MediaKeyMessageEventInit::setMessage(DOMArrayBuffer* value) {
-  m_message = value;
+void MediaKeyMessageEventInit::setMessage(DOMArrayBuffer* value)
+{
+    m_message = value;
 }
-bool MediaKeyMessageEventInit::hasMessageType() const {
-  return !m_messageType.isNull();
+bool MediaKeyMessageEventInit::hasMessageType() const
+{
+    return !m_messageType.isNull();
 }
-String MediaKeyMessageEventInit::messageType() const {
-  return m_messageType;
+String MediaKeyMessageEventInit::messageType() const
+{
+    return m_messageType;
 }
-void MediaKeyMessageEventInit::setMessageType(String value) {
-  m_messageType = value;
+void MediaKeyMessageEventInit::setMessageType(String value)
+{
+    m_messageType = value;
 }
 
-DEFINE_TRACE(MediaKeyMessageEventInit) {
-  visitor->trace(m_message);
-  EventInit::trace(visitor);
+DEFINE_TRACE(MediaKeyMessageEventInit)
+{
+    visitor->trace(m_message);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

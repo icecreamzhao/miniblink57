@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8KeyframeEffectOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,66 +16,70 @@
 
 namespace blink {
 
-void V8KeyframeEffectOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, KeyframeEffectOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8KeyframeEffectOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, KeyframeEffectOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8AnimationEffectTimingProperties::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    V8AnimationEffectTimingProperties::toImpl(isolate, v8Value, impl, exceptionState);
+    if (exceptionState.hadException())
+        return;
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> idValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "id")).ToLocal(&idValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (idValue.IsEmpty() || idValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> id = idValue;
-    if (!id.prepare(exceptionState))
-      return;
-    impl.setId(id);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> idValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "id")).ToLocal(&idValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (idValue.IsEmpty() || idValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> id = idValue;
+        if (!id.prepare(exceptionState))
+            return;
+        impl.setId(id);
+    }
 }
 
-v8::Local<v8::Value> KeyframeEffectOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8KeyframeEffectOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> KeyframeEffectOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8KeyframeEffectOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8KeyframeEffectOptions(const KeyframeEffectOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8AnimationEffectTimingProperties(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8KeyframeEffectOptions(const KeyframeEffectOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8AnimationEffectTimingProperties(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasId()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "id"), v8String(isolate, impl.id()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "id"), v8String(isolate, String("")))))
-      return false;
-  }
+    if (impl.hasId()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "id"), v8String(isolate, impl.id()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "id"), v8String(isolate, String("")))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-KeyframeEffectOptions NativeValueTraits<KeyframeEffectOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  KeyframeEffectOptions impl;
-  V8KeyframeEffectOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+KeyframeEffectOptions NativeValueTraits<KeyframeEffectOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    KeyframeEffectOptions impl;
+    V8KeyframeEffectOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

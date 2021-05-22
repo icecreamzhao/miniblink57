@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef IDBObserverInit_h
 #define IDBObserverInit_h
 
@@ -21,45 +21,46 @@
 namespace blink {
 
 class MODULES_EXPORT IDBObserverInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  IDBObserverInit();
-  virtual ~IDBObserverInit();
-  IDBObserverInit(const IDBObserverInit&);
-  IDBObserverInit& operator=(const IDBObserverInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasNoRecords() const;
-  bool noRecords() const;
-  void setNoRecords(bool);
+public:
+    IDBObserverInit();
+    virtual ~IDBObserverInit();
+    IDBObserverInit(const IDBObserverInit&);
+    IDBObserverInit& operator=(const IDBObserverInit&);
 
-  bool hasOperationTypes() const;
-  const Vector<String>& operationTypes() const;
-  void setOperationTypes(const Vector<String>&);
+    bool hasNoRecords() const;
+    bool noRecords() const;
+    void setNoRecords(bool);
 
-  bool hasTransaction() const;
-  bool transaction() const;
-  void setTransaction(bool);
+    bool hasOperationTypes() const;
+    const Vector<String>& operationTypes() const;
+    void setOperationTypes(const Vector<String>&);
 
-  bool hasValues() const;
-  bool values() const;
-  void setValues(bool);
+    bool hasTransaction() const;
+    bool transaction() const;
+    void setTransaction(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasValues() const;
+    bool values() const;
+    void setValues(bool);
 
- private:
-  bool m_hasNoRecords = false;
-  bool m_noRecords;
-  bool m_hasOperationTypes = false;
-  Vector<String> m_operationTypes;
-  bool m_hasTransaction = false;
-  bool m_transaction;
-  bool m_hasValues = false;
-  bool m_values;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8IDBObserverInit;
+private:
+    bool m_hasNoRecords = false;
+    bool m_noRecords;
+    bool m_hasOperationTypes = false;
+    Vector<String> m_operationTypes;
+    bool m_hasTransaction = false;
+    bool m_transaction;
+    bool m_hasValues = false;
+    bool m_values;
+
+    friend class V8IDBObserverInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // IDBObserverInit_h
+#endif // IDBObserverInit_h

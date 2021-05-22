@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8GamepadButton_h
 #define V8GamepadButton_h
 
@@ -25,35 +25,39 @@ namespace blink {
 
 class ScriptState;
 class V8GamepadButton {
-  STATIC_ONLY(V8GamepadButton);
- public:
-  MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static GamepadButton* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<GamepadButton>();
-  }
-  MODULES_EXPORT static GamepadButton* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<GamepadButton>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<GamepadButton>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8GamepadButton);
 
-  static void installGamepadExtensions(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installGamepadExtensions(ScriptState*, v8::Local<v8::Object> instance);
-  static void installGamepadExtensions(ScriptState*);
+public:
+    MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static GamepadButton* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<GamepadButton>();
+    }
+    MODULES_EXPORT static GamepadButton* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<GamepadButton>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<GamepadButton>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+
+    static void installGamepadExtensions(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installGamepadExtensions(ScriptState*, v8::Local<v8::Object> instance);
+    static void installGamepadExtensions(ScriptState*);
 };
 
 template <>
 struct V8TypeOf<GamepadButton> {
-  typedef V8GamepadButton Type;
+    typedef V8GamepadButton Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8GamepadButton_h
+#endif // V8GamepadButton_h

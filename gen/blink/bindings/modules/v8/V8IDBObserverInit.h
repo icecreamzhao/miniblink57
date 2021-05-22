@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8IDBObserverInit_h
 #define V8IDBObserverInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8IDBObserverInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, IDBObserverInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, IDBObserverInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8IDBObserverInit(const IDBObserverInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, IDBObserverInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, IDBObserverInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<IDBObserverInit> {
-  static IDBObserverInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static IDBObserverInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<IDBObserverInit> {
-  typedef V8IDBObserverInit Type;
+    typedef V8IDBObserverInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8IDBObserverInit_h
+#endif // V8IDBObserverInit_h

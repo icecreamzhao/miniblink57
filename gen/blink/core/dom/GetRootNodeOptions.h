@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef GetRootNodeOptions_h
 #define GetRootNodeOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class CORE_EXPORT GetRootNodeOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  GetRootNodeOptions();
-  virtual ~GetRootNodeOptions();
-  GetRootNodeOptions(const GetRootNodeOptions&);
-  GetRootNodeOptions& operator=(const GetRootNodeOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasComposed() const;
-  bool composed() const;
-  void setComposed(bool);
+public:
+    GetRootNodeOptions();
+    virtual ~GetRootNodeOptions();
+    GetRootNodeOptions(const GetRootNodeOptions&);
+    GetRootNodeOptions& operator=(const GetRootNodeOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasComposed() const;
+    bool composed() const;
+    void setComposed(bool);
 
- private:
-  bool m_hasComposed = false;
-  bool m_composed;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8GetRootNodeOptions;
+private:
+    bool m_hasComposed = false;
+    bool m_composed;
+
+    friend class V8GetRootNodeOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // GetRootNodeOptions_h
+#endif // GetRootNodeOptions_h

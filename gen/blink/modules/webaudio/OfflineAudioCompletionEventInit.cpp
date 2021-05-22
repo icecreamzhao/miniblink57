@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "OfflineAudioCompletionEventInit.h"
 
 #include "modules/webaudio/AudioBuffer.h"
 
 namespace blink {
 
-OfflineAudioCompletionEventInit::OfflineAudioCompletionEventInit() {
+OfflineAudioCompletionEventInit::OfflineAudioCompletionEventInit()
+{
 }
 
-OfflineAudioCompletionEventInit::~OfflineAudioCompletionEventInit() {}
+OfflineAudioCompletionEventInit::~OfflineAudioCompletionEventInit() { }
 
 OfflineAudioCompletionEventInit::OfflineAudioCompletionEventInit(const OfflineAudioCompletionEventInit&) = default;
 
 OfflineAudioCompletionEventInit& OfflineAudioCompletionEventInit::operator=(const OfflineAudioCompletionEventInit&) = default;
 
-bool OfflineAudioCompletionEventInit::hasRenderedBuffer() const {
-  return m_renderedBuffer;
+bool OfflineAudioCompletionEventInit::hasRenderedBuffer() const
+{
+    return m_renderedBuffer;
 }
-AudioBuffer* OfflineAudioCompletionEventInit::renderedBuffer() const {
-  return m_renderedBuffer;
+AudioBuffer* OfflineAudioCompletionEventInit::renderedBuffer() const
+{
+    return m_renderedBuffer;
 }
-void OfflineAudioCompletionEventInit::setRenderedBuffer(AudioBuffer* value) {
-  m_renderedBuffer = value;
-}
-
-DEFINE_TRACE(OfflineAudioCompletionEventInit) {
-  visitor->trace(m_renderedBuffer);
-  EventInit::trace(visitor);
+void OfflineAudioCompletionEventInit::setRenderedBuffer(AudioBuffer* value)
+{
+    m_renderedBuffer = value;
 }
 
-}  // namespace blink
+DEFINE_TRACE(OfflineAudioCompletionEventInit)
+{
+    visitor->trace(m_renderedBuffer);
+    EventInit::trace(visitor);
+}
+
+} // namespace blink

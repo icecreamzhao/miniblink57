@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RelatedEventInit_h
 #define RelatedEventInit_h
 
@@ -21,27 +21,28 @@ namespace blink {
 class EventTarget;
 
 class CORE_EXPORT RelatedEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RelatedEventInit();
-  virtual ~RelatedEventInit();
-  RelatedEventInit(const RelatedEventInit&);
-  RelatedEventInit& operator=(const RelatedEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasRelatedTarget() const;
-  EventTarget* relatedTarget() const;
-  void setRelatedTarget(EventTarget*);
-  void setRelatedTargetToNull();
+public:
+    RelatedEventInit();
+    virtual ~RelatedEventInit();
+    RelatedEventInit(const RelatedEventInit&);
+    RelatedEventInit& operator=(const RelatedEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRelatedTarget() const;
+    EventTarget* relatedTarget() const;
+    void setRelatedTarget(EventTarget*);
+    void setRelatedTargetToNull();
 
- private:
-  Member<EventTarget> m_relatedTarget;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RelatedEventInit;
+private:
+    Member<EventTarget> m_relatedTarget;
+
+    friend class V8RelatedEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RelatedEventInit_h
+#endif // RelatedEventInit_h

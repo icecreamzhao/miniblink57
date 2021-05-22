@@ -8,56 +8,67 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "GyroscopeReadingInit.h"
 
 namespace blink {
 
-GyroscopeReadingInit::GyroscopeReadingInit() {
+GyroscopeReadingInit::GyroscopeReadingInit()
+{
 }
 
-GyroscopeReadingInit::~GyroscopeReadingInit() {}
+GyroscopeReadingInit::~GyroscopeReadingInit() { }
 
 GyroscopeReadingInit::GyroscopeReadingInit(const GyroscopeReadingInit&) = default;
 
 GyroscopeReadingInit& GyroscopeReadingInit::operator=(const GyroscopeReadingInit&) = default;
 
-bool GyroscopeReadingInit::hasX() const {
-  return m_hasX;
+bool GyroscopeReadingInit::hasX() const
+{
+    return m_hasX;
 }
-double GyroscopeReadingInit::x() const {
-  DCHECK(m_hasX);
-  return m_x;
+double GyroscopeReadingInit::x() const
+{
+    DCHECK(m_hasX);
+    return m_x;
 }
-void GyroscopeReadingInit::setX(double value) {
-  m_x = value;
-  m_hasX = true;
+void GyroscopeReadingInit::setX(double value)
+{
+    m_x = value;
+    m_hasX = true;
 }
-bool GyroscopeReadingInit::hasY() const {
-  return m_hasY;
+bool GyroscopeReadingInit::hasY() const
+{
+    return m_hasY;
 }
-double GyroscopeReadingInit::y() const {
-  DCHECK(m_hasY);
-  return m_y;
+double GyroscopeReadingInit::y() const
+{
+    DCHECK(m_hasY);
+    return m_y;
 }
-void GyroscopeReadingInit::setY(double value) {
-  m_y = value;
-  m_hasY = true;
+void GyroscopeReadingInit::setY(double value)
+{
+    m_y = value;
+    m_hasY = true;
 }
-bool GyroscopeReadingInit::hasZ() const {
-  return m_hasZ;
+bool GyroscopeReadingInit::hasZ() const
+{
+    return m_hasZ;
 }
-double GyroscopeReadingInit::z() const {
-  DCHECK(m_hasZ);
-  return m_z;
+double GyroscopeReadingInit::z() const
+{
+    DCHECK(m_hasZ);
+    return m_z;
 }
-void GyroscopeReadingInit::setZ(double value) {
-  m_z = value;
-  m_hasZ = true;
+void GyroscopeReadingInit::setZ(double value)
+{
+    m_z = value;
+    m_hasZ = true;
 }
 
-DEFINE_TRACE(GyroscopeReadingInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(GyroscopeReadingInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

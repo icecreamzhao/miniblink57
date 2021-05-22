@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WheelEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,211 +48,234 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WheelEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WheelEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace WheelEventV8Internal {
 
-static void deltaXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deltaXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WheelEvent* impl = V8WheelEvent::toImpl(holder);
+        WheelEvent* impl = V8WheelEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->deltaX());
-}
+        v8SetReturnValue(info, impl->deltaX());
+    }
 
-CORE_EXPORT void deltaXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WheelEventV8Internal::deltaXAttributeGetter(info);
-}
+    CORE_EXPORT void deltaXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WheelEventV8Internal::deltaXAttributeGetter(info);
+    }
 
-static void deltaYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deltaYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WheelEvent* impl = V8WheelEvent::toImpl(holder);
+        WheelEvent* impl = V8WheelEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->deltaY());
-}
+        v8SetReturnValue(info, impl->deltaY());
+    }
 
-CORE_EXPORT void deltaYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WheelEventV8Internal::deltaYAttributeGetter(info);
-}
+    CORE_EXPORT void deltaYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WheelEventV8Internal::deltaYAttributeGetter(info);
+    }
 
-static void deltaZAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deltaZAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WheelEvent* impl = V8WheelEvent::toImpl(holder);
+        WheelEvent* impl = V8WheelEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->deltaZ());
-}
+        v8SetReturnValue(info, impl->deltaZ());
+    }
 
-CORE_EXPORT void deltaZAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WheelEventV8Internal::deltaZAttributeGetter(info);
-}
+    CORE_EXPORT void deltaZAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WheelEventV8Internal::deltaZAttributeGetter(info);
+    }
 
-static void deltaModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deltaModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WheelEvent* impl = V8WheelEvent::toImpl(holder);
+        WheelEvent* impl = V8WheelEvent::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->deltaMode());
-}
+        v8SetReturnValueUnsigned(info, impl->deltaMode());
+    }
 
-CORE_EXPORT void deltaModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WheelEventV8Internal::deltaModeAttributeGetter(info);
-}
+    CORE_EXPORT void deltaModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WheelEventV8Internal::deltaModeAttributeGetter(info);
+    }
 
-static void wheelDeltaXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void wheelDeltaXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WheelEvent* impl = V8WheelEvent::toImpl(holder);
+        WheelEvent* impl = V8WheelEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->wheelDeltaX());
-}
+        v8SetReturnValueInt(info, impl->wheelDeltaX());
+    }
 
-CORE_EXPORT void wheelDeltaXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WheelEventWheelDeltaX);
+    CORE_EXPORT void wheelDeltaXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WheelEventWheelDeltaX);
 
-  WheelEventV8Internal::wheelDeltaXAttributeGetter(info);
-}
+        WheelEventV8Internal::wheelDeltaXAttributeGetter(info);
+    }
 
-static void wheelDeltaYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void wheelDeltaYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WheelEvent* impl = V8WheelEvent::toImpl(holder);
+        WheelEvent* impl = V8WheelEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->wheelDeltaY());
-}
+        v8SetReturnValueInt(info, impl->wheelDeltaY());
+    }
 
-CORE_EXPORT void wheelDeltaYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WheelEventWheelDeltaY);
+    CORE_EXPORT void wheelDeltaYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WheelEventWheelDeltaY);
 
-  WheelEventV8Internal::wheelDeltaYAttributeGetter(info);
-}
+        WheelEventV8Internal::wheelDeltaYAttributeGetter(info);
+    }
 
-static void wheelDeltaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void wheelDeltaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WheelEvent* impl = V8WheelEvent::toImpl(holder);
+        WheelEvent* impl = V8WheelEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->wheelDelta());
-}
+        v8SetReturnValueInt(info, impl->wheelDelta());
+    }
 
-CORE_EXPORT void wheelDeltaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WheelEventWheelDelta);
+    CORE_EXPORT void wheelDeltaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WheelEventWheelDelta);
 
-  WheelEventV8Internal::wheelDeltaAttributeGetter(info);
-}
+        WheelEventV8Internal::wheelDeltaAttributeGetter(info);
+    }
 
-static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WheelEvent* impl = V8WheelEvent::toImpl(holder);
+        WheelEvent* impl = V8WheelEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isTrusted());
-}
+        v8SetReturnValueBool(info, impl->isTrusted());
+    }
 
-CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WheelEventV8Internal::isTrustedAttributeGetter(info);
-}
+    CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WheelEventV8Internal::isTrustedAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "WheelEvent");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "WheelEvent");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  WheelEventInit eventInitDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        WheelEventInit eventInitDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
 
-    return;
-  }
-  V8WheelEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8WheelEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  WheelEvent* impl = WheelEvent::create(type, eventInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8WheelEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        WheelEvent* impl = WheelEvent::create(type, eventInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8WheelEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace WheelEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8WheelEventAccessors[] = {
-    {"deltaX", WheelEventV8Internal::deltaXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deltaY", WheelEventV8Internal::deltaYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deltaZ", WheelEventV8Internal::deltaZAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deltaMode", WheelEventV8Internal::deltaModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"wheelDeltaX", WheelEventV8Internal::wheelDeltaXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"wheelDeltaY", WheelEventV8Internal::wheelDeltaYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"wheelDelta", WheelEventV8Internal::wheelDeltaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTrusted", WheelEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "deltaX", WheelEventV8Internal::deltaXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deltaY", WheelEventV8Internal::deltaYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deltaZ", WheelEventV8Internal::deltaZAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deltaMode", WheelEventV8Internal::deltaModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "wheelDeltaX", WheelEventV8Internal::wheelDeltaXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "wheelDeltaY", WheelEventV8Internal::wheelDeltaYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "wheelDelta", WheelEventV8Internal::wheelDeltaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTrusted", WheelEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
-void V8WheelEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("WheelEvent"));
-    return;
-  }
+void V8WheelEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("WheelEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  WheelEventV8Internal::constructor(info);
+    WheelEventV8Internal::constructor(info);
 }
 
-static void installV8WheelEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WheelEvent::wrapperTypeInfo.interfaceName, V8MouseEvent::domTemplate(isolate, world), V8WheelEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8WheelEvent::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8WheelEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WheelEvent::wrapperTypeInfo.interfaceName, V8MouseEvent::domTemplate(isolate, world), V8WheelEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8WheelEvent::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8WheelEventConstants[] = {
-      {"DOM_DELTA_PIXEL", 0x00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DOM_DELTA_LINE", 0x01, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DOM_DELTA_PAGE", 0x02, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WheelEventConstants, WTF_ARRAY_LENGTH(V8WheelEventConstants));
-  static_assert(0x00 == WheelEvent::kDomDeltaPixel, "the value of WheelEvent_kDomDeltaPixel does not match with implementation");
-  static_assert(0x01 == WheelEvent::kDomDeltaLine, "the value of WheelEvent_kDomDeltaLine does not match with implementation");
-  static_assert(0x02 == WheelEvent::kDomDeltaPage, "the value of WheelEvent_kDomDeltaPage does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WheelEventAccessors, WTF_ARRAY_LENGTH(V8WheelEventAccessors));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8WheelEventConstants[] = {
+        { "DOM_DELTA_PIXEL", 0x00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DOM_DELTA_LINE", 0x01, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DOM_DELTA_PAGE", 0x02, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WheelEventConstants, WTF_ARRAY_LENGTH(V8WheelEventConstants));
+    static_assert(0x00 == WheelEvent::kDomDeltaPixel, "the value of WheelEvent_kDomDeltaPixel does not match with implementation");
+    static_assert(0x01 == WheelEvent::kDomDeltaLine, "the value of WheelEvent_kDomDeltaLine does not match with implementation");
+    static_assert(0x02 == WheelEvent::kDomDeltaPage, "the value of WheelEvent_kDomDeltaPage does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WheelEventAccessors, WTF_ARRAY_LENGTH(V8WheelEventAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8WheelEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WheelEventTemplate);
+v8::Local<v8::FunctionTemplate> V8WheelEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WheelEventTemplate);
 }
 
-bool V8WheelEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WheelEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WheelEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WheelEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WheelEvent* V8WheelEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WheelEvent* V8WheelEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

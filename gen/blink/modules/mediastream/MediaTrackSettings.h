@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaTrackSettings_h
 #define MediaTrackSettings_h
 
@@ -20,96 +20,97 @@
 namespace blink {
 
 class MODULES_EXPORT MediaTrackSettings : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaTrackSettings();
-  virtual ~MediaTrackSettings();
-  MediaTrackSettings(const MediaTrackSettings&);
-  MediaTrackSettings& operator=(const MediaTrackSettings&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAspectRatio() const;
-  double aspectRatio() const;
-  void setAspectRatio(double);
+public:
+    MediaTrackSettings();
+    virtual ~MediaTrackSettings();
+    MediaTrackSettings(const MediaTrackSettings&);
+    MediaTrackSettings& operator=(const MediaTrackSettings&);
 
-  bool hasChannelCount() const;
-  int channelCount() const;
-  void setChannelCount(int);
+    bool hasAspectRatio() const;
+    double aspectRatio() const;
+    void setAspectRatio(double);
 
-  bool hasDeviceId() const;
-  String deviceId() const;
-  void setDeviceId(String);
+    bool hasChannelCount() const;
+    int channelCount() const;
+    void setChannelCount(int);
 
-  bool hasEchoCancellation() const;
-  bool echoCancellation() const;
-  void setEchoCancellation(bool);
+    bool hasDeviceId() const;
+    String deviceId() const;
+    void setDeviceId(String);
 
-  bool hasFacingMode() const;
-  String facingMode() const;
-  void setFacingMode(String);
+    bool hasEchoCancellation() const;
+    bool echoCancellation() const;
+    void setEchoCancellation(bool);
 
-  bool hasFrameRate() const;
-  double frameRate() const;
-  void setFrameRate(double);
+    bool hasFacingMode() const;
+    String facingMode() const;
+    void setFacingMode(String);
 
-  bool hasGroupId() const;
-  String groupId() const;
-  void setGroupId(String);
+    bool hasFrameRate() const;
+    double frameRate() const;
+    void setFrameRate(double);
 
-  bool hasHeight() const;
-  int height() const;
-  void setHeight(int);
+    bool hasGroupId() const;
+    String groupId() const;
+    void setGroupId(String);
 
-  bool hasLatency() const;
-  double latency() const;
-  void setLatency(double);
+    bool hasHeight() const;
+    int height() const;
+    void setHeight(int);
 
-  bool hasSampleRate() const;
-  int sampleRate() const;
-  void setSampleRate(int);
+    bool hasLatency() const;
+    double latency() const;
+    void setLatency(double);
 
-  bool hasSampleSize() const;
-  int sampleSize() const;
-  void setSampleSize(int);
+    bool hasSampleRate() const;
+    int sampleRate() const;
+    void setSampleRate(int);
 
-  bool hasVolume() const;
-  double volume() const;
-  void setVolume(double);
+    bool hasSampleSize() const;
+    int sampleSize() const;
+    void setSampleSize(int);
 
-  bool hasWidth() const;
-  int width() const;
-  void setWidth(int);
+    bool hasVolume() const;
+    double volume() const;
+    void setVolume(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasWidth() const;
+    int width() const;
+    void setWidth(int);
 
- private:
-  bool m_hasAspectRatio = false;
-  double m_aspectRatio;
-  bool m_hasChannelCount = false;
-  int m_channelCount;
-  String m_deviceId;
-  bool m_hasEchoCancellation = false;
-  bool m_echoCancellation;
-  String m_facingMode;
-  bool m_hasFrameRate = false;
-  double m_frameRate;
-  String m_groupId;
-  bool m_hasHeight = false;
-  int m_height;
-  bool m_hasLatency = false;
-  double m_latency;
-  bool m_hasSampleRate = false;
-  int m_sampleRate;
-  bool m_hasSampleSize = false;
-  int m_sampleSize;
-  bool m_hasVolume = false;
-  double m_volume;
-  bool m_hasWidth = false;
-  int m_width;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaTrackSettings;
+private:
+    bool m_hasAspectRatio = false;
+    double m_aspectRatio;
+    bool m_hasChannelCount = false;
+    int m_channelCount;
+    String m_deviceId;
+    bool m_hasEchoCancellation = false;
+    bool m_echoCancellation;
+    String m_facingMode;
+    bool m_hasFrameRate = false;
+    double m_frameRate;
+    String m_groupId;
+    bool m_hasHeight = false;
+    int m_height;
+    bool m_hasLatency = false;
+    double m_latency;
+    bool m_hasSampleRate = false;
+    int m_sampleRate;
+    bool m_hasSampleSize = false;
+    int m_sampleSize;
+    bool m_hasVolume = false;
+    double m_volume;
+    bool m_hasWidth = false;
+    int m_width;
+
+    friend class V8MediaTrackSettings;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaTrackSettings_h
+#endif // MediaTrackSettings_h

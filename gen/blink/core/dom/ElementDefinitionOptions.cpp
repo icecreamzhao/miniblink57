@@ -8,35 +8,41 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ElementDefinitionOptions.h"
 
 namespace blink {
 
-ElementDefinitionOptions::ElementDefinitionOptions() {
+ElementDefinitionOptions::ElementDefinitionOptions()
+{
 }
 
-ElementDefinitionOptions::~ElementDefinitionOptions() {}
+ElementDefinitionOptions::~ElementDefinitionOptions() { }
 
 ElementDefinitionOptions::ElementDefinitionOptions(const ElementDefinitionOptions&) = default;
 
 ElementDefinitionOptions& ElementDefinitionOptions::operator=(const ElementDefinitionOptions&) = default;
 
-bool ElementDefinitionOptions::hasExtends() const {
-  return !m_extends.isNull();
+bool ElementDefinitionOptions::hasExtends() const
+{
+    return !m_extends.isNull();
 }
-String ElementDefinitionOptions::extends() const {
-  return m_extends;
+String ElementDefinitionOptions::extends() const
+{
+    return m_extends;
 }
-void ElementDefinitionOptions::setExtends(String value) {
-  m_extends = value;
+void ElementDefinitionOptions::setExtends(String value)
+{
+    m_extends = value;
 }
-void ElementDefinitionOptions::setExtendsToNull() {
-  m_extends = String();
+void ElementDefinitionOptions::setExtendsToNull()
+{
+    m_extends = String();
 }
 
-DEFINE_TRACE(ElementDefinitionOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ElementDefinitionOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

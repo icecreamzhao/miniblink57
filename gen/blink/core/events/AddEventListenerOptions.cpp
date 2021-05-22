@@ -8,46 +8,54 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AddEventListenerOptions.h"
 
 namespace blink {
 
-AddEventListenerOptions::AddEventListenerOptions() {
-  setOnce(false);
+AddEventListenerOptions::AddEventListenerOptions()
+{
+    setOnce(false);
 }
 
-AddEventListenerOptions::~AddEventListenerOptions() {}
+AddEventListenerOptions::~AddEventListenerOptions() { }
 
 AddEventListenerOptions::AddEventListenerOptions(const AddEventListenerOptions&) = default;
 
 AddEventListenerOptions& AddEventListenerOptions::operator=(const AddEventListenerOptions&) = default;
 
-bool AddEventListenerOptions::hasOnce() const {
-  return m_hasOnce;
+bool AddEventListenerOptions::hasOnce() const
+{
+    return m_hasOnce;
 }
-bool AddEventListenerOptions::once() const {
-  DCHECK(m_hasOnce);
-  return m_once;
+bool AddEventListenerOptions::once() const
+{
+    DCHECK(m_hasOnce);
+    return m_once;
 }
-void AddEventListenerOptions::setOnce(bool value) {
-  m_once = value;
-  m_hasOnce = true;
+void AddEventListenerOptions::setOnce(bool value)
+{
+    m_once = value;
+    m_hasOnce = true;
 }
-bool AddEventListenerOptions::hasPassive() const {
-  return m_hasPassive;
+bool AddEventListenerOptions::hasPassive() const
+{
+    return m_hasPassive;
 }
-bool AddEventListenerOptions::passive() const {
-  DCHECK(m_hasPassive);
-  return m_passive;
+bool AddEventListenerOptions::passive() const
+{
+    DCHECK(m_hasPassive);
+    return m_passive;
 }
-void AddEventListenerOptions::setPassive(bool value) {
-  m_passive = value;
-  m_hasPassive = true;
+void AddEventListenerOptions::setPassive(bool value)
+{
+    m_passive = value;
+    m_hasPassive = true;
 }
 
-DEFINE_TRACE(AddEventListenerOptions) {
-  EventListenerOptions::trace(visitor);
+DEFINE_TRACE(AddEventListenerOptions)
+{
+    EventListenerOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

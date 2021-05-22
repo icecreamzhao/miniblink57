@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MutationEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,195 +47,214 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MutationEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MutationEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MutationEventV8Internal {
 
-static void relatedNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void relatedNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationEvent* impl = V8MutationEvent::toImpl(holder);
+        MutationEvent* impl = V8MutationEvent::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->relatedNode()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->relatedNode()), impl);
+    }
 
-CORE_EXPORT void relatedNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationEventV8Internal::relatedNodeAttributeGetter(info);
-}
+    CORE_EXPORT void relatedNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationEventV8Internal::relatedNodeAttributeGetter(info);
+    }
 
-static void prevValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void prevValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationEvent* impl = V8MutationEvent::toImpl(holder);
+        MutationEvent* impl = V8MutationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->prevValue(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->prevValue(), info.GetIsolate());
+    }
 
-CORE_EXPORT void prevValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationEventV8Internal::prevValueAttributeGetter(info);
-}
+    CORE_EXPORT void prevValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationEventV8Internal::prevValueAttributeGetter(info);
+    }
 
-static void newValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void newValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationEvent* impl = V8MutationEvent::toImpl(holder);
+        MutationEvent* impl = V8MutationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->newValue(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->newValue(), info.GetIsolate());
+    }
 
-CORE_EXPORT void newValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationEventV8Internal::newValueAttributeGetter(info);
-}
+    CORE_EXPORT void newValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationEventV8Internal::newValueAttributeGetter(info);
+    }
 
-static void attrNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void attrNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationEvent* impl = V8MutationEvent::toImpl(holder);
+        MutationEvent* impl = V8MutationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->attrName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->attrName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void attrNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationEventV8Internal::attrNameAttributeGetter(info);
-}
+    CORE_EXPORT void attrNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationEventV8Internal::attrNameAttributeGetter(info);
+    }
 
-static void attrChangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void attrChangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationEvent* impl = V8MutationEvent::toImpl(holder);
+        MutationEvent* impl = V8MutationEvent::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->attrChange());
-}
+        v8SetReturnValueUnsigned(info, impl->attrChange());
+    }
 
-CORE_EXPORT void attrChangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationEventV8Internal::attrChangeAttributeGetter(info);
-}
+    CORE_EXPORT void attrChangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationEventV8Internal::attrChangeAttributeGetter(info);
+    }
 
-static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationEvent* impl = V8MutationEvent::toImpl(holder);
+        MutationEvent* impl = V8MutationEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isTrusted());
-}
+        v8SetReturnValueBool(info, impl->isTrusted());
+    }
 
-CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationEventV8Internal::isTrustedAttributeGetter(info);
-}
+    CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationEventV8Internal::isTrustedAttributeGetter(info);
+    }
 
-static void initMutationEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MutationEvent", "initMutationEvent");
+    static void initMutationEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MutationEvent", "initMutationEvent");
 
-  MutationEvent* impl = V8MutationEvent::toImpl(info.Holder());
+        MutationEvent* impl = V8MutationEvent::toImpl(info.Holder());
 
-  V8StringResource<> type;
-  bool bubbles;
-  bool cancelable;
-  Node* relatedNode;
-  V8StringResource<> prevValue;
-  V8StringResource<> newValue;
-  V8StringResource<> attrName;
-  unsigned attrChange;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        bool bubbles;
+        bool cancelable;
+        Node* relatedNode;
+        V8StringResource<> prevValue;
+        V8StringResource<> newValue;
+        V8StringResource<> attrName;
+        unsigned attrChange;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  bubbles = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        bubbles = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  cancelable = toBoolean(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        cancelable = toBoolean(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  relatedNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[3]);
-  if (!relatedNode && !isUndefinedOrNull(info[3])) {
-    exceptionState.throwTypeError("parameter 4 is not of type 'Node'.");
+        relatedNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[3]);
+        if (!relatedNode && !isUndefinedOrNull(info[3])) {
+            exceptionState.throwTypeError("parameter 4 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  prevValue = info[4];
-  if (!prevValue.prepare())
-    return;
+        prevValue = info[4];
+        if (!prevValue.prepare())
+            return;
 
-  newValue = info[5];
-  if (!newValue.prepare())
-    return;
+        newValue = info[5];
+        if (!newValue.prepare())
+            return;
 
-  attrName = info[6];
-  if (!attrName.prepare())
-    return;
+        attrName = info[6];
+        if (!attrName.prepare())
+            return;
 
-  attrChange = toUInt16(info.GetIsolate(), info[7], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        attrChange = toUInt16(info.GetIsolate(), info[7], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->initMutationEvent(type, bubbles, cancelable, relatedNode, prevValue, newValue, attrName, attrChange);
-}
+        impl->initMutationEvent(type, bubbles, cancelable, relatedNode, prevValue, newValue, attrName, attrChange);
+    }
 
-CORE_EXPORT  void initMutationEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MutationEvent_InitMutationEvent_Method);
-  MutationEventV8Internal::initMutationEventMethod(info);
-}
+    CORE_EXPORT void initMutationEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MutationEvent_InitMutationEvent_Method);
+        MutationEventV8Internal::initMutationEventMethod(info);
+    }
 
 } // namespace MutationEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MutationEventAccessors[] = {
-    {"relatedNode", MutationEventV8Internal::relatedNodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"prevValue", MutationEventV8Internal::prevValueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"newValue", MutationEventV8Internal::newValueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"attrName", MutationEventV8Internal::attrNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"attrChange", MutationEventV8Internal::attrChangeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTrusted", MutationEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "relatedNode", MutationEventV8Internal::relatedNodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "prevValue", MutationEventV8Internal::prevValueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "newValue", MutationEventV8Internal::newValueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "attrName", MutationEventV8Internal::attrNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "attrChange", MutationEventV8Internal::attrChangeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTrusted", MutationEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MutationEventMethods[] = {
-    {"initMutationEvent", MutationEventV8Internal::initMutationEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "initMutationEvent", MutationEventV8Internal::initMutationEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8MutationEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MutationEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8MutationEvent::internalFieldCount);
+static void installV8MutationEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MutationEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8MutationEvent::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8MutationEventConstants[] = {
-      {"MODIFICATION", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"ADDITION", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"REMOVAL", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8MutationEventConstants, WTF_ARRAY_LENGTH(V8MutationEventConstants));
-  static_assert(1 == MutationEvent::kModification, "the value of MutationEvent_kModification does not match with implementation");
-  static_assert(2 == MutationEvent::kAddition, "the value of MutationEvent_kAddition does not match with implementation");
-  static_assert(3 == MutationEvent::kRemoval, "the value of MutationEvent_kRemoval does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MutationEventAccessors, WTF_ARRAY_LENGTH(V8MutationEventAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MutationEventMethods, WTF_ARRAY_LENGTH(V8MutationEventMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8MutationEventConstants[] = {
+        { "MODIFICATION", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "ADDITION", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "REMOVAL", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8MutationEventConstants, WTF_ARRAY_LENGTH(V8MutationEventConstants));
+    static_assert(1 == MutationEvent::kModification, "the value of MutationEvent_kModification does not match with implementation");
+    static_assert(2 == MutationEvent::kAddition, "the value of MutationEvent_kAddition does not match with implementation");
+    static_assert(3 == MutationEvent::kRemoval, "the value of MutationEvent_kRemoval does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MutationEventAccessors, WTF_ARRAY_LENGTH(V8MutationEventAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MutationEventMethods, WTF_ARRAY_LENGTH(V8MutationEventMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MutationEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MutationEventTemplate);
+v8::Local<v8::FunctionTemplate> V8MutationEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MutationEventTemplate);
 }
 
-bool V8MutationEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MutationEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MutationEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MutationEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MutationEvent* V8MutationEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MutationEvent* V8MutationEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

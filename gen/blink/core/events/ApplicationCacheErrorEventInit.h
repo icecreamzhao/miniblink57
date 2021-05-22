@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ApplicationCacheErrorEventInit_h
 #define ApplicationCacheErrorEventInit_h
 
@@ -20,42 +20,43 @@
 namespace blink {
 
 class CORE_EXPORT ApplicationCacheErrorEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ApplicationCacheErrorEventInit();
-  virtual ~ApplicationCacheErrorEventInit();
-  ApplicationCacheErrorEventInit(const ApplicationCacheErrorEventInit&);
-  ApplicationCacheErrorEventInit& operator=(const ApplicationCacheErrorEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMessage() const;
-  String message() const;
-  void setMessage(String);
+public:
+    ApplicationCacheErrorEventInit();
+    virtual ~ApplicationCacheErrorEventInit();
+    ApplicationCacheErrorEventInit(const ApplicationCacheErrorEventInit&);
+    ApplicationCacheErrorEventInit& operator=(const ApplicationCacheErrorEventInit&);
 
-  bool hasReason() const;
-  String reason() const;
-  void setReason(String);
+    bool hasMessage() const;
+    String message() const;
+    void setMessage(String);
 
-  bool hasStatus() const;
-  unsigned status() const;
-  void setStatus(unsigned);
+    bool hasReason() const;
+    String reason() const;
+    void setReason(String);
 
-  bool hasURL() const;
-  String url() const;
-  void setURL(String);
+    bool hasStatus() const;
+    unsigned status() const;
+    void setStatus(unsigned);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasURL() const;
+    String url() const;
+    void setURL(String);
 
- private:
-  String m_message;
-  String m_reason;
-  bool m_hasStatus = false;
-  unsigned m_status;
-  String m_url;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ApplicationCacheErrorEventInit;
+private:
+    String m_message;
+    String m_reason;
+    bool m_hasStatus = false;
+    unsigned m_status;
+    String m_url;
+
+    friend class V8ApplicationCacheErrorEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ApplicationCacheErrorEventInit_h
+#endif // ApplicationCacheErrorEventInit_h

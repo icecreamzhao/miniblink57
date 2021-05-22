@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RTCSessionDescription.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,186 +51,203 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&RTCSessionDescription::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "RTCSessionDescription is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace RTCSessionDescriptionV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(holder);
+        RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->type(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCSessionDescription_Type_AttributeGetter);
+    MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCSessionDescription_Type_AttributeGetter);
 
-  RTCSessionDescriptionV8Internal::typeAttributeGetter(info);
-}
+        RTCSessionDescriptionV8Internal::typeAttributeGetter(info);
+    }
 
-static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(holder);
+    static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "RTCSessionDescription", "type");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "RTCSessionDescription", "type");
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "offer",
-      "pranswer",
-      "answer",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "RTCSdpType", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "offer",
+            "pranswer",
+            "answer",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "RTCSdpType", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
 
-  impl->setType(cppValue);
-}
+        impl->setType(cppValue);
+    }
 
-MODULES_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCSessionDescription_Type_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCSessionDescription_Type_AttributeSetter);
 
-  RTCSessionDescriptionV8Internal::typeAttributeSetter(v8Value, info);
-}
+        RTCSessionDescriptionV8Internal::typeAttributeSetter(v8Value, info);
+    }
 
-static void sdpAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sdpAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(holder);
+        RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->sdp(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->sdp(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void sdpAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCSessionDescription_Sdp_AttributeGetter);
+    MODULES_EXPORT void sdpAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCSessionDescription_Sdp_AttributeGetter);
 
-  RTCSessionDescriptionV8Internal::sdpAttributeGetter(info);
-}
+        RTCSessionDescriptionV8Internal::sdpAttributeGetter(info);
+    }
 
-static void sdpAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(holder);
+    static void sdpAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setSdp(cppValue);
-}
+        impl->setSdp(cppValue);
+    }
 
-MODULES_EXPORT void sdpAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void sdpAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCSessionDescription_Sdp_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCSessionDescription_Sdp_AttributeSetter);
 
-  RTCSessionDescriptionV8Internal::sdpAttributeSetter(v8Value, info);
-}
+        RTCSessionDescriptionV8Internal::sdpAttributeSetter(v8Value, info);
+    }
 
-static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(info.Holder());
+    static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCSessionDescription* impl = V8RTCSessionDescription::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue result = impl->toJSONForBinding(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->toJSONForBinding(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCSessionDescriptionV8Internal::toJSONMethod(info);
-}
+    MODULES_EXPORT void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCSessionDescriptionV8Internal::toJSONMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "RTCSessionDescription");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "RTCSessionDescription");
 
-  RTCSessionDescriptionInit descriptionInitDict;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('descriptionInitDict') is not an object.");
+        RTCSessionDescriptionInit descriptionInitDict;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('descriptionInitDict') is not an object.");
 
-    return;
-  }
-  V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], descriptionInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], descriptionInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  RTCSessionDescription* impl = RTCSessionDescription::create(executionContext, descriptionInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8RTCSessionDescription::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        RTCSessionDescription* impl = RTCSessionDescription::create(executionContext, descriptionInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8RTCSessionDescription::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace RTCSessionDescriptionV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8RTCSessionDescriptionAccessors[] = {
-    {"type", RTCSessionDescriptionV8Internal::typeAttributeGetterCallback, RTCSessionDescriptionV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sdp", RTCSessionDescriptionV8Internal::sdpAttributeGetterCallback, RTCSessionDescriptionV8Internal::sdpAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", RTCSessionDescriptionV8Internal::typeAttributeGetterCallback, RTCSessionDescriptionV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sdp", RTCSessionDescriptionV8Internal::sdpAttributeGetterCallback, RTCSessionDescriptionV8Internal::sdpAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8RTCSessionDescriptionMethods[] = {
-    {"toJSON", RTCSessionDescriptionV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "toJSON", RTCSessionDescriptionV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8RTCSessionDescription::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("RTCSessionDescription"));
-    return;
-  }
+void V8RTCSessionDescription::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("RTCSessionDescription"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  RTCSessionDescriptionV8Internal::constructor(info);
+    RTCSessionDescriptionV8Internal::constructor(info);
 }
 
-static void installV8RTCSessionDescriptionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCSessionDescription::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8RTCSessionDescription::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8RTCSessionDescription::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8RTCSessionDescriptionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCSessionDescription::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8RTCSessionDescription::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8RTCSessionDescription::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCSessionDescriptionAccessors, WTF_ARRAY_LENGTH(V8RTCSessionDescriptionAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCSessionDescriptionMethods, WTF_ARRAY_LENGTH(V8RTCSessionDescriptionMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCSessionDescriptionAccessors, WTF_ARRAY_LENGTH(V8RTCSessionDescriptionAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCSessionDescriptionMethods, WTF_ARRAY_LENGTH(V8RTCSessionDescriptionMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8RTCSessionDescription::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCSessionDescriptionTemplate);
+v8::Local<v8::FunctionTemplate> V8RTCSessionDescription::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCSessionDescriptionTemplate);
 }
 
-bool V8RTCSessionDescription::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8RTCSessionDescription::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8RTCSessionDescription::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8RTCSessionDescription::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-RTCSessionDescription* V8RTCSessionDescription::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+RTCSessionDescription* V8RTCSessionDescription::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

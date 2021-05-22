@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8DedicatedWorkerGlobalScope_h
 #define V8DedicatedWorkerGlobalScope_h
 
@@ -25,38 +25,42 @@
 namespace blink {
 
 class V8DedicatedWorkerGlobalScope {
-  STATIC_ONLY(V8DedicatedWorkerGlobalScope);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static DedicatedWorkerGlobalScope* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<DedicatedWorkerGlobalScope>();
-  }
-  CORE_EXPORT static DedicatedWorkerGlobalScope* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<DedicatedWorkerGlobalScope>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<DedicatedWorkerGlobalScope>());
-  }
-  static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
-  CORE_EXPORT static void preparePrototypeAndInterfaceObject(v8::Local<v8::Context>, const DOMWrapperWorld&, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {}
-  CORE_EXPORT static void updateWrapperTypeInfo(InstallTemplateFunction, PreparePrototypeAndInterfaceObjectFunction);
-  CORE_EXPORT static void installV8DedicatedWorkerGlobalScopeTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+    STATIC_ONLY(V8DedicatedWorkerGlobalScope);
 
- private:
-  static InstallTemplateFunction installV8DedicatedWorkerGlobalScopeTemplateFunction;
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static DedicatedWorkerGlobalScope* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<DedicatedWorkerGlobalScope>();
+    }
+    CORE_EXPORT static DedicatedWorkerGlobalScope* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<DedicatedWorkerGlobalScope>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<DedicatedWorkerGlobalScope>());
+    }
+    static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
+    CORE_EXPORT static void preparePrototypeAndInterfaceObject(v8::Local<v8::Context>, const DOMWrapperWorld&, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) { }
+    CORE_EXPORT static void updateWrapperTypeInfo(InstallTemplateFunction, PreparePrototypeAndInterfaceObjectFunction);
+    CORE_EXPORT static void installV8DedicatedWorkerGlobalScopeTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+
+private:
+    static InstallTemplateFunction installV8DedicatedWorkerGlobalScopeTemplateFunction;
 };
 
 template <>
 struct V8TypeOf<DedicatedWorkerGlobalScope> {
-  typedef V8DedicatedWorkerGlobalScope Type;
+    typedef V8DedicatedWorkerGlobalScope Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8DedicatedWorkerGlobalScope_h
+#endif // V8DedicatedWorkerGlobalScope_h

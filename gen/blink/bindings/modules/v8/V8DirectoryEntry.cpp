@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DirectoryEntry.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,208 +50,221 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DirectoryEntry::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DirectoryEntry is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DirectoryEntryV8Internal {
 
-static void createReaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntry* impl = V8DirectoryEntry::toImpl(info.Holder());
+    static void createReaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntry* impl = V8DirectoryEntry::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->createReader());
-}
-
-MODULES_EXPORT  void createReaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntryV8Internal::createReaderMethod(info);
-}
-
-static void getFileMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntry", "getFile");
-
-  DirectoryEntry* impl = V8DirectoryEntry::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<TreatNullAndUndefinedAsNullString> path;
-  FileSystemFlags options;
-  EntryCallback* successCallback;
-  ErrorCallback* errorCallback;
-  path = info[0];
-  if (!path.prepare())
-    return;
-
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
-
-    return;
-  }
-  V8FileSystemFlags::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-      return;
+        v8SetReturnValue(info, impl->createReader());
     }
-    successCallback = V8EntryCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    successCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[3])) {
-    if (!info[3]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
-
-      return;
+    MODULES_EXPORT void createReaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntryV8Internal::createReaderMethod(info);
     }
-    errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  impl->getFile(path, options, successCallback, errorCallback);
-}
+    static void getFileMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntry", "getFile");
 
-MODULES_EXPORT  void getFileMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntryV8Internal::getFileMethod(info);
-}
+        DirectoryEntry* impl = V8DirectoryEntry::toImpl(info.Holder());
 
-static void getDirectoryMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntry", "getDirectory");
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  DirectoryEntry* impl = V8DirectoryEntry::toImpl(info.Holder());
+        V8StringResource<TreatNullAndUndefinedAsNullString> path;
+        FileSystemFlags options;
+        EntryCallback* successCallback;
+        ErrorCallback* errorCallback;
+        path = info[0];
+        if (!path.prepare())
+            return;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> path;
-  FileSystemFlags options;
-  EntryCallback* successCallback;
-  ErrorCallback* errorCallback;
-  path = info[0];
-  if (!path.prepare())
-    return;
+            return;
+        }
+        V8FileSystemFlags::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
 
-    return;
-  }
-  V8FileSystemFlags::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+                return;
+            }
+            successCallback = V8EntryCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            successCallback = nullptr;
+        }
 
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+        if (!isUndefinedOrNull(info[3])) {
+            if (!info[3]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
 
-      return;
+                return;
+            }
+            errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        impl->getFile(path, options, successCallback, errorCallback);
     }
-    successCallback = V8EntryCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    successCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[3])) {
-    if (!info[3]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
-
-      return;
+    MODULES_EXPORT void getFileMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntryV8Internal::getFileMethod(info);
     }
-    errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  impl->getDirectory(path, options, successCallback, errorCallback);
-}
+    static void getDirectoryMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntry", "getDirectory");
 
-MODULES_EXPORT  void getDirectoryMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntryV8Internal::getDirectoryMethod(info);
-}
+        DirectoryEntry* impl = V8DirectoryEntry::toImpl(info.Holder());
 
-static void removeRecursivelyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntry* impl = V8DirectoryEntry::toImpl(info.Holder());
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeRecursively", "DirectoryEntry", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        V8StringResource<TreatNullAndUndefinedAsNullString> path;
+        FileSystemFlags options;
+        EntryCallback* successCallback;
+        ErrorCallback* errorCallback;
+        path = info[0];
+        if (!path.prepare())
+            return;
 
-  VoidCallback* successCallback;
-  ErrorCallback* errorCallback;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeRecursively", "DirectoryEntry", "The callback provided as parameter 1 is not a function."));
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-    return;
-  }
-  successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+            return;
+        }
+        V8FileSystemFlags::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[1])) {
-    if (!info[1]->IsFunction()) {
-      V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeRecursively", "DirectoryEntry", "The callback provided as parameter 2 is not a function."));
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
 
-      return;
+                return;
+            }
+            successCallback = V8EntryCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            successCallback = nullptr;
+        }
+
+        if (!isUndefinedOrNull(info[3])) {
+            if (!info[3]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
+
+                return;
+            }
+            errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        impl->getDirectory(path, options, successCallback, errorCallback);
     }
-    errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  impl->removeRecursively(successCallback, errorCallback);
-}
+    MODULES_EXPORT void getDirectoryMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntryV8Internal::getDirectoryMethod(info);
+    }
 
-MODULES_EXPORT  void removeRecursivelyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntryV8Internal::removeRecursivelyMethod(info);
-}
+    static void removeRecursivelyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntry* impl = V8DirectoryEntry::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeRecursively", "DirectoryEntry", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        VoidCallback* successCallback;
+        ErrorCallback* errorCallback;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeRecursively", "DirectoryEntry", "The callback provided as parameter 1 is not a function."));
+
+            return;
+        }
+        successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+
+        if (!isUndefinedOrNull(info[1])) {
+            if (!info[1]->IsFunction()) {
+                V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeRecursively", "DirectoryEntry", "The callback provided as parameter 2 is not a function."));
+
+                return;
+            }
+            errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        impl->removeRecursively(successCallback, errorCallback);
+    }
+
+    MODULES_EXPORT void removeRecursivelyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntryV8Internal::removeRecursivelyMethod(info);
+    }
 
 } // namespace DirectoryEntryV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8DirectoryEntryMethods[] = {
-    {"createReader", DirectoryEntryV8Internal::createReaderMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getFile", DirectoryEntryV8Internal::getFileMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getDirectory", DirectoryEntryV8Internal::getDirectoryMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeRecursively", DirectoryEntryV8Internal::removeRecursivelyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "createReader", DirectoryEntryV8Internal::createReaderMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getFile", DirectoryEntryV8Internal::getFileMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getDirectory", DirectoryEntryV8Internal::getDirectoryMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeRecursively", DirectoryEntryV8Internal::removeRecursivelyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8DirectoryEntryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DirectoryEntry::wrapperTypeInfo.interfaceName, V8Entry::domTemplate(isolate, world), V8DirectoryEntry::internalFieldCount);
+static void installV8DirectoryEntryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DirectoryEntry::wrapperTypeInfo.interfaceName, V8Entry::domTemplate(isolate, world), V8DirectoryEntry::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DirectoryEntryMethods, WTF_ARRAY_LENGTH(V8DirectoryEntryMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DirectoryEntryMethods, WTF_ARRAY_LENGTH(V8DirectoryEntryMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DirectoryEntry::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DirectoryEntryTemplate);
+v8::Local<v8::FunctionTemplate> V8DirectoryEntry::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DirectoryEntryTemplate);
 }
 
-bool V8DirectoryEntry::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DirectoryEntry::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DirectoryEntry::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DirectoryEntry::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DirectoryEntry* V8DirectoryEntry::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DirectoryEntry* V8DirectoryEntry::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

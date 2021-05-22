@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AudioTrack.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,154 +48,173 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&AudioTrack::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "AudioTrack is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace AudioTrackV8Internal {
 
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AudioTrack* impl = V8AudioTrack::toImpl(holder);
+        AudioTrack* impl = V8AudioTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->id(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->id(), info.GetIsolate());
+    }
 
-CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioTrackV8Internal::idAttributeGetter(info);
-}
+    CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioTrackV8Internal::idAttributeGetter(info);
+    }
 
-static void kindAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void kindAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AudioTrack* impl = V8AudioTrack::toImpl(holder);
+        AudioTrack* impl = V8AudioTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->kind(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->kind(), info.GetIsolate());
+    }
 
-CORE_EXPORT void kindAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioTrackV8Internal::kindAttributeGetter(info);
-}
+    CORE_EXPORT void kindAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioTrackV8Internal::kindAttributeGetter(info);
+    }
 
-static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AudioTrack* impl = V8AudioTrack::toImpl(holder);
+        AudioTrack* impl = V8AudioTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->label(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->label(), info.GetIsolate());
+    }
 
-CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioTrackV8Internal::labelAttributeGetter(info);
-}
+    CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioTrackV8Internal::labelAttributeGetter(info);
+    }
 
-static void languageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void languageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AudioTrack* impl = V8AudioTrack::toImpl(holder);
+        AudioTrack* impl = V8AudioTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->language(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->language(), info.GetIsolate());
+    }
 
-CORE_EXPORT void languageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioTrackV8Internal::languageAttributeGetter(info);
-}
+    CORE_EXPORT void languageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioTrackV8Internal::languageAttributeGetter(info);
+    }
 
-static void enabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void enabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AudioTrack* impl = V8AudioTrack::toImpl(holder);
+        AudioTrack* impl = V8AudioTrack::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->enabled());
-}
+        v8SetReturnValueBool(info, impl->enabled());
+    }
 
-CORE_EXPORT void enabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioTrackV8Internal::enabledAttributeGetter(info);
-}
+    CORE_EXPORT void enabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioTrackV8Internal::enabledAttributeGetter(info);
+    }
 
-static void enabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  AudioTrack* impl = V8AudioTrack::toImpl(holder);
+    static void enabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        AudioTrack* impl = V8AudioTrack::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioTrack", "enabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioTrack", "enabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setEnabled(cppValue);
-}
+        impl->setEnabled(cppValue);
+    }
 
-CORE_EXPORT void enabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void enabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  AudioTrackV8Internal::enabledAttributeSetter(v8Value, info);
-}
+        AudioTrackV8Internal::enabledAttributeSetter(v8Value, info);
+    }
 
 } // namespace AudioTrackV8Internal
 
-void V8AudioTrack::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  AudioTrack* impl = scriptWrappable->toImpl<AudioTrack>();
-  // The owner() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->owner())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8AudioTrack::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    AudioTrack* impl = scriptWrappable->toImpl<AudioTrack>();
+    // The owner() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->owner())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8AudioTrackAccessors[] = {
-    {"id", AudioTrackV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"kind", AudioTrackV8Internal::kindAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"label", AudioTrackV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"language", AudioTrackV8Internal::languageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"enabled", AudioTrackV8Internal::enabledAttributeGetterCallback, AudioTrackV8Internal::enabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "id", AudioTrackV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "kind", AudioTrackV8Internal::kindAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "label", AudioTrackV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "language", AudioTrackV8Internal::languageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "enabled", AudioTrackV8Internal::enabledAttributeGetterCallback, AudioTrackV8Internal::enabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8AudioTrack::installV8AudioTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AudioTrack::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8AudioTrack::internalFieldCount);
+void V8AudioTrack::installV8AudioTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AudioTrack::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8AudioTrack::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioTrackAccessors, WTF_ARRAY_LENGTH(V8AudioTrackAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioTrackAccessors, WTF_ARRAY_LENGTH(V8AudioTrackAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8AudioTrack::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8AudioTrack::installV8AudioTrackTemplateFunction);
+v8::Local<v8::FunctionTemplate> V8AudioTrack::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), V8AudioTrack::installV8AudioTrackTemplateFunction);
 }
 
-bool V8AudioTrack::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8AudioTrack::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8AudioTrack::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8AudioTrack::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-AudioTrack* V8AudioTrack::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+AudioTrack* V8AudioTrack::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
 InstallTemplateFunction V8AudioTrack::installV8AudioTrackTemplateFunction = (InstallTemplateFunction)&V8AudioTrack::installV8AudioTrackTemplate;
 
-void V8AudioTrack::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction) {
-  V8AudioTrack::installV8AudioTrackTemplateFunction = installTemplateFunction;
-  if (preparePrototypeAndInterfaceObjectFunction)
-    V8AudioTrack::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
+void V8AudioTrack::updateWrapperTypeInfo(InstallTemplateFunction installTemplateFunction, PreparePrototypeAndInterfaceObjectFunction preparePrototypeAndInterfaceObjectFunction)
+{
+    V8AudioTrack::installV8AudioTrackTemplateFunction = installTemplateFunction;
+    if (preparePrototypeAndInterfaceObjectFunction)
+        V8AudioTrack::wrapperTypeInfo.preparePrototypeAndInterfaceObjectFunction = preparePrototypeAndInterfaceObjectFunction;
 }
 
-}  // namespace blink
+} // namespace blink

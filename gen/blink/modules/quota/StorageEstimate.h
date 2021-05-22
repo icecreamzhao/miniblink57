@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef StorageEstimate_h
 #define StorageEstimate_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT StorageEstimate : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  StorageEstimate();
-  virtual ~StorageEstimate();
-  StorageEstimate(const StorageEstimate&);
-  StorageEstimate& operator=(const StorageEstimate&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasQuota() const;
-  unsigned long long quota() const;
-  void setQuota(unsigned long long);
+public:
+    StorageEstimate();
+    virtual ~StorageEstimate();
+    StorageEstimate(const StorageEstimate&);
+    StorageEstimate& operator=(const StorageEstimate&);
 
-  bool hasUsage() const;
-  unsigned long long usage() const;
-  void setUsage(unsigned long long);
+    bool hasQuota() const;
+    unsigned long long quota() const;
+    void setQuota(unsigned long long);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasUsage() const;
+    unsigned long long usage() const;
+    void setUsage(unsigned long long);
 
- private:
-  bool m_hasQuota = false;
-  unsigned long long m_quota;
-  bool m_hasUsage = false;
-  unsigned long long m_usage;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8StorageEstimate;
+private:
+    bool m_hasQuota = false;
+    unsigned long long m_quota;
+    bool m_hasUsage = false;
+    unsigned long long m_usage;
+
+    friend class V8StorageEstimate;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // StorageEstimate_h
+#endif // StorageEstimate_h

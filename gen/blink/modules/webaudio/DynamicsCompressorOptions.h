@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DynamicsCompressorOptions_h
 #define DynamicsCompressorOptions_h
 
@@ -19,51 +19,52 @@
 namespace blink {
 
 class MODULES_EXPORT DynamicsCompressorOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DynamicsCompressorOptions();
-  virtual ~DynamicsCompressorOptions();
-  DynamicsCompressorOptions(const DynamicsCompressorOptions&);
-  DynamicsCompressorOptions& operator=(const DynamicsCompressorOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAttack() const;
-  float attack() const;
-  void setAttack(float);
+public:
+    DynamicsCompressorOptions();
+    virtual ~DynamicsCompressorOptions();
+    DynamicsCompressorOptions(const DynamicsCompressorOptions&);
+    DynamicsCompressorOptions& operator=(const DynamicsCompressorOptions&);
 
-  bool hasKnee() const;
-  float knee() const;
-  void setKnee(float);
+    bool hasAttack() const;
+    float attack() const;
+    void setAttack(float);
 
-  bool hasRatio() const;
-  float ratio() const;
-  void setRatio(float);
+    bool hasKnee() const;
+    float knee() const;
+    void setKnee(float);
 
-  bool hasRelease() const;
-  float release() const;
-  void setRelease(float);
+    bool hasRatio() const;
+    float ratio() const;
+    void setRatio(float);
 
-  bool hasThreshold() const;
-  float threshold() const;
-  void setThreshold(float);
+    bool hasRelease() const;
+    float release() const;
+    void setRelease(float);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasThreshold() const;
+    float threshold() const;
+    void setThreshold(float);
 
- private:
-  bool m_hasAttack = false;
-  float m_attack;
-  bool m_hasKnee = false;
-  float m_knee;
-  bool m_hasRatio = false;
-  float m_ratio;
-  bool m_hasRelease = false;
-  float m_release;
-  bool m_hasThreshold = false;
-  float m_threshold;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8DynamicsCompressorOptions;
+private:
+    bool m_hasAttack = false;
+    float m_attack;
+    bool m_hasKnee = false;
+    float m_knee;
+    bool m_hasRatio = false;
+    float m_ratio;
+    bool m_hasRelease = false;
+    float m_release;
+    bool m_hasThreshold = false;
+    float m_threshold;
+
+    friend class V8DynamicsCompressorOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // DynamicsCompressorOptions_h
+#endif // DynamicsCompressorOptions_h

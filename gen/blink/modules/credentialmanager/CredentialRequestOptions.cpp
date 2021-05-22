@@ -8,59 +8,70 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "CredentialRequestOptions.h"
 
 namespace blink {
 
-CredentialRequestOptions::CredentialRequestOptions() {
-  setPassword(false);
-  setUnmediated(false);
+CredentialRequestOptions::CredentialRequestOptions()
+{
+    setPassword(false);
+    setUnmediated(false);
 }
 
-CredentialRequestOptions::~CredentialRequestOptions() {}
+CredentialRequestOptions::~CredentialRequestOptions() { }
 
 CredentialRequestOptions::CredentialRequestOptions(const CredentialRequestOptions&) = default;
 
 CredentialRequestOptions& CredentialRequestOptions::operator=(const CredentialRequestOptions&) = default;
 
-bool CredentialRequestOptions::hasFederated() const {
-  return m_hasFederated;
+bool CredentialRequestOptions::hasFederated() const
+{
+    return m_hasFederated;
 }
-const FederatedCredentialRequestOptions& CredentialRequestOptions::federated() const {
-  DCHECK(m_hasFederated);
-  return m_federated;
+const FederatedCredentialRequestOptions& CredentialRequestOptions::federated() const
+{
+    DCHECK(m_hasFederated);
+    return m_federated;
 }
-void CredentialRequestOptions::setFederated(const FederatedCredentialRequestOptions& value) {
-  m_federated = value;
-  m_hasFederated = true;
+void CredentialRequestOptions::setFederated(const FederatedCredentialRequestOptions& value)
+{
+    m_federated = value;
+    m_hasFederated = true;
 }
-bool CredentialRequestOptions::hasPassword() const {
-  return m_hasPassword;
+bool CredentialRequestOptions::hasPassword() const
+{
+    return m_hasPassword;
 }
-bool CredentialRequestOptions::password() const {
-  DCHECK(m_hasPassword);
-  return m_password;
+bool CredentialRequestOptions::password() const
+{
+    DCHECK(m_hasPassword);
+    return m_password;
 }
-void CredentialRequestOptions::setPassword(bool value) {
-  m_password = value;
-  m_hasPassword = true;
+void CredentialRequestOptions::setPassword(bool value)
+{
+    m_password = value;
+    m_hasPassword = true;
 }
-bool CredentialRequestOptions::hasUnmediated() const {
-  return m_hasUnmediated;
+bool CredentialRequestOptions::hasUnmediated() const
+{
+    return m_hasUnmediated;
 }
-bool CredentialRequestOptions::unmediated() const {
-  DCHECK(m_hasUnmediated);
-  return m_unmediated;
+bool CredentialRequestOptions::unmediated() const
+{
+    DCHECK(m_hasUnmediated);
+    return m_unmediated;
 }
-void CredentialRequestOptions::setUnmediated(bool value) {
-  m_unmediated = value;
-  m_hasUnmediated = true;
+void CredentialRequestOptions::setUnmediated(bool value)
+{
+    m_unmediated = value;
+    m_hasUnmediated = true;
 }
 
-DEFINE_TRACE(CredentialRequestOptions) {
-  visitor->trace(m_federated);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(CredentialRequestOptions)
+{
+    visitor->trace(m_federated);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

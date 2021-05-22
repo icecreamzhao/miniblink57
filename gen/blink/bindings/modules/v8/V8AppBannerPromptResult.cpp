@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AppBannerPromptResult.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,73 +46,82 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&AppBannerPromptResult::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "AppBannerPromptResult is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace AppBannerPromptResultV8Internal {
 
-static void platformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void platformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AppBannerPromptResult* impl = V8AppBannerPromptResult::toImpl(holder);
+        AppBannerPromptResult* impl = V8AppBannerPromptResult::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->platform(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->platform(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void platformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AppBannerPromptResultV8Internal::platformAttributeGetter(info);
-}
+    MODULES_EXPORT void platformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AppBannerPromptResultV8Internal::platformAttributeGetter(info);
+    }
 
-static void outcomeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void outcomeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AppBannerPromptResult* impl = V8AppBannerPromptResult::toImpl(holder);
+        AppBannerPromptResult* impl = V8AppBannerPromptResult::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->outcome(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->outcome(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void outcomeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AppBannerPromptResultV8Internal::outcomeAttributeGetter(info);
-}
+    MODULES_EXPORT void outcomeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AppBannerPromptResultV8Internal::outcomeAttributeGetter(info);
+    }
 
 } // namespace AppBannerPromptResultV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8AppBannerPromptResultAccessors[] = {
-    {"platform", AppBannerPromptResultV8Internal::platformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"outcome", AppBannerPromptResultV8Internal::outcomeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "platform", AppBannerPromptResultV8Internal::platformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "outcome", AppBannerPromptResultV8Internal::outcomeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8AppBannerPromptResultTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AppBannerPromptResult::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8AppBannerPromptResult::internalFieldCount);
+static void installV8AppBannerPromptResultTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AppBannerPromptResult::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8AppBannerPromptResult::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AppBannerPromptResultAccessors, WTF_ARRAY_LENGTH(V8AppBannerPromptResultAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AppBannerPromptResultAccessors, WTF_ARRAY_LENGTH(V8AppBannerPromptResultAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8AppBannerPromptResult::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AppBannerPromptResultTemplate);
+v8::Local<v8::FunctionTemplate> V8AppBannerPromptResult::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AppBannerPromptResultTemplate);
 }
 
-bool V8AppBannerPromptResult::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8AppBannerPromptResult::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8AppBannerPromptResult::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8AppBannerPromptResult::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-AppBannerPromptResult* V8AppBannerPromptResult::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+AppBannerPromptResult* V8AppBannerPromptResult::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

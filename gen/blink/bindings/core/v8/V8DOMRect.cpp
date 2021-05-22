@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DOMRect.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,270 +49,295 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMRect::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMRect is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DOMRectV8Internal {
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRect* impl = V8DOMRect::toImpl(holder);
+        DOMRect* impl = V8DOMRect::toImpl(holder);
 
-  v8SetReturnValue(info, impl->x());
-}
+        v8SetReturnValue(info, impl->x());
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectV8Internal::xAttributeGetter(info);
-}
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectV8Internal::xAttributeGetter(info);
+    }
 
-static void xAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMRect* impl = V8DOMRect::toImpl(holder);
+    static void xAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMRect* impl = V8DOMRect::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMRect", "x");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMRect", "x");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setX(cppValue);
-}
+        impl->setX(cppValue);
+    }
 
-CORE_EXPORT void xAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void xAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMRectV8Internal::xAttributeSetter(v8Value, info);
-}
+        DOMRectV8Internal::xAttributeSetter(v8Value, info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRect* impl = V8DOMRect::toImpl(holder);
+        DOMRect* impl = V8DOMRect::toImpl(holder);
 
-  v8SetReturnValue(info, impl->y());
-}
+        v8SetReturnValue(info, impl->y());
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectV8Internal::yAttributeGetter(info);
-}
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectV8Internal::yAttributeGetter(info);
+    }
 
-static void yAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMRect* impl = V8DOMRect::toImpl(holder);
+    static void yAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMRect* impl = V8DOMRect::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMRect", "y");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMRect", "y");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setY(cppValue);
-}
+        impl->setY(cppValue);
+    }
 
-CORE_EXPORT void yAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void yAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMRectV8Internal::yAttributeSetter(v8Value, info);
-}
+        DOMRectV8Internal::yAttributeSetter(v8Value, info);
+    }
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRect* impl = V8DOMRect::toImpl(holder);
+        DOMRect* impl = V8DOMRect::toImpl(holder);
 
-  v8SetReturnValue(info, impl->width());
-}
+        v8SetReturnValue(info, impl->width());
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectV8Internal::widthAttributeGetter(info);
-}
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectV8Internal::widthAttributeGetter(info);
+    }
 
-static void widthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMRect* impl = V8DOMRect::toImpl(holder);
+    static void widthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMRect* impl = V8DOMRect::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMRect", "width");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMRect", "width");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setWidth(cppValue);
-}
+        impl->setWidth(cppValue);
+    }
 
-CORE_EXPORT void widthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void widthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMRectV8Internal::widthAttributeSetter(v8Value, info);
-}
+        DOMRectV8Internal::widthAttributeSetter(v8Value, info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRect* impl = V8DOMRect::toImpl(holder);
+        DOMRect* impl = V8DOMRect::toImpl(holder);
 
-  v8SetReturnValue(info, impl->height());
-}
+        v8SetReturnValue(info, impl->height());
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectV8Internal::heightAttributeGetter(info);
-}
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectV8Internal::heightAttributeGetter(info);
+    }
 
-static void heightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMRect* impl = V8DOMRect::toImpl(holder);
+    static void heightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMRect* impl = V8DOMRect::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMRect", "height");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMRect", "height");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setHeight(cppValue);
-}
+        impl->setHeight(cppValue);
+    }
 
-CORE_EXPORT void heightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void heightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMRectV8Internal::heightAttributeSetter(v8Value, info);
-}
+        DOMRectV8Internal::heightAttributeSetter(v8Value, info);
+    }
 
-static void fromRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMRect", "fromRect");
+    static void fromRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMRect", "fromRect");
 
-  DOMRectInit other;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
+        DOMRectInit other;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
 
-    return;
-  }
-  V8DOMRectInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8DOMRectInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  DOMRect* result = DOMRect::fromRect(other);
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
-}
+        DOMRect* result = DOMRect::fromRect(other);
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
+    }
 
-CORE_EXPORT  void fromRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectV8Internal::fromRectMethod(info);
-}
+    CORE_EXPORT void fromRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectV8Internal::fromRectMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMRect");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMRect");
 
-  double x;
-  double y;
-  double width;
-  double height;
-  if (!info[0]->IsUndefined()) {
-    x = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    x = 0;
-  }
-  if (!info[1]->IsUndefined()) {
-    y = toDouble(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    y = 0;
-  }
-  if (!info[2]->IsUndefined()) {
-    width = toDouble(info.GetIsolate(), info[2], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    width = 0;
-  }
-  if (!info[3]->IsUndefined()) {
-    height = toDouble(info.GetIsolate(), info[3], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    height = 0;
-  }
+        double x;
+        double y;
+        double width;
+        double height;
+        if (!info[0]->IsUndefined()) {
+            x = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            x = 0;
+        }
+        if (!info[1]->IsUndefined()) {
+            y = toDouble(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            y = 0;
+        }
+        if (!info[2]->IsUndefined()) {
+            width = toDouble(info.GetIsolate(), info[2], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            width = 0;
+        }
+        if (!info[3]->IsUndefined()) {
+            height = toDouble(info.GetIsolate(), info[3], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            height = 0;
+        }
 
-  DOMRect* impl = DOMRect::create(x, y, width, height);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMRect::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        DOMRect* impl = DOMRect::create(x, y, width, height);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMRect::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace DOMRectV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8DOMRectAccessors[] = {
-    {"x", DOMRectV8Internal::xAttributeGetterCallback, DOMRectV8Internal::xAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", DOMRectV8Internal::yAttributeGetterCallback, DOMRectV8Internal::yAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", DOMRectV8Internal::widthAttributeGetterCallback, DOMRectV8Internal::widthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", DOMRectV8Internal::heightAttributeGetterCallback, DOMRectV8Internal::heightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "x", DOMRectV8Internal::xAttributeGetterCallback, DOMRectV8Internal::xAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", DOMRectV8Internal::yAttributeGetterCallback, DOMRectV8Internal::yAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", DOMRectV8Internal::widthAttributeGetterCallback, DOMRectV8Internal::widthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", DOMRectV8Internal::heightAttributeGetterCallback, DOMRectV8Internal::heightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8DOMRectMethods[] = {
-    {"fromRect", DOMRectV8Internal::fromRectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
+    { "fromRect", DOMRectV8Internal::fromRectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
 };
 
-void V8DOMRect::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMRect"));
-    return;
-  }
+void V8DOMRect::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMRect"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  DOMRectV8Internal::constructor(info);
+    DOMRectV8Internal::constructor(info);
 }
 
-static void installV8DOMRectTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMRect::wrapperTypeInfo.interfaceName, V8DOMRectReadOnly::domTemplate(isolate, world), V8DOMRect::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8DOMRect::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8DOMRectTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMRect::wrapperTypeInfo.interfaceName, V8DOMRectReadOnly::domTemplate(isolate, world), V8DOMRect::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8DOMRect::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  if (!RuntimeEnabledFeatures::geometryInterfacesEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::geometryInterfacesEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMRectAccessors, WTF_ARRAY_LENGTH(V8DOMRectAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMRectMethods, WTF_ARRAY_LENGTH(V8DOMRectMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMRectAccessors, WTF_ARRAY_LENGTH(V8DOMRectAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMRectMethods, WTF_ARRAY_LENGTH(V8DOMRectMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DOMRect::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMRectTemplate);
+v8::Local<v8::FunctionTemplate> V8DOMRect::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMRectTemplate);
 }
 
-bool V8DOMRect::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DOMRect::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DOMRect::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DOMRect::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DOMRect* V8DOMRect::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMRect* V8DOMRect::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

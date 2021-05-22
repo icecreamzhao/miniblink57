@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ConstrainLongRange_h
 #define V8ConstrainLongRange_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ConstrainLongRange {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstrainLongRange&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstrainLongRange&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ConstrainLongRange(const ConstrainLongRange&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstrainLongRange& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstrainLongRange& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ConstrainLongRange> {
-  static ConstrainLongRange nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ConstrainLongRange nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ConstrainLongRange> {
-  typedef V8ConstrainLongRange Type;
+    typedef V8ConstrainLongRange Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ConstrainLongRange_h
+#endif // V8ConstrainLongRange_h

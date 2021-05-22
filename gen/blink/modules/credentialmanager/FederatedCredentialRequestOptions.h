@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FederatedCredentialRequestOptions_h
 #define FederatedCredentialRequestOptions_h
 
@@ -21,33 +21,34 @@
 namespace blink {
 
 class MODULES_EXPORT FederatedCredentialRequestOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FederatedCredentialRequestOptions();
-  virtual ~FederatedCredentialRequestOptions();
-  FederatedCredentialRequestOptions(const FederatedCredentialRequestOptions&);
-  FederatedCredentialRequestOptions& operator=(const FederatedCredentialRequestOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasProtocols() const;
-  const Vector<String>& protocols() const;
-  void setProtocols(const Vector<String>&);
+public:
+    FederatedCredentialRequestOptions();
+    virtual ~FederatedCredentialRequestOptions();
+    FederatedCredentialRequestOptions(const FederatedCredentialRequestOptions&);
+    FederatedCredentialRequestOptions& operator=(const FederatedCredentialRequestOptions&);
 
-  bool hasProviders() const;
-  const Vector<String>& providers() const;
-  void setProviders(const Vector<String>&);
+    bool hasProtocols() const;
+    const Vector<String>& protocols() const;
+    void setProtocols(const Vector<String>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasProviders() const;
+    const Vector<String>& providers() const;
+    void setProviders(const Vector<String>&);
 
- private:
-  bool m_hasProtocols = false;
-  Vector<String> m_protocols;
-  bool m_hasProviders = false;
-  Vector<String> m_providers;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8FederatedCredentialRequestOptions;
+private:
+    bool m_hasProtocols = false;
+    Vector<String> m_protocols;
+    bool m_hasProviders = false;
+    Vector<String> m_providers;
+
+    friend class V8FederatedCredentialRequestOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // FederatedCredentialRequestOptions_h
+#endif // FederatedCredentialRequestOptions_h

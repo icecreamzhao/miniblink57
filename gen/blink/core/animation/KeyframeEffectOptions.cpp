@@ -8,33 +8,38 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "KeyframeEffectOptions.h"
 
 namespace blink {
 
-KeyframeEffectOptions::KeyframeEffectOptions() {
-  setId(String(""));
+KeyframeEffectOptions::KeyframeEffectOptions()
+{
+    setId(String(""));
 }
 
-KeyframeEffectOptions::~KeyframeEffectOptions() {}
+KeyframeEffectOptions::~KeyframeEffectOptions() { }
 
 KeyframeEffectOptions::KeyframeEffectOptions(const KeyframeEffectOptions&) = default;
 
 KeyframeEffectOptions& KeyframeEffectOptions::operator=(const KeyframeEffectOptions&) = default;
 
-bool KeyframeEffectOptions::hasId() const {
-  return !m_id.isNull();
+bool KeyframeEffectOptions::hasId() const
+{
+    return !m_id.isNull();
 }
-String KeyframeEffectOptions::id() const {
-  return m_id;
+String KeyframeEffectOptions::id() const
+{
+    return m_id;
 }
-void KeyframeEffectOptions::setId(String value) {
-  m_id = value;
+void KeyframeEffectOptions::setId(String value)
+{
+    m_id = value;
 }
 
-DEFINE_TRACE(KeyframeEffectOptions) {
-  AnimationEffectTimingProperties::trace(visitor);
+DEFINE_TRACE(KeyframeEffectOptions)
+{
+    AnimationEffectTimingProperties::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

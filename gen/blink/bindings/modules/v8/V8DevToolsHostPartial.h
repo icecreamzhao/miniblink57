@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8DevToolsHostPartial_h
 #define V8DevToolsHostPartial_h
 
@@ -23,16 +23,17 @@
 namespace blink {
 
 class V8DevToolsHostPartial {
-  STATIC_ONLY(V8DevToolsHostPartial);
- public:
-  static void initialize();
-  static void platformMethodCustom(const v8::FunctionCallbackInfo<v8::Value>&);
-  static void showContextMenuAtPointMethodCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+    STATIC_ONLY(V8DevToolsHostPartial);
 
- private:
-  static void installV8DevToolsHostTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+public:
+    static void initialize();
+    static void platformMethodCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+    static void showContextMenuAtPointMethodCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+
+private:
+    static void installV8DevToolsHostTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8DevToolsHostPartial_h
+#endif // V8DevToolsHostPartial_h

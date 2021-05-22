@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaTrackConstraintSet_h
 #define MediaTrackConstraintSet_h
 
@@ -30,97 +30,98 @@
 namespace blink {
 
 class MODULES_EXPORT MediaTrackConstraintSet : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaTrackConstraintSet();
-  virtual ~MediaTrackConstraintSet();
-  MediaTrackConstraintSet(const MediaTrackConstraintSet&);
-  MediaTrackConstraintSet& operator=(const MediaTrackConstraintSet&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAspectRatio() const;
-  const DoubleOrConstrainDoubleRange& aspectRatio() const;
-  void setAspectRatio(const DoubleOrConstrainDoubleRange&);
+public:
+    MediaTrackConstraintSet();
+    virtual ~MediaTrackConstraintSet();
+    MediaTrackConstraintSet(const MediaTrackConstraintSet&);
+    MediaTrackConstraintSet& operator=(const MediaTrackConstraintSet&);
 
-  bool hasChannelCount() const;
-  const LongOrConstrainLongRange& channelCount() const;
-  void setChannelCount(const LongOrConstrainLongRange&);
+    bool hasAspectRatio() const;
+    const DoubleOrConstrainDoubleRange& aspectRatio() const;
+    void setAspectRatio(const DoubleOrConstrainDoubleRange&);
 
-  bool hasDeviceId() const;
-  const StringOrStringSequenceOrConstrainDOMStringParameters& deviceId() const;
-  void setDeviceId(const StringOrStringSequenceOrConstrainDOMStringParameters&);
+    bool hasChannelCount() const;
+    const LongOrConstrainLongRange& channelCount() const;
+    void setChannelCount(const LongOrConstrainLongRange&);
 
-  bool hasEchoCancellation() const;
-  const BooleanOrConstrainBooleanParameters& echoCancellation() const;
-  void setEchoCancellation(const BooleanOrConstrainBooleanParameters&);
+    bool hasDeviceId() const;
+    const StringOrStringSequenceOrConstrainDOMStringParameters& deviceId() const;
+    void setDeviceId(const StringOrStringSequenceOrConstrainDOMStringParameters&);
 
-  bool hasFacingMode() const;
-  const StringOrStringSequenceOrConstrainDOMStringParameters& facingMode() const;
-  void setFacingMode(const StringOrStringSequenceOrConstrainDOMStringParameters&);
+    bool hasEchoCancellation() const;
+    const BooleanOrConstrainBooleanParameters& echoCancellation() const;
+    void setEchoCancellation(const BooleanOrConstrainBooleanParameters&);
 
-  bool hasFrameRate() const;
-  const DoubleOrConstrainDoubleRange& frameRate() const;
-  void setFrameRate(const DoubleOrConstrainDoubleRange&);
+    bool hasFacingMode() const;
+    const StringOrStringSequenceOrConstrainDOMStringParameters& facingMode() const;
+    void setFacingMode(const StringOrStringSequenceOrConstrainDOMStringParameters&);
 
-  bool hasGroupId() const;
-  const StringOrStringSequenceOrConstrainDOMStringParameters& groupId() const;
-  void setGroupId(const StringOrStringSequenceOrConstrainDOMStringParameters&);
+    bool hasFrameRate() const;
+    const DoubleOrConstrainDoubleRange& frameRate() const;
+    void setFrameRate(const DoubleOrConstrainDoubleRange&);
 
-  bool hasHeight() const;
-  const LongOrConstrainLongRange& height() const;
-  void setHeight(const LongOrConstrainLongRange&);
+    bool hasGroupId() const;
+    const StringOrStringSequenceOrConstrainDOMStringParameters& groupId() const;
+    void setGroupId(const StringOrStringSequenceOrConstrainDOMStringParameters&);
 
-  bool hasLatency() const;
-  const DoubleOrConstrainDoubleRange& latency() const;
-  void setLatency(const DoubleOrConstrainDoubleRange&);
+    bool hasHeight() const;
+    const LongOrConstrainLongRange& height() const;
+    void setHeight(const LongOrConstrainLongRange&);
 
-  bool hasMandatory() const;
-  Dictionary mandatory() const;
-  void setMandatory(Dictionary);
+    bool hasLatency() const;
+    const DoubleOrConstrainDoubleRange& latency() const;
+    void setLatency(const DoubleOrConstrainDoubleRange&);
 
-  bool hasOptional() const;
-  const Vector<Dictionary>& optional() const;
-  void setOptional(const Vector<Dictionary>&);
+    bool hasMandatory() const;
+    Dictionary mandatory() const;
+    void setMandatory(Dictionary);
 
-  bool hasSampleRate() const;
-  const LongOrConstrainLongRange& sampleRate() const;
-  void setSampleRate(const LongOrConstrainLongRange&);
+    bool hasOptional() const;
+    const Vector<Dictionary>& optional() const;
+    void setOptional(const Vector<Dictionary>&);
 
-  bool hasSampleSize() const;
-  const LongOrConstrainLongRange& sampleSize() const;
-  void setSampleSize(const LongOrConstrainLongRange&);
+    bool hasSampleRate() const;
+    const LongOrConstrainLongRange& sampleRate() const;
+    void setSampleRate(const LongOrConstrainLongRange&);
 
-  bool hasVolume() const;
-  const DoubleOrConstrainDoubleRange& volume() const;
-  void setVolume(const DoubleOrConstrainDoubleRange&);
+    bool hasSampleSize() const;
+    const LongOrConstrainLongRange& sampleSize() const;
+    void setSampleSize(const LongOrConstrainLongRange&);
 
-  bool hasWidth() const;
-  const LongOrConstrainLongRange& width() const;
-  void setWidth(const LongOrConstrainLongRange&);
+    bool hasVolume() const;
+    const DoubleOrConstrainDoubleRange& volume() const;
+    void setVolume(const DoubleOrConstrainDoubleRange&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasWidth() const;
+    const LongOrConstrainLongRange& width() const;
+    void setWidth(const LongOrConstrainLongRange&);
 
- private:
-  DoubleOrConstrainDoubleRange m_aspectRatio;
-  LongOrConstrainLongRange m_channelCount;
-  StringOrStringSequenceOrConstrainDOMStringParameters m_deviceId;
-  BooleanOrConstrainBooleanParameters m_echoCancellation;
-  StringOrStringSequenceOrConstrainDOMStringParameters m_facingMode;
-  DoubleOrConstrainDoubleRange m_frameRate;
-  StringOrStringSequenceOrConstrainDOMStringParameters m_groupId;
-  LongOrConstrainLongRange m_height;
-  DoubleOrConstrainDoubleRange m_latency;
-  Dictionary m_mandatory;
-  bool m_hasOptional = false;
-  Vector<Dictionary> m_optional;
-  LongOrConstrainLongRange m_sampleRate;
-  LongOrConstrainLongRange m_sampleSize;
-  DoubleOrConstrainDoubleRange m_volume;
-  LongOrConstrainLongRange m_width;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaTrackConstraintSet;
+private:
+    DoubleOrConstrainDoubleRange m_aspectRatio;
+    LongOrConstrainLongRange m_channelCount;
+    StringOrStringSequenceOrConstrainDOMStringParameters m_deviceId;
+    BooleanOrConstrainBooleanParameters m_echoCancellation;
+    StringOrStringSequenceOrConstrainDOMStringParameters m_facingMode;
+    DoubleOrConstrainDoubleRange m_frameRate;
+    StringOrStringSequenceOrConstrainDOMStringParameters m_groupId;
+    LongOrConstrainLongRange m_height;
+    DoubleOrConstrainDoubleRange m_latency;
+    Dictionary m_mandatory;
+    bool m_hasOptional = false;
+    Vector<Dictionary> m_optional;
+    LongOrConstrainLongRange m_sampleRate;
+    LongOrConstrainLongRange m_sampleSize;
+    DoubleOrConstrainDoubleRange m_volume;
+    LongOrConstrainLongRange m_width;
+
+    friend class V8MediaTrackConstraintSet;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaTrackConstraintSet_h
+#endif // MediaTrackConstraintSet_h

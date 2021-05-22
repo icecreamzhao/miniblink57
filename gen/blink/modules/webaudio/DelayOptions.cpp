@@ -8,46 +8,54 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "DelayOptions.h"
 
 namespace blink {
 
-DelayOptions::DelayOptions() {
-  setMaxDelayTime(1);
+DelayOptions::DelayOptions()
+{
+    setMaxDelayTime(1);
 }
 
-DelayOptions::~DelayOptions() {}
+DelayOptions::~DelayOptions() { }
 
 DelayOptions::DelayOptions(const DelayOptions&) = default;
 
 DelayOptions& DelayOptions::operator=(const DelayOptions&) = default;
 
-bool DelayOptions::hasDelayTime() const {
-  return m_hasDelayTime;
+bool DelayOptions::hasDelayTime() const
+{
+    return m_hasDelayTime;
 }
-double DelayOptions::delayTime() const {
-  DCHECK(m_hasDelayTime);
-  return m_delayTime;
+double DelayOptions::delayTime() const
+{
+    DCHECK(m_hasDelayTime);
+    return m_delayTime;
 }
-void DelayOptions::setDelayTime(double value) {
-  m_delayTime = value;
-  m_hasDelayTime = true;
+void DelayOptions::setDelayTime(double value)
+{
+    m_delayTime = value;
+    m_hasDelayTime = true;
 }
-bool DelayOptions::hasMaxDelayTime() const {
-  return m_hasMaxDelayTime;
+bool DelayOptions::hasMaxDelayTime() const
+{
+    return m_hasMaxDelayTime;
 }
-double DelayOptions::maxDelayTime() const {
-  DCHECK(m_hasMaxDelayTime);
-  return m_maxDelayTime;
+double DelayOptions::maxDelayTime() const
+{
+    DCHECK(m_hasMaxDelayTime);
+    return m_maxDelayTime;
 }
-void DelayOptions::setMaxDelayTime(double value) {
-  m_maxDelayTime = value;
-  m_hasMaxDelayTime = true;
+void DelayOptions::setMaxDelayTime(double value)
+{
+    m_maxDelayTime = value;
+    m_hasMaxDelayTime = true;
 }
 
-DEFINE_TRACE(DelayOptions) {
-  AudioNodeOptions::trace(visitor);
+DEFINE_TRACE(DelayOptions)
+{
+    AudioNodeOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

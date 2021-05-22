@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ProcessingInstruction.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,73 +46,82 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ProcessingInstruction::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ProcessingInstruction is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ProcessingInstructionV8Internal {
 
-static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ProcessingInstruction* impl = V8ProcessingInstruction::toImpl(holder);
+        ProcessingInstruction* impl = V8ProcessingInstruction::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->target(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->target(), info.GetIsolate());
+    }
 
-CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ProcessingInstructionV8Internal::targetAttributeGetter(info);
-}
+    CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ProcessingInstructionV8Internal::targetAttributeGetter(info);
+    }
 
-static void sheetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sheetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ProcessingInstruction* impl = V8ProcessingInstruction::toImpl(holder);
+        ProcessingInstruction* impl = V8ProcessingInstruction::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->sheet()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->sheet()), impl);
+    }
 
-CORE_EXPORT void sheetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ProcessingInstructionV8Internal::sheetAttributeGetter(info);
-}
+    CORE_EXPORT void sheetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ProcessingInstructionV8Internal::sheetAttributeGetter(info);
+    }
 
 } // namespace ProcessingInstructionV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ProcessingInstructionAccessors[] = {
-    {"target", ProcessingInstructionV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sheet", ProcessingInstructionV8Internal::sheetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "target", ProcessingInstructionV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sheet", ProcessingInstructionV8Internal::sheetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8ProcessingInstructionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ProcessingInstruction::wrapperTypeInfo.interfaceName, V8CharacterData::domTemplate(isolate, world), V8ProcessingInstruction::internalFieldCount);
+static void installV8ProcessingInstructionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ProcessingInstruction::wrapperTypeInfo.interfaceName, V8CharacterData::domTemplate(isolate, world), V8ProcessingInstruction::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ProcessingInstructionAccessors, WTF_ARRAY_LENGTH(V8ProcessingInstructionAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ProcessingInstructionAccessors, WTF_ARRAY_LENGTH(V8ProcessingInstructionAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8ProcessingInstruction::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ProcessingInstructionTemplate);
+v8::Local<v8::FunctionTemplate> V8ProcessingInstruction::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ProcessingInstructionTemplate);
 }
 
-bool V8ProcessingInstruction::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ProcessingInstruction::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ProcessingInstruction::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ProcessingInstruction::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ProcessingInstruction* V8ProcessingInstruction::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ProcessingInstruction* V8ProcessingInstruction::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

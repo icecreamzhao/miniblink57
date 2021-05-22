@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ChannelMergerOptions.h"
 
 namespace blink {
 
-ChannelMergerOptions::ChannelMergerOptions() {
-  setNumberOfInputs(6u);
+ChannelMergerOptions::ChannelMergerOptions()
+{
+    setNumberOfInputs(6u);
 }
 
-ChannelMergerOptions::~ChannelMergerOptions() {}
+ChannelMergerOptions::~ChannelMergerOptions() { }
 
 ChannelMergerOptions::ChannelMergerOptions(const ChannelMergerOptions&) = default;
 
 ChannelMergerOptions& ChannelMergerOptions::operator=(const ChannelMergerOptions&) = default;
 
-bool ChannelMergerOptions::hasNumberOfInputs() const {
-  return m_hasNumberOfInputs;
+bool ChannelMergerOptions::hasNumberOfInputs() const
+{
+    return m_hasNumberOfInputs;
 }
-unsigned ChannelMergerOptions::numberOfInputs() const {
-  DCHECK(m_hasNumberOfInputs);
-  return m_numberOfInputs;
+unsigned ChannelMergerOptions::numberOfInputs() const
+{
+    DCHECK(m_hasNumberOfInputs);
+    return m_numberOfInputs;
 }
-void ChannelMergerOptions::setNumberOfInputs(unsigned value) {
-  m_numberOfInputs = value;
-  m_hasNumberOfInputs = true;
+void ChannelMergerOptions::setNumberOfInputs(unsigned value)
+{
+    m_numberOfInputs = value;
+    m_hasNumberOfInputs = true;
 }
 
-DEFINE_TRACE(ChannelMergerOptions) {
-  AudioNodeOptions::trace(visitor);
+DEFINE_TRACE(ChannelMergerOptions)
+{
+    AudioNodeOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

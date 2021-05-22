@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PushPermissionDescriptor_h
 #define PushPermissionDescriptor_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT PushPermissionDescriptor : public PermissionDescriptor {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PushPermissionDescriptor();
-  virtual ~PushPermissionDescriptor();
-  PushPermissionDescriptor(const PushPermissionDescriptor&);
-  PushPermissionDescriptor& operator=(const PushPermissionDescriptor&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasUserVisibleOnly() const;
-  bool userVisibleOnly() const;
-  void setUserVisibleOnly(bool);
+public:
+    PushPermissionDescriptor();
+    virtual ~PushPermissionDescriptor();
+    PushPermissionDescriptor(const PushPermissionDescriptor&);
+    PushPermissionDescriptor& operator=(const PushPermissionDescriptor&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasUserVisibleOnly() const;
+    bool userVisibleOnly() const;
+    void setUserVisibleOnly(bool);
 
- private:
-  bool m_hasUserVisibleOnly = false;
-  bool m_userVisibleOnly;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PushPermissionDescriptor;
+private:
+    bool m_hasUserVisibleOnly = false;
+    bool m_userVisibleOnly;
+
+    friend class V8PushPermissionDescriptor;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PushPermissionDescriptor_h
+#endif // PushPermissionDescriptor_h

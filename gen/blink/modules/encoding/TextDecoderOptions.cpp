@@ -8,47 +8,55 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "TextDecoderOptions.h"
 
 namespace blink {
 
-TextDecoderOptions::TextDecoderOptions() {
-  setFatal(false);
-  setIgnoreBOM(false);
+TextDecoderOptions::TextDecoderOptions()
+{
+    setFatal(false);
+    setIgnoreBOM(false);
 }
 
-TextDecoderOptions::~TextDecoderOptions() {}
+TextDecoderOptions::~TextDecoderOptions() { }
 
 TextDecoderOptions::TextDecoderOptions(const TextDecoderOptions&) = default;
 
 TextDecoderOptions& TextDecoderOptions::operator=(const TextDecoderOptions&) = default;
 
-bool TextDecoderOptions::hasFatal() const {
-  return m_hasFatal;
+bool TextDecoderOptions::hasFatal() const
+{
+    return m_hasFatal;
 }
-bool TextDecoderOptions::fatal() const {
-  DCHECK(m_hasFatal);
-  return m_fatal;
+bool TextDecoderOptions::fatal() const
+{
+    DCHECK(m_hasFatal);
+    return m_fatal;
 }
-void TextDecoderOptions::setFatal(bool value) {
-  m_fatal = value;
-  m_hasFatal = true;
+void TextDecoderOptions::setFatal(bool value)
+{
+    m_fatal = value;
+    m_hasFatal = true;
 }
-bool TextDecoderOptions::hasIgnoreBOM() const {
-  return m_hasIgnoreBOM;
+bool TextDecoderOptions::hasIgnoreBOM() const
+{
+    return m_hasIgnoreBOM;
 }
-bool TextDecoderOptions::ignoreBOM() const {
-  DCHECK(m_hasIgnoreBOM);
-  return m_ignoreBOM;
+bool TextDecoderOptions::ignoreBOM() const
+{
+    DCHECK(m_hasIgnoreBOM);
+    return m_ignoreBOM;
 }
-void TextDecoderOptions::setIgnoreBOM(bool value) {
-  m_ignoreBOM = value;
-  m_hasIgnoreBOM = true;
+void TextDecoderOptions::setIgnoreBOM(bool value)
+{
+    m_ignoreBOM = value;
+    m_hasIgnoreBOM = true;
 }
 
-DEFINE_TRACE(TextDecoderOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(TextDecoderOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

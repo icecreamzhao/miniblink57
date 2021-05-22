@@ -8,192 +8,242 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PhotoSettings.h"
 
 namespace blink {
 
-PhotoSettings::PhotoSettings() {
+PhotoSettings::PhotoSettings()
+{
 }
 
-PhotoSettings::~PhotoSettings() {}
+PhotoSettings::~PhotoSettings() { }
 
 PhotoSettings::PhotoSettings(const PhotoSettings&) = default;
 
 PhotoSettings& PhotoSettings::operator=(const PhotoSettings&) = default;
 
-bool PhotoSettings::hasBrightness() const {
-  return m_hasBrightness;
+bool PhotoSettings::hasBrightness() const
+{
+    return m_hasBrightness;
 }
-double PhotoSettings::brightness() const {
-  DCHECK(m_hasBrightness);
-  return m_brightness;
+double PhotoSettings::brightness() const
+{
+    DCHECK(m_hasBrightness);
+    return m_brightness;
 }
-void PhotoSettings::setBrightness(double value) {
-  m_brightness = value;
-  m_hasBrightness = true;
+void PhotoSettings::setBrightness(double value)
+{
+    m_brightness = value;
+    m_hasBrightness = true;
 }
-bool PhotoSettings::hasColorTemperature() const {
-  return m_hasColorTemperature;
+bool PhotoSettings::hasColorTemperature() const
+{
+    return m_hasColorTemperature;
 }
-double PhotoSettings::colorTemperature() const {
-  DCHECK(m_hasColorTemperature);
-  return m_colorTemperature;
+double PhotoSettings::colorTemperature() const
+{
+    DCHECK(m_hasColorTemperature);
+    return m_colorTemperature;
 }
-void PhotoSettings::setColorTemperature(double value) {
-  m_colorTemperature = value;
-  m_hasColorTemperature = true;
+void PhotoSettings::setColorTemperature(double value)
+{
+    m_colorTemperature = value;
+    m_hasColorTemperature = true;
 }
-bool PhotoSettings::hasContrast() const {
-  return m_hasContrast;
+bool PhotoSettings::hasContrast() const
+{
+    return m_hasContrast;
 }
-double PhotoSettings::contrast() const {
-  DCHECK(m_hasContrast);
-  return m_contrast;
+double PhotoSettings::contrast() const
+{
+    DCHECK(m_hasContrast);
+    return m_contrast;
 }
-void PhotoSettings::setContrast(double value) {
-  m_contrast = value;
-  m_hasContrast = true;
+void PhotoSettings::setContrast(double value)
+{
+    m_contrast = value;
+    m_hasContrast = true;
 }
-bool PhotoSettings::hasExposureCompensation() const {
-  return m_hasExposureCompensation;
+bool PhotoSettings::hasExposureCompensation() const
+{
+    return m_hasExposureCompensation;
 }
-double PhotoSettings::exposureCompensation() const {
-  DCHECK(m_hasExposureCompensation);
-  return m_exposureCompensation;
+double PhotoSettings::exposureCompensation() const
+{
+    DCHECK(m_hasExposureCompensation);
+    return m_exposureCompensation;
 }
-void PhotoSettings::setExposureCompensation(double value) {
-  m_exposureCompensation = value;
-  m_hasExposureCompensation = true;
+void PhotoSettings::setExposureCompensation(double value)
+{
+    m_exposureCompensation = value;
+    m_hasExposureCompensation = true;
 }
-bool PhotoSettings::hasExposureMode() const {
-  return !m_exposureMode.isNull();
+bool PhotoSettings::hasExposureMode() const
+{
+    return !m_exposureMode.isNull();
 }
-String PhotoSettings::exposureMode() const {
-  return m_exposureMode;
+String PhotoSettings::exposureMode() const
+{
+    return m_exposureMode;
 }
-void PhotoSettings::setExposureMode(String value) {
-  m_exposureMode = value;
+void PhotoSettings::setExposureMode(String value)
+{
+    m_exposureMode = value;
 }
-bool PhotoSettings::hasFillLightMode() const {
-  return !m_fillLightMode.isNull();
+bool PhotoSettings::hasFillLightMode() const
+{
+    return !m_fillLightMode.isNull();
 }
-String PhotoSettings::fillLightMode() const {
-  return m_fillLightMode;
+String PhotoSettings::fillLightMode() const
+{
+    return m_fillLightMode;
 }
-void PhotoSettings::setFillLightMode(String value) {
-  m_fillLightMode = value;
+void PhotoSettings::setFillLightMode(String value)
+{
+    m_fillLightMode = value;
 }
-bool PhotoSettings::hasFocusMode() const {
-  return !m_focusMode.isNull();
+bool PhotoSettings::hasFocusMode() const
+{
+    return !m_focusMode.isNull();
 }
-String PhotoSettings::focusMode() const {
-  return m_focusMode;
+String PhotoSettings::focusMode() const
+{
+    return m_focusMode;
 }
-void PhotoSettings::setFocusMode(String value) {
-  m_focusMode = value;
+void PhotoSettings::setFocusMode(String value)
+{
+    m_focusMode = value;
 }
-bool PhotoSettings::hasImageHeight() const {
-  return m_hasImageHeight;
+bool PhotoSettings::hasImageHeight() const
+{
+    return m_hasImageHeight;
 }
-double PhotoSettings::imageHeight() const {
-  DCHECK(m_hasImageHeight);
-  return m_imageHeight;
+double PhotoSettings::imageHeight() const
+{
+    DCHECK(m_hasImageHeight);
+    return m_imageHeight;
 }
-void PhotoSettings::setImageHeight(double value) {
-  m_imageHeight = value;
-  m_hasImageHeight = true;
+void PhotoSettings::setImageHeight(double value)
+{
+    m_imageHeight = value;
+    m_hasImageHeight = true;
 }
-bool PhotoSettings::hasImageWidth() const {
-  return m_hasImageWidth;
+bool PhotoSettings::hasImageWidth() const
+{
+    return m_hasImageWidth;
 }
-double PhotoSettings::imageWidth() const {
-  DCHECK(m_hasImageWidth);
-  return m_imageWidth;
+double PhotoSettings::imageWidth() const
+{
+    DCHECK(m_hasImageWidth);
+    return m_imageWidth;
 }
-void PhotoSettings::setImageWidth(double value) {
-  m_imageWidth = value;
-  m_hasImageWidth = true;
+void PhotoSettings::setImageWidth(double value)
+{
+    m_imageWidth = value;
+    m_hasImageWidth = true;
 }
-bool PhotoSettings::hasIso() const {
-  return m_hasIso;
+bool PhotoSettings::hasIso() const
+{
+    return m_hasIso;
 }
-double PhotoSettings::iso() const {
-  DCHECK(m_hasIso);
-  return m_iso;
+double PhotoSettings::iso() const
+{
+    DCHECK(m_hasIso);
+    return m_iso;
 }
-void PhotoSettings::setIso(double value) {
-  m_iso = value;
-  m_hasIso = true;
+void PhotoSettings::setIso(double value)
+{
+    m_iso = value;
+    m_hasIso = true;
 }
-bool PhotoSettings::hasPointsOfInterest() const {
-  return m_hasPointsOfInterest;
+bool PhotoSettings::hasPointsOfInterest() const
+{
+    return m_hasPointsOfInterest;
 }
-const HeapVector<Point2D>& PhotoSettings::pointsOfInterest() const {
-  DCHECK(m_hasPointsOfInterest);
-  return m_pointsOfInterest;
+const HeapVector<Point2D>& PhotoSettings::pointsOfInterest() const
+{
+    DCHECK(m_hasPointsOfInterest);
+    return m_pointsOfInterest;
 }
-void PhotoSettings::setPointsOfInterest(const HeapVector<Point2D>& value) {
-  m_pointsOfInterest = value;
-  m_hasPointsOfInterest = true;
+void PhotoSettings::setPointsOfInterest(const HeapVector<Point2D>& value)
+{
+    m_pointsOfInterest = value;
+    m_hasPointsOfInterest = true;
 }
-bool PhotoSettings::hasRedEyeReduction() const {
-  return m_hasRedEyeReduction;
+bool PhotoSettings::hasRedEyeReduction() const
+{
+    return m_hasRedEyeReduction;
 }
-bool PhotoSettings::redEyeReduction() const {
-  DCHECK(m_hasRedEyeReduction);
-  return m_redEyeReduction;
+bool PhotoSettings::redEyeReduction() const
+{
+    DCHECK(m_hasRedEyeReduction);
+    return m_redEyeReduction;
 }
-void PhotoSettings::setRedEyeReduction(bool value) {
-  m_redEyeReduction = value;
-  m_hasRedEyeReduction = true;
+void PhotoSettings::setRedEyeReduction(bool value)
+{
+    m_redEyeReduction = value;
+    m_hasRedEyeReduction = true;
 }
-bool PhotoSettings::hasSaturation() const {
-  return m_hasSaturation;
+bool PhotoSettings::hasSaturation() const
+{
+    return m_hasSaturation;
 }
-double PhotoSettings::saturation() const {
-  DCHECK(m_hasSaturation);
-  return m_saturation;
+double PhotoSettings::saturation() const
+{
+    DCHECK(m_hasSaturation);
+    return m_saturation;
 }
-void PhotoSettings::setSaturation(double value) {
-  m_saturation = value;
-  m_hasSaturation = true;
+void PhotoSettings::setSaturation(double value)
+{
+    m_saturation = value;
+    m_hasSaturation = true;
 }
-bool PhotoSettings::hasSharpness() const {
-  return m_hasSharpness;
+bool PhotoSettings::hasSharpness() const
+{
+    return m_hasSharpness;
 }
-double PhotoSettings::sharpness() const {
-  DCHECK(m_hasSharpness);
-  return m_sharpness;
+double PhotoSettings::sharpness() const
+{
+    DCHECK(m_hasSharpness);
+    return m_sharpness;
 }
-void PhotoSettings::setSharpness(double value) {
-  m_sharpness = value;
-  m_hasSharpness = true;
+void PhotoSettings::setSharpness(double value)
+{
+    m_sharpness = value;
+    m_hasSharpness = true;
 }
-bool PhotoSettings::hasWhiteBalanceMode() const {
-  return !m_whiteBalanceMode.isNull();
+bool PhotoSettings::hasWhiteBalanceMode() const
+{
+    return !m_whiteBalanceMode.isNull();
 }
-String PhotoSettings::whiteBalanceMode() const {
-  return m_whiteBalanceMode;
+String PhotoSettings::whiteBalanceMode() const
+{
+    return m_whiteBalanceMode;
 }
-void PhotoSettings::setWhiteBalanceMode(String value) {
-  m_whiteBalanceMode = value;
+void PhotoSettings::setWhiteBalanceMode(String value)
+{
+    m_whiteBalanceMode = value;
 }
-bool PhotoSettings::hasZoom() const {
-  return m_hasZoom;
+bool PhotoSettings::hasZoom() const
+{
+    return m_hasZoom;
 }
-double PhotoSettings::zoom() const {
-  DCHECK(m_hasZoom);
-  return m_zoom;
+double PhotoSettings::zoom() const
+{
+    DCHECK(m_hasZoom);
+    return m_zoom;
 }
-void PhotoSettings::setZoom(double value) {
-  m_zoom = value;
-  m_hasZoom = true;
+void PhotoSettings::setZoom(double value)
+{
+    m_zoom = value;
+    m_hasZoom = true;
 }
 
-DEFINE_TRACE(PhotoSettings) {
-  visitor->trace(m_pointsOfInterest);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PhotoSettings)
+{
+    visitor->trace(m_pointsOfInterest);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

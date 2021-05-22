@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8USBControlTransferParameters_h
 #define V8USBControlTransferParameters_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8USBControlTransferParameters {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, USBControlTransferParameters&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, USBControlTransferParameters&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8USBControlTransferParameters(const USBControlTransferParameters&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, USBControlTransferParameters& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, USBControlTransferParameters& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<USBControlTransferParameters> {
-  static USBControlTransferParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static USBControlTransferParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<USBControlTransferParameters> {
-  typedef V8USBControlTransferParameters Type;
+    typedef V8USBControlTransferParameters Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8USBControlTransferParameters_h
+#endif // V8USBControlTransferParameters_h

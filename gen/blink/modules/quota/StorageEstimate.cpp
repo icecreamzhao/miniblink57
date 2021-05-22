@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "StorageEstimate.h"
 
 namespace blink {
 
-StorageEstimate::StorageEstimate() {
+StorageEstimate::StorageEstimate()
+{
 }
 
-StorageEstimate::~StorageEstimate() {}
+StorageEstimate::~StorageEstimate() { }
 
 StorageEstimate::StorageEstimate(const StorageEstimate&) = default;
 
 StorageEstimate& StorageEstimate::operator=(const StorageEstimate&) = default;
 
-bool StorageEstimate::hasQuota() const {
-  return m_hasQuota;
+bool StorageEstimate::hasQuota() const
+{
+    return m_hasQuota;
 }
-unsigned long long StorageEstimate::quota() const {
-  DCHECK(m_hasQuota);
-  return m_quota;
+unsigned long long StorageEstimate::quota() const
+{
+    DCHECK(m_hasQuota);
+    return m_quota;
 }
-void StorageEstimate::setQuota(unsigned long long value) {
-  m_quota = value;
-  m_hasQuota = true;
+void StorageEstimate::setQuota(unsigned long long value)
+{
+    m_quota = value;
+    m_hasQuota = true;
 }
-bool StorageEstimate::hasUsage() const {
-  return m_hasUsage;
+bool StorageEstimate::hasUsage() const
+{
+    return m_hasUsage;
 }
-unsigned long long StorageEstimate::usage() const {
-  DCHECK(m_hasUsage);
-  return m_usage;
+unsigned long long StorageEstimate::usage() const
+{
+    DCHECK(m_hasUsage);
+    return m_usage;
 }
-void StorageEstimate::setUsage(unsigned long long value) {
-  m_usage = value;
-  m_hasUsage = true;
+void StorageEstimate::setUsage(unsigned long long value)
+{
+    m_usage = value;
+    m_hasUsage = true;
 }
 
-DEFINE_TRACE(StorageEstimate) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(StorageEstimate)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DoubleOrInternalEnum_h
 #define DoubleOrInternalEnum_h
 
@@ -21,58 +21,60 @@
 namespace blink {
 
 class CORE_EXPORT DoubleOrInternalEnum final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DoubleOrInternalEnum();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isDouble() const { return m_type == SpecificTypeDouble; }
-  double getAsDouble() const;
-  void setDouble(double);
-  static DoubleOrInternalEnum fromDouble(double);
+public:
+    DoubleOrInternalEnum();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isInternalEnum() const { return m_type == SpecificTypeInternalEnum; }
-  String getAsInternalEnum() const;
-  void setInternalEnum(String);
-  static DoubleOrInternalEnum fromInternalEnum(String);
+    bool isDouble() const { return m_type == SpecificTypeDouble; }
+    double getAsDouble() const;
+    void setDouble(double);
+    static DoubleOrInternalEnum fromDouble(double);
 
-  DoubleOrInternalEnum(const DoubleOrInternalEnum&);
-  ~DoubleOrInternalEnum();
-  DoubleOrInternalEnum& operator=(const DoubleOrInternalEnum&);
-  DECLARE_TRACE();
+    bool isInternalEnum() const { return m_type == SpecificTypeInternalEnum; }
+    String getAsInternalEnum() const;
+    void setInternalEnum(String);
+    static DoubleOrInternalEnum fromInternalEnum(String);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeDouble,
-    SpecificTypeInternalEnum,
-  };
-  SpecificTypes m_type;
+    DoubleOrInternalEnum(const DoubleOrInternalEnum&);
+    ~DoubleOrInternalEnum();
+    DoubleOrInternalEnum& operator=(const DoubleOrInternalEnum&);
+    DECLARE_TRACE();
 
-  double m_double;
-  String m_internalEnum;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeDouble,
+        SpecificTypeInternalEnum,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrInternalEnum&, v8::Local<v8::Object>, v8::Isolate*);
+    double m_double;
+    String m_internalEnum;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrInternalEnum&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8DoubleOrInternalEnum final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DoubleOrInternalEnum&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DoubleOrInternalEnum&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrInternalEnum&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DoubleOrInternalEnum& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DoubleOrInternalEnum& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<DoubleOrInternalEnum> {
-  CORE_EXPORT static DoubleOrInternalEnum nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static DoubleOrInternalEnum nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -80,4 +82,4 @@ struct NativeValueTraits<DoubleOrInternalEnum> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::DoubleOrInternalEnum);
 
-#endif  // DoubleOrInternalEnum_h
+#endif // DoubleOrInternalEnum_h

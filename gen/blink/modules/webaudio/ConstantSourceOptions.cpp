@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ConstantSourceOptions.h"
 
 namespace blink {
 
-ConstantSourceOptions::ConstantSourceOptions() {
-  setOffset(1);
+ConstantSourceOptions::ConstantSourceOptions()
+{
+    setOffset(1);
 }
 
-ConstantSourceOptions::~ConstantSourceOptions() {}
+ConstantSourceOptions::~ConstantSourceOptions() { }
 
 ConstantSourceOptions::ConstantSourceOptions(const ConstantSourceOptions&) = default;
 
 ConstantSourceOptions& ConstantSourceOptions::operator=(const ConstantSourceOptions&) = default;
 
-bool ConstantSourceOptions::hasOffset() const {
-  return m_hasOffset;
+bool ConstantSourceOptions::hasOffset() const
+{
+    return m_hasOffset;
 }
-float ConstantSourceOptions::offset() const {
-  DCHECK(m_hasOffset);
-  return m_offset;
+float ConstantSourceOptions::offset() const
+{
+    DCHECK(m_hasOffset);
+    return m_offset;
 }
-void ConstantSourceOptions::setOffset(float value) {
-  m_offset = value;
-  m_hasOffset = true;
+void ConstantSourceOptions::setOffset(float value)
+{
+    m_offset = value;
+    m_hasOffset = true;
 }
 
-DEFINE_TRACE(ConstantSourceOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ConstantSourceOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

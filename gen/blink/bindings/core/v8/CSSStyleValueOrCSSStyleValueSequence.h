@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CSSStyleValueOrCSSStyleValueSequence_h
 #define CSSStyleValueOrCSSStyleValueSequence_h
 
@@ -23,58 +23,60 @@ namespace blink {
 class CSSStyleValue;
 
 class CORE_EXPORT CSSStyleValueOrCSSStyleValueSequence final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CSSStyleValueOrCSSStyleValueSequence();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isCSSStyleValue() const { return m_type == SpecificTypeCSSStyleValue; }
-  CSSStyleValue* getAsCSSStyleValue() const;
-  void setCSSStyleValue(CSSStyleValue*);
-  static CSSStyleValueOrCSSStyleValueSequence fromCSSStyleValue(CSSStyleValue*);
+public:
+    CSSStyleValueOrCSSStyleValueSequence();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isCSSStyleValueSequence() const { return m_type == SpecificTypeCSSStyleValueSequence; }
-  const HeapVector<Member<CSSStyleValue>>& getAsCSSStyleValueSequence() const;
-  void setCSSStyleValueSequence(const HeapVector<Member<CSSStyleValue>>&);
-  static CSSStyleValueOrCSSStyleValueSequence fromCSSStyleValueSequence(const HeapVector<Member<CSSStyleValue>>&);
+    bool isCSSStyleValue() const { return m_type == SpecificTypeCSSStyleValue; }
+    CSSStyleValue* getAsCSSStyleValue() const;
+    void setCSSStyleValue(CSSStyleValue*);
+    static CSSStyleValueOrCSSStyleValueSequence fromCSSStyleValue(CSSStyleValue*);
 
-  CSSStyleValueOrCSSStyleValueSequence(const CSSStyleValueOrCSSStyleValueSequence&);
-  ~CSSStyleValueOrCSSStyleValueSequence();
-  CSSStyleValueOrCSSStyleValueSequence& operator=(const CSSStyleValueOrCSSStyleValueSequence&);
-  DECLARE_TRACE();
+    bool isCSSStyleValueSequence() const { return m_type == SpecificTypeCSSStyleValueSequence; }
+    const HeapVector<Member<CSSStyleValue>>& getAsCSSStyleValueSequence() const;
+    void setCSSStyleValueSequence(const HeapVector<Member<CSSStyleValue>>&);
+    static CSSStyleValueOrCSSStyleValueSequence fromCSSStyleValueSequence(const HeapVector<Member<CSSStyleValue>>&);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeCSSStyleValue,
-    SpecificTypeCSSStyleValueSequence,
-  };
-  SpecificTypes m_type;
+    CSSStyleValueOrCSSStyleValueSequence(const CSSStyleValueOrCSSStyleValueSequence&);
+    ~CSSStyleValueOrCSSStyleValueSequence();
+    CSSStyleValueOrCSSStyleValueSequence& operator=(const CSSStyleValueOrCSSStyleValueSequence&);
+    DECLARE_TRACE();
 
-  Member<CSSStyleValue> m_cssStyleValue;
-  HeapVector<Member<CSSStyleValue>> m_cssStyleValueSequence;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeCSSStyleValue,
+        SpecificTypeCSSStyleValueSequence,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const CSSStyleValueOrCSSStyleValueSequence&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<CSSStyleValue> m_cssStyleValue;
+    HeapVector<Member<CSSStyleValue>> m_cssStyleValueSequence;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const CSSStyleValueOrCSSStyleValueSequence&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8CSSStyleValueOrCSSStyleValueSequence final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CSSStyleValueOrCSSStyleValueSequence&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CSSStyleValueOrCSSStyleValueSequence&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const CSSStyleValueOrCSSStyleValueSequence&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CSSStyleValueOrCSSStyleValueSequence& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CSSStyleValueOrCSSStyleValueSequence& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<CSSStyleValueOrCSSStyleValueSequence> {
-  CORE_EXPORT static CSSStyleValueOrCSSStyleValueSequence nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static CSSStyleValueOrCSSStyleValueSequence nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -82,4 +84,4 @@ struct NativeValueTraits<CSSStyleValueOrCSSStyleValueSequence> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::CSSStyleValueOrCSSStyleValueSequence);
 
-#endif  // CSSStyleValueOrCSSStyleValueSequence_h
+#endif // CSSStyleValueOrCSSStyleValueSequence_h

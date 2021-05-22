@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8NodeIterator.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,170 +48,192 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&NodeIterator::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "NodeIterator is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace NodeIteratorV8Internal {
 
-static void rootAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rootAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  NodeIterator* impl = V8NodeIterator::toImpl(holder);
+        NodeIterator* impl = V8NodeIterator::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->root()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->root()), impl);
+    }
 
-CORE_EXPORT void rootAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeIteratorV8Internal::rootAttributeGetter(info);
-}
+    CORE_EXPORT void rootAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeIteratorV8Internal::rootAttributeGetter(info);
+    }
 
-static void referenceNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void referenceNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  NodeIterator* impl = V8NodeIterator::toImpl(holder);
+        NodeIterator* impl = V8NodeIterator::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->referenceNode()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->referenceNode()), impl);
+    }
 
-CORE_EXPORT void referenceNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeIteratorV8Internal::referenceNodeAttributeGetter(info);
-}
+    CORE_EXPORT void referenceNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeIteratorV8Internal::referenceNodeAttributeGetter(info);
+    }
 
-static void pointerBeforeReferenceNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pointerBeforeReferenceNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  NodeIterator* impl = V8NodeIterator::toImpl(holder);
+        NodeIterator* impl = V8NodeIterator::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->pointerBeforeReferenceNode());
-}
+        v8SetReturnValueBool(info, impl->pointerBeforeReferenceNode());
+    }
 
-CORE_EXPORT void pointerBeforeReferenceNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeIteratorV8Internal::pointerBeforeReferenceNodeAttributeGetter(info);
-}
+    CORE_EXPORT void pointerBeforeReferenceNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeIteratorV8Internal::pointerBeforeReferenceNodeAttributeGetter(info);
+    }
 
-static void whatToShowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void whatToShowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  NodeIterator* impl = V8NodeIterator::toImpl(holder);
+        NodeIterator* impl = V8NodeIterator::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->whatToShow());
-}
+        v8SetReturnValueUnsigned(info, impl->whatToShow());
+    }
 
-CORE_EXPORT void whatToShowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeIteratorV8Internal::whatToShowAttributeGetter(info);
-}
+    CORE_EXPORT void whatToShowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeIteratorV8Internal::whatToShowAttributeGetter(info);
+    }
 
-static void filterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void filterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  NodeIterator* impl = V8NodeIterator::toImpl(holder);
+        NodeIterator* impl = V8NodeIterator::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->filter()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->filter()), impl);
+    }
 
-CORE_EXPORT void filterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeIteratorV8Internal::filterAttributeGetter(info);
-}
+    CORE_EXPORT void filterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeIteratorV8Internal::filterAttributeGetter(info);
+    }
 
-static void nextNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NodeIterator", "nextNode");
+    static void nextNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NodeIterator", "nextNode");
 
-  NodeIterator* impl = V8NodeIterator::toImpl(info.Holder());
+        NodeIterator* impl = V8NodeIterator::toImpl(info.Holder());
 
-  Node* result = impl->nextNode(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Node* result = impl->nextNode(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void nextNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeIteratorV8Internal::nextNodeMethod(info);
-}
+    CORE_EXPORT void nextNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeIteratorV8Internal::nextNodeMethod(info);
+    }
 
-static void previousNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NodeIterator", "previousNode");
+    static void previousNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NodeIterator", "previousNode");
 
-  NodeIterator* impl = V8NodeIterator::toImpl(info.Holder());
+        NodeIterator* impl = V8NodeIterator::toImpl(info.Holder());
 
-  Node* result = impl->previousNode(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        Node* result = impl->previousNode(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void previousNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeIteratorV8Internal::previousNodeMethod(info);
-}
+    CORE_EXPORT void previousNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeIteratorV8Internal::previousNodeMethod(info);
+    }
 
-static void detachMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeIterator* impl = V8NodeIterator::toImpl(info.Holder());
+    static void detachMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeIterator* impl = V8NodeIterator::toImpl(info.Holder());
 
-  impl->detach();
-}
+        impl->detach();
+    }
 
-CORE_EXPORT  void detachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::NodeIteratorDetach);
-  NodeIteratorV8Internal::detachMethod(info);
-}
+    CORE_EXPORT void detachMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::NodeIteratorDetach);
+        NodeIteratorV8Internal::detachMethod(info);
+    }
 
 } // namespace NodeIteratorV8Internal
 
-void V8NodeIterator::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  NodeIterator* impl = scriptWrappable->toImpl<NodeIterator>();
-  NodeFilter* filter = impl->filter();
-  if (filter) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, filter, isolate);
-  }
+void V8NodeIterator::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    NodeIterator* impl = scriptWrappable->toImpl<NodeIterator>();
+    NodeFilter* filter = impl->filter();
+    if (filter) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, filter, isolate);
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8NodeIteratorAccessors[] = {
-    {"root", NodeIteratorV8Internal::rootAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"referenceNode", NodeIteratorV8Internal::referenceNodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pointerBeforeReferenceNode", NodeIteratorV8Internal::pointerBeforeReferenceNodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"whatToShow", NodeIteratorV8Internal::whatToShowAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"filter", NodeIteratorV8Internal::filterAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "root", NodeIteratorV8Internal::rootAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "referenceNode", NodeIteratorV8Internal::referenceNodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pointerBeforeReferenceNode", NodeIteratorV8Internal::pointerBeforeReferenceNodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "whatToShow", NodeIteratorV8Internal::whatToShowAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "filter", NodeIteratorV8Internal::filterAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8NodeIteratorMethods[] = {
-    {"nextNode", NodeIteratorV8Internal::nextNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"previousNode", NodeIteratorV8Internal::previousNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"detach", NodeIteratorV8Internal::detachMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "nextNode", NodeIteratorV8Internal::nextNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "previousNode", NodeIteratorV8Internal::previousNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "detach", NodeIteratorV8Internal::detachMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8NodeIteratorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NodeIterator::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NodeIterator::internalFieldCount);
+static void installV8NodeIteratorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NodeIterator::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NodeIterator::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeIteratorAccessors, WTF_ARRAY_LENGTH(V8NodeIteratorAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeIteratorMethods, WTF_ARRAY_LENGTH(V8NodeIteratorMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeIteratorAccessors, WTF_ARRAY_LENGTH(V8NodeIteratorAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeIteratorMethods, WTF_ARRAY_LENGTH(V8NodeIteratorMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8NodeIterator::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NodeIteratorTemplate);
+v8::Local<v8::FunctionTemplate> V8NodeIterator::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NodeIteratorTemplate);
 }
 
-bool V8NodeIterator::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8NodeIterator::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8NodeIterator::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8NodeIterator::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-NodeIterator* V8NodeIterator::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+NodeIterator* V8NodeIterator::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

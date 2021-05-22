@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "USBDeviceRequestOptions.h"
 
 namespace blink {
 
-USBDeviceRequestOptions::USBDeviceRequestOptions() {
+USBDeviceRequestOptions::USBDeviceRequestOptions()
+{
 }
 
-USBDeviceRequestOptions::~USBDeviceRequestOptions() {}
+USBDeviceRequestOptions::~USBDeviceRequestOptions() { }
 
 USBDeviceRequestOptions::USBDeviceRequestOptions(const USBDeviceRequestOptions&) = default;
 
 USBDeviceRequestOptions& USBDeviceRequestOptions::operator=(const USBDeviceRequestOptions&) = default;
 
-bool USBDeviceRequestOptions::hasFilters() const {
-  return m_hasFilters;
+bool USBDeviceRequestOptions::hasFilters() const
+{
+    return m_hasFilters;
 }
-const HeapVector<USBDeviceFilter>& USBDeviceRequestOptions::filters() const {
-  DCHECK(m_hasFilters);
-  return m_filters;
+const HeapVector<USBDeviceFilter>& USBDeviceRequestOptions::filters() const
+{
+    DCHECK(m_hasFilters);
+    return m_filters;
 }
-void USBDeviceRequestOptions::setFilters(const HeapVector<USBDeviceFilter>& value) {
-  m_filters = value;
-  m_hasFilters = true;
-}
-
-DEFINE_TRACE(USBDeviceRequestOptions) {
-  visitor->trace(m_filters);
-  IDLDictionaryBase::trace(visitor);
+void USBDeviceRequestOptions::setFilters(const HeapVector<USBDeviceFilter>& value)
+{
+    m_filters = value;
+    m_hasFilters = true;
 }
 
-}  // namespace blink
+DEFINE_TRACE(USBDeviceRequestOptions)
+{
+    visitor->trace(m_filters);
+    IDLDictionaryBase::trace(visitor);
+}
+
+} // namespace blink

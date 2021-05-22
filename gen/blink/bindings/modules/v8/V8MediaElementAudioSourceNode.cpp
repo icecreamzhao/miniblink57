@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaElementAudioSourceNode.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,112 +50,121 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MediaElementAudioSourceNode::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaElementAudioSourceNode is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaElementAudioSourceNodeV8Internal {
 
-static void mediaElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaElementAudioSourceNode* impl = V8MediaElementAudioSourceNode::toImpl(holder);
+        MediaElementAudioSourceNode* impl = V8MediaElementAudioSourceNode::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->mediaElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->mediaElement()), impl);
+    }
 
-MODULES_EXPORT void mediaElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaElementAudioSourceNodeV8Internal::mediaElementAttributeGetter(info);
-}
+    MODULES_EXPORT void mediaElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaElementAudioSourceNodeV8Internal::mediaElementAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaElementAudioSourceNode");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaElementAudioSourceNode");
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  BaseAudioContext* context;
-  MediaElementAudioSourceOptions options;
-  context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!context) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
+        BaseAudioContext* context;
+        MediaElementAudioSourceOptions options;
+        context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!context) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
 
-    return;
-  }
+            return;
+        }
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-    return;
-  }
-  V8MediaElementAudioSourceOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8MediaElementAudioSourceOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  MediaElementAudioSourceNode* impl = MediaElementAudioSourceNode::create(context, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaElementAudioSourceNode::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        MediaElementAudioSourceNode* impl = MediaElementAudioSourceNode::create(context, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaElementAudioSourceNode::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace MediaElementAudioSourceNodeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaElementAudioSourceNodeAccessors[] = {
-    {"mediaElement", MediaElementAudioSourceNodeV8Internal::mediaElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "mediaElement", MediaElementAudioSourceNodeV8Internal::mediaElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8MediaElementAudioSourceNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaElementAudioSourceNode_Constructor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaElementAudioSourceNode"));
-    return;
-  }
+void V8MediaElementAudioSourceNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaElementAudioSourceNode_Constructor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaElementAudioSourceNode"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  MediaElementAudioSourceNodeV8Internal::constructor(info);
+    MediaElementAudioSourceNodeV8Internal::constructor(info);
 }
 
-static void installV8MediaElementAudioSourceNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaElementAudioSourceNode::wrapperTypeInfo.interfaceName, V8AudioSourceNode::domTemplate(isolate, world), V8MediaElementAudioSourceNode::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8MediaElementAudioSourceNode::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8MediaElementAudioSourceNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaElementAudioSourceNode::wrapperTypeInfo.interfaceName, V8AudioSourceNode::domTemplate(isolate, world), V8MediaElementAudioSourceNode::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8MediaElementAudioSourceNode::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaElementAudioSourceNodeAccessors, WTF_ARRAY_LENGTH(V8MediaElementAudioSourceNodeAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaElementAudioSourceNodeAccessors, WTF_ARRAY_LENGTH(V8MediaElementAudioSourceNodeAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaElementAudioSourceNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaElementAudioSourceNodeTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaElementAudioSourceNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaElementAudioSourceNodeTemplate);
 }
 
-bool V8MediaElementAudioSourceNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaElementAudioSourceNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaElementAudioSourceNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaElementAudioSourceNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaElementAudioSourceNode* V8MediaElementAudioSourceNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaElementAudioSourceNode* V8MediaElementAudioSourceNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

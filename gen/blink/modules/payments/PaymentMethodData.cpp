@@ -8,43 +8,51 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PaymentMethodData.h"
 
 namespace blink {
 
-PaymentMethodData::PaymentMethodData() {
+PaymentMethodData::PaymentMethodData()
+{
 }
 
-PaymentMethodData::~PaymentMethodData() {}
+PaymentMethodData::~PaymentMethodData() { }
 
 PaymentMethodData::PaymentMethodData(const PaymentMethodData&) = default;
 
 PaymentMethodData& PaymentMethodData::operator=(const PaymentMethodData&) = default;
 
-bool PaymentMethodData::hasData() const {
-  return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
+bool PaymentMethodData::hasData() const
+{
+    return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
 }
-ScriptValue PaymentMethodData::data() const {
-  return m_data;
+ScriptValue PaymentMethodData::data() const
+{
+    return m_data;
 }
-void PaymentMethodData::setData(ScriptValue value) {
-  m_data = value;
+void PaymentMethodData::setData(ScriptValue value)
+{
+    m_data = value;
 }
-bool PaymentMethodData::hasSupportedMethods() const {
-  return m_hasSupportedMethods;
+bool PaymentMethodData::hasSupportedMethods() const
+{
+    return m_hasSupportedMethods;
 }
-const Vector<String>& PaymentMethodData::supportedMethods() const {
-  DCHECK(m_hasSupportedMethods);
-  return m_supportedMethods;
+const Vector<String>& PaymentMethodData::supportedMethods() const
+{
+    DCHECK(m_hasSupportedMethods);
+    return m_supportedMethods;
 }
-void PaymentMethodData::setSupportedMethods(const Vector<String>& value) {
-  m_supportedMethods = value;
-  m_hasSupportedMethods = true;
+void PaymentMethodData::setSupportedMethods(const Vector<String>& value)
+{
+    m_supportedMethods = value;
+    m_hasSupportedMethods = true;
 }
 
-DEFINE_TRACE(PaymentMethodData) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PaymentMethodData)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

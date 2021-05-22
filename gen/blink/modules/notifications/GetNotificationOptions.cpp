@@ -8,33 +8,38 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "GetNotificationOptions.h"
 
 namespace blink {
 
-GetNotificationOptions::GetNotificationOptions() {
-  setTag(String(""));
+GetNotificationOptions::GetNotificationOptions()
+{
+    setTag(String(""));
 }
 
-GetNotificationOptions::~GetNotificationOptions() {}
+GetNotificationOptions::~GetNotificationOptions() { }
 
 GetNotificationOptions::GetNotificationOptions(const GetNotificationOptions&) = default;
 
 GetNotificationOptions& GetNotificationOptions::operator=(const GetNotificationOptions&) = default;
 
-bool GetNotificationOptions::hasTag() const {
-  return !m_tag.isNull();
+bool GetNotificationOptions::hasTag() const
+{
+    return !m_tag.isNull();
 }
-String GetNotificationOptions::tag() const {
-  return m_tag;
+String GetNotificationOptions::tag() const
+{
+    return m_tag;
 }
-void GetNotificationOptions::setTag(String value) {
-  m_tag = value;
+void GetNotificationOptions::setTag(String value)
+{
+    m_tag = value;
 }
 
-DEFINE_TRACE(GetNotificationOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(GetNotificationOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

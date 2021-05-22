@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "TextDecodeOptions.h"
 
 namespace blink {
 
-TextDecodeOptions::TextDecodeOptions() {
-  setStream(false);
+TextDecodeOptions::TextDecodeOptions()
+{
+    setStream(false);
 }
 
-TextDecodeOptions::~TextDecodeOptions() {}
+TextDecodeOptions::~TextDecodeOptions() { }
 
 TextDecodeOptions::TextDecodeOptions(const TextDecodeOptions&) = default;
 
 TextDecodeOptions& TextDecodeOptions::operator=(const TextDecodeOptions&) = default;
 
-bool TextDecodeOptions::hasStream() const {
-  return m_hasStream;
+bool TextDecodeOptions::hasStream() const
+{
+    return m_hasStream;
 }
-bool TextDecodeOptions::stream() const {
-  DCHECK(m_hasStream);
-  return m_stream;
+bool TextDecodeOptions::stream() const
+{
+    DCHECK(m_hasStream);
+    return m_stream;
 }
-void TextDecodeOptions::setStream(bool value) {
-  m_stream = value;
-  m_hasStream = true;
+void TextDecodeOptions::setStream(bool value)
+{
+    m_stream = value;
+    m_hasStream = true;
 }
 
-DEFINE_TRACE(TextDecodeOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(TextDecodeOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

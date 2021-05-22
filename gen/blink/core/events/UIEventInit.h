@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef UIEventInit_h
 #define UIEventInit_h
 
@@ -22,39 +22,40 @@ class DOMWindow;
 class InputDeviceCapabilities;
 
 class CORE_EXPORT UIEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  UIEventInit();
-  virtual ~UIEventInit();
-  UIEventInit(const UIEventInit&);
-  UIEventInit& operator=(const UIEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDetail() const;
-  int detail() const;
-  void setDetail(int);
+public:
+    UIEventInit();
+    virtual ~UIEventInit();
+    UIEventInit(const UIEventInit&);
+    UIEventInit& operator=(const UIEventInit&);
 
-  bool hasSourceCapabilities() const;
-  InputDeviceCapabilities* sourceCapabilities() const;
-  void setSourceCapabilities(InputDeviceCapabilities*);
-  void setSourceCapabilitiesToNull();
+    bool hasDetail() const;
+    int detail() const;
+    void setDetail(int);
 
-  bool hasView() const;
-  DOMWindow* view() const;
-  void setView(DOMWindow*);
-  void setViewToNull();
+    bool hasSourceCapabilities() const;
+    InputDeviceCapabilities* sourceCapabilities() const;
+    void setSourceCapabilities(InputDeviceCapabilities*);
+    void setSourceCapabilitiesToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasView() const;
+    DOMWindow* view() const;
+    void setView(DOMWindow*);
+    void setViewToNull();
 
- private:
-  bool m_hasDetail = false;
-  int m_detail;
-  Member<InputDeviceCapabilities> m_sourceCapabilities;
-  Member<DOMWindow> m_view;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8UIEventInit;
+private:
+    bool m_hasDetail = false;
+    int m_detail;
+    Member<InputDeviceCapabilities> m_sourceCapabilities;
+    Member<DOMWindow> m_view;
+
+    friend class V8UIEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // UIEventInit_h
+#endif // UIEventInit_h

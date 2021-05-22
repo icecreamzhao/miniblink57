@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8DeviceLightEventInit_h
 #define V8DeviceLightEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8DeviceLightEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DeviceLightEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DeviceLightEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8DeviceLightEventInit(const DeviceLightEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DeviceLightEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DeviceLightEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<DeviceLightEventInit> {
-  static DeviceLightEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static DeviceLightEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<DeviceLightEventInit> {
-  typedef V8DeviceLightEventInit Type;
+    typedef V8DeviceLightEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8DeviceLightEventInit_h
+#endif // V8DeviceLightEventInit_h

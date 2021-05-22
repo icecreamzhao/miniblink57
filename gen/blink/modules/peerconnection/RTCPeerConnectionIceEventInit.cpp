@@ -8,38 +8,44 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RTCPeerConnectionIceEventInit.h"
 
 #include "modules/peerconnection/RTCIceCandidate.h"
 
 namespace blink {
 
-RTCPeerConnectionIceEventInit::RTCPeerConnectionIceEventInit() {
+RTCPeerConnectionIceEventInit::RTCPeerConnectionIceEventInit()
+{
 }
 
-RTCPeerConnectionIceEventInit::~RTCPeerConnectionIceEventInit() {}
+RTCPeerConnectionIceEventInit::~RTCPeerConnectionIceEventInit() { }
 
 RTCPeerConnectionIceEventInit::RTCPeerConnectionIceEventInit(const RTCPeerConnectionIceEventInit&) = default;
 
 RTCPeerConnectionIceEventInit& RTCPeerConnectionIceEventInit::operator=(const RTCPeerConnectionIceEventInit&) = default;
 
-bool RTCPeerConnectionIceEventInit::hasCandidate() const {
-  return m_candidate;
+bool RTCPeerConnectionIceEventInit::hasCandidate() const
+{
+    return m_candidate;
 }
-RTCIceCandidate* RTCPeerConnectionIceEventInit::candidate() const {
-  return m_candidate;
+RTCIceCandidate* RTCPeerConnectionIceEventInit::candidate() const
+{
+    return m_candidate;
 }
-void RTCPeerConnectionIceEventInit::setCandidate(RTCIceCandidate* value) {
-  m_candidate = value;
+void RTCPeerConnectionIceEventInit::setCandidate(RTCIceCandidate* value)
+{
+    m_candidate = value;
 }
-void RTCPeerConnectionIceEventInit::setCandidateToNull() {
-  m_candidate = Member<RTCIceCandidate>();
+void RTCPeerConnectionIceEventInit::setCandidateToNull()
+{
+    m_candidate = Member<RTCIceCandidate>();
 }
 
-DEFINE_TRACE(RTCPeerConnectionIceEventInit) {
-  visitor->trace(m_candidate);
-  EventInit::trace(visitor);
+DEFINE_TRACE(RTCPeerConnectionIceEventInit)
+{
+    visitor->trace(m_candidate);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

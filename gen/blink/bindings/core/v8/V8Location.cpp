@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Location.h"
 
 #include "bindings/core/v8/BindingSecurity.h"
@@ -52,515 +52,569 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Location::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Location is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace LocationV8Internal {
 
-static void ancestorOriginsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  DOMStringList* cppValue(WTF::getPtr(impl->ancestorOrigins()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Location#ancestorOrigins";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-CORE_EXPORT void ancestorOriginsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::ancestorOriginsAttributeGetter(info);
-}
-
-static void hrefAttributeGetter(const v8::PropertyCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->href(), info.GetIsolate());
-}
-
-CORE_EXPORT void hrefAttributeGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::hrefAttributeGetter(info);
-}
-
-static void hrefAttributeSetter(v8::Local<v8::Value> v8Value, const V8CrossOriginSetterInfo& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Location* impl = V8Location::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "href");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setHref(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
-
-CORE_EXPORT void hrefAttributeSetterCallback(v8::Local<v8::Name>, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<void>& info) {
-  LocationV8Internal::hrefAttributeSetter(v8Value, V8CrossOriginSetterInfo(info.GetIsolate(), info.Holder()));
-}
-
-static void originAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->origin(), info.GetIsolate());
-}
-
-CORE_EXPORT void originAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::originAttributeGetter(info);
-}
-
-static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->protocol(), info.GetIsolate());
-}
-
-CORE_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::protocolAttributeGetter(info);
-}
-
-static void protocolAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Location* impl = V8Location::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "protocol");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setProtocol(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
-
-CORE_EXPORT void protocolAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  LocationV8Internal::protocolAttributeSetter(v8Value, info);
-}
-
-static void hostAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->host(), info.GetIsolate());
-}
-
-CORE_EXPORT void hostAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::hostAttributeGetter(info);
-}
-
-static void hostAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Location* impl = V8Location::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "host");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setHost(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
-
-CORE_EXPORT void hostAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  LocationV8Internal::hostAttributeSetter(v8Value, info);
-}
-
-static void hostnameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->hostname(), info.GetIsolate());
-}
-
-CORE_EXPORT void hostnameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::hostnameAttributeGetter(info);
-}
-
-static void hostnameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Location* impl = V8Location::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "hostname");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setHostname(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
-
-CORE_EXPORT void hostnameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  LocationV8Internal::hostnameAttributeSetter(v8Value, info);
-}
-
-static void portAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->port(), info.GetIsolate());
-}
-
-CORE_EXPORT void portAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::portAttributeGetter(info);
-}
-
-static void portAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Location* impl = V8Location::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "port");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setPort(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
-
-CORE_EXPORT void portAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  LocationV8Internal::portAttributeSetter(v8Value, info);
-}
-
-static void pathnameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->pathname(), info.GetIsolate());
-}
-
-CORE_EXPORT void pathnameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::pathnameAttributeGetter(info);
-}
-
-static void pathnameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Location* impl = V8Location::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "pathname");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setPathname(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
-
-CORE_EXPORT void pathnameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  LocationV8Internal::pathnameAttributeSetter(v8Value, info);
-}
-
-static void searchAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->search(), info.GetIsolate());
-}
-
-CORE_EXPORT void searchAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::searchAttributeGetter(info);
-}
-
-static void searchAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Location* impl = V8Location::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "search");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setSearch(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
-
-CORE_EXPORT void searchAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  LocationV8Internal::searchAttributeSetter(v8Value, info);
-}
-
-static void hashAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Location* impl = V8Location::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->hash(), info.GetIsolate());
-}
-
-CORE_EXPORT void hashAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::hashAttributeGetter(info);
-}
-
-static void hashAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Location* impl = V8Location::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "hash");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setHash(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
-
-CORE_EXPORT void hashAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  LocationV8Internal::hashAttributeSetter(v8Value, info);
-}
-
-static void assignMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "assign");
-
-  Location* impl = V8Location::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> url;
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  impl->assign(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), url, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void assignMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::assignMethod(info);
-}
-
-static void assignOriginSafeMethodGetter(const v8::PropertyCallbackInfo<v8::Value>& info) {
-  static int domTemplateKey; // This address is used for a key to look up the dom template.
-  V8PerIsolateData* data = V8PerIsolateData::from(info.GetIsolate());
-  const DOMWrapperWorld& world = DOMWrapperWorld::world(info.GetIsolate()->GetCurrentContext());
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = data->findInterfaceTemplate(world, &V8Location::wrapperTypeInfo);
-  v8::Local<v8::Signature> signature = v8::Signature::New(info.GetIsolate(), interfaceTemplate);
-
-  v8::Local<v8::FunctionTemplate> methodTemplate = data->findOrCreateOperationTemplate(world, &domTemplateKey, LocationV8Internal::assignMethodCallback, v8Undefined(), signature, 1);
-  // Return the function by default, unless the user script has overwritten it.
-  v8SetReturnValue(info, methodTemplate->GetFunction(info.GetIsolate()->GetCurrentContext()).ToLocalChecked());
-
-  Location* impl = V8Location::toImpl(info.Holder());
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, BindingSecurity::ErrorReportOption::DoNotReport)) {
-    return;
-  }
-
-  v8::Local<v8::Value> hiddenValue = V8HiddenValue::getHiddenValue(ScriptState::current(info.GetIsolate()), v8::Local<v8::Object>::Cast(info.Holder()), v8AtomicString(info.GetIsolate(), "assign"));
-  if (!hiddenValue.IsEmpty()) {
-    v8SetReturnValue(info, hiddenValue);
-  }
-}
-
-CORE_EXPORT  void assignOriginSafeMethodGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::assignOriginSafeMethodGetter(info);
-}
-
-static void replaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "replace");
-
-  Location* impl = V8Location::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> url;
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  impl->replace(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), url, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void replaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::replaceMethod(info);
-}
-
-static void replaceOriginSafeMethodGetter(const v8::PropertyCallbackInfo<v8::Value>& info) {
-  static int domTemplateKey; // This address is used for a key to look up the dom template.
-  V8PerIsolateData* data = V8PerIsolateData::from(info.GetIsolate());
-  const DOMWrapperWorld& world = DOMWrapperWorld::world(info.GetIsolate()->GetCurrentContext());
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = data->findInterfaceTemplate(world, &V8Location::wrapperTypeInfo);
-  v8::Local<v8::Signature> signature = v8::Signature::New(info.GetIsolate(), interfaceTemplate);
-
-  v8::Local<v8::FunctionTemplate> methodTemplate = data->findOrCreateOperationTemplate(world, &domTemplateKey, LocationV8Internal::replaceMethodCallback, v8Undefined(), signature, 1);
-  // Return the function by default, unless the user script has overwritten it.
-  v8SetReturnValue(info, methodTemplate->GetFunction(info.GetIsolate()->GetCurrentContext()).ToLocalChecked());
-
-  Location* impl = V8Location::toImpl(info.Holder());
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, BindingSecurity::ErrorReportOption::DoNotReport)) {
-    return;
-  }
-
-  v8::Local<v8::Value> hiddenValue = V8HiddenValue::getHiddenValue(ScriptState::current(info.GetIsolate()), v8::Local<v8::Object>::Cast(info.Holder()), v8AtomicString(info.GetIsolate(), "replace"));
-  if (!hiddenValue.IsEmpty()) {
-    v8SetReturnValue(info, hiddenValue);
-  }
-}
-
-CORE_EXPORT  void replaceOriginSafeMethodGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::replaceOriginSafeMethodGetter(info);
-}
-
-static void reloadMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Location* impl = V8Location::toImpl(info.Holder());
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "reload");
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
-    return;
-  }
-
-  impl->reload(currentDOMWindow(info.GetIsolate()));
-}
-
-CORE_EXPORT  void reloadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::reloadMethod(info);
-}
-
-static void toStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Location* impl = V8Location::toImpl(info.Holder());
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "toString");
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
-    return;
-  }
-
-  v8SetReturnValueString(info, impl->href(), info.GetIsolate());
-}
-
-CORE_EXPORT  void toStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::toStringMethod(info);
-}
-
-static void valueOfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Location* impl = V8Location::toImpl(info.Holder());
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "valueOf");
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
-    return;
-  }
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  v8SetReturnValue(info, impl->valueOf(ScriptValue(scriptState, info.Holder())).v8Value());
-}
-
-CORE_EXPORT  void valueOfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LocationV8Internal::valueOfMethod(info);
-}
-
-CORE_EXPORT bool securityCheck(v8::Local<v8::Context> accessingContext, v8::Local<v8::Object> accessedObject, v8::Local<v8::Value> data) {
-  Location* impl = V8Location::toImpl(accessedObject);
-  return BindingSecurity::shouldAllowAccessTo(toLocalDOMWindow(toDOMWindow(accessingContext)), impl, BindingSecurity::ErrorReportOption::DoNotReport);
-}
-
-static const struct {
-  using GetterCallback = void(*)(const v8::PropertyCallbackInfo<v8::Value>&);
-  using SetterCallback = void(*)(v8::Local<v8::Value>, const V8CrossOriginSetterInfo&);
-
-  const char* const name;
-  const GetterCallback getter;
-  const SetterCallback setter;
-} kCrossOriginAttributeTable[] = {
-  {
-    "href",
-    nullptr,
-    &LocationV8Internal::hrefAttributeSetter,
-  },
-  {"assign", &LocationV8Internal::assignOriginSafeMethodGetter, nullptr},
-  {"replace", &LocationV8Internal::replaceOriginSafeMethodGetter, nullptr},
-};
-
-CORE_EXPORT void crossOriginNamedGetter(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
-
-  for (const auto& attribute : kCrossOriginAttributeTable) {
-    if (propertyName == attribute.name && attribute.getter) {
-      attribute.getter(info);
-      return;
+    static void ancestorOriginsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Location* impl = V8Location::toImpl(holder);
+
+        DOMStringList* cppValue(WTF::getPtr(impl->ancestorOrigins()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Location#ancestorOrigins";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
     }
-  }
 
-  BindingSecurity::failedAccessCheckFor(
-      info.GetIsolate(),
-      V8Location::toImpl(info.Holder())->frame());
-}
-
-CORE_EXPORT void crossOriginNamedSetter(v8::Local<v8::Name> name, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
-
-  for (const auto& attribute : kCrossOriginAttributeTable) {
-    if (propertyName == attribute.name && attribute.setter) {
-      attribute.setter(value, V8CrossOriginSetterInfo(info.GetIsolate(), info.Holder()));
-      return;
+    CORE_EXPORT void ancestorOriginsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::ancestorOriginsAttributeGetter(info);
     }
-  }
 
-  BindingSecurity::failedAccessCheckFor(
-      info.GetIsolate(),
-      V8Location::toImpl(info.Holder())->frame());
-}
+    static void hrefAttributeGetter(const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-CORE_EXPORT void crossOriginNamedEnumerator(const v8::PropertyCallbackInfo<v8::Array>& info) {
-  Vector<String> names;
-  for (const auto& attribute : kCrossOriginAttributeTable)
-    names.push_back(attribute.name);
+        Location* impl = V8Location::toImpl(holder);
 
-  v8SetReturnValue(
-      info,
-      ToV8(names, info.Holder(), info.GetIsolate()).As<v8::Array>());
-}
+        v8SetReturnValueString(info, impl->href(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void hrefAttributeGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::hrefAttributeGetter(info);
+    }
+
+    static void hrefAttributeSetter(v8::Local<v8::Value> v8Value, const V8CrossOriginSetterInfo& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Location* impl = V8Location::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "href");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setHref(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void hrefAttributeSetterCallback(v8::Local<v8::Name>, v8::Local<v8::Value> v8Value, const v8::PropertyCallbackInfo<void>& info)
+    {
+        LocationV8Internal::hrefAttributeSetter(v8Value, V8CrossOriginSetterInfo(info.GetIsolate(), info.Holder()));
+    }
+
+    static void originAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Location* impl = V8Location::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->origin(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void originAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::originAttributeGetter(info);
+    }
+
+    static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Location* impl = V8Location::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->protocol(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::protocolAttributeGetter(info);
+    }
+
+    static void protocolAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Location* impl = V8Location::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "protocol");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setProtocol(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void protocolAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        LocationV8Internal::protocolAttributeSetter(v8Value, info);
+    }
+
+    static void hostAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Location* impl = V8Location::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->host(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void hostAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::hostAttributeGetter(info);
+    }
+
+    static void hostAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Location* impl = V8Location::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "host");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setHost(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void hostAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        LocationV8Internal::hostAttributeSetter(v8Value, info);
+    }
+
+    static void hostnameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Location* impl = V8Location::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->hostname(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void hostnameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::hostnameAttributeGetter(info);
+    }
+
+    static void hostnameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Location* impl = V8Location::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "hostname");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setHostname(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void hostnameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        LocationV8Internal::hostnameAttributeSetter(v8Value, info);
+    }
+
+    static void portAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Location* impl = V8Location::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->port(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void portAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::portAttributeGetter(info);
+    }
+
+    static void portAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Location* impl = V8Location::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "port");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setPort(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void portAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        LocationV8Internal::portAttributeSetter(v8Value, info);
+    }
+
+    static void pathnameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Location* impl = V8Location::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->pathname(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void pathnameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::pathnameAttributeGetter(info);
+    }
+
+    static void pathnameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Location* impl = V8Location::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "pathname");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setPathname(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void pathnameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        LocationV8Internal::pathnameAttributeSetter(v8Value, info);
+    }
+
+    static void searchAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Location* impl = V8Location::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->search(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void searchAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::searchAttributeGetter(info);
+    }
+
+    static void searchAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Location* impl = V8Location::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "search");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setSearch(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void searchAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        LocationV8Internal::searchAttributeSetter(v8Value, info);
+    }
+
+    static void hashAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Location* impl = V8Location::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->hash(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void hashAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::hashAttributeGetter(info);
+    }
+
+    static void hashAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Location* impl = V8Location::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Location", "hash");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setHash(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void hashAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        LocationV8Internal::hashAttributeSetter(v8Value, info);
+    }
+
+    static void assignMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "assign");
+
+        Location* impl = V8Location::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> url;
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        impl->assign(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), url, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void assignMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::assignMethod(info);
+    }
+
+    static void assignOriginSafeMethodGetter(const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        static int domTemplateKey; // This address is used for a key to look up the dom template.
+        V8PerIsolateData* data = V8PerIsolateData::from(info.GetIsolate());
+        const DOMWrapperWorld& world = DOMWrapperWorld::world(info.GetIsolate()->GetCurrentContext());
+        v8::Local<v8::FunctionTemplate> interfaceTemplate = data->findInterfaceTemplate(world, &V8Location::wrapperTypeInfo);
+        v8::Local<v8::Signature> signature = v8::Signature::New(info.GetIsolate(), interfaceTemplate);
+
+        v8::Local<v8::FunctionTemplate> methodTemplate = data->findOrCreateOperationTemplate(world, &domTemplateKey, LocationV8Internal::assignMethodCallback, v8Undefined(), signature, 1);
+        // Return the function by default, unless the user script has overwritten it.
+        v8SetReturnValue(info, methodTemplate->GetFunction(info.GetIsolate()->GetCurrentContext()).ToLocalChecked());
+
+        Location* impl = V8Location::toImpl(info.Holder());
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, BindingSecurity::ErrorReportOption::DoNotReport)) {
+            return;
+        }
+
+        v8::Local<v8::Value> hiddenValue = V8HiddenValue::getHiddenValue(ScriptState::current(info.GetIsolate()), v8::Local<v8::Object>::Cast(info.Holder()), v8AtomicString(info.GetIsolate(), "assign"));
+        if (!hiddenValue.IsEmpty()) {
+            v8SetReturnValue(info, hiddenValue);
+        }
+    }
+
+    CORE_EXPORT void assignOriginSafeMethodGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::assignOriginSafeMethodGetter(info);
+    }
+
+    static void replaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "replace");
+
+        Location* impl = V8Location::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> url;
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        impl->replace(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), url, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void replaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::replaceMethod(info);
+    }
+
+    static void replaceOriginSafeMethodGetter(const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        static int domTemplateKey; // This address is used for a key to look up the dom template.
+        V8PerIsolateData* data = V8PerIsolateData::from(info.GetIsolate());
+        const DOMWrapperWorld& world = DOMWrapperWorld::world(info.GetIsolate()->GetCurrentContext());
+        v8::Local<v8::FunctionTemplate> interfaceTemplate = data->findInterfaceTemplate(world, &V8Location::wrapperTypeInfo);
+        v8::Local<v8::Signature> signature = v8::Signature::New(info.GetIsolate(), interfaceTemplate);
+
+        v8::Local<v8::FunctionTemplate> methodTemplate = data->findOrCreateOperationTemplate(world, &domTemplateKey, LocationV8Internal::replaceMethodCallback, v8Undefined(), signature, 1);
+        // Return the function by default, unless the user script has overwritten it.
+        v8SetReturnValue(info, methodTemplate->GetFunction(info.GetIsolate()->GetCurrentContext()).ToLocalChecked());
+
+        Location* impl = V8Location::toImpl(info.Holder());
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, BindingSecurity::ErrorReportOption::DoNotReport)) {
+            return;
+        }
+
+        v8::Local<v8::Value> hiddenValue = V8HiddenValue::getHiddenValue(ScriptState::current(info.GetIsolate()), v8::Local<v8::Object>::Cast(info.Holder()), v8AtomicString(info.GetIsolate(), "replace"));
+        if (!hiddenValue.IsEmpty()) {
+            v8SetReturnValue(info, hiddenValue);
+        }
+    }
+
+    CORE_EXPORT void replaceOriginSafeMethodGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::replaceOriginSafeMethodGetter(info);
+    }
+
+    static void reloadMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Location* impl = V8Location::toImpl(info.Holder());
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "reload");
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
+            return;
+        }
+
+        impl->reload(currentDOMWindow(info.GetIsolate()));
+    }
+
+    CORE_EXPORT void reloadMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::reloadMethod(info);
+    }
+
+    static void toStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Location* impl = V8Location::toImpl(info.Holder());
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "toString");
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
+            return;
+        }
+
+        v8SetReturnValueString(info, impl->href(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void toStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::toStringMethod(info);
+    }
+
+    static void valueOfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Location* impl = V8Location::toImpl(info.Holder());
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Location", "valueOf");
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
+            return;
+        }
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        v8SetReturnValue(info, impl->valueOf(ScriptValue(scriptState, info.Holder())).v8Value());
+    }
+
+    CORE_EXPORT void valueOfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LocationV8Internal::valueOfMethod(info);
+    }
+
+    CORE_EXPORT bool securityCheck(v8::Local<v8::Context> accessingContext, v8::Local<v8::Object> accessedObject, v8::Local<v8::Value> data)
+    {
+        Location* impl = V8Location::toImpl(accessedObject);
+        return BindingSecurity::shouldAllowAccessTo(toLocalDOMWindow(toDOMWindow(accessingContext)), impl, BindingSecurity::ErrorReportOption::DoNotReport);
+    }
+
+    static const struct {
+        using GetterCallback = void (*)(const v8::PropertyCallbackInfo<v8::Value>&);
+        using SetterCallback = void (*)(v8::Local<v8::Value>, const V8CrossOriginSetterInfo&);
+
+        const char* const name;
+        const GetterCallback getter;
+        const SetterCallback setter;
+    } kCrossOriginAttributeTable[] = {
+        {
+            "href",
+            nullptr,
+            &LocationV8Internal::hrefAttributeSetter,
+        },
+        { "assign", &LocationV8Internal::assignOriginSafeMethodGetter, nullptr },
+        { "replace", &LocationV8Internal::replaceOriginSafeMethodGetter, nullptr },
+    };
+
+    CORE_EXPORT void crossOriginNamedGetter(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+
+        for (const auto& attribute : kCrossOriginAttributeTable) {
+            if (propertyName == attribute.name && attribute.getter) {
+                attribute.getter(info);
+                return;
+            }
+        }
+
+        BindingSecurity::failedAccessCheckFor(
+            info.GetIsolate(),
+            V8Location::toImpl(info.Holder())->frame());
+    }
+
+    CORE_EXPORT void crossOriginNamedSetter(v8::Local<v8::Name> name, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+
+        for (const auto& attribute : kCrossOriginAttributeTable) {
+            if (propertyName == attribute.name && attribute.setter) {
+                attribute.setter(value, V8CrossOriginSetterInfo(info.GetIsolate(), info.Holder()));
+                return;
+            }
+        }
+
+        BindingSecurity::failedAccessCheckFor(
+            info.GetIsolate(),
+            V8Location::toImpl(info.Holder())->frame());
+    }
+
+    CORE_EXPORT void crossOriginNamedEnumerator(const v8::PropertyCallbackInfo<v8::Array>& info)
+    {
+        Vector<String> names;
+        for (const auto& attribute : kCrossOriginAttributeTable)
+            names.push_back(attribute.name);
+
+        v8SetReturnValue(
+            info,
+            ToV8(names, info.Holder(), info.GetIsolate()).As<v8::Array>());
+    }
 
 } // namespace LocationV8Internal
 
@@ -571,79 +625,84 @@ CORE_EXPORT void crossOriginNamedEnumerator(const v8::PropertyCallbackInfo<v8::A
 #pragma clang diagnostic ignored "-Wglobal-constructors"
 #endif
 const V8DOMConfiguration::AttributeConfiguration V8LocationAttributes[] = {
-    {"href", LocationV8Internal::hrefAttributeGetterCallback, LocationV8Internal::hrefAttributeSetterCallback, 0, 0, nullptr, 0, static_cast<v8::AccessControl>(v8::PROHIBITS_OVERWRITING), static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "href", LocationV8Internal::hrefAttributeGetterCallback, LocationV8Internal::hrefAttributeSetterCallback, 0, 0, nullptr, 0, static_cast<v8::AccessControl>(v8::PROHIBITS_OVERWRITING), static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 #if defined(COMPONENT_BUILD) && defined(WIN32) && COMPILER(CLANG)
 #pragma clang diagnostic pop
 #endif
 
 const V8DOMConfiguration::AccessorConfiguration V8LocationAccessors[] = {
-    {"ancestorOrigins", LocationV8Internal::ancestorOriginsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"origin", LocationV8Internal::originAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"protocol", LocationV8Internal::protocolAttributeGetterCallback, LocationV8Internal::protocolAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"host", LocationV8Internal::hostAttributeGetterCallback, LocationV8Internal::hostAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"hostname", LocationV8Internal::hostnameAttributeGetterCallback, LocationV8Internal::hostnameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"port", LocationV8Internal::portAttributeGetterCallback, LocationV8Internal::portAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"pathname", LocationV8Internal::pathnameAttributeGetterCallback, LocationV8Internal::pathnameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"search", LocationV8Internal::searchAttributeGetterCallback, LocationV8Internal::searchAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"hash", LocationV8Internal::hashAttributeGetterCallback, LocationV8Internal::hashAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "ancestorOrigins", LocationV8Internal::ancestorOriginsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "origin", LocationV8Internal::originAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "protocol", LocationV8Internal::protocolAttributeGetterCallback, LocationV8Internal::protocolAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "host", LocationV8Internal::hostAttributeGetterCallback, LocationV8Internal::hostAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "hostname", LocationV8Internal::hostnameAttributeGetterCallback, LocationV8Internal::hostnameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "port", LocationV8Internal::portAttributeGetterCallback, LocationV8Internal::portAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "pathname", LocationV8Internal::pathnameAttributeGetterCallback, LocationV8Internal::pathnameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "search", LocationV8Internal::searchAttributeGetterCallback, LocationV8Internal::searchAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "hash", LocationV8Internal::hashAttributeGetterCallback, LocationV8Internal::hashAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8LocationMethods[] = {
-    {"reload", LocationV8Internal::reloadMethodCallback, 0, 0, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"toString", LocationV8Internal::toStringMethodCallback, 0, 0, static_cast<v8::PropertyAttribute>(v8::DontEnum | v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"valueOf", LocationV8Internal::valueOfMethodCallback, 0, 0, static_cast<v8::PropertyAttribute>(v8::DontEnum | v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "reload", LocationV8Internal::reloadMethodCallback, 0, 0, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "toString", LocationV8Internal::toStringMethodCallback, 0, 0, static_cast<v8::PropertyAttribute>(v8::DontEnum | v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "valueOf", LocationV8Internal::valueOfMethodCallback, 0, 0, static_cast<v8::PropertyAttribute>(v8::DontEnum | v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8LocationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Location::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Location::internalFieldCount);
+static void installV8LocationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Location::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Location::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAttributes(isolate, world, instanceTemplate, prototypeTemplate, V8LocationAttributes, WTF_ARRAY_LENGTH(V8LocationAttributes));
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8LocationAccessors, WTF_ARRAY_LENGTH(V8LocationAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8LocationMethods, WTF_ARRAY_LENGTH(V8LocationMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAttributes(isolate, world, instanceTemplate, prototypeTemplate, V8LocationAttributes, WTF_ARRAY_LENGTH(V8LocationAttributes));
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8LocationAccessors, WTF_ARRAY_LENGTH(V8LocationAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8LocationMethods, WTF_ARRAY_LENGTH(V8LocationMethods));
 
-  // Cross-origin access check
-  instanceTemplate->SetAccessCheckCallbackAndHandler(LocationV8Internal::securityCheck, v8::NamedPropertyHandlerConfiguration(LocationV8Internal::crossOriginNamedGetter, LocationV8Internal::crossOriginNamedSetter, nullptr, nullptr, LocationV8Internal::crossOriginNamedEnumerator), v8::IndexedPropertyHandlerConfiguration(nullptr), v8::External::New(isolate, const_cast<WrapperTypeInfo*>(&V8Location::wrapperTypeInfo)));
+    // Cross-origin access check
+    instanceTemplate->SetAccessCheckCallbackAndHandler(LocationV8Internal::securityCheck, v8::NamedPropertyHandlerConfiguration(LocationV8Internal::crossOriginNamedGetter, LocationV8Internal::crossOriginNamedSetter, nullptr, nullptr, LocationV8Internal::crossOriginNamedEnumerator), v8::IndexedPropertyHandlerConfiguration(nullptr), v8::External::New(isolate, const_cast<WrapperTypeInfo*>(&V8Location::wrapperTypeInfo)));
 
-  // Symbol.toPrimitive
-  // Prevent author scripts to inject Symbol.toPrimitive property into location
-  // objects, also prevent the look-up of Symbol.toPrimitive through the
-  // prototype chain.
-  //instanceTemplate->Set(v8::Symbol::GetToPrimitive(isolate), v8::Undefined(isolate), static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontEnum | v8::DontDelete));
-  
-  const V8DOMConfiguration::AttributeConfiguration assignOriginSafeAttributeConfiguration = {
-      "assign", LocationV8Internal::assignOriginSafeMethodGetterCallback, 0, 0, 0, nullptr, &V8Location::wrapperTypeInfo, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder
-  };
-  V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, assignOriginSafeAttributeConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration replaceOriginSafeAttributeConfiguration = {
-      "replace", LocationV8Internal::replaceOriginSafeMethodGetterCallback, 0, 0, 0, nullptr, &V8Location::wrapperTypeInfo, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder
-  };
-  V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, replaceOriginSafeAttributeConfiguration);
+    // Symbol.toPrimitive
+    // Prevent author scripts to inject Symbol.toPrimitive property into location
+    // objects, also prevent the look-up of Symbol.toPrimitive through the
+    // prototype chain.
+    //instanceTemplate->Set(v8::Symbol::GetToPrimitive(isolate), v8::Undefined(isolate), static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontEnum | v8::DontDelete));
+
+    const V8DOMConfiguration::AttributeConfiguration assignOriginSafeAttributeConfiguration = {
+        "assign", LocationV8Internal::assignOriginSafeMethodGetterCallback, 0, 0, 0, nullptr, &V8Location::wrapperTypeInfo, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder
+    };
+    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, assignOriginSafeAttributeConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration replaceOriginSafeAttributeConfiguration = {
+        "replace", LocationV8Internal::replaceOriginSafeMethodGetterCallback, 0, 0, 0, nullptr, &V8Location::wrapperTypeInfo, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder
+    };
+    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, replaceOriginSafeAttributeConfiguration);
 }
 
-v8::Local<v8::FunctionTemplate> V8Location::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8LocationTemplate);
+v8::Local<v8::FunctionTemplate> V8Location::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8LocationTemplate);
 }
 
-bool V8Location::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Location::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Location::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Location::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Location* V8Location::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Location* V8Location::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

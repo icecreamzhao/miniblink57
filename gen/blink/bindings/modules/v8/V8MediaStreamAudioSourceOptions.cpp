@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaStreamAudioSourceOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,62 +16,66 @@
 
 namespace blink {
 
-void V8MediaStreamAudioSourceOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, MediaStreamAudioSourceOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): mediaStream.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> mediaStreamValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mediaStream")).ToLocal(&mediaStreamValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (mediaStreamValue.IsEmpty() || mediaStreamValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member mediaStream is undefined.");
-    return;
-  } else {
-    MediaStream* mediaStream = V8MediaStream::toImplWithTypeCheck(isolate, mediaStreamValue);
-    if (!mediaStream) {
-      exceptionState.throwTypeError("member mediaStream is not of type MediaStream.");
-      return;
+void V8MediaStreamAudioSourceOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, MediaStreamAudioSourceOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): mediaStream.");
+        return;
     }
-    impl.setMediaStream(mediaStream);
-  }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> mediaStreamValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mediaStream")).ToLocal(&mediaStreamValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (mediaStreamValue.IsEmpty() || mediaStreamValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member mediaStream is undefined.");
+        return;
+    } else {
+        MediaStream* mediaStream = V8MediaStream::toImplWithTypeCheck(isolate, mediaStreamValue);
+        if (!mediaStream) {
+            exceptionState.throwTypeError("member mediaStream is not of type MediaStream.");
+            return;
+        }
+        impl.setMediaStream(mediaStream);
+    }
 }
 
-v8::Local<v8::Value> MediaStreamAudioSourceOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8MediaStreamAudioSourceOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> MediaStreamAudioSourceOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8MediaStreamAudioSourceOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8MediaStreamAudioSourceOptions(const MediaStreamAudioSourceOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasMediaStream()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mediaStream"), ToV8(impl.mediaStream(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+bool toV8MediaStreamAudioSourceOptions(const MediaStreamAudioSourceOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasMediaStream()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mediaStream"), ToV8(impl.mediaStream(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  return true;
+    return true;
 }
 
-MediaStreamAudioSourceOptions NativeValueTraits<MediaStreamAudioSourceOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  MediaStreamAudioSourceOptions impl;
-  V8MediaStreamAudioSourceOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+MediaStreamAudioSourceOptions NativeValueTraits<MediaStreamAudioSourceOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    MediaStreamAudioSourceOptions impl;
+    V8MediaStreamAudioSourceOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PushSubscriptionOptionsInit_h
 #define V8PushSubscriptionOptionsInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8PushSubscriptionOptionsInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PushSubscriptionOptionsInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PushSubscriptionOptionsInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8PushSubscriptionOptionsInit(const PushSubscriptionOptionsInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PushSubscriptionOptionsInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PushSubscriptionOptionsInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<PushSubscriptionOptionsInit> {
-  static PushSubscriptionOptionsInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static PushSubscriptionOptionsInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<PushSubscriptionOptionsInit> {
-  typedef V8PushSubscriptionOptionsInit Type;
+    typedef V8PushSubscriptionOptionsInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PushSubscriptionOptionsInit_h
+#endif // V8PushSubscriptionOptionsInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DOMParser.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,113 +47,122 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMParser::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMParser is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DOMParserV8Internal {
 
-static void parseFromStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMParser", "parseFromString");
+    static void parseFromStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMParser", "parseFromString");
 
-  DOMParser* impl = V8DOMParser::toImpl(info.Holder());
+        DOMParser* impl = V8DOMParser::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> str;
-  V8StringResource<> type;
-  str = info[0];
-  if (!str.prepare())
-    return;
+        V8StringResource<> str;
+        V8StringResource<> type;
+        str = info[0];
+        if (!str.prepare())
+            return;
 
-  type = info[1];
-  if (!type.prepare())
-    return;
-  const char* validTypeValues[] = {
-      "text/html",
-      "text/xml",
-      "application/xml",
-      "application/xhtml+xml",
-      "image/svg+xml",
-  };
-  if (!isValidEnum(type, validTypeValues, WTF_ARRAY_LENGTH(validTypeValues), "SupportedType", exceptionState)) {
-    return;
-  }
+        type = info[1];
+        if (!type.prepare())
+            return;
+        const char* validTypeValues[] = {
+            "text/html",
+            "text/xml",
+            "application/xml",
+            "application/xhtml+xml",
+            "image/svg+xml",
+        };
+        if (!isValidEnum(type, validTypeValues, WTF_ARRAY_LENGTH(validTypeValues), "SupportedType", exceptionState)) {
+            return;
+        }
 
-  Document* result = impl->parseFromString(str, type);
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result);
-}
+        Document* result = impl->parseFromString(str, type);
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void parseFromStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMParserV8Internal::parseFromStringMethod(info);
-}
+    CORE_EXPORT void parseFromStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMParserV8Internal::parseFromStringMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
-  DOMParser* impl = DOMParser::create(document);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMParser::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+        DOMParser* impl = DOMParser::create(document);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMParser::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace DOMParserV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8DOMParserMethods[] = {
-    {"parseFromString", DOMParserV8Internal::parseFromStringMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "parseFromString", DOMParserV8Internal::parseFromStringMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8DOMParser::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMParser"));
-    return;
-  }
+void V8DOMParser::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMParser"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  DOMParserV8Internal::constructor(info);
+    DOMParserV8Internal::constructor(info);
 }
 
-static void installV8DOMParserTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMParser::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DOMParser::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8DOMParser::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8DOMParserTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMParser::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DOMParser::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8DOMParser::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMParserMethods, WTF_ARRAY_LENGTH(V8DOMParserMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMParserMethods, WTF_ARRAY_LENGTH(V8DOMParserMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DOMParser::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMParserTemplate);
+v8::Local<v8::FunctionTemplate> V8DOMParser::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMParserTemplate);
 }
 
-bool V8DOMParser::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DOMParser::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DOMParser::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DOMParser::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DOMParser* V8DOMParser::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMParser* V8DOMParser::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

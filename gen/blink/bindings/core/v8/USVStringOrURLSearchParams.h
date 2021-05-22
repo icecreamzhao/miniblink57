@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef USVStringOrURLSearchParams_h
 #define USVStringOrURLSearchParams_h
 
@@ -23,58 +23,60 @@ namespace blink {
 class URLSearchParams;
 
 class CORE_EXPORT USVStringOrURLSearchParams final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  USVStringOrURLSearchParams();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isUSVString() const { return m_type == SpecificTypeUSVString; }
-  String getAsUSVString() const;
-  void setUSVString(String);
-  static USVStringOrURLSearchParams fromUSVString(String);
+public:
+    USVStringOrURLSearchParams();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isURLSearchParams() const { return m_type == SpecificTypeURLSearchParams; }
-  URLSearchParams* getAsURLSearchParams() const;
-  void setURLSearchParams(URLSearchParams*);
-  static USVStringOrURLSearchParams fromURLSearchParams(URLSearchParams*);
+    bool isUSVString() const { return m_type == SpecificTypeUSVString; }
+    String getAsUSVString() const;
+    void setUSVString(String);
+    static USVStringOrURLSearchParams fromUSVString(String);
 
-  USVStringOrURLSearchParams(const USVStringOrURLSearchParams&);
-  ~USVStringOrURLSearchParams();
-  USVStringOrURLSearchParams& operator=(const USVStringOrURLSearchParams&);
-  DECLARE_TRACE();
+    bool isURLSearchParams() const { return m_type == SpecificTypeURLSearchParams; }
+    URLSearchParams* getAsURLSearchParams() const;
+    void setURLSearchParams(URLSearchParams*);
+    static USVStringOrURLSearchParams fromURLSearchParams(URLSearchParams*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeUSVString,
-    SpecificTypeURLSearchParams,
-  };
-  SpecificTypes m_type;
+    USVStringOrURLSearchParams(const USVStringOrURLSearchParams&);
+    ~USVStringOrURLSearchParams();
+    USVStringOrURLSearchParams& operator=(const USVStringOrURLSearchParams&);
+    DECLARE_TRACE();
 
-  String m_uSVString;
-  Member<URLSearchParams> m_urlSearchParams;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeUSVString,
+        SpecificTypeURLSearchParams,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const USVStringOrURLSearchParams&, v8::Local<v8::Object>, v8::Isolate*);
+    String m_uSVString;
+    Member<URLSearchParams> m_urlSearchParams;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const USVStringOrURLSearchParams&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8USVStringOrURLSearchParams final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, USVStringOrURLSearchParams&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, USVStringOrURLSearchParams&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const USVStringOrURLSearchParams&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, USVStringOrURLSearchParams& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, USVStringOrURLSearchParams& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<USVStringOrURLSearchParams> {
-  CORE_EXPORT static USVStringOrURLSearchParams nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static USVStringOrURLSearchParams nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -82,4 +84,4 @@ struct NativeValueTraits<USVStringOrURLSearchParams> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::USVStringOrURLSearchParams);
 
-#endif  // USVStringOrURLSearchParams_h
+#endif // USVStringOrURLSearchParams_h

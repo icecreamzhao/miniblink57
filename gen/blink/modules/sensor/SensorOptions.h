@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef SensorOptions_h
 #define SensorOptions_h
 
@@ -19,28 +19,29 @@
 namespace blink {
 
 class MODULES_EXPORT SensorOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  SensorOptions();
-  virtual ~SensorOptions();
-  SensorOptions(const SensorOptions&);
-  SensorOptions& operator=(const SensorOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasFrequency() const;
-  double frequency() const;
-  void setFrequency(double);
-  void setFrequencyToNull();
+public:
+    SensorOptions();
+    virtual ~SensorOptions();
+    SensorOptions(const SensorOptions&);
+    SensorOptions& operator=(const SensorOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasFrequency() const;
+    double frequency() const;
+    void setFrequency(double);
+    void setFrequencyToNull();
 
- private:
-  bool m_hasFrequency = false;
-  double m_frequency;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8SensorOptions;
+private:
+    bool m_hasFrequency = false;
+    double m_frequency;
+
+    friend class V8SensorOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // SensorOptions_h
+#endif // SensorOptions_h

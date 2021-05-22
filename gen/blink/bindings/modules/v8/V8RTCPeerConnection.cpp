@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RTCPeerConnection.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -71,1356 +71,1446 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&RTCPeerConnection::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "RTCPeerConnection is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace RTCPeerConnectionV8Internal {
 
-static void localDescriptionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  RTCSessionDescription* cppValue(WTF::getPtr(impl->localDescription()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#RTCPeerConnection#localDescription";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void localDescriptionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::localDescriptionAttributeGetter(info);
-}
-
-static void remoteDescriptionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  RTCSessionDescription* cppValue(WTF::getPtr(impl->remoteDescription()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#RTCPeerConnection#remoteDescription";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void remoteDescriptionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::remoteDescriptionAttributeGetter(info);
-}
-
-static void signalingStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->signalingState(), info.GetIsolate());
-}
-
-MODULES_EXPORT void signalingStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::signalingStateAttributeGetter(info);
-}
-
-static void iceGatheringStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->iceGatheringState(), info.GetIsolate());
-}
-
-MODULES_EXPORT void iceGatheringStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::iceGatheringStateAttributeGetter(info);
-}
-
-static void iceConnectionStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->iceConnectionState(), info.GetIsolate());
-}
-
-MODULES_EXPORT void iceConnectionStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::iceConnectionStateAttributeGetter(info);
-}
-
-static void onnegotiationneededAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onnegotiationneeded()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onnegotiationneededAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::onnegotiationneededAttributeGetter(info);
-}
-
-static void onnegotiationneededAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onnegotiationneeded(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
-
-  impl->setOnnegotiationneeded(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onnegotiationneededAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCPeerConnectionV8Internal::onnegotiationneededAttributeSetter(v8Value, info);
-}
-
-static void onicecandidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onicecandidate()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onicecandidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::onicecandidateAttributeGetter(info);
-}
-
-static void onicecandidateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onicecandidate(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
-
-  impl->setOnicecandidate(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onicecandidateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCPeerConnectionV8Internal::onicecandidateAttributeSetter(v8Value, info);
-}
-
-static void onsignalingstatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onsignalingstatechange()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onsignalingstatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::onsignalingstatechangeAttributeGetter(info);
-}
-
-static void onsignalingstatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsignalingstatechange(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
-
-  impl->setOnsignalingstatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onsignalingstatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCPeerConnectionV8Internal::onsignalingstatechangeAttributeSetter(v8Value, info);
-}
-
-static void oniceconnectionstatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->oniceconnectionstatechange()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void oniceconnectionstatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::oniceconnectionstatechangeAttributeGetter(info);
-}
-
-static void oniceconnectionstatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oniceconnectionstatechange(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
-
-  impl->setOniceconnectionstatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void oniceconnectionstatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCPeerConnectionV8Internal::oniceconnectionstatechangeAttributeSetter(v8Value, info);
-}
-
-static void ondatachannelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->ondatachannel()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void ondatachannelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::ondatachannelAttributeGetter(info);
-}
-
-static void ondatachannelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondatachannel(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
-
-  impl->setOndatachannel(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void ondatachannelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCPeerConnectionV8Internal::ondatachannelAttributeSetter(v8Value, info);
-}
-
-static void onaddstreamAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onaddstream()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onaddstreamAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::onaddstreamAttributeGetter(info);
-}
-
-static void onaddstreamAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onaddstream(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
-
-  impl->setOnaddstream(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onaddstreamAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCPeerConnectionV8Internal::onaddstreamAttributeSetter(v8Value, info);
-}
-
-static void onremovestreamAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onremovestream()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onremovestreamAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::onremovestreamAttributeGetter(info);
-}
-
-static void onremovestreamAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onremovestream(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
-
-  impl->setOnremovestream(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onremovestreamAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCPeerConnectionV8Internal::onremovestreamAttributeSetter(v8Value, info);
-}
-
-static void createOffer1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createOffer");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RTCOfferOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
-
-    return;
-  }
-  V8RTCOfferOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->createOffer(scriptState, options);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void createAnswer1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createAnswer");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RTCAnswerOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
-
-    return;
-  }
-  V8RTCAnswerOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->createAnswer(scriptState, options);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void setLocalDescription1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setLocalDescription");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RTCSessionDescriptionInit description;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('description') is not an object.");
-
-    return;
-  }
-  V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], description, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->setLocalDescription(scriptState, description);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void setRemoteDescription1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setRemoteDescription");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RTCSessionDescriptionInit description;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('description') is not an object.");
-
-    return;
-  }
-  V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], description, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->setRemoteDescription(scriptState, description);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void addIceCandidate1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "addIceCandidate");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RTCIceCandidateInitOrRTCIceCandidate candidate;
-  V8RTCIceCandidateInitOrRTCIceCandidate::toImpl(info.GetIsolate(), info[0], candidate, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->addIceCandidate(scriptState, candidate);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "close");
-
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  impl->close(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::closeMethod(info);
-}
-
-static void createOffer2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createOffer");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RTCSessionDescriptionCallback* successCallback;
-  RTCPeerConnectionErrorCallback* failureCallback;
-  Dictionary rtcOfferOptions;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  successCallback = V8RTCSessionDescriptionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
-
-  if (info.Length() <= 1 || !info[1]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-    return;
-  }
-  failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('rtcOfferOptions') is not an object.");
-
-    return;
-  }
-  rtcOfferOptions = Dictionary(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->createOffer(scriptState, successCallback, failureCallback, rtcOfferOptions, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void createOfferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 0:
-      if (true) {
-        createOffer1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (true) {
-        createOffer1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        createOffer2Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        createOffer2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createOffer");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-MODULES_EXPORT  void createOfferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::createOfferMethod(info);
-}
-
-static void createAnswer2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createAnswer");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RTCSessionDescriptionCallback* successCallback;
-  RTCPeerConnectionErrorCallback* failureCallback;
-  Dictionary mediaConstraints;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  successCallback = V8RTCSessionDescriptionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
-
-  if (info.Length() <= 1 || !info[1]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-    return;
-  }
-  failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('mediaConstraints') is not an object.");
-
-    return;
-  }
-  mediaConstraints = Dictionary(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = impl->createAnswer(scriptState, successCallback, failureCallback, mediaConstraints);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void createAnswerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 0:
-      if (true) {
-        createAnswer1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (true) {
-        createAnswer1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        createAnswer2Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        createAnswer2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createAnswer");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-MODULES_EXPORT  void createAnswerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::createAnswerMethod(info);
-}
-
-static void setLocalDescription2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setLocalDescription");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RTCSessionDescriptionInit description;
-  VoidCallback* successCallback;
-  RTCPeerConnectionErrorCallback* failureCallback;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('description') is not an object.");
-
-    return;
-  }
-  V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], description, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (info.Length() <= 1 || !info[1]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-    return;
-  }
-  successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-      return;
+    static void localDescriptionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        RTCSessionDescription* cppValue(WTF::getPtr(impl->localDescription()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#RTCPeerConnection#localDescription";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
     }
-    failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    failureCallback = nullptr;
-  }
 
-  ScriptPromise result = impl->setLocalDescription(scriptState, description, successCallback, failureCallback);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void setLocalDescriptionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 1:
-      if (true) {
-        setLocalDescription1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        setLocalDescription2Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        setLocalDescription2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setLocalDescription");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+    MODULES_EXPORT void localDescriptionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::localDescriptionAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void setLocalDescriptionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::setLocalDescriptionMethod(info);
-}
+    static void remoteDescriptionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void setRemoteDescription2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setRemoteDescription");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+        RTCSessionDescription* cppValue(WTF::getPtr(impl->remoteDescription()));
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#RTCPeerConnection#remoteDescription";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  RTCSessionDescriptionInit description;
-  VoidCallback* successCallback;
-  RTCPeerConnectionErrorCallback* failureCallback;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('description') is not an object.");
-
-    return;
-  }
-  V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], description, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (info.Length() <= 1 || !info[1]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-    return;
-  }
-  successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    failureCallback = nullptr;
-  }
 
-  ScriptPromise result = impl->setRemoteDescription(scriptState, description, successCallback, failureCallback);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void setRemoteDescriptionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 1:
-      if (true) {
-        setRemoteDescription1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        setRemoteDescription2Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        setRemoteDescription2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setRemoteDescription");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+    MODULES_EXPORT void remoteDescriptionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::remoteDescriptionAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void setRemoteDescriptionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::setRemoteDescriptionMethod(info);
-}
+    static void signalingStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void addIceCandidate2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "addIceCandidate");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  RTCIceCandidateInitOrRTCIceCandidate candidate;
-  VoidCallback* successCallback;
-  RTCPeerConnectionErrorCallback* failureCallback;
-  V8RTCIceCandidateInitOrRTCIceCandidate::toImpl(info.GetIsolate(), info[0], candidate, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (info.Length() <= 1 || !info[1]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-    return;
-  }
-  successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-
-  if (info.Length() <= 2 || !info[2]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-    return;
-  }
-  failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-
-  ScriptPromise result = impl->addIceCandidate(scriptState, candidate, successCallback, failureCallback);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-static void addIceCandidateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 1:
-      if (true) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::RTCPeerConnectionAddIceCandidatePromise);
-        addIceCandidate1Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::RTCPeerConnectionAddIceCandidateLegacy);
-        addIceCandidate2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "addIceCandidate");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValueString(info, impl->signalingState(), info.GetIsolate());
     }
-    if (info.Length() >= 1) {
-      exceptionState.throwTypeError(ExceptionMessages::invalidArity("[1, 3]", info.Length()));
-      return;
+
+    MODULES_EXPORT void signalingStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::signalingStateAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void addIceCandidateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::addIceCandidateMethod(info);
-}
+    static void iceGatheringStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void getStats1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "getStats");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+        v8SetReturnValueString(info, impl->iceGatheringState(), info.GetIsolate());
+    }
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    MODULES_EXPORT void iceGatheringStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::iceGatheringStateAttributeGetter(info);
+    }
 
-  RTCStatsCallback* successCallback;
-  MediaStreamTrack* selector;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+    static void iceConnectionStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-    return;
-  }
-  successCallback = V8RTCStatsCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
 
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    ScriptPromise result = impl->getStats(scriptState, successCallback);
-    v8SetReturnValue(info, result.v8Value());
-    return;
-  }
-  selector = V8MediaStreamTrack::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        v8SetReturnValueString(info, impl->iceConnectionState(), info.GetIsolate());
+    }
 
-  ScriptPromise result = impl->getStats(scriptState, successCallback, selector);
-  v8SetReturnValue(info, result.v8Value());
-}
+    MODULES_EXPORT void iceConnectionStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::iceConnectionStateAttributeGetter(info);
+    }
 
-static void getStats2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "getStats");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void onnegotiationneededAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        EventListener* cppValue(WTF::getPtr(impl->onnegotiationneeded()));
 
-  ScriptPromise result = impl->getStats(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-static int getStatsMethodLength() {
-  if (RuntimeEnabledFeatures::rTCPeerConnectionNewGetStatsEnabled()) {
-    return 0;
-  }
-  return 1;
-}
+    MODULES_EXPORT void onnegotiationneededAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::onnegotiationneededAttributeGetter(info);
+    }
 
-static void getStatsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 0:
-      if (RuntimeEnabledFeatures::rTCPeerConnectionNewGetStatsEnabled()) {
-        if (true) {
-          getStats2Method(info);
-          return;
+    static void onnegotiationneededAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onnegotiationneeded(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
+
+        impl->setOnnegotiationneeded(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onnegotiationneededAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCPeerConnectionV8Internal::onnegotiationneededAttributeSetter(v8Value, info);
+    }
+
+    static void onicecandidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onicecandidate()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onicecandidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::onicecandidateAttributeGetter(info);
+    }
+
+    static void onicecandidateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onicecandidate(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
+
+        impl->setOnicecandidate(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onicecandidateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCPeerConnectionV8Internal::onicecandidateAttributeSetter(v8Value, info);
+    }
+
+    static void onsignalingstatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onsignalingstatechange()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onsignalingstatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::onsignalingstatechangeAttributeGetter(info);
+    }
+
+    static void onsignalingstatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsignalingstatechange(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
+
+        impl->setOnsignalingstatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onsignalingstatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCPeerConnectionV8Internal::onsignalingstatechangeAttributeSetter(v8Value, info);
+    }
+
+    static void oniceconnectionstatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->oniceconnectionstatechange()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void oniceconnectionstatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::oniceconnectionstatechangeAttributeGetter(info);
+    }
+
+    static void oniceconnectionstatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oniceconnectionstatechange(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
+
+        impl->setOniceconnectionstatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void oniceconnectionstatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCPeerConnectionV8Internal::oniceconnectionstatechangeAttributeSetter(v8Value, info);
+    }
+
+    static void ondatachannelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->ondatachannel()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void ondatachannelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::ondatachannelAttributeGetter(info);
+    }
+
+    static void ondatachannelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondatachannel(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
+
+        impl->setOndatachannel(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void ondatachannelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCPeerConnectionV8Internal::ondatachannelAttributeSetter(v8Value, info);
+    }
+
+    static void onaddstreamAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onaddstream()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onaddstreamAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::onaddstreamAttributeGetter(info);
+    }
+
+    static void onaddstreamAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onaddstream(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
+
+        impl->setOnaddstream(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onaddstreamAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCPeerConnectionV8Internal::onaddstreamAttributeSetter(v8Value, info);
+    }
+
+    static void onremovestreamAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onremovestream()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onremovestreamAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::onremovestreamAttributeGetter(info);
+    }
+
+    static void onremovestreamAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onremovestream(), v8Value, V8RTCPeerConnection::eventListenerCacheIndex);
+
+        impl->setOnremovestream(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onremovestreamAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCPeerConnectionV8Internal::onremovestreamAttributeSetter(v8Value, info);
+    }
+
+    static void createOffer1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createOffer");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
         }
-      }
-      break;
-    case 1:
-      if (true) {
-        getStats1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        getStats1Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "getStats");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (isArityError) {
-    if (info.Length() < RTCPeerConnectionV8Internal::getStatsMethodLength()) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(RTCPeerConnectionV8Internal::getStatsMethodLength(), info.Length()));
-      return;
+        RTCOfferOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
+
+            return;
+        }
+        V8RTCOfferOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->createOffer(scriptState, options);
+        v8SetReturnValue(info, result.v8Value());
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void getStatsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::getStatsMethod(info);
-}
+    static void createAnswer1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createAnswer");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-static void createDataChannelMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createDataChannel");
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
 
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        RTCAnswerOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> label;
-  Dictionary options;
-  label = info[0];
-  if (!label.prepare())
-    return;
+            return;
+        }
+        V8RTCAnswerOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        ScriptPromise result = impl->createAnswer(scriptState, options);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-    return;
-  }
-  options = Dictionary(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void setLocalDescription1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setLocalDescription");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  RTCDataChannel* result = impl->createDataChannel(executionContext, label, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
 
-MODULES_EXPORT  void createDataChannelMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::createDataChannelMethod(info);
-}
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-static void generateCertificateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "generateCertificate");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        RTCSessionDescriptionInit description;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('description') is not an object.");
 
-  ScriptState* scriptState = ScriptState::forFunctionObject(info);
+            return;
+        }
+        V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], description, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        ScriptPromise result = impl->setLocalDescription(scriptState, description);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-  DictionaryOrString keygenAlgorithm;
-  V8DictionaryOrString::toImpl(info.GetIsolate(), info[0], keygenAlgorithm, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void setRemoteDescription1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setRemoteDescription");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  ScriptPromise result = RTCPeerConnection::generateCertificate(scriptState, keygenAlgorithm, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
 
-MODULES_EXPORT  void generateCertificateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnectionV8Internal::generateCertificateMethod(info);
-}
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-static void updateIceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "updateIce");
+        RTCSessionDescriptionInit description;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('description') is not an object.");
 
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+            return;
+        }
+        V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], description, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  RTCConfiguration configuration;
-  Dictionary mediaConstraints;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('configuration') is not an object.");
+        ScriptPromise result = impl->setRemoteDescription(scriptState, description);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-    return;
-  }
-  V8RTCConfiguration::toImpl(info.GetIsolate(), info[0], configuration, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void addIceCandidate1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "addIceCandidate");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('mediaConstraints') is not an object.");
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
 
-    return;
-  }
-  mediaConstraints = Dictionary(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->updateIce(executionContext, configuration, mediaConstraints, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        RTCIceCandidateInitOrRTCIceCandidate candidate;
+        V8RTCIceCandidateInitOrRTCIceCandidate::toImpl(info.GetIsolate(), info[0], candidate, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-MODULES_EXPORT  void updateIceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_UpdateIce_Method);
-  RTCPeerConnectionV8Internal::updateIceMethod(info);
-}
+        ScriptPromise result = impl->addIceCandidate(scriptState, candidate);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-static void getLocalStreamsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+    static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "close");
 
-  v8SetReturnValue(info, ToV8(impl->getLocalStreams(), info.Holder(), info.GetIsolate()));
-}
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
 
-MODULES_EXPORT  void getLocalStreamsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_GetLocalStreams_Method);
-  RTCPeerConnectionV8Internal::getLocalStreamsMethod(info);
-}
+        impl->close(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-static void getRemoteStreamsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+    MODULES_EXPORT void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::closeMethod(info);
+    }
 
-  v8SetReturnValue(info, ToV8(impl->getRemoteStreams(), info.Holder(), info.GetIsolate()));
-}
+    static void createOffer2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createOffer");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-MODULES_EXPORT  void getRemoteStreamsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_GetRemoteStreams_Method);
-  RTCPeerConnectionV8Internal::getRemoteStreamsMethod(info);
-}
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
 
-static void getStreamByIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getStreamById", "RTCPeerConnection", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        RTCSessionDescriptionCallback* successCallback;
+        RTCPeerConnectionErrorCallback* failureCallback;
+        Dictionary rtcOfferOptions;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
 
-  V8StringResource<> streamId;
-  streamId = info[0];
-  if (!streamId.prepare())
-    return;
+            return;
+        }
+        successCallback = V8RTCSessionDescriptionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
 
-  v8SetReturnValue(info, impl->getStreamById(streamId));
-}
+        if (info.Length() <= 1 || !info[1]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
 
-MODULES_EXPORT  void getStreamByIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_GetStreamById_Method);
-  RTCPeerConnectionV8Internal::getStreamByIdMethod(info);
-}
+            return;
+        }
+        failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
 
-static void addStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "addStream");
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('rtcOfferOptions') is not an object.");
 
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+            return;
+        }
+        rtcOfferOptions = Dictionary(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        ScriptPromise result = impl->createOffer(scriptState, successCallback, failureCallback, rtcOfferOptions, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-  MediaStream* stream;
-  Dictionary mediaConstraints;
-  stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!stream && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'MediaStream'.");
+    static void createOfferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 0:
+            if (true) {
+                createOffer1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (true) {
+                createOffer1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                createOffer2Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                createOffer2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
 
-    return;
-  }
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createOffer");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('mediaConstraints') is not an object.");
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
 
-    return;
-  }
-  mediaConstraints = Dictionary(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+    MODULES_EXPORT void createOfferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::createOfferMethod(info);
+    }
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->addStream(executionContext, stream, mediaConstraints, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void createAnswer2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createAnswer");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-MODULES_EXPORT  void addStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_AddStream_Method);
-  RTCPeerConnectionV8Internal::addStreamMethod(info);
-}
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
 
-static void removeStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "removeStream");
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+        RTCSessionDescriptionCallback* successCallback;
+        RTCPeerConnectionErrorCallback* failureCallback;
+        Dictionary mediaConstraints;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+            return;
+        }
+        successCallback = V8RTCSessionDescriptionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
 
-  MediaStream* stream;
-  stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!stream && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'MediaStream'.");
+        if (info.Length() <= 1 || !info[1]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
 
-    return;
-  }
+            return;
+        }
+        failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
 
-  impl->removeStream(stream, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('mediaConstraints') is not an object.");
 
-MODULES_EXPORT  void removeStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_RemoveStream_Method);
-  RTCPeerConnectionV8Internal::removeStreamMethod(info);
-}
+            return;
+        }
+        mediaConstraints = Dictionary(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-static void createDTMFSenderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createDTMFSender");
+        ScriptPromise result = impl->createAnswer(scriptState, successCallback, failureCallback, mediaConstraints);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-  RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+    static void createAnswerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 0:
+            if (true) {
+                createAnswer1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (true) {
+                createAnswer1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                createAnswer2Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                createAnswer2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createAnswer");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  MediaStreamTrack* track;
-  track = V8MediaStreamTrack::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!track) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'MediaStreamTrack'.");
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
 
-    return;
-  }
+    MODULES_EXPORT void createAnswerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::createAnswerMethod(info);
+    }
 
-  RTCDTMFSender* result = impl->createDTMFSender(track, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+    static void setLocalDescription2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setLocalDescription");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-MODULES_EXPORT  void createDTMFSenderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_CreateDTMFSender_Method);
-  RTCPeerConnectionV8Internal::createDTMFSenderMethod(info);
-}
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "RTCPeerConnection");
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  RTCConfiguration configuration;
-  Dictionary mediaConstraints;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('configuration') is not an object.");
+        RTCSessionDescriptionInit description;
+        VoidCallback* successCallback;
+        RTCPeerConnectionErrorCallback* failureCallback;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('description') is not an object.");
 
-    return;
-  }
-  V8RTCConfiguration::toImpl(info.GetIsolate(), info[0], configuration, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], description, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('mediaConstraints') is not an object.");
+        if (info.Length() <= 1 || !info[1]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
 
-    return;
-  }
-  mediaConstraints = Dictionary(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  RTCPeerConnection* impl = RTCPeerConnection::create(executionContext, configuration, mediaConstraints, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8RTCPeerConnection::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+
+                return;
+            }
+            failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            failureCallback = nullptr;
+        }
+
+        ScriptPromise result = impl->setLocalDescription(scriptState, description, successCallback, failureCallback);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static void setLocalDescriptionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 1:
+            if (true) {
+                setLocalDescription1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                setLocalDescription2Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                setLocalDescription2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setLocalDescription");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void setLocalDescriptionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::setLocalDescriptionMethod(info);
+    }
+
+    static void setRemoteDescription2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setRemoteDescription");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        RTCSessionDescriptionInit description;
+        VoidCallback* successCallback;
+        RTCPeerConnectionErrorCallback* failureCallback;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('description') is not an object.");
+
+            return;
+        }
+        V8RTCSessionDescriptionInit::toImpl(info.GetIsolate(), info[0], description, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (info.Length() <= 1 || !info[1]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+
+            return;
+        }
+        successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+
+                return;
+            }
+            failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            failureCallback = nullptr;
+        }
+
+        ScriptPromise result = impl->setRemoteDescription(scriptState, description, successCallback, failureCallback);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static void setRemoteDescriptionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 1:
+            if (true) {
+                setRemoteDescription1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                setRemoteDescription2Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                setRemoteDescription2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "setRemoteDescription");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void setRemoteDescriptionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::setRemoteDescriptionMethod(info);
+    }
+
+    static void addIceCandidate2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "addIceCandidate");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        RTCIceCandidateInitOrRTCIceCandidate candidate;
+        VoidCallback* successCallback;
+        RTCPeerConnectionErrorCallback* failureCallback;
+        V8RTCIceCandidateInitOrRTCIceCandidate::toImpl(info.GetIsolate(), info[0], candidate, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (info.Length() <= 1 || !info[1]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+
+            return;
+        }
+        successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+
+        if (info.Length() <= 2 || !info[2]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+
+            return;
+        }
+        failureCallback = V8RTCPeerConnectionErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+
+        ScriptPromise result = impl->addIceCandidate(scriptState, candidate, successCallback, failureCallback);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static void addIceCandidateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 1:
+            if (true) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::RTCPeerConnectionAddIceCandidatePromise);
+                addIceCandidate1Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::RTCPeerConnectionAddIceCandidateLegacy);
+                addIceCandidate2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "addIceCandidate");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+            if (info.Length() >= 1) {
+                exceptionState.throwTypeError(ExceptionMessages::invalidArity("[1, 3]", info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void addIceCandidateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::addIceCandidateMethod(info);
+    }
+
+    static void getStats1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "getStats");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        RTCStatsCallback* successCallback;
+        MediaStreamTrack* selector;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+
+            return;
+        }
+        successCallback = V8RTCStatsCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            ScriptPromise result = impl->getStats(scriptState, successCallback);
+            v8SetReturnValue(info, result.v8Value());
+            return;
+        }
+        selector = V8MediaStreamTrack::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+
+        ScriptPromise result = impl->getStats(scriptState, successCallback, selector);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static void getStats2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "getStats");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RTCPeerConnection::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->getStats(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    static int getStatsMethodLength()
+    {
+        if (RuntimeEnabledFeatures::rTCPeerConnectionNewGetStatsEnabled()) {
+            return 0;
+        }
+        return 1;
+    }
+
+    static void getStatsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 0:
+            if (RuntimeEnabledFeatures::rTCPeerConnectionNewGetStatsEnabled()) {
+                if (true) {
+                    getStats2Method(info);
+                    return;
+                }
+            }
+            break;
+        case 1:
+            if (true) {
+                getStats1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                getStats1Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "getStats");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        if (isArityError) {
+            if (info.Length() < RTCPeerConnectionV8Internal::getStatsMethodLength()) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(RTCPeerConnectionV8Internal::getStatsMethodLength(), info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void getStatsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::getStatsMethod(info);
+    }
+
+    static void createDataChannelMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createDataChannel");
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<TreatNullAndUndefinedAsNullString> label;
+        Dictionary options;
+        label = info[0];
+        if (!label.prepare())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        options = Dictionary(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        RTCDataChannel* result = impl->createDataChannel(executionContext, label, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createDataChannelMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::createDataChannelMethod(info);
+    }
+
+    static void generateCertificateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "generateCertificate");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        ScriptState* scriptState = ScriptState::forFunctionObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        DictionaryOrString keygenAlgorithm;
+        V8DictionaryOrString::toImpl(info.GetIsolate(), info[0], keygenAlgorithm, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = RTCPeerConnection::generateCertificate(scriptState, keygenAlgorithm, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void generateCertificateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnectionV8Internal::generateCertificateMethod(info);
+    }
+
+    static void updateIceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "updateIce");
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        RTCConfiguration configuration;
+        Dictionary mediaConstraints;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('configuration') is not an object.");
+
+            return;
+        }
+        V8RTCConfiguration::toImpl(info.GetIsolate(), info[0], configuration, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('mediaConstraints') is not an object.");
+
+            return;
+        }
+        mediaConstraints = Dictionary(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->updateIce(executionContext, configuration, mediaConstraints, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void updateIceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_UpdateIce_Method);
+        RTCPeerConnectionV8Internal::updateIceMethod(info);
+    }
+
+    static void getLocalStreamsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(impl->getLocalStreams(), info.Holder(), info.GetIsolate()));
+    }
+
+    MODULES_EXPORT void getLocalStreamsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_GetLocalStreams_Method);
+        RTCPeerConnectionV8Internal::getLocalStreamsMethod(info);
+    }
+
+    static void getRemoteStreamsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(impl->getRemoteStreams(), info.Holder(), info.GetIsolate()));
+    }
+
+    MODULES_EXPORT void getRemoteStreamsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_GetRemoteStreams_Method);
+        RTCPeerConnectionV8Internal::getRemoteStreamsMethod(info);
+    }
+
+    static void getStreamByIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getStreamById", "RTCPeerConnection", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> streamId;
+        streamId = info[0];
+        if (!streamId.prepare())
+            return;
+
+        v8SetReturnValue(info, impl->getStreamById(streamId));
+    }
+
+    MODULES_EXPORT void getStreamByIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_GetStreamById_Method);
+        RTCPeerConnectionV8Internal::getStreamByIdMethod(info);
+    }
+
+    static void addStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "addStream");
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        MediaStream* stream;
+        Dictionary mediaConstraints;
+        stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!stream && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'MediaStream'.");
+
+            return;
+        }
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('mediaConstraints') is not an object.");
+
+            return;
+        }
+        mediaConstraints = Dictionary(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->addStream(executionContext, stream, mediaConstraints, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void addStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_AddStream_Method);
+        RTCPeerConnectionV8Internal::addStreamMethod(info);
+    }
+
+    static void removeStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "removeStream");
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        MediaStream* stream;
+        stream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!stream && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'MediaStream'.");
+
+            return;
+        }
+
+        impl->removeStream(stream, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void removeStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_RemoveStream_Method);
+        RTCPeerConnectionV8Internal::removeStreamMethod(info);
+    }
+
+    static void createDTMFSenderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCPeerConnection", "createDTMFSender");
+
+        RTCPeerConnection* impl = V8RTCPeerConnection::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        MediaStreamTrack* track;
+        track = V8MediaStreamTrack::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!track) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'MediaStreamTrack'.");
+
+            return;
+        }
+
+        RTCDTMFSender* result = impl->createDTMFSender(track, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createDTMFSenderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCPeerConnection_CreateDTMFSender_Method);
+        RTCPeerConnectionV8Internal::createDTMFSenderMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "RTCPeerConnection");
+
+        RTCConfiguration configuration;
+        Dictionary mediaConstraints;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('configuration') is not an object.");
+
+            return;
+        }
+        V8RTCConfiguration::toImpl(info.GetIsolate(), info[0], configuration, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('mediaConstraints') is not an object.");
+
+            return;
+        }
+        mediaConstraints = Dictionary(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        RTCPeerConnection* impl = RTCPeerConnection::create(executionContext, configuration, mediaConstraints, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8RTCPeerConnection::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace RTCPeerConnectionV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8RTCPeerConnectionAccessors[] = {
-    {"localDescription", RTCPeerConnectionV8Internal::localDescriptionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"remoteDescription", RTCPeerConnectionV8Internal::remoteDescriptionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"signalingState", RTCPeerConnectionV8Internal::signalingStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"iceGatheringState", RTCPeerConnectionV8Internal::iceGatheringStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"iceConnectionState", RTCPeerConnectionV8Internal::iceConnectionStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onnegotiationneeded", RTCPeerConnectionV8Internal::onnegotiationneededAttributeGetterCallback, RTCPeerConnectionV8Internal::onnegotiationneededAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onicecandidate", RTCPeerConnectionV8Internal::onicecandidateAttributeGetterCallback, RTCPeerConnectionV8Internal::onicecandidateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsignalingstatechange", RTCPeerConnectionV8Internal::onsignalingstatechangeAttributeGetterCallback, RTCPeerConnectionV8Internal::onsignalingstatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oniceconnectionstatechange", RTCPeerConnectionV8Internal::oniceconnectionstatechangeAttributeGetterCallback, RTCPeerConnectionV8Internal::oniceconnectionstatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondatachannel", RTCPeerConnectionV8Internal::ondatachannelAttributeGetterCallback, RTCPeerConnectionV8Internal::ondatachannelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onaddstream", RTCPeerConnectionV8Internal::onaddstreamAttributeGetterCallback, RTCPeerConnectionV8Internal::onaddstreamAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onremovestream", RTCPeerConnectionV8Internal::onremovestreamAttributeGetterCallback, RTCPeerConnectionV8Internal::onremovestreamAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "localDescription", RTCPeerConnectionV8Internal::localDescriptionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "remoteDescription", RTCPeerConnectionV8Internal::remoteDescriptionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "signalingState", RTCPeerConnectionV8Internal::signalingStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "iceGatheringState", RTCPeerConnectionV8Internal::iceGatheringStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "iceConnectionState", RTCPeerConnectionV8Internal::iceConnectionStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onnegotiationneeded", RTCPeerConnectionV8Internal::onnegotiationneededAttributeGetterCallback, RTCPeerConnectionV8Internal::onnegotiationneededAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onicecandidate", RTCPeerConnectionV8Internal::onicecandidateAttributeGetterCallback, RTCPeerConnectionV8Internal::onicecandidateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsignalingstatechange", RTCPeerConnectionV8Internal::onsignalingstatechangeAttributeGetterCallback, RTCPeerConnectionV8Internal::onsignalingstatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oniceconnectionstatechange", RTCPeerConnectionV8Internal::oniceconnectionstatechangeAttributeGetterCallback, RTCPeerConnectionV8Internal::oniceconnectionstatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondatachannel", RTCPeerConnectionV8Internal::ondatachannelAttributeGetterCallback, RTCPeerConnectionV8Internal::ondatachannelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onaddstream", RTCPeerConnectionV8Internal::onaddstreamAttributeGetterCallback, RTCPeerConnectionV8Internal::onaddstreamAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onremovestream", RTCPeerConnectionV8Internal::onremovestreamAttributeGetterCallback, RTCPeerConnectionV8Internal::onremovestreamAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8RTCPeerConnectionMethods[] = {
-    {"close", RTCPeerConnectionV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createOffer", RTCPeerConnectionV8Internal::createOfferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"createAnswer", RTCPeerConnectionV8Internal::createAnswerMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"setLocalDescription", RTCPeerConnectionV8Internal::setLocalDescriptionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"setRemoteDescription", RTCPeerConnectionV8Internal::setRemoteDescriptionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"addIceCandidate", RTCPeerConnectionV8Internal::addIceCandidateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"createDataChannel", RTCPeerConnectionV8Internal::createDataChannelMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"generateCertificate", RTCPeerConnectionV8Internal::generateCertificateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::DoNotCheckHolder},
-    {"updateIce", RTCPeerConnectionV8Internal::updateIceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getLocalStreams", RTCPeerConnectionV8Internal::getLocalStreamsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getRemoteStreams", RTCPeerConnectionV8Internal::getRemoteStreamsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getStreamById", RTCPeerConnectionV8Internal::getStreamByIdMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addStream", RTCPeerConnectionV8Internal::addStreamMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeStream", RTCPeerConnectionV8Internal::removeStreamMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createDTMFSender", RTCPeerConnectionV8Internal::createDTMFSenderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "close", RTCPeerConnectionV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createOffer", RTCPeerConnectionV8Internal::createOfferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "createAnswer", RTCPeerConnectionV8Internal::createAnswerMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "setLocalDescription", RTCPeerConnectionV8Internal::setLocalDescriptionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "setRemoteDescription", RTCPeerConnectionV8Internal::setRemoteDescriptionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "addIceCandidate", RTCPeerConnectionV8Internal::addIceCandidateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "createDataChannel", RTCPeerConnectionV8Internal::createDataChannelMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "generateCertificate", RTCPeerConnectionV8Internal::generateCertificateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::DoNotCheckHolder },
+    { "updateIce", RTCPeerConnectionV8Internal::updateIceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getLocalStreams", RTCPeerConnectionV8Internal::getLocalStreamsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getRemoteStreams", RTCPeerConnectionV8Internal::getRemoteStreamsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getStreamById", RTCPeerConnectionV8Internal::getStreamByIdMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addStream", RTCPeerConnectionV8Internal::addStreamMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeStream", RTCPeerConnectionV8Internal::removeStreamMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createDTMFSender", RTCPeerConnectionV8Internal::createDTMFSenderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8RTCPeerConnection::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("RTCPeerConnection"));
-    return;
-  }
+void V8RTCPeerConnection::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("RTCPeerConnection"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  RTCPeerConnectionV8Internal::constructor(info);
+    RTCPeerConnectionV8Internal::constructor(info);
 }
 
-static void installV8RTCPeerConnectionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCPeerConnection::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8RTCPeerConnection::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8RTCPeerConnection::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8RTCPeerConnectionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCPeerConnection::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8RTCPeerConnection::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8RTCPeerConnection::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCPeerConnectionAccessors, WTF_ARRAY_LENGTH(V8RTCPeerConnectionAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCPeerConnectionMethods, WTF_ARRAY_LENGTH(V8RTCPeerConnectionMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCPeerConnectionAccessors, WTF_ARRAY_LENGTH(V8RTCPeerConnectionAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCPeerConnectionMethods, WTF_ARRAY_LENGTH(V8RTCPeerConnectionMethods));
 
-  const V8DOMConfiguration::MethodConfiguration getStatsMethodConfiguration = {"getStats", RTCPeerConnectionV8Internal::getStatsMethodCallback, 0, RTCPeerConnectionV8Internal::getStatsMethodLength(), v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder};
-  V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getStatsMethodConfiguration);
+    const V8DOMConfiguration::MethodConfiguration getStatsMethodConfiguration = { "getStats", RTCPeerConnectionV8Internal::getStatsMethodCallback, 0, RTCPeerConnectionV8Internal::getStatsMethodLength(), v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getStatsMethodConfiguration);
 }
 
-v8::Local<v8::FunctionTemplate> V8RTCPeerConnection::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCPeerConnectionTemplate);
+v8::Local<v8::FunctionTemplate> V8RTCPeerConnection::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCPeerConnectionTemplate);
 }
 
-bool V8RTCPeerConnection::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8RTCPeerConnection::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8RTCPeerConnection::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8RTCPeerConnection::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-RTCPeerConnection* V8RTCPeerConnection::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+RTCPeerConnection* V8RTCPeerConnection::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

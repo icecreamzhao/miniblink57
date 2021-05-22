@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef StringOrCSSVariableReferenceValue_h
 #define StringOrCSSVariableReferenceValue_h
 
@@ -23,58 +23,60 @@ namespace blink {
 class CSSStyleVariableReferenceValue;
 
 class CORE_EXPORT StringOrCSSVariableReferenceValue final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  StringOrCSSVariableReferenceValue();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isString() const { return m_type == SpecificTypeString; }
-  String getAsString() const;
-  void setString(String);
-  static StringOrCSSVariableReferenceValue fromString(String);
+public:
+    StringOrCSSVariableReferenceValue();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isCSSVariableReferenceValue() const { return m_type == SpecificTypeCSSVariableReferenceValue; }
-  CSSStyleVariableReferenceValue* getAsCSSVariableReferenceValue() const;
-  void setCSSVariableReferenceValue(CSSStyleVariableReferenceValue*);
-  static StringOrCSSVariableReferenceValue fromCSSVariableReferenceValue(CSSStyleVariableReferenceValue*);
+    bool isString() const { return m_type == SpecificTypeString; }
+    String getAsString() const;
+    void setString(String);
+    static StringOrCSSVariableReferenceValue fromString(String);
 
-  StringOrCSSVariableReferenceValue(const StringOrCSSVariableReferenceValue&);
-  ~StringOrCSSVariableReferenceValue();
-  StringOrCSSVariableReferenceValue& operator=(const StringOrCSSVariableReferenceValue&);
-  DECLARE_TRACE();
+    bool isCSSVariableReferenceValue() const { return m_type == SpecificTypeCSSVariableReferenceValue; }
+    CSSStyleVariableReferenceValue* getAsCSSVariableReferenceValue() const;
+    void setCSSVariableReferenceValue(CSSStyleVariableReferenceValue*);
+    static StringOrCSSVariableReferenceValue fromCSSVariableReferenceValue(CSSStyleVariableReferenceValue*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeString,
-    SpecificTypeCSSVariableReferenceValue,
-  };
-  SpecificTypes m_type;
+    StringOrCSSVariableReferenceValue(const StringOrCSSVariableReferenceValue&);
+    ~StringOrCSSVariableReferenceValue();
+    StringOrCSSVariableReferenceValue& operator=(const StringOrCSSVariableReferenceValue&);
+    DECLARE_TRACE();
 
-  String m_string;
-  Member<CSSStyleVariableReferenceValue> m_cssVariableReferenceValue;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeString,
+        SpecificTypeCSSVariableReferenceValue,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const StringOrCSSVariableReferenceValue&, v8::Local<v8::Object>, v8::Isolate*);
+    String m_string;
+    Member<CSSStyleVariableReferenceValue> m_cssVariableReferenceValue;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const StringOrCSSVariableReferenceValue&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8StringOrCSSVariableReferenceValue final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrCSSVariableReferenceValue&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrCSSVariableReferenceValue&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const StringOrCSSVariableReferenceValue&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrCSSVariableReferenceValue& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrCSSVariableReferenceValue& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<StringOrCSSVariableReferenceValue> {
-  CORE_EXPORT static StringOrCSSVariableReferenceValue nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static StringOrCSSVariableReferenceValue nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -82,4 +84,4 @@ struct NativeValueTraits<StringOrCSSVariableReferenceValue> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::StringOrCSSVariableReferenceValue);
 
-#endif  // StringOrCSSVariableReferenceValue_h
+#endif // StringOrCSSVariableReferenceValue_h

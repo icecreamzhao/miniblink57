@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DOMRectReadOnly.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,256 +51,283 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMRectReadOnly::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMRectReadOnly is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DOMRectReadOnlyV8Internal {
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
+        DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->x());
-}
+        v8SetReturnValue(info, impl->x());
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::xAttributeGetter(info);
-}
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::xAttributeGetter(info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
+        DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->y());
-}
+        v8SetReturnValue(info, impl->y());
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::yAttributeGetter(info);
-}
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::yAttributeGetter(info);
+    }
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
+        DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->width());
-}
+        v8SetReturnValue(info, impl->width());
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::widthAttributeGetter(info);
-}
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::widthAttributeGetter(info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
+        DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->height());
-}
+        v8SetReturnValue(info, impl->height());
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::heightAttributeGetter(info);
-}
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::heightAttributeGetter(info);
+    }
 
-static void topAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void topAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
+        DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->top());
-}
+        v8SetReturnValue(info, impl->top());
+    }
 
-CORE_EXPORT void topAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::topAttributeGetter(info);
-}
+    CORE_EXPORT void topAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::topAttributeGetter(info);
+    }
 
-static void rightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
+        DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->right());
-}
+        v8SetReturnValue(info, impl->right());
+    }
 
-CORE_EXPORT void rightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::rightAttributeGetter(info);
-}
+    CORE_EXPORT void rightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::rightAttributeGetter(info);
+    }
 
-static void bottomAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bottomAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
+        DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->bottom());
-}
+        v8SetReturnValue(info, impl->bottom());
+    }
 
-CORE_EXPORT void bottomAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::bottomAttributeGetter(info);
-}
+    CORE_EXPORT void bottomAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::bottomAttributeGetter(info);
+    }
 
-static void leftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void leftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
+        DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(holder);
 
-  v8SetReturnValue(info, impl->left());
-}
+        v8SetReturnValue(info, impl->left());
+    }
 
-CORE_EXPORT void leftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::leftAttributeGetter(info);
-}
+    CORE_EXPORT void leftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::leftAttributeGetter(info);
+    }
 
-static void fromRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMRectReadOnly", "fromRect");
+    static void fromRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMRectReadOnly", "fromRect");
 
-  DOMRectInit other;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
+        DOMRectInit other;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
 
-    return;
-  }
-  V8DOMRectInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8DOMRectInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  DOMRectReadOnly* result = DOMRectReadOnly::fromRect(other);
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
-}
+        DOMRectReadOnly* result = DOMRectReadOnly::fromRect(other);
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
+    }
 
-CORE_EXPORT  void fromRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::fromRectMethod(info);
-}
+    CORE_EXPORT void fromRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::fromRectMethod(info);
+    }
 
-static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(info.Holder());
+    static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnly* impl = V8DOMRectReadOnly::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue result = impl->toJSONForBinding(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->toJSONForBinding(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-CORE_EXPORT  void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMRectReadOnlyV8Internal::toJSONMethod(info);
-}
+    CORE_EXPORT void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMRectReadOnlyV8Internal::toJSONMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMRectReadOnly");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMRectReadOnly");
 
-  double x;
-  double y;
-  double width;
-  double height;
-  if (!info[0]->IsUndefined()) {
-    x = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    x = 0;
-  }
-  if (!info[1]->IsUndefined()) {
-    y = toDouble(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    y = 0;
-  }
-  if (!info[2]->IsUndefined()) {
-    width = toDouble(info.GetIsolate(), info[2], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    width = 0;
-  }
-  if (!info[3]->IsUndefined()) {
-    height = toDouble(info.GetIsolate(), info[3], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    height = 0;
-  }
+        double x;
+        double y;
+        double width;
+        double height;
+        if (!info[0]->IsUndefined()) {
+            x = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            x = 0;
+        }
+        if (!info[1]->IsUndefined()) {
+            y = toDouble(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            y = 0;
+        }
+        if (!info[2]->IsUndefined()) {
+            width = toDouble(info.GetIsolate(), info[2], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            width = 0;
+        }
+        if (!info[3]->IsUndefined()) {
+            height = toDouble(info.GetIsolate(), info[3], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            height = 0;
+        }
 
-  DOMRectReadOnly* impl = DOMRectReadOnly::create(x, y, width, height);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMRectReadOnly::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        DOMRectReadOnly* impl = DOMRectReadOnly::create(x, y, width, height);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMRectReadOnly::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace DOMRectReadOnlyV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8DOMRectReadOnlyAccessors[] = {
-    {"x", DOMRectReadOnlyV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", DOMRectReadOnlyV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", DOMRectReadOnlyV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", DOMRectReadOnlyV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"top", DOMRectReadOnlyV8Internal::topAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"right", DOMRectReadOnlyV8Internal::rightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bottom", DOMRectReadOnlyV8Internal::bottomAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"left", DOMRectReadOnlyV8Internal::leftAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "x", DOMRectReadOnlyV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", DOMRectReadOnlyV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", DOMRectReadOnlyV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", DOMRectReadOnlyV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "top", DOMRectReadOnlyV8Internal::topAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "right", DOMRectReadOnlyV8Internal::rightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bottom", DOMRectReadOnlyV8Internal::bottomAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "left", DOMRectReadOnlyV8Internal::leftAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8DOMRectReadOnlyMethods[] = {
-    {"fromRect", DOMRectReadOnlyV8Internal::fromRectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
-    {"toJSON", DOMRectReadOnlyV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "fromRect", DOMRectReadOnlyV8Internal::fromRectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
+    { "toJSON", DOMRectReadOnlyV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8DOMRectReadOnly::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMRectReadOnly"));
-    return;
-  }
+void V8DOMRectReadOnly::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMRectReadOnly"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  DOMRectReadOnlyV8Internal::constructor(info);
+    DOMRectReadOnlyV8Internal::constructor(info);
 }
 
-static void installV8DOMRectReadOnlyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMRectReadOnly::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DOMRectReadOnly::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8DOMRectReadOnly::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8DOMRectReadOnlyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMRectReadOnly::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DOMRectReadOnly::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8DOMRectReadOnly::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  if (!RuntimeEnabledFeatures::geometryInterfacesEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::geometryInterfacesEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMRectReadOnlyAccessors, WTF_ARRAY_LENGTH(V8DOMRectReadOnlyAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMRectReadOnlyMethods, WTF_ARRAY_LENGTH(V8DOMRectReadOnlyMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMRectReadOnlyAccessors, WTF_ARRAY_LENGTH(V8DOMRectReadOnlyAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMRectReadOnlyMethods, WTF_ARRAY_LENGTH(V8DOMRectReadOnlyMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DOMRectReadOnly::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMRectReadOnlyTemplate);
+v8::Local<v8::FunctionTemplate> V8DOMRectReadOnly::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMRectReadOnlyTemplate);
 }
 
-bool V8DOMRectReadOnly::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DOMRectReadOnly::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DOMRectReadOnly::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DOMRectReadOnly::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DOMRectReadOnly* V8DOMRectReadOnly::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMRectReadOnly* V8DOMRectReadOnly::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

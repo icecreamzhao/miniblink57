@@ -8,43 +8,51 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ShadowRootInit.h"
 
 namespace blink {
 
-ShadowRootInit::ShadowRootInit() {
+ShadowRootInit::ShadowRootInit()
+{
 }
 
-ShadowRootInit::~ShadowRootInit() {}
+ShadowRootInit::~ShadowRootInit() { }
 
 ShadowRootInit::ShadowRootInit(const ShadowRootInit&) = default;
 
 ShadowRootInit& ShadowRootInit::operator=(const ShadowRootInit&) = default;
 
-bool ShadowRootInit::hasDelegatesFocus() const {
-  return m_hasDelegatesFocus;
+bool ShadowRootInit::hasDelegatesFocus() const
+{
+    return m_hasDelegatesFocus;
 }
-bool ShadowRootInit::delegatesFocus() const {
-  DCHECK(m_hasDelegatesFocus);
-  return m_delegatesFocus;
+bool ShadowRootInit::delegatesFocus() const
+{
+    DCHECK(m_hasDelegatesFocus);
+    return m_delegatesFocus;
 }
-void ShadowRootInit::setDelegatesFocus(bool value) {
-  m_delegatesFocus = value;
-  m_hasDelegatesFocus = true;
+void ShadowRootInit::setDelegatesFocus(bool value)
+{
+    m_delegatesFocus = value;
+    m_hasDelegatesFocus = true;
 }
-bool ShadowRootInit::hasMode() const {
-  return !m_mode.isNull();
+bool ShadowRootInit::hasMode() const
+{
+    return !m_mode.isNull();
 }
-String ShadowRootInit::mode() const {
-  return m_mode;
+String ShadowRootInit::mode() const
+{
+    return m_mode;
 }
-void ShadowRootInit::setMode(String value) {
-  m_mode = value;
+void ShadowRootInit::setMode(String value)
+{
+    m_mode = value;
 }
 
-DEFINE_TRACE(ShadowRootInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ShadowRootInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PresentationConnectionList.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,95 +49,106 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PresentationConnectionList::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PresentationConnectionList is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PresentationConnectionListV8Internal {
 
-static void connectionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void connectionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PresentationConnectionList* impl = V8PresentationConnectionList::toImpl(holder);
+        PresentationConnectionList* impl = V8PresentationConnectionList::toImpl(holder);
 
-  v8SetReturnValue(info, freezeV8Object(ToV8(impl->connections(), info.Holder(), info.GetIsolate()), info.GetIsolate()));
-}
+        v8SetReturnValue(info, freezeV8Object(ToV8(impl->connections(), info.Holder(), info.GetIsolate()), info.GetIsolate()));
+    }
 
-MODULES_EXPORT void connectionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionListV8Internal::connectionsAttributeGetter(info);
-}
+    MODULES_EXPORT void connectionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionListV8Internal::connectionsAttributeGetter(info);
+    }
 
-static void onconnectionavailableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onconnectionavailableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PresentationConnectionList* impl = V8PresentationConnectionList::toImpl(holder);
+        PresentationConnectionList* impl = V8PresentationConnectionList::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onconnectionavailable()));
+        EventListener* cppValue(WTF::getPtr(impl->onconnectionavailable()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onconnectionavailableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionListV8Internal::onconnectionavailableAttributeGetter(info);
-}
+    MODULES_EXPORT void onconnectionavailableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionListV8Internal::onconnectionavailableAttributeGetter(info);
+    }
 
-static void onconnectionavailableAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PresentationConnectionList* impl = V8PresentationConnectionList::toImpl(holder);
+    static void onconnectionavailableAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PresentationConnectionList* impl = V8PresentationConnectionList::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnectionavailable(), v8Value, V8PresentationConnectionList::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnectionavailable(), v8Value, V8PresentationConnectionList::eventListenerCacheIndex);
 
-  impl->setOnconnectionavailable(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnconnectionavailable(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onconnectionavailableAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onconnectionavailableAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  PresentationConnectionListV8Internal::onconnectionavailableAttributeSetter(v8Value, info);
-}
+        PresentationConnectionListV8Internal::onconnectionavailableAttributeSetter(v8Value, info);
+    }
 
 } // namespace PresentationConnectionListV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PresentationConnectionListAccessors[] = {
-    {"connections", PresentationConnectionListV8Internal::connectionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onconnectionavailable", PresentationConnectionListV8Internal::onconnectionavailableAttributeGetterCallback, PresentationConnectionListV8Internal::onconnectionavailableAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "connections", PresentationConnectionListV8Internal::connectionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onconnectionavailable", PresentationConnectionListV8Internal::onconnectionavailableAttributeGetterCallback, PresentationConnectionListV8Internal::onconnectionavailableAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PresentationConnectionListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PresentationConnectionList::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8PresentationConnectionList::internalFieldCount);
+static void installV8PresentationConnectionListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PresentationConnectionList::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8PresentationConnectionList::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::presentationReceiverEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::presentationReceiverEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PresentationConnectionListAccessors, WTF_ARRAY_LENGTH(V8PresentationConnectionListAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PresentationConnectionListAccessors, WTF_ARRAY_LENGTH(V8PresentationConnectionListAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8PresentationConnectionList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PresentationConnectionListTemplate);
+v8::Local<v8::FunctionTemplate> V8PresentationConnectionList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PresentationConnectionListTemplate);
 }
 
-bool V8PresentationConnectionList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PresentationConnectionList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PresentationConnectionList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PresentationConnectionList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PresentationConnectionList* V8PresentationConnectionList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PresentationConnectionList* V8PresentationConnectionList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

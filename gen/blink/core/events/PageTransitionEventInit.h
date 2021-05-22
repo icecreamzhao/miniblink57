@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PageTransitionEventInit_h
 #define PageTransitionEventInit_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class CORE_EXPORT PageTransitionEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PageTransitionEventInit();
-  virtual ~PageTransitionEventInit();
-  PageTransitionEventInit(const PageTransitionEventInit&);
-  PageTransitionEventInit& operator=(const PageTransitionEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasPersisted() const;
-  bool persisted() const;
-  void setPersisted(bool);
+public:
+    PageTransitionEventInit();
+    virtual ~PageTransitionEventInit();
+    PageTransitionEventInit(const PageTransitionEventInit&);
+    PageTransitionEventInit& operator=(const PageTransitionEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPersisted() const;
+    bool persisted() const;
+    void setPersisted(bool);
 
- private:
-  bool m_hasPersisted = false;
-  bool m_persisted;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PageTransitionEventInit;
+private:
+    bool m_hasPersisted = false;
+    bool m_persisted;
+
+    friend class V8PageTransitionEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PageTransitionEventInit_h
+#endif // PageTransitionEventInit_h

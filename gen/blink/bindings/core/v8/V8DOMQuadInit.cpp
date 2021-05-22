@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DOMQuadInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,117 +16,121 @@
 
 namespace blink {
 
-void V8DOMQuadInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DOMQuadInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8DOMQuadInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DOMQuadInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> p1Value;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "p1")).ToLocal(&p1Value)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (p1Value.IsEmpty() || p1Value->IsUndefined()) {
-    // Do nothing.
-  } else {
-    DOMPointInit p1;
-    V8DOMPointInit::toImpl(isolate, p1Value, p1, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setP1(p1);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> p1Value;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "p1")).ToLocal(&p1Value)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (p1Value.IsEmpty() || p1Value->IsUndefined()) {
+        // Do nothing.
+    } else {
+        DOMPointInit p1;
+        V8DOMPointInit::toImpl(isolate, p1Value, p1, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setP1(p1);
+    }
 
-  v8::Local<v8::Value> p2Value;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "p2")).ToLocal(&p2Value)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (p2Value.IsEmpty() || p2Value->IsUndefined()) {
-    // Do nothing.
-  } else {
-    DOMPointInit p2;
-    V8DOMPointInit::toImpl(isolate, p2Value, p2, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setP2(p2);
-  }
+    v8::Local<v8::Value> p2Value;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "p2")).ToLocal(&p2Value)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (p2Value.IsEmpty() || p2Value->IsUndefined()) {
+        // Do nothing.
+    } else {
+        DOMPointInit p2;
+        V8DOMPointInit::toImpl(isolate, p2Value, p2, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setP2(p2);
+    }
 
-  v8::Local<v8::Value> p3Value;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "p3")).ToLocal(&p3Value)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (p3Value.IsEmpty() || p3Value->IsUndefined()) {
-    // Do nothing.
-  } else {
-    DOMPointInit p3;
-    V8DOMPointInit::toImpl(isolate, p3Value, p3, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setP3(p3);
-  }
+    v8::Local<v8::Value> p3Value;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "p3")).ToLocal(&p3Value)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (p3Value.IsEmpty() || p3Value->IsUndefined()) {
+        // Do nothing.
+    } else {
+        DOMPointInit p3;
+        V8DOMPointInit::toImpl(isolate, p3Value, p3, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setP3(p3);
+    }
 
-  v8::Local<v8::Value> p4Value;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "p4")).ToLocal(&p4Value)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (p4Value.IsEmpty() || p4Value->IsUndefined()) {
-    // Do nothing.
-  } else {
-    DOMPointInit p4;
-    V8DOMPointInit::toImpl(isolate, p4Value, p4, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setP4(p4);
-  }
+    v8::Local<v8::Value> p4Value;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "p4")).ToLocal(&p4Value)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (p4Value.IsEmpty() || p4Value->IsUndefined()) {
+        // Do nothing.
+    } else {
+        DOMPointInit p4;
+        V8DOMPointInit::toImpl(isolate, p4Value, p4, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setP4(p4);
+    }
 }
 
-v8::Local<v8::Value> DOMQuadInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8DOMQuadInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> DOMQuadInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8DOMQuadInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8DOMQuadInit(const DOMQuadInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasP1()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "p1"), ToV8(impl.p1(), creationContext, isolate))))
-      return false;
-  }
+bool toV8DOMQuadInit(const DOMQuadInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasP1()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "p1"), ToV8(impl.p1(), creationContext, isolate))))
+            return false;
+    }
 
-  if (impl.hasP2()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "p2"), ToV8(impl.p2(), creationContext, isolate))))
-      return false;
-  }
+    if (impl.hasP2()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "p2"), ToV8(impl.p2(), creationContext, isolate))))
+            return false;
+    }
 
-  if (impl.hasP3()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "p3"), ToV8(impl.p3(), creationContext, isolate))))
-      return false;
-  }
+    if (impl.hasP3()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "p3"), ToV8(impl.p3(), creationContext, isolate))))
+            return false;
+    }
 
-  if (impl.hasP4()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "p4"), ToV8(impl.p4(), creationContext, isolate))))
-      return false;
-  }
+    if (impl.hasP4()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "p4"), ToV8(impl.p4(), creationContext, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-DOMQuadInit NativeValueTraits<DOMQuadInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  DOMQuadInit impl;
-  V8DOMQuadInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+DOMQuadInit NativeValueTraits<DOMQuadInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    DOMQuadInit impl;
+    V8DOMQuadInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

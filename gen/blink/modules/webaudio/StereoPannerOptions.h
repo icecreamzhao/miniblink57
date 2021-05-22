@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef StereoPannerOptions_h
 #define StereoPannerOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT StereoPannerOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  StereoPannerOptions();
-  virtual ~StereoPannerOptions();
-  StereoPannerOptions(const StereoPannerOptions&);
-  StereoPannerOptions& operator=(const StereoPannerOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasPan() const;
-  float pan() const;
-  void setPan(float);
+public:
+    StereoPannerOptions();
+    virtual ~StereoPannerOptions();
+    StereoPannerOptions(const StereoPannerOptions&);
+    StereoPannerOptions& operator=(const StereoPannerOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPan() const;
+    float pan() const;
+    void setPan(float);
 
- private:
-  bool m_hasPan = false;
-  float m_pan;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8StereoPannerOptions;
+private:
+    bool m_hasPan = false;
+    float m_pan;
+
+    friend class V8StereoPannerOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // StereoPannerOptions_h
+#endif // StereoPannerOptions_h

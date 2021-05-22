@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaElementAudioSourceOptions_h
 #define MediaElementAudioSourceOptions_h
 
@@ -21,26 +21,27 @@ namespace blink {
 class HTMLMediaElement;
 
 class MODULES_EXPORT MediaElementAudioSourceOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaElementAudioSourceOptions();
-  virtual ~MediaElementAudioSourceOptions();
-  MediaElementAudioSourceOptions(const MediaElementAudioSourceOptions&);
-  MediaElementAudioSourceOptions& operator=(const MediaElementAudioSourceOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMediaElement() const;
-  HTMLMediaElement* mediaElement() const;
-  void setMediaElement(HTMLMediaElement*);
+public:
+    MediaElementAudioSourceOptions();
+    virtual ~MediaElementAudioSourceOptions();
+    MediaElementAudioSourceOptions(const MediaElementAudioSourceOptions&);
+    MediaElementAudioSourceOptions& operator=(const MediaElementAudioSourceOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMediaElement() const;
+    HTMLMediaElement* mediaElement() const;
+    void setMediaElement(HTMLMediaElement*);
 
- private:
-  Member<HTMLMediaElement> m_mediaElement;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaElementAudioSourceOptions;
+private:
+    Member<HTMLMediaElement> m_mediaElement;
+
+    friend class V8MediaElementAudioSourceOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaElementAudioSourceOptions_h
+#endif // MediaElementAudioSourceOptions_h

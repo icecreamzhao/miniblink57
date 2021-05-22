@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8FontFaceDescriptors_h
 #define V8FontFaceDescriptors_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8FontFaceDescriptors {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FontFaceDescriptors&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FontFaceDescriptors&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8FontFaceDescriptors(const FontFaceDescriptors&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FontFaceDescriptors& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FontFaceDescriptors& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<FontFaceDescriptors> {
-  static FontFaceDescriptors nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static FontFaceDescriptors nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<FontFaceDescriptors> {
-  typedef V8FontFaceDescriptors Type;
+    typedef V8FontFaceDescriptors Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8FontFaceDescriptors_h
+#endif // V8FontFaceDescriptors_h

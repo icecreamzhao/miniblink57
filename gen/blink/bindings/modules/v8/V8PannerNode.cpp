@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PannerNode.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,598 +52,653 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PannerNode::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PannerNode is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PannerNodeV8Internal {
 
-static void panningModelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void panningModelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PannerNode* impl = V8PannerNode::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->panningModel(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void panningModelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::panningModelAttributeGetter(info);
+    }
+
+    static void panningModelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "panningModel");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "equalpower",
+            "HRTF",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "PanningModelType", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
+
+        impl->setPanningModel(cppValue);
+    }
+
+    MODULES_EXPORT void panningModelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PannerNodeV8Internal::panningModelAttributeSetter(v8Value, info);
+    }
+
+    static void positionXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PannerNode* impl = V8PannerNode::toImpl(holder);
+
+        AudioParam* cppValue(WTF::getPtr(impl->positionX()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PannerNode#positionX";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    MODULES_EXPORT void positionXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::positionXAttributeGetter(info);
+    }
+
+    static void positionYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PannerNode* impl = V8PannerNode::toImpl(holder);
+
+        AudioParam* cppValue(WTF::getPtr(impl->positionY()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PannerNode#positionY";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    MODULES_EXPORT void positionYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::positionYAttributeGetter(info);
+    }
+
+    static void positionZAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        AudioParam* cppValue(WTF::getPtr(impl->positionZ()));
 
-  v8SetReturnValueString(info, impl->panningModel(), info.GetIsolate());
-}
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PannerNode#positionZ";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-MODULES_EXPORT void panningModelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::panningModelAttributeGetter(info);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-static void panningModelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+    MODULES_EXPORT void positionZAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::positionZAttributeGetter(info);
+    }
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "panningModel");
+    static void orientationXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PannerNode* impl = V8PannerNode::toImpl(holder);
+
+        AudioParam* cppValue(WTF::getPtr(impl->orientationX()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PannerNode#orientationX";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    MODULES_EXPORT void orientationXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::orientationXAttributeGetter(info);
+    }
+
+    static void orientationYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PannerNode* impl = V8PannerNode::toImpl(holder);
+
+        AudioParam* cppValue(WTF::getPtr(impl->orientationY()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PannerNode#orientationY";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    MODULES_EXPORT void orientationYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::orientationYAttributeGetter(info);
+    }
+
+    static void orientationZAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PannerNode* impl = V8PannerNode::toImpl(holder);
+
+        AudioParam* cppValue(WTF::getPtr(impl->orientationZ()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#PannerNode#orientationZ";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        v8SetReturnValue(info, v8Value);
+    }
 
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "equalpower",
-      "HRTF",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "PanningModelType", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
+    MODULES_EXPORT void orientationZAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::orientationZAttributeGetter(info);
+    }
 
-  impl->setPanningModel(cppValue);
-}
+    static void distanceModelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PannerNode* impl = V8PannerNode::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->distanceModel(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void panningModelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void distanceModelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::distanceModelAttributeGetter(info);
+    }
+
+    static void distanceModelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-  PannerNodeV8Internal::panningModelAttributeSetter(v8Value, info);
-}
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "distanceModel");
 
-static void positionXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "linear",
+            "inverse",
+            "exponential",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "DistanceModelType", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
 
-  AudioParam* cppValue(WTF::getPtr(impl->positionX()));
+        impl->setDistanceModel(cppValue);
+    }
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PannerNode#positionX";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+    MODULES_EXPORT void distanceModelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  v8SetReturnValue(info, v8Value);
-}
+        PannerNodeV8Internal::distanceModelAttributeSetter(v8Value, info);
+    }
 
-MODULES_EXPORT void positionXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::positionXAttributeGetter(info);
-}
+    static void refDistanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void positionYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        v8SetReturnValue(info, impl->refDistance());
+    }
 
-  AudioParam* cppValue(WTF::getPtr(impl->positionY()));
+    MODULES_EXPORT void refDistanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::refDistanceAttributeGetter(info);
+    }
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PannerNode#positionY";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+    static void refDistanceAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-  v8SetReturnValue(info, v8Value);
-}
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "refDistance");
 
-MODULES_EXPORT void positionYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::positionYAttributeGetter(info);
-}
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-static void positionZAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        impl->setRefDistance(cppValue, exceptionState);
+    }
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+    MODULES_EXPORT void refDistanceAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  AudioParam* cppValue(WTF::getPtr(impl->positionZ()));
+        PannerNodeV8Internal::refDistanceAttributeSetter(v8Value, info);
+    }
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PannerNode#positionZ";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+    static void maxDistanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  v8SetReturnValue(info, v8Value);
-}
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-MODULES_EXPORT void positionZAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::positionZAttributeGetter(info);
-}
+        v8SetReturnValue(info, impl->maxDistance());
+    }
 
-static void orientationXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    MODULES_EXPORT void maxDistanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::maxDistanceAttributeGetter(info);
+    }
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+    static void maxDistanceAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-  AudioParam* cppValue(WTF::getPtr(impl->orientationX()));
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "maxDistance");
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PannerNode#orientationX";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, v8Value);
-}
+        impl->setMaxDistance(cppValue, exceptionState);
+    }
 
-MODULES_EXPORT void orientationXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::orientationXAttributeGetter(info);
-}
+    MODULES_EXPORT void maxDistanceAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-static void orientationYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        PannerNodeV8Internal::maxDistanceAttributeSetter(v8Value, info);
+    }
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+    static void rolloffFactorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AudioParam* cppValue(WTF::getPtr(impl->orientationY()));
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PannerNode#orientationY";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        v8SetReturnValue(info, impl->rolloffFactor());
+    }
 
-  v8SetReturnValue(info, v8Value);
-}
+    MODULES_EXPORT void rolloffFactorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::rolloffFactorAttributeGetter(info);
+    }
 
-MODULES_EXPORT void orientationYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::orientationYAttributeGetter(info);
-}
+    static void rolloffFactorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-static void orientationZAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "rolloffFactor");
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  AudioParam* cppValue(WTF::getPtr(impl->orientationZ()));
+        impl->setRolloffFactor(cppValue);
+    }
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#PannerNode#orientationZ";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+    MODULES_EXPORT void rolloffFactorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  v8SetReturnValue(info, v8Value);
-}
+        PannerNodeV8Internal::rolloffFactorAttributeSetter(v8Value, info);
+    }
 
-MODULES_EXPORT void orientationZAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::orientationZAttributeGetter(info);
-}
+    static void coneInnerAngleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void distanceModelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        v8SetReturnValue(info, impl->coneInnerAngle());
+    }
 
-  v8SetReturnValueString(info, impl->distanceModel(), info.GetIsolate());
-}
+    MODULES_EXPORT void coneInnerAngleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::coneInnerAngleAttributeGetter(info);
+    }
 
-MODULES_EXPORT void distanceModelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::distanceModelAttributeGetter(info);
-}
+    static void coneInnerAngleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-static void distanceModelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "coneInnerAngle");
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "distanceModel");
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        impl->setConeInnerAngle(cppValue);
+    }
 
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "linear",
-      "inverse",
-      "exponential",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "DistanceModelType", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
+    MODULES_EXPORT void coneInnerAngleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  impl->setDistanceModel(cppValue);
-}
+        PannerNodeV8Internal::coneInnerAngleAttributeSetter(v8Value, info);
+    }
 
-MODULES_EXPORT void distanceModelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    static void coneOuterAngleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PannerNodeV8Internal::distanceModelAttributeSetter(v8Value, info);
-}
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-static void refDistanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        v8SetReturnValue(info, impl->coneOuterAngle());
+    }
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+    MODULES_EXPORT void coneOuterAngleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::coneOuterAngleAttributeGetter(info);
+    }
 
-  v8SetReturnValue(info, impl->refDistance());
-}
+    static void coneOuterAngleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-MODULES_EXPORT void refDistanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::refDistanceAttributeGetter(info);
-}
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "coneOuterAngle");
 
-static void refDistanceAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "refDistance");
+        impl->setConeOuterAngle(cppValue);
+    }
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    MODULES_EXPORT void coneOuterAngleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  impl->setRefDistance(cppValue, exceptionState);
-}
+        PannerNodeV8Internal::coneOuterAngleAttributeSetter(v8Value, info);
+    }
 
-MODULES_EXPORT void refDistanceAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    static void coneOuterGainAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PannerNodeV8Internal::refDistanceAttributeSetter(v8Value, info);
-}
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-static void maxDistanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        v8SetReturnValue(info, impl->coneOuterGain());
+    }
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+    MODULES_EXPORT void coneOuterGainAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PannerNodeV8Internal::coneOuterGainAttributeGetter(info);
+    }
 
-  v8SetReturnValue(info, impl->maxDistance());
-}
+    static void coneOuterGainAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PannerNode* impl = V8PannerNode::toImpl(holder);
 
-MODULES_EXPORT void maxDistanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::maxDistanceAttributeGetter(info);
-}
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "coneOuterGain");
 
-static void maxDistanceAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "maxDistance");
+        impl->setConeOuterGain(cppValue);
+    }
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    MODULES_EXPORT void coneOuterGainAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  impl->setMaxDistance(cppValue, exceptionState);
-}
+        PannerNodeV8Internal::coneOuterGainAttributeSetter(v8Value, info);
+    }
 
-MODULES_EXPORT void maxDistanceAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    static void setPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PannerNode", "setPosition");
 
-  PannerNodeV8Internal::maxDistanceAttributeSetter(v8Value, info);
-}
+        PannerNode* impl = V8PannerNode::toImpl(info.Holder());
 
-static void rolloffFactorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        float x;
+        float y;
+        float z;
+        x = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->rolloffFactor());
-}
+        y = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-MODULES_EXPORT void rolloffFactorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::rolloffFactorAttributeGetter(info);
-}
+        z = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-static void rolloffFactorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        impl->setPosition(x, y, z);
+    }
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "rolloffFactor");
+    MODULES_EXPORT void setPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PannerNodeSetPosition);
+        PannerNodeV8Internal::setPositionMethod(info);
+    }
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void setOrientationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PannerNode", "setOrientation");
 
-  impl->setRolloffFactor(cppValue);
-}
+        PannerNode* impl = V8PannerNode::toImpl(info.Holder());
 
-MODULES_EXPORT void rolloffFactorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  PannerNodeV8Internal::rolloffFactorAttributeSetter(v8Value, info);
-}
+        float x;
+        float y;
+        float z;
+        x = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-static void coneInnerAngleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        y = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+        z = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->coneInnerAngle());
-}
+        impl->setOrientation(x, y, z);
+    }
 
-MODULES_EXPORT void coneInnerAngleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::coneInnerAngleAttributeGetter(info);
-}
+    MODULES_EXPORT void setOrientationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PannerNodeSetOrientation);
+        PannerNodeV8Internal::setOrientationMethod(info);
+    }
 
-static void coneInnerAngleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PannerNode* impl = V8PannerNode::toImpl(holder);
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PannerNode");
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "coneInnerAngle");
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        BaseAudioContext* context;
+        PannerOptions options;
+        context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!context) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
 
-  impl->setConeInnerAngle(cppValue);
-}
+            return;
+        }
 
-MODULES_EXPORT void coneInnerAngleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-  PannerNodeV8Internal::coneInnerAngleAttributeSetter(v8Value, info);
-}
+            return;
+        }
+        V8PannerOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-static void coneOuterAngleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PannerNode* impl = V8PannerNode::toImpl(holder);
-
-  v8SetReturnValue(info, impl->coneOuterAngle());
-}
-
-MODULES_EXPORT void coneOuterAngleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::coneOuterAngleAttributeGetter(info);
-}
-
-static void coneOuterAngleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PannerNode* impl = V8PannerNode::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "coneOuterAngle");
-
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setConeOuterAngle(cppValue);
-}
-
-MODULES_EXPORT void coneOuterAngleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PannerNodeV8Internal::coneOuterAngleAttributeSetter(v8Value, info);
-}
-
-static void coneOuterGainAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PannerNode* impl = V8PannerNode::toImpl(holder);
-
-  v8SetReturnValue(info, impl->coneOuterGain());
-}
-
-MODULES_EXPORT void coneOuterGainAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PannerNodeV8Internal::coneOuterGainAttributeGetter(info);
-}
-
-static void coneOuterGainAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PannerNode* impl = V8PannerNode::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PannerNode", "coneOuterGain");
-
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setConeOuterGain(cppValue);
-}
-
-MODULES_EXPORT void coneOuterGainAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PannerNodeV8Internal::coneOuterGainAttributeSetter(v8Value, info);
-}
-
-static void setPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PannerNode", "setPosition");
-
-  PannerNode* impl = V8PannerNode::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  float x;
-  float y;
-  float z;
-  x = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  z = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setPosition(x, y, z);
-}
-
-MODULES_EXPORT  void setPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PannerNodeSetPosition);
-  PannerNodeV8Internal::setPositionMethod(info);
-}
-
-static void setOrientationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PannerNode", "setOrientation");
-
-  PannerNode* impl = V8PannerNode::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  float x;
-  float y;
-  float z;
-  x = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  z = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setOrientation(x, y, z);
-}
-
-MODULES_EXPORT  void setOrientationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PannerNodeSetOrientation);
-  PannerNodeV8Internal::setOrientationMethod(info);
-}
-
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PannerNode");
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  BaseAudioContext* context;
-  PannerOptions options;
-  context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!context) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
-
-    return;
-  }
-
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
-
-    return;
-  }
-  V8PannerOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  PannerNode* impl = PannerNode::create(context, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PannerNode::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        PannerNode* impl = PannerNode::create(context, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PannerNode::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace PannerNodeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PannerNodeAccessors[] = {
-    {"panningModel", PannerNodeV8Internal::panningModelAttributeGetterCallback, PannerNodeV8Internal::panningModelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"positionX", PannerNodeV8Internal::positionXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"positionY", PannerNodeV8Internal::positionYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"positionZ", PannerNodeV8Internal::positionZAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"orientationX", PannerNodeV8Internal::orientationXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"orientationY", PannerNodeV8Internal::orientationYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"orientationZ", PannerNodeV8Internal::orientationZAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"distanceModel", PannerNodeV8Internal::distanceModelAttributeGetterCallback, PannerNodeV8Internal::distanceModelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"refDistance", PannerNodeV8Internal::refDistanceAttributeGetterCallback, PannerNodeV8Internal::refDistanceAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"maxDistance", PannerNodeV8Internal::maxDistanceAttributeGetterCallback, PannerNodeV8Internal::maxDistanceAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rolloffFactor", PannerNodeV8Internal::rolloffFactorAttributeGetterCallback, PannerNodeV8Internal::rolloffFactorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"coneInnerAngle", PannerNodeV8Internal::coneInnerAngleAttributeGetterCallback, PannerNodeV8Internal::coneInnerAngleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"coneOuterAngle", PannerNodeV8Internal::coneOuterAngleAttributeGetterCallback, PannerNodeV8Internal::coneOuterAngleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"coneOuterGain", PannerNodeV8Internal::coneOuterGainAttributeGetterCallback, PannerNodeV8Internal::coneOuterGainAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "panningModel", PannerNodeV8Internal::panningModelAttributeGetterCallback, PannerNodeV8Internal::panningModelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "positionX", PannerNodeV8Internal::positionXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "positionY", PannerNodeV8Internal::positionYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "positionZ", PannerNodeV8Internal::positionZAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "orientationX", PannerNodeV8Internal::orientationXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "orientationY", PannerNodeV8Internal::orientationYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "orientationZ", PannerNodeV8Internal::orientationZAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "distanceModel", PannerNodeV8Internal::distanceModelAttributeGetterCallback, PannerNodeV8Internal::distanceModelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "refDistance", PannerNodeV8Internal::refDistanceAttributeGetterCallback, PannerNodeV8Internal::refDistanceAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "maxDistance", PannerNodeV8Internal::maxDistanceAttributeGetterCallback, PannerNodeV8Internal::maxDistanceAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rolloffFactor", PannerNodeV8Internal::rolloffFactorAttributeGetterCallback, PannerNodeV8Internal::rolloffFactorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "coneInnerAngle", PannerNodeV8Internal::coneInnerAngleAttributeGetterCallback, PannerNodeV8Internal::coneInnerAngleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "coneOuterAngle", PannerNodeV8Internal::coneOuterAngleAttributeGetterCallback, PannerNodeV8Internal::coneOuterAngleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "coneOuterGain", PannerNodeV8Internal::coneOuterGainAttributeGetterCallback, PannerNodeV8Internal::coneOuterGainAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8PannerNodeMethods[] = {
-    {"setPosition", PannerNodeV8Internal::setPositionMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setOrientation", PannerNodeV8Internal::setOrientationMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "setPosition", PannerNodeV8Internal::setPositionMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setOrientation", PannerNodeV8Internal::setOrientationMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8PannerNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8PannerNode_Constructor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("PannerNode"));
-    return;
-  }
+void V8PannerNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8PannerNode_Constructor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("PannerNode"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  PannerNodeV8Internal::constructor(info);
+    PannerNodeV8Internal::constructor(info);
 }
 
-static void installV8PannerNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PannerNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8PannerNode::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8PannerNode::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8PannerNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PannerNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8PannerNode::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8PannerNode::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PannerNodeAccessors, WTF_ARRAY_LENGTH(V8PannerNodeAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PannerNodeMethods, WTF_ARRAY_LENGTH(V8PannerNodeMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PannerNodeAccessors, WTF_ARRAY_LENGTH(V8PannerNodeAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PannerNodeMethods, WTF_ARRAY_LENGTH(V8PannerNodeMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8PannerNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PannerNodeTemplate);
+v8::Local<v8::FunctionTemplate> V8PannerNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PannerNodeTemplate);
 }
 
-bool V8PannerNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PannerNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PannerNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PannerNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PannerNode* V8PannerNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PannerNode* V8PannerNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

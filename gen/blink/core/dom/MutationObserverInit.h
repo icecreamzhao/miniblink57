@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MutationObserverInit_h
 #define MutationObserverInit_h
 
@@ -21,63 +21,64 @@
 namespace blink {
 
 class CORE_EXPORT MutationObserverInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MutationObserverInit();
-  virtual ~MutationObserverInit();
-  MutationObserverInit(const MutationObserverInit&);
-  MutationObserverInit& operator=(const MutationObserverInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAttributeFilter() const;
-  const Vector<String>& attributeFilter() const;
-  void setAttributeFilter(const Vector<String>&);
+public:
+    MutationObserverInit();
+    virtual ~MutationObserverInit();
+    MutationObserverInit(const MutationObserverInit&);
+    MutationObserverInit& operator=(const MutationObserverInit&);
 
-  bool hasAttributeOldValue() const;
-  bool attributeOldValue() const;
-  void setAttributeOldValue(bool);
+    bool hasAttributeFilter() const;
+    const Vector<String>& attributeFilter() const;
+    void setAttributeFilter(const Vector<String>&);
 
-  bool hasAttributes() const;
-  bool attributes() const;
-  void setAttributes(bool);
+    bool hasAttributeOldValue() const;
+    bool attributeOldValue() const;
+    void setAttributeOldValue(bool);
 
-  bool hasCharacterData() const;
-  bool characterData() const;
-  void setCharacterData(bool);
+    bool hasAttributes() const;
+    bool attributes() const;
+    void setAttributes(bool);
 
-  bool hasCharacterDataOldValue() const;
-  bool characterDataOldValue() const;
-  void setCharacterDataOldValue(bool);
+    bool hasCharacterData() const;
+    bool characterData() const;
+    void setCharacterData(bool);
 
-  bool hasChildList() const;
-  bool childList() const;
-  void setChildList(bool);
+    bool hasCharacterDataOldValue() const;
+    bool characterDataOldValue() const;
+    void setCharacterDataOldValue(bool);
 
-  bool hasSubtree() const;
-  bool subtree() const;
-  void setSubtree(bool);
+    bool hasChildList() const;
+    bool childList() const;
+    void setChildList(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSubtree() const;
+    bool subtree() const;
+    void setSubtree(bool);
 
- private:
-  bool m_hasAttributeFilter = false;
-  Vector<String> m_attributeFilter;
-  bool m_hasAttributeOldValue = false;
-  bool m_attributeOldValue;
-  bool m_hasAttributes = false;
-  bool m_attributes;
-  bool m_hasCharacterData = false;
-  bool m_characterData;
-  bool m_hasCharacterDataOldValue = false;
-  bool m_characterDataOldValue;
-  bool m_hasChildList = false;
-  bool m_childList;
-  bool m_hasSubtree = false;
-  bool m_subtree;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MutationObserverInit;
+private:
+    bool m_hasAttributeFilter = false;
+    Vector<String> m_attributeFilter;
+    bool m_hasAttributeOldValue = false;
+    bool m_attributeOldValue;
+    bool m_hasAttributes = false;
+    bool m_attributes;
+    bool m_hasCharacterData = false;
+    bool m_characterData;
+    bool m_hasCharacterDataOldValue = false;
+    bool m_characterDataOldValue;
+    bool m_hasChildList = false;
+    bool m_childList;
+    bool m_hasSubtree = false;
+    bool m_subtree;
+
+    friend class V8MutationObserverInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MutationObserverInit_h
+#endif // MutationObserverInit_h

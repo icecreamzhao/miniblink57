@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef NFCWatchOptions_h
 #define NFCWatchOptions_h
 
@@ -20,42 +20,43 @@
 namespace blink {
 
 class MODULES_EXPORT NFCWatchOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  NFCWatchOptions();
-  virtual ~NFCWatchOptions();
-  NFCWatchOptions(const NFCWatchOptions&);
-  NFCWatchOptions& operator=(const NFCWatchOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMediaType() const;
-  String mediaType() const;
-  void setMediaType(String);
+public:
+    NFCWatchOptions();
+    virtual ~NFCWatchOptions();
+    NFCWatchOptions(const NFCWatchOptions&);
+    NFCWatchOptions& operator=(const NFCWatchOptions&);
 
-  bool hasMode() const;
-  String mode() const;
-  void setMode(String);
+    bool hasMediaType() const;
+    String mediaType() const;
+    void setMediaType(String);
 
-  bool hasRecordType() const;
-  String recordType() const;
-  void setRecordType(String);
-  void setRecordTypeToNull();
+    bool hasMode() const;
+    String mode() const;
+    void setMode(String);
 
-  bool hasURL() const;
-  String url() const;
-  void setURL(String);
+    bool hasRecordType() const;
+    String recordType() const;
+    void setRecordType(String);
+    void setRecordTypeToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasURL() const;
+    String url() const;
+    void setURL(String);
 
- private:
-  String m_mediaType;
-  String m_mode;
-  String m_recordType;
-  String m_url;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8NFCWatchOptions;
+private:
+    String m_mediaType;
+    String m_mode;
+    String m_recordType;
+    String m_url;
+
+    friend class V8NFCWatchOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // NFCWatchOptions_h
+#endif // NFCWatchOptions_h

@@ -8,47 +8,56 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "VRDisplayEventInit.h"
 
 #include "modules/vr/VRDisplay.h"
 
 namespace blink {
 
-VRDisplayEventInit::VRDisplayEventInit() {
+VRDisplayEventInit::VRDisplayEventInit()
+{
 }
 
-VRDisplayEventInit::~VRDisplayEventInit() {}
+VRDisplayEventInit::~VRDisplayEventInit() { }
 
 VRDisplayEventInit::VRDisplayEventInit(const VRDisplayEventInit&) = default;
 
 VRDisplayEventInit& VRDisplayEventInit::operator=(const VRDisplayEventInit&) = default;
 
-bool VRDisplayEventInit::hasDisplay() const {
-  return m_display;
+bool VRDisplayEventInit::hasDisplay() const
+{
+    return m_display;
 }
-VRDisplay* VRDisplayEventInit::display() const {
-  return m_display;
+VRDisplay* VRDisplayEventInit::display() const
+{
+    return m_display;
 }
-void VRDisplayEventInit::setDisplay(VRDisplay* value) {
-  m_display = value;
+void VRDisplayEventInit::setDisplay(VRDisplay* value)
+{
+    m_display = value;
 }
-void VRDisplayEventInit::setDisplayToNull() {
-  m_display = Member<VRDisplay>();
+void VRDisplayEventInit::setDisplayToNull()
+{
+    m_display = Member<VRDisplay>();
 }
-bool VRDisplayEventInit::hasReason() const {
-  return !m_reason.isNull();
+bool VRDisplayEventInit::hasReason() const
+{
+    return !m_reason.isNull();
 }
-String VRDisplayEventInit::reason() const {
-  return m_reason;
+String VRDisplayEventInit::reason() const
+{
+    return m_reason;
 }
-void VRDisplayEventInit::setReason(String value) {
-  m_reason = value;
+void VRDisplayEventInit::setReason(String value)
+{
+    m_reason = value;
 }
 
-DEFINE_TRACE(VRDisplayEventInit) {
-  visitor->trace(m_display);
-  EventInit::trace(visitor);
+DEFINE_TRACE(VRDisplayEventInit)
+{
+    visitor->trace(m_display);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

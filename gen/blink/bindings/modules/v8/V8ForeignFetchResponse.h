@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ForeignFetchResponse_h
 #define V8ForeignFetchResponse_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ForeignFetchResponse {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ForeignFetchResponse&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ForeignFetchResponse&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ForeignFetchResponse(const ForeignFetchResponse&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ForeignFetchResponse& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ForeignFetchResponse& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ForeignFetchResponse> {
-  static ForeignFetchResponse nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ForeignFetchResponse nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ForeignFetchResponse> {
-  typedef V8ForeignFetchResponse Type;
+    typedef V8ForeignFetchResponse Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ForeignFetchResponse_h
+#endif // V8ForeignFetchResponse_h

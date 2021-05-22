@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ImageData.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,378 +53,400 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ImageData::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ImageData is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ImageDataV8Internal {
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ImageData* impl = V8ImageData::toImpl(holder);
+        ImageData* impl = V8ImageData::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->width());
-}
-
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ImageDataV8Internal::widthAttributeGetter(info);
-}
-
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  ImageData* impl = V8ImageData::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->height());
-}
-
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ImageDataV8Internal::heightAttributeGetter(info);
-}
-
-static void dataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  ImageData* impl = V8ImageData::toImpl(holder);
-
-  DOMUint8ClampedArray* cppValue(WTF::getPtr(impl->data()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#ImageData#data";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-CORE_EXPORT void dataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ImageDataV8Internal::dataAttributeGetter(info);
-}
-
-static void colorSpaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  ImageData* impl = V8ImageData::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->colorSpace(), info.GetIsolate());
-}
-
-CORE_EXPORT void colorSpaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ImageDataV8Internal::colorSpaceAttributeGetter(info);
-}
-
-static void createImageData1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageData", "createImageData");
-
-  ImageData* impl = V8ImageData::toImpl(info.Holder());
-
-  unsigned sw;
-  unsigned sh;
-  V8StringResource<> colorSpace;
-  sw = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sh = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  colorSpace = info[2];
-  if (!colorSpace.prepare())
-    return;
-  const char* validColorSpaceValues[] = {
-      "legacy-srgb",
-      "srgb",
-      "linear-rgb",
-  };
-  if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
-    return;
-  }
-
-  ImageData* result = impl->createImageData(sw, sh, colorSpace, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-static void createImageData2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageData", "createImageData");
-
-  ImageData* impl = V8ImageData::toImpl(info.Holder());
-
-  DOMUint8ClampedArray* data;
-  unsigned sw;
-  V8StringResource<> colorSpace;
-  data = info[0]->IsUint8ClampedArray() ? V8Uint8ClampedArray::toImpl(v8::Local<v8::Uint8ClampedArray>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Uint8ClampedArray'.");
-
-    return;
-  }
-
-  sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  colorSpace = info[2];
-  if (!colorSpace.prepare())
-    return;
-  const char* validColorSpaceValues[] = {
-      "legacy-srgb",
-      "srgb",
-      "linear-rgb",
-  };
-  if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
-    return;
-  }
-
-  ImageData* result = impl->createImageData(data, sw, colorSpace, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-static void createImageData3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageData", "createImageData");
-
-  ImageData* impl = V8ImageData::toImpl(info.Holder());
-
-  DOMUint8ClampedArray* data;
-  unsigned sw;
-  unsigned sh;
-  V8StringResource<> colorSpace;
-  data = info[0]->IsUint8ClampedArray() ? V8Uint8ClampedArray::toImpl(v8::Local<v8::Uint8ClampedArray>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Uint8ClampedArray'.");
-
-    return;
-  }
-
-  sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sh = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  colorSpace = info[3];
-  if (!colorSpace.prepare())
-    return;
-  const char* validColorSpaceValues[] = {
-      "legacy-srgb",
-      "srgb",
-      "linear-rgb",
-  };
-  if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
-    return;
-  }
-
-  ImageData* result = impl->createImageData(data, sw, sh, colorSpace, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-static void createImageDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(4, info.Length())) {
-    case 3:
-      if (info[0]->IsUint8ClampedArray()) {
-        createImageData2Method(info);
-        return;
-      }
-      if (true) {
-        createImageData1Method(info);
-        return;
-      }
-      break;
-    case 4:
-      if (true) {
-        createImageData3Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageData", "createImageData");
-
-  if (isArityError) {
-    if (info.Length() < 3) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-      return;
+        v8SetReturnValueUnsigned(info, impl->width());
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-CORE_EXPORT  void createImageDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ImageDataV8Internal::createImageDataMethod(info);
-}
-
-static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ImageData");
-
-  unsigned sw;
-  unsigned sh;
-  sw = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sh = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ImageData* impl = ImageData::create(sw, sh, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ImageData::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
-
-static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ImageData");
-
-  DOMUint8ClampedArray* data;
-  unsigned sw;
-  unsigned sh;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  data = info[0]->IsUint8ClampedArray() ? V8Uint8ClampedArray::toImpl(v8::Local<v8::Uint8ClampedArray>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Uint8ClampedArray'.");
-
-    return;
-  }
-
-  sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    ImageData* impl = ImageData::create(data, sw, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ImageDataV8Internal::widthAttributeGetter(info);
     }
-    v8::Local<v8::Object> wrapper = info.Holder();
-    wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ImageData::wrapperTypeInfo, wrapper);
-    v8SetReturnValue(info, wrapper);
-    return;
-  }
-  sh = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  ImageData* impl = ImageData::create(data, sw, sh, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ImageData::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ImageData");
-  switch (std::min(3, info.Length())) {
-    case 2:
-      if (info[0]->IsUint8ClampedArray()) {
-        ImageDataV8Internal::constructor2(info);
-        return;
-      }
-      if (true) {
-        ImageDataV8Internal::constructor1(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        ImageDataV8Internal::constructor2(info);
-        return;
-      }
-      break;
-    default:
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
-  }
-  exceptionState.throwTypeError("No matching constructor signature.");
-}
+        ImageData* impl = V8ImageData::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->height());
+    }
+
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ImageDataV8Internal::heightAttributeGetter(info);
+    }
+
+    static void dataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        ImageData* impl = V8ImageData::toImpl(holder);
+
+        DOMUint8ClampedArray* cppValue(WTF::getPtr(impl->data()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#ImageData#data";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    CORE_EXPORT void dataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ImageDataV8Internal::dataAttributeGetter(info);
+    }
+
+    static void colorSpaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        ImageData* impl = V8ImageData::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->colorSpace(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void colorSpaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ImageDataV8Internal::colorSpaceAttributeGetter(info);
+    }
+
+    static void createImageData1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageData", "createImageData");
+
+        ImageData* impl = V8ImageData::toImpl(info.Holder());
+
+        unsigned sw;
+        unsigned sh;
+        V8StringResource<> colorSpace;
+        sw = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sh = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        colorSpace = info[2];
+        if (!colorSpace.prepare())
+            return;
+        const char* validColorSpaceValues[] = {
+            "legacy-srgb",
+            "srgb",
+            "linear-rgb",
+        };
+        if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
+            return;
+        }
+
+        ImageData* result = impl->createImageData(sw, sh, colorSpace, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    static void createImageData2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageData", "createImageData");
+
+        ImageData* impl = V8ImageData::toImpl(info.Holder());
+
+        DOMUint8ClampedArray* data;
+        unsigned sw;
+        V8StringResource<> colorSpace;
+        data = info[0]->IsUint8ClampedArray() ? V8Uint8ClampedArray::toImpl(v8::Local<v8::Uint8ClampedArray>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Uint8ClampedArray'.");
+
+            return;
+        }
+
+        sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        colorSpace = info[2];
+        if (!colorSpace.prepare())
+            return;
+        const char* validColorSpaceValues[] = {
+            "legacy-srgb",
+            "srgb",
+            "linear-rgb",
+        };
+        if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
+            return;
+        }
+
+        ImageData* result = impl->createImageData(data, sw, colorSpace, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    static void createImageData3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageData", "createImageData");
+
+        ImageData* impl = V8ImageData::toImpl(info.Holder());
+
+        DOMUint8ClampedArray* data;
+        unsigned sw;
+        unsigned sh;
+        V8StringResource<> colorSpace;
+        data = info[0]->IsUint8ClampedArray() ? V8Uint8ClampedArray::toImpl(v8::Local<v8::Uint8ClampedArray>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Uint8ClampedArray'.");
+
+            return;
+        }
+
+        sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sh = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        colorSpace = info[3];
+        if (!colorSpace.prepare())
+            return;
+        const char* validColorSpaceValues[] = {
+            "legacy-srgb",
+            "srgb",
+            "linear-rgb",
+        };
+        if (!isValidEnum(colorSpace, validColorSpaceValues, WTF_ARRAY_LENGTH(validColorSpaceValues), "ImageDataColorSpace", exceptionState)) {
+            return;
+        }
+
+        ImageData* result = impl->createImageData(data, sw, sh, colorSpace, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    static void createImageDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(4, info.Length())) {
+        case 3:
+            if (info[0]->IsUint8ClampedArray()) {
+                createImageData2Method(info);
+                return;
+            }
+            if (true) {
+                createImageData1Method(info);
+                return;
+            }
+            break;
+        case 4:
+            if (true) {
+                createImageData3Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageData", "createImageData");
+
+        if (isArityError) {
+            if (info.Length() < 3) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void createImageDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ImageDataV8Internal::createImageDataMethod(info);
+    }
+
+    static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ImageData");
+
+        unsigned sw;
+        unsigned sh;
+        sw = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sh = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ImageData* impl = ImageData::create(sw, sh, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ImageData::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
+
+    static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ImageData");
+
+        DOMUint8ClampedArray* data;
+        unsigned sw;
+        unsigned sh;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        data = info[0]->IsUint8ClampedArray() ? V8Uint8ClampedArray::toImpl(v8::Local<v8::Uint8ClampedArray>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Uint8ClampedArray'.");
+
+            return;
+        }
+
+        sw = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            ImageData* impl = ImageData::create(data, sw, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8::Local<v8::Object> wrapper = info.Holder();
+            wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ImageData::wrapperTypeInfo, wrapper);
+            v8SetReturnValue(info, wrapper);
+            return;
+        }
+        sh = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ImageData* impl = ImageData::create(data, sw, sh, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8ImageData::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "ImageData");
+        switch (std::min(3, info.Length())) {
+        case 2:
+            if (info[0]->IsUint8ClampedArray()) {
+                ImageDataV8Internal::constructor2(info);
+                return;
+            }
+            if (true) {
+                ImageDataV8Internal::constructor1(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                ImageDataV8Internal::constructor2(info);
+                return;
+            }
+            break;
+        default:
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+        exceptionState.throwTypeError("No matching constructor signature.");
+    }
 
 } // namespace ImageDataV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ImageDataAccessors[] = {
-    {"width", ImageDataV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", ImageDataV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"data", ImageDataV8Internal::dataAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"colorSpace", ImageDataV8Internal::colorSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "width", ImageDataV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", ImageDataV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "data", ImageDataV8Internal::dataAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "colorSpace", ImageDataV8Internal::colorSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8ImageData::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("ImageData"));
-    return;
-  }
+void V8ImageData::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("ImageData"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  ImageDataV8Internal::constructor(info);
+    ImageDataV8Internal::constructor(info);
 }
 
-static void installV8ImageDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ImageData::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8ImageData::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8ImageData::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8ImageDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ImageData::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8ImageData::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8ImageData::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ImageDataAccessors, WTF_ARRAY_LENGTH(V8ImageDataAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ImageDataAccessors, WTF_ARRAY_LENGTH(V8ImageDataAccessors));
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration createImageDataMethodConfiguration = {"createImageData", ImageDataV8Internal::createImageDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, createImageDataMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration createImageDataMethodConfiguration = { "createImageData", ImageDataV8Internal::createImageDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, createImageDataMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8ImageData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ImageDataTemplate);
+v8::Local<v8::FunctionTemplate> V8ImageData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ImageDataTemplate);
 }
 
-bool V8ImageData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ImageData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ImageData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ImageData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ImageData* V8ImageData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ImageData* V8ImageData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RTCOfferOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,104 +16,108 @@
 
 namespace blink {
 
-void V8RTCOfferOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RTCOfferOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8RTCOfferOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RTCOfferOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8RTCOfferAnswerOptions::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> iceRestartValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "iceRestart")).ToLocal(&iceRestartValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (iceRestartValue.IsEmpty() || iceRestartValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool iceRestart = toBoolean(isolate, iceRestartValue, exceptionState);
+    V8RTCOfferAnswerOptions::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setIceRestart(iceRestart);
-  }
+        return;
 
-  v8::Local<v8::Value> offerToReceiveAudioValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "offerToReceiveAudio")).ToLocal(&offerToReceiveAudioValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (offerToReceiveAudioValue.IsEmpty() || offerToReceiveAudioValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    int offerToReceiveAudio = toInt32(isolate, offerToReceiveAudioValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setOfferToReceiveAudio(offerToReceiveAudio);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> iceRestartValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "iceRestart")).ToLocal(&iceRestartValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (iceRestartValue.IsEmpty() || iceRestartValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool iceRestart = toBoolean(isolate, iceRestartValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setIceRestart(iceRestart);
+    }
 
-  v8::Local<v8::Value> offerToReceiveVideoValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "offerToReceiveVideo")).ToLocal(&offerToReceiveVideoValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (offerToReceiveVideoValue.IsEmpty() || offerToReceiveVideoValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    int offerToReceiveVideo = toInt32(isolate, offerToReceiveVideoValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setOfferToReceiveVideo(offerToReceiveVideo);
-  }
+    v8::Local<v8::Value> offerToReceiveAudioValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "offerToReceiveAudio")).ToLocal(&offerToReceiveAudioValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (offerToReceiveAudioValue.IsEmpty() || offerToReceiveAudioValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        int offerToReceiveAudio = toInt32(isolate, offerToReceiveAudioValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setOfferToReceiveAudio(offerToReceiveAudio);
+    }
+
+    v8::Local<v8::Value> offerToReceiveVideoValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "offerToReceiveVideo")).ToLocal(&offerToReceiveVideoValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (offerToReceiveVideoValue.IsEmpty() || offerToReceiveVideoValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        int offerToReceiveVideo = toInt32(isolate, offerToReceiveVideoValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setOfferToReceiveVideo(offerToReceiveVideo);
+    }
 }
 
-v8::Local<v8::Value> RTCOfferOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8RTCOfferOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> RTCOfferOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8RTCOfferOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8RTCOfferOptions(const RTCOfferOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8RTCOfferAnswerOptions(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8RTCOfferOptions(const RTCOfferOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8RTCOfferAnswerOptions(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasIceRestart()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "iceRestart"), v8Boolean(impl.iceRestart(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "iceRestart"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasIceRestart()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "iceRestart"), v8Boolean(impl.iceRestart(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "iceRestart"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  if (impl.hasOfferToReceiveAudio()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "offerToReceiveAudio"), v8::Integer::New(isolate, impl.offerToReceiveAudio()))))
-      return false;
-  }
+    if (impl.hasOfferToReceiveAudio()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "offerToReceiveAudio"), v8::Integer::New(isolate, impl.offerToReceiveAudio()))))
+            return false;
+    }
 
-  if (impl.hasOfferToReceiveVideo()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "offerToReceiveVideo"), v8::Integer::New(isolate, impl.offerToReceiveVideo()))))
-      return false;
-  }
+    if (impl.hasOfferToReceiveVideo()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "offerToReceiveVideo"), v8::Integer::New(isolate, impl.offerToReceiveVideo()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-RTCOfferOptions NativeValueTraits<RTCOfferOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  RTCOfferOptions impl;
-  V8RTCOfferOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+RTCOfferOptions NativeValueTraits<RTCOfferOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    RTCOfferOptions impl;
+    V8RTCOfferOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

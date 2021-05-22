@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8OffscreenCanvasPartial.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -33,83 +33,87 @@ namespace blink {
 
 namespace OffscreenCanvasPartialV8Internal {
 
-static void getContextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "OffscreenCanvas", "getContext");
+    static void getContextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "OffscreenCanvas", "getContext");
 
-  OffscreenCanvas* impl = V8OffscreenCanvas::toImpl(info.Holder());
+        OffscreenCanvas* impl = V8OffscreenCanvas::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> contextType;
-  CanvasContextCreationAttributes attributes;
-  contextType = info[0];
-  if (!contextType.prepare())
-    return;
-  const char* validContextTypeValues[] = {
-      "2d",
-      "webgl",
-      "webgl2",
-  };
-  if (!isValidEnum(contextType, validContextTypeValues, WTF_ARRAY_LENGTH(validContextTypeValues), "OffscreenRenderingContextType", exceptionState)) {
-    return;
-  }
+        V8StringResource<> contextType;
+        CanvasContextCreationAttributes attributes;
+        contextType = info[0];
+        if (!contextType.prepare())
+            return;
+        const char* validContextTypeValues[] = {
+            "2d",
+            "webgl",
+            "webgl2",
+        };
+        if (!isValidEnum(contextType, validContextTypeValues, WTF_ARRAY_LENGTH(validContextTypeValues), "OffscreenRenderingContextType", exceptionState)) {
+            return;
+        }
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('attributes') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('attributes') is not an object.");
 
-    return;
-  }
-  V8CanvasContextCreationAttributes::toImpl(info.GetIsolate(), info[1], attributes, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8CanvasContextCreationAttributes::toImpl(info.GetIsolate(), info[1], attributes, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext result;
-  OffscreenCanvasModules::getContext(scriptState, *impl, contextType, attributes, exceptionState, result);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext result;
+        OffscreenCanvasModules::getContext(scriptState, *impl, contextType, attributes, exceptionState, result);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
- void getContextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  OffscreenCanvasPartialV8Internal::getContextMethod(info);
-}
+    void getContextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OffscreenCanvasPartialV8Internal::getContextMethod(info);
+    }
 
 } // namespace OffscreenCanvasPartialV8Internal
 
-void V8OffscreenCanvasPartial::installV8OffscreenCanvasTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8OffscreenCanvas::installV8OffscreenCanvasTemplate(isolate, world, interfaceTemplate);
+void V8OffscreenCanvasPartial::installV8OffscreenCanvasTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8OffscreenCanvas::installV8OffscreenCanvasTemplate(isolate, world, interfaceTemplate);
 
-  if (!RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration getContextMethodConfiguration = {"getContext", OffscreenCanvasPartialV8Internal::getContextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getContextMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration getContextMethodConfiguration = { "getContext", OffscreenCanvasPartialV8Internal::getContextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getContextMethodConfiguration);
+    }
 }
 
-void V8OffscreenCanvasPartial::initialize() {
-  // Should be invoked from ModulesInitializer.
-  V8OffscreenCanvas::updateWrapperTypeInfo(
-      &V8OffscreenCanvasPartial::installV8OffscreenCanvasTemplate,
-      nullptr);
+void V8OffscreenCanvasPartial::initialize()
+{
+    // Should be invoked from ModulesInitializer.
+    V8OffscreenCanvas::updateWrapperTypeInfo(
+        &V8OffscreenCanvasPartial::installV8OffscreenCanvasTemplate,
+        nullptr);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,48 +8,57 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PushSubscriptionOptionsInit.h"
 
 namespace blink {
 
-PushSubscriptionOptionsInit::PushSubscriptionOptionsInit() {
-  setUserVisibleOnly(false);
+PushSubscriptionOptionsInit::PushSubscriptionOptionsInit()
+{
+    setUserVisibleOnly(false);
 }
 
-PushSubscriptionOptionsInit::~PushSubscriptionOptionsInit() {}
+PushSubscriptionOptionsInit::~PushSubscriptionOptionsInit() { }
 
 PushSubscriptionOptionsInit::PushSubscriptionOptionsInit(const PushSubscriptionOptionsInit&) = default;
 
 PushSubscriptionOptionsInit& PushSubscriptionOptionsInit::operator=(const PushSubscriptionOptionsInit&) = default;
 
-bool PushSubscriptionOptionsInit::hasApplicationServerKey() const {
-  return !m_applicationServerKey.isNull();
+bool PushSubscriptionOptionsInit::hasApplicationServerKey() const
+{
+    return !m_applicationServerKey.isNull();
 }
-const ArrayBufferOrArrayBufferView& PushSubscriptionOptionsInit::applicationServerKey() const {
-  return m_applicationServerKey;
+const ArrayBufferOrArrayBufferView& PushSubscriptionOptionsInit::applicationServerKey() const
+{
+    return m_applicationServerKey;
 }
-void PushSubscriptionOptionsInit::setApplicationServerKey(const ArrayBufferOrArrayBufferView& value) {
-  m_applicationServerKey = value;
+void PushSubscriptionOptionsInit::setApplicationServerKey(const ArrayBufferOrArrayBufferView& value)
+{
+    m_applicationServerKey = value;
 }
-void PushSubscriptionOptionsInit::setApplicationServerKeyToNull() {
-  m_applicationServerKey = ArrayBufferOrArrayBufferView();
+void PushSubscriptionOptionsInit::setApplicationServerKeyToNull()
+{
+    m_applicationServerKey = ArrayBufferOrArrayBufferView();
 }
-bool PushSubscriptionOptionsInit::hasUserVisibleOnly() const {
-  return m_hasUserVisibleOnly;
+bool PushSubscriptionOptionsInit::hasUserVisibleOnly() const
+{
+    return m_hasUserVisibleOnly;
 }
-bool PushSubscriptionOptionsInit::userVisibleOnly() const {
-  DCHECK(m_hasUserVisibleOnly);
-  return m_userVisibleOnly;
+bool PushSubscriptionOptionsInit::userVisibleOnly() const
+{
+    DCHECK(m_hasUserVisibleOnly);
+    return m_userVisibleOnly;
 }
-void PushSubscriptionOptionsInit::setUserVisibleOnly(bool value) {
-  m_userVisibleOnly = value;
-  m_hasUserVisibleOnly = true;
+void PushSubscriptionOptionsInit::setUserVisibleOnly(bool value)
+{
+    m_userVisibleOnly = value;
+    m_hasUserVisibleOnly = true;
 }
 
-DEFINE_TRACE(PushSubscriptionOptionsInit) {
-  visitor->trace(m_applicationServerKey);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PushSubscriptionOptionsInit)
+{
+    visitor->trace(m_applicationServerKey);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

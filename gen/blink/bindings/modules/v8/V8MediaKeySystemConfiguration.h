@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8MediaKeySystemConfiguration_h
 #define V8MediaKeySystemConfiguration_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8MediaKeySystemConfiguration {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaKeySystemConfiguration&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaKeySystemConfiguration&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8MediaKeySystemConfiguration(const MediaKeySystemConfiguration&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaKeySystemConfiguration& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaKeySystemConfiguration& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<MediaKeySystemConfiguration> {
-  static MediaKeySystemConfiguration nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static MediaKeySystemConfiguration nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<MediaKeySystemConfiguration> {
-  typedef V8MediaKeySystemConfiguration Type;
+    typedef V8MediaKeySystemConfiguration Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8MediaKeySystemConfiguration_h
+#endif // V8MediaKeySystemConfiguration_h

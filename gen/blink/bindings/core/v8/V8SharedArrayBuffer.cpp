@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SharedArrayBuffer.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,34 +48,36 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMSharedArrayBuffer::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMSharedArrayBuffer is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
-DOMSharedArrayBuffer* V8SharedArrayBuffer::toImpl(v8::Local<v8::Object> object) {
-  DCHECK(object->IsSharedArrayBuffer());
-  v8::Local<v8::SharedArrayBuffer> v8buffer = object.As<v8::SharedArrayBuffer>();
-  if (v8buffer->IsExternal()) {
-    const WrapperTypeInfo* wrapperTypeInfo = toWrapperTypeInfo(object);
-    CHECK(wrapperTypeInfo);
-    CHECK_EQ(wrapperTypeInfo->ginEmbedder, gin::kEmbedderBlink);
-    return toScriptWrappable(object)->toImpl<DOMSharedArrayBuffer>();
-  }
+DOMSharedArrayBuffer* V8SharedArrayBuffer::toImpl(v8::Local<v8::Object> object)
+{
+    DCHECK(object->IsSharedArrayBuffer());
+    v8::Local<v8::SharedArrayBuffer> v8buffer = object.As<v8::SharedArrayBuffer>();
+    if (v8buffer->IsExternal()) {
+        const WrapperTypeInfo* wrapperTypeInfo = toWrapperTypeInfo(object);
+        CHECK(wrapperTypeInfo);
+        CHECK_EQ(wrapperTypeInfo->ginEmbedder, gin::kEmbedderBlink);
+        return toScriptWrappable(object)->toImpl<DOMSharedArrayBuffer>();
+    }
 
-  // Transfer the ownership of the allocated memory to an SharedArrayBuffer without
-  // copying.
-  v8::SharedArrayBuffer::Contents v8Contents = v8buffer->Externalize();
-  WTF::ArrayBufferContents contents(v8Contents.Data(), v8Contents.ByteLength(), WTF::ArrayBufferContents::Shared);
-  DOMSharedArrayBuffer* buffer = DOMSharedArrayBuffer::create(contents);
-  v8::Local<v8::Object> associatedWrapper = buffer->associateWithWrapper(v8::Isolate::GetCurrent(), buffer->wrapperTypeInfo(), object);
-  DCHECK(associatedWrapper == object);
+    // Transfer the ownership of the allocated memory to an SharedArrayBuffer without
+    // copying.
+    v8::SharedArrayBuffer::Contents v8Contents = v8buffer->Externalize();
+    WTF::ArrayBufferContents contents(v8Contents.Data(), v8Contents.ByteLength(), WTF::ArrayBufferContents::Shared);
+    DOMSharedArrayBuffer* buffer = DOMSharedArrayBuffer::create(contents);
+    v8::Local<v8::Object> associatedWrapper = buffer->associateWithWrapper(v8::Isolate::GetCurrent(), buffer->wrapperTypeInfo(), object);
+    DCHECK(associatedWrapper == object);
 
-  return buffer;
+    return buffer;
 }
 
-DOMSharedArrayBuffer* V8SharedArrayBuffer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return value->IsSharedArrayBuffer() ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMSharedArrayBuffer* V8SharedArrayBuffer::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return value->IsSharedArrayBuffer() ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

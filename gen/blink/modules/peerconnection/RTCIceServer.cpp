@@ -8,62 +8,76 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RTCIceServer.h"
 
 #include "bindings/modules/v8/StringOrStringSequence.h"
 
 namespace blink {
 
-RTCIceServer::RTCIceServer() {
+RTCIceServer::RTCIceServer()
+{
 }
 
-RTCIceServer::~RTCIceServer() {}
+RTCIceServer::~RTCIceServer() { }
 
 RTCIceServer::RTCIceServer(const RTCIceServer&) = default;
 
 RTCIceServer& RTCIceServer::operator=(const RTCIceServer&) = default;
 
-bool RTCIceServer::hasCredential() const {
-  return !m_credential.isNull();
+bool RTCIceServer::hasCredential() const
+{
+    return !m_credential.isNull();
 }
-String RTCIceServer::credential() const {
-  return m_credential;
+String RTCIceServer::credential() const
+{
+    return m_credential;
 }
-void RTCIceServer::setCredential(String value) {
-  m_credential = value;
+void RTCIceServer::setCredential(String value)
+{
+    m_credential = value;
 }
-bool RTCIceServer::hasURL() const {
-  return !m_url.isNull();
+bool RTCIceServer::hasURL() const
+{
+    return !m_url.isNull();
 }
-String RTCIceServer::url() const {
-  return m_url;
+String RTCIceServer::url() const
+{
+    return m_url;
 }
-void RTCIceServer::setURL(String value) {
-  m_url = value;
+void RTCIceServer::setURL(String value)
+{
+    m_url = value;
 }
-bool RTCIceServer::hasURLs() const {
-  return !m_urls.isNull();
+bool RTCIceServer::hasURLs() const
+{
+    return !m_urls.isNull();
 }
-const StringOrStringSequence& RTCIceServer::urls() const {
-  return m_urls;
+const StringOrStringSequence& RTCIceServer::urls() const
+{
+    return m_urls;
 }
-void RTCIceServer::setURLs(const StringOrStringSequence& value) {
-  m_urls = value;
+void RTCIceServer::setURLs(const StringOrStringSequence& value)
+{
+    m_urls = value;
 }
-bool RTCIceServer::hasUsername() const {
-  return !m_username.isNull();
+bool RTCIceServer::hasUsername() const
+{
+    return !m_username.isNull();
 }
-String RTCIceServer::username() const {
-  return m_username;
+String RTCIceServer::username() const
+{
+    return m_username;
 }
-void RTCIceServer::setUsername(String value) {
-  m_username = value;
+void RTCIceServer::setUsername(String value)
+{
+    m_username = value;
 }
 
-DEFINE_TRACE(RTCIceServer) {
-  visitor->trace(m_urls);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(RTCIceServer)
+{
+    visitor->trace(m_urls);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

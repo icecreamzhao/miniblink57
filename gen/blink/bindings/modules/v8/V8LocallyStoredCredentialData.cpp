@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8LocallyStoredCredentialData.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,82 +16,86 @@
 
 namespace blink {
 
-void V8LocallyStoredCredentialData::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, LocallyStoredCredentialData& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8LocallyStoredCredentialData::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, LocallyStoredCredentialData& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8CredentialData::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    V8CredentialData::toImpl(isolate, v8Value, impl, exceptionState);
+    if (exceptionState.hadException())
+        return;
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> iconURLValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "iconURL")).ToLocal(&iconURLValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (iconURLValue.IsEmpty() || iconURLValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> iconURL = iconURLValue;
-    if (!iconURL.prepare(exceptionState))
-      return;
-    impl.setIconURL(iconURL);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> iconURLValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "iconURL")).ToLocal(&iconURLValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (iconURLValue.IsEmpty() || iconURLValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> iconURL = iconURLValue;
+        if (!iconURL.prepare(exceptionState))
+            return;
+        impl.setIconURL(iconURL);
+    }
 
-  v8::Local<v8::Value> nameValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "name")).ToLocal(&nameValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (nameValue.IsEmpty() || nameValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> name = nameValue;
-    if (!name.prepare(exceptionState))
-      return;
-    impl.setName(name);
-  }
+    v8::Local<v8::Value> nameValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "name")).ToLocal(&nameValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (nameValue.IsEmpty() || nameValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> name = nameValue;
+        if (!name.prepare(exceptionState))
+            return;
+        impl.setName(name);
+    }
 }
 
-v8::Local<v8::Value> LocallyStoredCredentialData::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8LocallyStoredCredentialData(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> LocallyStoredCredentialData::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8LocallyStoredCredentialData(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8LocallyStoredCredentialData(const LocallyStoredCredentialData& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8CredentialData(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8LocallyStoredCredentialData(const LocallyStoredCredentialData& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8CredentialData(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasIconURL()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "iconURL"), v8String(isolate, impl.iconURL()))))
-      return false;
-  }
+    if (impl.hasIconURL()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "iconURL"), v8String(isolate, impl.iconURL()))))
+            return false;
+    }
 
-  if (impl.hasName()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "name"), v8String(isolate, impl.name()))))
-      return false;
-  }
+    if (impl.hasName()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "name"), v8String(isolate, impl.name()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-LocallyStoredCredentialData NativeValueTraits<LocallyStoredCredentialData>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  LocallyStoredCredentialData impl;
-  V8LocallyStoredCredentialData::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+LocallyStoredCredentialData NativeValueTraits<LocallyStoredCredentialData>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    LocallyStoredCredentialData impl;
+    V8LocallyStoredCredentialData::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

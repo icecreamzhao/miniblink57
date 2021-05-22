@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DeviceMotionEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,148 +49,162 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DeviceMotionEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DeviceMotionEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DeviceMotionEventV8Internal {
 
-static void accelerationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void accelerationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DeviceMotionEvent* impl = V8DeviceMotionEvent::toImpl(holder);
+        DeviceMotionEvent* impl = V8DeviceMotionEvent::toImpl(holder);
 
-  DeviceAcceleration* cppValue(WTF::getPtr(impl->acceleration()));
+        DeviceAcceleration* cppValue(WTF::getPtr(impl->acceleration()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#DeviceMotionEvent#acceleration";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#DeviceMotionEvent#acceleration";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void accelerationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DeviceMotionEventV8Internal::accelerationAttributeGetter(info);
-}
+    MODULES_EXPORT void accelerationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DeviceMotionEventV8Internal::accelerationAttributeGetter(info);
+    }
 
-static void accelerationIncludingGravityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void accelerationIncludingGravityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DeviceMotionEvent* impl = V8DeviceMotionEvent::toImpl(holder);
+        DeviceMotionEvent* impl = V8DeviceMotionEvent::toImpl(holder);
 
-  DeviceAcceleration* cppValue(WTF::getPtr(impl->accelerationIncludingGravity()));
+        DeviceAcceleration* cppValue(WTF::getPtr(impl->accelerationIncludingGravity()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#DeviceMotionEvent#accelerationIncludingGravity";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#DeviceMotionEvent#accelerationIncludingGravity";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void accelerationIncludingGravityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DeviceMotionEventV8Internal::accelerationIncludingGravityAttributeGetter(info);
-}
+    MODULES_EXPORT void accelerationIncludingGravityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DeviceMotionEventV8Internal::accelerationIncludingGravityAttributeGetter(info);
+    }
 
-static void rotationRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rotationRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DeviceMotionEvent* impl = V8DeviceMotionEvent::toImpl(holder);
+        DeviceMotionEvent* impl = V8DeviceMotionEvent::toImpl(holder);
 
-  DeviceRotationRate* cppValue(WTF::getPtr(impl->rotationRate()));
+        DeviceRotationRate* cppValue(WTF::getPtr(impl->rotationRate()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#DeviceMotionEvent#rotationRate";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#DeviceMotionEvent#rotationRate";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void rotationRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DeviceMotionEventV8Internal::rotationRateAttributeGetter(info);
-}
+    MODULES_EXPORT void rotationRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DeviceMotionEventV8Internal::rotationRateAttributeGetter(info);
+    }
 
-static void intervalAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void intervalAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DeviceMotionEvent* impl = V8DeviceMotionEvent::toImpl(holder);
+        DeviceMotionEvent* impl = V8DeviceMotionEvent::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->interval(isNull));
+        double cppValue(impl->interval(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-MODULES_EXPORT void intervalAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DeviceMotionEventV8Internal::intervalAttributeGetter(info);
-}
+    MODULES_EXPORT void intervalAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DeviceMotionEventV8Internal::intervalAttributeGetter(info);
+    }
 
-MODULES_EXPORT  void initDeviceMotionEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8DeviceMotionEvent_InitDeviceMotionEvent_Method);
-  V8DeviceMotionEvent::initDeviceMotionEventMethodCustom(info);
-}
+    MODULES_EXPORT void initDeviceMotionEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8DeviceMotionEvent_InitDeviceMotionEvent_Method);
+        V8DeviceMotionEvent::initDeviceMotionEventMethodCustom(info);
+    }
 
 } // namespace DeviceMotionEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8DeviceMotionEventAccessors[] = {
-    {"acceleration", DeviceMotionEventV8Internal::accelerationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"accelerationIncludingGravity", DeviceMotionEventV8Internal::accelerationIncludingGravityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rotationRate", DeviceMotionEventV8Internal::rotationRateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"interval", DeviceMotionEventV8Internal::intervalAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "acceleration", DeviceMotionEventV8Internal::accelerationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "accelerationIncludingGravity", DeviceMotionEventV8Internal::accelerationIncludingGravityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rotationRate", DeviceMotionEventV8Internal::rotationRateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "interval", DeviceMotionEventV8Internal::intervalAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8DeviceMotionEventMethods[] = {
-    {"initDeviceMotionEvent", DeviceMotionEventV8Internal::initDeviceMotionEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "initDeviceMotionEvent", DeviceMotionEventV8Internal::initDeviceMotionEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8DeviceMotionEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DeviceMotionEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8DeviceMotionEvent::internalFieldCount);
+static void installV8DeviceMotionEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DeviceMotionEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8DeviceMotionEvent::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DeviceMotionEventAccessors, WTF_ARRAY_LENGTH(V8DeviceMotionEventAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DeviceMotionEventMethods, WTF_ARRAY_LENGTH(V8DeviceMotionEventMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DeviceMotionEventAccessors, WTF_ARRAY_LENGTH(V8DeviceMotionEventAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DeviceMotionEventMethods, WTF_ARRAY_LENGTH(V8DeviceMotionEventMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DeviceMotionEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DeviceMotionEventTemplate);
+v8::Local<v8::FunctionTemplate> V8DeviceMotionEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DeviceMotionEventTemplate);
 }
 
-bool V8DeviceMotionEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DeviceMotionEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DeviceMotionEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DeviceMotionEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DeviceMotionEvent* V8DeviceMotionEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DeviceMotionEvent* V8DeviceMotionEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

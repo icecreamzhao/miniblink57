@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ConvolverOptions_h
 #define V8ConvolverOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ConvolverOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConvolverOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConvolverOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ConvolverOptions(const ConvolverOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConvolverOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConvolverOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ConvolverOptions> {
-  static ConvolverOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ConvolverOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ConvolverOptions> {
-  typedef V8ConvolverOptions Type;
+    typedef V8ConvolverOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ConvolverOptions_h
+#endif // V8ConvolverOptions_h

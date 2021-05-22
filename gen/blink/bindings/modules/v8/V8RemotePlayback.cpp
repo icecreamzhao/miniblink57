@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RemotePlayback.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,263 +52,289 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&RemotePlayback::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "RemotePlayback is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace RemotePlaybackV8Internal {
 
-static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
+        RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->state(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->state(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RemotePlaybackV8Internal::stateAttributeGetter(info);
-}
+    MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RemotePlaybackV8Internal::stateAttributeGetter(info);
+    }
 
-static void onconnectingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onconnectingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
+        RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onconnecting()));
+        EventListener* cppValue(WTF::getPtr(impl->onconnecting()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onconnectingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RemotePlaybackV8Internal::onconnectingAttributeGetter(info);
-}
+    MODULES_EXPORT void onconnectingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RemotePlaybackV8Internal::onconnectingAttributeGetter(info);
+    }
 
-static void onconnectingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
+    static void onconnectingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnecting(), v8Value, V8RemotePlayback::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnecting(), v8Value, V8RemotePlayback::eventListenerCacheIndex);
 
-  impl->setOnconnecting(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnconnecting(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onconnectingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onconnectingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  RemotePlaybackV8Internal::onconnectingAttributeSetter(v8Value, info);
-}
+        RemotePlaybackV8Internal::onconnectingAttributeSetter(v8Value, info);
+    }
 
-static void onconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
+        RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onconnect()));
+        EventListener* cppValue(WTF::getPtr(impl->onconnect()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RemotePlaybackV8Internal::onconnectAttributeGetter(info);
-}
+    MODULES_EXPORT void onconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RemotePlaybackV8Internal::onconnectAttributeGetter(info);
+    }
 
-static void onconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
+    static void onconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnect(), v8Value, V8RemotePlayback::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnect(), v8Value, V8RemotePlayback::eventListenerCacheIndex);
 
-  impl->setOnconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  RemotePlaybackV8Internal::onconnectAttributeSetter(v8Value, info);
-}
+        RemotePlaybackV8Internal::onconnectAttributeSetter(v8Value, info);
+    }
 
-static void ondisconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondisconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
+        RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->ondisconnect()));
+        EventListener* cppValue(WTF::getPtr(impl->ondisconnect()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void ondisconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RemotePlaybackV8Internal::ondisconnectAttributeGetter(info);
-}
+    MODULES_EXPORT void ondisconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RemotePlaybackV8Internal::ondisconnectAttributeGetter(info);
+    }
 
-static void ondisconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
+    static void ondisconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RemotePlayback* impl = V8RemotePlayback::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondisconnect(), v8Value, V8RemotePlayback::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondisconnect(), v8Value, V8RemotePlayback::eventListenerCacheIndex);
 
-  impl->setOndisconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOndisconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void ondisconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void ondisconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  RemotePlaybackV8Internal::ondisconnectAttributeSetter(v8Value, info);
-}
+        RemotePlaybackV8Internal::ondisconnectAttributeSetter(v8Value, info);
+    }
 
-static void watchAvailabilityMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RemotePlayback", "watchAvailability");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void watchAvailabilityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RemotePlayback", "watchAvailability");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RemotePlayback::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RemotePlayback* impl = V8RemotePlayback::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RemotePlayback::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RemotePlayback* impl = V8RemotePlayback::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  RemotePlaybackAvailabilityCallback* callback;
-  if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+        RemotePlaybackAvailabilityCallback* callback;
+        if (!(info[0]->IsObject() && v8::Local<v8::Object>::Cast(info[0])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
 
-    return;
-  }
-  callback = RemotePlaybackAvailabilityCallback::create(ScriptState::current(info.GetIsolate()), info[0]);
+            return;
+        }
+        callback = RemotePlaybackAvailabilityCallback::create(ScriptState::current(info.GetIsolate()), info[0]);
 
-  ScriptPromise result = impl->watchAvailability(scriptState, callback);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->watchAvailability(scriptState, callback);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void watchAvailabilityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RemotePlaybackV8Internal::watchAvailabilityMethod(info);
-}
+    MODULES_EXPORT void watchAvailabilityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RemotePlaybackV8Internal::watchAvailabilityMethod(info);
+    }
 
-static void cancelWatchAvailabilityMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RemotePlayback", "cancelWatchAvailability");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void cancelWatchAvailabilityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RemotePlayback", "cancelWatchAvailability");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RemotePlayback::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RemotePlayback* impl = V8RemotePlayback::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RemotePlayback::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RemotePlayback* impl = V8RemotePlayback::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  int id;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ScriptPromise result = impl->cancelWatchAvailability(scriptState);
-    v8SetReturnValue(info, result.v8Value());
-    return;
-  }
-  id = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int id;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ScriptPromise result = impl->cancelWatchAvailability(scriptState);
+            v8SetReturnValue(info, result.v8Value());
+            return;
+        }
+        id = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = impl->cancelWatchAvailability(scriptState, id);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->cancelWatchAvailability(scriptState, id);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void cancelWatchAvailabilityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RemotePlaybackV8Internal::cancelWatchAvailabilityMethod(info);
-}
+    MODULES_EXPORT void cancelWatchAvailabilityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RemotePlaybackV8Internal::cancelWatchAvailabilityMethod(info);
+    }
 
-static void promptMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RemotePlayback", "prompt");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void promptMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RemotePlayback", "prompt");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8RemotePlayback::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  RemotePlayback* impl = V8RemotePlayback::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8RemotePlayback::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        RemotePlayback* impl = V8RemotePlayback::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->prompt(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->prompt(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void promptMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RemotePlaybackV8Internal::promptMethod(info);
-}
+    MODULES_EXPORT void promptMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RemotePlaybackV8Internal::promptMethod(info);
+    }
 
 } // namespace RemotePlaybackV8Internal
 
-void V8RemotePlayback::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  V8RemotePlayback::visitDOMWrapperCustom(isolate, scriptWrappable, wrapper);
+void V8RemotePlayback::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    V8RemotePlayback::visitDOMWrapperCustom(isolate, scriptWrappable, wrapper);
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8RemotePlaybackAccessors[] = {
-    {"state", RemotePlaybackV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onconnecting", RemotePlaybackV8Internal::onconnectingAttributeGetterCallback, RemotePlaybackV8Internal::onconnectingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onconnect", RemotePlaybackV8Internal::onconnectAttributeGetterCallback, RemotePlaybackV8Internal::onconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondisconnect", RemotePlaybackV8Internal::ondisconnectAttributeGetterCallback, RemotePlaybackV8Internal::ondisconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "state", RemotePlaybackV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onconnecting", RemotePlaybackV8Internal::onconnectingAttributeGetterCallback, RemotePlaybackV8Internal::onconnectingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onconnect", RemotePlaybackV8Internal::onconnectAttributeGetterCallback, RemotePlaybackV8Internal::onconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondisconnect", RemotePlaybackV8Internal::ondisconnectAttributeGetterCallback, RemotePlaybackV8Internal::ondisconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8RemotePlaybackMethods[] = {
-    {"watchAvailability", RemotePlaybackV8Internal::watchAvailabilityMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"cancelWatchAvailability", RemotePlaybackV8Internal::cancelWatchAvailabilityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"prompt", RemotePlaybackV8Internal::promptMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "watchAvailability", RemotePlaybackV8Internal::watchAvailabilityMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "cancelWatchAvailability", RemotePlaybackV8Internal::cancelWatchAvailabilityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "prompt", RemotePlaybackV8Internal::promptMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8RemotePlaybackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RemotePlayback::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8RemotePlayback::internalFieldCount);
+static void installV8RemotePlaybackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RemotePlayback::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8RemotePlayback::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::remotePlaybackEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::remotePlaybackEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RemotePlaybackAccessors, WTF_ARRAY_LENGTH(V8RemotePlaybackAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RemotePlaybackMethods, WTF_ARRAY_LENGTH(V8RemotePlaybackMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RemotePlaybackAccessors, WTF_ARRAY_LENGTH(V8RemotePlaybackAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RemotePlaybackMethods, WTF_ARRAY_LENGTH(V8RemotePlaybackMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8RemotePlayback::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RemotePlaybackTemplate);
+v8::Local<v8::FunctionTemplate> V8RemotePlayback::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RemotePlaybackTemplate);
 }
 
-bool V8RemotePlayback::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8RemotePlayback::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8RemotePlayback::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8RemotePlayback::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-RemotePlayback* V8RemotePlayback::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+RemotePlayback* V8RemotePlayback::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

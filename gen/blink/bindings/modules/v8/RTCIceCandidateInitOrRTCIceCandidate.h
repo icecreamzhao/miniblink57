@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCIceCandidateInitOrRTCIceCandidate_h
 #define RTCIceCandidateInitOrRTCIceCandidate_h
 
@@ -24,58 +24,60 @@ namespace blink {
 class RTCIceCandidate;
 
 class MODULES_EXPORT RTCIceCandidateInitOrRTCIceCandidate final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCIceCandidateInitOrRTCIceCandidate();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isRTCIceCandidateInit() const { return m_type == SpecificTypeRTCIceCandidateInit; }
-  const RTCIceCandidateInit& getAsRTCIceCandidateInit() const;
-  void setRTCIceCandidateInit(const RTCIceCandidateInit&);
-  static RTCIceCandidateInitOrRTCIceCandidate fromRTCIceCandidateInit(const RTCIceCandidateInit&);
+public:
+    RTCIceCandidateInitOrRTCIceCandidate();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isRTCIceCandidate() const { return m_type == SpecificTypeRTCIceCandidate; }
-  RTCIceCandidate* getAsRTCIceCandidate() const;
-  void setRTCIceCandidate(RTCIceCandidate*);
-  static RTCIceCandidateInitOrRTCIceCandidate fromRTCIceCandidate(RTCIceCandidate*);
+    bool isRTCIceCandidateInit() const { return m_type == SpecificTypeRTCIceCandidateInit; }
+    const RTCIceCandidateInit& getAsRTCIceCandidateInit() const;
+    void setRTCIceCandidateInit(const RTCIceCandidateInit&);
+    static RTCIceCandidateInitOrRTCIceCandidate fromRTCIceCandidateInit(const RTCIceCandidateInit&);
 
-  RTCIceCandidateInitOrRTCIceCandidate(const RTCIceCandidateInitOrRTCIceCandidate&);
-  ~RTCIceCandidateInitOrRTCIceCandidate();
-  RTCIceCandidateInitOrRTCIceCandidate& operator=(const RTCIceCandidateInitOrRTCIceCandidate&);
-  DECLARE_TRACE();
+    bool isRTCIceCandidate() const { return m_type == SpecificTypeRTCIceCandidate; }
+    RTCIceCandidate* getAsRTCIceCandidate() const;
+    void setRTCIceCandidate(RTCIceCandidate*);
+    static RTCIceCandidateInitOrRTCIceCandidate fromRTCIceCandidate(RTCIceCandidate*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeRTCIceCandidateInit,
-    SpecificTypeRTCIceCandidate,
-  };
-  SpecificTypes m_type;
+    RTCIceCandidateInitOrRTCIceCandidate(const RTCIceCandidateInitOrRTCIceCandidate&);
+    ~RTCIceCandidateInitOrRTCIceCandidate();
+    RTCIceCandidateInitOrRTCIceCandidate& operator=(const RTCIceCandidateInitOrRTCIceCandidate&);
+    DECLARE_TRACE();
 
-  RTCIceCandidateInit m_rTCIceCandidateInit;
-  Member<RTCIceCandidate> m_rTCIceCandidate;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeRTCIceCandidateInit,
+        SpecificTypeRTCIceCandidate,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const RTCIceCandidateInitOrRTCIceCandidate&, v8::Local<v8::Object>, v8::Isolate*);
+    RTCIceCandidateInit m_rTCIceCandidateInit;
+    Member<RTCIceCandidate> m_rTCIceCandidate;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const RTCIceCandidateInitOrRTCIceCandidate&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8RTCIceCandidateInitOrRTCIceCandidate final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCIceCandidateInitOrRTCIceCandidate&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCIceCandidateInitOrRTCIceCandidate&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const RTCIceCandidateInitOrRTCIceCandidate&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCIceCandidateInitOrRTCIceCandidate& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCIceCandidateInitOrRTCIceCandidate& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<RTCIceCandidateInitOrRTCIceCandidate> {
-  MODULES_EXPORT static RTCIceCandidateInitOrRTCIceCandidate nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static RTCIceCandidateInitOrRTCIceCandidate nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -83,4 +85,4 @@ struct NativeValueTraits<RTCIceCandidateInitOrRTCIceCandidate> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::RTCIceCandidateInitOrRTCIceCandidate);
 
-#endif  // RTCIceCandidateInitOrRTCIceCandidate_h
+#endif // RTCIceCandidateInitOrRTCIceCandidate_h

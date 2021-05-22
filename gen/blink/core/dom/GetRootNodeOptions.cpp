@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "GetRootNodeOptions.h"
 
 namespace blink {
 
-GetRootNodeOptions::GetRootNodeOptions() {
-  setComposed(false);
+GetRootNodeOptions::GetRootNodeOptions()
+{
+    setComposed(false);
 }
 
-GetRootNodeOptions::~GetRootNodeOptions() {}
+GetRootNodeOptions::~GetRootNodeOptions() { }
 
 GetRootNodeOptions::GetRootNodeOptions(const GetRootNodeOptions&) = default;
 
 GetRootNodeOptions& GetRootNodeOptions::operator=(const GetRootNodeOptions&) = default;
 
-bool GetRootNodeOptions::hasComposed() const {
-  return m_hasComposed;
+bool GetRootNodeOptions::hasComposed() const
+{
+    return m_hasComposed;
 }
-bool GetRootNodeOptions::composed() const {
-  DCHECK(m_hasComposed);
-  return m_composed;
+bool GetRootNodeOptions::composed() const
+{
+    DCHECK(m_hasComposed);
+    return m_composed;
 }
-void GetRootNodeOptions::setComposed(bool value) {
-  m_composed = value;
-  m_hasComposed = true;
+void GetRootNodeOptions::setComposed(bool value)
+{
+    m_composed = value;
+    m_hasComposed = true;
 }
 
-DEFINE_TRACE(GetRootNodeOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(GetRootNodeOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

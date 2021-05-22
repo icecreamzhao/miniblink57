@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCOfferAnswerOptions_h
 #define RTCOfferAnswerOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT RTCOfferAnswerOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCOfferAnswerOptions();
-  virtual ~RTCOfferAnswerOptions();
-  RTCOfferAnswerOptions(const RTCOfferAnswerOptions&);
-  RTCOfferAnswerOptions& operator=(const RTCOfferAnswerOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasVoiceActivityDetection() const;
-  bool voiceActivityDetection() const;
-  void setVoiceActivityDetection(bool);
+public:
+    RTCOfferAnswerOptions();
+    virtual ~RTCOfferAnswerOptions();
+    RTCOfferAnswerOptions(const RTCOfferAnswerOptions&);
+    RTCOfferAnswerOptions& operator=(const RTCOfferAnswerOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasVoiceActivityDetection() const;
+    bool voiceActivityDetection() const;
+    void setVoiceActivityDetection(bool);
 
- private:
-  bool m_hasVoiceActivityDetection = false;
-  bool m_voiceActivityDetection;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCOfferAnswerOptions;
+private:
+    bool m_hasVoiceActivityDetection = false;
+    bool m_voiceActivityDetection;
+
+    friend class V8RTCOfferAnswerOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCOfferAnswerOptions_h
+#endif // RTCOfferAnswerOptions_h

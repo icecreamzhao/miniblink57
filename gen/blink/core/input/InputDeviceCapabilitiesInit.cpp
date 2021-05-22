@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "InputDeviceCapabilitiesInit.h"
 
 namespace blink {
 
-InputDeviceCapabilitiesInit::InputDeviceCapabilitiesInit() {
-  setFiresTouchEvents(false);
+InputDeviceCapabilitiesInit::InputDeviceCapabilitiesInit()
+{
+    setFiresTouchEvents(false);
 }
 
-InputDeviceCapabilitiesInit::~InputDeviceCapabilitiesInit() {}
+InputDeviceCapabilitiesInit::~InputDeviceCapabilitiesInit() { }
 
 InputDeviceCapabilitiesInit::InputDeviceCapabilitiesInit(const InputDeviceCapabilitiesInit&) = default;
 
 InputDeviceCapabilitiesInit& InputDeviceCapabilitiesInit::operator=(const InputDeviceCapabilitiesInit&) = default;
 
-bool InputDeviceCapabilitiesInit::hasFiresTouchEvents() const {
-  return m_hasFiresTouchEvents;
+bool InputDeviceCapabilitiesInit::hasFiresTouchEvents() const
+{
+    return m_hasFiresTouchEvents;
 }
-bool InputDeviceCapabilitiesInit::firesTouchEvents() const {
-  DCHECK(m_hasFiresTouchEvents);
-  return m_firesTouchEvents;
+bool InputDeviceCapabilitiesInit::firesTouchEvents() const
+{
+    DCHECK(m_hasFiresTouchEvents);
+    return m_firesTouchEvents;
 }
-void InputDeviceCapabilitiesInit::setFiresTouchEvents(bool value) {
-  m_firesTouchEvents = value;
-  m_hasFiresTouchEvents = true;
+void InputDeviceCapabilitiesInit::setFiresTouchEvents(bool value)
+{
+    m_firesTouchEvents = value;
+    m_hasFiresTouchEvents = true;
 }
 
-DEFINE_TRACE(InputDeviceCapabilitiesInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(InputDeviceCapabilitiesInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

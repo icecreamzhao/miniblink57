@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef InternalDictionaryDerivedDerived_h
 #define InternalDictionaryDerivedDerived_h
 
@@ -19,26 +19,27 @@
 namespace blink {
 
 class InternalDictionaryDerivedDerived : public InternalDictionaryDerived {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  InternalDictionaryDerivedDerived();
-  virtual ~InternalDictionaryDerivedDerived();
-  InternalDictionaryDerivedDerived(const InternalDictionaryDerivedDerived&);
-  InternalDictionaryDerivedDerived& operator=(const InternalDictionaryDerivedDerived&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDerivedDerivedStringMember() const;
-  String derivedDerivedStringMember() const;
-  void setDerivedDerivedStringMember(String);
+public:
+    InternalDictionaryDerivedDerived();
+    virtual ~InternalDictionaryDerivedDerived();
+    InternalDictionaryDerivedDerived(const InternalDictionaryDerivedDerived&);
+    InternalDictionaryDerivedDerived& operator=(const InternalDictionaryDerivedDerived&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasDerivedDerivedStringMember() const;
+    String derivedDerivedStringMember() const;
+    void setDerivedDerivedStringMember(String);
 
- private:
-  String m_derivedDerivedStringMember;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8InternalDictionaryDerivedDerived;
+private:
+    String m_derivedDerivedStringMember;
+
+    friend class V8InternalDictionaryDerivedDerived;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // InternalDictionaryDerivedDerived_h
+#endif // InternalDictionaryDerivedDerived_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8RTCPeerConnectionErrorCallback_h
 #define V8RTCPeerConnectionErrorCallback_h
 
@@ -20,21 +20,23 @@
 namespace blink {
 
 class V8RTCPeerConnectionErrorCallback final : public RTCPeerConnectionErrorCallback {
- public:
-  static V8RTCPeerConnectionErrorCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8RTCPeerConnectionErrorCallback(callback, scriptState);
-  }
+public:
+    static V8RTCPeerConnectionErrorCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8RTCPeerConnectionErrorCallback(callback, scriptState);
+    }
 
-  ~V8RTCPeerConnectionErrorCallback() override;
+    ~V8RTCPeerConnectionErrorCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  void handleEvent(DOMException* exception) override;
- private:
-  MODULES_EXPORT V8RTCPeerConnectionErrorCallback(v8::Local<v8::Function>, ScriptState*);
+    void handleEvent(DOMException* exception) override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    MODULES_EXPORT V8RTCPeerConnectionErrorCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8RTCPeerConnectionErrorCallback_h
+#endif // V8RTCPeerConnectionErrorCallback_h

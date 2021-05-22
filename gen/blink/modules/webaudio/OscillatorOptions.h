@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef OscillatorOptions_h
 #define OscillatorOptions_h
 
@@ -22,44 +22,45 @@ namespace blink {
 class PeriodicWave;
 
 class MODULES_EXPORT OscillatorOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  OscillatorOptions();
-  virtual ~OscillatorOptions();
-  OscillatorOptions(const OscillatorOptions&);
-  OscillatorOptions& operator=(const OscillatorOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDetune() const;
-  float detune() const;
-  void setDetune(float);
+public:
+    OscillatorOptions();
+    virtual ~OscillatorOptions();
+    OscillatorOptions(const OscillatorOptions&);
+    OscillatorOptions& operator=(const OscillatorOptions&);
 
-  bool hasFrequency() const;
-  float frequency() const;
-  void setFrequency(float);
+    bool hasDetune() const;
+    float detune() const;
+    void setDetune(float);
 
-  bool hasPeriodicWave() const;
-  PeriodicWave* periodicWave() const;
-  void setPeriodicWave(PeriodicWave*);
-  void setPeriodicWaveToNull();
+    bool hasFrequency() const;
+    float frequency() const;
+    void setFrequency(float);
 
-  bool hasType() const;
-  String type() const;
-  void setType(String);
+    bool hasPeriodicWave() const;
+    PeriodicWave* periodicWave() const;
+    void setPeriodicWave(PeriodicWave*);
+    void setPeriodicWaveToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasType() const;
+    String type() const;
+    void setType(String);
 
- private:
-  bool m_hasDetune = false;
-  float m_detune;
-  bool m_hasFrequency = false;
-  float m_frequency;
-  Member<PeriodicWave> m_periodicWave;
-  String m_type;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8OscillatorOptions;
+private:
+    bool m_hasDetune = false;
+    float m_detune;
+    bool m_hasFrequency = false;
+    float m_frequency;
+    Member<PeriodicWave> m_periodicWave;
+    String m_type;
+
+    friend class V8OscillatorOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // OscillatorOptions_h
+#endif // OscillatorOptions_h

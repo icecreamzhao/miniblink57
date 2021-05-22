@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DirectoryEntrySync.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,148 +49,161 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DirectoryEntrySync::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DirectoryEntrySync is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DirectoryEntrySyncV8Internal {
 
-static void createReaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntrySync* impl = V8DirectoryEntrySync::toImpl(info.Holder());
+    static void createReaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntrySync* impl = V8DirectoryEntrySync::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->createReader());
-}
+        v8SetReturnValue(info, impl->createReader());
+    }
 
-MODULES_EXPORT  void createReaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntrySyncV8Internal::createReaderMethod(info);
-}
+    MODULES_EXPORT void createReaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntrySyncV8Internal::createReaderMethod(info);
+    }
 
-static void getFileMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntrySync", "getFile");
+    static void getFileMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntrySync", "getFile");
 
-  DirectoryEntrySync* impl = V8DirectoryEntrySync::toImpl(info.Holder());
+        DirectoryEntrySync* impl = V8DirectoryEntrySync::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> path;
-  FileSystemFlags flags;
-  path = info[0];
-  if (!path.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> path;
+        FileSystemFlags flags;
+        path = info[0];
+        if (!path.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('flags') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('flags') is not an object.");
 
-    return;
-  }
-  V8FileSystemFlags::toImpl(info.GetIsolate(), info[1], flags, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8FileSystemFlags::toImpl(info.GetIsolate(), info[1], flags, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  FileEntrySync* result = impl->getFile(path, flags, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        FileEntrySync* result = impl->getFile(path, flags, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-MODULES_EXPORT  void getFileMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntrySyncV8Internal::getFileMethod(info);
-}
+    MODULES_EXPORT void getFileMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntrySyncV8Internal::getFileMethod(info);
+    }
 
-static void getDirectoryMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntrySync", "getDirectory");
+    static void getDirectoryMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntrySync", "getDirectory");
 
-  DirectoryEntrySync* impl = V8DirectoryEntrySync::toImpl(info.Holder());
+        DirectoryEntrySync* impl = V8DirectoryEntrySync::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> path;
-  FileSystemFlags flags;
-  path = info[0];
-  if (!path.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> path;
+        FileSystemFlags flags;
+        path = info[0];
+        if (!path.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('flags') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('flags') is not an object.");
 
-    return;
-  }
-  V8FileSystemFlags::toImpl(info.GetIsolate(), info[1], flags, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8FileSystemFlags::toImpl(info.GetIsolate(), info[1], flags, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  DirectoryEntrySync* result = impl->getDirectory(path, flags, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        DirectoryEntrySync* result = impl->getDirectory(path, flags, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-MODULES_EXPORT  void getDirectoryMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntrySyncV8Internal::getDirectoryMethod(info);
-}
+    MODULES_EXPORT void getDirectoryMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntrySyncV8Internal::getDirectoryMethod(info);
+    }
 
-static void removeRecursivelyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntrySync", "removeRecursively");
+    static void removeRecursivelyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DirectoryEntrySync", "removeRecursively");
 
-  DirectoryEntrySync* impl = V8DirectoryEntrySync::toImpl(info.Holder());
+        DirectoryEntrySync* impl = V8DirectoryEntrySync::toImpl(info.Holder());
 
-  impl->removeRecursively(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->removeRecursively(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void removeRecursivelyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DirectoryEntrySyncV8Internal::removeRecursivelyMethod(info);
-}
+    MODULES_EXPORT void removeRecursivelyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DirectoryEntrySyncV8Internal::removeRecursivelyMethod(info);
+    }
 
 } // namespace DirectoryEntrySyncV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8DirectoryEntrySyncMethods[] = {
-    {"createReader", DirectoryEntrySyncV8Internal::createReaderMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getFile", DirectoryEntrySyncV8Internal::getFileMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getDirectory", DirectoryEntrySyncV8Internal::getDirectoryMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeRecursively", DirectoryEntrySyncV8Internal::removeRecursivelyMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "createReader", DirectoryEntrySyncV8Internal::createReaderMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getFile", DirectoryEntrySyncV8Internal::getFileMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getDirectory", DirectoryEntrySyncV8Internal::getDirectoryMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeRecursively", DirectoryEntrySyncV8Internal::removeRecursivelyMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8DirectoryEntrySyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DirectoryEntrySync::wrapperTypeInfo.interfaceName, V8EntrySync::domTemplate(isolate, world), V8DirectoryEntrySync::internalFieldCount);
+static void installV8DirectoryEntrySyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DirectoryEntrySync::wrapperTypeInfo.interfaceName, V8EntrySync::domTemplate(isolate, world), V8DirectoryEntrySync::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DirectoryEntrySyncMethods, WTF_ARRAY_LENGTH(V8DirectoryEntrySyncMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DirectoryEntrySyncMethods, WTF_ARRAY_LENGTH(V8DirectoryEntrySyncMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DirectoryEntrySync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DirectoryEntrySyncTemplate);
+v8::Local<v8::FunctionTemplate> V8DirectoryEntrySync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DirectoryEntrySyncTemplate);
 }
 
-bool V8DirectoryEntrySync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DirectoryEntrySync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DirectoryEntrySync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DirectoryEntrySync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DirectoryEntrySync* V8DirectoryEntrySync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DirectoryEntrySync* V8DirectoryEntrySync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLDocument.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -55,349 +55,389 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLDocument::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLDocument is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLDocumentV8Internal {
 
-static void fgColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fgColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fgColor(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fgColor(), info.GetIsolate());
+    }
 
-CORE_EXPORT void fgColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDocumentV8Internal::fgColorAttributeGetter(info);
-}
+    CORE_EXPORT void fgColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDocumentV8Internal::fgColorAttributeGetter(info);
+    }
 
-static void fgColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+    static void fgColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setFgColor(cppValue);
-}
+        impl->setFgColor(cppValue);
+    }
 
-CORE_EXPORT void fgColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void fgColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLDocumentV8Internal::fgColorAttributeSetter(v8Value, info);
-}
+        HTMLDocumentV8Internal::fgColorAttributeSetter(v8Value, info);
+    }
 
-static void linkColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void linkColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->linkColor(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->linkColor(), info.GetIsolate());
+    }
 
-CORE_EXPORT void linkColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDocumentV8Internal::linkColorAttributeGetter(info);
-}
+    CORE_EXPORT void linkColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDocumentV8Internal::linkColorAttributeGetter(info);
+    }
 
-static void linkColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+    static void linkColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setLinkColor(cppValue);
-}
+        impl->setLinkColor(cppValue);
+    }
 
-CORE_EXPORT void linkColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void linkColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLDocumentV8Internal::linkColorAttributeSetter(v8Value, info);
-}
+        HTMLDocumentV8Internal::linkColorAttributeSetter(v8Value, info);
+    }
 
-static void vlinkColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void vlinkColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->vlinkColor(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->vlinkColor(), info.GetIsolate());
+    }
 
-CORE_EXPORT void vlinkColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDocumentV8Internal::vlinkColorAttributeGetter(info);
-}
+    CORE_EXPORT void vlinkColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDocumentV8Internal::vlinkColorAttributeGetter(info);
+    }
 
-static void vlinkColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+    static void vlinkColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setVlinkColor(cppValue);
-}
+        impl->setVlinkColor(cppValue);
+    }
 
-CORE_EXPORT void vlinkColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void vlinkColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLDocumentV8Internal::vlinkColorAttributeSetter(v8Value, info);
-}
+        HTMLDocumentV8Internal::vlinkColorAttributeSetter(v8Value, info);
+    }
 
-static void alinkColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void alinkColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->alinkColor(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->alinkColor(), info.GetIsolate());
+    }
 
-CORE_EXPORT void alinkColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDocumentV8Internal::alinkColorAttributeGetter(info);
-}
+    CORE_EXPORT void alinkColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDocumentV8Internal::alinkColorAttributeGetter(info);
+    }
 
-static void alinkColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+    static void alinkColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAlinkColor(cppValue);
-}
+        impl->setAlinkColor(cppValue);
+    }
 
-CORE_EXPORT void alinkColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void alinkColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLDocumentV8Internal::alinkColorAttributeSetter(v8Value, info);
-}
+        HTMLDocumentV8Internal::alinkColorAttributeSetter(v8Value, info);
+    }
 
-static void bgColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bgColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->bgColor(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->bgColor(), info.GetIsolate());
+    }
 
-CORE_EXPORT void bgColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDocumentV8Internal::bgColorAttributeGetter(info);
-}
+    CORE_EXPORT void bgColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDocumentV8Internal::bgColorAttributeGetter(info);
+    }
 
-static void bgColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+    static void bgColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsEmptyString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setBgColor(cppValue);
-}
+        impl->setBgColor(cppValue);
+    }
 
-CORE_EXPORT void bgColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void bgColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLDocumentV8Internal::bgColorAttributeSetter(v8Value, info);
-}
+        HTMLDocumentV8Internal::bgColorAttributeSetter(v8Value, info);
+    }
 
-static void allAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void allAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->all()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->all()), impl);
+    }
 
-CORE_EXPORT void allAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentAll);
+    CORE_EXPORT void allAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentAll);
 
-  HTMLDocumentV8Internal::allAttributeGetter(info);
-}
+        HTMLDocumentV8Internal::allAttributeGetter(info);
+    }
 
-static void allAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // Prepare the value to be set.
+    static void allAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // Prepare the value to be set.
 
-  v8::Local<v8::String> propertyName = v8AtomicString(info.GetIsolate(), "all");
-  v8CallBoolean(info.Holder()->CreateDataProperty(info.GetIsolate()->GetCurrentContext(), propertyName, v8Value));
-}
+        v8::Local<v8::String> propertyName = v8AtomicString(info.GetIsolate(), "all");
+        v8CallBoolean(info.Holder()->CreateDataProperty(info.GetIsolate()->GetCurrentContext(), propertyName, v8Value));
+    }
 
-CORE_EXPORT void allAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void allAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentAll);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentAll);
 
-  HTMLDocumentV8Internal::allAttributeSetter(v8Value, info);
-}
+        HTMLDocumentV8Internal::allAttributeSetter(v8Value, info);
+    }
 
-static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
+        HTMLDocument* impl = V8HTMLDocument::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->location()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->location()), impl);
+    }
 
-CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDocumentV8Internal::locationAttributeGetter(info);
-}
+    CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDocumentV8Internal::locationAttributeGetter(info);
+    }
 
-static void locationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLDocument* proxyImpl = V8HTMLDocument::toImpl(holder);
-  Location* impl = WTF::getPtr(proxyImpl->location());
-  if (!impl)
-    return;
+    static void locationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLDocument* proxyImpl = V8HTMLDocument::toImpl(holder);
+        Location* impl = WTF::getPtr(proxyImpl->location());
+        if (!impl)
+            return;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLDocument", "location");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLDocument", "location");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setHref(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
+        impl->setHref(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
 
-CORE_EXPORT void locationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void locationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLDocumentV8Internal::locationAttributeSetter(v8Value, info);
-}
+        HTMLDocumentV8Internal::locationAttributeSetter(v8Value, info);
+    }
 
-static void clearMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDocument* impl = V8HTMLDocument::toImpl(info.Holder());
+    static void clearMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDocument* impl = V8HTMLDocument::toImpl(info.Holder());
 
-  impl->clear();
-}
+        impl->clear();
+    }
 
-CORE_EXPORT  void clearMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentClear);
-  HTMLDocumentV8Internal::clearMethod(info);
-}
+    CORE_EXPORT void clearMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentClear);
+        HTMLDocumentV8Internal::clearMethod(info);
+    }
 
-static void captureEventsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDocument* impl = V8HTMLDocument::toImpl(info.Holder());
+    static void captureEventsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDocument* impl = V8HTMLDocument::toImpl(info.Holder());
 
-  impl->captureEvents();
-}
+        impl->captureEvents();
+    }
 
-CORE_EXPORT  void captureEventsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentCaptureEvents);
-  HTMLDocumentV8Internal::captureEventsMethod(info);
-}
+    CORE_EXPORT void captureEventsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentCaptureEvents);
+        HTMLDocumentV8Internal::captureEventsMethod(info);
+    }
 
-static void releaseEventsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDocument* impl = V8HTMLDocument::toImpl(info.Holder());
+    static void releaseEventsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDocument* impl = V8HTMLDocument::toImpl(info.Holder());
 
-  impl->releaseEvents();
-}
+        impl->releaseEvents();
+    }
 
-CORE_EXPORT  void releaseEventsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentReleaseEvents);
-  HTMLDocumentV8Internal::releaseEventsMethod(info);
-}
+    CORE_EXPORT void releaseEventsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentReleaseEvents);
+        HTMLDocumentV8Internal::releaseEventsMethod(info);
+    }
 
 } // namespace HTMLDocumentV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLDocumentAccessors[] = {
-    {"fgColor", HTMLDocumentV8Internal::fgColorAttributeGetterCallback, HTMLDocumentV8Internal::fgColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"linkColor", HTMLDocumentV8Internal::linkColorAttributeGetterCallback, HTMLDocumentV8Internal::linkColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vlinkColor", HTMLDocumentV8Internal::vlinkColorAttributeGetterCallback, HTMLDocumentV8Internal::vlinkColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"alinkColor", HTMLDocumentV8Internal::alinkColorAttributeGetterCallback, HTMLDocumentV8Internal::alinkColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bgColor", HTMLDocumentV8Internal::bgColorAttributeGetterCallback, HTMLDocumentV8Internal::bgColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"all", HTMLDocumentV8Internal::allAttributeGetterCallback, HTMLDocumentV8Internal::allAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"location", HTMLDocumentV8Internal::locationAttributeGetterCallback, HTMLDocumentV8Internal::locationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "fgColor", HTMLDocumentV8Internal::fgColorAttributeGetterCallback, HTMLDocumentV8Internal::fgColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "linkColor", HTMLDocumentV8Internal::linkColorAttributeGetterCallback, HTMLDocumentV8Internal::linkColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vlinkColor", HTMLDocumentV8Internal::vlinkColorAttributeGetterCallback, HTMLDocumentV8Internal::vlinkColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "alinkColor", HTMLDocumentV8Internal::alinkColorAttributeGetterCallback, HTMLDocumentV8Internal::alinkColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bgColor", HTMLDocumentV8Internal::bgColorAttributeGetterCallback, HTMLDocumentV8Internal::bgColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "all", HTMLDocumentV8Internal::allAttributeGetterCallback, HTMLDocumentV8Internal::allAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "location", HTMLDocumentV8Internal::locationAttributeGetterCallback, HTMLDocumentV8Internal::locationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLDocumentMethods[] = {
-    {"clear", HTMLDocumentV8Internal::clearMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"captureEvents", HTMLDocumentV8Internal::captureEventsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"releaseEvents", HTMLDocumentV8Internal::releaseEventsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "clear", HTMLDocumentV8Internal::clearMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "captureEvents", HTMLDocumentV8Internal::captureEventsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "releaseEvents", HTMLDocumentV8Internal::releaseEventsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLDocumentTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLDocument::wrapperTypeInfo.interfaceName, V8Document::domTemplate(isolate, world), V8HTMLDocument::internalFieldCount);
+static void installV8HTMLDocumentTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLDocument::wrapperTypeInfo.interfaceName, V8Document::domTemplate(isolate, world), V8HTMLDocument::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDocumentAccessors, WTF_ARRAY_LENGTH(V8HTMLDocumentAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDocumentMethods, WTF_ARRAY_LENGTH(V8HTMLDocumentMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDocumentAccessors, WTF_ARRAY_LENGTH(V8HTMLDocumentAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDocumentMethods, WTF_ARRAY_LENGTH(V8HTMLDocumentMethods));
 }
 
-void V8HTMLDocument::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8HTMLDocument::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
+void V8HTMLDocument::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8HTMLDocument::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLDocument::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLDocumentTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLDocument::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLDocumentTemplate);
 }
 
-bool V8HTMLDocument::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLDocument::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLDocument::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLDocument::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLDocument* V8HTMLDocument::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLDocument* V8HTMLDocument::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

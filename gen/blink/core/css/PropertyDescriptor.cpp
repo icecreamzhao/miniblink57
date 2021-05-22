@@ -8,63 +8,77 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PropertyDescriptor.h"
 
 namespace blink {
 
-PropertyDescriptor::PropertyDescriptor() {
-  setInherits(false);
-  setSyntax(String("*"));
+PropertyDescriptor::PropertyDescriptor()
+{
+    setInherits(false);
+    setSyntax(String("*"));
 }
 
-PropertyDescriptor::~PropertyDescriptor() {}
+PropertyDescriptor::~PropertyDescriptor() { }
 
 PropertyDescriptor::PropertyDescriptor(const PropertyDescriptor&) = default;
 
 PropertyDescriptor& PropertyDescriptor::operator=(const PropertyDescriptor&) = default;
 
-bool PropertyDescriptor::hasInherits() const {
-  return m_hasInherits;
+bool PropertyDescriptor::hasInherits() const
+{
+    return m_hasInherits;
 }
-bool PropertyDescriptor::inherits() const {
-  DCHECK(m_hasInherits);
-  return m_inherits;
+bool PropertyDescriptor::inherits() const
+{
+    DCHECK(m_hasInherits);
+    return m_inherits;
 }
-void PropertyDescriptor::setInherits(bool value) {
-  m_inherits = value;
-  m_hasInherits = true;
+void PropertyDescriptor::setInherits(bool value)
+{
+    m_inherits = value;
+    m_hasInherits = true;
 }
-bool PropertyDescriptor::hasInitialValue() const {
-  return !m_initialValue.isNull();
+bool PropertyDescriptor::hasInitialValue() const
+{
+    return !m_initialValue.isNull();
 }
-String PropertyDescriptor::initialValue() const {
-  return m_initialValue;
+String PropertyDescriptor::initialValue() const
+{
+    return m_initialValue;
 }
-void PropertyDescriptor::setInitialValue(String value) {
-  m_initialValue = value;
+void PropertyDescriptor::setInitialValue(String value)
+{
+    m_initialValue = value;
 }
-bool PropertyDescriptor::hasName() const {
-  return !m_name.isNull();
+bool PropertyDescriptor::hasName() const
+{
+    return !m_name.isNull();
 }
-String PropertyDescriptor::name() const {
-  return m_name;
+String PropertyDescriptor::name() const
+{
+    return m_name;
 }
-void PropertyDescriptor::setName(String value) {
-  m_name = value;
+void PropertyDescriptor::setName(String value)
+{
+    m_name = value;
 }
-bool PropertyDescriptor::hasSyntax() const {
-  return !m_syntax.isNull();
+bool PropertyDescriptor::hasSyntax() const
+{
+    return !m_syntax.isNull();
 }
-String PropertyDescriptor::syntax() const {
-  return m_syntax;
+String PropertyDescriptor::syntax() const
+{
+    return m_syntax;
 }
-void PropertyDescriptor::setSyntax(String value) {
-  m_syntax = value;
+void PropertyDescriptor::setSyntax(String value)
+{
+    m_syntax = value;
 }
 
-DEFINE_TRACE(PropertyDescriptor) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PropertyDescriptor)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

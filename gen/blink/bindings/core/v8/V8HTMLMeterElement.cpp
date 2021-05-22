@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLMeterElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,270 +53,301 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLMeterElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLMeterElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLMeterElementV8Internal {
 
-static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->value());
-}
+        v8SetReturnValue(info, impl->value());
+    }
 
-CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMeterElementV8Internal::valueAttributeGetter(info);
-}
+    CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMeterElementV8Internal::valueAttributeGetter(info);
+    }
 
-static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+    static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "value");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "value");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setValue(cppValue);
-}
+        impl->setValue(cppValue);
+    }
 
-CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLMeterElementV8Internal::valueAttributeSetter(v8Value, info);
-}
+        HTMLMeterElementV8Internal::valueAttributeSetter(v8Value, info);
+    }
 
-static void minAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void minAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->min());
-}
+        v8SetReturnValue(info, impl->min());
+    }
 
-CORE_EXPORT void minAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMeterElementV8Internal::minAttributeGetter(info);
-}
+    CORE_EXPORT void minAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMeterElementV8Internal::minAttributeGetter(info);
+    }
 
-static void minAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+    static void minAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "min");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "min");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setMin(cppValue);
-}
+        impl->setMin(cppValue);
+    }
 
-CORE_EXPORT void minAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void minAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLMeterElementV8Internal::minAttributeSetter(v8Value, info);
-}
+        HTMLMeterElementV8Internal::minAttributeSetter(v8Value, info);
+    }
 
-static void maxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void maxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->max());
-}
+        v8SetReturnValue(info, impl->max());
+    }
 
-CORE_EXPORT void maxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMeterElementV8Internal::maxAttributeGetter(info);
-}
+    CORE_EXPORT void maxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMeterElementV8Internal::maxAttributeGetter(info);
+    }
 
-static void maxAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+    static void maxAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "max");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "max");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setMax(cppValue);
-}
+        impl->setMax(cppValue);
+    }
 
-CORE_EXPORT void maxAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void maxAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLMeterElementV8Internal::maxAttributeSetter(v8Value, info);
-}
+        HTMLMeterElementV8Internal::maxAttributeSetter(v8Value, info);
+    }
 
-static void lowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->low());
-}
+        v8SetReturnValue(info, impl->low());
+    }
 
-CORE_EXPORT void lowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMeterElementV8Internal::lowAttributeGetter(info);
-}
+    CORE_EXPORT void lowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMeterElementV8Internal::lowAttributeGetter(info);
+    }
 
-static void lowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+    static void lowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "low");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "low");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setLow(cppValue);
-}
+        impl->setLow(cppValue);
+    }
 
-CORE_EXPORT void lowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void lowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLMeterElementV8Internal::lowAttributeSetter(v8Value, info);
-}
+        HTMLMeterElementV8Internal::lowAttributeSetter(v8Value, info);
+    }
 
-static void highAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void highAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->high());
-}
+        v8SetReturnValue(info, impl->high());
+    }
 
-CORE_EXPORT void highAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMeterElementV8Internal::highAttributeGetter(info);
-}
+    CORE_EXPORT void highAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMeterElementV8Internal::highAttributeGetter(info);
+    }
 
-static void highAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+    static void highAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "high");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "high");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setHigh(cppValue);
-}
+        impl->setHigh(cppValue);
+    }
 
-CORE_EXPORT void highAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void highAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLMeterElementV8Internal::highAttributeSetter(v8Value, info);
-}
+        HTMLMeterElementV8Internal::highAttributeSetter(v8Value, info);
+    }
 
-static void optimumAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void optimumAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  v8SetReturnValue(info, impl->optimum());
-}
+        v8SetReturnValue(info, impl->optimum());
+    }
 
-CORE_EXPORT void optimumAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMeterElementV8Internal::optimumAttributeGetter(info);
-}
+    CORE_EXPORT void optimumAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMeterElementV8Internal::optimumAttributeGetter(info);
+    }
 
-static void optimumAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+    static void optimumAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "optimum");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLMeterElement", "optimum");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setOptimum(cppValue);
-}
+        impl->setOptimum(cppValue);
+    }
 
-CORE_EXPORT void optimumAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void optimumAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLMeterElementV8Internal::optimumAttributeSetter(v8Value, info);
-}
+        HTMLMeterElementV8Internal::optimumAttributeSetter(v8Value, info);
+    }
 
-static void labelsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
+        HTMLMeterElement* impl = V8HTMLMeterElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->labels()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->labels()), impl);
+    }
 
-CORE_EXPORT void labelsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLMeterElementV8Internal::labelsAttributeGetter(info);
-}
+    CORE_EXPORT void labelsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLMeterElementV8Internal::labelsAttributeGetter(info);
+    }
 
 } // namespace HTMLMeterElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLMeterElementAccessors[] = {
-    {"value", HTMLMeterElementV8Internal::valueAttributeGetterCallback, HTMLMeterElementV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"min", HTMLMeterElementV8Internal::minAttributeGetterCallback, HTMLMeterElementV8Internal::minAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"max", HTMLMeterElementV8Internal::maxAttributeGetterCallback, HTMLMeterElementV8Internal::maxAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"low", HTMLMeterElementV8Internal::lowAttributeGetterCallback, HTMLMeterElementV8Internal::lowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"high", HTMLMeterElementV8Internal::highAttributeGetterCallback, HTMLMeterElementV8Internal::highAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"optimum", HTMLMeterElementV8Internal::optimumAttributeGetterCallback, HTMLMeterElementV8Internal::optimumAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"labels", HTMLMeterElementV8Internal::labelsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "value", HTMLMeterElementV8Internal::valueAttributeGetterCallback, HTMLMeterElementV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "min", HTMLMeterElementV8Internal::minAttributeGetterCallback, HTMLMeterElementV8Internal::minAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "max", HTMLMeterElementV8Internal::maxAttributeGetterCallback, HTMLMeterElementV8Internal::maxAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "low", HTMLMeterElementV8Internal::lowAttributeGetterCallback, HTMLMeterElementV8Internal::lowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "high", HTMLMeterElementV8Internal::highAttributeGetterCallback, HTMLMeterElementV8Internal::highAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "optimum", HTMLMeterElementV8Internal::optimumAttributeGetterCallback, HTMLMeterElementV8Internal::optimumAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "labels", HTMLMeterElementV8Internal::labelsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLMeterElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLMeterElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLMeterElement::internalFieldCount);
+static void installV8HTMLMeterElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLMeterElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLMeterElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMeterElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMeterElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLMeterElementAccessors, WTF_ARRAY_LENGTH(V8HTMLMeterElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLMeterElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLMeterElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLMeterElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLMeterElementTemplate);
 }
 
-bool V8HTMLMeterElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLMeterElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLMeterElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLMeterElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLMeterElement* V8HTMLMeterElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLMeterElement* V8HTMLMeterElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

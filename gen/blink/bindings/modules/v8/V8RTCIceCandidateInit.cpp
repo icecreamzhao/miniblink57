@@ -8,101 +8,105 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RTCIceCandidateInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8RTCIceCandidateInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RTCIceCandidateInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8RTCIceCandidateInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RTCIceCandidateInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> candidateValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "candidate")).ToLocal(&candidateValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (candidateValue.IsEmpty() || candidateValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> candidate = candidateValue;
-    if (!candidate.prepare(exceptionState))
-      return;
-    impl.setCandidate(candidate);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> candidateValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "candidate")).ToLocal(&candidateValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (candidateValue.IsEmpty() || candidateValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> candidate = candidateValue;
+        if (!candidate.prepare(exceptionState))
+            return;
+        impl.setCandidate(candidate);
+    }
 
-  v8::Local<v8::Value> sdpMLineIndexValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "sdpMLineIndex")).ToLocal(&sdpMLineIndexValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (sdpMLineIndexValue.IsEmpty() || sdpMLineIndexValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned sdpMLineIndex = toUInt16(isolate, sdpMLineIndexValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setSdpMLineIndex(sdpMLineIndex);
-  }
+    v8::Local<v8::Value> sdpMLineIndexValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "sdpMLineIndex")).ToLocal(&sdpMLineIndexValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (sdpMLineIndexValue.IsEmpty() || sdpMLineIndexValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned sdpMLineIndex = toUInt16(isolate, sdpMLineIndexValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setSdpMLineIndex(sdpMLineIndex);
+    }
 
-  v8::Local<v8::Value> sdpMidValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "sdpMid")).ToLocal(&sdpMidValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (sdpMidValue.IsEmpty() || sdpMidValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> sdpMid = sdpMidValue;
-    if (!sdpMid.prepare(exceptionState))
-      return;
-    impl.setSdpMid(sdpMid);
-  }
+    v8::Local<v8::Value> sdpMidValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "sdpMid")).ToLocal(&sdpMidValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (sdpMidValue.IsEmpty() || sdpMidValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> sdpMid = sdpMidValue;
+        if (!sdpMid.prepare(exceptionState))
+            return;
+        impl.setSdpMid(sdpMid);
+    }
 }
 
-v8::Local<v8::Value> RTCIceCandidateInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8RTCIceCandidateInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> RTCIceCandidateInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8RTCIceCandidateInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8RTCIceCandidateInit(const RTCIceCandidateInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasCandidate()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "candidate"), v8String(isolate, impl.candidate()))))
-      return false;
-  }
+bool toV8RTCIceCandidateInit(const RTCIceCandidateInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasCandidate()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "candidate"), v8String(isolate, impl.candidate()))))
+            return false;
+    }
 
-  if (impl.hasSdpMLineIndex()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "sdpMLineIndex"), v8::Integer::NewFromUnsigned(isolate, impl.sdpMLineIndex()))))
-      return false;
-  }
+    if (impl.hasSdpMLineIndex()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "sdpMLineIndex"), v8::Integer::NewFromUnsigned(isolate, impl.sdpMLineIndex()))))
+            return false;
+    }
 
-  if (impl.hasSdpMid()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "sdpMid"), v8String(isolate, impl.sdpMid()))))
-      return false;
-  }
+    if (impl.hasSdpMid()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "sdpMid"), v8String(isolate, impl.sdpMid()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-RTCIceCandidateInit NativeValueTraits<RTCIceCandidateInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  RTCIceCandidateInit impl;
-  V8RTCIceCandidateInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+RTCIceCandidateInit NativeValueTraits<RTCIceCandidateInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    RTCIceCandidateInit impl;
+    V8RTCIceCandidateInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

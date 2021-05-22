@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef USBDeviceRequestOptions_h
 #define USBDeviceRequestOptions_h
 
@@ -21,27 +21,28 @@
 namespace blink {
 
 class MODULES_EXPORT USBDeviceRequestOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  USBDeviceRequestOptions();
-  virtual ~USBDeviceRequestOptions();
-  USBDeviceRequestOptions(const USBDeviceRequestOptions&);
-  USBDeviceRequestOptions& operator=(const USBDeviceRequestOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasFilters() const;
-  const HeapVector<USBDeviceFilter>& filters() const;
-  void setFilters(const HeapVector<USBDeviceFilter>&);
+public:
+    USBDeviceRequestOptions();
+    virtual ~USBDeviceRequestOptions();
+    USBDeviceRequestOptions(const USBDeviceRequestOptions&);
+    USBDeviceRequestOptions& operator=(const USBDeviceRequestOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasFilters() const;
+    const HeapVector<USBDeviceFilter>& filters() const;
+    void setFilters(const HeapVector<USBDeviceFilter>&);
 
- private:
-  bool m_hasFilters = false;
-  HeapVector<USBDeviceFilter> m_filters;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8USBDeviceRequestOptions;
+private:
+    bool m_hasFilters = false;
+    HeapVector<USBDeviceFilter> m_filters;
+
+    friend class V8USBDeviceRequestOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // USBDeviceRequestOptions_h
+#endif // USBDeviceRequestOptions_h

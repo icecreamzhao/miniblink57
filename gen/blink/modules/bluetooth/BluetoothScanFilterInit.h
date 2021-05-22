@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef BluetoothScanFilterInit_h
 #define BluetoothScanFilterInit_h
 
@@ -22,37 +22,38 @@
 namespace blink {
 
 class MODULES_EXPORT BluetoothScanFilterInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  BluetoothScanFilterInit();
-  virtual ~BluetoothScanFilterInit();
-  BluetoothScanFilterInit(const BluetoothScanFilterInit&);
-  BluetoothScanFilterInit& operator=(const BluetoothScanFilterInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasName() const;
-  String name() const;
-  void setName(String);
+public:
+    BluetoothScanFilterInit();
+    virtual ~BluetoothScanFilterInit();
+    BluetoothScanFilterInit(const BluetoothScanFilterInit&);
+    BluetoothScanFilterInit& operator=(const BluetoothScanFilterInit&);
 
-  bool hasNamePrefix() const;
-  String namePrefix() const;
-  void setNamePrefix(String);
+    bool hasName() const;
+    String name() const;
+    void setName(String);
 
-  bool hasServices() const;
-  const HeapVector<StringOrUnsignedLong>& services() const;
-  void setServices(const HeapVector<StringOrUnsignedLong>&);
+    bool hasNamePrefix() const;
+    String namePrefix() const;
+    void setNamePrefix(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasServices() const;
+    const HeapVector<StringOrUnsignedLong>& services() const;
+    void setServices(const HeapVector<StringOrUnsignedLong>&);
 
- private:
-  String m_name;
-  String m_namePrefix;
-  bool m_hasServices = false;
-  HeapVector<StringOrUnsignedLong> m_services;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8BluetoothScanFilterInit;
+private:
+    String m_name;
+    String m_namePrefix;
+    bool m_hasServices = false;
+    HeapVector<StringOrUnsignedLong> m_services;
+
+    friend class V8BluetoothScanFilterInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // BluetoothScanFilterInit_h
+#endif // BluetoothScanFilterInit_h

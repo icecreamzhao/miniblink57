@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TaskAttributionTiming.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,99 +45,112 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&TaskAttributionTiming::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "TaskAttributionTiming is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TaskAttributionTimingV8Internal {
 
-static void containerTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void containerTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TaskAttributionTiming* impl = V8TaskAttributionTiming::toImpl(holder);
+        TaskAttributionTiming* impl = V8TaskAttributionTiming::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->containerType(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->containerType(), info.GetIsolate());
+    }
 
-CORE_EXPORT void containerTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TaskAttributionTimingV8Internal::containerTypeAttributeGetter(info);
-}
+    CORE_EXPORT void containerTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TaskAttributionTimingV8Internal::containerTypeAttributeGetter(info);
+    }
 
-static void containerSrcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void containerSrcAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TaskAttributionTiming* impl = V8TaskAttributionTiming::toImpl(holder);
+        TaskAttributionTiming* impl = V8TaskAttributionTiming::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->containerSrc(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->containerSrc(), info.GetIsolate());
+    }
 
-CORE_EXPORT void containerSrcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TaskAttributionTimingV8Internal::containerSrcAttributeGetter(info);
-}
+    CORE_EXPORT void containerSrcAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TaskAttributionTimingV8Internal::containerSrcAttributeGetter(info);
+    }
 
-static void containerIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void containerIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TaskAttributionTiming* impl = V8TaskAttributionTiming::toImpl(holder);
+        TaskAttributionTiming* impl = V8TaskAttributionTiming::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->containerId(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->containerId(), info.GetIsolate());
+    }
 
-CORE_EXPORT void containerIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TaskAttributionTimingV8Internal::containerIdAttributeGetter(info);
-}
+    CORE_EXPORT void containerIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TaskAttributionTimingV8Internal::containerIdAttributeGetter(info);
+    }
 
-static void containerNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void containerNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TaskAttributionTiming* impl = V8TaskAttributionTiming::toImpl(holder);
+        TaskAttributionTiming* impl = V8TaskAttributionTiming::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->containerName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->containerName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void containerNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TaskAttributionTimingV8Internal::containerNameAttributeGetter(info);
-}
+    CORE_EXPORT void containerNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TaskAttributionTimingV8Internal::containerNameAttributeGetter(info);
+    }
 
 } // namespace TaskAttributionTimingV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8TaskAttributionTimingAccessors[] = {
-    {"containerType", TaskAttributionTimingV8Internal::containerTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"containerSrc", TaskAttributionTimingV8Internal::containerSrcAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"containerId", TaskAttributionTimingV8Internal::containerIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"containerName", TaskAttributionTimingV8Internal::containerNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "containerType", TaskAttributionTimingV8Internal::containerTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "containerSrc", TaskAttributionTimingV8Internal::containerSrcAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "containerId", TaskAttributionTimingV8Internal::containerIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "containerName", TaskAttributionTimingV8Internal::containerNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8TaskAttributionTimingTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TaskAttributionTiming::wrapperTypeInfo.interfaceName, V8PerformanceEntry::domTemplate(isolate, world), V8TaskAttributionTiming::internalFieldCount);
+static void installV8TaskAttributionTimingTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TaskAttributionTiming::wrapperTypeInfo.interfaceName, V8PerformanceEntry::domTemplate(isolate, world), V8TaskAttributionTiming::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TaskAttributionTimingAccessors, WTF_ARRAY_LENGTH(V8TaskAttributionTimingAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TaskAttributionTimingAccessors, WTF_ARRAY_LENGTH(V8TaskAttributionTimingAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8TaskAttributionTiming::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TaskAttributionTimingTemplate);
+v8::Local<v8::FunctionTemplate> V8TaskAttributionTiming::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TaskAttributionTimingTemplate);
 }
 
-bool V8TaskAttributionTiming::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8TaskAttributionTiming::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8TaskAttributionTiming::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8TaskAttributionTiming::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-TaskAttributionTiming* V8TaskAttributionTiming::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+TaskAttributionTiming* V8TaskAttributionTiming::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

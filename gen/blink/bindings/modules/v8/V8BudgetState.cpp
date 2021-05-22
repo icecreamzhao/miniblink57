@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8BudgetState.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,77 +46,86 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&BudgetState::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "BudgetState is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BudgetStateV8Internal {
 
-static void budgetAtAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void budgetAtAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BudgetState* impl = V8BudgetState::toImpl(holder);
+        BudgetState* impl = V8BudgetState::toImpl(holder);
 
-  v8SetReturnValue(info, impl->budgetAt());
-}
+        v8SetReturnValue(info, impl->budgetAt());
+    }
 
-MODULES_EXPORT void budgetAtAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BudgetStateV8Internal::budgetAtAttributeGetter(info);
-}
+    MODULES_EXPORT void budgetAtAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BudgetStateV8Internal::budgetAtAttributeGetter(info);
+    }
 
-static void timeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void timeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BudgetState* impl = V8BudgetState::toImpl(holder);
+        BudgetState* impl = V8BudgetState::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->time()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->time()));
+    }
 
-MODULES_EXPORT void timeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BudgetStateV8Internal::timeAttributeGetter(info);
-}
+    MODULES_EXPORT void timeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BudgetStateV8Internal::timeAttributeGetter(info);
+    }
 
 } // namespace BudgetStateV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8BudgetStateAccessors[] = {
-    {"budgetAt", BudgetStateV8Internal::budgetAtAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"time", BudgetStateV8Internal::timeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "budgetAt", BudgetStateV8Internal::budgetAtAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "time", BudgetStateV8Internal::timeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8BudgetStateTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BudgetState::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8BudgetState::internalFieldCount);
+static void installV8BudgetStateTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BudgetState::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8BudgetState::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::budgetEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::budgetEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BudgetStateAccessors, WTF_ARRAY_LENGTH(V8BudgetStateAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BudgetStateAccessors, WTF_ARRAY_LENGTH(V8BudgetStateAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8BudgetState::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BudgetStateTemplate);
+v8::Local<v8::FunctionTemplate> V8BudgetState::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BudgetStateTemplate);
 }
 
-bool V8BudgetState::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8BudgetState::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8BudgetState::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8BudgetState::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-BudgetState* V8BudgetState::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+BudgetState* V8BudgetState::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

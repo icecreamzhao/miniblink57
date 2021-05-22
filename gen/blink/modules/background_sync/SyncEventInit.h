@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef SyncEventInit_h
 #define SyncEventInit_h
 
@@ -20,32 +20,33 @@
 namespace blink {
 
 class MODULES_EXPORT SyncEventInit : public ExtendableEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  SyncEventInit();
-  virtual ~SyncEventInit();
-  SyncEventInit(const SyncEventInit&);
-  SyncEventInit& operator=(const SyncEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasLastChance() const;
-  bool lastChance() const;
-  void setLastChance(bool);
+public:
+    SyncEventInit();
+    virtual ~SyncEventInit();
+    SyncEventInit(const SyncEventInit&);
+    SyncEventInit& operator=(const SyncEventInit&);
 
-  bool hasTag() const;
-  String tag() const;
-  void setTag(String);
+    bool hasLastChance() const;
+    bool lastChance() const;
+    void setLastChance(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTag() const;
+    String tag() const;
+    void setTag(String);
 
- private:
-  bool m_hasLastChance = false;
-  bool m_lastChance;
-  String m_tag;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8SyncEventInit;
+private:
+    bool m_hasLastChance = false;
+    bool m_lastChance;
+    String m_tag;
+
+    friend class V8SyncEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // SyncEventInit_h
+#endif // SyncEventInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaDeviceInfo.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,117 +48,132 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MediaDeviceInfo::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaDeviceInfo is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaDeviceInfoV8Internal {
 
-static void deviceIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void deviceIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(holder);
+        MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->deviceId(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->deviceId(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void deviceIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaDeviceInfoV8Internal::deviceIdAttributeGetter(info);
-}
+    MODULES_EXPORT void deviceIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaDeviceInfoV8Internal::deviceIdAttributeGetter(info);
+    }
 
-static void kindAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void kindAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(holder);
+        MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->kind(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->kind(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void kindAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaDeviceInfoV8Internal::kindAttributeGetter(info);
-}
+    MODULES_EXPORT void kindAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaDeviceInfoV8Internal::kindAttributeGetter(info);
+    }
 
-static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(holder);
+        MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->label(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->label(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaDeviceInfoV8Internal::labelAttributeGetter(info);
-}
+    MODULES_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaDeviceInfoV8Internal::labelAttributeGetter(info);
+    }
 
-static void groupIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void groupIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(holder);
+        MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->groupId(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->groupId(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void groupIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaDeviceInfoV8Internal::groupIdAttributeGetter(info);
-}
+    MODULES_EXPORT void groupIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaDeviceInfoV8Internal::groupIdAttributeGetter(info);
+    }
 
-static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(info.Holder());
+    static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaDeviceInfo* impl = V8MediaDeviceInfo::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue result = impl->toJSONForBinding(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->toJSONForBinding(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaDeviceInfoV8Internal::toJSONMethod(info);
-}
+    MODULES_EXPORT void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaDeviceInfoV8Internal::toJSONMethod(info);
+    }
 
 } // namespace MediaDeviceInfoV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaDeviceInfoAccessors[] = {
-    {"deviceId", MediaDeviceInfoV8Internal::deviceIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"kind", MediaDeviceInfoV8Internal::kindAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"label", MediaDeviceInfoV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"groupId", MediaDeviceInfoV8Internal::groupIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "deviceId", MediaDeviceInfoV8Internal::deviceIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "kind", MediaDeviceInfoV8Internal::kindAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "label", MediaDeviceInfoV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "groupId", MediaDeviceInfoV8Internal::groupIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MediaDeviceInfoMethods[] = {
-    {"toJSON", MediaDeviceInfoV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "toJSON", MediaDeviceInfoV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8MediaDeviceInfoTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaDeviceInfo::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaDeviceInfo::internalFieldCount);
+static void installV8MediaDeviceInfoTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaDeviceInfo::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaDeviceInfo::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaDeviceInfoAccessors, WTF_ARRAY_LENGTH(V8MediaDeviceInfoAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaDeviceInfoMethods, WTF_ARRAY_LENGTH(V8MediaDeviceInfoMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaDeviceInfoAccessors, WTF_ARRAY_LENGTH(V8MediaDeviceInfoAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaDeviceInfoMethods, WTF_ARRAY_LENGTH(V8MediaDeviceInfoMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaDeviceInfo::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaDeviceInfoTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaDeviceInfo::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaDeviceInfoTemplate);
 }
 
-bool V8MediaDeviceInfo::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaDeviceInfo::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaDeviceInfo::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaDeviceInfo::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaDeviceInfo* V8MediaDeviceInfo::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaDeviceInfo* V8MediaDeviceInfo::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

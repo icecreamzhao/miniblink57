@@ -8,38 +8,44 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FocusEventInit.h"
 
 #include "core/events/EventTarget.h"
 
 namespace blink {
 
-FocusEventInit::FocusEventInit() {
+FocusEventInit::FocusEventInit()
+{
 }
 
-FocusEventInit::~FocusEventInit() {}
+FocusEventInit::~FocusEventInit() { }
 
 FocusEventInit::FocusEventInit(const FocusEventInit&) = default;
 
 FocusEventInit& FocusEventInit::operator=(const FocusEventInit&) = default;
 
-bool FocusEventInit::hasRelatedTarget() const {
-  return m_relatedTarget;
+bool FocusEventInit::hasRelatedTarget() const
+{
+    return m_relatedTarget;
 }
-EventTarget* FocusEventInit::relatedTarget() const {
-  return m_relatedTarget;
+EventTarget* FocusEventInit::relatedTarget() const
+{
+    return m_relatedTarget;
 }
-void FocusEventInit::setRelatedTarget(EventTarget* value) {
-  m_relatedTarget = value;
+void FocusEventInit::setRelatedTarget(EventTarget* value)
+{
+    m_relatedTarget = value;
 }
-void FocusEventInit::setRelatedTargetToNull() {
-  m_relatedTarget = Member<EventTarget>();
+void FocusEventInit::setRelatedTargetToNull()
+{
+    m_relatedTarget = Member<EventTarget>();
 }
 
-DEFINE_TRACE(FocusEventInit) {
-  visitor->trace(m_relatedTarget);
-  UIEventInit::trace(visitor);
+DEFINE_TRACE(FocusEventInit)
+{
+    visitor->trace(m_relatedTarget);
+    UIEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

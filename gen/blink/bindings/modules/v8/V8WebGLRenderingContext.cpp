@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WebGLRenderingContext.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -72,5912 +72,6245 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WebGLRenderingContext::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WebGLRenderingContext is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace WebGLRenderingContextV8Internal {
 
-static void canvasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void canvasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(holder);
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(holder);
 
-  HTMLCanvasElementOrOffscreenCanvas result;
-  impl->getHTMLOrOffscreenCanvas(result);
+        HTMLCanvasElementOrOffscreenCanvas result;
+        impl->getHTMLOrOffscreenCanvas(result);
 
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT void canvasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::canvasAttributeGetter(info);
-}
-
-static void drawingBufferWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(holder);
-
-  v8SetReturnValueInt(info, impl->drawingBufferWidth());
-}
-
-MODULES_EXPORT void drawingBufferWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::drawingBufferWidthAttributeGetter(info);
-}
-
-static void drawingBufferHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(holder);
-
-  v8SetReturnValueInt(info, impl->drawingBufferHeight());
-}
-
-MODULES_EXPORT void drawingBufferHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::drawingBufferHeightAttributeGetter(info);
-}
-
-static void activeTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "activeTexture");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned texture;
-  texture = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->activeTexture(texture);
-}
-
-MODULES_EXPORT  void activeTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::activeTextureMethod(info);
-}
-
-static void attachShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("attachShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  WebGLShader* shader;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("attachShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!shader) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("attachShader", "WebGLRenderingContext", "parameter 2 is not of type 'WebGLShader'."));
-
-    return;
-  }
-
-  impl->attachShader(program, shader);
-}
-
-MODULES_EXPORT  void attachShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::attachShaderMethod(info);
-}
-
-static void bindAttribLocationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindAttribLocation");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  WebGLProgram* program;
-  unsigned index;
-  V8StringResource<> name;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLProgram'.");
-
-    return;
-  }
-
-  index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  name = info[2];
-  if (!name.prepare())
-    return;
-
-  impl->bindAttribLocation(program, index, name);
-}
-
-MODULES_EXPORT  void bindAttribLocationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::bindAttribLocationMethod(info);
-}
-
-static void bindBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindBuffer");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  WebGLBuffer* buffer;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  buffer = V8WebGLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!buffer && !isUndefinedOrNull(info[1])) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'WebGLBuffer'.");
-
-    return;
-  }
-
-  impl->bindBuffer(target, buffer);
-}
-
-MODULES_EXPORT  void bindBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::bindBufferMethod(info);
-}
-
-static void bindFramebufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindFramebuffer");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  WebGLFramebuffer* framebuffer;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  framebuffer = V8WebGLFramebuffer::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!framebuffer && !isUndefinedOrNull(info[1])) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'WebGLFramebuffer'.");
-
-    return;
-  }
-
-  impl->bindFramebuffer(target, framebuffer);
-}
-
-MODULES_EXPORT  void bindFramebufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::bindFramebufferMethod(info);
-}
-
-static void bindRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindRenderbuffer");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  WebGLRenderbuffer* renderbuffer;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  renderbuffer = V8WebGLRenderbuffer::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!renderbuffer && !isUndefinedOrNull(info[1])) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'WebGLRenderbuffer'.");
-
-    return;
-  }
-
-  impl->bindRenderbuffer(target, renderbuffer);
-}
-
-MODULES_EXPORT  void bindRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::bindRenderbufferMethod(info);
-}
-
-static void bindTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindTexture");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  WebGLTexture* texture;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  texture = V8WebGLTexture::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!texture && !isUndefinedOrNull(info[1])) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'WebGLTexture'.");
-
-    return;
-  }
-
-  impl->bindTexture(target, texture);
-}
-
-MODULES_EXPORT  void bindTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::bindTextureMethod(info);
-}
-
-static void blendColorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendColor");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  float red;
-  float green;
-  float blue;
-  float alpha;
-  red = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  green = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  blue = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  alpha = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->blendColor(red, green, blue, alpha);
-}
-
-MODULES_EXPORT  void blendColorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::blendColorMethod(info);
-}
-
-static void blendEquationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendEquation");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned mode;
-  mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->blendEquation(mode);
-}
-
-MODULES_EXPORT  void blendEquationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::blendEquationMethod(info);
-}
-
-static void blendEquationSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendEquationSeparate");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned modeRGB;
-  unsigned modeAlpha;
-  modeRGB = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  modeAlpha = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->blendEquationSeparate(modeRGB, modeAlpha);
-}
-
-MODULES_EXPORT  void blendEquationSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::blendEquationSeparateMethod(info);
-}
-
-static void blendFuncMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendFunc");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned sfactor;
-  unsigned dfactor;
-  sfactor = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dfactor = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->blendFunc(sfactor, dfactor);
-}
-
-MODULES_EXPORT  void blendFuncMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::blendFuncMethod(info);
-}
-
-static void blendFuncSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendFuncSeparate");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  unsigned srcRGB;
-  unsigned dstRGB;
-  unsigned srcAlpha;
-  unsigned dstAlpha;
-  srcRGB = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dstRGB = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  srcAlpha = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dstAlpha = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
-}
-
-MODULES_EXPORT  void blendFuncSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::blendFuncSeparateMethod(info);
-}
-
-static void bufferData1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferData");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  long long size;
-  unsigned usage;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  size = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  usage = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->bufferData(target, size, usage);
-}
-
-static void bufferData2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferData");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  DOMArrayBufferView* data;
-  unsigned usage;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  data = info[1]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[1])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  usage = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->bufferData(target, data, usage);
-}
-
-static void bufferData3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferData");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  DOMArrayBuffer* data;
-  unsigned usage;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  data = info[1]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[1])) : 0;
-  if (!data && !isUndefinedOrNull(info[1])) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'ArrayBuffer'.");
-
-    return;
-  }
-
-  usage = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->bufferData(target, data, usage);
-}
-
-static void bufferDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 3:
-      if (isUndefinedOrNull(info[1])) {
-        bufferData3Method(info);
-        return;
-      }
-      if (info[1]->IsArrayBufferView()) {
-        bufferData2Method(info);
-        return;
-      }
-      if (info[1]->IsArrayBuffer()) {
-        bufferData3Method(info);
-        return;
-      }
-      if (true) {
-        bufferData1Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferData");
-
-  if (isArityError) {
-    if (info.Length() < 3) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-      return;
+        v8SetReturnValue(info, result);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void bufferDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::bufferDataMethod(info);
-}
-
-static void bufferSubData1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferSubData");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  long long offset;
-  FlexibleArrayBufferView data;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  offset = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  toFlexibleArrayBufferView(info.GetIsolate(), info[2], data, allocateFlexibleArrayBufferViewStorage(info[2]));
-  if (!data) {
-    exceptionState.throwTypeError("parameter 3 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  impl->bufferSubData(target, offset, data);
-}
-
-static void bufferSubData2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferSubData");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  long long offset;
-  DOMArrayBuffer* data;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  offset = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  data = info[2]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[2])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 3 is not of type 'ArrayBuffer'.");
-
-    return;
-  }
-
-  impl->bufferSubData(target, offset, data);
-}
-
-static void bufferSubDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 3:
-      if (info[2]->IsArrayBufferView()) {
-        bufferSubData1Method(info);
-        return;
-      }
-      if (info[2]->IsArrayBuffer()) {
-        bufferSubData2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferSubData");
-
-  if (isArityError) {
-    if (info.Length() < 3) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-      return;
+    MODULES_EXPORT void canvasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::canvasAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void bufferSubDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::bufferSubDataMethod(info);
-}
+    static void drawingBufferWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void checkFramebufferStatusMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "checkFramebufferStatus");
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(holder);
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueUnsigned(info, impl->checkFramebufferStatus(target));
-}
-
-MODULES_EXPORT  void checkFramebufferStatusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::checkFramebufferStatusMethod(info);
-}
-
-static void clearMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "clear");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned mask;
-  mask = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->clear(mask);
-}
-
-MODULES_EXPORT  void clearMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::clearMethod(info);
-}
-
-static void clearColorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "clearColor");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  float red;
-  float green;
-  float blue;
-  float alpha;
-  red = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  green = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  blue = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  alpha = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->clearColor(red, green, blue, alpha);
-}
-
-MODULES_EXPORT  void clearColorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::clearColorMethod(info);
-}
-
-static void clearDepthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "clearDepth");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  float depth;
-  depth = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->clearDepth(depth);
-}
-
-MODULES_EXPORT  void clearDepthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::clearDepthMethod(info);
-}
-
-static void clearStencilMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "clearStencil");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  int s;
-  s = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->clearStencil(s);
-}
-
-MODULES_EXPORT  void clearStencilMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::clearStencilMethod(info);
-}
-
-static void colorMaskMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "colorMask");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  bool red;
-  bool green;
-  bool blue;
-  bool alpha;
-  red = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  green = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  blue = toBoolean(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  alpha = toBoolean(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->colorMask(red, green, blue, alpha);
-}
-
-MODULES_EXPORT  void colorMaskMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::colorMaskMethod(info);
-}
-
-static void compileShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("compileShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLShader* shader;
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!shader) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("compileShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
-
-    return;
-  }
-
-  impl->compileShader(shader);
-}
-
-MODULES_EXPORT  void compileShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::compileShaderMethod(info);
-}
-
-static void compressedTexImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "compressedTexImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 7)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  int level;
-  unsigned internalformat;
-  int width;
-  int height;
-  int border;
-  DOMArrayBufferView* data;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  internalformat = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  border = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  data = info[6]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[6])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 7 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  impl->compressedTexImage2D(target, level, internalformat, width, height, border, data);
-}
-
-MODULES_EXPORT  void compressedTexImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::compressedTexImage2DMethod(info);
-}
-
-static void compressedTexSubImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "compressedTexSubImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 8)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(8, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  int level;
-  int xoffset;
-  int yoffset;
-  int width;
-  int height;
-  unsigned format;
-  DOMArrayBufferView* data;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  data = info[7]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[7])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 8 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  impl->compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data);
-}
-
-MODULES_EXPORT  void compressedTexSubImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::compressedTexSubImage2DMethod(info);
-}
-
-static void copyTexImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "copyTexImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 8)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(8, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  int level;
-  unsigned internalformat;
-  int x;
-  int y;
-  int width;
-  int height;
-  int border;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  internalformat = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  border = toInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->copyTexImage2D(target, level, internalformat, x, y, width, height, border);
-}
-
-MODULES_EXPORT  void copyTexImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::copyTexImage2DMethod(info);
-}
-
-static void copyTexSubImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "copyTexSubImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 8)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(8, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  int level;
-  int xoffset;
-  int yoffset;
-  int x;
-  int y;
-  int width;
-  int height;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->copyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
-}
-
-MODULES_EXPORT  void copyTexSubImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::copyTexSubImage2DMethod(info);
-}
-
-static void createBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->createBuffer());
-}
-
-MODULES_EXPORT  void createBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::createBufferMethod(info);
-}
-
-static void createFramebufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->createFramebuffer());
-}
-
-MODULES_EXPORT  void createFramebufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::createFramebufferMethod(info);
-}
-
-static void createProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->createProgram());
-}
-
-MODULES_EXPORT  void createProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::createProgramMethod(info);
-}
-
-static void createRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->createRenderbuffer());
-}
-
-MODULES_EXPORT  void createRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::createRenderbufferMethod(info);
-}
-
-static void createShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "createShader");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned type;
-  type = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->createShader(type));
-}
-
-MODULES_EXPORT  void createShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::createShaderMethod(info);
-}
-
-static void createTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->createTexture());
-}
-
-MODULES_EXPORT  void createTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::createTextureMethod(info);
-}
-
-static void cullFaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "cullFace");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned mode;
-  mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->cullFace(mode);
-}
-
-MODULES_EXPORT  void cullFaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::cullFaceMethod(info);
-}
-
-static void deleteBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteBuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLBuffer* buffer;
-  buffer = V8WebGLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!buffer && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteBuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLBuffer'."));
-
-    return;
-  }
-
-  impl->deleteBuffer(buffer);
-}
-
-MODULES_EXPORT  void deleteBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::deleteBufferMethod(info);
-}
-
-static void deleteFramebufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteFramebuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLFramebuffer* framebuffer;
-  framebuffer = V8WebGLFramebuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!framebuffer && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteFramebuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLFramebuffer'."));
-
-    return;
-  }
-
-  impl->deleteFramebuffer(framebuffer);
-}
-
-MODULES_EXPORT  void deleteFramebufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::deleteFramebufferMethod(info);
-}
-
-static void deleteProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  impl->deleteProgram(program);
-}
-
-MODULES_EXPORT  void deleteProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::deleteProgramMethod(info);
-}
-
-static void deleteRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteRenderbuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLRenderbuffer* renderbuffer;
-  renderbuffer = V8WebGLRenderbuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!renderbuffer && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteRenderbuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLRenderbuffer'."));
-
-    return;
-  }
-
-  impl->deleteRenderbuffer(renderbuffer);
-}
-
-MODULES_EXPORT  void deleteRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::deleteRenderbufferMethod(info);
-}
-
-static void deleteShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLShader* shader;
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!shader && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
-
-    return;
-  }
-
-  impl->deleteShader(shader);
-}
-
-MODULES_EXPORT  void deleteShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::deleteShaderMethod(info);
-}
-
-static void deleteTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteTexture", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLTexture* texture;
-  texture = V8WebGLTexture::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!texture && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteTexture", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLTexture'."));
-
-    return;
-  }
-
-  impl->deleteTexture(texture);
-}
-
-MODULES_EXPORT  void deleteTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::deleteTextureMethod(info);
-}
-
-static void depthFuncMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "depthFunc");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned func;
-  func = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->depthFunc(func);
-}
-
-MODULES_EXPORT  void depthFuncMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::depthFuncMethod(info);
-}
-
-static void depthMaskMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "depthMask");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool flag;
-  flag = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->depthMask(flag);
-}
-
-MODULES_EXPORT  void depthMaskMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::depthMaskMethod(info);
-}
-
-static void depthRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "depthRange");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  float zNear;
-  float zFar;
-  zNear = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  zFar = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->depthRange(zNear, zFar);
-}
-
-MODULES_EXPORT  void depthRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::depthRangeMethod(info);
-}
-
-static void detachShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("detachShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  WebGLShader* shader;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("detachShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!shader) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("detachShader", "WebGLRenderingContext", "parameter 2 is not of type 'WebGLShader'."));
-
-    return;
-  }
-
-  impl->detachShader(program, shader);
-}
-
-MODULES_EXPORT  void detachShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::detachShaderMethod(info);
-}
-
-static void disableMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "disable");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned cap;
-  cap = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->disable(cap);
-}
-
-MODULES_EXPORT  void disableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::disableMethod(info);
-}
-
-static void disableVertexAttribArrayMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "disableVertexAttribArray");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned index;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->disableVertexAttribArray(index);
-}
-
-MODULES_EXPORT  void disableVertexAttribArrayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::disableVertexAttribArrayMethod(info);
-}
-
-static void drawArraysMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "drawArrays");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  unsigned mode;
-  int first;
-  int count;
-  mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  first = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  count = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->drawArrays(mode, first, count);
-}
-
-MODULES_EXPORT  void drawArraysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::drawArraysMethod(info);
-}
-
-static void drawElementsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "drawElements");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  unsigned mode;
-  int count;
-  unsigned type;
-  long long offset;
-  mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  count = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  offset = toInt64(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->drawElements(mode, count, type, offset);
-}
-
-MODULES_EXPORT  void drawElementsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::drawElementsMethod(info);
-}
-
-static void enableMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "enable");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned cap;
-  cap = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->enable(cap);
-}
-
-MODULES_EXPORT  void enableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::enableMethod(info);
-}
-
-static void enableVertexAttribArrayMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "enableVertexAttribArray");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned index;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->enableVertexAttribArray(index);
-}
-
-MODULES_EXPORT  void enableVertexAttribArrayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::enableVertexAttribArrayMethod(info);
-}
-
-static void finishMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  impl->finish();
-}
-
-MODULES_EXPORT  void finishMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::finishMethod(info);
-}
-
-static void flushMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  impl->flush();
-}
-
-MODULES_EXPORT  void flushMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::flushMethod(info);
-}
-
-static void framebufferRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "framebufferRenderbuffer");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned attachment;
-  unsigned renderbuffertarget;
-  WebGLRenderbuffer* renderbuffer;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  attachment = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  renderbuffertarget = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  renderbuffer = V8WebGLRenderbuffer::toImplWithTypeCheck(info.GetIsolate(), info[3]);
-  if (!renderbuffer && !isUndefinedOrNull(info[3])) {
-    exceptionState.throwTypeError("parameter 4 is not of type 'WebGLRenderbuffer'.");
-
-    return;
-  }
-
-  impl->framebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
-}
-
-MODULES_EXPORT  void framebufferRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::framebufferRenderbufferMethod(info);
-}
-
-static void framebufferTexture2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "framebufferTexture2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned attachment;
-  unsigned textarget;
-  WebGLTexture* texture;
-  int level;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  attachment = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  textarget = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  texture = V8WebGLTexture::toImplWithTypeCheck(info.GetIsolate(), info[3]);
-  if (!texture && !isUndefinedOrNull(info[3])) {
-    exceptionState.throwTypeError("parameter 4 is not of type 'WebGLTexture'.");
-
-    return;
-  }
-
-  level = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->framebufferTexture2D(target, attachment, textarget, texture, level);
-}
-
-MODULES_EXPORT  void framebufferTexture2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::framebufferTexture2DMethod(info);
-}
-
-static void frontFaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "frontFace");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned mode;
-  mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->frontFace(mode);
-}
-
-MODULES_EXPORT  void frontFaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::frontFaceMethod(info);
-}
-
-static void generateMipmapMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "generateMipmap");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->generateMipmap(target);
-}
-
-MODULES_EXPORT  void generateMipmapMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::generateMipmapMethod(info);
-}
-
-static void getActiveAttribMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getActiveAttrib");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  WebGLProgram* program;
-  unsigned index;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLProgram'.");
-
-    return;
-  }
-
-  index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->getActiveAttrib(program, index));
-}
-
-MODULES_EXPORT  void getActiveAttribMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getActiveAttribMethod(info);
-}
-
-static void getActiveUniformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getActiveUniform");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  WebGLProgram* program;
-  unsigned index;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLProgram'.");
-
-    return;
-  }
-
-  index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->getActiveUniform(program, index));
-}
-
-MODULES_EXPORT  void getActiveUniformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getActiveUniformMethod(info);
-}
-
-static void getAttachedShadersMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttachedShaders", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttachedShaders", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  Nullable<HeapVector<Member<WebGLShader>>> result = impl->getAttachedShaders(program);
-  if (result.isNull())
-    v8SetReturnValueNull(info);
-  else
-    v8SetReturnValue(info, ToV8(result.get(), info.Holder(), info.GetIsolate()));
-}
-
-MODULES_EXPORT  void getAttachedShadersMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getAttachedShadersMethod(info);
-}
-
-static void getAttribLocationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttribLocation", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  V8StringResource<> name;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttribLocation", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  name = info[1];
-  if (!name.prepare())
-    return;
-
-  v8SetReturnValueInt(info, impl->getAttribLocation(program, name));
-}
-
-MODULES_EXPORT  void getAttribLocationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getAttribLocationMethod(info);
-}
-
-static void getBufferParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getBufferParameter");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned pname;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptValue result = impl->getBufferParameter(scriptState, target, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getBufferParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getBufferParameterMethod(info);
-}
-
-static void getContextAttributesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  Nullable<WebGLContextAttributes> result;
-  impl->getContextAttributes(result);
-  if (result.isNull())
-    v8SetReturnValueNull(info);
-  else
-    v8SetReturnValue(info, result.get());
-}
-
-MODULES_EXPORT  void getContextAttributesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getContextAttributesMethod(info);
-}
-
-static void getErrorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  v8SetReturnValueUnsigned(info, impl->getError());
-}
-
-MODULES_EXPORT  void getErrorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getErrorMethod(info);
-}
-
-static void getExtensionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getExtension", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
-
-  ScriptValue result = impl->getExtension(scriptState, name);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getExtensionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getExtensionMethod(info);
-}
-
-static void getFramebufferAttachmentParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getFramebufferAttachmentParameter");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned attachment;
-  unsigned pname;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  attachment = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pname = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptValue result = impl->getFramebufferAttachmentParameter(scriptState, target, attachment, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getFramebufferAttachmentParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getFramebufferAttachmentParameterMethod(info);
-}
-
-static void getParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getParameter");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned pname;
-  pname = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptValue result = impl->getParameter(scriptState, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getParameterMethod(info);
-}
-
-static void getProgramParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getProgramParameter");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  WebGLProgram* program;
-  unsigned pname;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLProgram'.");
-
-    return;
-  }
-
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptValue result = impl->getProgramParameter(scriptState, program, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getProgramParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getProgramParameterMethod(info);
-}
-
-static void getProgramInfoLogMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getProgramInfoLog", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getProgramInfoLog", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  v8SetReturnValueStringOrNull(info, impl->getProgramInfoLog(program), info.GetIsolate());
-}
-
-MODULES_EXPORT  void getProgramInfoLogMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getProgramInfoLogMethod(info);
-}
-
-static void getRenderbufferParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getRenderbufferParameter");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned pname;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptValue result = impl->getRenderbufferParameter(scriptState, target, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getRenderbufferParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getRenderbufferParameterMethod(info);
-}
-
-static void getShaderParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getShaderParameter");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  WebGLShader* shader;
-  unsigned pname;
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!shader) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLShader'.");
-
-    return;
-  }
-
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptValue result = impl->getShaderParameter(scriptState, shader, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getShaderParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getShaderParameterMethod(info);
-}
-
-static void getShaderInfoLogMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getShaderInfoLog", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLShader* shader;
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!shader) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getShaderInfoLog", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
-
-    return;
-  }
-
-  v8SetReturnValueStringOrNull(info, impl->getShaderInfoLog(shader), info.GetIsolate());
-}
-
-MODULES_EXPORT  void getShaderInfoLogMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getShaderInfoLogMethod(info);
-}
-
-static void getShaderPrecisionFormatMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getShaderPrecisionFormat");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned shadertype;
-  unsigned precisiontype;
-  shadertype = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  precisiontype = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->getShaderPrecisionFormat(shadertype, precisiontype));
-}
-
-MODULES_EXPORT  void getShaderPrecisionFormatMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getShaderPrecisionFormatMethod(info);
-}
-
-static void getShaderSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getShaderSource", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLShader* shader;
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!shader) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getShaderSource", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
-
-    return;
-  }
-
-  v8SetReturnValueStringOrNull(info, impl->getShaderSource(shader), info.GetIsolate());
-}
-
-MODULES_EXPORT  void getShaderSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getShaderSourceMethod(info);
-}
-
-static void getSupportedExtensionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  Nullable<Vector<String>> result = impl->getSupportedExtensions();
-  if (result.isNull())
-    v8SetReturnValueNull(info);
-  else
-    v8SetReturnValue(info, ToV8(result.get(), info.Holder(), info.GetIsolate()));
-}
-
-MODULES_EXPORT  void getSupportedExtensionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getSupportedExtensionsMethod(info);
-}
-
-static void getTexParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getTexParameter");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned pname;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptValue result = impl->getTexParameter(scriptState, target, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getTexParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getTexParameterMethod(info);
-}
-
-static void getUniformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniform", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  WebGLUniformLocation* location;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniform", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!location) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniform", "WebGLRenderingContext", "parameter 2 is not of type 'WebGLUniformLocation'."));
-
-    return;
-  }
-
-  ScriptValue result = impl->getUniform(scriptState, program, location);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getUniformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getUniformMethod(info);
-}
-
-static void getUniformLocationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniformLocation", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  V8StringResource<> name;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniformLocation", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  name = info[1];
-  if (!name.prepare())
-    return;
-
-  v8SetReturnValue(info, impl->getUniformLocation(program, name));
-}
-
-MODULES_EXPORT  void getUniformLocationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getUniformLocationMethod(info);
-}
-
-static void getVertexAttribMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getVertexAttrib");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned index;
-  unsigned pname;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptValue result = impl->getVertexAttrib(scriptState, index, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void getVertexAttribMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getVertexAttribMethod(info);
-}
-
-static void getVertexAttribOffsetMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getVertexAttribOffset");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned index;
-  unsigned pname;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, static_cast<double>(impl->getVertexAttribOffset(index, pname)));
-}
-
-MODULES_EXPORT  void getVertexAttribOffsetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::getVertexAttribOffsetMethod(info);
-}
-
-static void hintMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "hint");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned mode;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  mode = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->hint(target, mode);
-}
-
-MODULES_EXPORT  void hintMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::hintMethod(info);
-}
-
-static void isBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isBuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLBuffer* buffer;
-  buffer = V8WebGLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!buffer && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isBuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLBuffer'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isBuffer(buffer));
-}
-
-MODULES_EXPORT  void isBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::isBufferMethod(info);
-}
-
-static void isContextLostMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  v8SetReturnValueBool(info, impl->isContextLost());
-}
-
-MODULES_EXPORT  void isContextLostMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::isContextLostMethod(info);
-}
-
-static void isEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "isEnabled");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned cap;
-  cap = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueBool(info, impl->isEnabled(cap));
-}
-
-MODULES_EXPORT  void isEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::isEnabledMethod(info);
-}
-
-static void isFramebufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isFramebuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLFramebuffer* framebuffer;
-  framebuffer = V8WebGLFramebuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!framebuffer && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isFramebuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLFramebuffer'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isFramebuffer(framebuffer));
-}
-
-MODULES_EXPORT  void isFramebufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::isFramebufferMethod(info);
-}
-
-static void isProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isProgram(program));
-}
-
-MODULES_EXPORT  void isProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::isProgramMethod(info);
-}
-
-static void isRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isRenderbuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLRenderbuffer* renderbuffer;
-  renderbuffer = V8WebGLRenderbuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!renderbuffer && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isRenderbuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLRenderbuffer'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isRenderbuffer(renderbuffer));
-}
-
-MODULES_EXPORT  void isRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::isRenderbufferMethod(info);
-}
-
-static void isShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLShader* shader;
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!shader && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isShader(shader));
-}
-
-MODULES_EXPORT  void isShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::isShaderMethod(info);
-}
-
-static void isTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isTexture", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLTexture* texture;
-  texture = V8WebGLTexture::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!texture && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isTexture", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLTexture'."));
-
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isTexture(texture));
-}
-
-MODULES_EXPORT  void isTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::isTextureMethod(info);
-}
-
-static void lineWidthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "lineWidth");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  float width;
-  width = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->lineWidth(width);
-}
-
-MODULES_EXPORT  void lineWidthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::lineWidthMethod(info);
-}
-
-static void linkProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("linkProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("linkProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  impl->linkProgram(program);
-}
-
-MODULES_EXPORT  void linkProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::linkProgramMethod(info);
-}
-
-static void pixelStoreiMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "pixelStorei");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned pname;
-  int param;
-  pname = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  param = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->pixelStorei(pname, param);
-}
-
-MODULES_EXPORT  void pixelStoreiMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::pixelStoreiMethod(info);
-}
-
-static void polygonOffsetMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "polygonOffset");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  float factor;
-  float units;
-  factor = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  units = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->polygonOffset(factor, units);
-}
-
-MODULES_EXPORT  void polygonOffsetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::polygonOffsetMethod(info);
-}
-
-static void readPixelsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "readPixels");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 7)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  int width;
-  int height;
-  unsigned format;
-  unsigned type;
-  DOMArrayBufferView* pixels;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pixels = info[6]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[6])) : 0;
-  if (!pixels && !isUndefinedOrNull(info[6])) {
-    exceptionState.throwTypeError("parameter 7 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  impl->readPixels(x, y, width, height, format, type, pixels);
-}
-
-MODULES_EXPORT  void readPixelsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::readPixelsMethod(info);
-}
-
-static void renderbufferStorageMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "renderbufferStorage");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned internalformat;
-  int width;
-  int height;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  internalformat = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->renderbufferStorage(target, internalformat, width, height);
-}
-
-MODULES_EXPORT  void renderbufferStorageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::renderbufferStorageMethod(info);
-}
-
-static void sampleCoverageMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "sampleCoverage");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  float value;
-  bool invert;
-  value = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  invert = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->sampleCoverage(value, invert);
-}
-
-MODULES_EXPORT  void sampleCoverageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::sampleCoverageMethod(info);
-}
-
-static void scissorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "scissor");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  int x;
-  int y;
-  int width;
-  int height;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scissor(x, y, width, height);
-}
-
-MODULES_EXPORT  void scissorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::scissorMethod(info);
-}
-
-static void shaderSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shaderSource", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  WebGLShader* shader;
-  V8StringResource<> string;
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!shader) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shaderSource", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
-
-    return;
-  }
-
-  string = info[1];
-  if (!string.prepare())
-    return;
-
-  impl->shaderSource(shader, string);
-}
-
-MODULES_EXPORT  void shaderSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::shaderSourceMethod(info);
-}
-
-static void stencilFuncMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilFunc");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  unsigned func;
-  int ref;
-  unsigned mask;
-  func = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ref = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  mask = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->stencilFunc(func, ref, mask);
-}
-
-MODULES_EXPORT  void stencilFuncMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::stencilFuncMethod(info);
-}
-
-static void stencilFuncSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilFuncSeparate");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  unsigned face;
-  unsigned func;
-  int ref;
-  unsigned mask;
-  face = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  func = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ref = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  mask = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->stencilFuncSeparate(face, func, ref, mask);
-}
-
-MODULES_EXPORT  void stencilFuncSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::stencilFuncSeparateMethod(info);
-}
-
-static void stencilMaskMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilMask");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned mask;
-  mask = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->stencilMask(mask);
-}
-
-MODULES_EXPORT  void stencilMaskMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::stencilMaskMethod(info);
-}
-
-static void stencilMaskSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilMaskSeparate");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned face;
-  unsigned mask;
-  face = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  mask = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->stencilMaskSeparate(face, mask);
-}
-
-MODULES_EXPORT  void stencilMaskSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::stencilMaskSeparateMethod(info);
-}
-
-static void stencilOpMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilOp");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  unsigned fail;
-  unsigned zfail;
-  unsigned zpass;
-  fail = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  zfail = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  zpass = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->stencilOp(fail, zfail, zpass);
-}
-
-MODULES_EXPORT  void stencilOpMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::stencilOpMethod(info);
-}
-
-static void stencilOpSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilOpSeparate");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  unsigned face;
-  unsigned fail;
-  unsigned zfail;
-  unsigned zpass;
-  face = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  fail = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  zfail = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  zpass = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->stencilOpSeparate(face, fail, zfail, zpass);
-}
-
-MODULES_EXPORT  void stencilOpSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::stencilOpSeparateMethod(info);
-}
-
-static void texParameterfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texParameterf");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned pname;
-  float param;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  param = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->texParameterf(target, pname, param);
-}
-
-MODULES_EXPORT  void texParameterfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::texParameterfMethod(info);
-}
-
-static void texParameteriMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texParameteri");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  unsigned target;
-  unsigned pname;
-  int param;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  param = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->texParameteri(target, pname, param);
-}
-
-MODULES_EXPORT  void texParameteriMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::texParameteriMethod(info);
-}
-
-static void texImage2D1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int internalformat;
-  int width;
-  int height;
-  int border;
-  unsigned format;
-  unsigned type;
-  DOMArrayBufferView* pixels;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  border = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pixels = info[8]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[8])) : 0;
-  if (!pixels && !isUndefinedOrNull(info[8])) {
-    exceptionState.throwTypeError("parameter 9 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  impl->texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
-}
-
-static void texImage2D2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int internalformat;
-  unsigned format;
-  unsigned type;
-  ImageData* pixels;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pixels = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[5]);
-  if (!pixels) {
-    exceptionState.throwTypeError("parameter 6 is not of type 'ImageData'.");
-
-    return;
-  }
-
-  impl->texImage2D(target, level, internalformat, format, type, pixels);
-}
-
-static void texImage2D3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int internalformat;
-  unsigned format;
-  unsigned type;
-  HTMLImageElement* image;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  image = V8HTMLImageElement::toImplWithTypeCheck(info.GetIsolate(), info[5]);
-  if (!image) {
-    exceptionState.throwTypeError("parameter 6 is not of type 'HTMLImageElement'.");
-
-    return;
-  }
-
-  impl->texImage2D(target, level, internalformat, format, type, image, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void texImage2D4Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int internalformat;
-  unsigned format;
-  unsigned type;
-  HTMLCanvasElement* canvas;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  canvas = V8HTMLCanvasElement::toImplWithTypeCheck(info.GetIsolate(), info[5]);
-  if (!canvas) {
-    exceptionState.throwTypeError("parameter 6 is not of type 'HTMLCanvasElement'.");
-
-    return;
-  }
-
-  impl->texImage2D(target, level, internalformat, format, type, canvas, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void texImage2D5Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int internalformat;
-  unsigned format;
-  unsigned type;
-  HTMLVideoElement* video;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  video = V8HTMLVideoElement::toImplWithTypeCheck(info.GetIsolate(), info[5]);
-  if (!video) {
-    exceptionState.throwTypeError("parameter 6 is not of type 'HTMLVideoElement'.");
-
-    return;
-  }
-
-  impl->texImage2D(target, level, internalformat, format, type, video, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void texImage2D6Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int internalformat;
-  unsigned format;
-  unsigned type;
-  ImageBitmap* bitmap;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  bitmap = V8ImageBitmap::toImplWithTypeCheck(info.GetIsolate(), info[5]);
-  if (!bitmap) {
-    exceptionState.throwTypeError("parameter 6 is not of type 'ImageBitmap'.");
-
-    return;
-  }
-
-  impl->texImage2D(target, level, internalformat, format, type, bitmap, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void texImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(9, info.Length())) {
-    case 6:
-      if (V8ImageData::hasInstance(info[5], info.GetIsolate())) {
-        texImage2D2Method(info);
-        return;
-      }
-      if (V8HTMLImageElement::hasInstance(info[5], info.GetIsolate())) {
-        texImage2D3Method(info);
-        return;
-      }
-      if (V8HTMLCanvasElement::hasInstance(info[5], info.GetIsolate())) {
-        texImage2D4Method(info);
-        return;
-      }
-      if (V8HTMLVideoElement::hasInstance(info[5], info.GetIsolate())) {
-        texImage2D5Method(info);
-        return;
-      }
-      if (V8ImageBitmap::hasInstance(info[5], info.GetIsolate())) {
-        texImage2D6Method(info);
-        return;
-      }
-      break;
-    case 9:
-      if (true) {
-        texImage2D1Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
-
-  if (isArityError) {
-    if (info.Length() < 6) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-      return;
+        v8SetReturnValueInt(info, impl->drawingBufferWidth());
     }
-    if (info.Length() >= 6) {
-      exceptionState.throwTypeError(ExceptionMessages::invalidArity("[6, 9]", info.Length()));
-      return;
+
+    MODULES_EXPORT void drawingBufferWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::drawingBufferWidthAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void texImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::texImage2DMethod(info);
-}
+    static void drawingBufferHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void texSubImage2D1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(holder);
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int xoffset;
-  int yoffset;
-  int width;
-  int height;
-  unsigned format;
-  unsigned type;
-  DOMArrayBufferView* pixels;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pixels = info[8]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[8])) : 0;
-  if (!pixels && !isUndefinedOrNull(info[8])) {
-    exceptionState.throwTypeError("parameter 9 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  impl->texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
-}
-
-static void texSubImage2D2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int xoffset;
-  int yoffset;
-  unsigned format;
-  unsigned type;
-  ImageData* pixels;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pixels = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[6]);
-  if (!pixels) {
-    exceptionState.throwTypeError("parameter 7 is not of type 'ImageData'.");
-
-    return;
-  }
-
-  impl->texSubImage2D(target, level, xoffset, yoffset, format, type, pixels);
-}
-
-static void texSubImage2D3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int xoffset;
-  int yoffset;
-  unsigned format;
-  unsigned type;
-  HTMLImageElement* image;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  image = V8HTMLImageElement::toImplWithTypeCheck(info.GetIsolate(), info[6]);
-  if (!image) {
-    exceptionState.throwTypeError("parameter 7 is not of type 'HTMLImageElement'.");
-
-    return;
-  }
-
-  impl->texSubImage2D(target, level, xoffset, yoffset, format, type, image, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void texSubImage2D4Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int xoffset;
-  int yoffset;
-  unsigned format;
-  unsigned type;
-  HTMLCanvasElement* canvas;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  canvas = V8HTMLCanvasElement::toImplWithTypeCheck(info.GetIsolate(), info[6]);
-  if (!canvas) {
-    exceptionState.throwTypeError("parameter 7 is not of type 'HTMLCanvasElement'.");
-
-    return;
-  }
-
-  impl->texSubImage2D(target, level, xoffset, yoffset, format, type, canvas, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void texSubImage2D5Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int xoffset;
-  int yoffset;
-  unsigned format;
-  unsigned type;
-  HTMLVideoElement* video;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  video = V8HTMLVideoElement::toImplWithTypeCheck(info.GetIsolate(), info[6]);
-  if (!video) {
-    exceptionState.throwTypeError("parameter 7 is not of type 'HTMLVideoElement'.");
-
-    return;
-  }
-
-  impl->texSubImage2D(target, level, xoffset, yoffset, format, type, video, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void texSubImage2D6Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned target;
-  int level;
-  int xoffset;
-  int yoffset;
-  unsigned format;
-  unsigned type;
-  ImageBitmap* bitmap;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  bitmap = V8ImageBitmap::toImplWithTypeCheck(info.GetIsolate(), info[6]);
-  if (!bitmap) {
-    exceptionState.throwTypeError("parameter 7 is not of type 'ImageBitmap'.");
-
-    return;
-  }
-
-  impl->texSubImage2D(target, level, xoffset, yoffset, format, type, bitmap, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void texSubImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(9, info.Length())) {
-    case 7:
-      if (V8ImageData::hasInstance(info[6], info.GetIsolate())) {
-        texSubImage2D2Method(info);
-        return;
-      }
-      if (V8HTMLImageElement::hasInstance(info[6], info.GetIsolate())) {
-        texSubImage2D3Method(info);
-        return;
-      }
-      if (V8HTMLCanvasElement::hasInstance(info[6], info.GetIsolate())) {
-        texSubImage2D4Method(info);
-        return;
-      }
-      if (V8HTMLVideoElement::hasInstance(info[6], info.GetIsolate())) {
-        texSubImage2D5Method(info);
-        return;
-      }
-      if (V8ImageBitmap::hasInstance(info[6], info.GetIsolate())) {
-        texSubImage2D6Method(info);
-        return;
-      }
-      break;
-    case 9:
-      if (true) {
-        texSubImage2D1Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
-
-  if (isArityError) {
-    if (info.Length() < 7) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
-      return;
+        v8SetReturnValueInt(info, impl->drawingBufferHeight());
     }
-    if (info.Length() >= 7) {
-      exceptionState.throwTypeError(ExceptionMessages::invalidArity("[7, 9]", info.Length()));
-      return;
+
+    MODULES_EXPORT void drawingBufferHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::drawingBufferHeightAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void texSubImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::texSubImage2DMethod(info);
-}
+    static void activeTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "activeTexture");
 
-static void uniform1fMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1f");
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        unsigned texture;
+        texture = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  WebGLUniformLocation* location;
-  float x;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  x = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform1f(location, x);
-}
-
-MODULES_EXPORT  void uniform1fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform1fMethod(info);
-}
-
-static void uniform1fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  FlexibleFloat32ArrayView v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform1fv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
-
-    return;
-  }
-
-  toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
-  if (!v) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform1fv", "WebGLRenderingContext", "parameter 2 is not of type 'Float32Array'."));
-
-    return;
-  }
-
-  impl->uniform1fv(location, v);
-}
-
-static void uniform1fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  Vector<float> v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  v = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform1fv(location, v);
-}
-
-static void uniform1fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsFloat32Array()) {
-        uniform1fv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        uniform1fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1fv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+        impl->activeTexture(texture);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniform1fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform1fvMethod(info);
-}
-
-static void uniform1iMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1i");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  WebGLUniformLocation* location;
-  int x;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform1i(location, x);
-}
-
-MODULES_EXPORT  void uniform1iMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform1iMethod(info);
-}
-
-static void uniform1iv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  FlexibleInt32ArrayView v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform1iv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
-
-    return;
-  }
-
-  toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
-  if (!v) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform1iv", "WebGLRenderingContext", "parameter 2 is not of type 'Int32Array'."));
-
-    return;
-  }
-
-  impl->uniform1iv(location, v);
-}
-
-static void uniform1iv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1iv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  Vector<int> v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  v = toImplArray<Vector<int>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform1iv(location, v);
-}
-
-static void uniform1ivMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsInt32Array()) {
-        uniform1iv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        uniform1iv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1iv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+    MODULES_EXPORT void activeTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::activeTextureMethod(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniform1ivMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform1ivMethod(info);
-}
+    static void attachShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-static void uniform2fMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2f");
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("attachShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        WebGLProgram* program;
+        WebGLShader* shader;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("attachShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
 
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
+            return;
+        }
 
-  WebGLUniformLocation* location;
-  float x;
-  float y;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!shader) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("attachShader", "WebGLRenderingContext", "parameter 2 is not of type 'WebGLShader'."));
 
-    return;
-  }
+            return;
+        }
 
-  x = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform2f(location, x, y);
-}
-
-MODULES_EXPORT  void uniform2fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform2fMethod(info);
-}
-
-static void uniform2fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  FlexibleFloat32ArrayView v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform2fv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
-
-    return;
-  }
-
-  toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
-  if (!v) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform2fv", "WebGLRenderingContext", "parameter 2 is not of type 'Float32Array'."));
-
-    return;
-  }
-
-  impl->uniform2fv(location, v);
-}
-
-static void uniform2fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  Vector<float> v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  v = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform2fv(location, v);
-}
-
-static void uniform2fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsFloat32Array()) {
-        uniform2fv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        uniform2fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2fv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+        impl->attachShader(program, shader);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniform2fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform2fvMethod(info);
-}
-
-static void uniform2iMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2i");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  WebGLUniformLocation* location;
-  int x;
-  int y;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform2i(location, x, y);
-}
-
-MODULES_EXPORT  void uniform2iMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform2iMethod(info);
-}
-
-static void uniform2iv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  FlexibleInt32ArrayView v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform2iv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
-
-    return;
-  }
-
-  toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
-  if (!v) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform2iv", "WebGLRenderingContext", "parameter 2 is not of type 'Int32Array'."));
-
-    return;
-  }
-
-  impl->uniform2iv(location, v);
-}
-
-static void uniform2iv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2iv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  Vector<int> v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  v = toImplArray<Vector<int>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform2iv(location, v);
-}
-
-static void uniform2ivMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsInt32Array()) {
-        uniform2iv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        uniform2iv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2iv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+    MODULES_EXPORT void attachShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::attachShaderMethod(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniform2ivMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform2ivMethod(info);
-}
+    static void bindAttribLocationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindAttribLocation");
 
-static void uniform3fMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3f");
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
+        WebGLProgram* program;
+        unsigned index;
+        V8StringResource<> name;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLProgram'.");
 
-  WebGLUniformLocation* location;
-  float x;
-  float y;
-  float z;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+            return;
+        }
 
-    return;
-  }
+        index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  x = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        name = info[2];
+        if (!name.prepare())
+            return;
 
-  y = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  z = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform3f(location, x, y, z);
-}
-
-MODULES_EXPORT  void uniform3fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform3fMethod(info);
-}
-
-static void uniform3fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  FlexibleFloat32ArrayView v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform3fv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
-
-    return;
-  }
-
-  toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
-  if (!v) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform3fv", "WebGLRenderingContext", "parameter 2 is not of type 'Float32Array'."));
-
-    return;
-  }
-
-  impl->uniform3fv(location, v);
-}
-
-static void uniform3fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  Vector<float> v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  v = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform3fv(location, v);
-}
-
-static void uniform3fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsFloat32Array()) {
-        uniform3fv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        uniform3fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3fv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+        impl->bindAttribLocation(program, index, name);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniform3fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform3fvMethod(info);
-}
-
-static void uniform3iMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3i");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  WebGLUniformLocation* location;
-  int x;
-  int y;
-  int z;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  z = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform3i(location, x, y, z);
-}
-
-MODULES_EXPORT  void uniform3iMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform3iMethod(info);
-}
-
-static void uniform3iv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  FlexibleInt32ArrayView v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform3iv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
-
-    return;
-  }
-
-  toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
-  if (!v) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform3iv", "WebGLRenderingContext", "parameter 2 is not of type 'Int32Array'."));
-
-    return;
-  }
-
-  impl->uniform3iv(location, v);
-}
-
-static void uniform3iv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3iv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  Vector<int> v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  v = toImplArray<Vector<int>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform3iv(location, v);
-}
-
-static void uniform3ivMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsInt32Array()) {
-        uniform3iv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        uniform3iv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3iv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+    MODULES_EXPORT void bindAttribLocationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::bindAttribLocationMethod(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniform3ivMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform3ivMethod(info);
-}
+    static void bindBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindBuffer");
 
-static void uniform4fMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4f");
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
+        unsigned target;
+        WebGLBuffer* buffer;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  WebGLUniformLocation* location;
-  float x;
-  float y;
-  float z;
-  float w;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+        buffer = V8WebGLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!buffer && !isUndefinedOrNull(info[1])) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'WebGLBuffer'.");
 
-    return;
-  }
+            return;
+        }
 
-  x = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  z = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  w = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform4f(location, x, y, z, w);
-}
-
-MODULES_EXPORT  void uniform4fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform4fMethod(info);
-}
-
-static void uniform4fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  FlexibleFloat32ArrayView v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform4fv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
-
-    return;
-  }
-
-  toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
-  if (!v) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform4fv", "WebGLRenderingContext", "parameter 2 is not of type 'Float32Array'."));
-
-    return;
-  }
-
-  impl->uniform4fv(location, v);
-}
-
-static void uniform4fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  Vector<float> v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  v = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform4fv(location, v);
-}
-
-static void uniform4fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsFloat32Array()) {
-        uniform4fv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        uniform4fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4fv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+        impl->bindBuffer(target, buffer);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniform4fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform4fvMethod(info);
-}
-
-static void uniform4iMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4i");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  WebGLUniformLocation* location;
-  int x;
-  int y;
-  int z;
-  int w;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  z = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  w = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform4i(location, x, y, z, w);
-}
-
-MODULES_EXPORT  void uniform4iMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform4iMethod(info);
-}
-
-static void uniform4iv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  FlexibleInt32ArrayView v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform4iv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
-
-    return;
-  }
-
-  toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
-  if (!v) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform4iv", "WebGLRenderingContext", "parameter 2 is not of type 'Int32Array'."));
-
-    return;
-  }
-
-  impl->uniform4iv(location, v);
-}
-
-static void uniform4iv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4iv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  Vector<int> v;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  v = toImplArray<Vector<int>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniform4iv(location, v);
-}
-
-static void uniform4ivMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsInt32Array()) {
-        uniform4iv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        uniform4iv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4iv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+    MODULES_EXPORT void bindBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::bindBufferMethod(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniform4ivMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniform4ivMethod(info);
-}
+    static void bindFramebufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindFramebuffer");
 
-static void uniformMatrix2fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix2fv");
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  WebGLUniformLocation* location;
-  bool transpose;
-  DOMFloat32Array* array;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+        unsigned target;
+        WebGLFramebuffer* framebuffer;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-    return;
-  }
+        framebuffer = V8WebGLFramebuffer::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!framebuffer && !isUndefinedOrNull(info[1])) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'WebGLFramebuffer'.");
 
-  transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
 
-  array = info[2]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[2])) : 0;
-  if (!array) {
-    exceptionState.throwTypeError("parameter 3 is not of type 'Float32Array'.");
-
-    return;
-  }
-
-  impl->uniformMatrix2fv(location, transpose, array);
-}
-
-static void uniformMatrix2fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix2fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  bool transpose;
-  Vector<float> array;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  array = toImplArray<Vector<float>>(info[2], 3, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniformMatrix2fv(location, transpose, array);
-}
-
-static void uniformMatrix2fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 3:
-      if (info[2]->IsFloat32Array()) {
-        uniformMatrix2fv1Method(info);
-        return;
-      }
-      if (info[2]->IsArray()) {
-        uniformMatrix2fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix2fv");
-
-  if (isArityError) {
-    if (info.Length() < 3) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-      return;
+        impl->bindFramebuffer(target, framebuffer);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniformMatrix2fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniformMatrix2fvMethod(info);
-}
-
-static void uniformMatrix3fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix3fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  bool transpose;
-  DOMFloat32Array* array;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  array = info[2]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[2])) : 0;
-  if (!array) {
-    exceptionState.throwTypeError("parameter 3 is not of type 'Float32Array'.");
-
-    return;
-  }
-
-  impl->uniformMatrix3fv(location, transpose, array);
-}
-
-static void uniformMatrix3fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix3fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  bool transpose;
-  Vector<float> array;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  array = toImplArray<Vector<float>>(info[2], 3, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniformMatrix3fv(location, transpose, array);
-}
-
-static void uniformMatrix3fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 3:
-      if (info[2]->IsFloat32Array()) {
-        uniformMatrix3fv1Method(info);
-        return;
-      }
-      if (info[2]->IsArray()) {
-        uniformMatrix3fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix3fv");
-
-  if (isArityError) {
-    if (info.Length() < 3) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-      return;
+    MODULES_EXPORT void bindFramebufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::bindFramebufferMethod(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniformMatrix3fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniformMatrix3fvMethod(info);
-}
+    static void bindRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindRenderbuffer");
 
-static void uniformMatrix4fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix4fv");
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  WebGLUniformLocation* location;
-  bool transpose;
-  DOMFloat32Array* array;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+        unsigned target;
+        WebGLRenderbuffer* renderbuffer;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-    return;
-  }
+        renderbuffer = V8WebGLRenderbuffer::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!renderbuffer && !isUndefinedOrNull(info[1])) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'WebGLRenderbuffer'.");
 
-  transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
 
-  array = info[2]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[2])) : 0;
-  if (!array) {
-    exceptionState.throwTypeError("parameter 3 is not of type 'Float32Array'.");
-
-    return;
-  }
-
-  impl->uniformMatrix4fv(location, transpose, array);
-}
-
-static void uniformMatrix4fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix4fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  WebGLUniformLocation* location;
-  bool transpose;
-  Vector<float> array;
-  location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!location && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
-
-    return;
-  }
-
-  transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  array = toImplArray<Vector<float>>(info[2], 3, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->uniformMatrix4fv(location, transpose, array);
-}
-
-static void uniformMatrix4fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 3:
-      if (info[2]->IsFloat32Array()) {
-        uniformMatrix4fv1Method(info);
-        return;
-      }
-      if (info[2]->IsArray()) {
-        uniformMatrix4fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix4fv");
-
-  if (isArityError) {
-    if (info.Length() < 3) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-      return;
+        impl->bindRenderbuffer(target, renderbuffer);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void uniformMatrix4fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::uniformMatrix4fvMethod(info);
-}
-
-static void useProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("useProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("useProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  impl->useProgram(program);
-}
-
-MODULES_EXPORT  void useProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::useProgramMethod(info);
-}
-
-static void validateProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("validateProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  WebGLProgram* program;
-  program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!program) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("validateProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
-
-    return;
-  }
-
-  impl->validateProgram(program);
-}
-
-MODULES_EXPORT  void validateProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::validateProgramMethod(info);
-}
-
-static void vertexAttrib1fMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib1f");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned indx;
-  float x;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->vertexAttrib1f(indx, x);
-}
-
-MODULES_EXPORT  void vertexAttrib1fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::vertexAttrib1fMethod(info);
-}
-
-static void vertexAttrib1fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib1fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned indx;
-  DOMFloat32Array* values;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  values = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
-  if (!values) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
-
-    return;
-  }
-
-  impl->vertexAttrib1fv(indx, values);
-}
-
-static void vertexAttrib1fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib1fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned indx;
-  Vector<float> values;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  values = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->vertexAttrib1fv(indx, values);
-}
-
-static void vertexAttrib1fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsFloat32Array()) {
-        vertexAttrib1fv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        vertexAttrib1fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib1fv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+    MODULES_EXPORT void bindRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::bindRenderbufferMethod(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void vertexAttrib1fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::vertexAttrib1fvMethod(info);
-}
+    static void bindTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bindTexture");
 
-static void vertexAttrib2fMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib2f");
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
+        unsigned target;
+        WebGLTexture* texture;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  unsigned indx;
-  float x;
-  float y;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        texture = V8WebGLTexture::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!texture && !isUndefinedOrNull(info[1])) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'WebGLTexture'.");
 
-  x = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
 
-  y = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->vertexAttrib2f(indx, x, y);
-}
-
-MODULES_EXPORT  void vertexAttrib2fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::vertexAttrib2fMethod(info);
-}
-
-static void vertexAttrib2fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib2fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned indx;
-  DOMFloat32Array* values;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  values = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
-  if (!values) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
-
-    return;
-  }
-
-  impl->vertexAttrib2fv(indx, values);
-}
-
-static void vertexAttrib2fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib2fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned indx;
-  Vector<float> values;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  values = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->vertexAttrib2fv(indx, values);
-}
-
-static void vertexAttrib2fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsFloat32Array()) {
-        vertexAttrib2fv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        vertexAttrib2fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib2fv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+        impl->bindTexture(target, texture);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void vertexAttrib2fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::vertexAttrib2fvMethod(info);
-}
-
-static void vertexAttrib3fMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib3f");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  unsigned indx;
-  float x;
-  float y;
-  float z;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  z = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->vertexAttrib3f(indx, x, y, z);
-}
-
-MODULES_EXPORT  void vertexAttrib3fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::vertexAttrib3fMethod(info);
-}
-
-static void vertexAttrib3fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib3fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned indx;
-  DOMFloat32Array* values;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  values = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
-  if (!values) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
-
-    return;
-  }
-
-  impl->vertexAttrib3fv(indx, values);
-}
-
-static void vertexAttrib3fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib3fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned indx;
-  Vector<float> values;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  values = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->vertexAttrib3fv(indx, values);
-}
-
-static void vertexAttrib3fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsFloat32Array()) {
-        vertexAttrib3fv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        vertexAttrib3fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib3fv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+    MODULES_EXPORT void bindTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::bindTextureMethod(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void vertexAttrib3fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::vertexAttrib3fvMethod(info);
-}
+    static void blendColorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendColor");
 
-static void vertexAttrib4fMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib4f");
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
 
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
+        float red;
+        float green;
+        float blue;
+        float alpha;
+        red = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  unsigned indx;
-  float x;
-  float y;
-  float z;
-  float w;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        green = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  x = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        blue = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  y = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        alpha = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  z = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  w = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->vertexAttrib4f(indx, x, y, z, w);
-}
-
-MODULES_EXPORT  void vertexAttrib4fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::vertexAttrib4fMethod(info);
-}
-
-static void vertexAttrib4fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib4fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned indx;
-  DOMFloat32Array* values;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  values = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
-  if (!values) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
-
-    return;
-  }
-
-  impl->vertexAttrib4fv(indx, values);
-}
-
-static void vertexAttrib4fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib4fv");
-
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
-
-  unsigned indx;
-  Vector<float> values;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  values = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->vertexAttrib4fv(indx, values);
-}
-
-static void vertexAttrib4fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 2:
-      if (info[1]->IsFloat32Array()) {
-        vertexAttrib4fv1Method(info);
-        return;
-      }
-      if (info[1]->IsArray()) {
-        vertexAttrib4fv2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib4fv");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+        impl->blendColor(red, green, blue, alpha);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void vertexAttrib4fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::vertexAttrib4fvMethod(info);
-}
+    MODULES_EXPORT void blendColorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::blendColorMethod(info);
+    }
 
-static void vertexAttribPointerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttribPointer");
+    static void blendEquationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendEquation");
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 6)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned indx;
-  int size;
-  unsigned type;
-  bool normalized;
-  int stride;
-  long long offset;
-  indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned mode;
+        mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  size = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        impl->blendEquation(mode);
+    }
 
-  type = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    MODULES_EXPORT void blendEquationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::blendEquationMethod(info);
+    }
 
-  normalized = toBoolean(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void blendEquationSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendEquationSeparate");
 
-  stride = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  offset = toInt64(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  impl->vertexAttribPointer(indx, size, type, normalized, stride, offset);
-}
+        unsigned modeRGB;
+        unsigned modeAlpha;
+        modeRGB = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-MODULES_EXPORT  void vertexAttribPointerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::vertexAttribPointerMethod(info);
-}
+        modeAlpha = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-static void viewportMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "viewport");
+        impl->blendEquationSeparate(modeRGB, modeAlpha);
+    }
 
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+    MODULES_EXPORT void blendEquationSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::blendEquationSeparateMethod(info);
+    }
 
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
+    static void blendFuncMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendFunc");
 
-  int x;
-  int y;
-  int width;
-  int height;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned sfactor;
+        unsigned dfactor;
+        sfactor = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        dfactor = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->viewport(x, y, width, height);
-}
+        impl->blendFunc(sfactor, dfactor);
+    }
 
-MODULES_EXPORT  void viewportMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::viewportMethod(info);
-}
+    MODULES_EXPORT void blendFuncMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::blendFuncMethod(info);
+    }
 
-static void commitMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "commit");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void blendFuncSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "blendFuncSeparate");
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8WebGLRenderingContext::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
 
-  ScriptPromise result = impl->commit(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+        unsigned srcRGB;
+        unsigned dstRGB;
+        unsigned srcAlpha;
+        unsigned dstAlpha;
+        srcRGB = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-MODULES_EXPORT  void commitMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLRenderingContextV8Internal::commitMethod(info);
-}
+        dstRGB = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        srcAlpha = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dstAlpha = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+    }
+
+    MODULES_EXPORT void blendFuncSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::blendFuncSeparateMethod(info);
+    }
+
+    static void bufferData1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferData");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        long long size;
+        unsigned usage;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        size = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        usage = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->bufferData(target, size, usage);
+    }
+
+    static void bufferData2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferData");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        DOMArrayBufferView* data;
+        unsigned usage;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        data = info[1]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[1])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        usage = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->bufferData(target, data, usage);
+    }
+
+    static void bufferData3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferData");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        DOMArrayBuffer* data;
+        unsigned usage;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        data = info[1]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[1])) : 0;
+        if (!data && !isUndefinedOrNull(info[1])) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'ArrayBuffer'.");
+
+            return;
+        }
+
+        usage = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->bufferData(target, data, usage);
+    }
+
+    static void bufferDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 3:
+            if (isUndefinedOrNull(info[1])) {
+                bufferData3Method(info);
+                return;
+            }
+            if (info[1]->IsArrayBufferView()) {
+                bufferData2Method(info);
+                return;
+            }
+            if (info[1]->IsArrayBuffer()) {
+                bufferData3Method(info);
+                return;
+            }
+            if (true) {
+                bufferData1Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferData");
+
+        if (isArityError) {
+            if (info.Length() < 3) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void bufferDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::bufferDataMethod(info);
+    }
+
+    static void bufferSubData1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferSubData");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        long long offset;
+        FlexibleArrayBufferView data;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        offset = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        toFlexibleArrayBufferView(info.GetIsolate(), info[2], data, allocateFlexibleArrayBufferViewStorage(info[2]));
+        if (!data) {
+            exceptionState.throwTypeError("parameter 3 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        impl->bufferSubData(target, offset, data);
+    }
+
+    static void bufferSubData2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferSubData");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        long long offset;
+        DOMArrayBuffer* data;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        offset = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        data = info[2]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[2])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 3 is not of type 'ArrayBuffer'.");
+
+            return;
+        }
+
+        impl->bufferSubData(target, offset, data);
+    }
+
+    static void bufferSubDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 3:
+            if (info[2]->IsArrayBufferView()) {
+                bufferSubData1Method(info);
+                return;
+            }
+            if (info[2]->IsArrayBuffer()) {
+                bufferSubData2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "bufferSubData");
+
+        if (isArityError) {
+            if (info.Length() < 3) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void bufferSubDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::bufferSubDataMethod(info);
+    }
+
+    static void checkFramebufferStatusMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "checkFramebufferStatus");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueUnsigned(info, impl->checkFramebufferStatus(target));
+    }
+
+    MODULES_EXPORT void checkFramebufferStatusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::checkFramebufferStatusMethod(info);
+    }
+
+    static void clearMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "clear");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned mask;
+        mask = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->clear(mask);
+    }
+
+    MODULES_EXPORT void clearMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::clearMethod(info);
+    }
+
+    static void clearColorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "clearColor");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        float red;
+        float green;
+        float blue;
+        float alpha;
+        red = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        green = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        blue = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        alpha = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->clearColor(red, green, blue, alpha);
+    }
+
+    MODULES_EXPORT void clearColorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::clearColorMethod(info);
+    }
+
+    static void clearDepthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "clearDepth");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        float depth;
+        depth = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->clearDepth(depth);
+    }
+
+    MODULES_EXPORT void clearDepthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::clearDepthMethod(info);
+    }
+
+    static void clearStencilMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "clearStencil");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        int s;
+        s = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->clearStencil(s);
+    }
+
+    MODULES_EXPORT void clearStencilMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::clearStencilMethod(info);
+    }
+
+    static void colorMaskMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "colorMask");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        bool red;
+        bool green;
+        bool blue;
+        bool alpha;
+        red = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        green = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        blue = toBoolean(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        alpha = toBoolean(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->colorMask(red, green, blue, alpha);
+    }
+
+    MODULES_EXPORT void colorMaskMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::colorMaskMethod(info);
+    }
+
+    static void compileShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("compileShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLShader* shader;
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!shader) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("compileShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
+
+            return;
+        }
+
+        impl->compileShader(shader);
+    }
+
+    MODULES_EXPORT void compileShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::compileShaderMethod(info);
+    }
+
+    static void compressedTexImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "compressedTexImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 7)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        int level;
+        unsigned internalformat;
+        int width;
+        int height;
+        int border;
+        DOMArrayBufferView* data;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        internalformat = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        border = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        data = info[6]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[6])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 7 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        impl->compressedTexImage2D(target, level, internalformat, width, height, border, data);
+    }
+
+    MODULES_EXPORT void compressedTexImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::compressedTexImage2DMethod(info);
+    }
+
+    static void compressedTexSubImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "compressedTexSubImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 8)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(8, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        int level;
+        int xoffset;
+        int yoffset;
+        int width;
+        int height;
+        unsigned format;
+        DOMArrayBufferView* data;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        data = info[7]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[7])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 8 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        impl->compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data);
+    }
+
+    MODULES_EXPORT void compressedTexSubImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::compressedTexSubImage2DMethod(info);
+    }
+
+    static void copyTexImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "copyTexImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 8)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(8, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        int level;
+        unsigned internalformat;
+        int x;
+        int y;
+        int width;
+        int height;
+        int border;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        internalformat = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        border = toInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->copyTexImage2D(target, level, internalformat, x, y, width, height, border);
+    }
+
+    MODULES_EXPORT void copyTexImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::copyTexImage2DMethod(info);
+    }
+
+    static void copyTexSubImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "copyTexSubImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 8)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(8, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        int level;
+        int xoffset;
+        int yoffset;
+        int x;
+        int y;
+        int width;
+        int height;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->copyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
+    }
+
+    MODULES_EXPORT void copyTexSubImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::copyTexSubImage2DMethod(info);
+    }
+
+    static void createBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->createBuffer());
+    }
+
+    MODULES_EXPORT void createBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::createBufferMethod(info);
+    }
+
+    static void createFramebufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->createFramebuffer());
+    }
+
+    MODULES_EXPORT void createFramebufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::createFramebufferMethod(info);
+    }
+
+    static void createProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->createProgram());
+    }
+
+    MODULES_EXPORT void createProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::createProgramMethod(info);
+    }
+
+    static void createRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->createRenderbuffer());
+    }
+
+    MODULES_EXPORT void createRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::createRenderbufferMethod(info);
+    }
+
+    static void createShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "createShader");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned type;
+        type = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->createShader(type));
+    }
+
+    MODULES_EXPORT void createShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::createShaderMethod(info);
+    }
+
+    static void createTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->createTexture());
+    }
+
+    MODULES_EXPORT void createTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::createTextureMethod(info);
+    }
+
+    static void cullFaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "cullFace");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned mode;
+        mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->cullFace(mode);
+    }
+
+    MODULES_EXPORT void cullFaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::cullFaceMethod(info);
+    }
+
+    static void deleteBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteBuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLBuffer* buffer;
+        buffer = V8WebGLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!buffer && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteBuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLBuffer'."));
+
+            return;
+        }
+
+        impl->deleteBuffer(buffer);
+    }
+
+    MODULES_EXPORT void deleteBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::deleteBufferMethod(info);
+    }
+
+    static void deleteFramebufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteFramebuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLFramebuffer* framebuffer;
+        framebuffer = V8WebGLFramebuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!framebuffer && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteFramebuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLFramebuffer'."));
+
+            return;
+        }
+
+        impl->deleteFramebuffer(framebuffer);
+    }
+
+    MODULES_EXPORT void deleteFramebufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::deleteFramebufferMethod(info);
+    }
+
+    static void deleteProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        impl->deleteProgram(program);
+    }
+
+    MODULES_EXPORT void deleteProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::deleteProgramMethod(info);
+    }
+
+    static void deleteRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteRenderbuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLRenderbuffer* renderbuffer;
+        renderbuffer = V8WebGLRenderbuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!renderbuffer && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteRenderbuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLRenderbuffer'."));
+
+            return;
+        }
+
+        impl->deleteRenderbuffer(renderbuffer);
+    }
+
+    MODULES_EXPORT void deleteRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::deleteRenderbufferMethod(info);
+    }
+
+    static void deleteShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLShader* shader;
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!shader && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
+
+            return;
+        }
+
+        impl->deleteShader(shader);
+    }
+
+    MODULES_EXPORT void deleteShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::deleteShaderMethod(info);
+    }
+
+    static void deleteTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteTexture", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLTexture* texture;
+        texture = V8WebGLTexture::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!texture && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteTexture", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLTexture'."));
+
+            return;
+        }
+
+        impl->deleteTexture(texture);
+    }
+
+    MODULES_EXPORT void deleteTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::deleteTextureMethod(info);
+    }
+
+    static void depthFuncMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "depthFunc");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned func;
+        func = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->depthFunc(func);
+    }
+
+    MODULES_EXPORT void depthFuncMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::depthFuncMethod(info);
+    }
+
+    static void depthMaskMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "depthMask");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool flag;
+        flag = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->depthMask(flag);
+    }
+
+    MODULES_EXPORT void depthMaskMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::depthMaskMethod(info);
+    }
+
+    static void depthRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "depthRange");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        float zNear;
+        float zFar;
+        zNear = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        zFar = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->depthRange(zNear, zFar);
+    }
+
+    MODULES_EXPORT void depthRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::depthRangeMethod(info);
+    }
+
+    static void detachShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("detachShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        WebGLShader* shader;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("detachShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!shader) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("detachShader", "WebGLRenderingContext", "parameter 2 is not of type 'WebGLShader'."));
+
+            return;
+        }
+
+        impl->detachShader(program, shader);
+    }
+
+    MODULES_EXPORT void detachShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::detachShaderMethod(info);
+    }
+
+    static void disableMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "disable");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned cap;
+        cap = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->disable(cap);
+    }
+
+    MODULES_EXPORT void disableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::disableMethod(info);
+    }
+
+    static void disableVertexAttribArrayMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "disableVertexAttribArray");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned index;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->disableVertexAttribArray(index);
+    }
+
+    MODULES_EXPORT void disableVertexAttribArrayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::disableVertexAttribArrayMethod(info);
+    }
+
+    static void drawArraysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "drawArrays");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        unsigned mode;
+        int first;
+        int count;
+        mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        first = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        count = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->drawArrays(mode, first, count);
+    }
+
+    MODULES_EXPORT void drawArraysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::drawArraysMethod(info);
+    }
+
+    static void drawElementsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "drawElements");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        unsigned mode;
+        int count;
+        unsigned type;
+        long long offset;
+        mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        count = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        offset = toInt64(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->drawElements(mode, count, type, offset);
+    }
+
+    MODULES_EXPORT void drawElementsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::drawElementsMethod(info);
+    }
+
+    static void enableMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "enable");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned cap;
+        cap = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->enable(cap);
+    }
+
+    MODULES_EXPORT void enableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::enableMethod(info);
+    }
+
+    static void enableVertexAttribArrayMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "enableVertexAttribArray");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned index;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->enableVertexAttribArray(index);
+    }
+
+    MODULES_EXPORT void enableVertexAttribArrayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::enableVertexAttribArrayMethod(info);
+    }
+
+    static void finishMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        impl->finish();
+    }
+
+    MODULES_EXPORT void finishMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::finishMethod(info);
+    }
+
+    static void flushMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        impl->flush();
+    }
+
+    MODULES_EXPORT void flushMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::flushMethod(info);
+    }
+
+    static void framebufferRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "framebufferRenderbuffer");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned attachment;
+        unsigned renderbuffertarget;
+        WebGLRenderbuffer* renderbuffer;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        attachment = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        renderbuffertarget = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        renderbuffer = V8WebGLRenderbuffer::toImplWithTypeCheck(info.GetIsolate(), info[3]);
+        if (!renderbuffer && !isUndefinedOrNull(info[3])) {
+            exceptionState.throwTypeError("parameter 4 is not of type 'WebGLRenderbuffer'.");
+
+            return;
+        }
+
+        impl->framebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+    }
+
+    MODULES_EXPORT void framebufferRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::framebufferRenderbufferMethod(info);
+    }
+
+    static void framebufferTexture2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "framebufferTexture2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned attachment;
+        unsigned textarget;
+        WebGLTexture* texture;
+        int level;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        attachment = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        textarget = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        texture = V8WebGLTexture::toImplWithTypeCheck(info.GetIsolate(), info[3]);
+        if (!texture && !isUndefinedOrNull(info[3])) {
+            exceptionState.throwTypeError("parameter 4 is not of type 'WebGLTexture'.");
+
+            return;
+        }
+
+        level = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->framebufferTexture2D(target, attachment, textarget, texture, level);
+    }
+
+    MODULES_EXPORT void framebufferTexture2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::framebufferTexture2DMethod(info);
+    }
+
+    static void frontFaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "frontFace");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned mode;
+        mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->frontFace(mode);
+    }
+
+    MODULES_EXPORT void frontFaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::frontFaceMethod(info);
+    }
+
+    static void generateMipmapMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "generateMipmap");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->generateMipmap(target);
+    }
+
+    MODULES_EXPORT void generateMipmapMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::generateMipmapMethod(info);
+    }
+
+    static void getActiveAttribMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getActiveAttrib");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        WebGLProgram* program;
+        unsigned index;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLProgram'.");
+
+            return;
+        }
+
+        index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->getActiveAttrib(program, index));
+    }
+
+    MODULES_EXPORT void getActiveAttribMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getActiveAttribMethod(info);
+    }
+
+    static void getActiveUniformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getActiveUniform");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        WebGLProgram* program;
+        unsigned index;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLProgram'.");
+
+            return;
+        }
+
+        index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->getActiveUniform(program, index));
+    }
+
+    MODULES_EXPORT void getActiveUniformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getActiveUniformMethod(info);
+    }
+
+    static void getAttachedShadersMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttachedShaders", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttachedShaders", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        Nullable<HeapVector<Member<WebGLShader>>> result = impl->getAttachedShaders(program);
+        if (result.isNull())
+            v8SetReturnValueNull(info);
+        else
+            v8SetReturnValue(info, ToV8(result.get(), info.Holder(), info.GetIsolate()));
+    }
+
+    MODULES_EXPORT void getAttachedShadersMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getAttachedShadersMethod(info);
+    }
+
+    static void getAttribLocationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttribLocation", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        V8StringResource<> name;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttribLocation", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        name = info[1];
+        if (!name.prepare())
+            return;
+
+        v8SetReturnValueInt(info, impl->getAttribLocation(program, name));
+    }
+
+    MODULES_EXPORT void getAttribLocationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getAttribLocationMethod(info);
+    }
+
+    static void getBufferParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getBufferParameter");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned pname;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptValue result = impl->getBufferParameter(scriptState, target, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getBufferParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getBufferParameterMethod(info);
+    }
+
+    static void getContextAttributesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        Nullable<WebGLContextAttributes> result;
+        impl->getContextAttributes(result);
+        if (result.isNull())
+            v8SetReturnValueNull(info);
+        else
+            v8SetReturnValue(info, result.get());
+    }
+
+    MODULES_EXPORT void getContextAttributesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getContextAttributesMethod(info);
+    }
+
+    static void getErrorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        v8SetReturnValueUnsigned(info, impl->getError());
+    }
+
+    MODULES_EXPORT void getErrorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getErrorMethod(info);
+    }
+
+    static void getExtensionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getExtension", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
+
+        ScriptValue result = impl->getExtension(scriptState, name);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getExtensionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getExtensionMethod(info);
+    }
+
+    static void getFramebufferAttachmentParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getFramebufferAttachmentParameter");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned attachment;
+        unsigned pname;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        attachment = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pname = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptValue result = impl->getFramebufferAttachmentParameter(scriptState, target, attachment, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getFramebufferAttachmentParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getFramebufferAttachmentParameterMethod(info);
+    }
+
+    static void getParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getParameter");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned pname;
+        pname = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptValue result = impl->getParameter(scriptState, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getParameterMethod(info);
+    }
+
+    static void getProgramParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getProgramParameter");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        WebGLProgram* program;
+        unsigned pname;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLProgram'.");
+
+            return;
+        }
+
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptValue result = impl->getProgramParameter(scriptState, program, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getProgramParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getProgramParameterMethod(info);
+    }
+
+    static void getProgramInfoLogMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getProgramInfoLog", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getProgramInfoLog", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        v8SetReturnValueStringOrNull(info, impl->getProgramInfoLog(program), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void getProgramInfoLogMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getProgramInfoLogMethod(info);
+    }
+
+    static void getRenderbufferParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getRenderbufferParameter");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned pname;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptValue result = impl->getRenderbufferParameter(scriptState, target, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getRenderbufferParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getRenderbufferParameterMethod(info);
+    }
+
+    static void getShaderParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getShaderParameter");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        WebGLShader* shader;
+        unsigned pname;
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!shader) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLShader'.");
+
+            return;
+        }
+
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptValue result = impl->getShaderParameter(scriptState, shader, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getShaderParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getShaderParameterMethod(info);
+    }
+
+    static void getShaderInfoLogMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getShaderInfoLog", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLShader* shader;
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!shader) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getShaderInfoLog", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
+
+            return;
+        }
+
+        v8SetReturnValueStringOrNull(info, impl->getShaderInfoLog(shader), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void getShaderInfoLogMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getShaderInfoLogMethod(info);
+    }
+
+    static void getShaderPrecisionFormatMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getShaderPrecisionFormat");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned shadertype;
+        unsigned precisiontype;
+        shadertype = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        precisiontype = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->getShaderPrecisionFormat(shadertype, precisiontype));
+    }
+
+    MODULES_EXPORT void getShaderPrecisionFormatMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getShaderPrecisionFormatMethod(info);
+    }
+
+    static void getShaderSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getShaderSource", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLShader* shader;
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!shader) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getShaderSource", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
+
+            return;
+        }
+
+        v8SetReturnValueStringOrNull(info, impl->getShaderSource(shader), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void getShaderSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getShaderSourceMethod(info);
+    }
+
+    static void getSupportedExtensionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        Nullable<Vector<String>> result = impl->getSupportedExtensions();
+        if (result.isNull())
+            v8SetReturnValueNull(info);
+        else
+            v8SetReturnValue(info, ToV8(result.get(), info.Holder(), info.GetIsolate()));
+    }
+
+    MODULES_EXPORT void getSupportedExtensionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getSupportedExtensionsMethod(info);
+    }
+
+    static void getTexParameterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getTexParameter");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned pname;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptValue result = impl->getTexParameter(scriptState, target, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getTexParameterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getTexParameterMethod(info);
+    }
+
+    static void getUniformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniform", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        WebGLUniformLocation* location;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniform", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!location) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniform", "WebGLRenderingContext", "parameter 2 is not of type 'WebGLUniformLocation'."));
+
+            return;
+        }
+
+        ScriptValue result = impl->getUniform(scriptState, program, location);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getUniformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getUniformMethod(info);
+    }
+
+    static void getUniformLocationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniformLocation", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        V8StringResource<> name;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getUniformLocation", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        name = info[1];
+        if (!name.prepare())
+            return;
+
+        v8SetReturnValue(info, impl->getUniformLocation(program, name));
+    }
+
+    MODULES_EXPORT void getUniformLocationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getUniformLocationMethod(info);
+    }
+
+    static void getVertexAttribMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getVertexAttrib");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned index;
+        unsigned pname;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptValue result = impl->getVertexAttrib(scriptState, index, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void getVertexAttribMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getVertexAttribMethod(info);
+    }
+
+    static void getVertexAttribOffsetMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "getVertexAttribOffset");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned index;
+        unsigned pname;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, static_cast<double>(impl->getVertexAttribOffset(index, pname)));
+    }
+
+    MODULES_EXPORT void getVertexAttribOffsetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::getVertexAttribOffsetMethod(info);
+    }
+
+    static void hintMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "hint");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned mode;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        mode = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->hint(target, mode);
+    }
+
+    MODULES_EXPORT void hintMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::hintMethod(info);
+    }
+
+    static void isBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isBuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLBuffer* buffer;
+        buffer = V8WebGLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!buffer && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isBuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLBuffer'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isBuffer(buffer));
+    }
+
+    MODULES_EXPORT void isBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::isBufferMethod(info);
+    }
+
+    static void isContextLostMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        v8SetReturnValueBool(info, impl->isContextLost());
+    }
+
+    MODULES_EXPORT void isContextLostMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::isContextLostMethod(info);
+    }
+
+    static void isEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "isEnabled");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned cap;
+        cap = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueBool(info, impl->isEnabled(cap));
+    }
+
+    MODULES_EXPORT void isEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::isEnabledMethod(info);
+    }
+
+    static void isFramebufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isFramebuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLFramebuffer* framebuffer;
+        framebuffer = V8WebGLFramebuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!framebuffer && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isFramebuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLFramebuffer'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isFramebuffer(framebuffer));
+    }
+
+    MODULES_EXPORT void isFramebufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::isFramebufferMethod(info);
+    }
+
+    static void isProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isProgram(program));
+    }
+
+    MODULES_EXPORT void isProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::isProgramMethod(info);
+    }
+
+    static void isRenderbufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isRenderbuffer", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLRenderbuffer* renderbuffer;
+        renderbuffer = V8WebGLRenderbuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!renderbuffer && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isRenderbuffer", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLRenderbuffer'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isRenderbuffer(renderbuffer));
+    }
+
+    MODULES_EXPORT void isRenderbufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::isRenderbufferMethod(info);
+    }
+
+    static void isShaderMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isShader", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLShader* shader;
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!shader && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isShader", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isShader(shader));
+    }
+
+    MODULES_EXPORT void isShaderMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::isShaderMethod(info);
+    }
+
+    static void isTextureMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isTexture", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLTexture* texture;
+        texture = V8WebGLTexture::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!texture && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isTexture", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLTexture'."));
+
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isTexture(texture));
+    }
+
+    MODULES_EXPORT void isTextureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::isTextureMethod(info);
+    }
+
+    static void lineWidthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "lineWidth");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        float width;
+        width = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->lineWidth(width);
+    }
+
+    MODULES_EXPORT void lineWidthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::lineWidthMethod(info);
+    }
+
+    static void linkProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("linkProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("linkProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        impl->linkProgram(program);
+    }
+
+    MODULES_EXPORT void linkProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::linkProgramMethod(info);
+    }
+
+    static void pixelStoreiMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "pixelStorei");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned pname;
+        int param;
+        pname = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        param = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->pixelStorei(pname, param);
+    }
+
+    MODULES_EXPORT void pixelStoreiMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::pixelStoreiMethod(info);
+    }
+
+    static void polygonOffsetMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "polygonOffset");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        float factor;
+        float units;
+        factor = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        units = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->polygonOffset(factor, units);
+    }
+
+    MODULES_EXPORT void polygonOffsetMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::polygonOffsetMethod(info);
+    }
+
+    static void readPixelsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "readPixels");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 7)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        int width;
+        int height;
+        unsigned format;
+        unsigned type;
+        DOMArrayBufferView* pixels;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pixels = info[6]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[6])) : 0;
+        if (!pixels && !isUndefinedOrNull(info[6])) {
+            exceptionState.throwTypeError("parameter 7 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        impl->readPixels(x, y, width, height, format, type, pixels);
+    }
+
+    MODULES_EXPORT void readPixelsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::readPixelsMethod(info);
+    }
+
+    static void renderbufferStorageMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "renderbufferStorage");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned internalformat;
+        int width;
+        int height;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        internalformat = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->renderbufferStorage(target, internalformat, width, height);
+    }
+
+    MODULES_EXPORT void renderbufferStorageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::renderbufferStorageMethod(info);
+    }
+
+    static void sampleCoverageMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "sampleCoverage");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        float value;
+        bool invert;
+        value = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        invert = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->sampleCoverage(value, invert);
+    }
+
+    MODULES_EXPORT void sampleCoverageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::sampleCoverageMethod(info);
+    }
+
+    static void scissorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "scissor");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        int width;
+        int height;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->scissor(x, y, width, height);
+    }
+
+    MODULES_EXPORT void scissorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::scissorMethod(info);
+    }
+
+    static void shaderSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shaderSource", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        WebGLShader* shader;
+        V8StringResource<> string;
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!shader) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("shaderSource", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLShader'."));
+
+            return;
+        }
+
+        string = info[1];
+        if (!string.prepare())
+            return;
+
+        impl->shaderSource(shader, string);
+    }
+
+    MODULES_EXPORT void shaderSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::shaderSourceMethod(info);
+    }
+
+    static void stencilFuncMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilFunc");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        unsigned func;
+        int ref;
+        unsigned mask;
+        func = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ref = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        mask = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->stencilFunc(func, ref, mask);
+    }
+
+    MODULES_EXPORT void stencilFuncMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::stencilFuncMethod(info);
+    }
+
+    static void stencilFuncSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilFuncSeparate");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        unsigned face;
+        unsigned func;
+        int ref;
+        unsigned mask;
+        face = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        func = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ref = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        mask = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->stencilFuncSeparate(face, func, ref, mask);
+    }
+
+    MODULES_EXPORT void stencilFuncSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::stencilFuncSeparateMethod(info);
+    }
+
+    static void stencilMaskMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilMask");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned mask;
+        mask = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->stencilMask(mask);
+    }
+
+    MODULES_EXPORT void stencilMaskMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::stencilMaskMethod(info);
+    }
+
+    static void stencilMaskSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilMaskSeparate");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned face;
+        unsigned mask;
+        face = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        mask = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->stencilMaskSeparate(face, mask);
+    }
+
+    MODULES_EXPORT void stencilMaskSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::stencilMaskSeparateMethod(info);
+    }
+
+    static void stencilOpMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilOp");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        unsigned fail;
+        unsigned zfail;
+        unsigned zpass;
+        fail = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        zfail = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        zpass = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->stencilOp(fail, zfail, zpass);
+    }
+
+    MODULES_EXPORT void stencilOpMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::stencilOpMethod(info);
+    }
+
+    static void stencilOpSeparateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "stencilOpSeparate");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        unsigned face;
+        unsigned fail;
+        unsigned zfail;
+        unsigned zpass;
+        face = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        fail = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        zfail = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        zpass = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->stencilOpSeparate(face, fail, zfail, zpass);
+    }
+
+    MODULES_EXPORT void stencilOpSeparateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::stencilOpSeparateMethod(info);
+    }
+
+    static void texParameterfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texParameterf");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned pname;
+        float param;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        param = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->texParameterf(target, pname, param);
+    }
+
+    MODULES_EXPORT void texParameterfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::texParameterfMethod(info);
+    }
+
+    static void texParameteriMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texParameteri");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        unsigned target;
+        unsigned pname;
+        int param;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        param = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->texParameteri(target, pname, param);
+    }
+
+    MODULES_EXPORT void texParameteriMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::texParameteriMethod(info);
+    }
+
+    static void texImage2D1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int internalformat;
+        int width;
+        int height;
+        int border;
+        unsigned format;
+        unsigned type;
+        DOMArrayBufferView* pixels;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        border = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pixels = info[8]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[8])) : 0;
+        if (!pixels && !isUndefinedOrNull(info[8])) {
+            exceptionState.throwTypeError("parameter 9 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        impl->texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+    }
+
+    static void texImage2D2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int internalformat;
+        unsigned format;
+        unsigned type;
+        ImageData* pixels;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pixels = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[5]);
+        if (!pixels) {
+            exceptionState.throwTypeError("parameter 6 is not of type 'ImageData'.");
+
+            return;
+        }
+
+        impl->texImage2D(target, level, internalformat, format, type, pixels);
+    }
+
+    static void texImage2D3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int internalformat;
+        unsigned format;
+        unsigned type;
+        HTMLImageElement* image;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        image = V8HTMLImageElement::toImplWithTypeCheck(info.GetIsolate(), info[5]);
+        if (!image) {
+            exceptionState.throwTypeError("parameter 6 is not of type 'HTMLImageElement'.");
+
+            return;
+        }
+
+        impl->texImage2D(target, level, internalformat, format, type, image, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void texImage2D4Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int internalformat;
+        unsigned format;
+        unsigned type;
+        HTMLCanvasElement* canvas;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        canvas = V8HTMLCanvasElement::toImplWithTypeCheck(info.GetIsolate(), info[5]);
+        if (!canvas) {
+            exceptionState.throwTypeError("parameter 6 is not of type 'HTMLCanvasElement'.");
+
+            return;
+        }
+
+        impl->texImage2D(target, level, internalformat, format, type, canvas, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void texImage2D5Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int internalformat;
+        unsigned format;
+        unsigned type;
+        HTMLVideoElement* video;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        video = V8HTMLVideoElement::toImplWithTypeCheck(info.GetIsolate(), info[5]);
+        if (!video) {
+            exceptionState.throwTypeError("parameter 6 is not of type 'HTMLVideoElement'.");
+
+            return;
+        }
+
+        impl->texImage2D(target, level, internalformat, format, type, video, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void texImage2D6Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int internalformat;
+        unsigned format;
+        unsigned type;
+        ImageBitmap* bitmap;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        internalformat = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        bitmap = V8ImageBitmap::toImplWithTypeCheck(info.GetIsolate(), info[5]);
+        if (!bitmap) {
+            exceptionState.throwTypeError("parameter 6 is not of type 'ImageBitmap'.");
+
+            return;
+        }
+
+        impl->texImage2D(target, level, internalformat, format, type, bitmap, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void texImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(9, info.Length())) {
+        case 6:
+            if (V8ImageData::hasInstance(info[5], info.GetIsolate())) {
+                texImage2D2Method(info);
+                return;
+            }
+            if (V8HTMLImageElement::hasInstance(info[5], info.GetIsolate())) {
+                texImage2D3Method(info);
+                return;
+            }
+            if (V8HTMLCanvasElement::hasInstance(info[5], info.GetIsolate())) {
+                texImage2D4Method(info);
+                return;
+            }
+            if (V8HTMLVideoElement::hasInstance(info[5], info.GetIsolate())) {
+                texImage2D5Method(info);
+                return;
+            }
+            if (V8ImageBitmap::hasInstance(info[5], info.GetIsolate())) {
+                texImage2D6Method(info);
+                return;
+            }
+            break;
+        case 9:
+            if (true) {
+                texImage2D1Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texImage2D");
+
+        if (isArityError) {
+            if (info.Length() < 6) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+                return;
+            }
+            if (info.Length() >= 6) {
+                exceptionState.throwTypeError(ExceptionMessages::invalidArity("[6, 9]", info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void texImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::texImage2DMethod(info);
+    }
+
+    static void texSubImage2D1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int xoffset;
+        int yoffset;
+        int width;
+        int height;
+        unsigned format;
+        unsigned type;
+        DOMArrayBufferView* pixels;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pixels = info[8]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[8])) : 0;
+        if (!pixels && !isUndefinedOrNull(info[8])) {
+            exceptionState.throwTypeError("parameter 9 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        impl->texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+    }
+
+    static void texSubImage2D2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int xoffset;
+        int yoffset;
+        unsigned format;
+        unsigned type;
+        ImageData* pixels;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pixels = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[6]);
+        if (!pixels) {
+            exceptionState.throwTypeError("parameter 7 is not of type 'ImageData'.");
+
+            return;
+        }
+
+        impl->texSubImage2D(target, level, xoffset, yoffset, format, type, pixels);
+    }
+
+    static void texSubImage2D3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int xoffset;
+        int yoffset;
+        unsigned format;
+        unsigned type;
+        HTMLImageElement* image;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        image = V8HTMLImageElement::toImplWithTypeCheck(info.GetIsolate(), info[6]);
+        if (!image) {
+            exceptionState.throwTypeError("parameter 7 is not of type 'HTMLImageElement'.");
+
+            return;
+        }
+
+        impl->texSubImage2D(target, level, xoffset, yoffset, format, type, image, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void texSubImage2D4Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int xoffset;
+        int yoffset;
+        unsigned format;
+        unsigned type;
+        HTMLCanvasElement* canvas;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        canvas = V8HTMLCanvasElement::toImplWithTypeCheck(info.GetIsolate(), info[6]);
+        if (!canvas) {
+            exceptionState.throwTypeError("parameter 7 is not of type 'HTMLCanvasElement'.");
+
+            return;
+        }
+
+        impl->texSubImage2D(target, level, xoffset, yoffset, format, type, canvas, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void texSubImage2D5Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int xoffset;
+        int yoffset;
+        unsigned format;
+        unsigned type;
+        HTMLVideoElement* video;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        video = V8HTMLVideoElement::toImplWithTypeCheck(info.GetIsolate(), info[6]);
+        if (!video) {
+            exceptionState.throwTypeError("parameter 7 is not of type 'HTMLVideoElement'.");
+
+            return;
+        }
+
+        impl->texSubImage2D(target, level, xoffset, yoffset, format, type, video, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void texSubImage2D6Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned target;
+        int level;
+        int xoffset;
+        int yoffset;
+        unsigned format;
+        unsigned type;
+        ImageBitmap* bitmap;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        level = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        xoffset = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        yoffset = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        format = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        bitmap = V8ImageBitmap::toImplWithTypeCheck(info.GetIsolate(), info[6]);
+        if (!bitmap) {
+            exceptionState.throwTypeError("parameter 7 is not of type 'ImageBitmap'.");
+
+            return;
+        }
+
+        impl->texSubImage2D(target, level, xoffset, yoffset, format, type, bitmap, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void texSubImage2DMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(9, info.Length())) {
+        case 7:
+            if (V8ImageData::hasInstance(info[6], info.GetIsolate())) {
+                texSubImage2D2Method(info);
+                return;
+            }
+            if (V8HTMLImageElement::hasInstance(info[6], info.GetIsolate())) {
+                texSubImage2D3Method(info);
+                return;
+            }
+            if (V8HTMLCanvasElement::hasInstance(info[6], info.GetIsolate())) {
+                texSubImage2D4Method(info);
+                return;
+            }
+            if (V8HTMLVideoElement::hasInstance(info[6], info.GetIsolate())) {
+                texSubImage2D5Method(info);
+                return;
+            }
+            if (V8ImageBitmap::hasInstance(info[6], info.GetIsolate())) {
+                texSubImage2D6Method(info);
+                return;
+            }
+            break;
+        case 9:
+            if (true) {
+                texSubImage2D1Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "texSubImage2D");
+
+        if (isArityError) {
+            if (info.Length() < 7) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
+                return;
+            }
+            if (info.Length() >= 7) {
+                exceptionState.throwTypeError(ExceptionMessages::invalidArity("[7, 9]", info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void texSubImage2DMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::texSubImage2DMethod(info);
+    }
+
+    static void uniform1fMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1f");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        WebGLUniformLocation* location;
+        float x;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        x = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform1f(location, x);
+    }
+
+    MODULES_EXPORT void uniform1fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform1fMethod(info);
+    }
+
+    static void uniform1fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        FlexibleFloat32ArrayView v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform1fv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
+
+            return;
+        }
+
+        toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
+        if (!v) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform1fv", "WebGLRenderingContext", "parameter 2 is not of type 'Float32Array'."));
+
+            return;
+        }
+
+        impl->uniform1fv(location, v);
+    }
+
+    static void uniform1fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        Vector<float> v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        v = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform1fv(location, v);
+    }
+
+    static void uniform1fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsFloat32Array()) {
+                uniform1fv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                uniform1fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1fv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniform1fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform1fvMethod(info);
+    }
+
+    static void uniform1iMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1i");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        WebGLUniformLocation* location;
+        int x;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform1i(location, x);
+    }
+
+    MODULES_EXPORT void uniform1iMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform1iMethod(info);
+    }
+
+    static void uniform1iv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        FlexibleInt32ArrayView v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform1iv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
+
+            return;
+        }
+
+        toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
+        if (!v) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform1iv", "WebGLRenderingContext", "parameter 2 is not of type 'Int32Array'."));
+
+            return;
+        }
+
+        impl->uniform1iv(location, v);
+    }
+
+    static void uniform1iv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1iv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        Vector<int> v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        v = toImplArray<Vector<int>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform1iv(location, v);
+    }
+
+    static void uniform1ivMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsInt32Array()) {
+                uniform1iv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                uniform1iv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform1iv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniform1ivMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform1ivMethod(info);
+    }
+
+    static void uniform2fMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2f");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        WebGLUniformLocation* location;
+        float x;
+        float y;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        x = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform2f(location, x, y);
+    }
+
+    MODULES_EXPORT void uniform2fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform2fMethod(info);
+    }
+
+    static void uniform2fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        FlexibleFloat32ArrayView v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform2fv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
+
+            return;
+        }
+
+        toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
+        if (!v) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform2fv", "WebGLRenderingContext", "parameter 2 is not of type 'Float32Array'."));
+
+            return;
+        }
+
+        impl->uniform2fv(location, v);
+    }
+
+    static void uniform2fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        Vector<float> v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        v = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform2fv(location, v);
+    }
+
+    static void uniform2fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsFloat32Array()) {
+                uniform2fv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                uniform2fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2fv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniform2fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform2fvMethod(info);
+    }
+
+    static void uniform2iMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2i");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        WebGLUniformLocation* location;
+        int x;
+        int y;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform2i(location, x, y);
+    }
+
+    MODULES_EXPORT void uniform2iMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform2iMethod(info);
+    }
+
+    static void uniform2iv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        FlexibleInt32ArrayView v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform2iv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
+
+            return;
+        }
+
+        toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
+        if (!v) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform2iv", "WebGLRenderingContext", "parameter 2 is not of type 'Int32Array'."));
+
+            return;
+        }
+
+        impl->uniform2iv(location, v);
+    }
+
+    static void uniform2iv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2iv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        Vector<int> v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        v = toImplArray<Vector<int>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform2iv(location, v);
+    }
+
+    static void uniform2ivMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsInt32Array()) {
+                uniform2iv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                uniform2iv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform2iv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniform2ivMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform2ivMethod(info);
+    }
+
+    static void uniform3fMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3f");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        WebGLUniformLocation* location;
+        float x;
+        float y;
+        float z;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        x = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        z = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform3f(location, x, y, z);
+    }
+
+    MODULES_EXPORT void uniform3fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform3fMethod(info);
+    }
+
+    static void uniform3fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        FlexibleFloat32ArrayView v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform3fv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
+
+            return;
+        }
+
+        toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
+        if (!v) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform3fv", "WebGLRenderingContext", "parameter 2 is not of type 'Float32Array'."));
+
+            return;
+        }
+
+        impl->uniform3fv(location, v);
+    }
+
+    static void uniform3fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        Vector<float> v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        v = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform3fv(location, v);
+    }
+
+    static void uniform3fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsFloat32Array()) {
+                uniform3fv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                uniform3fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3fv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniform3fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform3fvMethod(info);
+    }
+
+    static void uniform3iMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3i");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        WebGLUniformLocation* location;
+        int x;
+        int y;
+        int z;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        z = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform3i(location, x, y, z);
+    }
+
+    MODULES_EXPORT void uniform3iMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform3iMethod(info);
+    }
+
+    static void uniform3iv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        FlexibleInt32ArrayView v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform3iv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
+
+            return;
+        }
+
+        toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
+        if (!v) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform3iv", "WebGLRenderingContext", "parameter 2 is not of type 'Int32Array'."));
+
+            return;
+        }
+
+        impl->uniform3iv(location, v);
+    }
+
+    static void uniform3iv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3iv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        Vector<int> v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        v = toImplArray<Vector<int>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform3iv(location, v);
+    }
+
+    static void uniform3ivMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsInt32Array()) {
+                uniform3iv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                uniform3iv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform3iv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniform3ivMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform3ivMethod(info);
+    }
+
+    static void uniform4fMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4f");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        WebGLUniformLocation* location;
+        float x;
+        float y;
+        float z;
+        float w;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        x = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        z = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        w = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform4f(location, x, y, z, w);
+    }
+
+    MODULES_EXPORT void uniform4fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform4fMethod(info);
+    }
+
+    static void uniform4fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        FlexibleFloat32ArrayView v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform4fv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
+
+            return;
+        }
+
+        toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
+        if (!v) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform4fv", "WebGLRenderingContext", "parameter 2 is not of type 'Float32Array'."));
+
+            return;
+        }
+
+        impl->uniform4fv(location, v);
+    }
+
+    static void uniform4fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        Vector<float> v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        v = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform4fv(location, v);
+    }
+
+    static void uniform4fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsFloat32Array()) {
+                uniform4fv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                uniform4fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4fv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniform4fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform4fvMethod(info);
+    }
+
+    static void uniform4iMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4i");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        WebGLUniformLocation* location;
+        int x;
+        int y;
+        int z;
+        int w;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        x = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        z = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        w = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform4i(location, x, y, z, w);
+    }
+
+    MODULES_EXPORT void uniform4iMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform4iMethod(info);
+    }
+
+    static void uniform4iv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        FlexibleInt32ArrayView v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform4iv", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLUniformLocation'."));
+
+            return;
+        }
+
+        toFlexibleArrayBufferView(info.GetIsolate(), info[1], v, allocateFlexibleArrayBufferViewStorage(info[1]));
+        if (!v) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("uniform4iv", "WebGLRenderingContext", "parameter 2 is not of type 'Int32Array'."));
+
+            return;
+        }
+
+        impl->uniform4iv(location, v);
+    }
+
+    static void uniform4iv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4iv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        Vector<int> v;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        v = toImplArray<Vector<int>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniform4iv(location, v);
+    }
+
+    static void uniform4ivMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsInt32Array()) {
+                uniform4iv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                uniform4iv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniform4iv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniform4ivMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniform4ivMethod(info);
+    }
+
+    static void uniformMatrix2fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix2fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        bool transpose;
+        DOMFloat32Array* array;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        array = info[2]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[2])) : 0;
+        if (!array) {
+            exceptionState.throwTypeError("parameter 3 is not of type 'Float32Array'.");
+
+            return;
+        }
+
+        impl->uniformMatrix2fv(location, transpose, array);
+    }
+
+    static void uniformMatrix2fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix2fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        bool transpose;
+        Vector<float> array;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        array = toImplArray<Vector<float>>(info[2], 3, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniformMatrix2fv(location, transpose, array);
+    }
+
+    static void uniformMatrix2fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 3:
+            if (info[2]->IsFloat32Array()) {
+                uniformMatrix2fv1Method(info);
+                return;
+            }
+            if (info[2]->IsArray()) {
+                uniformMatrix2fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix2fv");
+
+        if (isArityError) {
+            if (info.Length() < 3) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniformMatrix2fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniformMatrix2fvMethod(info);
+    }
+
+    static void uniformMatrix3fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix3fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        bool transpose;
+        DOMFloat32Array* array;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        array = info[2]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[2])) : 0;
+        if (!array) {
+            exceptionState.throwTypeError("parameter 3 is not of type 'Float32Array'.");
+
+            return;
+        }
+
+        impl->uniformMatrix3fv(location, transpose, array);
+    }
+
+    static void uniformMatrix3fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix3fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        bool transpose;
+        Vector<float> array;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        array = toImplArray<Vector<float>>(info[2], 3, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniformMatrix3fv(location, transpose, array);
+    }
+
+    static void uniformMatrix3fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 3:
+            if (info[2]->IsFloat32Array()) {
+                uniformMatrix3fv1Method(info);
+                return;
+            }
+            if (info[2]->IsArray()) {
+                uniformMatrix3fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix3fv");
+
+        if (isArityError) {
+            if (info.Length() < 3) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniformMatrix3fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniformMatrix3fvMethod(info);
+    }
+
+    static void uniformMatrix4fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix4fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        bool transpose;
+        DOMFloat32Array* array;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        array = info[2]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[2])) : 0;
+        if (!array) {
+            exceptionState.throwTypeError("parameter 3 is not of type 'Float32Array'.");
+
+            return;
+        }
+
+        impl->uniformMatrix4fv(location, transpose, array);
+    }
+
+    static void uniformMatrix4fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix4fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        WebGLUniformLocation* location;
+        bool transpose;
+        Vector<float> array;
+        location = V8WebGLUniformLocation::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!location && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLUniformLocation'.");
+
+            return;
+        }
+
+        transpose = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        array = toImplArray<Vector<float>>(info[2], 3, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->uniformMatrix4fv(location, transpose, array);
+    }
+
+    static void uniformMatrix4fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 3:
+            if (info[2]->IsFloat32Array()) {
+                uniformMatrix4fv1Method(info);
+                return;
+            }
+            if (info[2]->IsArray()) {
+                uniformMatrix4fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "uniformMatrix4fv");
+
+        if (isArityError) {
+            if (info.Length() < 3) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void uniformMatrix4fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::uniformMatrix4fvMethod(info);
+    }
+
+    static void useProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("useProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("useProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        impl->useProgram(program);
+    }
+
+    MODULES_EXPORT void useProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::useProgramMethod(info);
+    }
+
+    static void validateProgramMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("validateProgram", "WebGLRenderingContext", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        WebGLProgram* program;
+        program = V8WebGLProgram::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!program) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("validateProgram", "WebGLRenderingContext", "parameter 1 is not of type 'WebGLProgram'."));
+
+            return;
+        }
+
+        impl->validateProgram(program);
+    }
+
+    MODULES_EXPORT void validateProgramMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::validateProgramMethod(info);
+    }
+
+    static void vertexAttrib1fMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib1f");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned indx;
+        float x;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->vertexAttrib1f(indx, x);
+    }
+
+    MODULES_EXPORT void vertexAttrib1fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::vertexAttrib1fMethod(info);
+    }
+
+    static void vertexAttrib1fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib1fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned indx;
+        DOMFloat32Array* values;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        values = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
+        if (!values) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
+
+            return;
+        }
+
+        impl->vertexAttrib1fv(indx, values);
+    }
+
+    static void vertexAttrib1fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib1fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned indx;
+        Vector<float> values;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        values = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->vertexAttrib1fv(indx, values);
+    }
+
+    static void vertexAttrib1fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsFloat32Array()) {
+                vertexAttrib1fv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                vertexAttrib1fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib1fv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void vertexAttrib1fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::vertexAttrib1fvMethod(info);
+    }
+
+    static void vertexAttrib2fMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib2f");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        unsigned indx;
+        float x;
+        float y;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->vertexAttrib2f(indx, x, y);
+    }
+
+    MODULES_EXPORT void vertexAttrib2fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::vertexAttrib2fMethod(info);
+    }
+
+    static void vertexAttrib2fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib2fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned indx;
+        DOMFloat32Array* values;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        values = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
+        if (!values) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
+
+            return;
+        }
+
+        impl->vertexAttrib2fv(indx, values);
+    }
+
+    static void vertexAttrib2fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib2fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned indx;
+        Vector<float> values;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        values = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->vertexAttrib2fv(indx, values);
+    }
+
+    static void vertexAttrib2fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsFloat32Array()) {
+                vertexAttrib2fv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                vertexAttrib2fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib2fv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void vertexAttrib2fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::vertexAttrib2fvMethod(info);
+    }
+
+    static void vertexAttrib3fMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib3f");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        unsigned indx;
+        float x;
+        float y;
+        float z;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        z = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->vertexAttrib3f(indx, x, y, z);
+    }
+
+    MODULES_EXPORT void vertexAttrib3fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::vertexAttrib3fMethod(info);
+    }
+
+    static void vertexAttrib3fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib3fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned indx;
+        DOMFloat32Array* values;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        values = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
+        if (!values) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
+
+            return;
+        }
+
+        impl->vertexAttrib3fv(indx, values);
+    }
+
+    static void vertexAttrib3fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib3fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned indx;
+        Vector<float> values;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        values = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->vertexAttrib3fv(indx, values);
+    }
+
+    static void vertexAttrib3fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsFloat32Array()) {
+                vertexAttrib3fv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                vertexAttrib3fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib3fv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void vertexAttrib3fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::vertexAttrib3fvMethod(info);
+    }
+
+    static void vertexAttrib4fMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib4f");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        unsigned indx;
+        float x;
+        float y;
+        float z;
+        float w;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        z = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        w = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->vertexAttrib4f(indx, x, y, z, w);
+    }
+
+    MODULES_EXPORT void vertexAttrib4fMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::vertexAttrib4fMethod(info);
+    }
+
+    static void vertexAttrib4fv1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib4fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned indx;
+        DOMFloat32Array* values;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        values = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
+        if (!values) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
+
+            return;
+        }
+
+        impl->vertexAttrib4fv(indx, values);
+    }
+
+    static void vertexAttrib4fv2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib4fv");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        unsigned indx;
+        Vector<float> values;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        values = toImplArray<Vector<float>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->vertexAttrib4fv(indx, values);
+    }
+
+    static void vertexAttrib4fvMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 2:
+            if (info[1]->IsFloat32Array()) {
+                vertexAttrib4fv1Method(info);
+                return;
+            }
+            if (info[1]->IsArray()) {
+                vertexAttrib4fv2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttrib4fv");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void vertexAttrib4fvMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::vertexAttrib4fvMethod(info);
+    }
+
+    static void vertexAttribPointerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "vertexAttribPointer");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 6)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+            return;
+        }
+
+        unsigned indx;
+        int size;
+        unsigned type;
+        bool normalized;
+        int stride;
+        long long offset;
+        indx = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        size = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        type = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        normalized = toBoolean(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        stride = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        offset = toInt64(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->vertexAttribPointer(indx, size, type, normalized, stride, offset);
+    }
+
+    MODULES_EXPORT void vertexAttribPointerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::vertexAttribPointerMethod(info);
+    }
+
+    static void viewportMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "viewport");
+
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        int width;
+        int height;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->viewport(x, y, width, height);
+    }
+
+    MODULES_EXPORT void viewportMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::viewportMethod(info);
+    }
+
+    static void commitMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLRenderingContext", "commit");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8WebGLRenderingContext::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        WebGLRenderingContext* impl = V8WebGLRenderingContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->commit(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void commitMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLRenderingContextV8Internal::commitMethod(info);
+    }
 
 } // namespace WebGLRenderingContextV8Internal
 
-void V8WebGLRenderingContext::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  V8WebGLRenderingContext::visitDOMWrapperCustom(isolate, scriptWrappable, wrapper);
-  WebGLRenderingContext* impl = scriptWrappable->toImpl<WebGLRenderingContext>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8WebGLRenderingContext::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    V8WebGLRenderingContext::visitDOMWrapperCustom(isolate, scriptWrappable, wrapper);
+    WebGLRenderingContext* impl = scriptWrappable->toImpl<WebGLRenderingContext>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8WebGLRenderingContextAccessors[] = {
-    {"canvas", WebGLRenderingContextV8Internal::canvasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"drawingBufferWidth", WebGLRenderingContextV8Internal::drawingBufferWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"drawingBufferHeight", WebGLRenderingContextV8Internal::drawingBufferHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "canvas", WebGLRenderingContextV8Internal::canvasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "drawingBufferWidth", WebGLRenderingContextV8Internal::drawingBufferWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "drawingBufferHeight", WebGLRenderingContextV8Internal::drawingBufferHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8WebGLRenderingContextMethods[] = {
-    {"activeTexture", WebGLRenderingContextV8Internal::activeTextureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"attachShader", WebGLRenderingContextV8Internal::attachShaderMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bindAttribLocation", WebGLRenderingContextV8Internal::bindAttribLocationMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bindBuffer", WebGLRenderingContextV8Internal::bindBufferMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bindFramebuffer", WebGLRenderingContextV8Internal::bindFramebufferMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bindRenderbuffer", WebGLRenderingContextV8Internal::bindRenderbufferMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bindTexture", WebGLRenderingContextV8Internal::bindTextureMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"blendColor", WebGLRenderingContextV8Internal::blendColorMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"blendEquation", WebGLRenderingContextV8Internal::blendEquationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"blendEquationSeparate", WebGLRenderingContextV8Internal::blendEquationSeparateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"blendFunc", WebGLRenderingContextV8Internal::blendFuncMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"blendFuncSeparate", WebGLRenderingContextV8Internal::blendFuncSeparateMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bufferData", WebGLRenderingContextV8Internal::bufferDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bufferSubData", WebGLRenderingContextV8Internal::bufferSubDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"checkFramebufferStatus", WebGLRenderingContextV8Internal::checkFramebufferStatusMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clear", WebGLRenderingContextV8Internal::clearMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearColor", WebGLRenderingContextV8Internal::clearColorMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearDepth", WebGLRenderingContextV8Internal::clearDepthMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearStencil", WebGLRenderingContextV8Internal::clearStencilMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"colorMask", WebGLRenderingContextV8Internal::colorMaskMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compileShader", WebGLRenderingContextV8Internal::compileShaderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compressedTexImage2D", WebGLRenderingContextV8Internal::compressedTexImage2DMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compressedTexSubImage2D", WebGLRenderingContextV8Internal::compressedTexSubImage2DMethodCallback, 0, 8, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"copyTexImage2D", WebGLRenderingContextV8Internal::copyTexImage2DMethodCallback, 0, 8, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"copyTexSubImage2D", WebGLRenderingContextV8Internal::copyTexSubImage2DMethodCallback, 0, 8, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createBuffer", WebGLRenderingContextV8Internal::createBufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createFramebuffer", WebGLRenderingContextV8Internal::createFramebufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createProgram", WebGLRenderingContextV8Internal::createProgramMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createRenderbuffer", WebGLRenderingContextV8Internal::createRenderbufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createShader", WebGLRenderingContextV8Internal::createShaderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createTexture", WebGLRenderingContextV8Internal::createTextureMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cullFace", WebGLRenderingContextV8Internal::cullFaceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteBuffer", WebGLRenderingContextV8Internal::deleteBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteFramebuffer", WebGLRenderingContextV8Internal::deleteFramebufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteProgram", WebGLRenderingContextV8Internal::deleteProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteRenderbuffer", WebGLRenderingContextV8Internal::deleteRenderbufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteShader", WebGLRenderingContextV8Internal::deleteShaderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteTexture", WebGLRenderingContextV8Internal::deleteTextureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"depthFunc", WebGLRenderingContextV8Internal::depthFuncMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"depthMask", WebGLRenderingContextV8Internal::depthMaskMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"depthRange", WebGLRenderingContextV8Internal::depthRangeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"detachShader", WebGLRenderingContextV8Internal::detachShaderMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disable", WebGLRenderingContextV8Internal::disableMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disableVertexAttribArray", WebGLRenderingContextV8Internal::disableVertexAttribArrayMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"drawArrays", WebGLRenderingContextV8Internal::drawArraysMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"drawElements", WebGLRenderingContextV8Internal::drawElementsMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"enable", WebGLRenderingContextV8Internal::enableMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"enableVertexAttribArray", WebGLRenderingContextV8Internal::enableVertexAttribArrayMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"finish", WebGLRenderingContextV8Internal::finishMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"flush", WebGLRenderingContextV8Internal::flushMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"framebufferRenderbuffer", WebGLRenderingContextV8Internal::framebufferRenderbufferMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"framebufferTexture2D", WebGLRenderingContextV8Internal::framebufferTexture2DMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"frontFace", WebGLRenderingContextV8Internal::frontFaceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"generateMipmap", WebGLRenderingContextV8Internal::generateMipmapMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getActiveAttrib", WebGLRenderingContextV8Internal::getActiveAttribMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getActiveUniform", WebGLRenderingContextV8Internal::getActiveUniformMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getAttachedShaders", WebGLRenderingContextV8Internal::getAttachedShadersMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getAttribLocation", WebGLRenderingContextV8Internal::getAttribLocationMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getBufferParameter", WebGLRenderingContextV8Internal::getBufferParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getContextAttributes", WebGLRenderingContextV8Internal::getContextAttributesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getError", WebGLRenderingContextV8Internal::getErrorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getExtension", WebGLRenderingContextV8Internal::getExtensionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getFramebufferAttachmentParameter", WebGLRenderingContextV8Internal::getFramebufferAttachmentParameterMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getParameter", WebGLRenderingContextV8Internal::getParameterMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getProgramParameter", WebGLRenderingContextV8Internal::getProgramParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getProgramInfoLog", WebGLRenderingContextV8Internal::getProgramInfoLogMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getRenderbufferParameter", WebGLRenderingContextV8Internal::getRenderbufferParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getShaderParameter", WebGLRenderingContextV8Internal::getShaderParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getShaderInfoLog", WebGLRenderingContextV8Internal::getShaderInfoLogMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getShaderPrecisionFormat", WebGLRenderingContextV8Internal::getShaderPrecisionFormatMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getShaderSource", WebGLRenderingContextV8Internal::getShaderSourceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getSupportedExtensions", WebGLRenderingContextV8Internal::getSupportedExtensionsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getTexParameter", WebGLRenderingContextV8Internal::getTexParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getUniform", WebGLRenderingContextV8Internal::getUniformMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getUniformLocation", WebGLRenderingContextV8Internal::getUniformLocationMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getVertexAttrib", WebGLRenderingContextV8Internal::getVertexAttribMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getVertexAttribOffset", WebGLRenderingContextV8Internal::getVertexAttribOffsetMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hint", WebGLRenderingContextV8Internal::hintMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isBuffer", WebGLRenderingContextV8Internal::isBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isContextLost", WebGLRenderingContextV8Internal::isContextLostMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isEnabled", WebGLRenderingContextV8Internal::isEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isFramebuffer", WebGLRenderingContextV8Internal::isFramebufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isProgram", WebGLRenderingContextV8Internal::isProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isRenderbuffer", WebGLRenderingContextV8Internal::isRenderbufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isShader", WebGLRenderingContextV8Internal::isShaderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTexture", WebGLRenderingContextV8Internal::isTextureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineWidth", WebGLRenderingContextV8Internal::lineWidthMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"linkProgram", WebGLRenderingContextV8Internal::linkProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pixelStorei", WebGLRenderingContextV8Internal::pixelStoreiMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"polygonOffset", WebGLRenderingContextV8Internal::polygonOffsetMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readPixels", WebGLRenderingContextV8Internal::readPixelsMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"renderbufferStorage", WebGLRenderingContextV8Internal::renderbufferStorageMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sampleCoverage", WebGLRenderingContextV8Internal::sampleCoverageMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scissor", WebGLRenderingContextV8Internal::scissorMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shaderSource", WebGLRenderingContextV8Internal::shaderSourceMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stencilFunc", WebGLRenderingContextV8Internal::stencilFuncMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stencilFuncSeparate", WebGLRenderingContextV8Internal::stencilFuncSeparateMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stencilMask", WebGLRenderingContextV8Internal::stencilMaskMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stencilMaskSeparate", WebGLRenderingContextV8Internal::stencilMaskSeparateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stencilOp", WebGLRenderingContextV8Internal::stencilOpMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stencilOpSeparate", WebGLRenderingContextV8Internal::stencilOpSeparateMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"texParameterf", WebGLRenderingContextV8Internal::texParameterfMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"texParameteri", WebGLRenderingContextV8Internal::texParameteriMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"texImage2D", WebGLRenderingContextV8Internal::texImage2DMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"texSubImage2D", WebGLRenderingContextV8Internal::texSubImage2DMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform1f", WebGLRenderingContextV8Internal::uniform1fMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform1fv", WebGLRenderingContextV8Internal::uniform1fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform1i", WebGLRenderingContextV8Internal::uniform1iMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform1iv", WebGLRenderingContextV8Internal::uniform1ivMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform2f", WebGLRenderingContextV8Internal::uniform2fMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform2fv", WebGLRenderingContextV8Internal::uniform2fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform2i", WebGLRenderingContextV8Internal::uniform2iMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform2iv", WebGLRenderingContextV8Internal::uniform2ivMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform3f", WebGLRenderingContextV8Internal::uniform3fMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform3fv", WebGLRenderingContextV8Internal::uniform3fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform3i", WebGLRenderingContextV8Internal::uniform3iMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform3iv", WebGLRenderingContextV8Internal::uniform3ivMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform4f", WebGLRenderingContextV8Internal::uniform4fMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform4fv", WebGLRenderingContextV8Internal::uniform4fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform4i", WebGLRenderingContextV8Internal::uniform4iMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniform4iv", WebGLRenderingContextV8Internal::uniform4ivMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniformMatrix2fv", WebGLRenderingContextV8Internal::uniformMatrix2fvMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniformMatrix3fv", WebGLRenderingContextV8Internal::uniformMatrix3fvMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"uniformMatrix4fv", WebGLRenderingContextV8Internal::uniformMatrix4fvMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"useProgram", WebGLRenderingContextV8Internal::useProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"validateProgram", WebGLRenderingContextV8Internal::validateProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttrib1f", WebGLRenderingContextV8Internal::vertexAttrib1fMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttrib1fv", WebGLRenderingContextV8Internal::vertexAttrib1fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttrib2f", WebGLRenderingContextV8Internal::vertexAttrib2fMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttrib2fv", WebGLRenderingContextV8Internal::vertexAttrib2fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttrib3f", WebGLRenderingContextV8Internal::vertexAttrib3fMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttrib3fv", WebGLRenderingContextV8Internal::vertexAttrib3fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttrib4f", WebGLRenderingContextV8Internal::vertexAttrib4fMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttrib4fv", WebGLRenderingContextV8Internal::vertexAttrib4fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttribPointer", WebGLRenderingContextV8Internal::vertexAttribPointerMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"viewport", WebGLRenderingContextV8Internal::viewportMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "activeTexture", WebGLRenderingContextV8Internal::activeTextureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "attachShader", WebGLRenderingContextV8Internal::attachShaderMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bindAttribLocation", WebGLRenderingContextV8Internal::bindAttribLocationMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bindBuffer", WebGLRenderingContextV8Internal::bindBufferMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bindFramebuffer", WebGLRenderingContextV8Internal::bindFramebufferMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bindRenderbuffer", WebGLRenderingContextV8Internal::bindRenderbufferMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bindTexture", WebGLRenderingContextV8Internal::bindTextureMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "blendColor", WebGLRenderingContextV8Internal::blendColorMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "blendEquation", WebGLRenderingContextV8Internal::blendEquationMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "blendEquationSeparate", WebGLRenderingContextV8Internal::blendEquationSeparateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "blendFunc", WebGLRenderingContextV8Internal::blendFuncMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "blendFuncSeparate", WebGLRenderingContextV8Internal::blendFuncSeparateMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bufferData", WebGLRenderingContextV8Internal::bufferDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bufferSubData", WebGLRenderingContextV8Internal::bufferSubDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "checkFramebufferStatus", WebGLRenderingContextV8Internal::checkFramebufferStatusMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clear", WebGLRenderingContextV8Internal::clearMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearColor", WebGLRenderingContextV8Internal::clearColorMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearDepth", WebGLRenderingContextV8Internal::clearDepthMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearStencil", WebGLRenderingContextV8Internal::clearStencilMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "colorMask", WebGLRenderingContextV8Internal::colorMaskMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compileShader", WebGLRenderingContextV8Internal::compileShaderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compressedTexImage2D", WebGLRenderingContextV8Internal::compressedTexImage2DMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compressedTexSubImage2D", WebGLRenderingContextV8Internal::compressedTexSubImage2DMethodCallback, 0, 8, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "copyTexImage2D", WebGLRenderingContextV8Internal::copyTexImage2DMethodCallback, 0, 8, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "copyTexSubImage2D", WebGLRenderingContextV8Internal::copyTexSubImage2DMethodCallback, 0, 8, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createBuffer", WebGLRenderingContextV8Internal::createBufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createFramebuffer", WebGLRenderingContextV8Internal::createFramebufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createProgram", WebGLRenderingContextV8Internal::createProgramMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createRenderbuffer", WebGLRenderingContextV8Internal::createRenderbufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createShader", WebGLRenderingContextV8Internal::createShaderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createTexture", WebGLRenderingContextV8Internal::createTextureMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cullFace", WebGLRenderingContextV8Internal::cullFaceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteBuffer", WebGLRenderingContextV8Internal::deleteBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteFramebuffer", WebGLRenderingContextV8Internal::deleteFramebufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteProgram", WebGLRenderingContextV8Internal::deleteProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteRenderbuffer", WebGLRenderingContextV8Internal::deleteRenderbufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteShader", WebGLRenderingContextV8Internal::deleteShaderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteTexture", WebGLRenderingContextV8Internal::deleteTextureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "depthFunc", WebGLRenderingContextV8Internal::depthFuncMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "depthMask", WebGLRenderingContextV8Internal::depthMaskMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "depthRange", WebGLRenderingContextV8Internal::depthRangeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "detachShader", WebGLRenderingContextV8Internal::detachShaderMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disable", WebGLRenderingContextV8Internal::disableMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disableVertexAttribArray", WebGLRenderingContextV8Internal::disableVertexAttribArrayMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "drawArrays", WebGLRenderingContextV8Internal::drawArraysMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "drawElements", WebGLRenderingContextV8Internal::drawElementsMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "enable", WebGLRenderingContextV8Internal::enableMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "enableVertexAttribArray", WebGLRenderingContextV8Internal::enableVertexAttribArrayMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "finish", WebGLRenderingContextV8Internal::finishMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "flush", WebGLRenderingContextV8Internal::flushMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "framebufferRenderbuffer", WebGLRenderingContextV8Internal::framebufferRenderbufferMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "framebufferTexture2D", WebGLRenderingContextV8Internal::framebufferTexture2DMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "frontFace", WebGLRenderingContextV8Internal::frontFaceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "generateMipmap", WebGLRenderingContextV8Internal::generateMipmapMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getActiveAttrib", WebGLRenderingContextV8Internal::getActiveAttribMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getActiveUniform", WebGLRenderingContextV8Internal::getActiveUniformMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getAttachedShaders", WebGLRenderingContextV8Internal::getAttachedShadersMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getAttribLocation", WebGLRenderingContextV8Internal::getAttribLocationMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getBufferParameter", WebGLRenderingContextV8Internal::getBufferParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getContextAttributes", WebGLRenderingContextV8Internal::getContextAttributesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getError", WebGLRenderingContextV8Internal::getErrorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getExtension", WebGLRenderingContextV8Internal::getExtensionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getFramebufferAttachmentParameter", WebGLRenderingContextV8Internal::getFramebufferAttachmentParameterMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getParameter", WebGLRenderingContextV8Internal::getParameterMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getProgramParameter", WebGLRenderingContextV8Internal::getProgramParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getProgramInfoLog", WebGLRenderingContextV8Internal::getProgramInfoLogMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getRenderbufferParameter", WebGLRenderingContextV8Internal::getRenderbufferParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getShaderParameter", WebGLRenderingContextV8Internal::getShaderParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getShaderInfoLog", WebGLRenderingContextV8Internal::getShaderInfoLogMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getShaderPrecisionFormat", WebGLRenderingContextV8Internal::getShaderPrecisionFormatMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getShaderSource", WebGLRenderingContextV8Internal::getShaderSourceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getSupportedExtensions", WebGLRenderingContextV8Internal::getSupportedExtensionsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getTexParameter", WebGLRenderingContextV8Internal::getTexParameterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getUniform", WebGLRenderingContextV8Internal::getUniformMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getUniformLocation", WebGLRenderingContextV8Internal::getUniformLocationMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getVertexAttrib", WebGLRenderingContextV8Internal::getVertexAttribMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getVertexAttribOffset", WebGLRenderingContextV8Internal::getVertexAttribOffsetMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hint", WebGLRenderingContextV8Internal::hintMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isBuffer", WebGLRenderingContextV8Internal::isBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isContextLost", WebGLRenderingContextV8Internal::isContextLostMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isEnabled", WebGLRenderingContextV8Internal::isEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isFramebuffer", WebGLRenderingContextV8Internal::isFramebufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isProgram", WebGLRenderingContextV8Internal::isProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isRenderbuffer", WebGLRenderingContextV8Internal::isRenderbufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isShader", WebGLRenderingContextV8Internal::isShaderMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTexture", WebGLRenderingContextV8Internal::isTextureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineWidth", WebGLRenderingContextV8Internal::lineWidthMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "linkProgram", WebGLRenderingContextV8Internal::linkProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pixelStorei", WebGLRenderingContextV8Internal::pixelStoreiMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "polygonOffset", WebGLRenderingContextV8Internal::polygonOffsetMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readPixels", WebGLRenderingContextV8Internal::readPixelsMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "renderbufferStorage", WebGLRenderingContextV8Internal::renderbufferStorageMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sampleCoverage", WebGLRenderingContextV8Internal::sampleCoverageMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scissor", WebGLRenderingContextV8Internal::scissorMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shaderSource", WebGLRenderingContextV8Internal::shaderSourceMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stencilFunc", WebGLRenderingContextV8Internal::stencilFuncMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stencilFuncSeparate", WebGLRenderingContextV8Internal::stencilFuncSeparateMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stencilMask", WebGLRenderingContextV8Internal::stencilMaskMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stencilMaskSeparate", WebGLRenderingContextV8Internal::stencilMaskSeparateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stencilOp", WebGLRenderingContextV8Internal::stencilOpMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stencilOpSeparate", WebGLRenderingContextV8Internal::stencilOpSeparateMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "texParameterf", WebGLRenderingContextV8Internal::texParameterfMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "texParameteri", WebGLRenderingContextV8Internal::texParameteriMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "texImage2D", WebGLRenderingContextV8Internal::texImage2DMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "texSubImage2D", WebGLRenderingContextV8Internal::texSubImage2DMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform1f", WebGLRenderingContextV8Internal::uniform1fMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform1fv", WebGLRenderingContextV8Internal::uniform1fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform1i", WebGLRenderingContextV8Internal::uniform1iMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform1iv", WebGLRenderingContextV8Internal::uniform1ivMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform2f", WebGLRenderingContextV8Internal::uniform2fMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform2fv", WebGLRenderingContextV8Internal::uniform2fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform2i", WebGLRenderingContextV8Internal::uniform2iMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform2iv", WebGLRenderingContextV8Internal::uniform2ivMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform3f", WebGLRenderingContextV8Internal::uniform3fMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform3fv", WebGLRenderingContextV8Internal::uniform3fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform3i", WebGLRenderingContextV8Internal::uniform3iMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform3iv", WebGLRenderingContextV8Internal::uniform3ivMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform4f", WebGLRenderingContextV8Internal::uniform4fMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform4fv", WebGLRenderingContextV8Internal::uniform4fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform4i", WebGLRenderingContextV8Internal::uniform4iMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniform4iv", WebGLRenderingContextV8Internal::uniform4ivMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniformMatrix2fv", WebGLRenderingContextV8Internal::uniformMatrix2fvMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniformMatrix3fv", WebGLRenderingContextV8Internal::uniformMatrix3fvMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "uniformMatrix4fv", WebGLRenderingContextV8Internal::uniformMatrix4fvMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "useProgram", WebGLRenderingContextV8Internal::useProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "validateProgram", WebGLRenderingContextV8Internal::validateProgramMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttrib1f", WebGLRenderingContextV8Internal::vertexAttrib1fMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttrib1fv", WebGLRenderingContextV8Internal::vertexAttrib1fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttrib2f", WebGLRenderingContextV8Internal::vertexAttrib2fMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttrib2fv", WebGLRenderingContextV8Internal::vertexAttrib2fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttrib3f", WebGLRenderingContextV8Internal::vertexAttrib3fMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttrib3fv", WebGLRenderingContextV8Internal::vertexAttrib3fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttrib4f", WebGLRenderingContextV8Internal::vertexAttrib4fMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttrib4fv", WebGLRenderingContextV8Internal::vertexAttrib4fvMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttribPointer", WebGLRenderingContextV8Internal::vertexAttribPointerMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "viewport", WebGLRenderingContextV8Internal::viewportMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8WebGLRenderingContextTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLRenderingContext::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLRenderingContext::internalFieldCount);
+static void installV8WebGLRenderingContextTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLRenderingContext::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLRenderingContext::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8WebGLRenderingContextConstants[] = {
-      {"DEPTH_BUFFER_BIT", 0x00000100, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_BUFFER_BIT", 0x00000400, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_BUFFER_BIT", 0x00004000, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"POINTS", 0x0000, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LINES", 0x0001, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LINE_LOOP", 0x0002, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LINE_STRIP", 0x0003, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TRIANGLES", 0x0004, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TRIANGLE_STRIP", 0x0005, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TRIANGLE_FAN", 0x0006, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ZERO", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ONE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SRC_COLOR", 0x0300, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ONE_MINUS_SRC_COLOR", 0x0301, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SRC_ALPHA", 0x0302, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ONE_MINUS_SRC_ALPHA", 0x0303, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DST_ALPHA", 0x0304, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ONE_MINUS_DST_ALPHA", 0x0305, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DST_COLOR", 0x0306, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ONE_MINUS_DST_COLOR", 0x0307, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SRC_ALPHA_SATURATE", 0x0308, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FUNC_ADD", 0x8006, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLEND_EQUATION", 0x8009, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLEND_EQUATION_RGB", 0x8009, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLEND_EQUATION_ALPHA", 0x883D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FUNC_SUBTRACT", 0x800A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FUNC_REVERSE_SUBTRACT", 0x800B, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLEND_DST_RGB", 0x80C8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLEND_SRC_RGB", 0x80C9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLEND_DST_ALPHA", 0x80CA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLEND_SRC_ALPHA", 0x80CB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CONSTANT_COLOR", 0x8001, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ONE_MINUS_CONSTANT_COLOR", 0x8002, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CONSTANT_ALPHA", 0x8003, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ONE_MINUS_CONSTANT_ALPHA", 0x8004, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLEND_COLOR", 0x8005, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ARRAY_BUFFER", 0x8892, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ELEMENT_ARRAY_BUFFER", 0x8893, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ARRAY_BUFFER_BINDING", 0x8894, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ELEMENT_ARRAY_BUFFER_BINDING", 0x8895, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STREAM_DRAW", 0x88E0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STATIC_DRAW", 0x88E4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DYNAMIC_DRAW", 0x88E8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BUFFER_SIZE", 0x8764, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BUFFER_USAGE", 0x8765, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CURRENT_VERTEX_ATTRIB", 0x8626, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRONT", 0x0404, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BACK", 0x0405, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRONT_AND_BACK", 0x0408, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_2D", 0x0DE1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CULL_FACE", 0x0B44, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLEND", 0x0BE2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DITHER", 0x0BD0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_TEST", 0x0B90, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_TEST", 0x0B71, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SCISSOR_TEST", 0x0C11, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"POLYGON_OFFSET_FILL", 0x8037, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SAMPLE_ALPHA_TO_COVERAGE", 0x809E, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SAMPLE_COVERAGE", 0x80A0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"NO_ERROR", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INVALID_ENUM", 0x0500, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INVALID_VALUE", 0x0501, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INVALID_OPERATION", 0x0502, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"OUT_OF_MEMORY", 0x0505, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CW", 0x0900, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CCW", 0x0901, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LINE_WIDTH", 0x0B21, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ALIASED_POINT_SIZE_RANGE", 0x846D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ALIASED_LINE_WIDTH_RANGE", 0x846E, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CULL_FACE_MODE", 0x0B45, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRONT_FACE", 0x0B46, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_RANGE", 0x0B70, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_WRITEMASK", 0x0B72, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_CLEAR_VALUE", 0x0B73, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_FUNC", 0x0B74, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_CLEAR_VALUE", 0x0B91, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_FUNC", 0x0B92, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_FAIL", 0x0B94, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_PASS_DEPTH_FAIL", 0x0B95, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_PASS_DEPTH_PASS", 0x0B96, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_REF", 0x0B97, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_VALUE_MASK", 0x0B93, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_WRITEMASK", 0x0B98, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_BACK_FUNC", 0x8800, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_BACK_FAIL", 0x8801, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_BACK_PASS_DEPTH_FAIL", 0x8802, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_BACK_PASS_DEPTH_PASS", 0x8803, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_BACK_REF", 0x8CA3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_BACK_VALUE_MASK", 0x8CA4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_BACK_WRITEMASK", 0x8CA5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VIEWPORT", 0x0BA2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SCISSOR_BOX", 0x0C10, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_CLEAR_VALUE", 0x0C22, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_WRITEMASK", 0x0C23, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNPACK_ALIGNMENT", 0x0CF5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"PACK_ALIGNMENT", 0x0D05, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_TEXTURE_SIZE", 0x0D33, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_VIEWPORT_DIMS", 0x0D3A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SUBPIXEL_BITS", 0x0D50, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RED_BITS", 0x0D52, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"GREEN_BITS", 0x0D53, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BLUE_BITS", 0x0D54, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ALPHA_BITS", 0x0D55, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_BITS", 0x0D56, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_BITS", 0x0D57, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"POLYGON_OFFSET_UNITS", 0x2A00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"POLYGON_OFFSET_FACTOR", 0x8038, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_BINDING_2D", 0x8069, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SAMPLE_BUFFERS", 0x80A8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SAMPLES", 0x80A9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SAMPLE_COVERAGE_VALUE", 0x80AA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SAMPLE_COVERAGE_INVERT", 0x80AB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_TEXTURE_FORMATS", 0x86A3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DONT_CARE", 0x1100, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FASTEST", 0x1101, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"NICEST", 0x1102, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"GENERATE_MIPMAP_HINT", 0x8192, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BYTE", 0x1400, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNSIGNED_BYTE", 0x1401, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHORT", 0x1402, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNSIGNED_SHORT", 0x1403, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INT", 0x1404, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNSIGNED_INT", 0x1405, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FLOAT", 0x1406, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_COMPONENT", 0x1902, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ALPHA", 0x1906, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RGB", 0x1907, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RGBA", 0x1908, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LUMINANCE", 0x1909, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LUMINANCE_ALPHA", 0x190A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNSIGNED_SHORT_4_4_4_4", 0x8033, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNSIGNED_SHORT_5_5_5_1", 0x8034, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNSIGNED_SHORT_5_6_5", 0x8363, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAGMENT_SHADER", 0x8B30, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VERTEX_SHADER", 0x8B31, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_VERTEX_ATTRIBS", 0x8869, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_VERTEX_UNIFORM_VECTORS", 0x8DFB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_VARYING_VECTORS", 0x8DFC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_COMBINED_TEXTURE_IMAGE_UNITS", 0x8B4D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_VERTEX_TEXTURE_IMAGE_UNITS", 0x8B4C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_TEXTURE_IMAGE_UNITS", 0x8872, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_FRAGMENT_UNIFORM_VECTORS", 0x8DFD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHADER_TYPE", 0x8B4F, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DELETE_STATUS", 0x8B80, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LINK_STATUS", 0x8B82, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VALIDATE_STATUS", 0x8B83, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ATTACHED_SHADERS", 0x8B85, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ACTIVE_UNIFORMS", 0x8B86, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ACTIVE_ATTRIBUTES", 0x8B89, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SHADING_LANGUAGE_VERSION", 0x8B8C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CURRENT_PROGRAM", 0x8B8D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"NEVER", 0x0200, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LESS", 0x0201, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"EQUAL", 0x0202, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LEQUAL", 0x0203, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"GREATER", 0x0204, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"NOTEQUAL", 0x0205, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"GEQUAL", 0x0206, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ALWAYS", 0x0207, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"KEEP", 0x1E00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"REPLACE", 0x1E01, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INCR", 0x1E02, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DECR", 0x1E03, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INVERT", 0x150A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INCR_WRAP", 0x8507, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DECR_WRAP", 0x8508, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VENDOR", 0x1F00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERER", 0x1F01, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VERSION", 0x1F02, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"NEAREST", 0x2600, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LINEAR", 0x2601, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"NEAREST_MIPMAP_NEAREST", 0x2700, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LINEAR_MIPMAP_NEAREST", 0x2701, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"NEAREST_MIPMAP_LINEAR", 0x2702, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LINEAR_MIPMAP_LINEAR", 0x2703, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_MAG_FILTER", 0x2800, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_MIN_FILTER", 0x2801, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_WRAP_S", 0x2802, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_WRAP_T", 0x2803, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE", 0x1702, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_CUBE_MAP", 0x8513, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_BINDING_CUBE_MAP", 0x8514, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_CUBE_MAP_POSITIVE_X", 0x8515, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_CUBE_MAP_NEGATIVE_X", 0x8516, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_CUBE_MAP_POSITIVE_Y", 0x8517, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_CUBE_MAP_NEGATIVE_Y", 0x8518, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_CUBE_MAP_POSITIVE_Z", 0x8519, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE_CUBE_MAP_NEGATIVE_Z", 0x851A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_CUBE_MAP_TEXTURE_SIZE", 0x851C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE0", 0x84C0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE1", 0x84C1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE2", 0x84C2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE3", 0x84C3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE4", 0x84C4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE5", 0x84C5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE6", 0x84C6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE7", 0x84C7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE8", 0x84C8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE9", 0x84C9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE10", 0x84CA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE11", 0x84CB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE12", 0x84CC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE13", 0x84CD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE14", 0x84CE, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE15", 0x84CF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE16", 0x84D0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE17", 0x84D1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE18", 0x84D2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE19", 0x84D3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE20", 0x84D4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE21", 0x84D5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE22", 0x84D6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE23", 0x84D7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE24", 0x84D8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE25", 0x84D9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE26", 0x84DA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE27", 0x84DB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE28", 0x84DC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE29", 0x84DD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE30", 0x84DE, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TEXTURE31", 0x84DF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"ACTIVE_TEXTURE", 0x84E0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"REPEAT", 0x2901, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CLAMP_TO_EDGE", 0x812F, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MIRRORED_REPEAT", 0x8370, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FLOAT_VEC2", 0x8B50, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FLOAT_VEC3", 0x8B51, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FLOAT_VEC4", 0x8B52, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INT_VEC2", 0x8B53, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INT_VEC3", 0x8B54, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INT_VEC4", 0x8B55, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BOOL", 0x8B56, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BOOL_VEC2", 0x8B57, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BOOL_VEC3", 0x8B58, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BOOL_VEC4", 0x8B59, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FLOAT_MAT2", 0x8B5A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FLOAT_MAT3", 0x8B5B, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FLOAT_MAT4", 0x8B5C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SAMPLER_2D", 0x8B5E, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SAMPLER_CUBE", 0x8B60, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VERTEX_ATTRIB_ARRAY_ENABLED", 0x8622, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VERTEX_ATTRIB_ARRAY_SIZE", 0x8623, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VERTEX_ATTRIB_ARRAY_STRIDE", 0x8624, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VERTEX_ATTRIB_ARRAY_TYPE", 0x8625, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VERTEX_ATTRIB_ARRAY_NORMALIZED", 0x886A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VERTEX_ATTRIB_ARRAY_POINTER", 0x8645, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"VERTEX_ATTRIB_ARRAY_BUFFER_BINDING", 0x889F, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"IMPLEMENTATION_COLOR_READ_TYPE", 0x8B9A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"IMPLEMENTATION_COLOR_READ_FORMAT", 0x8B9B, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPILE_STATUS", 0x8B81, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LOW_FLOAT", 0x8DF0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MEDIUM_FLOAT", 0x8DF1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"HIGH_FLOAT", 0x8DF2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"LOW_INT", 0x8DF3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MEDIUM_INT", 0x8DF4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"HIGH_INT", 0x8DF5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER", 0x8D40, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER", 0x8D41, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RGBA4", 0x8056, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RGB5_A1", 0x8057, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RGB565", 0x8D62, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_COMPONENT16", 0x81A5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_INDEX", 0x1901, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_INDEX8", 0x8D48, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_STENCIL", 0x84F9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_WIDTH", 0x8D42, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_HEIGHT", 0x8D43, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_INTERNAL_FORMAT", 0x8D44, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_RED_SIZE", 0x8D50, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_GREEN_SIZE", 0x8D51, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_BLUE_SIZE", 0x8D52, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_ALPHA_SIZE", 0x8D53, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_DEPTH_SIZE", 0x8D54, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_STENCIL_SIZE", 0x8D55, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE", 0x8CD0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_ATTACHMENT_OBJECT_NAME", 0x8CD1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL", 0x8CD2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE", 0x8CD3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COLOR_ATTACHMENT0", 0x8CE0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_ATTACHMENT", 0x8D00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"STENCIL_ATTACHMENT", 0x8D20, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"DEPTH_STENCIL_ATTACHMENT", 0x821A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"NONE", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_COMPLETE", 0x8CD5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_INCOMPLETE_ATTACHMENT", 0x8CD6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT", 0x8CD7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_INCOMPLETE_DIMENSIONS", 0x8CD9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_UNSUPPORTED", 0x8CDD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_BINDING", 0x8CA6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"RENDERBUFFER_BINDING", 0x8CA7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"MAX_RENDERBUFFER_SIZE", 0x84E8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"INVALID_FRAMEBUFFER_OPERATION", 0x0506, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNPACK_FLIP_Y_WEBGL", 0x9240, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNPACK_PREMULTIPLY_ALPHA_WEBGL", 0x9241, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CONTEXT_LOST_WEBGL", 0x9242, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"UNPACK_COLORSPACE_CONVERSION_WEBGL", 0x9243, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"BROWSER_DEFAULT_WEBGL", 0x9244, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebGLRenderingContextConstants, WTF_ARRAY_LENGTH(V8WebGLRenderingContextConstants));
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLRenderingContextAccessors, WTF_ARRAY_LENGTH(V8WebGLRenderingContextAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLRenderingContextMethods, WTF_ARRAY_LENGTH(V8WebGLRenderingContextMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8WebGLRenderingContextConstants[] = {
+        { "DEPTH_BUFFER_BIT", 0x00000100, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_BUFFER_BIT", 0x00000400, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_BUFFER_BIT", 0x00004000, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "POINTS", 0x0000, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LINES", 0x0001, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LINE_LOOP", 0x0002, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LINE_STRIP", 0x0003, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TRIANGLES", 0x0004, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TRIANGLE_STRIP", 0x0005, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TRIANGLE_FAN", 0x0006, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ZERO", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ONE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SRC_COLOR", 0x0300, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ONE_MINUS_SRC_COLOR", 0x0301, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SRC_ALPHA", 0x0302, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ONE_MINUS_SRC_ALPHA", 0x0303, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DST_ALPHA", 0x0304, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ONE_MINUS_DST_ALPHA", 0x0305, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DST_COLOR", 0x0306, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ONE_MINUS_DST_COLOR", 0x0307, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SRC_ALPHA_SATURATE", 0x0308, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FUNC_ADD", 0x8006, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLEND_EQUATION", 0x8009, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLEND_EQUATION_RGB", 0x8009, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLEND_EQUATION_ALPHA", 0x883D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FUNC_SUBTRACT", 0x800A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FUNC_REVERSE_SUBTRACT", 0x800B, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLEND_DST_RGB", 0x80C8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLEND_SRC_RGB", 0x80C9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLEND_DST_ALPHA", 0x80CA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLEND_SRC_ALPHA", 0x80CB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CONSTANT_COLOR", 0x8001, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ONE_MINUS_CONSTANT_COLOR", 0x8002, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CONSTANT_ALPHA", 0x8003, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ONE_MINUS_CONSTANT_ALPHA", 0x8004, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLEND_COLOR", 0x8005, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ARRAY_BUFFER", 0x8892, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ELEMENT_ARRAY_BUFFER", 0x8893, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ARRAY_BUFFER_BINDING", 0x8894, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ELEMENT_ARRAY_BUFFER_BINDING", 0x8895, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STREAM_DRAW", 0x88E0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STATIC_DRAW", 0x88E4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DYNAMIC_DRAW", 0x88E8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BUFFER_SIZE", 0x8764, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BUFFER_USAGE", 0x8765, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CURRENT_VERTEX_ATTRIB", 0x8626, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRONT", 0x0404, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BACK", 0x0405, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRONT_AND_BACK", 0x0408, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_2D", 0x0DE1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CULL_FACE", 0x0B44, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLEND", 0x0BE2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DITHER", 0x0BD0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_TEST", 0x0B90, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_TEST", 0x0B71, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SCISSOR_TEST", 0x0C11, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "POLYGON_OFFSET_FILL", 0x8037, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SAMPLE_ALPHA_TO_COVERAGE", 0x809E, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SAMPLE_COVERAGE", 0x80A0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "NO_ERROR", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INVALID_ENUM", 0x0500, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INVALID_VALUE", 0x0501, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INVALID_OPERATION", 0x0502, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "OUT_OF_MEMORY", 0x0505, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CW", 0x0900, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CCW", 0x0901, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LINE_WIDTH", 0x0B21, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ALIASED_POINT_SIZE_RANGE", 0x846D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ALIASED_LINE_WIDTH_RANGE", 0x846E, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CULL_FACE_MODE", 0x0B45, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRONT_FACE", 0x0B46, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_RANGE", 0x0B70, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_WRITEMASK", 0x0B72, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_CLEAR_VALUE", 0x0B73, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_FUNC", 0x0B74, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_CLEAR_VALUE", 0x0B91, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_FUNC", 0x0B92, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_FAIL", 0x0B94, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_PASS_DEPTH_FAIL", 0x0B95, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_PASS_DEPTH_PASS", 0x0B96, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_REF", 0x0B97, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_VALUE_MASK", 0x0B93, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_WRITEMASK", 0x0B98, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_BACK_FUNC", 0x8800, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_BACK_FAIL", 0x8801, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_BACK_PASS_DEPTH_FAIL", 0x8802, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_BACK_PASS_DEPTH_PASS", 0x8803, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_BACK_REF", 0x8CA3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_BACK_VALUE_MASK", 0x8CA4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_BACK_WRITEMASK", 0x8CA5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VIEWPORT", 0x0BA2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SCISSOR_BOX", 0x0C10, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_CLEAR_VALUE", 0x0C22, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_WRITEMASK", 0x0C23, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNPACK_ALIGNMENT", 0x0CF5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "PACK_ALIGNMENT", 0x0D05, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_TEXTURE_SIZE", 0x0D33, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_VIEWPORT_DIMS", 0x0D3A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SUBPIXEL_BITS", 0x0D50, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RED_BITS", 0x0D52, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "GREEN_BITS", 0x0D53, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BLUE_BITS", 0x0D54, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ALPHA_BITS", 0x0D55, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_BITS", 0x0D56, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_BITS", 0x0D57, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "POLYGON_OFFSET_UNITS", 0x2A00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "POLYGON_OFFSET_FACTOR", 0x8038, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_BINDING_2D", 0x8069, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SAMPLE_BUFFERS", 0x80A8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SAMPLES", 0x80A9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SAMPLE_COVERAGE_VALUE", 0x80AA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SAMPLE_COVERAGE_INVERT", 0x80AB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_TEXTURE_FORMATS", 0x86A3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DONT_CARE", 0x1100, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FASTEST", 0x1101, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "NICEST", 0x1102, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "GENERATE_MIPMAP_HINT", 0x8192, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BYTE", 0x1400, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNSIGNED_BYTE", 0x1401, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHORT", 0x1402, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNSIGNED_SHORT", 0x1403, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INT", 0x1404, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNSIGNED_INT", 0x1405, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FLOAT", 0x1406, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_COMPONENT", 0x1902, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ALPHA", 0x1906, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RGB", 0x1907, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RGBA", 0x1908, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LUMINANCE", 0x1909, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LUMINANCE_ALPHA", 0x190A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNSIGNED_SHORT_4_4_4_4", 0x8033, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNSIGNED_SHORT_5_5_5_1", 0x8034, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNSIGNED_SHORT_5_6_5", 0x8363, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAGMENT_SHADER", 0x8B30, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VERTEX_SHADER", 0x8B31, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_VERTEX_ATTRIBS", 0x8869, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_VERTEX_UNIFORM_VECTORS", 0x8DFB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_VARYING_VECTORS", 0x8DFC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_COMBINED_TEXTURE_IMAGE_UNITS", 0x8B4D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_VERTEX_TEXTURE_IMAGE_UNITS", 0x8B4C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_TEXTURE_IMAGE_UNITS", 0x8872, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_FRAGMENT_UNIFORM_VECTORS", 0x8DFD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHADER_TYPE", 0x8B4F, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DELETE_STATUS", 0x8B80, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LINK_STATUS", 0x8B82, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VALIDATE_STATUS", 0x8B83, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ATTACHED_SHADERS", 0x8B85, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ACTIVE_UNIFORMS", 0x8B86, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ACTIVE_ATTRIBUTES", 0x8B89, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SHADING_LANGUAGE_VERSION", 0x8B8C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CURRENT_PROGRAM", 0x8B8D, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "NEVER", 0x0200, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LESS", 0x0201, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "EQUAL", 0x0202, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LEQUAL", 0x0203, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "GREATER", 0x0204, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "NOTEQUAL", 0x0205, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "GEQUAL", 0x0206, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ALWAYS", 0x0207, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "KEEP", 0x1E00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "REPLACE", 0x1E01, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INCR", 0x1E02, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DECR", 0x1E03, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INVERT", 0x150A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INCR_WRAP", 0x8507, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DECR_WRAP", 0x8508, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VENDOR", 0x1F00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERER", 0x1F01, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VERSION", 0x1F02, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "NEAREST", 0x2600, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LINEAR", 0x2601, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "NEAREST_MIPMAP_NEAREST", 0x2700, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LINEAR_MIPMAP_NEAREST", 0x2701, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "NEAREST_MIPMAP_LINEAR", 0x2702, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LINEAR_MIPMAP_LINEAR", 0x2703, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_MAG_FILTER", 0x2800, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_MIN_FILTER", 0x2801, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_WRAP_S", 0x2802, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_WRAP_T", 0x2803, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE", 0x1702, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_CUBE_MAP", 0x8513, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_BINDING_CUBE_MAP", 0x8514, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_CUBE_MAP_POSITIVE_X", 0x8515, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_CUBE_MAP_NEGATIVE_X", 0x8516, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_CUBE_MAP_POSITIVE_Y", 0x8517, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_CUBE_MAP_NEGATIVE_Y", 0x8518, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_CUBE_MAP_POSITIVE_Z", 0x8519, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE_CUBE_MAP_NEGATIVE_Z", 0x851A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_CUBE_MAP_TEXTURE_SIZE", 0x851C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE0", 0x84C0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE1", 0x84C1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE2", 0x84C2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE3", 0x84C3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE4", 0x84C4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE5", 0x84C5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE6", 0x84C6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE7", 0x84C7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE8", 0x84C8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE9", 0x84C9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE10", 0x84CA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE11", 0x84CB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE12", 0x84CC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE13", 0x84CD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE14", 0x84CE, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE15", 0x84CF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE16", 0x84D0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE17", 0x84D1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE18", 0x84D2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE19", 0x84D3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE20", 0x84D4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE21", 0x84D5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE22", 0x84D6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE23", 0x84D7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE24", 0x84D8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE25", 0x84D9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE26", 0x84DA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE27", 0x84DB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE28", 0x84DC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE29", 0x84DD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE30", 0x84DE, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TEXTURE31", 0x84DF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "ACTIVE_TEXTURE", 0x84E0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "REPEAT", 0x2901, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CLAMP_TO_EDGE", 0x812F, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MIRRORED_REPEAT", 0x8370, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FLOAT_VEC2", 0x8B50, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FLOAT_VEC3", 0x8B51, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FLOAT_VEC4", 0x8B52, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INT_VEC2", 0x8B53, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INT_VEC3", 0x8B54, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INT_VEC4", 0x8B55, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BOOL", 0x8B56, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BOOL_VEC2", 0x8B57, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BOOL_VEC3", 0x8B58, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BOOL_VEC4", 0x8B59, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FLOAT_MAT2", 0x8B5A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FLOAT_MAT3", 0x8B5B, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FLOAT_MAT4", 0x8B5C, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SAMPLER_2D", 0x8B5E, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SAMPLER_CUBE", 0x8B60, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VERTEX_ATTRIB_ARRAY_ENABLED", 0x8622, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VERTEX_ATTRIB_ARRAY_SIZE", 0x8623, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VERTEX_ATTRIB_ARRAY_STRIDE", 0x8624, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VERTEX_ATTRIB_ARRAY_TYPE", 0x8625, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VERTEX_ATTRIB_ARRAY_NORMALIZED", 0x886A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VERTEX_ATTRIB_ARRAY_POINTER", 0x8645, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "VERTEX_ATTRIB_ARRAY_BUFFER_BINDING", 0x889F, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "IMPLEMENTATION_COLOR_READ_TYPE", 0x8B9A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "IMPLEMENTATION_COLOR_READ_FORMAT", 0x8B9B, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPILE_STATUS", 0x8B81, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LOW_FLOAT", 0x8DF0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MEDIUM_FLOAT", 0x8DF1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "HIGH_FLOAT", 0x8DF2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "LOW_INT", 0x8DF3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MEDIUM_INT", 0x8DF4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "HIGH_INT", 0x8DF5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER", 0x8D40, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER", 0x8D41, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RGBA4", 0x8056, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RGB5_A1", 0x8057, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RGB565", 0x8D62, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_COMPONENT16", 0x81A5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_INDEX", 0x1901, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_INDEX8", 0x8D48, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_STENCIL", 0x84F9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_WIDTH", 0x8D42, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_HEIGHT", 0x8D43, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_INTERNAL_FORMAT", 0x8D44, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_RED_SIZE", 0x8D50, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_GREEN_SIZE", 0x8D51, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_BLUE_SIZE", 0x8D52, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_ALPHA_SIZE", 0x8D53, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_DEPTH_SIZE", 0x8D54, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_STENCIL_SIZE", 0x8D55, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE", 0x8CD0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_ATTACHMENT_OBJECT_NAME", 0x8CD1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL", 0x8CD2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE", 0x8CD3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COLOR_ATTACHMENT0", 0x8CE0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_ATTACHMENT", 0x8D00, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "STENCIL_ATTACHMENT", 0x8D20, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "DEPTH_STENCIL_ATTACHMENT", 0x821A, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "NONE", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_COMPLETE", 0x8CD5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_INCOMPLETE_ATTACHMENT", 0x8CD6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT", 0x8CD7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_INCOMPLETE_DIMENSIONS", 0x8CD9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_UNSUPPORTED", 0x8CDD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_BINDING", 0x8CA6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "RENDERBUFFER_BINDING", 0x8CA7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "MAX_RENDERBUFFER_SIZE", 0x84E8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "INVALID_FRAMEBUFFER_OPERATION", 0x0506, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNPACK_FLIP_Y_WEBGL", 0x9240, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNPACK_PREMULTIPLY_ALPHA_WEBGL", 0x9241, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CONTEXT_LOST_WEBGL", 0x9242, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "UNPACK_COLORSPACE_CONVERSION_WEBGL", 0x9243, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "BROWSER_DEFAULT_WEBGL", 0x9244, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebGLRenderingContextConstants, WTF_ARRAY_LENGTH(V8WebGLRenderingContextConstants));
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLRenderingContextAccessors, WTF_ARRAY_LENGTH(V8WebGLRenderingContextAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLRenderingContextMethods, WTF_ARRAY_LENGTH(V8WebGLRenderingContextMethods));
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration commitMethodConfiguration = {"commit", WebGLRenderingContextV8Internal::commitMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, commitMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration commitMethodConfiguration = { "commit", WebGLRenderingContextV8Internal::commitMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, commitMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8WebGLRenderingContext::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLRenderingContextTemplate);
+v8::Local<v8::FunctionTemplate> V8WebGLRenderingContext::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLRenderingContextTemplate);
 }
 
-bool V8WebGLRenderingContext::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WebGLRenderingContext::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WebGLRenderingContext::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WebGLRenderingContext::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WebGLRenderingContext* V8WebGLRenderingContext::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WebGLRenderingContext* V8WebGLRenderingContext::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

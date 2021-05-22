@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ScrollStateInit_h
 #define V8ScrollStateInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ScrollStateInit {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ScrollStateInit&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ScrollStateInit&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8ScrollStateInit(const ScrollStateInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ScrollStateInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ScrollStateInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ScrollStateInit> {
-  static ScrollStateInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ScrollStateInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ScrollStateInit> {
-  typedef V8ScrollStateInit Type;
+    typedef V8ScrollStateInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ScrollStateInit_h
+#endif // V8ScrollStateInit_h

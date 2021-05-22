@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FileReaderSync.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,219 +50,234 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&FileReaderSync::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "FileReaderSync is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace FileReaderSyncV8Internal {
 
-static void readAsArrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReaderSync", "readAsArrayBuffer");
+    static void readAsArrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReaderSync", "readAsArrayBuffer");
 
-  FileReaderSync* impl = V8FileReaderSync::toImpl(info.Holder());
+        FileReaderSync* impl = V8FileReaderSync::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Blob* blob;
-  blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!blob) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+        Blob* blob;
+        blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!blob) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
 
-    return;
-  }
+            return;
+        }
 
-  DOMArrayBuffer* result = impl->readAsArrayBuffer(scriptState, blob, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void readAsArrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderSyncV8Internal::readAsArrayBufferMethod(info);
-}
-
-static void readAsBinaryStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReaderSync", "readAsBinaryString");
-
-  FileReaderSync* impl = V8FileReaderSync::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Blob* blob;
-  blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!blob) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
-
-    return;
-  }
-
-  String result = impl->readAsBinaryString(scriptState, blob, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
-CORE_EXPORT  void readAsBinaryStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderSyncV8Internal::readAsBinaryStringMethod(info);
-}
-
-static void readAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReaderSync", "readAsText");
-
-  FileReaderSync* impl = V8FileReaderSync::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Blob* blob;
-  V8StringResource<> label;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!blob) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
-
-    return;
-  }
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    String result = impl->readAsText(scriptState, blob, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        DOMArrayBuffer* result = impl->readAsArrayBuffer(scriptState, blob, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
     }
-    v8SetReturnValueString(info, result, info.GetIsolate());
-    return;
-  }
-  label = info[1];
-  if (!label.prepare())
-    return;
 
-  String result = impl->readAsText(scriptState, blob, label, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
+    CORE_EXPORT void readAsArrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderSyncV8Internal::readAsArrayBufferMethod(info);
+    }
 
-CORE_EXPORT  void readAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderSyncV8Internal::readAsTextMethod(info);
-}
+    static void readAsBinaryStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReaderSync", "readAsBinaryString");
 
-static void readAsDataURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReaderSync", "readAsDataURL");
+        FileReaderSync* impl = V8FileReaderSync::toImpl(info.Holder());
 
-  FileReaderSync* impl = V8FileReaderSync::toImpl(info.Holder());
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        Blob* blob;
+        blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!blob) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
 
-  Blob* blob;
-  blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!blob) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+            return;
+        }
 
-    return;
-  }
+        String result = impl->readAsBinaryString(scriptState, blob, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
 
-  String result = impl->readAsDataURL(scriptState, blob, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
+    CORE_EXPORT void readAsBinaryStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderSyncV8Internal::readAsBinaryStringMethod(info);
+    }
 
-CORE_EXPORT  void readAsDataURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderSyncV8Internal::readAsDataURLMethod(info);
-}
+    static void readAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReaderSync", "readAsText");
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  FileReaderSync* impl = FileReaderSync::create(executionContext);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8FileReaderSync::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        FileReaderSync* impl = V8FileReaderSync::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Blob* blob;
+        V8StringResource<> label;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!blob) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+
+            return;
+        }
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            String result = impl->readAsText(scriptState, blob, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValueString(info, result, info.GetIsolate());
+            return;
+        }
+        label = info[1];
+        if (!label.prepare())
+            return;
+
+        String result = impl->readAsText(scriptState, blob, label, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    CORE_EXPORT void readAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderSyncV8Internal::readAsTextMethod(info);
+    }
+
+    static void readAsDataURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReaderSync", "readAsDataURL");
+
+        FileReaderSync* impl = V8FileReaderSync::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Blob* blob;
+        blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!blob) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+
+            return;
+        }
+
+        String result = impl->readAsDataURL(scriptState, blob, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    CORE_EXPORT void readAsDataURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderSyncV8Internal::readAsDataURLMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        FileReaderSync* impl = FileReaderSync::create(executionContext);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8FileReaderSync::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace FileReaderSyncV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8FileReaderSyncMethods[] = {
-    {"readAsArrayBuffer", FileReaderSyncV8Internal::readAsArrayBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readAsBinaryString", FileReaderSyncV8Internal::readAsBinaryStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readAsText", FileReaderSyncV8Internal::readAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readAsDataURL", FileReaderSyncV8Internal::readAsDataURLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "readAsArrayBuffer", FileReaderSyncV8Internal::readAsArrayBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readAsBinaryString", FileReaderSyncV8Internal::readAsBinaryStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readAsText", FileReaderSyncV8Internal::readAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readAsDataURL", FileReaderSyncV8Internal::readAsDataURLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8FileReaderSync::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8FileReaderSync_Constructor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("FileReaderSync"));
-    return;
-  }
+void V8FileReaderSync::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8FileReaderSync_Constructor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("FileReaderSync"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  FileReaderSyncV8Internal::constructor(info);
+    FileReaderSyncV8Internal::constructor(info);
 }
 
-static void installV8FileReaderSyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileReaderSync::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8FileReaderSync::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8FileReaderSync::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8FileReaderSyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileReaderSync::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8FileReaderSync::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8FileReaderSync::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileReaderSyncMethods, WTF_ARRAY_LENGTH(V8FileReaderSyncMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileReaderSyncMethods, WTF_ARRAY_LENGTH(V8FileReaderSyncMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8FileReaderSync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileReaderSyncTemplate);
+v8::Local<v8::FunctionTemplate> V8FileReaderSync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileReaderSyncTemplate);
 }
 
-bool V8FileReaderSync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8FileReaderSync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8FileReaderSync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8FileReaderSync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-FileReaderSync* V8FileReaderSync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+FileReaderSync* V8FileReaderSync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

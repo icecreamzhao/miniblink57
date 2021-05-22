@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8BasicCardRequest_h
 #define V8BasicCardRequest_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8BasicCardRequest {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, BasicCardRequest&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, BasicCardRequest&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8BasicCardRequest(const BasicCardRequest&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, BasicCardRequest& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, BasicCardRequest& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<BasicCardRequest> {
-  static BasicCardRequest nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static BasicCardRequest nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<BasicCardRequest> {
-  typedef V8BasicCardRequest Type;
+    typedef V8BasicCardRequest Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8BasicCardRequest_h
+#endif // V8BasicCardRequest_h

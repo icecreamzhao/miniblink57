@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "HTMLElementOrLong.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -16,98 +16,111 @@
 
 namespace blink {
 
-HTMLElementOrLong::HTMLElementOrLong() : m_type(SpecificTypeNone) {}
-
-HTMLElement* HTMLElementOrLong::getAsHTMLElement() const {
-  DCHECK(isHTMLElement());
-  return m_htmlElement;
+HTMLElementOrLong::HTMLElementOrLong()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void HTMLElementOrLong::setHTMLElement(HTMLElement* value) {
-  DCHECK(isNull());
-  m_htmlElement = value;
-  m_type = SpecificTypeHTMLElement;
+HTMLElement* HTMLElementOrLong::getAsHTMLElement() const
+{
+    DCHECK(isHTMLElement());
+    return m_htmlElement;
 }
 
-HTMLElementOrLong HTMLElementOrLong::fromHTMLElement(HTMLElement* value) {
-  HTMLElementOrLong container;
-  container.setHTMLElement(value);
-  return container;
+void HTMLElementOrLong::setHTMLElement(HTMLElement* value)
+{
+    DCHECK(isNull());
+    m_htmlElement = value;
+    m_type = SpecificTypeHTMLElement;
 }
 
-int HTMLElementOrLong::getAsLong() const {
-  DCHECK(isLong());
-  return m_long;
+HTMLElementOrLong HTMLElementOrLong::fromHTMLElement(HTMLElement* value)
+{
+    HTMLElementOrLong container;
+    container.setHTMLElement(value);
+    return container;
 }
 
-void HTMLElementOrLong::setLong(int value) {
-  DCHECK(isNull());
-  m_long = value;
-  m_type = SpecificTypeLong;
+int HTMLElementOrLong::getAsLong() const
+{
+    DCHECK(isLong());
+    return m_long;
 }
 
-HTMLElementOrLong HTMLElementOrLong::fromLong(int value) {
-  HTMLElementOrLong container;
-  container.setLong(value);
-  return container;
+void HTMLElementOrLong::setLong(int value)
+{
+    DCHECK(isNull());
+    m_long = value;
+    m_type = SpecificTypeLong;
+}
+
+HTMLElementOrLong HTMLElementOrLong::fromLong(int value)
+{
+    HTMLElementOrLong container;
+    container.setLong(value);
+    return container;
 }
 
 HTMLElementOrLong::HTMLElementOrLong(const HTMLElementOrLong&) = default;
 HTMLElementOrLong::~HTMLElementOrLong() = default;
 HTMLElementOrLong& HTMLElementOrLong::operator=(const HTMLElementOrLong&) = default;
 
-DEFINE_TRACE(HTMLElementOrLong) {
-  visitor->trace(m_htmlElement);
+DEFINE_TRACE(HTMLElementOrLong)
+{
+    visitor->trace(m_htmlElement);
 }
 
-void V8HTMLElementOrLong::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, HTMLElementOrLong& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8HTMLElementOrLong::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, HTMLElementOrLong& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8HTMLElement::hasInstance(v8Value, isolate)) {
-    HTMLElement* cppValue = V8HTMLElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setHTMLElement(cppValue);
-    return;
-  }
+    if (V8HTMLElement::hasInstance(v8Value, isolate)) {
+        HTMLElement* cppValue = V8HTMLElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setHTMLElement(cppValue);
+        return;
+    }
 
-  if (v8Value->IsNumber()) {
-    int cppValue = toInt32(isolate, v8Value, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setLong(cppValue);
-    return;
-  }
+    if (v8Value->IsNumber()) {
+        int cppValue = toInt32(isolate, v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setLong(cppValue);
+        return;
+    }
 
-  {
-    int cppValue = toInt32(isolate, v8Value, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setLong(cppValue);
-    return;
-  }
+    {
+        int cppValue = toInt32(isolate, v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setLong(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const HTMLElementOrLong& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const HTMLElementOrLong& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case HTMLElementOrLong::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case HTMLElementOrLong::SpecificTypeHTMLElement:
-      return ToV8(impl.getAsHTMLElement(), creationContext, isolate);
+        return ToV8(impl.getAsHTMLElement(), creationContext, isolate);
     case HTMLElementOrLong::SpecificTypeLong:
-      return v8::Integer::New(isolate, impl.getAsLong());
+        return v8::Integer::New(isolate, impl.getAsLong());
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-HTMLElementOrLong NativeValueTraits<HTMLElementOrLong>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  HTMLElementOrLong impl;
-  V8HTMLElementOrLong::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+HTMLElementOrLong NativeValueTraits<HTMLElementOrLong>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    HTMLElementOrLong impl;
+    V8HTMLElementOrLong::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

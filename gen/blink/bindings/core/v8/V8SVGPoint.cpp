@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGPoint.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,150 +49,166 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGPointTearOff::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGPointTearOff is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGPointTearOffV8Internal {
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPointTearOff* impl = V8SVGPoint::toImpl(holder);
+        SVGPointTearOff* impl = V8SVGPoint::toImpl(holder);
 
-  v8SetReturnValue(info, impl->x());
-}
+        v8SetReturnValue(info, impl->x());
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGPointTearOffV8Internal::xAttributeGetter(info);
-}
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGPointTearOffV8Internal::xAttributeGetter(info);
+    }
 
-static void xAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGPointTearOff* impl = V8SVGPoint::toImpl(holder);
+    static void xAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGPointTearOff* impl = V8SVGPoint::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGPoint", "x");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGPoint", "x");
 
-  // Prepare the value to be set.
-  float cppValue = toFloat(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        float cppValue = toFloat(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setX(cppValue, exceptionState);
-}
+        impl->setX(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void xAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void xAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGPointTearOffV8Internal::xAttributeSetter(v8Value, info);
-}
+        SVGPointTearOffV8Internal::xAttributeSetter(v8Value, info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGPointTearOff* impl = V8SVGPoint::toImpl(holder);
+        SVGPointTearOff* impl = V8SVGPoint::toImpl(holder);
 
-  v8SetReturnValue(info, impl->y());
-}
+        v8SetReturnValue(info, impl->y());
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGPointTearOffV8Internal::yAttributeGetter(info);
-}
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGPointTearOffV8Internal::yAttributeGetter(info);
+    }
 
-static void yAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGPointTearOff* impl = V8SVGPoint::toImpl(holder);
+    static void yAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGPointTearOff* impl = V8SVGPoint::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGPoint", "y");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGPoint", "y");
 
-  // Prepare the value to be set.
-  float cppValue = toFloat(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        float cppValue = toFloat(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setY(cppValue, exceptionState);
-}
+        impl->setY(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void yAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void yAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGPointTearOffV8Internal::yAttributeSetter(v8Value, info);
-}
+        SVGPointTearOffV8Internal::yAttributeSetter(v8Value, info);
+    }
 
-static void matrixTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGPointTearOff* impl = V8SVGPoint::toImpl(info.Holder());
+    static void matrixTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGPointTearOff* impl = V8SVGPoint::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("matrixTransform", "SVGPoint", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("matrixTransform", "SVGPoint", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  SVGMatrixTearOff* matrix;
-  matrix = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!matrix) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("matrixTransform", "SVGPoint", "parameter 1 is not of type 'SVGMatrix'."));
+        SVGMatrixTearOff* matrix;
+        matrix = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!matrix) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("matrixTransform", "SVGPoint", "parameter 1 is not of type 'SVGMatrix'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValue(info, impl->matrixTransform(matrix));
-}
+        v8SetReturnValue(info, impl->matrixTransform(matrix));
+    }
 
-CORE_EXPORT  void matrixTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGPointMatrixTransform);
-  SVGPointTearOffV8Internal::matrixTransformMethod(info);
-}
+    CORE_EXPORT void matrixTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGPointMatrixTransform);
+        SVGPointTearOffV8Internal::matrixTransformMethod(info);
+    }
 
 } // namespace SVGPointTearOffV8Internal
 
-void V8SVGPoint::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  SVGPointTearOff* impl = scriptWrappable->toImpl<SVGPointTearOff>();
-  SVGElement* contextElement = impl->contextElement();
-  if (contextElement) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
-  }
+void V8SVGPoint::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    SVGPointTearOff* impl = scriptWrappable->toImpl<SVGPointTearOff>();
+    SVGElement* contextElement = impl->contextElement();
+    if (contextElement) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGPointAccessors[] = {
-    {"x", SVGPointTearOffV8Internal::xAttributeGetterCallback, SVGPointTearOffV8Internal::xAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", SVGPointTearOffV8Internal::yAttributeGetterCallback, SVGPointTearOffV8Internal::yAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "x", SVGPointTearOffV8Internal::xAttributeGetterCallback, SVGPointTearOffV8Internal::xAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", SVGPointTearOffV8Internal::yAttributeGetterCallback, SVGPointTearOffV8Internal::yAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGPointMethods[] = {
-    {"matrixTransform", SVGPointTearOffV8Internal::matrixTransformMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "matrixTransform", SVGPointTearOffV8Internal::matrixTransformMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGPointTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGPoint::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGPoint::internalFieldCount);
+static void installV8SVGPointTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGPoint::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGPoint::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGPointAccessors, WTF_ARRAY_LENGTH(V8SVGPointAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGPointMethods, WTF_ARRAY_LENGTH(V8SVGPointMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGPointAccessors, WTF_ARRAY_LENGTH(V8SVGPointAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGPointMethods, WTF_ARRAY_LENGTH(V8SVGPointMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGPoint::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGPointTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGPoint::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGPointTemplate);
 }
 
-bool V8SVGPoint::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGPoint::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGPoint::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGPoint::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGPointTearOff* V8SVGPoint::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGPointTearOff* V8SVGPoint::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

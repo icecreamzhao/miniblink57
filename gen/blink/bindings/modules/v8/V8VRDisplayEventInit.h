@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8VRDisplayEventInit_h
 #define V8VRDisplayEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8VRDisplayEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, VRDisplayEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, VRDisplayEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8VRDisplayEventInit(const VRDisplayEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, VRDisplayEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, VRDisplayEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<VRDisplayEventInit> {
-  static VRDisplayEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static VRDisplayEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<VRDisplayEventInit> {
-  typedef V8VRDisplayEventInit Type;
+    typedef V8VRDisplayEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8VRDisplayEventInit_h
+#endif // V8VRDisplayEventInit_h

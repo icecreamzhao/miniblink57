@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "CustomEventInit.h"
 
 namespace blink {
 
-CustomEventInit::CustomEventInit() {
+CustomEventInit::CustomEventInit()
+{
 }
 
-CustomEventInit::~CustomEventInit() {}
+CustomEventInit::~CustomEventInit() { }
 
 CustomEventInit::CustomEventInit(const CustomEventInit&) = default;
 
 CustomEventInit& CustomEventInit::operator=(const CustomEventInit&) = default;
 
-bool CustomEventInit::hasDetail() const {
-  return !(m_detail.isEmpty() || m_detail.isNull() || m_detail.isUndefined());
+bool CustomEventInit::hasDetail() const
+{
+    return !(m_detail.isEmpty() || m_detail.isNull() || m_detail.isUndefined());
 }
-ScriptValue CustomEventInit::detail() const {
-  return m_detail;
+ScriptValue CustomEventInit::detail() const
+{
+    return m_detail;
 }
-void CustomEventInit::setDetail(ScriptValue value) {
-  m_detail = value;
+void CustomEventInit::setDetail(ScriptValue value)
+{
+    m_detail = value;
 }
 
-DEFINE_TRACE(CustomEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(CustomEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

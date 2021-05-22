@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef GetNotificationOptions_h
 #define GetNotificationOptions_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class MODULES_EXPORT GetNotificationOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  GetNotificationOptions();
-  virtual ~GetNotificationOptions();
-  GetNotificationOptions(const GetNotificationOptions&);
-  GetNotificationOptions& operator=(const GetNotificationOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasTag() const;
-  String tag() const;
-  void setTag(String);
+public:
+    GetNotificationOptions();
+    virtual ~GetNotificationOptions();
+    GetNotificationOptions(const GetNotificationOptions&);
+    GetNotificationOptions& operator=(const GetNotificationOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTag() const;
+    String tag() const;
+    void setTag(String);
 
- private:
-  String m_tag;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8GetNotificationOptions;
+private:
+    String m_tag;
+
+    friend class V8GetNotificationOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // GetNotificationOptions_h
+#endif // GetNotificationOptions_h

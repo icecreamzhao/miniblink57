@@ -8,41 +8,49 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "SpeechRecognitionErrorInit.h"
 
 namespace blink {
 
-SpeechRecognitionErrorInit::SpeechRecognitionErrorInit() {
+SpeechRecognitionErrorInit::SpeechRecognitionErrorInit()
+{
 }
 
-SpeechRecognitionErrorInit::~SpeechRecognitionErrorInit() {}
+SpeechRecognitionErrorInit::~SpeechRecognitionErrorInit() { }
 
 SpeechRecognitionErrorInit::SpeechRecognitionErrorInit(const SpeechRecognitionErrorInit&) = default;
 
 SpeechRecognitionErrorInit& SpeechRecognitionErrorInit::operator=(const SpeechRecognitionErrorInit&) = default;
 
-bool SpeechRecognitionErrorInit::hasError() const {
-  return !m_error.isNull();
+bool SpeechRecognitionErrorInit::hasError() const
+{
+    return !m_error.isNull();
 }
-String SpeechRecognitionErrorInit::error() const {
-  return m_error;
+String SpeechRecognitionErrorInit::error() const
+{
+    return m_error;
 }
-void SpeechRecognitionErrorInit::setError(String value) {
-  m_error = value;
+void SpeechRecognitionErrorInit::setError(String value)
+{
+    m_error = value;
 }
-bool SpeechRecognitionErrorInit::hasMessage() const {
-  return !m_message.isNull();
+bool SpeechRecognitionErrorInit::hasMessage() const
+{
+    return !m_message.isNull();
 }
-String SpeechRecognitionErrorInit::message() const {
-  return m_message;
+String SpeechRecognitionErrorInit::message() const
+{
+    return m_message;
 }
-void SpeechRecognitionErrorInit::setMessage(String value) {
-  m_message = value;
+void SpeechRecognitionErrorInit::setMessage(String value)
+{
+    m_message = value;
 }
 
-DEFINE_TRACE(SpeechRecognitionErrorInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(SpeechRecognitionErrorInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

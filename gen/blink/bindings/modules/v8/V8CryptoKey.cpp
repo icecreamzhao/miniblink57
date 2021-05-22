@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CryptoKey.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,101 +46,114 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CryptoKey::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CryptoKey is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CryptoKeyV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CryptoKey* impl = V8CryptoKey::toImpl(holder);
+        CryptoKey* impl = V8CryptoKey::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CryptoKeyV8Internal::typeAttributeGetter(info);
-}
+    MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CryptoKeyV8Internal::typeAttributeGetter(info);
+    }
 
-static void extractableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void extractableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CryptoKey* impl = V8CryptoKey::toImpl(holder);
+        CryptoKey* impl = V8CryptoKey::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->extractable());
-}
+        v8SetReturnValueBool(info, impl->extractable());
+    }
 
-MODULES_EXPORT void extractableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CryptoKeyV8Internal::extractableAttributeGetter(info);
-}
+    MODULES_EXPORT void extractableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CryptoKeyV8Internal::extractableAttributeGetter(info);
+    }
 
-static void algorithmAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void algorithmAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CryptoKey* impl = V8CryptoKey::toImpl(holder);
+        CryptoKey* impl = V8CryptoKey::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, impl->algorithm(scriptState).v8Value());
-}
+        v8SetReturnValue(info, impl->algorithm(scriptState).v8Value());
+    }
 
-MODULES_EXPORT void algorithmAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CryptoKeyV8Internal::algorithmAttributeGetter(info);
-}
+    MODULES_EXPORT void algorithmAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CryptoKeyV8Internal::algorithmAttributeGetter(info);
+    }
 
-static void usagesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void usagesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CryptoKey* impl = V8CryptoKey::toImpl(holder);
+        CryptoKey* impl = V8CryptoKey::toImpl(holder);
 
-  v8SetReturnValue(info, ToV8(impl->usages(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->usages(), info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT void usagesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CryptoKeyV8Internal::usagesAttributeGetter(info);
-}
+    MODULES_EXPORT void usagesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CryptoKeyV8Internal::usagesAttributeGetter(info);
+    }
 
 } // namespace CryptoKeyV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CryptoKeyAccessors[] = {
-    {"type", CryptoKeyV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"extractable", CryptoKeyV8Internal::extractableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"algorithm", CryptoKeyV8Internal::algorithmAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"usages", CryptoKeyV8Internal::usagesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", CryptoKeyV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "extractable", CryptoKeyV8Internal::extractableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "algorithm", CryptoKeyV8Internal::algorithmAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "usages", CryptoKeyV8Internal::usagesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CryptoKeyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CryptoKey::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CryptoKey::internalFieldCount);
+static void installV8CryptoKeyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CryptoKey::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CryptoKey::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CryptoKeyAccessors, WTF_ARRAY_LENGTH(V8CryptoKeyAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CryptoKeyAccessors, WTF_ARRAY_LENGTH(V8CryptoKeyAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8CryptoKey::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CryptoKeyTemplate);
+v8::Local<v8::FunctionTemplate> V8CryptoKey::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CryptoKeyTemplate);
 }
 
-bool V8CryptoKey::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CryptoKey::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CryptoKey::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CryptoKey::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CryptoKey* V8CryptoKey::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CryptoKey* V8CryptoKey::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

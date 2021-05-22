@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ForeignFetchEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -17,91 +17,95 @@
 
 namespace blink {
 
-void V8ForeignFetchEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ForeignFetchEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): request.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  V8ExtendableEventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> originValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "origin")).ToLocal(&originValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (originValue.IsEmpty() || originValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> origin = toUSVString(isolate, originValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setOrigin(origin);
-  }
-
-  v8::Local<v8::Value> requestValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "request")).ToLocal(&requestValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (requestValue.IsEmpty() || requestValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member request is undefined.");
-    return;
-  } else {
-    Request* request = V8Request::toImplWithTypeCheck(isolate, requestValue);
-    if (!request) {
-      exceptionState.throwTypeError("member request is not of type Request.");
-      return;
+void V8ForeignFetchEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ForeignFetchEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): request.");
+        return;
     }
-    impl.setRequest(request);
-  }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
+
+    V8ExtendableEventInit::toImpl(isolate, v8Value, impl, exceptionState);
+    if (exceptionState.hadException())
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> originValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "origin")).ToLocal(&originValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (originValue.IsEmpty() || originValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> origin = toUSVString(isolate, originValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setOrigin(origin);
+    }
+
+    v8::Local<v8::Value> requestValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "request")).ToLocal(&requestValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (requestValue.IsEmpty() || requestValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member request is undefined.");
+        return;
+    } else {
+        Request* request = V8Request::toImplWithTypeCheck(isolate, requestValue);
+        if (!request) {
+            exceptionState.throwTypeError("member request is not of type Request.");
+            return;
+        }
+        impl.setRequest(request);
+    }
 }
 
-v8::Local<v8::Value> ForeignFetchEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ForeignFetchEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ForeignFetchEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ForeignFetchEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ForeignFetchEventInit(const ForeignFetchEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8ExtendableEventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8ForeignFetchEventInit(const ForeignFetchEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8ExtendableEventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasOrigin()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "origin"), v8String(isolate, impl.origin()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "origin"), v8String(isolate, String("null")))))
-      return false;
-  }
+    if (impl.hasOrigin()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "origin"), v8String(isolate, impl.origin()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "origin"), v8String(isolate, String("null")))))
+            return false;
+    }
 
-  if (impl.hasRequest()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "request"), ToV8(impl.request(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasRequest()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "request"), ToV8(impl.request(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  return true;
+    return true;
 }
 
-ForeignFetchEventInit NativeValueTraits<ForeignFetchEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ForeignFetchEventInit impl;
-  V8ForeignFetchEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ForeignFetchEventInit NativeValueTraits<ForeignFetchEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ForeignFetchEventInit impl;
+    V8ForeignFetchEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

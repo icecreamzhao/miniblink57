@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CloseEventInit_h
 #define CloseEventInit_h
 
@@ -20,38 +20,39 @@
 namespace blink {
 
 class MODULES_EXPORT CloseEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CloseEventInit();
-  virtual ~CloseEventInit();
-  CloseEventInit(const CloseEventInit&);
-  CloseEventInit& operator=(const CloseEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCode() const;
-  unsigned code() const;
-  void setCode(unsigned);
+public:
+    CloseEventInit();
+    virtual ~CloseEventInit();
+    CloseEventInit(const CloseEventInit&);
+    CloseEventInit& operator=(const CloseEventInit&);
 
-  bool hasReason() const;
-  String reason() const;
-  void setReason(String);
+    bool hasCode() const;
+    unsigned code() const;
+    void setCode(unsigned);
 
-  bool hasWasClean() const;
-  bool wasClean() const;
-  void setWasClean(bool);
+    bool hasReason() const;
+    String reason() const;
+    void setReason(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasWasClean() const;
+    bool wasClean() const;
+    void setWasClean(bool);
 
- private:
-  bool m_hasCode = false;
-  unsigned m_code;
-  String m_reason;
-  bool m_hasWasClean = false;
-  bool m_wasClean;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8CloseEventInit;
+private:
+    bool m_hasCode = false;
+    unsigned m_code;
+    String m_reason;
+    bool m_hasWasClean = false;
+    bool m_wasClean;
+
+    friend class V8CloseEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // CloseEventInit_h
+#endif // CloseEventInit_h

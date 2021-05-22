@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ForeignFetchEventInit.h"
 
 #include "modules/fetch/Request.h"
 
 namespace blink {
 
-ForeignFetchEventInit::ForeignFetchEventInit() {
-  setOrigin(String("null"));
+ForeignFetchEventInit::ForeignFetchEventInit()
+{
+    setOrigin(String("null"));
 }
 
-ForeignFetchEventInit::~ForeignFetchEventInit() {}
+ForeignFetchEventInit::~ForeignFetchEventInit() { }
 
 ForeignFetchEventInit::ForeignFetchEventInit(const ForeignFetchEventInit&) = default;
 
 ForeignFetchEventInit& ForeignFetchEventInit::operator=(const ForeignFetchEventInit&) = default;
 
-bool ForeignFetchEventInit::hasOrigin() const {
-  return !m_origin.isNull();
+bool ForeignFetchEventInit::hasOrigin() const
+{
+    return !m_origin.isNull();
 }
-String ForeignFetchEventInit::origin() const {
-  return m_origin;
+String ForeignFetchEventInit::origin() const
+{
+    return m_origin;
 }
-void ForeignFetchEventInit::setOrigin(String value) {
-  m_origin = value;
+void ForeignFetchEventInit::setOrigin(String value)
+{
+    m_origin = value;
 }
-bool ForeignFetchEventInit::hasRequest() const {
-  return m_request;
+bool ForeignFetchEventInit::hasRequest() const
+{
+    return m_request;
 }
-Request* ForeignFetchEventInit::request() const {
-  return m_request;
+Request* ForeignFetchEventInit::request() const
+{
+    return m_request;
 }
-void ForeignFetchEventInit::setRequest(Request* value) {
-  m_request = value;
+void ForeignFetchEventInit::setRequest(Request* value)
+{
+    m_request = value;
 }
 
-DEFINE_TRACE(ForeignFetchEventInit) {
-  visitor->trace(m_request);
-  ExtendableEventInit::trace(visitor);
+DEFINE_TRACE(ForeignFetchEventInit)
+{
+    visitor->trace(m_request);
+    ExtendableEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

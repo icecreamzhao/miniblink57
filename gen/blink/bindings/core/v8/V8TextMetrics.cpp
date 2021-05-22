@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TextMetrics.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,217 +46,246 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&TextMetrics::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "TextMetrics is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TextMetricsV8Internal {
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->width());
-}
+        v8SetReturnValue(info, impl->width());
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::widthAttributeGetter(info);
-}
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::widthAttributeGetter(info);
+    }
 
-static void actualBoundingBoxLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void actualBoundingBoxLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->actualBoundingBoxLeft());
-}
+        v8SetReturnValue(info, impl->actualBoundingBoxLeft());
+    }
 
-CORE_EXPORT void actualBoundingBoxLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::actualBoundingBoxLeftAttributeGetter(info);
-}
+    CORE_EXPORT void actualBoundingBoxLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::actualBoundingBoxLeftAttributeGetter(info);
+    }
 
-static void actualBoundingBoxRightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void actualBoundingBoxRightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->actualBoundingBoxRight());
-}
+        v8SetReturnValue(info, impl->actualBoundingBoxRight());
+    }
 
-CORE_EXPORT void actualBoundingBoxRightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::actualBoundingBoxRightAttributeGetter(info);
-}
+    CORE_EXPORT void actualBoundingBoxRightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::actualBoundingBoxRightAttributeGetter(info);
+    }
 
-static void fontBoundingBoxAscentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fontBoundingBoxAscentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->fontBoundingBoxAscent());
-}
+        v8SetReturnValue(info, impl->fontBoundingBoxAscent());
+    }
 
-CORE_EXPORT void fontBoundingBoxAscentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::fontBoundingBoxAscentAttributeGetter(info);
-}
+    CORE_EXPORT void fontBoundingBoxAscentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::fontBoundingBoxAscentAttributeGetter(info);
+    }
 
-static void fontBoundingBoxDescentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fontBoundingBoxDescentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->fontBoundingBoxDescent());
-}
+        v8SetReturnValue(info, impl->fontBoundingBoxDescent());
+    }
 
-CORE_EXPORT void fontBoundingBoxDescentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::fontBoundingBoxDescentAttributeGetter(info);
-}
+    CORE_EXPORT void fontBoundingBoxDescentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::fontBoundingBoxDescentAttributeGetter(info);
+    }
 
-static void actualBoundingBoxAscentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void actualBoundingBoxAscentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->actualBoundingBoxAscent());
-}
+        v8SetReturnValue(info, impl->actualBoundingBoxAscent());
+    }
 
-CORE_EXPORT void actualBoundingBoxAscentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::actualBoundingBoxAscentAttributeGetter(info);
-}
+    CORE_EXPORT void actualBoundingBoxAscentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::actualBoundingBoxAscentAttributeGetter(info);
+    }
 
-static void actualBoundingBoxDescentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void actualBoundingBoxDescentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->actualBoundingBoxDescent());
-}
+        v8SetReturnValue(info, impl->actualBoundingBoxDescent());
+    }
 
-CORE_EXPORT void actualBoundingBoxDescentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::actualBoundingBoxDescentAttributeGetter(info);
-}
+    CORE_EXPORT void actualBoundingBoxDescentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::actualBoundingBoxDescentAttributeGetter(info);
+    }
 
-static void emHeightAscentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void emHeightAscentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->emHeightAscent());
-}
+        v8SetReturnValue(info, impl->emHeightAscent());
+    }
 
-CORE_EXPORT void emHeightAscentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::emHeightAscentAttributeGetter(info);
-}
+    CORE_EXPORT void emHeightAscentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::emHeightAscentAttributeGetter(info);
+    }
 
-static void emHeightDescentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void emHeightDescentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->emHeightDescent());
-}
+        v8SetReturnValue(info, impl->emHeightDescent());
+    }
 
-CORE_EXPORT void emHeightDescentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::emHeightDescentAttributeGetter(info);
-}
+    CORE_EXPORT void emHeightDescentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::emHeightDescentAttributeGetter(info);
+    }
 
-static void hangingBaselineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hangingBaselineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->hangingBaseline());
-}
+        v8SetReturnValue(info, impl->hangingBaseline());
+    }
 
-CORE_EXPORT void hangingBaselineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::hangingBaselineAttributeGetter(info);
-}
+    CORE_EXPORT void hangingBaselineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::hangingBaselineAttributeGetter(info);
+    }
 
-static void alphabeticBaselineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void alphabeticBaselineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->alphabeticBaseline());
-}
+        v8SetReturnValue(info, impl->alphabeticBaseline());
+    }
 
-CORE_EXPORT void alphabeticBaselineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::alphabeticBaselineAttributeGetter(info);
-}
+    CORE_EXPORT void alphabeticBaselineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::alphabeticBaselineAttributeGetter(info);
+    }
 
-static void ideographicBaselineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ideographicBaselineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextMetrics* impl = V8TextMetrics::toImpl(holder);
+        TextMetrics* impl = V8TextMetrics::toImpl(holder);
 
-  v8SetReturnValue(info, impl->ideographicBaseline());
-}
+        v8SetReturnValue(info, impl->ideographicBaseline());
+    }
 
-CORE_EXPORT void ideographicBaselineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextMetricsV8Internal::ideographicBaselineAttributeGetter(info);
-}
+    CORE_EXPORT void ideographicBaselineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextMetricsV8Internal::ideographicBaselineAttributeGetter(info);
+    }
 
 } // namespace TextMetricsV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8TextMetricsAccessors[] = {
-    {"width", TextMetricsV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "width", TextMetricsV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8TextMetricsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TextMetrics::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TextMetrics::internalFieldCount);
+static void installV8TextMetricsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TextMetrics::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TextMetrics::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextMetricsAccessors, WTF_ARRAY_LENGTH(V8TextMetricsAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextMetricsAccessors, WTF_ARRAY_LENGTH(V8TextMetricsAccessors));
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoractualBoundingBoxAscentConfiguration = {"actualBoundingBoxAscent", TextMetricsV8Internal::actualBoundingBoxAscentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoractualBoundingBoxAscentConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoractualBoundingBoxDescentConfiguration = {"actualBoundingBoxDescent", TextMetricsV8Internal::actualBoundingBoxDescentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoractualBoundingBoxDescentConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoractualBoundingBoxLeftConfiguration = {"actualBoundingBoxLeft", TextMetricsV8Internal::actualBoundingBoxLeftAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoractualBoundingBoxLeftConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoractualBoundingBoxRightConfiguration = {"actualBoundingBoxRight", TextMetricsV8Internal::actualBoundingBoxRightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoractualBoundingBoxRightConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoralphabeticBaselineConfiguration = {"alphabeticBaseline", TextMetricsV8Internal::alphabeticBaselineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoralphabeticBaselineConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoremHeightAscentConfiguration = {"emHeightAscent", TextMetricsV8Internal::emHeightAscentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoremHeightAscentConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoremHeightDescentConfiguration = {"emHeightDescent", TextMetricsV8Internal::emHeightDescentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoremHeightDescentConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorfontBoundingBoxAscentConfiguration = {"fontBoundingBoxAscent", TextMetricsV8Internal::fontBoundingBoxAscentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfontBoundingBoxAscentConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorfontBoundingBoxDescentConfiguration = {"fontBoundingBoxDescent", TextMetricsV8Internal::fontBoundingBoxDescentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfontBoundingBoxDescentConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorhangingBaselineConfiguration = {"hangingBaseline", TextMetricsV8Internal::hangingBaselineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorhangingBaselineConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorideographicBaselineConfiguration = {"ideographicBaseline", TextMetricsV8Internal::ideographicBaselineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorideographicBaselineConfiguration);
-  }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoractualBoundingBoxAscentConfiguration = { "actualBoundingBoxAscent", TextMetricsV8Internal::actualBoundingBoxAscentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoractualBoundingBoxAscentConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoractualBoundingBoxDescentConfiguration = { "actualBoundingBoxDescent", TextMetricsV8Internal::actualBoundingBoxDescentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoractualBoundingBoxDescentConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoractualBoundingBoxLeftConfiguration = { "actualBoundingBoxLeft", TextMetricsV8Internal::actualBoundingBoxLeftAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoractualBoundingBoxLeftConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoractualBoundingBoxRightConfiguration = { "actualBoundingBoxRight", TextMetricsV8Internal::actualBoundingBoxRightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoractualBoundingBoxRightConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoralphabeticBaselineConfiguration = { "alphabeticBaseline", TextMetricsV8Internal::alphabeticBaselineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoralphabeticBaselineConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoremHeightAscentConfiguration = { "emHeightAscent", TextMetricsV8Internal::emHeightAscentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoremHeightAscentConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoremHeightDescentConfiguration = { "emHeightDescent", TextMetricsV8Internal::emHeightDescentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoremHeightDescentConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorfontBoundingBoxAscentConfiguration = { "fontBoundingBoxAscent", TextMetricsV8Internal::fontBoundingBoxAscentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfontBoundingBoxAscentConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorfontBoundingBoxDescentConfiguration = { "fontBoundingBoxDescent", TextMetricsV8Internal::fontBoundingBoxDescentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfontBoundingBoxDescentConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorhangingBaselineConfiguration = { "hangingBaseline", TextMetricsV8Internal::hangingBaselineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorhangingBaselineConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorideographicBaselineConfiguration = { "ideographicBaseline", TextMetricsV8Internal::ideographicBaselineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorideographicBaselineConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8TextMetrics::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TextMetricsTemplate);
+v8::Local<v8::FunctionTemplate> V8TextMetrics::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TextMetricsTemplate);
 }
 
-bool V8TextMetrics::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8TextMetrics::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8TextMetrics::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8TextMetrics::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-TextMetrics* V8TextMetrics::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+TextMetrics* V8TextMetrics::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

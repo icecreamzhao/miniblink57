@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8StorageQuota.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,141 +49,152 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&StorageQuota::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "StorageQuota is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace StorageQuotaV8Internal {
 
-static void supportedTypesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void supportedTypesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  StorageQuota* impl = V8StorageQuota::toImpl(holder);
+        StorageQuota* impl = V8StorageQuota::toImpl(holder);
 
-  v8SetReturnValue(info, ToV8(impl->supportedTypes(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->supportedTypes(), info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT void supportedTypesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StorageQuotaV8Internal::supportedTypesAttributeGetter(info);
-}
+    MODULES_EXPORT void supportedTypesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StorageQuotaV8Internal::supportedTypesAttributeGetter(info);
+    }
 
-static void queryInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StorageQuota", "queryInfo");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void queryInfoMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StorageQuota", "queryInfo");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8StorageQuota::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  StorageQuota* impl = V8StorageQuota::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8StorageQuota::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        StorageQuota* impl = V8StorageQuota::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  type = info[0];
-  if (!type.prepare(exceptionState))
-    return;
-  const char* validTypeValues[] = {
-      "temporary",
-      "persistent",
-  };
-  if (!isValidEnum(type, validTypeValues, WTF_ARRAY_LENGTH(validTypeValues), "StorageType", exceptionState)) {
-    return;
-  }
+        V8StringResource<> type;
+        type = info[0];
+        if (!type.prepare(exceptionState))
+            return;
+        const char* validTypeValues[] = {
+            "temporary",
+            "persistent",
+        };
+        if (!isValidEnum(type, validTypeValues, WTF_ARRAY_LENGTH(validTypeValues), "StorageType", exceptionState)) {
+            return;
+        }
 
-  ScriptPromise result = impl->queryInfo(scriptState, type);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->queryInfo(scriptState, type);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void queryInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StorageQuotaV8Internal::queryInfoMethod(info);
-}
+    MODULES_EXPORT void queryInfoMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StorageQuotaV8Internal::queryInfoMethod(info);
+    }
 
-static void requestPersistentQuotaMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StorageQuota", "requestPersistentQuota");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void requestPersistentQuotaMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "StorageQuota", "requestPersistentQuota");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8StorageQuota::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  StorageQuota* impl = V8StorageQuota::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8StorageQuota::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        StorageQuota* impl = V8StorageQuota::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned long long newQuota;
-  newQuota = toUInt64(info.GetIsolate(), info[0], Clamp, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned long long newQuota;
+        newQuota = toUInt64(info.GetIsolate(), info[0], Clamp, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = impl->requestPersistentQuota(scriptState, newQuota);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->requestPersistentQuota(scriptState, newQuota);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void requestPersistentQuotaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  StorageQuotaV8Internal::requestPersistentQuotaMethod(info);
-}
+    MODULES_EXPORT void requestPersistentQuotaMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        StorageQuotaV8Internal::requestPersistentQuotaMethod(info);
+    }
 
 } // namespace StorageQuotaV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8StorageQuotaAccessors[] = {
-    {"supportedTypes", StorageQuotaV8Internal::supportedTypesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "supportedTypes", StorageQuotaV8Internal::supportedTypesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8StorageQuotaMethods[] = {
-    {"queryInfo", StorageQuotaV8Internal::queryInfoMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"requestPersistentQuota", StorageQuotaV8Internal::requestPersistentQuotaMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "queryInfo", StorageQuotaV8Internal::queryInfoMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "requestPersistentQuota", StorageQuotaV8Internal::requestPersistentQuotaMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8StorageQuotaTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8StorageQuota::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8StorageQuota::internalFieldCount);
+static void installV8StorageQuotaTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8StorageQuota::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8StorageQuota::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::quotaPromiseEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::quotaPromiseEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StorageQuotaAccessors, WTF_ARRAY_LENGTH(V8StorageQuotaAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StorageQuotaMethods, WTF_ARRAY_LENGTH(V8StorageQuotaMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StorageQuotaAccessors, WTF_ARRAY_LENGTH(V8StorageQuotaAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8StorageQuotaMethods, WTF_ARRAY_LENGTH(V8StorageQuotaMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8StorageQuota::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8StorageQuotaTemplate);
+v8::Local<v8::FunctionTemplate> V8StorageQuota::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8StorageQuotaTemplate);
 }
 
-bool V8StorageQuota::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8StorageQuota::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8StorageQuota::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8StorageQuota::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-StorageQuota* V8StorageQuota::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+StorageQuota* V8StorageQuota::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

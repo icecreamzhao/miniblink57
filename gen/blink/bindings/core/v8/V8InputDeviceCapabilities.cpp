@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8InputDeviceCapabilities.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,97 +48,106 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&InputDeviceCapabilities::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "InputDeviceCapabilities is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace InputDeviceCapabilitiesV8Internal {
 
-static void firesTouchEventsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void firesTouchEventsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  InputDeviceCapabilities* impl = V8InputDeviceCapabilities::toImpl(holder);
+        InputDeviceCapabilities* impl = V8InputDeviceCapabilities::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->firesTouchEvents());
-}
+        v8SetReturnValueBool(info, impl->firesTouchEvents());
+    }
 
-CORE_EXPORT void firesTouchEventsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8InputDeviceCapabilities_FiresTouchEvents_AttributeGetter);
+    CORE_EXPORT void firesTouchEventsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8InputDeviceCapabilities_FiresTouchEvents_AttributeGetter);
 
-  InputDeviceCapabilitiesV8Internal::firesTouchEventsAttributeGetter(info);
-}
+        InputDeviceCapabilitiesV8Internal::firesTouchEventsAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "InputDeviceCapabilities");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "InputDeviceCapabilities");
 
-  InputDeviceCapabilitiesInit deviceInitDict;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('deviceInitDict') is not an object.");
+        InputDeviceCapabilitiesInit deviceInitDict;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('deviceInitDict') is not an object.");
 
-    return;
-  }
-  V8InputDeviceCapabilitiesInit::toImpl(info.GetIsolate(), info[0], deviceInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8InputDeviceCapabilitiesInit::toImpl(info.GetIsolate(), info[0], deviceInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  InputDeviceCapabilities* impl = InputDeviceCapabilities::create(deviceInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8InputDeviceCapabilities::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        InputDeviceCapabilities* impl = InputDeviceCapabilities::create(deviceInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8InputDeviceCapabilities::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace InputDeviceCapabilitiesV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8InputDeviceCapabilitiesAccessors[] = {
-    {"firesTouchEvents", InputDeviceCapabilitiesV8Internal::firesTouchEventsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "firesTouchEvents", InputDeviceCapabilitiesV8Internal::firesTouchEventsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8InputDeviceCapabilities::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("InputDeviceCapabilities"));
-    return;
-  }
+void V8InputDeviceCapabilities::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("InputDeviceCapabilities"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  InputDeviceCapabilitiesV8Internal::constructor(info);
+    InputDeviceCapabilitiesV8Internal::constructor(info);
 }
 
-static void installV8InputDeviceCapabilitiesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8InputDeviceCapabilities::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8InputDeviceCapabilities::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8InputDeviceCapabilities::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8InputDeviceCapabilitiesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8InputDeviceCapabilities::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8InputDeviceCapabilities::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8InputDeviceCapabilities::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InputDeviceCapabilitiesAccessors, WTF_ARRAY_LENGTH(V8InputDeviceCapabilitiesAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InputDeviceCapabilitiesAccessors, WTF_ARRAY_LENGTH(V8InputDeviceCapabilitiesAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8InputDeviceCapabilities::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8InputDeviceCapabilitiesTemplate);
+v8::Local<v8::FunctionTemplate> V8InputDeviceCapabilities::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8InputDeviceCapabilitiesTemplate);
 }
 
-bool V8InputDeviceCapabilities::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8InputDeviceCapabilities::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8InputDeviceCapabilities::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8InputDeviceCapabilities::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-InputDeviceCapabilities* V8InputDeviceCapabilities::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+InputDeviceCapabilities* V8InputDeviceCapabilities::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

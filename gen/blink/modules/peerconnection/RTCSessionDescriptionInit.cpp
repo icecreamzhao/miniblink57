@@ -8,41 +8,49 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RTCSessionDescriptionInit.h"
 
 namespace blink {
 
-RTCSessionDescriptionInit::RTCSessionDescriptionInit() {
+RTCSessionDescriptionInit::RTCSessionDescriptionInit()
+{
 }
 
-RTCSessionDescriptionInit::~RTCSessionDescriptionInit() {}
+RTCSessionDescriptionInit::~RTCSessionDescriptionInit() { }
 
 RTCSessionDescriptionInit::RTCSessionDescriptionInit(const RTCSessionDescriptionInit&) = default;
 
 RTCSessionDescriptionInit& RTCSessionDescriptionInit::operator=(const RTCSessionDescriptionInit&) = default;
 
-bool RTCSessionDescriptionInit::hasSdp() const {
-  return !m_sdp.isNull();
+bool RTCSessionDescriptionInit::hasSdp() const
+{
+    return !m_sdp.isNull();
 }
-String RTCSessionDescriptionInit::sdp() const {
-  return m_sdp;
+String RTCSessionDescriptionInit::sdp() const
+{
+    return m_sdp;
 }
-void RTCSessionDescriptionInit::setSdp(String value) {
-  m_sdp = value;
+void RTCSessionDescriptionInit::setSdp(String value)
+{
+    m_sdp = value;
 }
-bool RTCSessionDescriptionInit::hasType() const {
-  return !m_type.isNull();
+bool RTCSessionDescriptionInit::hasType() const
+{
+    return !m_type.isNull();
 }
-String RTCSessionDescriptionInit::type() const {
-  return m_type;
+String RTCSessionDescriptionInit::type() const
+{
+    return m_type;
 }
-void RTCSessionDescriptionInit::setType(String value) {
-  m_type = value;
+void RTCSessionDescriptionInit::setType(String value)
+{
+    m_type = value;
 }
 
-DEFINE_TRACE(RTCSessionDescriptionInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(RTCSessionDescriptionInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ForeignFetchEventInit_h
 #define ForeignFetchEventInit_h
 
@@ -22,31 +22,32 @@ namespace blink {
 class Request;
 
 class MODULES_EXPORT ForeignFetchEventInit : public ExtendableEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ForeignFetchEventInit();
-  virtual ~ForeignFetchEventInit();
-  ForeignFetchEventInit(const ForeignFetchEventInit&);
-  ForeignFetchEventInit& operator=(const ForeignFetchEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasOrigin() const;
-  String origin() const;
-  void setOrigin(String);
+public:
+    ForeignFetchEventInit();
+    virtual ~ForeignFetchEventInit();
+    ForeignFetchEventInit(const ForeignFetchEventInit&);
+    ForeignFetchEventInit& operator=(const ForeignFetchEventInit&);
 
-  bool hasRequest() const;
-  Request* request() const;
-  void setRequest(Request*);
+    bool hasOrigin() const;
+    String origin() const;
+    void setOrigin(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRequest() const;
+    Request* request() const;
+    void setRequest(Request*);
 
- private:
-  String m_origin;
-  Member<Request> m_request;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ForeignFetchEventInit;
+private:
+    String m_origin;
+    Member<Request> m_request;
+
+    friend class V8ForeignFetchEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ForeignFetchEventInit_h
+#endif // ForeignFetchEventInit_h

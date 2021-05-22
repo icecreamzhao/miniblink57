@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ForeignFetchResponse.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,100 +16,104 @@
 
 namespace blink {
 
-void V8ForeignFetchResponse::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ForeignFetchResponse& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): response.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> headersValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "headers")).ToLocal(&headersValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (headersValue.IsEmpty() || headersValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    Vector<String> headers = toImplArray<Vector<String>>(headersValue, 0, isolate, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setHeaders(headers);
-  }
-
-  v8::Local<v8::Value> originValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "origin")).ToLocal(&originValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (originValue.IsEmpty() || originValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> origin = toUSVString(isolate, originValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setOrigin(origin);
-  }
-
-  v8::Local<v8::Value> responseValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "response")).ToLocal(&responseValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (responseValue.IsEmpty() || responseValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member response is undefined.");
-    return;
-  } else {
-    Response* response = V8Response::toImplWithTypeCheck(isolate, responseValue);
-    if (!response) {
-      exceptionState.throwTypeError("member response is not of type Response.");
-      return;
+void V8ForeignFetchResponse::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ForeignFetchResponse& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): response.");
+        return;
     }
-    impl.setResponse(response);
-  }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> headersValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "headers")).ToLocal(&headersValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (headersValue.IsEmpty() || headersValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        Vector<String> headers = toImplArray<Vector<String>>(headersValue, 0, isolate, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setHeaders(headers);
+    }
+
+    v8::Local<v8::Value> originValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "origin")).ToLocal(&originValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (originValue.IsEmpty() || originValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> origin = toUSVString(isolate, originValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setOrigin(origin);
+    }
+
+    v8::Local<v8::Value> responseValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "response")).ToLocal(&responseValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (responseValue.IsEmpty() || responseValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member response is undefined.");
+        return;
+    } else {
+        Response* response = V8Response::toImplWithTypeCheck(isolate, responseValue);
+        if (!response) {
+            exceptionState.throwTypeError("member response is not of type Response.");
+            return;
+        }
+        impl.setResponse(response);
+    }
 }
 
-v8::Local<v8::Value> ForeignFetchResponse::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ForeignFetchResponse(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ForeignFetchResponse::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ForeignFetchResponse(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ForeignFetchResponse(const ForeignFetchResponse& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasHeaders()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "headers"), ToV8(impl.headers(), creationContext, isolate))))
-      return false;
-  }
+bool toV8ForeignFetchResponse(const ForeignFetchResponse& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasHeaders()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "headers"), ToV8(impl.headers(), creationContext, isolate))))
+            return false;
+    }
 
-  if (impl.hasOrigin()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "origin"), v8String(isolate, impl.origin()))))
-      return false;
-  }
+    if (impl.hasOrigin()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "origin"), v8String(isolate, impl.origin()))))
+            return false;
+    }
 
-  if (impl.hasResponse()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "response"), ToV8(impl.response(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasResponse()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "response"), ToV8(impl.response(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  return true;
+    return true;
 }
 
-ForeignFetchResponse NativeValueTraits<ForeignFetchResponse>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ForeignFetchResponse impl;
-  V8ForeignFetchResponse::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ForeignFetchResponse NativeValueTraits<ForeignFetchResponse>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ForeignFetchResponse impl;
+    V8ForeignFetchResponse::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

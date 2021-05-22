@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaKeyMessageEventInit_h
 #define MediaKeyMessageEventInit_h
 
@@ -22,31 +22,32 @@ namespace blink {
 class DOMArrayBuffer;
 
 class MODULES_EXPORT MediaKeyMessageEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaKeyMessageEventInit();
-  virtual ~MediaKeyMessageEventInit();
-  MediaKeyMessageEventInit(const MediaKeyMessageEventInit&);
-  MediaKeyMessageEventInit& operator=(const MediaKeyMessageEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMessage() const;
-  DOMArrayBuffer* message() const;
-  void setMessage(DOMArrayBuffer*);
+public:
+    MediaKeyMessageEventInit();
+    virtual ~MediaKeyMessageEventInit();
+    MediaKeyMessageEventInit(const MediaKeyMessageEventInit&);
+    MediaKeyMessageEventInit& operator=(const MediaKeyMessageEventInit&);
 
-  bool hasMessageType() const;
-  String messageType() const;
-  void setMessageType(String);
+    bool hasMessage() const;
+    DOMArrayBuffer* message() const;
+    void setMessage(DOMArrayBuffer*);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMessageType() const;
+    String messageType() const;
+    void setMessageType(String);
 
- private:
-  Member<DOMArrayBuffer> m_message;
-  String m_messageType;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaKeyMessageEventInit;
+private:
+    Member<DOMArrayBuffer> m_message;
+    String m_messageType;
+
+    friend class V8MediaKeyMessageEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaKeyMessageEventInit_h
+#endif // MediaKeyMessageEventInit_h

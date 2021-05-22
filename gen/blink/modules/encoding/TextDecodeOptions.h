@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef TextDecodeOptions_h
 #define TextDecodeOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT TextDecodeOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  TextDecodeOptions();
-  virtual ~TextDecodeOptions();
-  TextDecodeOptions(const TextDecodeOptions&);
-  TextDecodeOptions& operator=(const TextDecodeOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasStream() const;
-  bool stream() const;
-  void setStream(bool);
+public:
+    TextDecodeOptions();
+    virtual ~TextDecodeOptions();
+    TextDecodeOptions(const TextDecodeOptions&);
+    TextDecodeOptions& operator=(const TextDecodeOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasStream() const;
+    bool stream() const;
+    void setStream(bool);
 
- private:
-  bool m_hasStream = false;
-  bool m_stream;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8TextDecodeOptions;
+private:
+    bool m_hasStream = false;
+    bool m_stream;
+
+    friend class V8TextDecodeOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // TextDecodeOptions_h
+#endif // TextDecodeOptions_h

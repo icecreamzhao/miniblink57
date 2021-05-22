@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FileWriterSync.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,158 +46,173 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&FileWriterSync::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "FileWriterSync is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace FileWriterSyncV8Internal {
 
-static void positionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void positionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriterSync* impl = V8FileWriterSync::toImpl(holder);
+        FileWriterSync* impl = V8FileWriterSync::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->position()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->position()));
+    }
 
-MODULES_EXPORT void positionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterSyncV8Internal::positionAttributeGetter(info);
-}
+    MODULES_EXPORT void positionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterSyncV8Internal::positionAttributeGetter(info);
+    }
 
-static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriterSync* impl = V8FileWriterSync::toImpl(holder);
+        FileWriterSync* impl = V8FileWriterSync::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->length()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->length()));
+    }
 
-MODULES_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterSyncV8Internal::lengthAttributeGetter(info);
-}
+    MODULES_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterSyncV8Internal::lengthAttributeGetter(info);
+    }
 
-static void writeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriterSync", "write");
+    static void writeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriterSync", "write");
 
-  FileWriterSync* impl = V8FileWriterSync::toImpl(info.Holder());
+        FileWriterSync* impl = V8FileWriterSync::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Blob* data;
-  data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+        Blob* data;
+        data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->write(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->write(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void writeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterSyncV8Internal::writeMethod(info);
-}
+    MODULES_EXPORT void writeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterSyncV8Internal::writeMethod(info);
+    }
 
-static void seekMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriterSync", "seek");
+    static void seekMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriterSync", "seek");
 
-  FileWriterSync* impl = V8FileWriterSync::toImpl(info.Holder());
+        FileWriterSync* impl = V8FileWriterSync::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  long long position;
-  position = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        long long position;
+        position = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->seek(position, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->seek(position, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void seekMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterSyncV8Internal::seekMethod(info);
-}
+    MODULES_EXPORT void seekMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterSyncV8Internal::seekMethod(info);
+    }
 
-static void truncateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriterSync", "truncate");
+    static void truncateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriterSync", "truncate");
 
-  FileWriterSync* impl = V8FileWriterSync::toImpl(info.Holder());
+        FileWriterSync* impl = V8FileWriterSync::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  long long size;
-  size = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        long long size;
+        size = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->truncate(size, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->truncate(size, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void truncateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterSyncV8Internal::truncateMethod(info);
-}
+    MODULES_EXPORT void truncateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterSyncV8Internal::truncateMethod(info);
+    }
 
 } // namespace FileWriterSyncV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8FileWriterSyncAccessors[] = {
-    {"position", FileWriterSyncV8Internal::positionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"length", FileWriterSyncV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "position", FileWriterSyncV8Internal::positionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "length", FileWriterSyncV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8FileWriterSyncMethods[] = {
-    {"write", FileWriterSyncV8Internal::writeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"seek", FileWriterSyncV8Internal::seekMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"truncate", FileWriterSyncV8Internal::truncateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "write", FileWriterSyncV8Internal::writeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "seek", FileWriterSyncV8Internal::seekMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "truncate", FileWriterSyncV8Internal::truncateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8FileWriterSyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileWriterSync::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8FileWriterSync::internalFieldCount);
+static void installV8FileWriterSyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileWriterSync::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8FileWriterSync::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileWriterSyncAccessors, WTF_ARRAY_LENGTH(V8FileWriterSyncAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileWriterSyncMethods, WTF_ARRAY_LENGTH(V8FileWriterSyncMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileWriterSyncAccessors, WTF_ARRAY_LENGTH(V8FileWriterSyncAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileWriterSyncMethods, WTF_ARRAY_LENGTH(V8FileWriterSyncMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8FileWriterSync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileWriterSyncTemplate);
+v8::Local<v8::FunctionTemplate> V8FileWriterSync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileWriterSyncTemplate);
 }
 
-bool V8FileWriterSync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8FileWriterSync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8FileWriterSync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8FileWriterSync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-FileWriterSync* V8FileWriterSync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+FileWriterSync* V8FileWriterSync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

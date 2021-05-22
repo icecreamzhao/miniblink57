@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Touch.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,261 +49,294 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Touch::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Touch is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TouchV8Internal {
 
-static void identifierAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void identifierAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->identifier());
-}
+        v8SetReturnValueInt(info, impl->identifier());
+    }
 
-CORE_EXPORT void identifierAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::identifierAttributeGetter(info);
-}
+    CORE_EXPORT void identifierAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::identifierAttributeGetter(info);
+    }
 
-static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->target()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->target()), impl);
+    }
 
-CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::targetAttributeGetter(info);
-}
+    CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::targetAttributeGetter(info);
+    }
 
-static void screenXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void screenXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->screenX());
-}
+        v8SetReturnValue(info, impl->screenX());
+    }
 
-CORE_EXPORT void screenXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::screenXAttributeGetter(info);
-}
+    CORE_EXPORT void screenXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::screenXAttributeGetter(info);
+    }
 
-static void screenYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void screenYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->screenY());
-}
+        v8SetReturnValue(info, impl->screenY());
+    }
 
-CORE_EXPORT void screenYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::screenYAttributeGetter(info);
-}
+    CORE_EXPORT void screenYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::screenYAttributeGetter(info);
+    }
 
-static void clientXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->clientX());
-}
+        v8SetReturnValue(info, impl->clientX());
+    }
 
-CORE_EXPORT void clientXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::clientXAttributeGetter(info);
-}
+    CORE_EXPORT void clientXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::clientXAttributeGetter(info);
+    }
 
-static void clientYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->clientY());
-}
+        v8SetReturnValue(info, impl->clientY());
+    }
 
-CORE_EXPORT void clientYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::clientYAttributeGetter(info);
-}
+    CORE_EXPORT void clientYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::clientYAttributeGetter(info);
+    }
 
-static void pageXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pageXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->pageX());
-}
+        v8SetReturnValue(info, impl->pageX());
+    }
 
-CORE_EXPORT void pageXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::pageXAttributeGetter(info);
-}
+    CORE_EXPORT void pageXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::pageXAttributeGetter(info);
+    }
 
-static void pageYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pageYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->pageY());
-}
+        v8SetReturnValue(info, impl->pageY());
+    }
 
-CORE_EXPORT void pageYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::pageYAttributeGetter(info);
-}
+    CORE_EXPORT void pageYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::pageYAttributeGetter(info);
+    }
 
-static void radiusXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void radiusXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->radiusX());
-}
+        v8SetReturnValue(info, impl->radiusX());
+    }
 
-CORE_EXPORT void radiusXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::radiusXAttributeGetter(info);
-}
+    CORE_EXPORT void radiusXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::radiusXAttributeGetter(info);
+    }
 
-static void radiusYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void radiusYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->radiusY());
-}
+        v8SetReturnValue(info, impl->radiusY());
+    }
 
-CORE_EXPORT void radiusYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::radiusYAttributeGetter(info);
-}
+    CORE_EXPORT void radiusYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::radiusYAttributeGetter(info);
+    }
 
-static void rotationAngleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rotationAngleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->rotationAngle());
-}
+        v8SetReturnValue(info, impl->rotationAngle());
+    }
 
-CORE_EXPORT void rotationAngleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::rotationAngleAttributeGetter(info);
-}
+    CORE_EXPORT void rotationAngleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::rotationAngleAttributeGetter(info);
+    }
 
-static void forceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void forceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValue(info, impl->force());
-}
+        v8SetReturnValue(info, impl->force());
+    }
 
-CORE_EXPORT void forceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::forceAttributeGetter(info);
-}
+    CORE_EXPORT void forceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::forceAttributeGetter(info);
+    }
 
-static void regionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void regionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Touch* impl = V8Touch::toImpl(holder);
+        Touch* impl = V8Touch::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->region(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->region(), info.GetIsolate());
+    }
 
-CORE_EXPORT void regionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TouchV8Internal::regionAttributeGetter(info);
-}
+    CORE_EXPORT void regionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TouchV8Internal::regionAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Touch");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Touch");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  TouchInit initDict;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('initDict') is not an object.");
+        TouchInit initDict;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('initDict') is not an object.");
 
-    return;
-  }
-  V8TouchInit::toImpl(info.GetIsolate(), info[0], initDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8TouchInit::toImpl(info.GetIsolate(), info[0], initDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
-  Touch* impl = Touch::create(document, initDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Touch::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+        Touch* impl = Touch::create(document, initDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Touch::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace TouchV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8TouchAccessors[] = {
-    {"identifier", TouchV8Internal::identifierAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"target", TouchV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"screenX", TouchV8Internal::screenXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"screenY", TouchV8Internal::screenYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientX", TouchV8Internal::clientXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientY", TouchV8Internal::clientYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageX", TouchV8Internal::pageXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageY", TouchV8Internal::pageYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"radiusX", TouchV8Internal::radiusXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"radiusY", TouchV8Internal::radiusYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rotationAngle", TouchV8Internal::rotationAngleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"force", TouchV8Internal::forceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "identifier", TouchV8Internal::identifierAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "target", TouchV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "screenX", TouchV8Internal::screenXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "screenY", TouchV8Internal::screenYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientX", TouchV8Internal::clientXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientY", TouchV8Internal::clientYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageX", TouchV8Internal::pageXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageY", TouchV8Internal::pageYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "radiusX", TouchV8Internal::radiusXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "radiusY", TouchV8Internal::radiusYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rotationAngle", TouchV8Internal::rotationAngleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "force", TouchV8Internal::forceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8Touch::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Touch"));
-    return;
-  }
+void V8Touch::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Touch"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  TouchV8Internal::constructor(info);
+    TouchV8Internal::constructor(info);
 }
 
-static void installV8TouchTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Touch::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Touch::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8Touch::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8TouchTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Touch::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Touch::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8Touch::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TouchAccessors, WTF_ARRAY_LENGTH(V8TouchAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TouchAccessors, WTF_ARRAY_LENGTH(V8TouchAccessors));
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorregionConfiguration = {"region", TouchV8Internal::regionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorregionConfiguration);
-  }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorregionConfiguration = { "region", TouchV8Internal::regionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorregionConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8Touch::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TouchTemplate);
+v8::Local<v8::FunctionTemplate> V8Touch::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TouchTemplate);
 }
 
-bool V8Touch::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Touch::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Touch::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Touch::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Touch* V8Touch::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Touch* V8Touch::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

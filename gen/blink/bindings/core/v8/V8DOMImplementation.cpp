@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DOMImplementation.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,179 +50,193 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMImplementation::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMImplementation is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DOMImplementationV8Internal {
 
-static void createDocumentTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMImplementation", "createDocumentType");
+    static void createDocumentTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMImplementation", "createDocumentType");
 
-  DOMImplementation* impl = V8DOMImplementation::toImpl(info.Holder());
+        DOMImplementation* impl = V8DOMImplementation::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  V8StringResource<> qualifiedName;
-  V8StringResource<> publicId;
-  V8StringResource<> systemId;
-  qualifiedName = info[0];
-  if (!qualifiedName.prepare())
-    return;
+        V8StringResource<> qualifiedName;
+        V8StringResource<> publicId;
+        V8StringResource<> systemId;
+        qualifiedName = info[0];
+        if (!qualifiedName.prepare())
+            return;
 
-  publicId = info[1];
-  if (!publicId.prepare())
-    return;
+        publicId = info[1];
+        if (!publicId.prepare())
+            return;
 
-  systemId = info[2];
-  if (!systemId.prepare())
-    return;
+        systemId = info[2];
+        if (!systemId.prepare())
+            return;
 
-  DocumentType* result = impl->createDocumentType(qualifiedName, publicId, systemId, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void createDocumentTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMImplementationV8Internal::createDocumentTypeMethod(info);
-}
-
-static void createDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMImplementation", "createDocument");
-
-  DOMImplementation* impl = V8DOMImplementation::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<TreatNullAsEmptyString> qualifiedName;
-  DocumentType* doctype;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
-
-  qualifiedName = info[1];
-  if (!qualifiedName.prepare())
-    return;
-
-  if (!info[2]->IsUndefined()) {
-    doctype = V8DocumentType::toImplWithTypeCheck(info.GetIsolate(), info[2]);
-    if (!doctype && !isUndefinedOrNull(info[2])) {
-      exceptionState.throwTypeError("parameter 3 is not of type 'DocumentType'.");
-
-      return;
+        DocumentType* result = impl->createDocumentType(qualifiedName, publicId, systemId, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result);
     }
-  } else {
-    doctype = nullptr;
-  }
 
-  XMLDocument* result = impl->createDocument(namespaceURI, qualifiedName, doctype, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result);
-}
+    CORE_EXPORT void createDocumentTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMImplementationV8Internal::createDocumentTypeMethod(info);
+    }
 
-CORE_EXPORT  void createDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMImplementationV8Internal::createDocumentMethod(info);
-}
+    static void createDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMImplementation", "createDocument");
 
-static void createHTMLDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMImplementation* impl = V8DOMImplementation::toImpl(info.Holder());
+        DOMImplementation* impl = V8DOMImplementation::toImpl(info.Holder());
 
-  V8StringResource<> title;
-  if (!info[0]->IsUndefined()) {
-    title = info[0];
-    if (!title.prepare())
-      return;
-  } else {
-    title = nullptr;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  HTMLDocument* result = impl->createHTMLDocument(title);
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result);
-}
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<TreatNullAsEmptyString> qualifiedName;
+        DocumentType* doctype;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-CORE_EXPORT  void createHTMLDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMImplementationV8Internal::createHTMLDocumentMethod(info);
-}
+        qualifiedName = info[1];
+        if (!qualifiedName.prepare())
+            return;
 
-static void hasFeatureMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMImplementation* impl = V8DOMImplementation::toImpl(info.Holder());
+        if (!info[2]->IsUndefined()) {
+            doctype = V8DocumentType::toImplWithTypeCheck(info.GetIsolate(), info[2]);
+            if (!doctype && !isUndefinedOrNull(info[2])) {
+                exceptionState.throwTypeError("parameter 3 is not of type 'DocumentType'.");
 
-  v8SetReturnValueBool(info, impl->hasFeature());
-}
+                return;
+            }
+        } else {
+            doctype = nullptr;
+        }
 
-CORE_EXPORT  void hasFeatureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMImplementationV8Internal::hasFeatureMethod(info);
-}
+        XMLDocument* result = impl->createDocument(namespaceURI, qualifiedName, doctype, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void createDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMImplementationV8Internal::createDocumentMethod(info);
+    }
+
+    static void createHTMLDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMImplementation* impl = V8DOMImplementation::toImpl(info.Holder());
+
+        V8StringResource<> title;
+        if (!info[0]->IsUndefined()) {
+            title = info[0];
+            if (!title.prepare())
+                return;
+        } else {
+            title = nullptr;
+        }
+
+        HTMLDocument* result = impl->createHTMLDocument(title);
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void createHTMLDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMImplementationV8Internal::createHTMLDocumentMethod(info);
+    }
+
+    static void hasFeatureMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMImplementation* impl = V8DOMImplementation::toImpl(info.Holder());
+
+        v8SetReturnValueBool(info, impl->hasFeature());
+    }
+
+    CORE_EXPORT void hasFeatureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMImplementationV8Internal::hasFeatureMethod(info);
+    }
 
 } // namespace DOMImplementationV8Internal
 
-void V8DOMImplementation::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  DOMImplementation* impl = scriptWrappable->toImpl<DOMImplementation>();
-  // The document() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->document())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8DOMImplementation::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    DOMImplementation* impl = scriptWrappable->toImpl<DOMImplementation>();
+    // The document() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->document())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::MethodConfiguration V8DOMImplementationMethods[] = {
-    {"createDocumentType", DOMImplementationV8Internal::createDocumentTypeMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createDocument", DOMImplementationV8Internal::createDocumentMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createHTMLDocument", DOMImplementationV8Internal::createHTMLDocumentMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasFeature", DOMImplementationV8Internal::hasFeatureMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "createDocumentType", DOMImplementationV8Internal::createDocumentTypeMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createDocument", DOMImplementationV8Internal::createDocumentMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createHTMLDocument", DOMImplementationV8Internal::createHTMLDocumentMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasFeature", DOMImplementationV8Internal::hasFeatureMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8DOMImplementationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMImplementation::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DOMImplementation::internalFieldCount);
+static void installV8DOMImplementationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMImplementation::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DOMImplementation::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMImplementationMethods, WTF_ARRAY_LENGTH(V8DOMImplementationMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMImplementationMethods, WTF_ARRAY_LENGTH(V8DOMImplementationMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DOMImplementation::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMImplementationTemplate);
+v8::Local<v8::FunctionTemplate> V8DOMImplementation::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMImplementationTemplate);
 }
 
-bool V8DOMImplementation::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DOMImplementation::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DOMImplementation::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DOMImplementation::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DOMImplementation* V8DOMImplementation::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMImplementation* V8DOMImplementation::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

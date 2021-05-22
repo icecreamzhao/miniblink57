@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8EventSource.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,252 +49,279 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&EventSource::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "EventSource is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace EventSourceV8Internal {
 
-static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  EventSource* impl = V8EventSource::toImpl(holder);
+        EventSource* impl = V8EventSource::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->url(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->url(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventSourceV8Internal::urlAttributeGetter(info);
-}
+    MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventSourceV8Internal::urlAttributeGetter(info);
+    }
 
-static void withCredentialsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void withCredentialsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  EventSource* impl = V8EventSource::toImpl(holder);
+        EventSource* impl = V8EventSource::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->withCredentials());
-}
+        v8SetReturnValueBool(info, impl->withCredentials());
+    }
 
-MODULES_EXPORT void withCredentialsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventSourceV8Internal::withCredentialsAttributeGetter(info);
-}
+    MODULES_EXPORT void withCredentialsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventSourceV8Internal::withCredentialsAttributeGetter(info);
+    }
 
-static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  EventSource* impl = V8EventSource::toImpl(holder);
+        EventSource* impl = V8EventSource::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->readyState());
-}
+        v8SetReturnValueUnsigned(info, impl->readyState());
+    }
 
-MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventSourceV8Internal::readyStateAttributeGetter(info);
-}
+    MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventSourceV8Internal::readyStateAttributeGetter(info);
+    }
 
-static void onopenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onopenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  EventSource* impl = V8EventSource::toImpl(holder);
+        EventSource* impl = V8EventSource::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onopen()));
+        EventListener* cppValue(WTF::getPtr(impl->onopen()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onopenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventSourceV8Internal::onopenAttributeGetter(info);
-}
+    MODULES_EXPORT void onopenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventSourceV8Internal::onopenAttributeGetter(info);
+    }
 
-static void onopenAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  EventSource* impl = V8EventSource::toImpl(holder);
+    static void onopenAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        EventSource* impl = V8EventSource::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onopen(), v8Value, V8EventSource::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onopen(), v8Value, V8EventSource::eventListenerCacheIndex);
 
-  impl->setOnopen(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnopen(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onopenAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onopenAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  EventSourceV8Internal::onopenAttributeSetter(v8Value, info);
-}
+        EventSourceV8Internal::onopenAttributeSetter(v8Value, info);
+    }
 
-static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  EventSource* impl = V8EventSource::toImpl(holder);
+        EventSource* impl = V8EventSource::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onmessage()));
+        EventListener* cppValue(WTF::getPtr(impl->onmessage()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventSourceV8Internal::onmessageAttributeGetter(info);
-}
+    MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventSourceV8Internal::onmessageAttributeGetter(info);
+    }
 
-static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  EventSource* impl = V8EventSource::toImpl(holder);
+    static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        EventSource* impl = V8EventSource::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8EventSource::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8EventSource::eventListenerCacheIndex);
 
-  impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  EventSourceV8Internal::onmessageAttributeSetter(v8Value, info);
-}
+        EventSourceV8Internal::onmessageAttributeSetter(v8Value, info);
+    }
 
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  EventSource* impl = V8EventSource::toImpl(holder);
+        EventSource* impl = V8EventSource::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventSourceV8Internal::onerrorAttributeGetter(info);
-}
+    MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventSourceV8Internal::onerrorAttributeGetter(info);
+    }
 
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  EventSource* impl = V8EventSource::toImpl(holder);
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        EventSource* impl = V8EventSource::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8EventSource::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8EventSource::eventListenerCacheIndex);
 
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  EventSourceV8Internal::onerrorAttributeSetter(v8Value, info);
-}
+        EventSourceV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
 
-static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventSource* impl = V8EventSource::toImpl(info.Holder());
+    static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventSource* impl = V8EventSource::toImpl(info.Holder());
 
-  impl->close();
-}
+        impl->close();
+    }
 
-MODULES_EXPORT  void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventSourceV8Internal::closeMethod(info);
-}
+    MODULES_EXPORT void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventSourceV8Internal::closeMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "EventSource");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "EventSource");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> url;
-  EventSourceInit eventSourceInitDict;
-  url = info[0];
-  if (!url.prepare())
-    return;
+        V8StringResource<> url;
+        EventSourceInit eventSourceInitDict;
+        url = info[0];
+        if (!url.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventSourceInitDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventSourceInitDict') is not an object.");
 
-    return;
-  }
-  V8EventSourceInit::toImpl(info.GetIsolate(), info[1], eventSourceInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8EventSourceInit::toImpl(info.GetIsolate(), info[1], eventSourceInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  EventSource* impl = EventSource::create(executionContext, url, eventSourceInitDict, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8EventSource::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        EventSource* impl = EventSource::create(executionContext, url, eventSourceInitDict, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8EventSource::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace EventSourceV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8EventSourceAccessors[] = {
-    {"url", EventSourceV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"withCredentials", EventSourceV8Internal::withCredentialsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readyState", EventSourceV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onopen", EventSourceV8Internal::onopenAttributeGetterCallback, EventSourceV8Internal::onopenAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmessage", EventSourceV8Internal::onmessageAttributeGetterCallback, EventSourceV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", EventSourceV8Internal::onerrorAttributeGetterCallback, EventSourceV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "url", EventSourceV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "withCredentials", EventSourceV8Internal::withCredentialsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readyState", EventSourceV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onopen", EventSourceV8Internal::onopenAttributeGetterCallback, EventSourceV8Internal::onopenAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmessage", EventSourceV8Internal::onmessageAttributeGetterCallback, EventSourceV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", EventSourceV8Internal::onerrorAttributeGetterCallback, EventSourceV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8EventSourceMethods[] = {
-    {"close", EventSourceV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "close", EventSourceV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8EventSource::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("EventSource"));
-    return;
-  }
+void V8EventSource::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("EventSource"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  EventSourceV8Internal::constructor(info);
+    EventSourceV8Internal::constructor(info);
 }
 
-static void installV8EventSourceTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8EventSource::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8EventSource::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8EventSource::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8EventSourceTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8EventSource::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8EventSource::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8EventSource::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8EventSourceConstants[] = {
-      {"CONNECTING", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"OPEN", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"CLOSED", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8EventSourceConstants, WTF_ARRAY_LENGTH(V8EventSourceConstants));
-  static_assert(0 == EventSource::kConnecting, "the value of EventSource_kConnecting does not match with implementation");
-  static_assert(1 == EventSource::kOpen, "the value of EventSource_kOpen does not match with implementation");
-  static_assert(2 == EventSource::kClosed, "the value of EventSource_kClosed does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventSourceAccessors, WTF_ARRAY_LENGTH(V8EventSourceAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventSourceMethods, WTF_ARRAY_LENGTH(V8EventSourceMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8EventSourceConstants[] = {
+        { "CONNECTING", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "OPEN", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "CLOSED", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8EventSourceConstants, WTF_ARRAY_LENGTH(V8EventSourceConstants));
+    static_assert(0 == EventSource::kConnecting, "the value of EventSource_kConnecting does not match with implementation");
+    static_assert(1 == EventSource::kOpen, "the value of EventSource_kOpen does not match with implementation");
+    static_assert(2 == EventSource::kClosed, "the value of EventSource_kClosed does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventSourceAccessors, WTF_ARRAY_LENGTH(V8EventSourceAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventSourceMethods, WTF_ARRAY_LENGTH(V8EventSourceMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8EventSource::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EventSourceTemplate);
+v8::Local<v8::FunctionTemplate> V8EventSource::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EventSourceTemplate);
 }
 
-bool V8EventSource::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8EventSource::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8EventSource::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8EventSource::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-EventSource* V8EventSource::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+EventSource* V8EventSource::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

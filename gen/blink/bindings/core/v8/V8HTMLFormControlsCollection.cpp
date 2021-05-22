@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLFormControlsCollection.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,158 +51,174 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLFormControlsCollection::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLFormControlsCollection is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLFormControlsCollectionV8Internal {
 
-static void namedItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
+    static void namedItemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("namedItem", "HTMLFormControlsCollection", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("namedItem", "HTMLFormControlsCollection", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  RadioNodeListOrElement result;
-  impl->namedGetter(name, result);
-  v8SetReturnValue(info, result);
-}
+        RadioNodeListOrElement result;
+        impl->namedGetter(name, result);
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void namedItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLFormControlsCollectionV8Internal::namedItemMethod(info);
-}
+    CORE_EXPORT void namedItemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLFormControlsCollectionV8Internal::namedItemMethod(info);
+    }
 
-static void namedPropertyGetter(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
-  RadioNodeListOrElement result;
-  impl->namedGetter(name, result);
-  if (result.isNull())
-    return;
-  v8SetReturnValue(info, result);
-}
+    static void namedPropertyGetter(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
+        RadioNodeListOrElement result;
+        impl->namedGetter(name, result);
+        if (result.isNull())
+            return;
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT void namedPropertyGetterCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+    CORE_EXPORT void namedPropertyGetterCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
 
-  HTMLFormControlsCollectionV8Internal::namedPropertyGetter(propertyName, info);
-}
+        HTMLFormControlsCollectionV8Internal::namedPropertyGetter(propertyName, info);
+    }
 
-static void namedPropertyQuery(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Integer>& info) {
-  const CString& nameInUtf8 = name.utf8();
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "HTMLFormControlsCollection", nameInUtf8.data());
+    static void namedPropertyQuery(const AtomicString& name, const v8::PropertyCallbackInfo<v8::Integer>& info)
+    {
+        const CString& nameInUtf8 = name.utf8();
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "HTMLFormControlsCollection", nameInUtf8.data());
 
-  HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
+        HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
 
-  bool result = impl->namedPropertyQuery(name, exceptionState);
-  if (!result)
-    return;
-  v8SetReturnValueInt(info, v8::None);
-}
+        bool result = impl->namedPropertyQuery(name, exceptionState);
+        if (!result)
+            return;
+        v8SetReturnValueInt(info, v8::None);
+    }
 
-CORE_EXPORT void namedPropertyQueryCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Integer>& info) {
-  if (!name->IsString())
-    return;
-  const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
+    CORE_EXPORT void namedPropertyQueryCallback(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Integer>& info)
+    {
+        if (!name->IsString())
+            return;
+        const AtomicString& propertyName = toCoreAtomicString(name.As<v8::String>());
 
-  HTMLFormControlsCollectionV8Internal::namedPropertyQuery(propertyName, info);
-}
+        HTMLFormControlsCollectionV8Internal::namedPropertyQuery(propertyName, info);
+    }
 
-static void namedPropertyEnumerator(const v8::PropertyCallbackInfo<v8::Array>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::EnumerationContext, "HTMLFormControlsCollection");
+    static void namedPropertyEnumerator(const v8::PropertyCallbackInfo<v8::Array>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::EnumerationContext, "HTMLFormControlsCollection");
 
-  HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
+        HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
 
-  Vector<String> names;
-  impl->namedPropertyEnumerator(names, exceptionState);
-  if (exceptionState.hadException())
-    return;
-  v8SetReturnValue(info, ToV8(names, info.Holder(), info.GetIsolate()).As<v8::Array>());
-}
+        Vector<String> names;
+        impl->namedPropertyEnumerator(names, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        v8SetReturnValue(info, ToV8(names, info.Holder(), info.GetIsolate()).As<v8::Array>());
+    }
 
-CORE_EXPORT void namedPropertyEnumeratorCallback(const v8::PropertyCallbackInfo<v8::Array>& info) {
-  HTMLFormControlsCollectionV8Internal::namedPropertyEnumerator(info);
-}
+    CORE_EXPORT void namedPropertyEnumeratorCallback(const v8::PropertyCallbackInfo<v8::Array>& info)
+    {
+        HTMLFormControlsCollectionV8Internal::namedPropertyEnumerator(info);
+    }
 
-static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
+    static void indexedPropertyGetter(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        HTMLFormControlsCollection* impl = V8HTMLFormControlsCollection::toImpl(info.Holder());
 
-  // We assume that all the implementations support length() method, although
-  // the spec doesn't require that length() must exist.  It's okay that
-  // the interface does not have length attribute as long as the
-  // implementation supports length() member function.
-  if (index >= impl->length())
-    return;  // Returns undefined due to out-of-range.
+        // We assume that all the implementations support length() method, although
+        // the spec doesn't require that length() must exist.  It's okay that
+        // the interface does not have length attribute as long as the
+        // implementation supports length() member function.
+        if (index >= impl->length())
+            return; // Returns undefined due to out-of-range.
 
-  Node* result = impl->item(index);
-  v8SetReturnValueFast(info, result, impl);
-}
+        Node* result = impl->item(index);
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  HTMLFormControlsCollectionV8Internal::indexedPropertyGetter(index, info);
-}
+    CORE_EXPORT void indexedPropertyGetterCallback(uint32_t index, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        HTMLFormControlsCollectionV8Internal::indexedPropertyGetter(index, info);
+    }
 
 } // namespace HTMLFormControlsCollectionV8Internal
 
-void V8HTMLFormControlsCollection::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  HTMLFormControlsCollection* impl = scriptWrappable->toImpl<HTMLFormControlsCollection>();
-  // The ownerNode() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->ownerNode())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8HTMLFormControlsCollection::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    HTMLFormControlsCollection* impl = scriptWrappable->toImpl<HTMLFormControlsCollection>();
+    // The ownerNode() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->ownerNode())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLFormControlsCollectionMethods[] = {
-    {"namedItem", HTMLFormControlsCollectionV8Internal::namedItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "namedItem", HTMLFormControlsCollectionV8Internal::namedItemMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLFormControlsCollectionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLFormControlsCollection::wrapperTypeInfo.interfaceName, V8HTMLCollection::domTemplate(isolate, world), V8HTMLFormControlsCollection::internalFieldCount);
+static void installV8HTMLFormControlsCollectionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLFormControlsCollection::wrapperTypeInfo.interfaceName, V8HTMLCollection::domTemplate(isolate, world), V8HTMLFormControlsCollection::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLFormControlsCollectionMethods, WTF_ARRAY_LENGTH(V8HTMLFormControlsCollectionMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLFormControlsCollectionMethods, WTF_ARRAY_LENGTH(V8HTMLFormControlsCollectionMethods));
 
-  // Indexed properties
-  v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(HTMLFormControlsCollectionV8Internal::indexedPropertyGetterCallback, 0, 0, 0, indexedPropertyEnumerator<HTMLFormControlsCollection>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
-  instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
-  // Named properties
-  v8::NamedPropertyHandlerConfiguration namedPropertyHandlerConfig(HTMLFormControlsCollectionV8Internal::namedPropertyGetterCallback, 0, HTMLFormControlsCollectionV8Internal::namedPropertyQueryCallback, 0, HTMLFormControlsCollectionV8Internal::namedPropertyEnumeratorCallback, v8::Local<v8::Value>(), static_cast<v8::PropertyHandlerFlags>(int(v8::PropertyHandlerFlags::kOnlyInterceptStrings) | int(v8::PropertyHandlerFlags::kNonMasking)));
-  instanceTemplate->SetHandler(namedPropertyHandlerConfig);
+    // Indexed properties
+    v8::IndexedPropertyHandlerConfiguration indexedPropertyHandlerConfig(HTMLFormControlsCollectionV8Internal::indexedPropertyGetterCallback, 0, 0, 0, indexedPropertyEnumerator<HTMLFormControlsCollection>, v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
+    instanceTemplate->SetHandler(indexedPropertyHandlerConfig);
+    // Named properties
+    v8::NamedPropertyHandlerConfiguration namedPropertyHandlerConfig(HTMLFormControlsCollectionV8Internal::namedPropertyGetterCallback, 0, HTMLFormControlsCollectionV8Internal::namedPropertyQueryCallback, 0, HTMLFormControlsCollectionV8Internal::namedPropertyEnumeratorCallback, v8::Local<v8::Value>(), static_cast<v8::PropertyHandlerFlags>(int(v8::PropertyHandlerFlags::kOnlyInterceptStrings) | int(v8::PropertyHandlerFlags::kNonMasking)));
+    instanceTemplate->SetHandler(namedPropertyHandlerConfig);
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLFormControlsCollection::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLFormControlsCollectionTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLFormControlsCollection::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLFormControlsCollectionTemplate);
 }
 
-bool V8HTMLFormControlsCollection::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLFormControlsCollection::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLFormControlsCollection::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLFormControlsCollection::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLFormControlsCollection* V8HTMLFormControlsCollection::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLFormControlsCollection* V8HTMLFormControlsCollection::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

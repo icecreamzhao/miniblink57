@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8InternalDictionaryDerived_h
 #define V8InternalDictionaryDerived_h
 
@@ -22,27 +22,28 @@ namespace blink {
 class ExceptionState;
 
 class V8InternalDictionaryDerived {
- public:
-  static void toImpl(v8::Isolate*, v8::Local<v8::Value>, InternalDictionaryDerived&, ExceptionState&);
+public:
+    static void toImpl(v8::Isolate*, v8::Local<v8::Value>, InternalDictionaryDerived&, ExceptionState&);
 };
 
 bool toV8InternalDictionaryDerived(const InternalDictionaryDerived&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, InternalDictionaryDerived& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, InternalDictionaryDerived& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<InternalDictionaryDerived> {
-  static InternalDictionaryDerived nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static InternalDictionaryDerived nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<InternalDictionaryDerived> {
-  typedef V8InternalDictionaryDerived Type;
+    typedef V8InternalDictionaryDerived Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8InternalDictionaryDerived_h
+#endif // V8InternalDictionaryDerived_h

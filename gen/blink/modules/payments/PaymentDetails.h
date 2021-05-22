@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentDetails_h
 #define PaymentDetails_h
 
@@ -24,50 +24,51 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentDetails : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentDetails();
-  virtual ~PaymentDetails();
-  PaymentDetails(const PaymentDetails&);
-  PaymentDetails& operator=(const PaymentDetails&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDisplayItems() const;
-  const HeapVector<PaymentItem>& displayItems() const;
-  void setDisplayItems(const HeapVector<PaymentItem>&);
+public:
+    PaymentDetails();
+    virtual ~PaymentDetails();
+    PaymentDetails(const PaymentDetails&);
+    PaymentDetails& operator=(const PaymentDetails&);
 
-  bool hasError() const;
-  String error() const;
-  void setError(String);
+    bool hasDisplayItems() const;
+    const HeapVector<PaymentItem>& displayItems() const;
+    void setDisplayItems(const HeapVector<PaymentItem>&);
 
-  bool hasModifiers() const;
-  const HeapVector<PaymentDetailsModifier>& modifiers() const;
-  void setModifiers(const HeapVector<PaymentDetailsModifier>&);
+    bool hasError() const;
+    String error() const;
+    void setError(String);
 
-  bool hasShippingOptions() const;
-  const HeapVector<PaymentShippingOption>& shippingOptions() const;
-  void setShippingOptions(const HeapVector<PaymentShippingOption>&);
+    bool hasModifiers() const;
+    const HeapVector<PaymentDetailsModifier>& modifiers() const;
+    void setModifiers(const HeapVector<PaymentDetailsModifier>&);
 
-  bool hasTotal() const;
-  const PaymentItem& total() const;
-  void setTotal(const PaymentItem&);
+    bool hasShippingOptions() const;
+    const HeapVector<PaymentShippingOption>& shippingOptions() const;
+    void setShippingOptions(const HeapVector<PaymentShippingOption>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTotal() const;
+    const PaymentItem& total() const;
+    void setTotal(const PaymentItem&);
 
- private:
-  bool m_hasDisplayItems = false;
-  HeapVector<PaymentItem> m_displayItems;
-  String m_error;
-  bool m_hasModifiers = false;
-  HeapVector<PaymentDetailsModifier> m_modifiers;
-  bool m_hasShippingOptions = false;
-  HeapVector<PaymentShippingOption> m_shippingOptions;
-  bool m_hasTotal = false;
-  PaymentItem m_total;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentDetails;
+private:
+    bool m_hasDisplayItems = false;
+    HeapVector<PaymentItem> m_displayItems;
+    String m_error;
+    bool m_hasModifiers = false;
+    HeapVector<PaymentDetailsModifier> m_modifiers;
+    bool m_hasShippingOptions = false;
+    HeapVector<PaymentShippingOption> m_shippingOptions;
+    bool m_hasTotal = false;
+    PaymentItem m_total;
+
+    friend class V8PaymentDetails;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentDetails_h
+#endif // PaymentDetails_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CharacterData.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,418 +52,456 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CharacterData::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CharacterData is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CharacterDataV8Internal {
 
-static void dataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CharacterData* impl = V8CharacterData::toImpl(holder);
+        CharacterData* impl = V8CharacterData::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->data(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->data(), info.GetIsolate());
+    }
 
-CORE_EXPORT void dataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::dataAttributeGetter(info);
-}
+    CORE_EXPORT void dataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::dataAttributeGetter(info);
+    }
 
-static void dataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CharacterData* impl = V8CharacterData::toImpl(holder);
+    static void dataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CharacterData* impl = V8CharacterData::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setData(cppValue);
-}
+        impl->setData(cppValue);
+    }
 
-CORE_EXPORT void dataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void dataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CharacterDataV8Internal::dataAttributeSetter(v8Value, info);
-}
+        CharacterDataV8Internal::dataAttributeSetter(v8Value, info);
+    }
 
-static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CharacterData* impl = V8CharacterData::toImpl(holder);
+        CharacterData* impl = V8CharacterData::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->length());
-}
+        v8SetReturnValueUnsigned(info, impl->length());
+    }
 
-CORE_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::lengthAttributeGetter(info);
-}
+    CORE_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::lengthAttributeGetter(info);
+    }
 
-static void previousElementSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void previousElementSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CharacterData* impl = V8CharacterData::toImpl(holder);
+        CharacterData* impl = V8CharacterData::toImpl(holder);
 
-  v8SetReturnValueFast(info, NonDocumentTypeChildNode::previousElementSibling(*impl), impl);
-}
+        v8SetReturnValueFast(info, NonDocumentTypeChildNode::previousElementSibling(*impl), impl);
+    }
 
-CORE_EXPORT void previousElementSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::previousElementSiblingAttributeGetter(info);
-}
+    CORE_EXPORT void previousElementSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::previousElementSiblingAttributeGetter(info);
+    }
 
-static void previousElementSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void previousElementSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CharacterData* impl = V8CharacterData::toImpl(holder);
+        CharacterData* impl = V8CharacterData::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, NonDocumentTypeChildNode::previousElementSibling(*impl));
-}
+        v8SetReturnValueForMainWorld(info, NonDocumentTypeChildNode::previousElementSibling(*impl));
+    }
 
-CORE_EXPORT void previousElementSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::previousElementSiblingAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void previousElementSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::previousElementSiblingAttributeGetterForMainWorld(info);
+    }
 
-static void nextElementSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nextElementSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CharacterData* impl = V8CharacterData::toImpl(holder);
+        CharacterData* impl = V8CharacterData::toImpl(holder);
 
-  v8SetReturnValueFast(info, NonDocumentTypeChildNode::nextElementSibling(*impl), impl);
-}
+        v8SetReturnValueFast(info, NonDocumentTypeChildNode::nextElementSibling(*impl), impl);
+    }
 
-CORE_EXPORT void nextElementSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::nextElementSiblingAttributeGetter(info);
-}
+    CORE_EXPORT void nextElementSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::nextElementSiblingAttributeGetter(info);
+    }
+
+    static void nextElementSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CharacterData* impl = V8CharacterData::toImpl(holder);
 
-static void nextElementSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        v8SetReturnValueForMainWorld(info, NonDocumentTypeChildNode::nextElementSibling(*impl));
+    }
 
-  CharacterData* impl = V8CharacterData::toImpl(holder);
-
-  v8SetReturnValueForMainWorld(info, NonDocumentTypeChildNode::nextElementSibling(*impl));
-}
-
-CORE_EXPORT void nextElementSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::nextElementSiblingAttributeGetterForMainWorld(info);
-}
-
-static void substringDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "substringData");
-
-  CharacterData* impl = V8CharacterData::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned offset;
-  unsigned count;
-  offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  count = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  String result = impl->substringData(offset, count, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
-CORE_EXPORT  void substringDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::substringDataMethod(info);
-}
-
-static void appendDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterData* impl = V8CharacterData::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("appendData", "CharacterData", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> data;
-  data = info[0];
-  if (!data.prepare())
-    return;
-
-  impl->appendData(data);
-}
-
-CORE_EXPORT  void appendDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::appendDataMethod(info);
-}
-
-static void insertDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "insertData");
-
-  CharacterData* impl = V8CharacterData::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned offset;
-  V8StringResource<> data;
-  offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  data = info[1];
-  if (!data.prepare())
-    return;
-
-  impl->insertData(offset, data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void insertDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::insertDataMethod(info);
-}
-
-static void deleteDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "deleteData");
-
-  CharacterData* impl = V8CharacterData::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  unsigned offset;
-  unsigned count;
-  offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  count = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->deleteData(offset, count, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void deleteDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::deleteDataMethod(info);
-}
-
-static void replaceDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "replaceData");
-
-  CharacterData* impl = V8CharacterData::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  unsigned offset;
-  unsigned count;
-  V8StringResource<> data;
-  offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  count = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  data = info[2];
-  if (!data.prepare())
-    return;
-
-  impl->replaceData(offset, count, data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void replaceDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CharacterDataV8Internal::replaceDataMethod(info);
-}
-
-static void beforeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "before");
-
-  CharacterData* impl = V8CharacterData::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ChildNode::before(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void beforeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  CharacterDataV8Internal::beforeMethod(info);
-}
-
-static void afterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "after");
-
-  CharacterData* impl = V8CharacterData::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ChildNode::after(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void afterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  CharacterDataV8Internal::afterMethod(info);
-}
-
-static void replaceWithMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "replaceWith");
-
-  CharacterData* impl = V8CharacterData::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ChildNode::replaceWith(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void replaceWithMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  CharacterDataV8Internal::replaceWithMethod(info);
-}
-
-static void removeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "remove");
-
-  CharacterData* impl = V8CharacterData::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  ChildNode::remove(*impl, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void removeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  CharacterDataV8Internal::removeMethod(info);
-}
+    CORE_EXPORT void nextElementSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::nextElementSiblingAttributeGetterForMainWorld(info);
+    }
+
+    static void substringDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "substringData");
+
+        CharacterData* impl = V8CharacterData::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned offset;
+        unsigned count;
+        offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        count = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        String result = impl->substringData(offset, count, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    CORE_EXPORT void substringDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::substringDataMethod(info);
+    }
+
+    static void appendDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterData* impl = V8CharacterData::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("appendData", "CharacterData", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> data;
+        data = info[0];
+        if (!data.prepare())
+            return;
+
+        impl->appendData(data);
+    }
+
+    CORE_EXPORT void appendDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::appendDataMethod(info);
+    }
+
+    static void insertDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "insertData");
+
+        CharacterData* impl = V8CharacterData::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned offset;
+        V8StringResource<> data;
+        offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        data = info[1];
+        if (!data.prepare())
+            return;
+
+        impl->insertData(offset, data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void insertDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::insertDataMethod(info);
+    }
+
+    static void deleteDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "deleteData");
+
+        CharacterData* impl = V8CharacterData::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        unsigned offset;
+        unsigned count;
+        offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        count = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->deleteData(offset, count, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void deleteDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::deleteDataMethod(info);
+    }
+
+    static void replaceDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "replaceData");
+
+        CharacterData* impl = V8CharacterData::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        unsigned offset;
+        unsigned count;
+        V8StringResource<> data;
+        offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        count = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        data = info[2];
+        if (!data.prepare())
+            return;
+
+        impl->replaceData(offset, count, data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void replaceDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CharacterDataV8Internal::replaceDataMethod(info);
+    }
+
+    static void beforeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "before");
+
+        CharacterData* impl = V8CharacterData::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ChildNode::before(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void beforeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        CharacterDataV8Internal::beforeMethod(info);
+    }
+
+    static void afterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "after");
+
+        CharacterData* impl = V8CharacterData::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ChildNode::after(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void afterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        CharacterDataV8Internal::afterMethod(info);
+    }
+
+    static void replaceWithMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "replaceWith");
+
+        CharacterData* impl = V8CharacterData::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ChildNode::replaceWith(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void replaceWithMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        CharacterDataV8Internal::replaceWithMethod(info);
+    }
+
+    static void removeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CharacterData", "remove");
+
+        CharacterData* impl = V8CharacterData::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        ChildNode::remove(*impl, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void removeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        CharacterDataV8Internal::removeMethod(info);
+    }
 
 } // namespace CharacterDataV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CharacterDataAccessors[] = {
-    {"data", CharacterDataV8Internal::dataAttributeGetterCallback, CharacterDataV8Internal::dataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"length", CharacterDataV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"previousElementSibling", CharacterDataV8Internal::previousElementSiblingAttributeGetterCallback, 0, CharacterDataV8Internal::previousElementSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nextElementSibling", CharacterDataV8Internal::nextElementSiblingAttributeGetterCallback, 0, CharacterDataV8Internal::nextElementSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "data", CharacterDataV8Internal::dataAttributeGetterCallback, CharacterDataV8Internal::dataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "length", CharacterDataV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "previousElementSibling", CharacterDataV8Internal::previousElementSiblingAttributeGetterCallback, 0, CharacterDataV8Internal::previousElementSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nextElementSibling", CharacterDataV8Internal::nextElementSiblingAttributeGetterCallback, 0, CharacterDataV8Internal::nextElementSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8CharacterDataMethods[] = {
-    {"substringData", CharacterDataV8Internal::substringDataMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"appendData", CharacterDataV8Internal::appendDataMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"insertData", CharacterDataV8Internal::insertDataMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteData", CharacterDataV8Internal::deleteDataMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"replaceData", CharacterDataV8Internal::replaceDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"remove", CharacterDataV8Internal::removeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "substringData", CharacterDataV8Internal::substringDataMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "appendData", CharacterDataV8Internal::appendDataMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "insertData", CharacterDataV8Internal::insertDataMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteData", CharacterDataV8Internal::deleteDataMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "replaceData", CharacterDataV8Internal::replaceDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "remove", CharacterDataV8Internal::removeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CharacterDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CharacterData::wrapperTypeInfo.interfaceName, V8Node::domTemplate(isolate, world), V8CharacterData::internalFieldCount);
+static void installV8CharacterDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CharacterData::wrapperTypeInfo.interfaceName, V8Node::domTemplate(isolate, world), V8CharacterData::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CharacterDataAccessors, WTF_ARRAY_LENGTH(V8CharacterDataAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CharacterDataMethods, WTF_ARRAY_LENGTH(V8CharacterDataMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CharacterDataAccessors, WTF_ARRAY_LENGTH(V8CharacterDataAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CharacterDataMethods, WTF_ARRAY_LENGTH(V8CharacterDataMethods));
 
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration beforeMethodConfiguration = {"before", CharacterDataV8Internal::beforeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, beforeMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration afterMethodConfiguration = {"after", CharacterDataV8Internal::afterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, afterMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration replaceWithMethodConfiguration = {"replaceWith", CharacterDataV8Internal::replaceWithMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, replaceWithMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration beforeMethodConfiguration = { "before", CharacterDataV8Internal::beforeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, beforeMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration afterMethodConfiguration = { "after", CharacterDataV8Internal::afterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, afterMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration replaceWithMethodConfiguration = { "replaceWith", CharacterDataV8Internal::replaceWithMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, replaceWithMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8CharacterData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CharacterDataTemplate);
+v8::Local<v8::FunctionTemplate> V8CharacterData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CharacterDataTemplate);
 }
 
-bool V8CharacterData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CharacterData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CharacterData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CharacterData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CharacterData* V8CharacterData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CharacterData* V8CharacterData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-void V8CharacterData::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  v8::Isolate* isolate = context->GetIsolate();
-  v8::Local<v8::Name> unscopablesSymbol(v8::Symbol::GetUnscopables(isolate));
-  v8::Local<v8::Object> unscopables;
-  if (v8CallBoolean(prototypeObject->HasOwnProperty(context, unscopablesSymbol)))
-    unscopables = prototypeObject->Get(context, unscopablesSymbol).ToLocalChecked().As<v8::Object>();
-  else
-    unscopables = v8::Object::New(isolate);
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "after"), v8::True(isolate)).FromJust();
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "before"), v8::True(isolate)).FromJust();
-  }
-  unscopables->CreateDataProperty(context, v8AtomicString(isolate, "remove"), v8::True(isolate)).FromJust();
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "replaceWith"), v8::True(isolate)).FromJust();
-  }
-  prototypeObject->CreateDataProperty(context, unscopablesSymbol, unscopables).FromJust();
+void V8CharacterData::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::Local<v8::Name> unscopablesSymbol(v8::Symbol::GetUnscopables(isolate));
+    v8::Local<v8::Object> unscopables;
+    if (v8CallBoolean(prototypeObject->HasOwnProperty(context, unscopablesSymbol)))
+        unscopables = prototypeObject->Get(context, unscopablesSymbol).ToLocalChecked().As<v8::Object>();
+    else
+        unscopables = v8::Object::New(isolate);
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "after"), v8::True(isolate)).FromJust();
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "before"), v8::True(isolate)).FromJust();
+    }
+    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "remove"), v8::True(isolate)).FromJust();
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "replaceWith"), v8::True(isolate)).FromJust();
+    }
+    prototypeObject->CreateDataProperty(context, unscopablesSymbol, unscopables).FromJust();
 }
 
-}  // namespace blink
+} // namespace blink

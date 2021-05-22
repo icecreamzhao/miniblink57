@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DOMMatrix.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,1369 +53,1497 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMMatrix::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMMatrix is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DOMMatrixV8Internal {
 
-static void aAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void aAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->a());
-}
+        v8SetReturnValue(info, impl->a());
+    }
 
-CORE_EXPORT void aAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::aAttributeGetter(info);
-}
+    CORE_EXPORT void aAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::aAttributeGetter(info);
+    }
 
-static void aAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void aAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "a");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "a");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setA(cppValue);
-}
+        impl->setA(cppValue);
+    }
 
-CORE_EXPORT void aAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void aAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::aAttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::aAttributeSetter(v8Value, info);
+    }
 
-static void bAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->b());
-}
+        v8SetReturnValue(info, impl->b());
+    }
 
-CORE_EXPORT void bAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::bAttributeGetter(info);
-}
+    CORE_EXPORT void bAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::bAttributeGetter(info);
+    }
 
-static void bAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void bAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "b");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "b");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setB(cppValue);
-}
+        impl->setB(cppValue);
+    }
 
-CORE_EXPORT void bAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void bAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::bAttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::bAttributeSetter(v8Value, info);
+    }
 
-static void cAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->c());
-}
+        v8SetReturnValue(info, impl->c());
+    }
 
-CORE_EXPORT void cAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::cAttributeGetter(info);
-}
+    CORE_EXPORT void cAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::cAttributeGetter(info);
+    }
 
-static void cAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void cAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "c");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "c");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setC(cppValue);
-}
+        impl->setC(cppValue);
+    }
 
-CORE_EXPORT void cAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void cAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::cAttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::cAttributeSetter(v8Value, info);
+    }
 
-static void dAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->d());
-}
+        v8SetReturnValue(info, impl->d());
+    }
 
-CORE_EXPORT void dAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::dAttributeGetter(info);
-}
+    CORE_EXPORT void dAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::dAttributeGetter(info);
+    }
 
-static void dAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void dAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "d");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "d");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setD(cppValue);
-}
+        impl->setD(cppValue);
+    }
 
-CORE_EXPORT void dAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void dAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::dAttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::dAttributeSetter(v8Value, info);
+    }
 
-static void eAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void eAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->e());
-}
+        v8SetReturnValue(info, impl->e());
+    }
 
-CORE_EXPORT void eAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::eAttributeGetter(info);
-}
+    CORE_EXPORT void eAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::eAttributeGetter(info);
+    }
 
-static void eAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void eAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "e");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "e");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setE(cppValue);
-}
+        impl->setE(cppValue);
+    }
 
-CORE_EXPORT void eAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void eAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::eAttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::eAttributeSetter(v8Value, info);
+    }
 
-static void fAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->f());
-}
+        v8SetReturnValue(info, impl->f());
+    }
 
-CORE_EXPORT void fAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::fAttributeGetter(info);
-}
+    CORE_EXPORT void fAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::fAttributeGetter(info);
+    }
 
-static void fAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void fAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "f");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "f");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setF(cppValue);
-}
+        impl->setF(cppValue);
+    }
 
-CORE_EXPORT void fAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void fAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::fAttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::fAttributeSetter(v8Value, info);
+    }
 
-static void m11AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m11AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m11());
-}
+        v8SetReturnValue(info, impl->m11());
+    }
 
-CORE_EXPORT void m11AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m11AttributeGetter(info);
-}
+    CORE_EXPORT void m11AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m11AttributeGetter(info);
+    }
 
-static void m11AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m11AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m11");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m11");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM11(cppValue);
-}
+        impl->setM11(cppValue);
+    }
 
-CORE_EXPORT void m11AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m11AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m11AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m11AttributeSetter(v8Value, info);
+    }
 
-static void m12AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m12AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m12());
-}
+        v8SetReturnValue(info, impl->m12());
+    }
 
-CORE_EXPORT void m12AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m12AttributeGetter(info);
-}
+    CORE_EXPORT void m12AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m12AttributeGetter(info);
+    }
 
-static void m12AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m12AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m12");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m12");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM12(cppValue);
-}
+        impl->setM12(cppValue);
+    }
 
-CORE_EXPORT void m12AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m12AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m12AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m12AttributeSetter(v8Value, info);
+    }
 
-static void m13AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m13AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m13());
-}
+        v8SetReturnValue(info, impl->m13());
+    }
 
-CORE_EXPORT void m13AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m13AttributeGetter(info);
-}
+    CORE_EXPORT void m13AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m13AttributeGetter(info);
+    }
 
-static void m13AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m13AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m13");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m13");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM13(cppValue);
-}
+        impl->setM13(cppValue);
+    }
 
-CORE_EXPORT void m13AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m13AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m13AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m13AttributeSetter(v8Value, info);
+    }
 
-static void m14AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m14AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m14());
-}
+        v8SetReturnValue(info, impl->m14());
+    }
 
-CORE_EXPORT void m14AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m14AttributeGetter(info);
-}
+    CORE_EXPORT void m14AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m14AttributeGetter(info);
+    }
 
-static void m14AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m14AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m14");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m14");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM14(cppValue);
-}
+        impl->setM14(cppValue);
+    }
 
-CORE_EXPORT void m14AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m14AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m14AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m14AttributeSetter(v8Value, info);
+    }
 
-static void m21AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m21AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m21());
-}
+        v8SetReturnValue(info, impl->m21());
+    }
 
-CORE_EXPORT void m21AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m21AttributeGetter(info);
-}
+    CORE_EXPORT void m21AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m21AttributeGetter(info);
+    }
 
-static void m21AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m21AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m21");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m21");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM21(cppValue);
-}
+        impl->setM21(cppValue);
+    }
 
-CORE_EXPORT void m21AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m21AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m21AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m21AttributeSetter(v8Value, info);
+    }
 
-static void m22AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m22AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m22());
-}
+        v8SetReturnValue(info, impl->m22());
+    }
 
-CORE_EXPORT void m22AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m22AttributeGetter(info);
-}
+    CORE_EXPORT void m22AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m22AttributeGetter(info);
+    }
 
-static void m22AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m22AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m22");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m22");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM22(cppValue);
-}
+        impl->setM22(cppValue);
+    }
 
-CORE_EXPORT void m22AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m22AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m22AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m22AttributeSetter(v8Value, info);
+    }
 
-static void m23AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m23AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m23());
-}
+        v8SetReturnValue(info, impl->m23());
+    }
 
-CORE_EXPORT void m23AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m23AttributeGetter(info);
-}
+    CORE_EXPORT void m23AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m23AttributeGetter(info);
+    }
 
-static void m23AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m23AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m23");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m23");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM23(cppValue);
-}
+        impl->setM23(cppValue);
+    }
 
-CORE_EXPORT void m23AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m23AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m23AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m23AttributeSetter(v8Value, info);
+    }
 
-static void m24AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m24AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m24());
-}
+        v8SetReturnValue(info, impl->m24());
+    }
 
-CORE_EXPORT void m24AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m24AttributeGetter(info);
-}
+    CORE_EXPORT void m24AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m24AttributeGetter(info);
+    }
 
-static void m24AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m24AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m24");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m24");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM24(cppValue);
-}
+        impl->setM24(cppValue);
+    }
 
-CORE_EXPORT void m24AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m24AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m24AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m24AttributeSetter(v8Value, info);
+    }
 
-static void m31AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m31AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m31());
-}
+        v8SetReturnValue(info, impl->m31());
+    }
 
-CORE_EXPORT void m31AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m31AttributeGetter(info);
-}
+    CORE_EXPORT void m31AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m31AttributeGetter(info);
+    }
 
-static void m31AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m31AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m31");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m31");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM31(cppValue);
-}
+        impl->setM31(cppValue);
+    }
 
-CORE_EXPORT void m31AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m31AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m31AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m31AttributeSetter(v8Value, info);
+    }
 
-static void m32AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m32AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m32());
-}
+        v8SetReturnValue(info, impl->m32());
+    }
 
-CORE_EXPORT void m32AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m32AttributeGetter(info);
-}
+    CORE_EXPORT void m32AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m32AttributeGetter(info);
+    }
 
-static void m32AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m32AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m32");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m32");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM32(cppValue);
-}
+        impl->setM32(cppValue);
+    }
 
-CORE_EXPORT void m32AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m32AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m32AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m32AttributeSetter(v8Value, info);
+    }
 
-static void m33AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m33AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m33());
-}
+        v8SetReturnValue(info, impl->m33());
+    }
 
-CORE_EXPORT void m33AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m33AttributeGetter(info);
-}
+    CORE_EXPORT void m33AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m33AttributeGetter(info);
+    }
 
-static void m33AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m33AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m33");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m33");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM33(cppValue);
-}
+        impl->setM33(cppValue);
+    }
 
-CORE_EXPORT void m33AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m33AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m33AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m33AttributeSetter(v8Value, info);
+    }
 
-static void m34AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m34AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m34());
-}
+        v8SetReturnValue(info, impl->m34());
+    }
 
-CORE_EXPORT void m34AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m34AttributeGetter(info);
-}
+    CORE_EXPORT void m34AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m34AttributeGetter(info);
+    }
 
-static void m34AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m34AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m34");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m34");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM34(cppValue);
-}
+        impl->setM34(cppValue);
+    }
 
-CORE_EXPORT void m34AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m34AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m34AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m34AttributeSetter(v8Value, info);
+    }
 
-static void m41AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m41AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m41());
-}
+        v8SetReturnValue(info, impl->m41());
+    }
 
-CORE_EXPORT void m41AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m41AttributeGetter(info);
-}
+    CORE_EXPORT void m41AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m41AttributeGetter(info);
+    }
 
-static void m41AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m41AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m41");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m41");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM41(cppValue);
-}
+        impl->setM41(cppValue);
+    }
 
-CORE_EXPORT void m41AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m41AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m41AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m41AttributeSetter(v8Value, info);
+    }
 
-static void m42AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m42AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m42());
-}
+        v8SetReturnValue(info, impl->m42());
+    }
 
-CORE_EXPORT void m42AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m42AttributeGetter(info);
-}
+    CORE_EXPORT void m42AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m42AttributeGetter(info);
+    }
 
-static void m42AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m42AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m42");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m42");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM42(cppValue);
-}
+        impl->setM42(cppValue);
+    }
 
-CORE_EXPORT void m42AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m42AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m42AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m42AttributeSetter(v8Value, info);
+    }
 
-static void m43AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m43AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m43());
-}
+        v8SetReturnValue(info, impl->m43());
+    }
 
-CORE_EXPORT void m43AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m43AttributeGetter(info);
-}
+    CORE_EXPORT void m43AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m43AttributeGetter(info);
+    }
 
-static void m43AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m43AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m43");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m43");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM43(cppValue);
-}
+        impl->setM43(cppValue);
+    }
 
-CORE_EXPORT void m43AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m43AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m43AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m43AttributeSetter(v8Value, info);
+    }
 
-static void m44AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void m44AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  v8SetReturnValue(info, impl->m44());
-}
+        v8SetReturnValue(info, impl->m44());
+    }
 
-CORE_EXPORT void m44AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::m44AttributeGetter(info);
-}
+    CORE_EXPORT void m44AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::m44AttributeGetter(info);
+    }
 
-static void m44AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
+    static void m44AttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMMatrix* impl = V8DOMMatrix::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m44");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "DOMMatrix", "m44");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setM44(cppValue);
-}
+        impl->setM44(cppValue);
+    }
 
-CORE_EXPORT void m44AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void m44AttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  DOMMatrixV8Internal::m44AttributeSetter(v8Value, info);
-}
+        DOMMatrixV8Internal::m44AttributeSetter(v8Value, info);
+    }
 
-static void fromMatrixMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "fromMatrix");
+    static void fromMatrixMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "fromMatrix");
 
-  DOMMatrixInit other;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
+        DOMMatrixInit other;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
 
-    return;
-  }
-  V8DOMMatrixInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8DOMMatrixInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  DOMMatrix* result = DOMMatrix::fromMatrix(other, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
-}
+        DOMMatrix* result = DOMMatrix::fromMatrix(other, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
+    }
 
-CORE_EXPORT  void fromMatrixMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::fromMatrixMethod(info);
-}
+    CORE_EXPORT void fromMatrixMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::fromMatrixMethod(info);
+    }
 
-static void fromFloat32ArrayMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "fromFloat32Array");
+    static void fromFloat32ArrayMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "fromFloat32Array");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  DOMFloat32Array* array32;
-  array32 = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
-  if (!array32) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
+        DOMFloat32Array* array32;
+        array32 = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
+        if (!array32) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
 
-    return;
-  }
+            return;
+        }
 
-  DOMMatrix* result = DOMMatrix::fromFloat32Array(array32, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
-}
+        DOMMatrix* result = DOMMatrix::fromFloat32Array(array32, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
+    }
 
-CORE_EXPORT  void fromFloat32ArrayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::fromFloat32ArrayMethod(info);
-}
+    CORE_EXPORT void fromFloat32ArrayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::fromFloat32ArrayMethod(info);
+    }
 
-static void fromFloat64ArrayMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "fromFloat64Array");
+    static void fromFloat64ArrayMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "fromFloat64Array");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  DOMFloat64Array* array64;
-  array64 = info[0]->IsFloat64Array() ? V8Float64Array::toImpl(v8::Local<v8::Float64Array>::Cast(info[0])) : 0;
-  if (!array64) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Float64Array'.");
+        DOMFloat64Array* array64;
+        array64 = info[0]->IsFloat64Array() ? V8Float64Array::toImpl(v8::Local<v8::Float64Array>::Cast(info[0])) : 0;
+        if (!array64) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Float64Array'.");
 
-    return;
-  }
+            return;
+        }
 
-  DOMMatrix* result = DOMMatrix::fromFloat64Array(array64, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
-}
+        DOMMatrix* result = DOMMatrix::fromFloat64Array(array64, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValue(info, result, info.GetIsolate()->GetCurrentContext()->Global());
+    }
 
-CORE_EXPORT  void fromFloat64ArrayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::fromFloat64ArrayMethod(info);
-}
+    CORE_EXPORT void fromFloat64ArrayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::fromFloat64ArrayMethod(info);
+    }
 
-static void multiplySelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "multiplySelf");
+    static void multiplySelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "multiplySelf");
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
 
-  DOMMatrixInit other;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
+        DOMMatrixInit other;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
 
-    return;
-  }
-  V8DOMMatrixInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8DOMMatrixInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  DOMMatrix* result = impl->multiplySelf(other, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        DOMMatrix* result = impl->multiplySelf(other, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void multiplySelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::multiplySelfMethod(info);
-}
+    CORE_EXPORT void multiplySelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::multiplySelfMethod(info);
+    }
 
-static void preMultiplySelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "preMultiplySelf");
+    static void preMultiplySelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "preMultiplySelf");
 
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
 
-  DOMMatrixInit other;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
-
-    return;
-  }
-  V8DOMMatrixInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  DOMMatrix* result = impl->preMultiplySelf(other, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void preMultiplySelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::preMultiplySelfMethod(info);
-}
-
-static void translateSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "translateSelf");
-
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  double tx;
-  double ty;
-  double tz;
-  if (!info[0]->IsUndefined()) {
-    tx = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    tx = 0;
-  }
-  if (!info[1]->IsUndefined()) {
-    ty = toDouble(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    ty = 0;
-  }
-  if (!info[2]->IsUndefined()) {
-    tz = toDouble(info.GetIsolate(), info[2], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    tz = 0;
-  }
-
-  v8SetReturnValue(info, impl->translateSelf(tx, ty, tz));
-}
-
-CORE_EXPORT  void translateSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::translateSelfMethod(info);
-}
-
-static void scaleSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "scaleSelf");
-
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  double scaleX;
-  double scaleY;
-  double scaleZ;
-  double originX;
-  double originY;
-  double originZ;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (!info[0]->IsUndefined()) {
-    scaleX = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    scaleX = 1;
-  }
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    v8SetReturnValue(info, impl->scaleSelf(scaleX));
-    return;
-  }
-  scaleY = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!info[2]->IsUndefined()) {
-    scaleZ = toDouble(info.GetIsolate(), info[2], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    scaleZ = 1;
-  }
-  if (!info[3]->IsUndefined()) {
-    originX = toDouble(info.GetIsolate(), info[3], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    originX = 0;
-  }
-  if (!info[4]->IsUndefined()) {
-    originY = toDouble(info.GetIsolate(), info[4], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    originY = 0;
-  }
-  if (!info[5]->IsUndefined()) {
-    originZ = toDouble(info.GetIsolate(), info[5], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    originZ = 0;
-  }
-
-  v8SetReturnValue(info, impl->scaleSelf(scaleX, scaleY, scaleZ, originX, originY, originZ));
-}
-
-CORE_EXPORT  void scaleSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::scaleSelfMethod(info);
-}
-
-static void scale3dSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "scale3dSelf");
-
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  double scale;
-  double originX;
-  double originY;
-  double originZ;
-  if (!info[0]->IsUndefined()) {
-    scale = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    scale = 1;
-  }
-  if (!info[1]->IsUndefined()) {
-    originX = toDouble(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    originX = 0;
-  }
-  if (!info[2]->IsUndefined()) {
-    originY = toDouble(info.GetIsolate(), info[2], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    originY = 0;
-  }
-  if (!info[3]->IsUndefined()) {
-    originZ = toDouble(info.GetIsolate(), info[3], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    originZ = 0;
-  }
-
-  v8SetReturnValue(info, impl->scale3dSelf(scale, originX, originY, originZ));
-}
-
-CORE_EXPORT  void scale3dSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::scale3dSelfMethod(info);
-}
-
-static void rotateSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "rotateSelf");
-
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  double rotX;
-  double rotY;
-  double rotZ;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (!info[0]->IsUndefined()) {
-    rotX = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    rotX = 0;
-  }
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    v8SetReturnValue(info, impl->rotateSelf(rotX));
-    return;
-  }
-  rotY = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    v8SetReturnValue(info, impl->rotateSelf(rotX, rotY));
-    return;
-  }
-  rotZ = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->rotateSelf(rotX, rotY, rotZ));
-}
-
-CORE_EXPORT  void rotateSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::rotateSelfMethod(info);
-}
-
-static void rotateFromVectorSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "rotateFromVectorSelf");
-
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  double x;
-  double y;
-  if (!info[0]->IsUndefined()) {
-    x = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    x = 0;
-  }
-  if (!info[1]->IsUndefined()) {
-    y = toDouble(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    y = 0;
-  }
-
-  v8SetReturnValue(info, impl->rotateFromVectorSelf(x, y));
-}
-
-CORE_EXPORT  void rotateFromVectorSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::rotateFromVectorSelfMethod(info);
-}
-
-static void rotateAxisAngleSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "rotateAxisAngleSelf");
-
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  double x;
-  double y;
-  double z;
-  double angle;
-  if (!info[0]->IsUndefined()) {
-    x = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    x = 0;
-  }
-  if (!info[1]->IsUndefined()) {
-    y = toDouble(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    y = 0;
-  }
-  if (!info[2]->IsUndefined()) {
-    z = toDouble(info.GetIsolate(), info[2], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    z = 0;
-  }
-  if (!info[3]->IsUndefined()) {
-    angle = toDouble(info.GetIsolate(), info[3], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    angle = 0;
-  }
-
-  v8SetReturnValue(info, impl->rotateAxisAngleSelf(x, y, z, angle));
-}
-
-CORE_EXPORT  void rotateAxisAngleSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::rotateAxisAngleSelfMethod(info);
-}
-
-static void skewXSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "skewXSelf");
-
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  double sx;
-  if (!info[0]->IsUndefined()) {
-    sx = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    sx = 0;
-  }
-
-  v8SetReturnValue(info, impl->skewXSelf(sx));
-}
-
-CORE_EXPORT  void skewXSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::skewXSelfMethod(info);
-}
-
-static void skewYSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "skewYSelf");
-
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  double sy;
-  if (!info[0]->IsUndefined()) {
-    sy = toDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    sy = 0;
-  }
-
-  v8SetReturnValue(info, impl->skewYSelf(sy));
-}
-
-CORE_EXPORT  void skewYSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::skewYSelfMethod(info);
-}
-
-static void invertSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  v8SetReturnValue(info, impl->invertSelf());
-}
-
-CORE_EXPORT  void invertSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::invertSelfMethod(info);
-}
-
-static void setMatrixValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "setMatrixValue");
-
-  DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> transformList;
-  transformList = info[0];
-  if (!transformList.prepare())
-    return;
-
-  DOMMatrix* result = impl->setMatrixValue(transformList, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT  void setMatrixValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMMatrixV8Internal::setMatrixValueMethod(info);
-}
-
-static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMMatrix");
-
-  DOMMatrix* impl = DOMMatrix::create(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMMatrix::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
-
-static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMMatrix");
-
-  V8StringResource<> transformList;
-  transformList = info[0];
-  if (!transformList.prepare())
-    return;
-
-  DOMMatrix* impl = DOMMatrix::create(transformList, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMMatrix::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
-
-static void constructor3(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMMatrix");
-
-  Vector<double> numberSequence;
-  numberSequence = toImplArray<Vector<double>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  DOMMatrix* impl = DOMMatrix::create(numberSequence, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMMatrix::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
-
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMMatrix");
-  switch (std::min(1, info.Length())) {
-    case 0:
-      if (true) {
-        DOMMatrixV8Internal::constructor1(info);
-        return;
-      }
-      break;
-    case 1:
-      if (info[0]->IsArray()) {
-        DOMMatrixV8Internal::constructor3(info);
-        return;
-      }
-      if (true) {
-        DOMMatrixV8Internal::constructor2(info);
-        return;
-      }
-      break;
-    default:
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(0, info.Length()));
-      return;
-  }
-  exceptionState.throwTypeError("No matching constructor signature.");
-}
+        DOMMatrixInit other;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('other') is not an object.");
+
+            return;
+        }
+        V8DOMMatrixInit::toImpl(info.GetIsolate(), info[0], other, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        DOMMatrix* result = impl->preMultiplySelf(other, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void preMultiplySelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::preMultiplySelfMethod(info);
+    }
+
+    static void translateSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "translateSelf");
+
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        double tx;
+        double ty;
+        double tz;
+        if (!info[0]->IsUndefined()) {
+            tx = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            tx = 0;
+        }
+        if (!info[1]->IsUndefined()) {
+            ty = toDouble(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            ty = 0;
+        }
+        if (!info[2]->IsUndefined()) {
+            tz = toDouble(info.GetIsolate(), info[2], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            tz = 0;
+        }
+
+        v8SetReturnValue(info, impl->translateSelf(tx, ty, tz));
+    }
+
+    CORE_EXPORT void translateSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::translateSelfMethod(info);
+    }
+
+    static void scaleSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "scaleSelf");
+
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        double scaleX;
+        double scaleY;
+        double scaleZ;
+        double originX;
+        double originY;
+        double originZ;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (!info[0]->IsUndefined()) {
+            scaleX = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            scaleX = 1;
+        }
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            v8SetReturnValue(info, impl->scaleSelf(scaleX));
+            return;
+        }
+        scaleY = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!info[2]->IsUndefined()) {
+            scaleZ = toDouble(info.GetIsolate(), info[2], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            scaleZ = 1;
+        }
+        if (!info[3]->IsUndefined()) {
+            originX = toDouble(info.GetIsolate(), info[3], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            originX = 0;
+        }
+        if (!info[4]->IsUndefined()) {
+            originY = toDouble(info.GetIsolate(), info[4], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            originY = 0;
+        }
+        if (!info[5]->IsUndefined()) {
+            originZ = toDouble(info.GetIsolate(), info[5], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            originZ = 0;
+        }
+
+        v8SetReturnValue(info, impl->scaleSelf(scaleX, scaleY, scaleZ, originX, originY, originZ));
+    }
+
+    CORE_EXPORT void scaleSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::scaleSelfMethod(info);
+    }
+
+    static void scale3dSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "scale3dSelf");
+
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        double scale;
+        double originX;
+        double originY;
+        double originZ;
+        if (!info[0]->IsUndefined()) {
+            scale = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            scale = 1;
+        }
+        if (!info[1]->IsUndefined()) {
+            originX = toDouble(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            originX = 0;
+        }
+        if (!info[2]->IsUndefined()) {
+            originY = toDouble(info.GetIsolate(), info[2], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            originY = 0;
+        }
+        if (!info[3]->IsUndefined()) {
+            originZ = toDouble(info.GetIsolate(), info[3], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            originZ = 0;
+        }
+
+        v8SetReturnValue(info, impl->scale3dSelf(scale, originX, originY, originZ));
+    }
+
+    CORE_EXPORT void scale3dSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::scale3dSelfMethod(info);
+    }
+
+    static void rotateSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "rotateSelf");
+
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        double rotX;
+        double rotY;
+        double rotZ;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (!info[0]->IsUndefined()) {
+            rotX = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            rotX = 0;
+        }
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            v8SetReturnValue(info, impl->rotateSelf(rotX));
+            return;
+        }
+        rotY = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            v8SetReturnValue(info, impl->rotateSelf(rotX, rotY));
+            return;
+        }
+        rotZ = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->rotateSelf(rotX, rotY, rotZ));
+    }
+
+    CORE_EXPORT void rotateSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::rotateSelfMethod(info);
+    }
+
+    static void rotateFromVectorSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "rotateFromVectorSelf");
+
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        double x;
+        double y;
+        if (!info[0]->IsUndefined()) {
+            x = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            x = 0;
+        }
+        if (!info[1]->IsUndefined()) {
+            y = toDouble(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            y = 0;
+        }
+
+        v8SetReturnValue(info, impl->rotateFromVectorSelf(x, y));
+    }
+
+    CORE_EXPORT void rotateFromVectorSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::rotateFromVectorSelfMethod(info);
+    }
+
+    static void rotateAxisAngleSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "rotateAxisAngleSelf");
+
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        double x;
+        double y;
+        double z;
+        double angle;
+        if (!info[0]->IsUndefined()) {
+            x = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            x = 0;
+        }
+        if (!info[1]->IsUndefined()) {
+            y = toDouble(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            y = 0;
+        }
+        if (!info[2]->IsUndefined()) {
+            z = toDouble(info.GetIsolate(), info[2], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            z = 0;
+        }
+        if (!info[3]->IsUndefined()) {
+            angle = toDouble(info.GetIsolate(), info[3], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            angle = 0;
+        }
+
+        v8SetReturnValue(info, impl->rotateAxisAngleSelf(x, y, z, angle));
+    }
+
+    CORE_EXPORT void rotateAxisAngleSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::rotateAxisAngleSelfMethod(info);
+    }
+
+    static void skewXSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "skewXSelf");
+
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        double sx;
+        if (!info[0]->IsUndefined()) {
+            sx = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            sx = 0;
+        }
+
+        v8SetReturnValue(info, impl->skewXSelf(sx));
+    }
+
+    CORE_EXPORT void skewXSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::skewXSelfMethod(info);
+    }
+
+    static void skewYSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "skewYSelf");
+
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        double sy;
+        if (!info[0]->IsUndefined()) {
+            sy = toDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            sy = 0;
+        }
+
+        v8SetReturnValue(info, impl->skewYSelf(sy));
+    }
+
+    CORE_EXPORT void skewYSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::skewYSelfMethod(info);
+    }
+
+    static void invertSelfMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        v8SetReturnValue(info, impl->invertSelf());
+    }
+
+    CORE_EXPORT void invertSelfMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::invertSelfMethod(info);
+    }
+
+    static void setMatrixValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DOMMatrix", "setMatrixValue");
+
+        DOMMatrix* impl = V8DOMMatrix::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> transformList;
+        transformList = info[0];
+        if (!transformList.prepare())
+            return;
+
+        DOMMatrix* result = impl->setMatrixValue(transformList, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void setMatrixValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMMatrixV8Internal::setMatrixValueMethod(info);
+    }
+
+    static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMMatrix");
+
+        DOMMatrix* impl = DOMMatrix::create(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMMatrix::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
+
+    static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMMatrix");
+
+        V8StringResource<> transformList;
+        transformList = info[0];
+        if (!transformList.prepare())
+            return;
+
+        DOMMatrix* impl = DOMMatrix::create(transformList, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMMatrix::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
+
+    static void constructor3(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMMatrix");
+
+        Vector<double> numberSequence;
+        numberSequence = toImplArray<Vector<double>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        DOMMatrix* impl = DOMMatrix::create(numberSequence, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8DOMMatrix::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "DOMMatrix");
+        switch (std::min(1, info.Length())) {
+        case 0:
+            if (true) {
+                DOMMatrixV8Internal::constructor1(info);
+                return;
+            }
+            break;
+        case 1:
+            if (info[0]->IsArray()) {
+                DOMMatrixV8Internal::constructor3(info);
+                return;
+            }
+            if (true) {
+                DOMMatrixV8Internal::constructor2(info);
+                return;
+            }
+            break;
+        default:
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(0, info.Length()));
+            return;
+        }
+        exceptionState.throwTypeError("No matching constructor signature.");
+    }
 
 } // namespace DOMMatrixV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8DOMMatrixAccessors[] = {
-    {"a", DOMMatrixV8Internal::aAttributeGetterCallback, DOMMatrixV8Internal::aAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"b", DOMMatrixV8Internal::bAttributeGetterCallback, DOMMatrixV8Internal::bAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"c", DOMMatrixV8Internal::cAttributeGetterCallback, DOMMatrixV8Internal::cAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"d", DOMMatrixV8Internal::dAttributeGetterCallback, DOMMatrixV8Internal::dAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"e", DOMMatrixV8Internal::eAttributeGetterCallback, DOMMatrixV8Internal::eAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"f", DOMMatrixV8Internal::fAttributeGetterCallback, DOMMatrixV8Internal::fAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m11", DOMMatrixV8Internal::m11AttributeGetterCallback, DOMMatrixV8Internal::m11AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m12", DOMMatrixV8Internal::m12AttributeGetterCallback, DOMMatrixV8Internal::m12AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m13", DOMMatrixV8Internal::m13AttributeGetterCallback, DOMMatrixV8Internal::m13AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m14", DOMMatrixV8Internal::m14AttributeGetterCallback, DOMMatrixV8Internal::m14AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m21", DOMMatrixV8Internal::m21AttributeGetterCallback, DOMMatrixV8Internal::m21AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m22", DOMMatrixV8Internal::m22AttributeGetterCallback, DOMMatrixV8Internal::m22AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m23", DOMMatrixV8Internal::m23AttributeGetterCallback, DOMMatrixV8Internal::m23AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m24", DOMMatrixV8Internal::m24AttributeGetterCallback, DOMMatrixV8Internal::m24AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m31", DOMMatrixV8Internal::m31AttributeGetterCallback, DOMMatrixV8Internal::m31AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m32", DOMMatrixV8Internal::m32AttributeGetterCallback, DOMMatrixV8Internal::m32AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m33", DOMMatrixV8Internal::m33AttributeGetterCallback, DOMMatrixV8Internal::m33AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m34", DOMMatrixV8Internal::m34AttributeGetterCallback, DOMMatrixV8Internal::m34AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m41", DOMMatrixV8Internal::m41AttributeGetterCallback, DOMMatrixV8Internal::m41AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m42", DOMMatrixV8Internal::m42AttributeGetterCallback, DOMMatrixV8Internal::m42AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m43", DOMMatrixV8Internal::m43AttributeGetterCallback, DOMMatrixV8Internal::m43AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"m44", DOMMatrixV8Internal::m44AttributeGetterCallback, DOMMatrixV8Internal::m44AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "a", DOMMatrixV8Internal::aAttributeGetterCallback, DOMMatrixV8Internal::aAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "b", DOMMatrixV8Internal::bAttributeGetterCallback, DOMMatrixV8Internal::bAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "c", DOMMatrixV8Internal::cAttributeGetterCallback, DOMMatrixV8Internal::cAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "d", DOMMatrixV8Internal::dAttributeGetterCallback, DOMMatrixV8Internal::dAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "e", DOMMatrixV8Internal::eAttributeGetterCallback, DOMMatrixV8Internal::eAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "f", DOMMatrixV8Internal::fAttributeGetterCallback, DOMMatrixV8Internal::fAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m11", DOMMatrixV8Internal::m11AttributeGetterCallback, DOMMatrixV8Internal::m11AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m12", DOMMatrixV8Internal::m12AttributeGetterCallback, DOMMatrixV8Internal::m12AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m13", DOMMatrixV8Internal::m13AttributeGetterCallback, DOMMatrixV8Internal::m13AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m14", DOMMatrixV8Internal::m14AttributeGetterCallback, DOMMatrixV8Internal::m14AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m21", DOMMatrixV8Internal::m21AttributeGetterCallback, DOMMatrixV8Internal::m21AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m22", DOMMatrixV8Internal::m22AttributeGetterCallback, DOMMatrixV8Internal::m22AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m23", DOMMatrixV8Internal::m23AttributeGetterCallback, DOMMatrixV8Internal::m23AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m24", DOMMatrixV8Internal::m24AttributeGetterCallback, DOMMatrixV8Internal::m24AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m31", DOMMatrixV8Internal::m31AttributeGetterCallback, DOMMatrixV8Internal::m31AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m32", DOMMatrixV8Internal::m32AttributeGetterCallback, DOMMatrixV8Internal::m32AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m33", DOMMatrixV8Internal::m33AttributeGetterCallback, DOMMatrixV8Internal::m33AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m34", DOMMatrixV8Internal::m34AttributeGetterCallback, DOMMatrixV8Internal::m34AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m41", DOMMatrixV8Internal::m41AttributeGetterCallback, DOMMatrixV8Internal::m41AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m42", DOMMatrixV8Internal::m42AttributeGetterCallback, DOMMatrixV8Internal::m42AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m43", DOMMatrixV8Internal::m43AttributeGetterCallback, DOMMatrixV8Internal::m43AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "m44", DOMMatrixV8Internal::m44AttributeGetterCallback, DOMMatrixV8Internal::m44AttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8DOMMatrixMethods[] = {
-    {"fromMatrix", DOMMatrixV8Internal::fromMatrixMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
-    {"fromFloat32Array", DOMMatrixV8Internal::fromFloat32ArrayMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
-    {"fromFloat64Array", DOMMatrixV8Internal::fromFloat64ArrayMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
-    {"multiplySelf", DOMMatrixV8Internal::multiplySelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"preMultiplySelf", DOMMatrixV8Internal::preMultiplySelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"translateSelf", DOMMatrixV8Internal::translateSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scaleSelf", DOMMatrixV8Internal::scaleSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scale3dSelf", DOMMatrixV8Internal::scale3dSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rotateSelf", DOMMatrixV8Internal::rotateSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rotateFromVectorSelf", DOMMatrixV8Internal::rotateFromVectorSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rotateAxisAngleSelf", DOMMatrixV8Internal::rotateAxisAngleSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"skewXSelf", DOMMatrixV8Internal::skewXSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"skewYSelf", DOMMatrixV8Internal::skewYSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"invertSelf", DOMMatrixV8Internal::invertSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setMatrixValue", DOMMatrixV8Internal::setMatrixValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "fromMatrix", DOMMatrixV8Internal::fromMatrixMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
+    { "fromFloat32Array", DOMMatrixV8Internal::fromFloat32ArrayMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
+    { "fromFloat64Array", DOMMatrixV8Internal::fromFloat64ArrayMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
+    { "multiplySelf", DOMMatrixV8Internal::multiplySelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "preMultiplySelf", DOMMatrixV8Internal::preMultiplySelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "translateSelf", DOMMatrixV8Internal::translateSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scaleSelf", DOMMatrixV8Internal::scaleSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scale3dSelf", DOMMatrixV8Internal::scale3dSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rotateSelf", DOMMatrixV8Internal::rotateSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rotateFromVectorSelf", DOMMatrixV8Internal::rotateFromVectorSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rotateAxisAngleSelf", DOMMatrixV8Internal::rotateAxisAngleSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "skewXSelf", DOMMatrixV8Internal::skewXSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "skewYSelf", DOMMatrixV8Internal::skewYSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "invertSelf", DOMMatrixV8Internal::invertSelfMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setMatrixValue", DOMMatrixV8Internal::setMatrixValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8DOMMatrix::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMMatrix"));
-    return;
-  }
+void V8DOMMatrix::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("DOMMatrix"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  DOMMatrixV8Internal::constructor(info);
+    DOMMatrixV8Internal::constructor(info);
 }
 
-static void installV8DOMMatrixTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMMatrix::wrapperTypeInfo.interfaceName, V8DOMMatrixReadOnly::domTemplate(isolate, world), V8DOMMatrix::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8DOMMatrix::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8DOMMatrixTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DOMMatrix::wrapperTypeInfo.interfaceName, V8DOMMatrixReadOnly::domTemplate(isolate, world), V8DOMMatrix::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8DOMMatrix::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  if (!RuntimeEnabledFeatures::geometryInterfacesEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::geometryInterfacesEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMMatrixAccessors, WTF_ARRAY_LENGTH(V8DOMMatrixAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMMatrixMethods, WTF_ARRAY_LENGTH(V8DOMMatrixMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMMatrixAccessors, WTF_ARRAY_LENGTH(V8DOMMatrixAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DOMMatrixMethods, WTF_ARRAY_LENGTH(V8DOMMatrixMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DOMMatrix::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMMatrixTemplate);
+v8::Local<v8::FunctionTemplate> V8DOMMatrix::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DOMMatrixTemplate);
 }
 
-bool V8DOMMatrix::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DOMMatrix::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DOMMatrix::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DOMMatrix::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DOMMatrix* V8DOMMatrix::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMMatrix* V8DOMMatrix::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

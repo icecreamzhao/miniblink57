@@ -8,80 +8,97 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PaymentDetails.h"
 
 namespace blink {
 
-PaymentDetails::PaymentDetails() {
+PaymentDetails::PaymentDetails()
+{
 }
 
-PaymentDetails::~PaymentDetails() {}
+PaymentDetails::~PaymentDetails() { }
 
 PaymentDetails::PaymentDetails(const PaymentDetails&) = default;
 
 PaymentDetails& PaymentDetails::operator=(const PaymentDetails&) = default;
 
-bool PaymentDetails::hasDisplayItems() const {
-  return m_hasDisplayItems;
+bool PaymentDetails::hasDisplayItems() const
+{
+    return m_hasDisplayItems;
 }
-const HeapVector<PaymentItem>& PaymentDetails::displayItems() const {
-  DCHECK(m_hasDisplayItems);
-  return m_displayItems;
+const HeapVector<PaymentItem>& PaymentDetails::displayItems() const
+{
+    DCHECK(m_hasDisplayItems);
+    return m_displayItems;
 }
-void PaymentDetails::setDisplayItems(const HeapVector<PaymentItem>& value) {
-  m_displayItems = value;
-  m_hasDisplayItems = true;
+void PaymentDetails::setDisplayItems(const HeapVector<PaymentItem>& value)
+{
+    m_displayItems = value;
+    m_hasDisplayItems = true;
 }
-bool PaymentDetails::hasError() const {
-  return !m_error.isNull();
+bool PaymentDetails::hasError() const
+{
+    return !m_error.isNull();
 }
-String PaymentDetails::error() const {
-  return m_error;
+String PaymentDetails::error() const
+{
+    return m_error;
 }
-void PaymentDetails::setError(String value) {
-  m_error = value;
+void PaymentDetails::setError(String value)
+{
+    m_error = value;
 }
-bool PaymentDetails::hasModifiers() const {
-  return m_hasModifiers;
+bool PaymentDetails::hasModifiers() const
+{
+    return m_hasModifiers;
 }
-const HeapVector<PaymentDetailsModifier>& PaymentDetails::modifiers() const {
-  DCHECK(m_hasModifiers);
-  return m_modifiers;
+const HeapVector<PaymentDetailsModifier>& PaymentDetails::modifiers() const
+{
+    DCHECK(m_hasModifiers);
+    return m_modifiers;
 }
-void PaymentDetails::setModifiers(const HeapVector<PaymentDetailsModifier>& value) {
-  m_modifiers = value;
-  m_hasModifiers = true;
+void PaymentDetails::setModifiers(const HeapVector<PaymentDetailsModifier>& value)
+{
+    m_modifiers = value;
+    m_hasModifiers = true;
 }
-bool PaymentDetails::hasShippingOptions() const {
-  return m_hasShippingOptions;
+bool PaymentDetails::hasShippingOptions() const
+{
+    return m_hasShippingOptions;
 }
-const HeapVector<PaymentShippingOption>& PaymentDetails::shippingOptions() const {
-  DCHECK(m_hasShippingOptions);
-  return m_shippingOptions;
+const HeapVector<PaymentShippingOption>& PaymentDetails::shippingOptions() const
+{
+    DCHECK(m_hasShippingOptions);
+    return m_shippingOptions;
 }
-void PaymentDetails::setShippingOptions(const HeapVector<PaymentShippingOption>& value) {
-  m_shippingOptions = value;
-  m_hasShippingOptions = true;
+void PaymentDetails::setShippingOptions(const HeapVector<PaymentShippingOption>& value)
+{
+    m_shippingOptions = value;
+    m_hasShippingOptions = true;
 }
-bool PaymentDetails::hasTotal() const {
-  return m_hasTotal;
+bool PaymentDetails::hasTotal() const
+{
+    return m_hasTotal;
 }
-const PaymentItem& PaymentDetails::total() const {
-  DCHECK(m_hasTotal);
-  return m_total;
+const PaymentItem& PaymentDetails::total() const
+{
+    DCHECK(m_hasTotal);
+    return m_total;
 }
-void PaymentDetails::setTotal(const PaymentItem& value) {
-  m_total = value;
-  m_hasTotal = true;
+void PaymentDetails::setTotal(const PaymentItem& value)
+{
+    m_total = value;
+    m_hasTotal = true;
 }
 
-DEFINE_TRACE(PaymentDetails) {
-  visitor->trace(m_displayItems);
-  visitor->trace(m_modifiers);
-  visitor->trace(m_shippingOptions);
-  visitor->trace(m_total);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PaymentDetails)
+{
+    visitor->trace(m_displayItems);
+    visitor->trace(m_modifiers);
+    visitor->trace(m_shippingOptions);
+    visitor->trace(m_total);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CSSStyleSheet.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,273 +51,293 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CSSStyleSheet::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CSSStyleSheet is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CSSStyleSheetV8Internal {
 
-static void ownerRuleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ownerRuleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(holder);
+        CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(holder);
 
-  CSSRule* cppValue(WTF::getPtr(impl->ownerRule()));
+        CSSRule* cppValue(WTF::getPtr(impl->ownerRule()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#CSSStyleSheet#ownerRule";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#CSSStyleSheet#ownerRule";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
-
-CORE_EXPORT void ownerRuleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSStyleSheetV8Internal::ownerRuleAttributeGetter(info);
-}
-
-static void cssRulesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(holder);
-
-  CSSRuleList* cppValue(WTF::getPtr(impl->cssRules()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#CSSStyleSheet#cssRules";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-CORE_EXPORT void cssRulesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSStyleSheetV8Internal::cssRulesAttributeGetter(info);
-}
-
-static void rulesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(holder);
-
-  CSSRuleList* cppValue(WTF::getPtr(impl->rules()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#CSSStyleSheet#rules";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-CORE_EXPORT void rulesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CSSStyleSheetRules);
-
-  CSSStyleSheetV8Internal::rulesAttributeGetter(info);
-}
-
-static void insertRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSStyleSheet", "insertRule");
-
-  CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> rule;
-  unsigned index;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  rule = info[0];
-  if (!rule.prepare())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    unsigned result = impl->insertRule(rule, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    v8SetReturnValueUnsigned(info, result);
-    return;
-  }
-  index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  unsigned result = impl->insertRule(rule, index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueUnsigned(info, result);
-}
-
-CORE_EXPORT  void insertRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSStyleSheetV8Internal::insertRuleMethod(info);
-}
-
-static void deleteRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSStyleSheet", "deleteRule");
-
-  CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  unsigned index;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->deleteRule(index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void deleteRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CSSStyleSheetV8Internal::deleteRuleMethod(info);
-}
-
-static void addRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSStyleSheet", "addRule");
-
-  CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(info.Holder());
-
-  V8StringResource<> selector;
-  V8StringResource<> style;
-  unsigned index;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  selector = info[0];
-  if (!selector.prepare())
-    return;
-
-  style = info[1];
-  if (!style.prepare())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    int result = impl->addRule(selector, style, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    CORE_EXPORT void ownerRuleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSStyleSheetV8Internal::ownerRuleAttributeGetter(info);
     }
-    v8SetReturnValueInt(info, result);
-    return;
-  }
-  index = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  int result = impl->addRule(selector, style, index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueInt(info, result);
-}
+    static void cssRulesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-CORE_EXPORT  void addRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CSSStyleSheetAddRule);
-  CSSStyleSheetV8Internal::addRuleMethod(info);
-}
+        CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(holder);
 
-static void removeRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSStyleSheet", "removeRule");
+        CSSRuleList* cppValue(WTF::getPtr(impl->cssRules()));
 
-  CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(info.Holder());
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#CSSStyleSheet#cssRules";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  unsigned index;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        v8SetReturnValue(info, v8Value);
+    }
 
-  impl->removeRule(index, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    CORE_EXPORT void cssRulesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSStyleSheetV8Internal::cssRulesAttributeGetter(info);
+    }
 
-CORE_EXPORT  void removeRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CSSStyleSheetRemoveRule);
-  CSSStyleSheetV8Internal::removeRuleMethod(info);
-}
+    static void rulesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(holder);
+
+        CSSRuleList* cppValue(WTF::getPtr(impl->rules()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#CSSStyleSheet#rules";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    CORE_EXPORT void rulesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CSSStyleSheetRules);
+
+        CSSStyleSheetV8Internal::rulesAttributeGetter(info);
+    }
+
+    static void insertRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSStyleSheet", "insertRule");
+
+        CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> rule;
+        unsigned index;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        rule = info[0];
+        if (!rule.prepare())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            unsigned result = impl->insertRule(rule, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValueUnsigned(info, result);
+            return;
+        }
+        index = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        unsigned result = impl->insertRule(rule, index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueUnsigned(info, result);
+    }
+
+    CORE_EXPORT void insertRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSStyleSheetV8Internal::insertRuleMethod(info);
+    }
+
+    static void deleteRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSStyleSheet", "deleteRule");
+
+        CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        unsigned index;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->deleteRule(index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void deleteRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CSSStyleSheetV8Internal::deleteRuleMethod(info);
+    }
+
+    static void addRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSStyleSheet", "addRule");
+
+        CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(info.Holder());
+
+        V8StringResource<> selector;
+        V8StringResource<> style;
+        unsigned index;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        selector = info[0];
+        if (!selector.prepare())
+            return;
+
+        style = info[1];
+        if (!style.prepare())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            int result = impl->addRule(selector, style, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValueInt(info, result);
+            return;
+        }
+        index = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        int result = impl->addRule(selector, style, index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueInt(info, result);
+    }
+
+    CORE_EXPORT void addRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CSSStyleSheetAddRule);
+        CSSStyleSheetV8Internal::addRuleMethod(info);
+    }
+
+    static void removeRuleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CSSStyleSheet", "removeRule");
+
+        CSSStyleSheet* impl = V8CSSStyleSheet::toImpl(info.Holder());
+
+        unsigned index;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->removeRule(index, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void removeRuleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CSSStyleSheetRemoveRule);
+        CSSStyleSheetV8Internal::removeRuleMethod(info);
+    }
 
 } // namespace CSSStyleSheetV8Internal
 
-void V8CSSStyleSheet::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  CSSStyleSheet* impl = scriptWrappable->toImpl<CSSStyleSheet>();
-  // The ownerNode() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->ownerNode())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8CSSStyleSheet::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    CSSStyleSheet* impl = scriptWrappable->toImpl<CSSStyleSheet>();
+    // The ownerNode() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->ownerNode())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8CSSStyleSheetAccessors[] = {
-    {"ownerRule", CSSStyleSheetV8Internal::ownerRuleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cssRules", CSSStyleSheetV8Internal::cssRulesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rules", CSSStyleSheetV8Internal::rulesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "ownerRule", CSSStyleSheetV8Internal::ownerRuleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cssRules", CSSStyleSheetV8Internal::cssRulesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rules", CSSStyleSheetV8Internal::rulesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8CSSStyleSheetMethods[] = {
-    {"insertRule", CSSStyleSheetV8Internal::insertRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteRule", CSSStyleSheetV8Internal::deleteRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addRule", CSSStyleSheetV8Internal::addRuleMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeRule", CSSStyleSheetV8Internal::removeRuleMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "insertRule", CSSStyleSheetV8Internal::insertRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteRule", CSSStyleSheetV8Internal::deleteRuleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addRule", CSSStyleSheetV8Internal::addRuleMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeRule", CSSStyleSheetV8Internal::removeRuleMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CSSStyleSheetTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSStyleSheet::wrapperTypeInfo.interfaceName, V8StyleSheet::domTemplate(isolate, world), V8CSSStyleSheet::internalFieldCount);
+static void installV8CSSStyleSheetTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CSSStyleSheet::wrapperTypeInfo.interfaceName, V8StyleSheet::domTemplate(isolate, world), V8CSSStyleSheet::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSStyleSheetAccessors, WTF_ARRAY_LENGTH(V8CSSStyleSheetAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSStyleSheetMethods, WTF_ARRAY_LENGTH(V8CSSStyleSheetMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSStyleSheetAccessors, WTF_ARRAY_LENGTH(V8CSSStyleSheetAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CSSStyleSheetMethods, WTF_ARRAY_LENGTH(V8CSSStyleSheetMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8CSSStyleSheet::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSStyleSheetTemplate);
+v8::Local<v8::FunctionTemplate> V8CSSStyleSheet::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CSSStyleSheetTemplate);
 }
 
-bool V8CSSStyleSheet::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CSSStyleSheet::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CSSStyleSheet::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CSSStyleSheet::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CSSStyleSheet* V8CSSStyleSheet::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CSSStyleSheet* V8CSSStyleSheet::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ApplicationCache.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,364 +47,409 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ApplicationCache::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ApplicationCache is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ApplicationCacheV8Internal {
 
-static void statusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void statusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->status());
-}
+        v8SetReturnValueUnsigned(info, impl->status());
+    }
 
-CORE_EXPORT void statusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::statusAttributeGetter(info);
-}
+    CORE_EXPORT void statusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::statusAttributeGetter(info);
+    }
 
-static void oncheckingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncheckingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onchecking()));
+        EventListener* cppValue(WTF::getPtr(impl->onchecking()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncheckingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::oncheckingAttributeGetter(info);
-}
+    CORE_EXPORT void oncheckingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::oncheckingAttributeGetter(info);
+    }
 
-static void oncheckingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+    static void oncheckingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchecking(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchecking(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
 
-  impl->setOnchecking(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnchecking(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncheckingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncheckingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ApplicationCacheV8Internal::oncheckingAttributeSetter(v8Value, info);
-}
+        ApplicationCacheV8Internal::oncheckingAttributeSetter(v8Value, info);
+    }
 
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::onerrorAttributeGetter(info);
-}
+    CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::onerrorAttributeGetter(info);
+    }
 
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
 
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ApplicationCacheV8Internal::onerrorAttributeSetter(v8Value, info);
-}
+        ApplicationCacheV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
 
-static void onnoupdateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onnoupdateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onnoupdate()));
+        EventListener* cppValue(WTF::getPtr(impl->onnoupdate()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onnoupdateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::onnoupdateAttributeGetter(info);
-}
+    CORE_EXPORT void onnoupdateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::onnoupdateAttributeGetter(info);
+    }
 
-static void onnoupdateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+    static void onnoupdateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onnoupdate(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onnoupdate(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
 
-  impl->setOnnoupdate(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnnoupdate(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onnoupdateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onnoupdateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ApplicationCacheV8Internal::onnoupdateAttributeSetter(v8Value, info);
-}
+        ApplicationCacheV8Internal::onnoupdateAttributeSetter(v8Value, info);
+    }
 
-static void ondownloadingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondownloadingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->ondownloading()));
+        EventListener* cppValue(WTF::getPtr(impl->ondownloading()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void ondownloadingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::ondownloadingAttributeGetter(info);
-}
+    CORE_EXPORT void ondownloadingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::ondownloadingAttributeGetter(info);
+    }
 
-static void ondownloadingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+    static void ondownloadingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondownloading(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondownloading(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
 
-  impl->setOndownloading(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOndownloading(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void ondownloadingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void ondownloadingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ApplicationCacheV8Internal::ondownloadingAttributeSetter(v8Value, info);
-}
+        ApplicationCacheV8Internal::ondownloadingAttributeSetter(v8Value, info);
+    }
 
-static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onprogress()));
+        EventListener* cppValue(WTF::getPtr(impl->onprogress()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::onprogressAttributeGetter(info);
-}
+    CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::onprogressAttributeGetter(info);
+    }
 
-static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+    static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onprogress(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onprogress(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
 
-  impl->setOnprogress(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnprogress(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ApplicationCacheV8Internal::onprogressAttributeSetter(v8Value, info);
-}
+        ApplicationCacheV8Internal::onprogressAttributeSetter(v8Value, info);
+    }
 
-static void onupdatereadyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onupdatereadyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onupdateready()));
+        EventListener* cppValue(WTF::getPtr(impl->onupdateready()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onupdatereadyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::onupdatereadyAttributeGetter(info);
-}
+    CORE_EXPORT void onupdatereadyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::onupdatereadyAttributeGetter(info);
+    }
 
-static void onupdatereadyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+    static void onupdatereadyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onupdateready(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onupdateready(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
 
-  impl->setOnupdateready(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnupdateready(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onupdatereadyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onupdatereadyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ApplicationCacheV8Internal::onupdatereadyAttributeSetter(v8Value, info);
-}
+        ApplicationCacheV8Internal::onupdatereadyAttributeSetter(v8Value, info);
+    }
 
-static void oncachedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncachedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->oncached()));
+        EventListener* cppValue(WTF::getPtr(impl->oncached()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncachedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::oncachedAttributeGetter(info);
-}
+    CORE_EXPORT void oncachedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::oncachedAttributeGetter(info);
+    }
 
-static void oncachedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+    static void oncachedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncached(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncached(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
 
-  impl->setOncached(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOncached(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncachedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncachedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ApplicationCacheV8Internal::oncachedAttributeSetter(v8Value, info);
-}
+        ApplicationCacheV8Internal::oncachedAttributeSetter(v8Value, info);
+    }
 
-static void onobsoleteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onobsoleteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onobsolete()));
+        EventListener* cppValue(WTF::getPtr(impl->onobsolete()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onobsoleteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::onobsoleteAttributeGetter(info);
-}
+    CORE_EXPORT void onobsoleteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::onobsoleteAttributeGetter(info);
+    }
 
-static void onobsoleteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
+    static void onobsoleteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ApplicationCache* impl = V8ApplicationCache::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onobsolete(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onobsolete(), v8Value, V8ApplicationCache::eventListenerCacheIndex);
 
-  impl->setOnobsolete(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnobsolete(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onobsoleteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onobsoleteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ApplicationCacheV8Internal::onobsoleteAttributeSetter(v8Value, info);
-}
+        ApplicationCacheV8Internal::onobsoleteAttributeSetter(v8Value, info);
+    }
 
-static void updateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ApplicationCache", "update");
+    static void updateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ApplicationCache", "update");
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(info.Holder());
+        ApplicationCache* impl = V8ApplicationCache::toImpl(info.Holder());
 
-  impl->update(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->update(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void updateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::updateMethod(info);
-}
+    CORE_EXPORT void updateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::updateMethod(info);
+    }
 
-static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCache* impl = V8ApplicationCache::toImpl(info.Holder());
+    static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCache* impl = V8ApplicationCache::toImpl(info.Holder());
 
-  impl->abort();
-}
+        impl->abort();
+    }
 
-CORE_EXPORT  void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::abortMethod(info);
-}
+    CORE_EXPORT void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::abortMethod(info);
+    }
 
-static void swapCacheMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ApplicationCache", "swapCache");
+    static void swapCacheMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ApplicationCache", "swapCache");
 
-  ApplicationCache* impl = V8ApplicationCache::toImpl(info.Holder());
+        ApplicationCache* impl = V8ApplicationCache::toImpl(info.Holder());
 
-  impl->swapCache(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->swapCache(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void swapCacheMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ApplicationCacheV8Internal::swapCacheMethod(info);
-}
+    CORE_EXPORT void swapCacheMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ApplicationCacheV8Internal::swapCacheMethod(info);
+    }
 
 } // namespace ApplicationCacheV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ApplicationCacheAccessors[] = {
-    {"status", ApplicationCacheV8Internal::statusAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onchecking", ApplicationCacheV8Internal::oncheckingAttributeGetterCallback, ApplicationCacheV8Internal::oncheckingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", ApplicationCacheV8Internal::onerrorAttributeGetterCallback, ApplicationCacheV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onnoupdate", ApplicationCacheV8Internal::onnoupdateAttributeGetterCallback, ApplicationCacheV8Internal::onnoupdateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondownloading", ApplicationCacheV8Internal::ondownloadingAttributeGetterCallback, ApplicationCacheV8Internal::ondownloadingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onprogress", ApplicationCacheV8Internal::onprogressAttributeGetterCallback, ApplicationCacheV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onupdateready", ApplicationCacheV8Internal::onupdatereadyAttributeGetterCallback, ApplicationCacheV8Internal::onupdatereadyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncached", ApplicationCacheV8Internal::oncachedAttributeGetterCallback, ApplicationCacheV8Internal::oncachedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onobsolete", ApplicationCacheV8Internal::onobsoleteAttributeGetterCallback, ApplicationCacheV8Internal::onobsoleteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "status", ApplicationCacheV8Internal::statusAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onchecking", ApplicationCacheV8Internal::oncheckingAttributeGetterCallback, ApplicationCacheV8Internal::oncheckingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", ApplicationCacheV8Internal::onerrorAttributeGetterCallback, ApplicationCacheV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onnoupdate", ApplicationCacheV8Internal::onnoupdateAttributeGetterCallback, ApplicationCacheV8Internal::onnoupdateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondownloading", ApplicationCacheV8Internal::ondownloadingAttributeGetterCallback, ApplicationCacheV8Internal::ondownloadingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onprogress", ApplicationCacheV8Internal::onprogressAttributeGetterCallback, ApplicationCacheV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onupdateready", ApplicationCacheV8Internal::onupdatereadyAttributeGetterCallback, ApplicationCacheV8Internal::onupdatereadyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncached", ApplicationCacheV8Internal::oncachedAttributeGetterCallback, ApplicationCacheV8Internal::oncachedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onobsolete", ApplicationCacheV8Internal::onobsoleteAttributeGetterCallback, ApplicationCacheV8Internal::onobsoleteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8ApplicationCacheMethods[] = {
-    {"update", ApplicationCacheV8Internal::updateMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"abort", ApplicationCacheV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"swapCache", ApplicationCacheV8Internal::swapCacheMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "update", ApplicationCacheV8Internal::updateMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "abort", ApplicationCacheV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "swapCache", ApplicationCacheV8Internal::swapCacheMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8ApplicationCacheTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ApplicationCache::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8ApplicationCache::internalFieldCount);
+static void installV8ApplicationCacheTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ApplicationCache::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8ApplicationCache::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8ApplicationCacheConstants[] = {
-      {"UNCACHED", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"IDLE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"CHECKING", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOWNLOADING", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"UPDATEREADY", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"OBSOLETE", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8ApplicationCacheConstants, WTF_ARRAY_LENGTH(V8ApplicationCacheConstants));
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ApplicationCacheAccessors, WTF_ARRAY_LENGTH(V8ApplicationCacheAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ApplicationCacheMethods, WTF_ARRAY_LENGTH(V8ApplicationCacheMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8ApplicationCacheConstants[] = {
+        { "UNCACHED", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "IDLE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "CHECKING", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOWNLOADING", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "UPDATEREADY", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "OBSOLETE", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8ApplicationCacheConstants, WTF_ARRAY_LENGTH(V8ApplicationCacheConstants));
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ApplicationCacheAccessors, WTF_ARRAY_LENGTH(V8ApplicationCacheAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ApplicationCacheMethods, WTF_ARRAY_LENGTH(V8ApplicationCacheMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8ApplicationCache::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ApplicationCacheTemplate);
+v8::Local<v8::FunctionTemplate> V8ApplicationCache::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ApplicationCacheTemplate);
 }
 
-bool V8ApplicationCache::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ApplicationCache::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ApplicationCache::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ApplicationCache::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ApplicationCache* V8ApplicationCache::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ApplicationCache* V8ApplicationCache::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

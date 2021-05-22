@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MessageEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,201 +52,222 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MessageEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MessageEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MessageEventV8Internal {
 
-CORE_EXPORT void dataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  V8MessageEvent::dataAttributeGetterCustom(info);
-}
+    CORE_EXPORT void dataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        V8MessageEvent::dataAttributeGetterCustom(info);
+    }
 
-static void originAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void originAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MessageEvent* impl = V8MessageEvent::toImpl(holder);
+        MessageEvent* impl = V8MessageEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->origin(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->origin(), info.GetIsolate());
+    }
 
-CORE_EXPORT void originAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MessageEventV8Internal::originAttributeGetter(info);
-}
+    CORE_EXPORT void originAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MessageEventV8Internal::originAttributeGetter(info);
+    }
 
-static void lastEventIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lastEventIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MessageEvent* impl = V8MessageEvent::toImpl(holder);
+        MessageEvent* impl = V8MessageEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->lastEventId(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->lastEventId(), info.GetIsolate());
+    }
 
-CORE_EXPORT void lastEventIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MessageEventV8Internal::lastEventIdAttributeGetter(info);
-}
+    CORE_EXPORT void lastEventIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MessageEventV8Internal::lastEventIdAttributeGetter(info);
+    }
 
-static void sourceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sourceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MessageEvent* impl = V8MessageEvent::toImpl(holder);
+        MessageEvent* impl = V8MessageEvent::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->source()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->source()), impl);
+    }
 
-CORE_EXPORT void sourceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MessageEventV8Internal::sourceAttributeGetter(info);
-}
+    CORE_EXPORT void sourceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MessageEventV8Internal::sourceAttributeGetter(info);
+    }
 
-static void portsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void portsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MessageEvent* impl = V8MessageEvent::toImpl(holder);
+        MessageEvent* impl = V8MessageEvent::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  HeapVector<Member<MessagePort>> cppValue(impl->ports(isNull));
+        HeapVector<Member<MessagePort>> cppValue(impl->ports(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, ToV8(cppValue, info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(cppValue, info.Holder(), info.GetIsolate()));
+    }
 
-CORE_EXPORT void portsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MessageEventV8Internal::portsAttributeGetter(info);
-}
+    CORE_EXPORT void portsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MessageEventV8Internal::portsAttributeGetter(info);
+    }
 
-static void suboriginAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void suboriginAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MessageEvent* impl = V8MessageEvent::toImpl(holder);
+        MessageEvent* impl = V8MessageEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->suborigin(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->suborigin(), info.GetIsolate());
+    }
 
-CORE_EXPORT void suboriginAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MessageEventV8Internal::suboriginAttributeGetter(info);
-}
+    CORE_EXPORT void suboriginAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MessageEventV8Internal::suboriginAttributeGetter(info);
+    }
 
-static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MessageEvent* impl = V8MessageEvent::toImpl(holder);
+        MessageEvent* impl = V8MessageEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isTrusted());
-}
+        v8SetReturnValueBool(info, impl->isTrusted());
+    }
 
-CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MessageEventV8Internal::isTrustedAttributeGetter(info);
-}
+    CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MessageEventV8Internal::isTrustedAttributeGetter(info);
+    }
 
-CORE_EXPORT  void initMessageEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::InitMessageEvent);
-  V8MessageEvent::initMessageEventMethodCustom(info);
-}
+    CORE_EXPORT void initMessageEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::InitMessageEvent);
+        V8MessageEvent::initMessageEventMethodCustom(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MessageEvent");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MessageEvent");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  MessageEventInit eventInitDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        MessageEventInit eventInitDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
 
-    return;
-  }
-  V8MessageEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8MessageEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  MessageEvent* impl = MessageEvent::create(type, eventInitDict, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MessageEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        MessageEvent* impl = MessageEvent::create(type, eventInitDict, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MessageEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace MessageEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MessageEventAccessors[] = {
-    {"data", MessageEventV8Internal::dataAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"origin", MessageEventV8Internal::originAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastEventId", MessageEventV8Internal::lastEventIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"source", MessageEventV8Internal::sourceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ports", MessageEventV8Internal::portsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTrusted", MessageEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "data", MessageEventV8Internal::dataAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "origin", MessageEventV8Internal::originAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastEventId", MessageEventV8Internal::lastEventIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "source", MessageEventV8Internal::sourceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ports", MessageEventV8Internal::portsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTrusted", MessageEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MessageEventMethods[] = {
-    {"initMessageEvent", MessageEventV8Internal::initMessageEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "initMessageEvent", MessageEventV8Internal::initMessageEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8MessageEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MessageEvent"));
-    return;
-  }
+void V8MessageEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MessageEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  MessageEventV8Internal::constructor(info);
+    MessageEventV8Internal::constructor(info);
 }
 
-static void installV8MessageEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MessageEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8MessageEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8MessageEvent::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8MessageEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MessageEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8MessageEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8MessageEvent::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MessageEventAccessors, WTF_ARRAY_LENGTH(V8MessageEventAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MessageEventMethods, WTF_ARRAY_LENGTH(V8MessageEventMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MessageEventAccessors, WTF_ARRAY_LENGTH(V8MessageEventAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MessageEventMethods, WTF_ARRAY_LENGTH(V8MessageEventMethods));
 
-  if (RuntimeEnabledFeatures::suboriginsEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorsuboriginConfiguration = {"suborigin", MessageEventV8Internal::suboriginAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorsuboriginConfiguration);
-  }
+    if (RuntimeEnabledFeatures::suboriginsEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorsuboriginConfiguration = { "suborigin", MessageEventV8Internal::suboriginAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorsuboriginConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8MessageEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MessageEventTemplate);
+v8::Local<v8::FunctionTemplate> V8MessageEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MessageEventTemplate);
 }
 
-bool V8MessageEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MessageEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MessageEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MessageEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MessageEvent* V8MessageEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MessageEvent* V8MessageEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WorkerGlobalScopePartial.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -38,164 +38,174 @@ namespace blink {
 
 namespace WorkerGlobalScopePartialV8Internal {
 
-static void cachesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cachesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "WorkerGlobalScope", "caches");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "WorkerGlobalScope", "caches");
 
-  CacheStorage* cppValue(GlobalCacheStorage::caches(*impl, exceptionState));
+        CacheStorage* cppValue(GlobalCacheStorage::caches(*impl, exceptionState));
 
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#caches";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#caches";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-void cachesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GlobalCacheStorage);
+    void cachesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GlobalCacheStorage);
 
-  WorkerGlobalScopePartialV8Internal::cachesAttributeGetter(info);
-}
+        WorkerGlobalScopePartialV8Internal::cachesAttributeGetter(info);
+    }
 
-static void cryptoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cryptoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
 
-  Crypto* cppValue(WorkerGlobalScopeCrypto::crypto(*impl));
+        Crypto* cppValue(WorkerGlobalScopeCrypto::crypto(*impl));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#crypto";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#crypto";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-void cryptoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopePartialV8Internal::cryptoAttributeGetter(info);
-}
+    void cryptoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopePartialV8Internal::cryptoAttributeGetter(info);
+    }
 
-static void indexedDBAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void indexedDBAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
 
-  IDBFactory* cppValue(GlobalIndexedDB::indexedDB(*impl));
+        IDBFactory* cppValue(GlobalIndexedDB::indexedDB(*impl));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#indexedDB";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#indexedDB";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-void indexedDBAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopePartialV8Internal::indexedDBAttributeGetter(info);
-}
+    void indexedDBAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopePartialV8Internal::indexedDBAttributeGetter(info);
+    }
 
-static void fetchMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "fetch");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void fetchMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WorkerGlobalScope", "fetch");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8WorkerGlobalScope::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8WorkerGlobalScope::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  RequestOrUSVString input;
-  Dictionary init;
-  V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], input, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        RequestOrUSVString input;
+        Dictionary init;
+        V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], input, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('init') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('init') is not an object.");
 
-    return;
-  }
-  init = Dictionary(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        init = Dictionary(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = GlobalFetch::fetch(scriptState, *impl, input, init, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = GlobalFetch::fetch(scriptState, *impl, input, init, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
 
- void fetchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerGlobalScopePartialV8Internal::fetchMethod(info);
-}
+    void fetchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerGlobalScopePartialV8Internal::fetchMethod(info);
+    }
 
 } // namespace WorkerGlobalScopePartialV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8WorkerGlobalScopeAccessors[] = {
-    {"crypto", WorkerGlobalScopePartialV8Internal::cryptoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"indexedDB", WorkerGlobalScopePartialV8Internal::indexedDBAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "crypto", WorkerGlobalScopePartialV8Internal::cryptoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "indexedDB", WorkerGlobalScopePartialV8Internal::indexedDBAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8WorkerGlobalScopeMethods[] = {
-    {"fetch", WorkerGlobalScopePartialV8Internal::fetchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "fetch", WorkerGlobalScopePartialV8Internal::fetchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-void V8WorkerGlobalScopePartial::installV8WorkerGlobalScopeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplate(isolate, world, interfaceTemplate);
+void V8WorkerGlobalScopePartial::installV8WorkerGlobalScopeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8WorkerGlobalScope::installV8WorkerGlobalScopeTemplate(isolate, world, interfaceTemplate);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Global object prototype chain consists of Immutable Prototype Exotic Objects
-  prototypeTemplate->SetImmutableProto();
+    // Global object prototype chain consists of Immutable Prototype Exotic Objects
+    prototypeTemplate->SetImmutableProto();
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeAccessors, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeMethods, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeAccessors, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerGlobalScopeMethods, WTF_ARRAY_LENGTH(V8WorkerGlobalScopeMethods));
 
-  if (RuntimeEnabledFeatures::globalCacheStorageEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorcachesConfiguration = {"caches", WorkerGlobalScopePartialV8Internal::cachesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcachesConfiguration);
-  }
+    if (RuntimeEnabledFeatures::globalCacheStorageEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorcachesConfiguration = { "caches", WorkerGlobalScopePartialV8Internal::cachesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcachesConfiguration);
+    }
 }
 
-void V8WorkerGlobalScopePartial::initialize() {
-  // Should be invoked from ModulesInitializer.
-  V8WorkerGlobalScope::updateWrapperTypeInfo(
-      &V8WorkerGlobalScopePartial::installV8WorkerGlobalScopeTemplate,
-      nullptr);
+void V8WorkerGlobalScopePartial::initialize()
+{
+    // Should be invoked from ModulesInitializer.
+    V8WorkerGlobalScope::updateWrapperTypeInfo(
+        &V8WorkerGlobalScopePartial::installV8WorkerGlobalScopeTemplate,
+        nullptr);
 }
 
-}  // namespace blink
+} // namespace blink

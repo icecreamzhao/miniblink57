@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef NodeOrString_h
 #define NodeOrString_h
 
@@ -23,58 +23,60 @@ namespace blink {
 class Node;
 
 class CORE_EXPORT NodeOrString final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  NodeOrString();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isNode() const { return m_type == SpecificTypeNode; }
-  Node* getAsNode() const;
-  void setNode(Node*);
-  static NodeOrString fromNode(Node*);
+public:
+    NodeOrString();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isString() const { return m_type == SpecificTypeString; }
-  String getAsString() const;
-  void setString(String);
-  static NodeOrString fromString(String);
+    bool isNode() const { return m_type == SpecificTypeNode; }
+    Node* getAsNode() const;
+    void setNode(Node*);
+    static NodeOrString fromNode(Node*);
 
-  NodeOrString(const NodeOrString&);
-  ~NodeOrString();
-  NodeOrString& operator=(const NodeOrString&);
-  DECLARE_TRACE();
+    bool isString() const { return m_type == SpecificTypeString; }
+    String getAsString() const;
+    void setString(String);
+    static NodeOrString fromString(String);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeNode,
-    SpecificTypeString,
-  };
-  SpecificTypes m_type;
+    NodeOrString(const NodeOrString&);
+    ~NodeOrString();
+    NodeOrString& operator=(const NodeOrString&);
+    DECLARE_TRACE();
 
-  Member<Node> m_node;
-  String m_string;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeNode,
+        SpecificTypeString,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const NodeOrString&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<Node> m_node;
+    String m_string;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const NodeOrString&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8NodeOrString final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, NodeOrString&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, NodeOrString&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const NodeOrString&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, NodeOrString& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, NodeOrString& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<NodeOrString> {
-  CORE_EXPORT static NodeOrString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static NodeOrString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -82,4 +84,4 @@ struct NativeValueTraits<NodeOrString> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::NodeOrString);
 
-#endif  // NodeOrString_h
+#endif // NodeOrString_h

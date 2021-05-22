@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLDialogElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,177 +50,196 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLDialogElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLDialogElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLDialogElementV8Internal {
 
-static void openAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void openAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(holder);
+        HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::openAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::openAttr));
+    }
 
-CORE_EXPORT void openAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDialogElementV8Internal::openAttributeGetter(info);
-}
+    CORE_EXPORT void openAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDialogElementV8Internal::openAttributeGetter(info);
+    }
 
-static void openAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(holder);
+    static void openAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLDialogElement", "open");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLDialogElement", "open");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::openAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::openAttr, cppValue);
+    }
 
-CORE_EXPORT void openAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void openAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLDialogElementV8Internal::openAttributeSetter(v8Value, info);
-}
+        HTMLDialogElementV8Internal::openAttributeSetter(v8Value, info);
+    }
 
-static void returnValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void returnValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(holder);
+        HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->returnValue(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->returnValue(), info.GetIsolate());
+    }
 
-CORE_EXPORT void returnValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDialogElementV8Internal::returnValueAttributeGetter(info);
-}
+    CORE_EXPORT void returnValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDialogElementV8Internal::returnValueAttributeGetter(info);
+    }
 
-static void returnValueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(holder);
+    static void returnValueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setReturnValue(cppValue);
-}
+        impl->setReturnValue(cppValue);
+    }
 
-CORE_EXPORT void returnValueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void returnValueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLDialogElementV8Internal::returnValueAttributeSetter(v8Value, info);
-}
+        HTMLDialogElementV8Internal::returnValueAttributeSetter(v8Value, info);
+    }
 
-static void showMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(info.Holder());
+    static void showMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(info.Holder());
 
-  impl->show();
-}
+        impl->show();
+    }
 
-CORE_EXPORT  void showMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  HTMLDialogElementV8Internal::showMethod(info);
-}
+    CORE_EXPORT void showMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        HTMLDialogElementV8Internal::showMethod(info);
+    }
 
-static void showModalMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLDialogElement", "showModal");
+    static void showModalMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLDialogElement", "showModal");
 
-  HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(info.Holder());
+        HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(info.Holder());
 
-  impl->showModal(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->showModal(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void showModalMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  HTMLDialogElementV8Internal::showModalMethod(info);
-}
+    CORE_EXPORT void showModalMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        HTMLDialogElementV8Internal::showModalMethod(info);
+    }
 
-static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLDialogElement", "close");
+    static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLDialogElement", "close");
 
-  HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(info.Holder());
+        HTMLDialogElement* impl = V8HTMLDialogElement::toImpl(info.Holder());
 
-  V8StringResource<> returnValue;
-  if (!info[0]->IsUndefined()) {
-    returnValue = info[0];
-    if (!returnValue.prepare())
-      return;
-  } else {
-    returnValue = nullptr;
-  }
+        V8StringResource<> returnValue;
+        if (!info[0]->IsUndefined()) {
+            returnValue = info[0];
+            if (!returnValue.prepare())
+                return;
+        } else {
+            returnValue = nullptr;
+        }
 
-  impl->close(returnValue, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->close(returnValue, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  HTMLDialogElementV8Internal::closeMethod(info);
-}
+    CORE_EXPORT void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        HTMLDialogElementV8Internal::closeMethod(info);
+    }
 
 } // namespace HTMLDialogElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLDialogElementAccessors[] = {
-    {"open", HTMLDialogElementV8Internal::openAttributeGetterCallback, HTMLDialogElementV8Internal::openAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"returnValue", HTMLDialogElementV8Internal::returnValueAttributeGetterCallback, HTMLDialogElementV8Internal::returnValueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "open", HTMLDialogElementV8Internal::openAttributeGetterCallback, HTMLDialogElementV8Internal::openAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "returnValue", HTMLDialogElementV8Internal::returnValueAttributeGetterCallback, HTMLDialogElementV8Internal::returnValueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLDialogElementMethods[] = {
-    {"show", HTMLDialogElementV8Internal::showMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"showModal", HTMLDialogElementV8Internal::showModalMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"close", HTMLDialogElementV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "show", HTMLDialogElementV8Internal::showMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "showModal", HTMLDialogElementV8Internal::showModalMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "close", HTMLDialogElementV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLDialogElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLDialogElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLDialogElement::internalFieldCount);
+static void installV8HTMLDialogElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLDialogElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLDialogElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDialogElementAccessors, WTF_ARRAY_LENGTH(V8HTMLDialogElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDialogElementMethods, WTF_ARRAY_LENGTH(V8HTMLDialogElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDialogElementAccessors, WTF_ARRAY_LENGTH(V8HTMLDialogElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLDialogElementMethods, WTF_ARRAY_LENGTH(V8HTMLDialogElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLDialogElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLDialogElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLDialogElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLDialogElementTemplate);
 }
 
-bool V8HTMLDialogElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLDialogElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLDialogElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLDialogElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLDialogElement* V8HTMLDialogElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLDialogElement* V8HTMLDialogElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

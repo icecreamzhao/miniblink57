@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8WorkerInternals_h
 #define V8WorkerInternals_h
 
@@ -23,37 +23,41 @@
 namespace blink {
 
 class V8WorkerInternals {
-  STATIC_ONLY(V8WorkerInternals);
- public:
-  static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static WorkerInternals* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<WorkerInternals>();
-  }
-  static WorkerInternals* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  static WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<WorkerInternals>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<WorkerInternals>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
-  static void preparePrototypeAndInterfaceObject(v8::Local<v8::Context>, const DOMWrapperWorld&, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {}
-  static void updateWrapperTypeInfo(InstallTemplateFunction, PreparePrototypeAndInterfaceObjectFunction);
-  static void installV8WorkerInternalsTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+    STATIC_ONLY(V8WorkerInternals);
 
- private:
-  static InstallTemplateFunction installV8WorkerInternalsTemplateFunction;
+public:
+    static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static WorkerInternals* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<WorkerInternals>();
+    }
+    static WorkerInternals* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    static WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<WorkerInternals>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<WorkerInternals>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    static void preparePrototypeAndInterfaceObject(v8::Local<v8::Context>, const DOMWrapperWorld&, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) { }
+    static void updateWrapperTypeInfo(InstallTemplateFunction, PreparePrototypeAndInterfaceObjectFunction);
+    static void installV8WorkerInternalsTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+
+private:
+    static InstallTemplateFunction installV8WorkerInternalsTemplateFunction;
 };
 
 template <>
 struct V8TypeOf<WorkerInternals> {
-  typedef V8WorkerInternals Type;
+    typedef V8WorkerInternals Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8WorkerInternals_h
+#endif // V8WorkerInternals_h

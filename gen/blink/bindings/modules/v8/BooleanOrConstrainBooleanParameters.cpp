@@ -8,113 +8,126 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "BooleanOrConstrainBooleanParameters.h"
 
 #include "bindings/core/v8/ToV8.h"
 
 namespace blink {
 
-BooleanOrConstrainBooleanParameters::BooleanOrConstrainBooleanParameters() : m_type(SpecificTypeNone) {}
-
-bool BooleanOrConstrainBooleanParameters::getAsBoolean() const {
-  DCHECK(isBoolean());
-  return m_boolean;
+BooleanOrConstrainBooleanParameters::BooleanOrConstrainBooleanParameters()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void BooleanOrConstrainBooleanParameters::setBoolean(bool value) {
-  DCHECK(isNull());
-  m_boolean = value;
-  m_type = SpecificTypeBoolean;
+bool BooleanOrConstrainBooleanParameters::getAsBoolean() const
+{
+    DCHECK(isBoolean());
+    return m_boolean;
 }
 
-BooleanOrConstrainBooleanParameters BooleanOrConstrainBooleanParameters::fromBoolean(bool value) {
-  BooleanOrConstrainBooleanParameters container;
-  container.setBoolean(value);
-  return container;
+void BooleanOrConstrainBooleanParameters::setBoolean(bool value)
+{
+    DCHECK(isNull());
+    m_boolean = value;
+    m_type = SpecificTypeBoolean;
 }
 
-const ConstrainBooleanParameters& BooleanOrConstrainBooleanParameters::getAsConstrainBooleanParameters() const {
-  DCHECK(isConstrainBooleanParameters());
-  return m_constrainBooleanParameters;
+BooleanOrConstrainBooleanParameters BooleanOrConstrainBooleanParameters::fromBoolean(bool value)
+{
+    BooleanOrConstrainBooleanParameters container;
+    container.setBoolean(value);
+    return container;
 }
 
-void BooleanOrConstrainBooleanParameters::setConstrainBooleanParameters(const ConstrainBooleanParameters& value) {
-  DCHECK(isNull());
-  m_constrainBooleanParameters = value;
-  m_type = SpecificTypeConstrainBooleanParameters;
+const ConstrainBooleanParameters& BooleanOrConstrainBooleanParameters::getAsConstrainBooleanParameters() const
+{
+    DCHECK(isConstrainBooleanParameters());
+    return m_constrainBooleanParameters;
 }
 
-BooleanOrConstrainBooleanParameters BooleanOrConstrainBooleanParameters::fromConstrainBooleanParameters(const ConstrainBooleanParameters& value) {
-  BooleanOrConstrainBooleanParameters container;
-  container.setConstrainBooleanParameters(value);
-  return container;
+void BooleanOrConstrainBooleanParameters::setConstrainBooleanParameters(const ConstrainBooleanParameters& value)
+{
+    DCHECK(isNull());
+    m_constrainBooleanParameters = value;
+    m_type = SpecificTypeConstrainBooleanParameters;
+}
+
+BooleanOrConstrainBooleanParameters BooleanOrConstrainBooleanParameters::fromConstrainBooleanParameters(const ConstrainBooleanParameters& value)
+{
+    BooleanOrConstrainBooleanParameters container;
+    container.setConstrainBooleanParameters(value);
+    return container;
 }
 
 BooleanOrConstrainBooleanParameters::BooleanOrConstrainBooleanParameters(const BooleanOrConstrainBooleanParameters&) = default;
 BooleanOrConstrainBooleanParameters::~BooleanOrConstrainBooleanParameters() = default;
 BooleanOrConstrainBooleanParameters& BooleanOrConstrainBooleanParameters::operator=(const BooleanOrConstrainBooleanParameters&) = default;
 
-DEFINE_TRACE(BooleanOrConstrainBooleanParameters) {
-  visitor->trace(m_constrainBooleanParameters);
+DEFINE_TRACE(BooleanOrConstrainBooleanParameters)
+{
+    visitor->trace(m_constrainBooleanParameters);
 }
 
-void V8BooleanOrConstrainBooleanParameters::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, BooleanOrConstrainBooleanParameters& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8BooleanOrConstrainBooleanParameters::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, BooleanOrConstrainBooleanParameters& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (isUndefinedOrNull(v8Value)) {
-//     ConstrainBooleanParameters cppValue;
-//     V8ConstrainBooleanParameters::toImpl(isolate, v8Value, cppValue, exceptionState);
-//     if (exceptionState.hadException())
-//       return;
-//     impl.setConstrainBooleanParameters(cppValue);
-    DebugBreak();
-    return;
-  }
+    if (isUndefinedOrNull(v8Value)) {
+        //     ConstrainBooleanParameters cppValue;
+        //     V8ConstrainBooleanParameters::toImpl(isolate, v8Value, cppValue, exceptionState);
+        //     if (exceptionState.hadException())
+        //       return;
+        //     impl.setConstrainBooleanParameters(cppValue);
+        DebugBreak();
+        return;
+    }
 
-  if (v8Value->IsObject()) {
-//     ConstrainBooleanParameters cppValue;
-//     V8ConstrainBooleanParameters::toImpl(isolate, v8Value, cppValue, exceptionState);
-//     if (exceptionState.hadException())
-//       return;
-//     impl.setConstrainBooleanParameters(cppValue);
-    DebugBreak();
-    return;
-  }
+    if (v8Value->IsObject()) {
+        //     ConstrainBooleanParameters cppValue;
+        //     V8ConstrainBooleanParameters::toImpl(isolate, v8Value, cppValue, exceptionState);
+        //     if (exceptionState.hadException())
+        //       return;
+        //     impl.setConstrainBooleanParameters(cppValue);
+        DebugBreak();
+        return;
+    }
 
-  if (v8Value->IsBoolean()) {
-    impl.setBoolean(v8Value.As<v8::Boolean>()->Value());
-    return;
-  }
+    if (v8Value->IsBoolean()) {
+        impl.setBoolean(v8Value.As<v8::Boolean>()->Value());
+        return;
+    }
 
-  {
-    impl.setBoolean(v8Value->BooleanValue());
-    return;
-  }
+    {
+        impl.setBoolean(v8Value->BooleanValue());
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const BooleanOrConstrainBooleanParameters& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const BooleanOrConstrainBooleanParameters& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case BooleanOrConstrainBooleanParameters::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case BooleanOrConstrainBooleanParameters::SpecificTypeBoolean:
-      return v8Boolean(impl.getAsBoolean(), isolate);
+        return v8Boolean(impl.getAsBoolean(), isolate);
     case BooleanOrConstrainBooleanParameters::SpecificTypeConstrainBooleanParameters:
-      return ToV8(impl.getAsConstrainBooleanParameters(), creationContext, isolate);
+        return ToV8(impl.getAsConstrainBooleanParameters(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-BooleanOrConstrainBooleanParameters NativeValueTraits<BooleanOrConstrainBooleanParameters>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  BooleanOrConstrainBooleanParameters impl;
-  V8BooleanOrConstrainBooleanParameters::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+BooleanOrConstrainBooleanParameters NativeValueTraits<BooleanOrConstrainBooleanParameters>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    BooleanOrConstrainBooleanParameters impl;
+    V8BooleanOrConstrainBooleanParameters::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8IDBFactory.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,174 +50,187 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&IDBFactory::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "IDBFactory is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace IDBFactoryV8Internal {
 
-static void webkitGetDatabaseNamesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBFactory", "webkitGetDatabaseNames");
+    static void webkitGetDatabaseNamesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBFactory", "webkitGetDatabaseNames");
 
-  IDBFactory* impl = V8IDBFactory::toImpl(info.Holder());
+        IDBFactory* impl = V8IDBFactory::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  IDBRequest* result = impl->getDatabaseNames(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void webkitGetDatabaseNamesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8IDBFactory_WebkitGetDatabaseNames_Method);
-  IDBFactoryV8Internal::webkitGetDatabaseNamesMethod(info);
-}
-
-static void openMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBFactory", "open");
-
-  IDBFactory* impl = V8IDBFactory::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> name;
-  unsigned long long version;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  name = info[0];
-  if (!name.prepare())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    IDBOpenDBRequest* result = impl->open(scriptState, name, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        IDBRequest* result = impl->getDatabaseNames(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  version = toUInt64(info.GetIsolate(), info[1], EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  IDBOpenDBRequest* result = impl->open(scriptState, name, version, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+    MODULES_EXPORT void webkitGetDatabaseNamesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8IDBFactory_WebkitGetDatabaseNames_Method);
+        IDBFactoryV8Internal::webkitGetDatabaseNamesMethod(info);
+    }
 
-MODULES_EXPORT  void openMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBFactoryV8Internal::openMethod(info);
-}
+    static void openMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBFactory", "open");
 
-static void deleteDatabaseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBFactory", "deleteDatabase");
+        IDBFactory* impl = V8IDBFactory::toImpl(info.Holder());
 
-  IDBFactory* impl = V8IDBFactory::toImpl(info.Holder());
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        V8StringResource<> name;
+        unsigned long long version;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            IDBOpenDBRequest* result = impl->open(scriptState, name, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        version = toUInt64(info.GetIsolate(), info[1], EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  IDBOpenDBRequest* result = impl->deleteDatabase(scriptState, name, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        IDBOpenDBRequest* result = impl->open(scriptState, name, version, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-MODULES_EXPORT  void deleteDatabaseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBFactoryV8Internal::deleteDatabaseMethod(info);
-}
+    MODULES_EXPORT void openMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBFactoryV8Internal::openMethod(info);
+    }
 
-static void cmpMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBFactory", "cmp");
+    static void deleteDatabaseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBFactory", "deleteDatabase");
 
-  IDBFactory* impl = V8IDBFactory::toImpl(info.Holder());
+        IDBFactory* impl = V8IDBFactory::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  ScriptValue first;
-  ScriptValue second;
-  first = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  second = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
+        IDBOpenDBRequest* result = impl->deleteDatabase(scriptState, name, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-  int result = impl->cmp(scriptState, first, second, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueInt(info, result);
-}
+    MODULES_EXPORT void deleteDatabaseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBFactoryV8Internal::deleteDatabaseMethod(info);
+    }
 
-MODULES_EXPORT  void cmpMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBFactoryV8Internal::cmpMethod(info);
-}
+    static void cmpMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBFactory", "cmp");
+
+        IDBFactory* impl = V8IDBFactory::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        ScriptValue first;
+        ScriptValue second;
+        first = ScriptValue(ScriptState::current(info.GetIsolate()), info[0]);
+
+        second = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
+
+        int result = impl->cmp(scriptState, first, second, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueInt(info, result);
+    }
+
+    MODULES_EXPORT void cmpMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBFactoryV8Internal::cmpMethod(info);
+    }
 
 } // namespace IDBFactoryV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8IDBFactoryMethods[] = {
-    {"webkitGetDatabaseNames", IDBFactoryV8Internal::webkitGetDatabaseNamesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"open", IDBFactoryV8Internal::openMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteDatabase", IDBFactoryV8Internal::deleteDatabaseMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cmp", IDBFactoryV8Internal::cmpMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "webkitGetDatabaseNames", IDBFactoryV8Internal::webkitGetDatabaseNamesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "open", IDBFactoryV8Internal::openMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteDatabase", IDBFactoryV8Internal::deleteDatabaseMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cmp", IDBFactoryV8Internal::cmpMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8IDBFactoryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IDBFactory::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8IDBFactory::internalFieldCount);
+static void installV8IDBFactoryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IDBFactory::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8IDBFactory::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IDBFactoryMethods, WTF_ARRAY_LENGTH(V8IDBFactoryMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IDBFactoryMethods, WTF_ARRAY_LENGTH(V8IDBFactoryMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8IDBFactory::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IDBFactoryTemplate);
+v8::Local<v8::FunctionTemplate> V8IDBFactory::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IDBFactoryTemplate);
 }
 
-bool V8IDBFactory::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8IDBFactory::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8IDBFactory::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8IDBFactory::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-IDBFactory* V8IDBFactory::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+IDBFactory* V8IDBFactory::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

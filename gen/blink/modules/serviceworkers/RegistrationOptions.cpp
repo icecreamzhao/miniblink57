@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RegistrationOptions.h"
 
 namespace blink {
 
-RegistrationOptions::RegistrationOptions() {
+RegistrationOptions::RegistrationOptions()
+{
 }
 
-RegistrationOptions::~RegistrationOptions() {}
+RegistrationOptions::~RegistrationOptions() { }
 
 RegistrationOptions::RegistrationOptions(const RegistrationOptions&) = default;
 
 RegistrationOptions& RegistrationOptions::operator=(const RegistrationOptions&) = default;
 
-bool RegistrationOptions::hasScope() const {
-  return !m_scope.isNull();
+bool RegistrationOptions::hasScope() const
+{
+    return !m_scope.isNull();
 }
-String RegistrationOptions::scope() const {
-  return m_scope;
+String RegistrationOptions::scope() const
+{
+    return m_scope;
 }
-void RegistrationOptions::setScope(String value) {
-  m_scope = value;
+void RegistrationOptions::setScope(String value)
+{
+    m_scope = value;
 }
 
-DEFINE_TRACE(RegistrationOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(RegistrationOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

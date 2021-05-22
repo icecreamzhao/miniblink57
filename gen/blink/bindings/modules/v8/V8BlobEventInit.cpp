@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8BlobEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -17,88 +17,92 @@
 
 namespace blink {
 
-void V8BlobEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, BlobEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): data.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> dataValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "data")).ToLocal(&dataValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (dataValue.IsEmpty() || dataValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member data is undefined.");
-    return;
-  } else {
-    Blob* data = V8Blob::toImplWithTypeCheck(isolate, dataValue);
-    if (!data) {
-      exceptionState.throwTypeError("member data is not of type Blob.");
-      return;
+void V8BlobEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, BlobEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): data.");
+        return;
     }
-    impl.setData(data);
-  }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::Local<v8::Value> timecodeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "timecode")).ToLocal(&timecodeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (timecodeValue.IsEmpty() || timecodeValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    double timecode = toRestrictedDouble(isolate, timecodeValue, exceptionState);
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setTimecode(timecode);
-  }
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> dataValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "data")).ToLocal(&dataValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (dataValue.IsEmpty() || dataValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member data is undefined.");
+        return;
+    } else {
+        Blob* data = V8Blob::toImplWithTypeCheck(isolate, dataValue);
+        if (!data) {
+            exceptionState.throwTypeError("member data is not of type Blob.");
+            return;
+        }
+        impl.setData(data);
+    }
+
+    v8::Local<v8::Value> timecodeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "timecode")).ToLocal(&timecodeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (timecodeValue.IsEmpty() || timecodeValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        double timecode = toRestrictedDouble(isolate, timecodeValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setTimecode(timecode);
+    }
 }
 
-v8::Local<v8::Value> BlobEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8BlobEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> BlobEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8BlobEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8BlobEventInit(const BlobEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8BlobEventInit(const BlobEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasData()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "data"), ToV8(impl.data(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasData()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "data"), ToV8(impl.data(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasTimecode()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "timecode"), v8::Number::New(isolate, impl.timecode()))))
-      return false;
-  }
+    if (impl.hasTimecode()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "timecode"), v8::Number::New(isolate, impl.timecode()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-BlobEventInit NativeValueTraits<BlobEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  BlobEventInit impl;
-  V8BlobEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+BlobEventInit NativeValueTraits<BlobEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    BlobEventInit impl;
+    V8BlobEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

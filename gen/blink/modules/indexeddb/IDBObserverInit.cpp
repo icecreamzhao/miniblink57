@@ -8,71 +8,85 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "IDBObserverInit.h"
 
 namespace blink {
 
-IDBObserverInit::IDBObserverInit() {
-  setNoRecords(false);
-  setOperationTypes(Vector<String>());
-  setTransaction(false);
-  setValues(false);
+IDBObserverInit::IDBObserverInit()
+{
+    setNoRecords(false);
+    setOperationTypes(Vector<String>());
+    setTransaction(false);
+    setValues(false);
 }
 
-IDBObserverInit::~IDBObserverInit() {}
+IDBObserverInit::~IDBObserverInit() { }
 
 IDBObserverInit::IDBObserverInit(const IDBObserverInit&) = default;
 
 IDBObserverInit& IDBObserverInit::operator=(const IDBObserverInit&) = default;
 
-bool IDBObserverInit::hasNoRecords() const {
-  return m_hasNoRecords;
+bool IDBObserverInit::hasNoRecords() const
+{
+    return m_hasNoRecords;
 }
-bool IDBObserverInit::noRecords() const {
-  DCHECK(m_hasNoRecords);
-  return m_noRecords;
+bool IDBObserverInit::noRecords() const
+{
+    DCHECK(m_hasNoRecords);
+    return m_noRecords;
 }
-void IDBObserverInit::setNoRecords(bool value) {
-  m_noRecords = value;
-  m_hasNoRecords = true;
+void IDBObserverInit::setNoRecords(bool value)
+{
+    m_noRecords = value;
+    m_hasNoRecords = true;
 }
-bool IDBObserverInit::hasOperationTypes() const {
-  return m_hasOperationTypes;
+bool IDBObserverInit::hasOperationTypes() const
+{
+    return m_hasOperationTypes;
 }
-const Vector<String>& IDBObserverInit::operationTypes() const {
-  DCHECK(m_hasOperationTypes);
-  return m_operationTypes;
+const Vector<String>& IDBObserverInit::operationTypes() const
+{
+    DCHECK(m_hasOperationTypes);
+    return m_operationTypes;
 }
-void IDBObserverInit::setOperationTypes(const Vector<String>& value) {
-  m_operationTypes = value;
-  m_hasOperationTypes = true;
+void IDBObserverInit::setOperationTypes(const Vector<String>& value)
+{
+    m_operationTypes = value;
+    m_hasOperationTypes = true;
 }
-bool IDBObserverInit::hasTransaction() const {
-  return m_hasTransaction;
+bool IDBObserverInit::hasTransaction() const
+{
+    return m_hasTransaction;
 }
-bool IDBObserverInit::transaction() const {
-  DCHECK(m_hasTransaction);
-  return m_transaction;
+bool IDBObserverInit::transaction() const
+{
+    DCHECK(m_hasTransaction);
+    return m_transaction;
 }
-void IDBObserverInit::setTransaction(bool value) {
-  m_transaction = value;
-  m_hasTransaction = true;
+void IDBObserverInit::setTransaction(bool value)
+{
+    m_transaction = value;
+    m_hasTransaction = true;
 }
-bool IDBObserverInit::hasValues() const {
-  return m_hasValues;
+bool IDBObserverInit::hasValues() const
+{
+    return m_hasValues;
 }
-bool IDBObserverInit::values() const {
-  DCHECK(m_hasValues);
-  return m_values;
+bool IDBObserverInit::values() const
+{
+    DCHECK(m_hasValues);
+    return m_values;
 }
-void IDBObserverInit::setValues(bool value) {
-  m_values = value;
-  m_hasValues = true;
+void IDBObserverInit::setValues(bool value)
+{
+    m_values = value;
+    m_hasValues = true;
 }
 
-DEFINE_TRACE(IDBObserverInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(IDBObserverInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

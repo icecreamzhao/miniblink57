@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef BlobPropertyBag_h
 #define BlobPropertyBag_h
 
@@ -20,31 +20,32 @@
 namespace blink {
 
 class CORE_EXPORT BlobPropertyBag : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  BlobPropertyBag();
-  virtual ~BlobPropertyBag();
-  BlobPropertyBag(const BlobPropertyBag&);
-  BlobPropertyBag& operator=(const BlobPropertyBag&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasEndings() const;
-  String endings() const;
-  void setEndings(String);
+public:
+    BlobPropertyBag();
+    virtual ~BlobPropertyBag();
+    BlobPropertyBag(const BlobPropertyBag&);
+    BlobPropertyBag& operator=(const BlobPropertyBag&);
 
-  bool hasType() const;
-  String type() const;
-  void setType(String);
+    bool hasEndings() const;
+    String endings() const;
+    void setEndings(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasType() const;
+    String type() const;
+    void setType(String);
 
- private:
-  String m_endings;
-  String m_type;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8BlobPropertyBag;
+private:
+    String m_endings;
+    String m_type;
+
+    friend class V8BlobPropertyBag;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // BlobPropertyBag_h
+#endif // BlobPropertyBag_h

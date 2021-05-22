@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PresentationConnectionAvailableEventInit_h
 #define PresentationConnectionAvailableEventInit_h
 
@@ -21,26 +21,27 @@ namespace blink {
 class PresentationConnection;
 
 class MODULES_EXPORT PresentationConnectionAvailableEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PresentationConnectionAvailableEventInit();
-  virtual ~PresentationConnectionAvailableEventInit();
-  PresentationConnectionAvailableEventInit(const PresentationConnectionAvailableEventInit&);
-  PresentationConnectionAvailableEventInit& operator=(const PresentationConnectionAvailableEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasConnection() const;
-  PresentationConnection* connection() const;
-  void setConnection(PresentationConnection*);
+public:
+    PresentationConnectionAvailableEventInit();
+    virtual ~PresentationConnectionAvailableEventInit();
+    PresentationConnectionAvailableEventInit(const PresentationConnectionAvailableEventInit&);
+    PresentationConnectionAvailableEventInit& operator=(const PresentationConnectionAvailableEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasConnection() const;
+    PresentationConnection* connection() const;
+    void setConnection(PresentationConnection*);
 
- private:
-  Member<PresentationConnection> m_connection;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PresentationConnectionAvailableEventInit;
+private:
+    Member<PresentationConnection> m_connection;
+
+    friend class V8PresentationConnectionAvailableEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PresentationConnectionAvailableEventInit_h
+#endif // PresentationConnectionAvailableEventInit_h

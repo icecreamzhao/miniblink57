@@ -8,111 +8,124 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "DoubleOrAutoKeyword.h"
 
 #include "bindings/core/v8/ToV8.h"
 
 namespace blink {
 
-DoubleOrAutoKeyword::DoubleOrAutoKeyword() : m_type(SpecificTypeNone) {}
-
-double DoubleOrAutoKeyword::getAsDouble() const {
-  DCHECK(isDouble());
-  return m_double;
+DoubleOrAutoKeyword::DoubleOrAutoKeyword()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void DoubleOrAutoKeyword::setDouble(double value) {
-  DCHECK(isNull());
-  m_double = value;
-  m_type = SpecificTypeDouble;
+double DoubleOrAutoKeyword::getAsDouble() const
+{
+    DCHECK(isDouble());
+    return m_double;
 }
 
-DoubleOrAutoKeyword DoubleOrAutoKeyword::fromDouble(double value) {
-  DoubleOrAutoKeyword container;
-  container.setDouble(value);
-  return container;
+void DoubleOrAutoKeyword::setDouble(double value)
+{
+    DCHECK(isNull());
+    m_double = value;
+    m_type = SpecificTypeDouble;
 }
 
-String DoubleOrAutoKeyword::getAsAutoKeyword() const {
-  DCHECK(isAutoKeyword());
-  return m_autoKeyword;
+DoubleOrAutoKeyword DoubleOrAutoKeyword::fromDouble(double value)
+{
+    DoubleOrAutoKeyword container;
+    container.setDouble(value);
+    return container;
 }
 
-void DoubleOrAutoKeyword::setAutoKeyword(String value) {
-  DCHECK(isNull());
-  NonThrowableExceptionState exceptionState;
-  const char* validValues[] = {
-      "auto",
-  };
-  if (!isValidEnum(value, validValues, WTF_ARRAY_LENGTH(validValues), "AutoKeyword", exceptionState)) {
-    NOTREACHED();
-    return;
-  }
-  m_autoKeyword = value;
-  m_type = SpecificTypeAutoKeyword;
+String DoubleOrAutoKeyword::getAsAutoKeyword() const
+{
+    DCHECK(isAutoKeyword());
+    return m_autoKeyword;
 }
 
-DoubleOrAutoKeyword DoubleOrAutoKeyword::fromAutoKeyword(String value) {
-  DoubleOrAutoKeyword container;
-  container.setAutoKeyword(value);
-  return container;
+void DoubleOrAutoKeyword::setAutoKeyword(String value)
+{
+    DCHECK(isNull());
+    NonThrowableExceptionState exceptionState;
+    const char* validValues[] = {
+        "auto",
+    };
+    if (!isValidEnum(value, validValues, WTF_ARRAY_LENGTH(validValues), "AutoKeyword", exceptionState)) {
+        NOTREACHED();
+        return;
+    }
+    m_autoKeyword = value;
+    m_type = SpecificTypeAutoKeyword;
+}
+
+DoubleOrAutoKeyword DoubleOrAutoKeyword::fromAutoKeyword(String value)
+{
+    DoubleOrAutoKeyword container;
+    container.setAutoKeyword(value);
+    return container;
 }
 
 DoubleOrAutoKeyword::DoubleOrAutoKeyword(const DoubleOrAutoKeyword&) = default;
 DoubleOrAutoKeyword::~DoubleOrAutoKeyword() = default;
 DoubleOrAutoKeyword& DoubleOrAutoKeyword::operator=(const DoubleOrAutoKeyword&) = default;
 
-DEFINE_TRACE(DoubleOrAutoKeyword) {
+DEFINE_TRACE(DoubleOrAutoKeyword)
+{
 }
 
-void V8DoubleOrAutoKeyword::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DoubleOrAutoKeyword& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8DoubleOrAutoKeyword::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DoubleOrAutoKeyword& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (v8Value->IsNumber()) {
-    double cppValue = toRestrictedDouble(isolate, v8Value, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setDouble(cppValue);
-    return;
-  }
+    if (v8Value->IsNumber()) {
+        double cppValue = toRestrictedDouble(isolate, v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setDouble(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = v8Value;
-    if (!cppValue.prepare(exceptionState))
-      return;
-    const char* validValues[] = {
-        "auto",
-    };
-    if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "AutoKeyword", exceptionState))
-      return;
-    impl.setAutoKeyword(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare(exceptionState))
+            return;
+        const char* validValues[] = {
+            "auto",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "AutoKeyword", exceptionState))
+            return;
+        impl.setAutoKeyword(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const DoubleOrAutoKeyword& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const DoubleOrAutoKeyword& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case DoubleOrAutoKeyword::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case DoubleOrAutoKeyword::SpecificTypeDouble:
-      return v8::Number::New(isolate, impl.getAsDouble());
+        return v8::Number::New(isolate, impl.getAsDouble());
     case DoubleOrAutoKeyword::SpecificTypeAutoKeyword:
-      return v8String(isolate, impl.getAsAutoKeyword());
+        return v8String(isolate, impl.getAsAutoKeyword());
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-DoubleOrAutoKeyword NativeValueTraits<DoubleOrAutoKeyword>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  DoubleOrAutoKeyword impl;
-  V8DoubleOrAutoKeyword::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+DoubleOrAutoKeyword NativeValueTraits<DoubleOrAutoKeyword>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    DoubleOrAutoKeyword impl;
+    V8DoubleOrAutoKeyword::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

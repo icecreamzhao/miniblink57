@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ExtendableMessageEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -21,148 +21,152 @@
 
 namespace blink {
 
-void V8ExtendableMessageEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ExtendableMessageEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8ExtendableMessageEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ExtendableMessageEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8ExtendableEventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> dataValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "data")).ToLocal(&dataValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (dataValue.IsEmpty() || dataValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    ScriptValue data = ScriptValue(ScriptState::current(isolate), dataValue);
-    impl.setData(data);
-  }
-
-  v8::Local<v8::Value> lastEventIdValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "lastEventId")).ToLocal(&lastEventIdValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (lastEventIdValue.IsEmpty() || lastEventIdValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> lastEventId = lastEventIdValue;
-    if (!lastEventId.prepare(exceptionState))
-      return;
-    impl.setLastEventId(lastEventId);
-  }
-
-  v8::Local<v8::Value> originValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "origin")).ToLocal(&originValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (originValue.IsEmpty() || originValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> origin = originValue;
-    if (!origin.prepare(exceptionState))
-      return;
-    impl.setOrigin(origin);
-  }
-
-  v8::Local<v8::Value> portsValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ports")).ToLocal(&portsValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (portsValue.IsEmpty() || portsValue->IsUndefined()) {
-    // Do nothing.
-  } else if (portsValue->IsNull()) {
-    impl.setPortsToNull();
-  } else {
-    HeapVector<Member<MessagePort>> ports = (toMemberNativeArray<MessagePort>(portsValue, 0, isolate, exceptionState));
+    V8ExtendableEventInit::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setPorts(ports);
-  }
+        return;
 
-  v8::Local<v8::Value> sourceValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "source")).ToLocal(&sourceValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (sourceValue.IsEmpty() || sourceValue->IsUndefined()) {
-    // Do nothing.
-  } else if (sourceValue->IsNull()) {
-    impl.setSourceToNull();
-  } else {
-    ClientOrServiceWorkerOrMessagePort source;
-    V8ClientOrServiceWorkerOrMessagePort::toImpl(isolate, sourceValue, source, UnionTypeConversionMode::NotNullable, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setSource(source);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> dataValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "data")).ToLocal(&dataValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (dataValue.IsEmpty() || dataValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        ScriptValue data = ScriptValue(ScriptState::current(isolate), dataValue);
+        impl.setData(data);
+    }
+
+    v8::Local<v8::Value> lastEventIdValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "lastEventId")).ToLocal(&lastEventIdValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (lastEventIdValue.IsEmpty() || lastEventIdValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> lastEventId = lastEventIdValue;
+        if (!lastEventId.prepare(exceptionState))
+            return;
+        impl.setLastEventId(lastEventId);
+    }
+
+    v8::Local<v8::Value> originValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "origin")).ToLocal(&originValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (originValue.IsEmpty() || originValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> origin = originValue;
+        if (!origin.prepare(exceptionState))
+            return;
+        impl.setOrigin(origin);
+    }
+
+    v8::Local<v8::Value> portsValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ports")).ToLocal(&portsValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (portsValue.IsEmpty() || portsValue->IsUndefined()) {
+        // Do nothing.
+    } else if (portsValue->IsNull()) {
+        impl.setPortsToNull();
+    } else {
+        HeapVector<Member<MessagePort>> ports = (toMemberNativeArray<MessagePort>(portsValue, 0, isolate, exceptionState));
+        if (exceptionState.hadException())
+            return;
+        impl.setPorts(ports);
+    }
+
+    v8::Local<v8::Value> sourceValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "source")).ToLocal(&sourceValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (sourceValue.IsEmpty() || sourceValue->IsUndefined()) {
+        // Do nothing.
+    } else if (sourceValue->IsNull()) {
+        impl.setSourceToNull();
+    } else {
+        ClientOrServiceWorkerOrMessagePort source;
+        V8ClientOrServiceWorkerOrMessagePort::toImpl(isolate, sourceValue, source, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setSource(source);
+    }
 }
 
-v8::Local<v8::Value> ExtendableMessageEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ExtendableMessageEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ExtendableMessageEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ExtendableMessageEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ExtendableMessageEventInit(const ExtendableMessageEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8ExtendableEventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8ExtendableMessageEventInit(const ExtendableMessageEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8ExtendableEventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasData()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "data"), impl.data().v8Value())))
-      return false;
-  }
+    if (impl.hasData()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "data"), impl.data().v8Value())))
+            return false;
+    }
 
-  if (impl.hasLastEventId()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "lastEventId"), v8String(isolate, impl.lastEventId()))))
-      return false;
-  }
+    if (impl.hasLastEventId()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "lastEventId"), v8String(isolate, impl.lastEventId()))))
+            return false;
+    }
 
-  if (impl.hasOrigin()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "origin"), v8String(isolate, impl.origin()))))
-      return false;
-  }
+    if (impl.hasOrigin()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "origin"), v8String(isolate, impl.origin()))))
+            return false;
+    }
 
-  if (impl.hasPorts()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ports"), ToV8(impl.ports(), creationContext, isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ports"), v8::Null(isolate))))
-      return false;
-  }
+    if (impl.hasPorts()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ports"), ToV8(impl.ports(), creationContext, isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ports"), v8::Null(isolate))))
+            return false;
+    }
 
-  if (impl.hasSource()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "source"), ToV8(impl.source(), creationContext, isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "source"), v8::Null(isolate))))
-      return false;
-  }
+    if (impl.hasSource()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "source"), ToV8(impl.source(), creationContext, isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "source"), v8::Null(isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-ExtendableMessageEventInit NativeValueTraits<ExtendableMessageEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ExtendableMessageEventInit impl;
-  V8ExtendableMessageEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ExtendableMessageEventInit NativeValueTraits<ExtendableMessageEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ExtendableMessageEventInit impl;
+    V8ExtendableMessageEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

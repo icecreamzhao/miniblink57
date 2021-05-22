@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WorkerInternalsPartial.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -26,55 +26,59 @@ namespace blink {
 
 namespace WorkerInternalsPartialV8Internal {
 
-static void getInternalResponseURLListMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerInternals* impl = V8WorkerInternals::toImpl(info.Holder());
+    static void getInternalResponseURLListMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerInternals* impl = V8WorkerInternals::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getInternalResponseURLList", "WorkerInternals", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getInternalResponseURLList", "WorkerInternals", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  Response* response;
-  response = V8Response::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!response) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getInternalResponseURLList", "WorkerInternals", "parameter 1 is not of type 'Response'."));
+        Response* response;
+        response = V8Response::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!response) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getInternalResponseURLList", "WorkerInternals", "parameter 1 is not of type 'Response'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValue(info, ToV8(WorkerInternalsFetch::getInternalResponseURLList(*impl, response), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(WorkerInternalsFetch::getInternalResponseURLList(*impl, response), info.Holder(), info.GetIsolate()));
+    }
 
- void getInternalResponseURLListMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WorkerInternalsPartialV8Internal::getInternalResponseURLListMethod(info);
-}
+    void getInternalResponseURLListMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WorkerInternalsPartialV8Internal::getInternalResponseURLListMethod(info);
+    }
 
 } // namespace WorkerInternalsPartialV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8WorkerInternalsMethods[] = {
-    {"getInternalResponseURLList", WorkerInternalsPartialV8Internal::getInternalResponseURLListMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getInternalResponseURLList", WorkerInternalsPartialV8Internal::getInternalResponseURLListMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8WorkerInternalsPartial::installV8WorkerInternalsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8WorkerInternals::installV8WorkerInternalsTemplate(isolate, world, interfaceTemplate);
+void V8WorkerInternalsPartial::installV8WorkerInternalsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8WorkerInternals::installV8WorkerInternalsTemplate(isolate, world, interfaceTemplate);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerInternalsMethods, WTF_ARRAY_LENGTH(V8WorkerInternalsMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WorkerInternalsMethods, WTF_ARRAY_LENGTH(V8WorkerInternalsMethods));
 }
 
-void V8WorkerInternalsPartial::initialize() {
-  // Should be invoked from ModulesInitializer.
-  V8WorkerInternals::updateWrapperTypeInfo(
-      &V8WorkerInternalsPartial::installV8WorkerInternalsTemplate,
-      nullptr);
+void V8WorkerInternalsPartial::initialize()
+{
+    // Should be invoked from ModulesInitializer.
+    V8WorkerInternals::updateWrapperTypeInfo(
+        &V8WorkerInternalsPartial::installV8WorkerInternalsTemplate,
+        nullptr);
 }
 
-}  // namespace blink
+} // namespace blink

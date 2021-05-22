@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentShippingOption_h
 #define PaymentShippingOption_h
 
@@ -21,43 +21,44 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentShippingOption : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentShippingOption();
-  virtual ~PaymentShippingOption();
-  PaymentShippingOption(const PaymentShippingOption&);
-  PaymentShippingOption& operator=(const PaymentShippingOption&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAmount() const;
-  const PaymentCurrencyAmount& amount() const;
-  void setAmount(const PaymentCurrencyAmount&);
+public:
+    PaymentShippingOption();
+    virtual ~PaymentShippingOption();
+    PaymentShippingOption(const PaymentShippingOption&);
+    PaymentShippingOption& operator=(const PaymentShippingOption&);
 
-  bool hasId() const;
-  String id() const;
-  void setId(String);
+    bool hasAmount() const;
+    const PaymentCurrencyAmount& amount() const;
+    void setAmount(const PaymentCurrencyAmount&);
 
-  bool hasLabel() const;
-  String label() const;
-  void setLabel(String);
+    bool hasId() const;
+    String id() const;
+    void setId(String);
 
-  bool hasSelected() const;
-  bool selected() const;
-  void setSelected(bool);
+    bool hasLabel() const;
+    String label() const;
+    void setLabel(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSelected() const;
+    bool selected() const;
+    void setSelected(bool);
 
- private:
-  bool m_hasAmount = false;
-  PaymentCurrencyAmount m_amount;
-  String m_id;
-  String m_label;
-  bool m_hasSelected = false;
-  bool m_selected;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentShippingOption;
+private:
+    bool m_hasAmount = false;
+    PaymentCurrencyAmount m_amount;
+    String m_id;
+    String m_label;
+    bool m_hasSelected = false;
+    bool m_selected;
+
+    friend class V8PaymentShippingOption;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentShippingOption_h
+#endif // PaymentShippingOption_h

@@ -8,41 +8,49 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AndroidPayTokenization.h"
 
 namespace blink {
 
-AndroidPayTokenization::AndroidPayTokenization() {
+AndroidPayTokenization::AndroidPayTokenization()
+{
 }
 
-AndroidPayTokenization::~AndroidPayTokenization() {}
+AndroidPayTokenization::~AndroidPayTokenization() { }
 
 AndroidPayTokenization::AndroidPayTokenization(const AndroidPayTokenization&) = default;
 
 AndroidPayTokenization& AndroidPayTokenization::operator=(const AndroidPayTokenization&) = default;
 
-bool AndroidPayTokenization::hasParameters() const {
-  return !m_parameters.isUndefinedOrNull();
+bool AndroidPayTokenization::hasParameters() const
+{
+    return !m_parameters.isUndefinedOrNull();
 }
-Dictionary AndroidPayTokenization::parameters() const {
-  return m_parameters;
+Dictionary AndroidPayTokenization::parameters() const
+{
+    return m_parameters;
 }
-void AndroidPayTokenization::setParameters(Dictionary value) {
-  m_parameters = value;
+void AndroidPayTokenization::setParameters(Dictionary value)
+{
+    m_parameters = value;
 }
-bool AndroidPayTokenization::hasTokenizationType() const {
-  return !m_tokenizationType.isNull();
+bool AndroidPayTokenization::hasTokenizationType() const
+{
+    return !m_tokenizationType.isNull();
 }
-String AndroidPayTokenization::tokenizationType() const {
-  return m_tokenizationType;
+String AndroidPayTokenization::tokenizationType() const
+{
+    return m_tokenizationType;
 }
-void AndroidPayTokenization::setTokenizationType(String value) {
-  m_tokenizationType = value;
+void AndroidPayTokenization::setTokenizationType(String value)
+{
+    m_tokenizationType = value;
 }
 
-DEFINE_TRACE(AndroidPayTokenization) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(AndroidPayTokenization)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

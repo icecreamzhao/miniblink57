@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8VRDisplayCapabilities.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,112 +45,127 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&VRDisplayCapabilities::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "VRDisplayCapabilities is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace VRDisplayCapabilitiesV8Internal {
 
-static void hasOrientationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hasOrientationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
+        VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->hasOrientation());
-}
+        v8SetReturnValueBool(info, impl->hasOrientation());
+    }
 
-MODULES_EXPORT void hasOrientationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRDisplayCapabilitiesV8Internal::hasOrientationAttributeGetter(info);
-}
+    MODULES_EXPORT void hasOrientationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRDisplayCapabilitiesV8Internal::hasOrientationAttributeGetter(info);
+    }
 
-static void hasPositionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hasPositionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
+        VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->hasPosition());
-}
+        v8SetReturnValueBool(info, impl->hasPosition());
+    }
 
-MODULES_EXPORT void hasPositionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRDisplayCapabilitiesV8Internal::hasPositionAttributeGetter(info);
-}
+    MODULES_EXPORT void hasPositionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRDisplayCapabilitiesV8Internal::hasPositionAttributeGetter(info);
+    }
 
-static void hasExternalDisplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hasExternalDisplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
+        VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->hasExternalDisplay());
-}
+        v8SetReturnValueBool(info, impl->hasExternalDisplay());
+    }
 
-MODULES_EXPORT void hasExternalDisplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRDisplayCapabilitiesV8Internal::hasExternalDisplayAttributeGetter(info);
-}
+    MODULES_EXPORT void hasExternalDisplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRDisplayCapabilitiesV8Internal::hasExternalDisplayAttributeGetter(info);
+    }
 
-static void canPresentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void canPresentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
+        VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->canPresent());
-}
+        v8SetReturnValueBool(info, impl->canPresent());
+    }
 
-MODULES_EXPORT void canPresentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRDisplayCapabilitiesV8Internal::canPresentAttributeGetter(info);
-}
+    MODULES_EXPORT void canPresentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRDisplayCapabilitiesV8Internal::canPresentAttributeGetter(info);
+    }
 
-static void maxLayersAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void maxLayersAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
+        VRDisplayCapabilities* impl = V8VRDisplayCapabilities::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->maxLayers());
-}
+        v8SetReturnValueUnsigned(info, impl->maxLayers());
+    }
 
-MODULES_EXPORT void maxLayersAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VRDisplayCapabilitiesV8Internal::maxLayersAttributeGetter(info);
-}
+    MODULES_EXPORT void maxLayersAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VRDisplayCapabilitiesV8Internal::maxLayersAttributeGetter(info);
+    }
 
 } // namespace VRDisplayCapabilitiesV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8VRDisplayCapabilitiesAccessors[] = {
-    {"hasOrientation", VRDisplayCapabilitiesV8Internal::hasOrientationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasPosition", VRDisplayCapabilitiesV8Internal::hasPositionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasExternalDisplay", VRDisplayCapabilitiesV8Internal::hasExternalDisplayAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"canPresent", VRDisplayCapabilitiesV8Internal::canPresentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"maxLayers", VRDisplayCapabilitiesV8Internal::maxLayersAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "hasOrientation", VRDisplayCapabilitiesV8Internal::hasOrientationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasPosition", VRDisplayCapabilitiesV8Internal::hasPositionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasExternalDisplay", VRDisplayCapabilitiesV8Internal::hasExternalDisplayAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "canPresent", VRDisplayCapabilitiesV8Internal::canPresentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "maxLayers", VRDisplayCapabilitiesV8Internal::maxLayersAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8VRDisplayCapabilitiesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VRDisplayCapabilities::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VRDisplayCapabilities::internalFieldCount);
+static void installV8VRDisplayCapabilitiesTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VRDisplayCapabilities::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8VRDisplayCapabilities::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VRDisplayCapabilitiesAccessors, WTF_ARRAY_LENGTH(V8VRDisplayCapabilitiesAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VRDisplayCapabilitiesAccessors, WTF_ARRAY_LENGTH(V8VRDisplayCapabilitiesAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8VRDisplayCapabilities::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VRDisplayCapabilitiesTemplate);
+v8::Local<v8::FunctionTemplate> V8VRDisplayCapabilities::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VRDisplayCapabilitiesTemplate);
 }
 
-bool V8VRDisplayCapabilities::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8VRDisplayCapabilities::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8VRDisplayCapabilities::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8VRDisplayCapabilities::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-VRDisplayCapabilities* V8VRDisplayCapabilities::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+VRDisplayCapabilities* V8VRDisplayCapabilities::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

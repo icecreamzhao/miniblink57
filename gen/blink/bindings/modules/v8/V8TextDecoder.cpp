@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TextDecoder.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,184 +52,199 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&TextDecoder::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "TextDecoder is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TextDecoderV8Internal {
 
-static void encodingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void encodingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextDecoder* impl = V8TextDecoder::toImpl(holder);
+        TextDecoder* impl = V8TextDecoder::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->encoding(), info.GetIsolate());
-}
-
-MODULES_EXPORT void encodingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextDecoderV8Internal::encodingAttributeGetter(info);
-}
-
-static void fatalAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  TextDecoder* impl = V8TextDecoder::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->fatal());
-}
-
-MODULES_EXPORT void fatalAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextDecoderV8Internal::fatalAttributeGetter(info);
-}
-
-static void ignoreBOMAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  TextDecoder* impl = V8TextDecoder::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->ignoreBOM());
-}
-
-MODULES_EXPORT void ignoreBOMAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextDecoderV8Internal::ignoreBOMAttributeGetter(info);
-}
-
-static void decodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TextDecoder", "decode");
-
-  TextDecoder* impl = V8TextDecoder::toImpl(info.Holder());
-
-  ArrayBufferOrArrayBufferView input;
-  TextDecodeOptions options;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    String result = impl->decode(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValueString(info, impl->encoding(), info.GetIsolate());
     }
-    v8SetReturnValueString(info, result, info.GetIsolate());
-    return;
-  }
-  V8ArrayBufferOrArrayBufferView::toImpl(info.GetIsolate(), info[0], input, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+    MODULES_EXPORT void encodingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextDecoderV8Internal::encodingAttributeGetter(info);
+    }
 
-    return;
-  }
-  V8TextDecodeOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void fatalAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  String result = impl->decode(input, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
+        TextDecoder* impl = V8TextDecoder::toImpl(holder);
 
-MODULES_EXPORT  void decodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::TextDecoderDecode);
-  TextDecoderV8Internal::decodeMethod(info);
-}
+        v8SetReturnValueBool(info, impl->fatal());
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "TextDecoder");
+    MODULES_EXPORT void fatalAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextDecoderV8Internal::fatalAttributeGetter(info);
+    }
 
-  V8StringResource<> label;
-  TextDecoderOptions options;
-  if (!info[0]->IsUndefined()) {
-    label = info[0];
-    if (!label.prepare())
-      return;
-  } else {
-    label = String("utf-8");
-  }
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+    static void ignoreBOMAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-    return;
-  }
-  V8TextDecoderOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        TextDecoder* impl = V8TextDecoder::toImpl(holder);
 
-  TextDecoder* impl = TextDecoder::create(label, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8TextDecoder::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        v8SetReturnValueBool(info, impl->ignoreBOM());
+    }
+
+    MODULES_EXPORT void ignoreBOMAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextDecoderV8Internal::ignoreBOMAttributeGetter(info);
+    }
+
+    static void decodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TextDecoder", "decode");
+
+        TextDecoder* impl = V8TextDecoder::toImpl(info.Holder());
+
+        ArrayBufferOrArrayBufferView input;
+        TextDecodeOptions options;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            String result = impl->decode(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValueString(info, result, info.GetIsolate());
+            return;
+        }
+        V8ArrayBufferOrArrayBufferView::toImpl(info.GetIsolate(), info[0], input, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8TextDecodeOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        String result = impl->decode(input, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    MODULES_EXPORT void decodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::TextDecoderDecode);
+        TextDecoderV8Internal::decodeMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "TextDecoder");
+
+        V8StringResource<> label;
+        TextDecoderOptions options;
+        if (!info[0]->IsUndefined()) {
+            label = info[0];
+            if (!label.prepare())
+                return;
+        } else {
+            label = String("utf-8");
+        }
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8TextDecoderOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        TextDecoder* impl = TextDecoder::create(label, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8TextDecoder::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace TextDecoderV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8TextDecoderAccessors[] = {
-    {"encoding", TextDecoderV8Internal::encodingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fatal", TextDecoderV8Internal::fatalAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ignoreBOM", TextDecoderV8Internal::ignoreBOMAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "encoding", TextDecoderV8Internal::encodingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fatal", TextDecoderV8Internal::fatalAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ignoreBOM", TextDecoderV8Internal::ignoreBOMAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8TextDecoderMethods[] = {
-    {"decode", TextDecoderV8Internal::decodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "decode", TextDecoderV8Internal::decodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8TextDecoder::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::TextDecoderConstructor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("TextDecoder"));
-    return;
-  }
+void V8TextDecoder::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::TextDecoderConstructor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("TextDecoder"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  TextDecoderV8Internal::constructor(info);
+    TextDecoderV8Internal::constructor(info);
 }
 
-static void installV8TextDecoderTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TextDecoder::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TextDecoder::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8TextDecoder::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8TextDecoderTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TextDecoder::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8TextDecoder::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8TextDecoder::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextDecoderAccessors, WTF_ARRAY_LENGTH(V8TextDecoderAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextDecoderMethods, WTF_ARRAY_LENGTH(V8TextDecoderMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextDecoderAccessors, WTF_ARRAY_LENGTH(V8TextDecoderAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextDecoderMethods, WTF_ARRAY_LENGTH(V8TextDecoderMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8TextDecoder::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TextDecoderTemplate);
+v8::Local<v8::FunctionTemplate> V8TextDecoder::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TextDecoderTemplate);
 }
 
-bool V8TextDecoder::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8TextDecoder::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8TextDecoder::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8TextDecoder::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-TextDecoder* V8TextDecoder::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+TextDecoder* V8TextDecoder::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

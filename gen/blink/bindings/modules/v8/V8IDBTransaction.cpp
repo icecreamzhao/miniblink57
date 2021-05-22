@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8IDBTransaction.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,269 +53,298 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&IDBTransaction::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "IDBTransaction is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace IDBTransactionV8Internal {
 
-static void objectStoreNamesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void objectStoreNamesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  DOMStringList* cppValue(WTF::getPtr(impl->objectStoreNames()));
+        DOMStringList* cppValue(WTF::getPtr(impl->objectStoreNames()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#IDBTransaction#objectStoreNames";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#IDBTransaction#objectStoreNames";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void objectStoreNamesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBTransactionV8Internal::objectStoreNamesAttributeGetter(info);
-}
+    MODULES_EXPORT void objectStoreNamesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBTransactionV8Internal::objectStoreNamesAttributeGetter(info);
+    }
 
-static void modeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void modeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->mode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->mode(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void modeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBTransactionV8Internal::modeAttributeGetter(info);
-}
+    MODULES_EXPORT void modeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBTransactionV8Internal::modeAttributeGetter(info);
+    }
 
-static void dbAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dbAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  IDBDatabase* cppValue(WTF::getPtr(impl->db()));
+        IDBDatabase* cppValue(WTF::getPtr(impl->db()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#IDBTransaction#db";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#IDBTransaction#db";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void dbAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBTransactionV8Internal::dbAttributeGetter(info);
-}
+    MODULES_EXPORT void dbAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBTransactionV8Internal::dbAttributeGetter(info);
+    }
 
-static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  DOMException* cppValue(WTF::getPtr(impl->error()));
+        DOMException* cppValue(WTF::getPtr(impl->error()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#IDBTransaction#error";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#IDBTransaction#error";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBTransactionV8Internal::errorAttributeGetter(info);
-}
+    MODULES_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBTransactionV8Internal::errorAttributeGetter(info);
+    }
 
-static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onabort()));
+        EventListener* cppValue(WTF::getPtr(impl->onabort()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBTransactionV8Internal::onabortAttributeGetter(info);
-}
+    MODULES_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBTransactionV8Internal::onabortAttributeGetter(info);
+    }
 
-static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+    static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onabort(), v8Value, V8IDBTransaction::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onabort(), v8Value, V8IDBTransaction::eventListenerCacheIndex);
 
-  impl->setOnabort(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnabort(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  IDBTransactionV8Internal::onabortAttributeSetter(v8Value, info);
-}
+        IDBTransactionV8Internal::onabortAttributeSetter(v8Value, info);
+    }
 
-static void oncompleteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncompleteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->oncomplete()));
+        EventListener* cppValue(WTF::getPtr(impl->oncomplete()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void oncompleteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBTransactionV8Internal::oncompleteAttributeGetter(info);
-}
+    MODULES_EXPORT void oncompleteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBTransactionV8Internal::oncompleteAttributeGetter(info);
+    }
 
-static void oncompleteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+    static void oncompleteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncomplete(), v8Value, V8IDBTransaction::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncomplete(), v8Value, V8IDBTransaction::eventListenerCacheIndex);
 
-  impl->setOncomplete(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOncomplete(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void oncompleteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void oncompleteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  IDBTransactionV8Internal::oncompleteAttributeSetter(v8Value, info);
-}
+        IDBTransactionV8Internal::oncompleteAttributeSetter(v8Value, info);
+    }
 
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBTransactionV8Internal::onerrorAttributeGetter(info);
-}
+    MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBTransactionV8Internal::onerrorAttributeGetter(info);
+    }
 
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        IDBTransaction* impl = V8IDBTransaction::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8IDBTransaction::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8IDBTransaction::eventListenerCacheIndex);
 
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  IDBTransactionV8Internal::onerrorAttributeSetter(v8Value, info);
-}
+        IDBTransactionV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
 
-static void objectStoreMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBTransaction", "objectStore");
+    static void objectStoreMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBTransaction", "objectStore");
 
-  IDBTransaction* impl = V8IDBTransaction::toImpl(info.Holder());
+        IDBTransaction* impl = V8IDBTransaction::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  IDBObjectStore* result = impl->objectStore(name, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        IDBObjectStore* result = impl->objectStore(name, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-MODULES_EXPORT  void objectStoreMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBTransactionV8Internal::objectStoreMethod(info);
-}
+    MODULES_EXPORT void objectStoreMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBTransactionV8Internal::objectStoreMethod(info);
+    }
 
-static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBTransaction", "abort");
+    static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "IDBTransaction", "abort");
 
-  IDBTransaction* impl = V8IDBTransaction::toImpl(info.Holder());
+        IDBTransaction* impl = V8IDBTransaction::toImpl(info.Holder());
 
-  impl->abort(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->abort(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IDBTransactionV8Internal::abortMethod(info);
-}
+    MODULES_EXPORT void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IDBTransactionV8Internal::abortMethod(info);
+    }
 
 } // namespace IDBTransactionV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8IDBTransactionAccessors[] = {
-    {"objectStoreNames", IDBTransactionV8Internal::objectStoreNamesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mode", IDBTransactionV8Internal::modeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"db", IDBTransactionV8Internal::dbAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"error", IDBTransactionV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onabort", IDBTransactionV8Internal::onabortAttributeGetterCallback, IDBTransactionV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncomplete", IDBTransactionV8Internal::oncompleteAttributeGetterCallback, IDBTransactionV8Internal::oncompleteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", IDBTransactionV8Internal::onerrorAttributeGetterCallback, IDBTransactionV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "objectStoreNames", IDBTransactionV8Internal::objectStoreNamesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mode", IDBTransactionV8Internal::modeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "db", IDBTransactionV8Internal::dbAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "error", IDBTransactionV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onabort", IDBTransactionV8Internal::onabortAttributeGetterCallback, IDBTransactionV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncomplete", IDBTransactionV8Internal::oncompleteAttributeGetterCallback, IDBTransactionV8Internal::oncompleteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", IDBTransactionV8Internal::onerrorAttributeGetterCallback, IDBTransactionV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8IDBTransactionMethods[] = {
-    {"objectStore", IDBTransactionV8Internal::objectStoreMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"abort", IDBTransactionV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "objectStore", IDBTransactionV8Internal::objectStoreMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "abort", IDBTransactionV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8IDBTransactionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IDBTransaction::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8IDBTransaction::internalFieldCount);
+static void installV8IDBTransactionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IDBTransaction::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8IDBTransaction::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IDBTransactionAccessors, WTF_ARRAY_LENGTH(V8IDBTransactionAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IDBTransactionMethods, WTF_ARRAY_LENGTH(V8IDBTransactionMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IDBTransactionAccessors, WTF_ARRAY_LENGTH(V8IDBTransactionAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IDBTransactionMethods, WTF_ARRAY_LENGTH(V8IDBTransactionMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8IDBTransaction::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IDBTransactionTemplate);
+v8::Local<v8::FunctionTemplate> V8IDBTransaction::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IDBTransactionTemplate);
 }
 
-bool V8IDBTransaction::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8IDBTransaction::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8IDBTransaction::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8IDBTransaction::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-IDBTransaction* V8IDBTransaction::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+IDBTransaction* V8IDBTransaction::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

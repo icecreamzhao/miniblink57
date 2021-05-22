@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "WebGLContextEventInit.h"
 
 namespace blink {
 
-WebGLContextEventInit::WebGLContextEventInit() {
+WebGLContextEventInit::WebGLContextEventInit()
+{
 }
 
-WebGLContextEventInit::~WebGLContextEventInit() {}
+WebGLContextEventInit::~WebGLContextEventInit() { }
 
 WebGLContextEventInit::WebGLContextEventInit(const WebGLContextEventInit&) = default;
 
 WebGLContextEventInit& WebGLContextEventInit::operator=(const WebGLContextEventInit&) = default;
 
-bool WebGLContextEventInit::hasStatusMessage() const {
-  return !m_statusMessage.isNull();
+bool WebGLContextEventInit::hasStatusMessage() const
+{
+    return !m_statusMessage.isNull();
 }
-String WebGLContextEventInit::statusMessage() const {
-  return m_statusMessage;
+String WebGLContextEventInit::statusMessage() const
+{
+    return m_statusMessage;
 }
-void WebGLContextEventInit::setStatusMessage(String value) {
-  m_statusMessage = value;
+void WebGLContextEventInit::setStatusMessage(String value)
+{
+    m_statusMessage = value;
 }
 
-DEFINE_TRACE(WebGLContextEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(WebGLContextEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

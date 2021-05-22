@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef StringOrStringSequence_h
 #define StringOrStringSequence_h
 
@@ -21,58 +21,60 @@
 namespace blink {
 
 class MODULES_EXPORT StringOrStringSequence final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  StringOrStringSequence();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isString() const { return m_type == SpecificTypeString; }
-  String getAsString() const;
-  void setString(String);
-  static StringOrStringSequence fromString(String);
+public:
+    StringOrStringSequence();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isStringSequence() const { return m_type == SpecificTypeStringSequence; }
-  const Vector<String>& getAsStringSequence() const;
-  void setStringSequence(const Vector<String>&);
-  static StringOrStringSequence fromStringSequence(const Vector<String>&);
+    bool isString() const { return m_type == SpecificTypeString; }
+    String getAsString() const;
+    void setString(String);
+    static StringOrStringSequence fromString(String);
 
-  StringOrStringSequence(const StringOrStringSequence&);
-  ~StringOrStringSequence();
-  StringOrStringSequence& operator=(const StringOrStringSequence&);
-  DECLARE_TRACE();
+    bool isStringSequence() const { return m_type == SpecificTypeStringSequence; }
+    const Vector<String>& getAsStringSequence() const;
+    void setStringSequence(const Vector<String>&);
+    static StringOrStringSequence fromStringSequence(const Vector<String>&);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeString,
-    SpecificTypeStringSequence,
-  };
-  SpecificTypes m_type;
+    StringOrStringSequence(const StringOrStringSequence&);
+    ~StringOrStringSequence();
+    StringOrStringSequence& operator=(const StringOrStringSequence&);
+    DECLARE_TRACE();
 
-  String m_string;
-  Vector<String> m_stringSequence;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeString,
+        SpecificTypeStringSequence,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrStringSequence&, v8::Local<v8::Object>, v8::Isolate*);
+    String m_string;
+    Vector<String> m_stringSequence;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrStringSequence&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8StringOrStringSequence final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrStringSequence&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrStringSequence&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrStringSequence&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrStringSequence& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrStringSequence& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<StringOrStringSequence> {
-  MODULES_EXPORT static StringOrStringSequence nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static StringOrStringSequence nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -80,4 +82,4 @@ struct NativeValueTraits<StringOrStringSequence> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::StringOrStringSequence);
 
-#endif  // StringOrStringSequence_h
+#endif // StringOrStringSequence_h

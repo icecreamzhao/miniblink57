@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef StringOrCanvasGradientOrCanvasPattern_h
 #define StringOrCanvasGradientOrCanvasPattern_h
 
@@ -24,65 +24,67 @@ class CanvasGradient;
 class CanvasPattern;
 
 class MODULES_EXPORT StringOrCanvasGradientOrCanvasPattern final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  StringOrCanvasGradientOrCanvasPattern();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isString() const { return m_type == SpecificTypeString; }
-  String getAsString() const;
-  void setString(String);
-  static StringOrCanvasGradientOrCanvasPattern fromString(String);
+public:
+    StringOrCanvasGradientOrCanvasPattern();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isCanvasGradient() const { return m_type == SpecificTypeCanvasGradient; }
-  CanvasGradient* getAsCanvasGradient() const;
-  void setCanvasGradient(CanvasGradient*);
-  static StringOrCanvasGradientOrCanvasPattern fromCanvasGradient(CanvasGradient*);
+    bool isString() const { return m_type == SpecificTypeString; }
+    String getAsString() const;
+    void setString(String);
+    static StringOrCanvasGradientOrCanvasPattern fromString(String);
 
-  bool isCanvasPattern() const { return m_type == SpecificTypeCanvasPattern; }
-  CanvasPattern* getAsCanvasPattern() const;
-  void setCanvasPattern(CanvasPattern*);
-  static StringOrCanvasGradientOrCanvasPattern fromCanvasPattern(CanvasPattern*);
+    bool isCanvasGradient() const { return m_type == SpecificTypeCanvasGradient; }
+    CanvasGradient* getAsCanvasGradient() const;
+    void setCanvasGradient(CanvasGradient*);
+    static StringOrCanvasGradientOrCanvasPattern fromCanvasGradient(CanvasGradient*);
 
-  StringOrCanvasGradientOrCanvasPattern(const StringOrCanvasGradientOrCanvasPattern&);
-  ~StringOrCanvasGradientOrCanvasPattern();
-  StringOrCanvasGradientOrCanvasPattern& operator=(const StringOrCanvasGradientOrCanvasPattern&);
-  DECLARE_TRACE();
+    bool isCanvasPattern() const { return m_type == SpecificTypeCanvasPattern; }
+    CanvasPattern* getAsCanvasPattern() const;
+    void setCanvasPattern(CanvasPattern*);
+    static StringOrCanvasGradientOrCanvasPattern fromCanvasPattern(CanvasPattern*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeString,
-    SpecificTypeCanvasGradient,
-    SpecificTypeCanvasPattern,
-  };
-  SpecificTypes m_type;
+    StringOrCanvasGradientOrCanvasPattern(const StringOrCanvasGradientOrCanvasPattern&);
+    ~StringOrCanvasGradientOrCanvasPattern();
+    StringOrCanvasGradientOrCanvasPattern& operator=(const StringOrCanvasGradientOrCanvasPattern&);
+    DECLARE_TRACE();
 
-  String m_string;
-  Member<CanvasGradient> m_canvasGradient;
-  Member<CanvasPattern> m_canvasPattern;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeString,
+        SpecificTypeCanvasGradient,
+        SpecificTypeCanvasPattern,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrCanvasGradientOrCanvasPattern&, v8::Local<v8::Object>, v8::Isolate*);
+    String m_string;
+    Member<CanvasGradient> m_canvasGradient;
+    Member<CanvasPattern> m_canvasPattern;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrCanvasGradientOrCanvasPattern&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8StringOrCanvasGradientOrCanvasPattern final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrCanvasGradientOrCanvasPattern&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrCanvasGradientOrCanvasPattern&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrCanvasGradientOrCanvasPattern&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrCanvasGradientOrCanvasPattern& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrCanvasGradientOrCanvasPattern& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<StringOrCanvasGradientOrCanvasPattern> {
-  MODULES_EXPORT static StringOrCanvasGradientOrCanvasPattern nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static StringOrCanvasGradientOrCanvasPattern nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -90,4 +92,4 @@ struct NativeValueTraits<StringOrCanvasGradientOrCanvasPattern> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::StringOrCanvasGradientOrCanvasPattern);
 
-#endif  // StringOrCanvasGradientOrCanvasPattern_h
+#endif // StringOrCanvasGradientOrCanvasPattern_h

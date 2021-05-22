@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AccelerometerOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,66 +16,70 @@
 
 namespace blink {
 
-void V8AccelerometerOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, AccelerometerOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8AccelerometerOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, AccelerometerOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8SensorOptions::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> includeGravityValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "includeGravity")).ToLocal(&includeGravityValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (includeGravityValue.IsEmpty() || includeGravityValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool includeGravity = toBoolean(isolate, includeGravityValue, exceptionState);
+    V8SensorOptions::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setIncludeGravity(includeGravity);
-  }
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> includeGravityValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "includeGravity")).ToLocal(&includeGravityValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (includeGravityValue.IsEmpty() || includeGravityValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool includeGravity = toBoolean(isolate, includeGravityValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setIncludeGravity(includeGravity);
+    }
 }
 
-v8::Local<v8::Value> AccelerometerOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8AccelerometerOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> AccelerometerOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8AccelerometerOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8AccelerometerOptions(const AccelerometerOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8SensorOptions(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8AccelerometerOptions(const AccelerometerOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8SensorOptions(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasIncludeGravity()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "includeGravity"), v8Boolean(impl.includeGravity(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "includeGravity"), v8Boolean(true, isolate))))
-      return false;
-  }
+    if (impl.hasIncludeGravity()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "includeGravity"), v8Boolean(impl.includeGravity(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "includeGravity"), v8Boolean(true, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-AccelerometerOptions NativeValueTraits<AccelerometerOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  AccelerometerOptions impl;
-  V8AccelerometerOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+AccelerometerOptions NativeValueTraits<AccelerometerOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    AccelerometerOptions impl;
+    V8AccelerometerOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

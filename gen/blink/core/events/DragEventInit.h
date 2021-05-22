@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DragEventInit_h
 #define DragEventInit_h
 
@@ -21,27 +21,28 @@ namespace blink {
 class DataTransfer;
 
 class CORE_EXPORT DragEventInit : public MouseEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DragEventInit();
-  virtual ~DragEventInit();
-  DragEventInit(const DragEventInit&);
-  DragEventInit& operator=(const DragEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasGetDataTransfer() const;
-  DataTransfer* getDataTransfer() const;
-  void setGetDataTransfer(DataTransfer*);
-  void setGetDataTransferToNull();
+public:
+    DragEventInit();
+    virtual ~DragEventInit();
+    DragEventInit(const DragEventInit&);
+    DragEventInit& operator=(const DragEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasGetDataTransfer() const;
+    DataTransfer* getDataTransfer() const;
+    void setGetDataTransfer(DataTransfer*);
+    void setGetDataTransferToNull();
 
- private:
-  Member<DataTransfer> m_getDataTransfer;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8DragEventInit;
+private:
+    Member<DataTransfer> m_getDataTransfer;
+
+    friend class V8DragEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // DragEventInit_h
+#endif // DragEventInit_h

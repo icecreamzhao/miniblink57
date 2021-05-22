@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PushPermissionDescriptor_h
 #define V8PushPermissionDescriptor_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8PushPermissionDescriptor {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PushPermissionDescriptor&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PushPermissionDescriptor&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8PushPermissionDescriptor(const PushPermissionDescriptor&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PushPermissionDescriptor& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PushPermissionDescriptor& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<PushPermissionDescriptor> {
-  static PushPermissionDescriptor nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static PushPermissionDescriptor nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<PushPermissionDescriptor> {
-  typedef V8PushPermissionDescriptor Type;
+    typedef V8PushPermissionDescriptor Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PushPermissionDescriptor_h
+#endif // V8PushPermissionDescriptor_h

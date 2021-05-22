@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WindowPartial.h"
 
 #include "bindings/core/v8/BindingSecurity.h"
@@ -295,732 +295,799 @@ namespace blink {
 
 namespace DOMWindowPartialV8Internal {
 
-static void cachesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cachesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMWindow* impl = V8Window::toImpl(holder);
+        DOMWindow* impl = V8Window::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Window", "caches");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Window", "caches");
 
-  CacheStorage* cppValue(GlobalCacheStorage::caches(*impl, exceptionState));
+        CacheStorage* cppValue(GlobalCacheStorage::caches(*impl, exceptionState));
 
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#caches";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#caches";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
-
-void cachesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GlobalCacheStorage);
-
-  DOMWindowPartialV8Internal::cachesAttributeGetter(info);
-}
-
-static void animationWorkletAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  Worklet* cppValue(WindowAnimationWorklet::animationWorklet(*impl));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#animationWorklet";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void animationWorkletAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::animationWorkletAttributeGetter(info);
-}
-
-static void cryptoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  Crypto* cppValue(DOMWindowCrypto::crypto(*impl));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#crypto";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void cryptoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::cryptoAttributeGetter(info);
-}
-
-static void paintWorkletAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  Worklet* cppValue(WindowPaintWorklet::paintWorklet(*impl));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#paintWorklet";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void paintWorkletAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::paintWorkletAttributeGetter(info);
-}
-
-static void ondevicelightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  EventListener* cppValue(DOMWindowDeviceLight::ondevicelight(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-void ondevicelightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::ondevicelightAttributeGetter(info);
-}
-
-static void ondevicelightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, DOMWindowDeviceLight::ondevicelight(*impl), v8Value, V8Window::eventListenerCacheIndex);
-
-  DOMWindowDeviceLight::setOndevicelight(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-void ondevicelightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DOMWindowPartialV8Internal::ondevicelightAttributeSetter(v8Value, info);
-}
-
-static void ondevicemotionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  EventListener* cppValue(DOMWindowDeviceMotion::ondevicemotion(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-void ondevicemotionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::ondevicemotionAttributeGetter(info);
-}
-
-static void ondevicemotionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, DOMWindowDeviceMotion::ondevicemotion(*impl), v8Value, V8Window::eventListenerCacheIndex);
-
-  DOMWindowDeviceMotion::setOndevicemotion(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-void ondevicemotionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DOMWindowPartialV8Internal::ondevicemotionAttributeSetter(v8Value, info);
-}
-
-static void ondeviceorientationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  EventListener* cppValue(DOMWindowDeviceOrientation::ondeviceorientation(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-void ondeviceorientationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::ondeviceorientationAttributeGetter(info);
-}
-
-static void ondeviceorientationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, DOMWindowDeviceOrientation::ondeviceorientation(*impl), v8Value, V8Window::eventListenerCacheIndex);
-
-  DOMWindowDeviceOrientation::setOndeviceorientation(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-void ondeviceorientationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DOMWindowPartialV8Internal::ondeviceorientationAttributeSetter(v8Value, info);
-}
-
-static void ondeviceorientationabsoluteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  EventListener* cppValue(DOMWindowDeviceOrientation::ondeviceorientationabsolute(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-void ondeviceorientationabsoluteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeGetter(info);
-}
-
-static void ondeviceorientationabsoluteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, DOMWindowDeviceOrientation::ondeviceorientationabsolute(*impl), v8Value, V8Window::eventListenerCacheIndex);
-
-  DOMWindowDeviceOrientation::setOndeviceorientationabsolute(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-void ondeviceorientationabsoluteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeSetter(v8Value, info);
-}
-
-static void indexedDBAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  IDBFactory* cppValue(GlobalIndexedDB::indexedDB(*impl));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#indexedDB";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void indexedDBAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::UnprefixedIndexedDB);
-
-  DOMWindowPartialV8Internal::indexedDBAttributeGetter(info);
-}
-
-static void webkitStorageInfoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  DeprecatedStorageInfo* cppValue(DOMWindowQuota::webkitStorageInfo(*impl));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#webkitStorageInfo";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void webkitStorageInfoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Deprecation::countDeprecation(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedStorageInfo);
-
-  DOMWindowPartialV8Internal::webkitStorageInfoAttributeGetter(info);
-}
-
-void webkitSpeechGrammarConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechGrammar_ConstructorGetter);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void webkitSpeechGrammarListConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechGrammarList_ConstructorGetter);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void webkitSpeechRecognitionConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechRecognition_ConstructorGetter);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void webkitSpeechRecognitionErrorConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechRecognitionError_ConstructorGetter);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void webkitSpeechRecognitionEventConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechRecognitionEvent_ConstructorGetter);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-static void speechSynthesisAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  SpeechSynthesis* cppValue(DOMWindowSpeechSynthesis::speechSynthesis(scriptState, *impl));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#speechSynthesis";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void speechSynthesisAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_SpeechSynthesis_AttributeGetter);
-
-  DOMWindowPartialV8Internal::speechSynthesisAttributeGetter(info);
-}
-
-static void sessionStorageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Window", "sessionStorage");
-
-  Storage* cppValue(DOMWindowStorage::sessionStorage(*impl, exceptionState));
-
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#sessionStorage";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void sessionStorageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-  V8PerContextData* contextData = scriptState->perContextData();
-  if (scriptState->world().isIsolatedWorld() && contextData && contextData->activityLogger()) {
-    contextData->activityLogger()->logGetter("Window.sessionStorage");
-  }
-
-  DOMWindowPartialV8Internal::sessionStorageAttributeGetter(info);
-}
-
-static void localStorageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Window", "localStorage");
-
-  Storage* cppValue(DOMWindowStorage::localStorage(*impl, exceptionState));
-
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#localStorage";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void localStorageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-  V8PerContextData* contextData = scriptState->perContextData();
-  if (scriptState->world().isIsolatedWorld() && contextData && contextData->activityLogger()) {
-    contextData->activityLogger()->logGetter("Window.localStorage");
-  }
-
-  DOMWindowPartialV8Internal::localStorageAttributeGetter(info);
-}
-
-static void audioWorkletAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWindow* impl = V8Window::toImpl(holder);
-
-  Worklet* cppValue(WindowAudioWorklet::audioWorklet(*impl));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Window#audioWorklet";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-void audioWorkletAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::audioWorkletAttributeGetter(info);
-}
-
-void AnalyserNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioAnalyserNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void AudioBufferConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioAudioBuffer);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void AudioBufferSourceNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioAudioBufferSourceNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void BiquadFilterNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioBiquadFilterNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void ChannelMergerNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioChannelMergerNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void ChannelSplitterNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioChannelSplitterNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void ConstantSourceNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioConstantSourceNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void ConvolverNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioConvolverNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void DelayNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioDelayNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void DynamicsCompressorNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioDynamicsCompressorNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void GainNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioGainNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void IIRFilterNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioIIRFilterNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void MediaElementAudioSourceNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioMediaElementAudioSourceNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void OscillatorNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioOscillatorNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void PannerNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioPannerNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void PeriodicWaveConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioPeriodicWave);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void StereoPannerNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioStereoPannerNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-void WaveShaperNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioWaveShaperNode);
-
-  v8ConstructorAttributeGetter(property, info);
-}
-
-static void fetchMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "fetch");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Window::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  DOMWindow* impl = V8Window::toImpl(info.Holder());
-
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
-    return;
-  }
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  RequestOrUSVString input;
-  Dictionary init;
-  V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], input, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('init') is not an object.");
-
-    return;
-  }
-  init = Dictionary(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptPromise result = GlobalFetch::fetch(scriptState, *impl, input, init, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
- void fetchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::fetchMethod(info);
-}
-
-static void webkitRequestFileSystemMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "webkitRequestFileSystem");
-
-  DOMWindow* impl = V8Window::toImpl(info.Holder());
-
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
-    return;
-  }
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  unsigned type;
-  long long size;
-  FileSystemCallback* successCallback;
-  ErrorCallback* errorCallback;
-  type = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  size = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (info.Length() <= 2 || !info[2]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-    return;
-  }
-  successCallback = V8FileSystemCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-
-  if (!isUndefinedOrNull(info[3])) {
-    if (!info[3]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
-
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  DOMWindowFileSystem::webkitRequestFileSystem(*impl, type, size, successCallback, errorCallback);
-}
+    void cachesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GlobalCacheStorage);
 
- void webkitRequestFileSystemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::RequestFileSystem);
-  DOMWindowPartialV8Internal::webkitRequestFileSystemMethod(info);
-}
-
-static void webkitResolveLocalFileSystemURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "webkitResolveLocalFileSystemURL");
-
-  DOMWindow* impl = V8Window::toImpl(info.Holder());
-
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
-    return;
-  }
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> url;
-  EntryCallback* successCallback;
-  ErrorCallback* errorCallback;
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  if (info.Length() <= 1 || !info[1]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-    return;
-  }
-  successCallback = V8EntryCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-      return;
+        DOMWindowPartialV8Internal::cachesAttributeGetter(info);
     }
-    errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  DOMWindowFileSystem::webkitResolveLocalFileSystemURL(*impl, url, successCallback, errorCallback);
-}
+    static void animationWorkletAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
- void webkitResolveLocalFileSystemURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWindowPartialV8Internal::webkitResolveLocalFileSystemURLMethod(info);
-}
+        DOMWindow* impl = V8Window::toImpl(holder);
 
-static void openDatabaseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "openDatabase");
+        Worklet* cppValue(WindowAnimationWorklet::animationWorklet(*impl));
 
-  DOMWindow* impl = V8Window::toImpl(info.Holder());
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#animationWorklet";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
-    return;
-  }
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  V8StringResource<> name;
-  V8StringResource<> version;
-  V8StringResource<> displayName;
-  unsigned estimatedSize;
-  DatabaseCallback* creationCallback;
-  name = info[0];
-  if (!name.prepare())
-    return;
-
-  version = info[1];
-  if (!version.prepare())
-    return;
-
-  displayName = info[2];
-  if (!displayName.prepare())
-    return;
-
-  estimatedSize = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!isUndefinedOrNull(info[4])) {
-    if (!info[4]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 5 is not a function.");
-
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    creationCallback = V8DatabaseCallback::create(v8::Local<v8::Function>::Cast(info[4]), ScriptState::current(info.GetIsolate()));
-  } else {
-    creationCallback = nullptr;
-  }
 
-  Database* result = DOMWindowWebDatabase::openDatabase(*impl, name, version, displayName, estimatedSize, creationCallback, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+    void animationWorkletAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::animationWorkletAttributeGetter(info);
+    }
 
- void openDatabaseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::OpenWebDatabase);
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-  V8PerContextData* contextData = scriptState->perContextData();
-  if (contextData && contextData->activityLogger()) {
-    ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "openDatabase");
-    Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
-    contextData->activityLogger()->logMethod("Window.openDatabase", info.Length(), loggerArgs.data());
-  }
-  DOMWindowPartialV8Internal::openDatabaseMethod(info);
-}
+    static void cryptoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        Crypto* cppValue(DOMWindowCrypto::crypto(*impl));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#crypto";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    void cryptoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::cryptoAttributeGetter(info);
+    }
+
+    static void paintWorkletAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        Worklet* cppValue(WindowPaintWorklet::paintWorklet(*impl));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#paintWorklet";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    void paintWorkletAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::paintWorkletAttributeGetter(info);
+    }
+
+    static void ondevicelightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        EventListener* cppValue(DOMWindowDeviceLight::ondevicelight(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    void ondevicelightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::ondevicelightAttributeGetter(info);
+    }
+
+    static void ondevicelightAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, DOMWindowDeviceLight::ondevicelight(*impl), v8Value, V8Window::eventListenerCacheIndex);
+
+        DOMWindowDeviceLight::setOndevicelight(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    void ondevicelightAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DOMWindowPartialV8Internal::ondevicelightAttributeSetter(v8Value, info);
+    }
+
+    static void ondevicemotionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        EventListener* cppValue(DOMWindowDeviceMotion::ondevicemotion(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    void ondevicemotionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::ondevicemotionAttributeGetter(info);
+    }
+
+    static void ondevicemotionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, DOMWindowDeviceMotion::ondevicemotion(*impl), v8Value, V8Window::eventListenerCacheIndex);
+
+        DOMWindowDeviceMotion::setOndevicemotion(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    void ondevicemotionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DOMWindowPartialV8Internal::ondevicemotionAttributeSetter(v8Value, info);
+    }
+
+    static void ondeviceorientationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        EventListener* cppValue(DOMWindowDeviceOrientation::ondeviceorientation(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    void ondeviceorientationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::ondeviceorientationAttributeGetter(info);
+    }
+
+    static void ondeviceorientationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, DOMWindowDeviceOrientation::ondeviceorientation(*impl), v8Value, V8Window::eventListenerCacheIndex);
+
+        DOMWindowDeviceOrientation::setOndeviceorientation(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    void ondeviceorientationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DOMWindowPartialV8Internal::ondeviceorientationAttributeSetter(v8Value, info);
+    }
+
+    static void ondeviceorientationabsoluteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        EventListener* cppValue(DOMWindowDeviceOrientation::ondeviceorientationabsolute(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    void ondeviceorientationabsoluteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeGetter(info);
+    }
+
+    static void ondeviceorientationabsoluteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, DOMWindowDeviceOrientation::ondeviceorientationabsolute(*impl), v8Value, V8Window::eventListenerCacheIndex);
+
+        DOMWindowDeviceOrientation::setOndeviceorientationabsolute(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    void ondeviceorientationabsoluteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeSetter(v8Value, info);
+    }
+
+    static void indexedDBAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        IDBFactory* cppValue(GlobalIndexedDB::indexedDB(*impl));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#indexedDB";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    void indexedDBAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::UnprefixedIndexedDB);
+
+        DOMWindowPartialV8Internal::indexedDBAttributeGetter(info);
+    }
+
+    static void webkitStorageInfoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        DeprecatedStorageInfo* cppValue(DOMWindowQuota::webkitStorageInfo(*impl));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#webkitStorageInfo";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    void webkitStorageInfoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Deprecation::countDeprecation(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedStorageInfo);
+
+        DOMWindowPartialV8Internal::webkitStorageInfoAttributeGetter(info);
+    }
+
+    void webkitSpeechGrammarConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechGrammar_ConstructorGetter);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void webkitSpeechGrammarListConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechGrammarList_ConstructorGetter);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void webkitSpeechRecognitionConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechRecognition_ConstructorGetter);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void webkitSpeechRecognitionErrorConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechRecognitionError_ConstructorGetter);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void webkitSpeechRecognitionEventConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_WebkitSpeechRecognitionEvent_ConstructorGetter);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    static void speechSynthesisAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        SpeechSynthesis* cppValue(DOMWindowSpeechSynthesis::speechSynthesis(scriptState, *impl));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#speechSynthesis";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    void speechSynthesisAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Window_SpeechSynthesis_AttributeGetter);
+
+        DOMWindowPartialV8Internal::speechSynthesisAttributeGetter(info);
+    }
+
+    static void sessionStorageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Window", "sessionStorage");
+
+        Storage* cppValue(DOMWindowStorage::sessionStorage(*impl, exceptionState));
+
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#sessionStorage";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    void sessionStorageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        V8PerContextData* contextData = scriptState->perContextData();
+        if (scriptState->world().isIsolatedWorld() && contextData && contextData->activityLogger()) {
+            contextData->activityLogger()->logGetter("Window.sessionStorage");
+        }
+
+        DOMWindowPartialV8Internal::sessionStorageAttributeGetter(info);
+    }
+
+    static void localStorageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Window", "localStorage");
+
+        Storage* cppValue(DOMWindowStorage::localStorage(*impl, exceptionState));
+
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#localStorage";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    void localStorageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        V8PerContextData* contextData = scriptState->perContextData();
+        if (scriptState->world().isIsolatedWorld() && contextData && contextData->activityLogger()) {
+            contextData->activityLogger()->logGetter("Window.localStorage");
+        }
+
+        DOMWindowPartialV8Internal::localStorageAttributeGetter(info);
+    }
+
+    static void audioWorkletAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        Worklet* cppValue(WindowAudioWorklet::audioWorklet(*impl));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#audioWorklet";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    void audioWorkletAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::audioWorkletAttributeGetter(info);
+    }
+
+    void AnalyserNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioAnalyserNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void AudioBufferConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioAudioBuffer);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void AudioBufferSourceNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioAudioBufferSourceNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void BiquadFilterNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioBiquadFilterNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void ChannelMergerNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioChannelMergerNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void ChannelSplitterNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioChannelSplitterNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void ConstantSourceNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioConstantSourceNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void ConvolverNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioConvolverNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void DelayNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioDelayNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void DynamicsCompressorNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioDynamicsCompressorNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void GainNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioGainNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void IIRFilterNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioIIRFilterNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void MediaElementAudioSourceNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioMediaElementAudioSourceNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void OscillatorNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioOscillatorNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void PannerNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioPannerNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void PeriodicWaveConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioPeriodicWave);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void StereoPannerNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioStereoPannerNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    void WaveShaperNodeConstructorGetterCallback(v8::Local<v8::Name> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::WebAudioWaveShaperNode);
+
+        v8ConstructorAttributeGetter(property, info);
+    }
+
+    static void fetchMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "fetch");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Window::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        DOMWindow* impl = V8Window::toImpl(info.Holder());
+
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
+            return;
+        }
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        RequestOrUSVString input;
+        Dictionary init;
+        V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], input, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('init') is not an object.");
+
+            return;
+        }
+        init = Dictionary(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = GlobalFetch::fetch(scriptState, *impl, input, init, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    void fetchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::fetchMethod(info);
+    }
+
+    static void webkitRequestFileSystemMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "webkitRequestFileSystem");
+
+        DOMWindow* impl = V8Window::toImpl(info.Holder());
+
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
+            return;
+        }
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        unsigned type;
+        long long size;
+        FileSystemCallback* successCallback;
+        ErrorCallback* errorCallback;
+        type = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        size = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (info.Length() <= 2 || !info[2]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+
+            return;
+        }
+        successCallback = V8FileSystemCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+
+        if (!isUndefinedOrNull(info[3])) {
+            if (!info[3]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 4 is not a function.");
+
+                return;
+            }
+            errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        DOMWindowFileSystem::webkitRequestFileSystem(*impl, type, size, successCallback, errorCallback);
+    }
+
+    void webkitRequestFileSystemMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::RequestFileSystem);
+        DOMWindowPartialV8Internal::webkitRequestFileSystemMethod(info);
+    }
+
+    static void webkitResolveLocalFileSystemURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "webkitResolveLocalFileSystemURL");
+
+        DOMWindow* impl = V8Window::toImpl(info.Holder());
+
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
+            return;
+        }
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> url;
+        EntryCallback* successCallback;
+        ErrorCallback* errorCallback;
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        if (info.Length() <= 1 || !info[1]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+
+            return;
+        }
+        successCallback = V8EntryCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+
+                return;
+            }
+            errorCallback = V8ErrorCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        DOMWindowFileSystem::webkitResolveLocalFileSystemURL(*impl, url, successCallback, errorCallback);
+    }
+
+    void webkitResolveLocalFileSystemURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::webkitResolveLocalFileSystemURLMethod(info);
+    }
+
+    static void openDatabaseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "openDatabase");
+
+        DOMWindow* impl = V8Window::toImpl(info.Holder());
+
+        if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
+            return;
+        }
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        V8StringResource<> name;
+        V8StringResource<> version;
+        V8StringResource<> displayName;
+        unsigned estimatedSize;
+        DatabaseCallback* creationCallback;
+        name = info[0];
+        if (!name.prepare())
+            return;
+
+        version = info[1];
+        if (!version.prepare())
+            return;
+
+        displayName = info[2];
+        if (!displayName.prepare())
+            return;
+
+        estimatedSize = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[4])) {
+            if (!info[4]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 5 is not a function.");
+
+                return;
+            }
+            creationCallback = V8DatabaseCallback::create(v8::Local<v8::Function>::Cast(info[4]), ScriptState::current(info.GetIsolate()));
+        } else {
+            creationCallback = nullptr;
+        }
+
+        Database* result = DOMWindowWebDatabase::openDatabase(*impl, name, version, displayName, estimatedSize, creationCallback, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    void openDatabaseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::OpenWebDatabase);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        V8PerContextData* contextData = scriptState->perContextData();
+        if (contextData && contextData->activityLogger()) {
+            ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Window", "openDatabase");
+            Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
+            contextData->activityLogger()->logMethod("Window.openDatabase", info.Length(), loggerArgs.data());
+        }
+        DOMWindowPartialV8Internal::openDatabaseMethod(info);
+    }
 
 } // namespace DOMWindowPartialV8Internal
 
@@ -1031,24 +1098,24 @@ static void openDatabaseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) 
 #pragma clang diagnostic ignored "-Wglobal-constructors"
 #endif
 const V8DOMConfiguration::AttributeConfiguration V8WindowAttributes[] = {
-    {"AnalyserNode", DOMWindowPartialV8Internal::AnalyserNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AnalyserNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioBuffer", DOMWindowPartialV8Internal::AudioBufferConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioBuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioBufferSourceNode", DOMWindowPartialV8Internal::AudioBufferSourceNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioBufferSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"BiquadFilterNode", DOMWindowPartialV8Internal::BiquadFilterNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BiquadFilterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ChannelMergerNode", DOMWindowPartialV8Internal::ChannelMergerNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ChannelMergerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ChannelSplitterNode", DOMWindowPartialV8Internal::ChannelSplitterNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ChannelSplitterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ConstantSourceNode", DOMWindowPartialV8Internal::ConstantSourceNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ConstantSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ConvolverNode", DOMWindowPartialV8Internal::ConvolverNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ConvolverNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"DelayNode", DOMWindowPartialV8Internal::DelayNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DelayNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"DynamicsCompressorNode", DOMWindowPartialV8Internal::DynamicsCompressorNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DynamicsCompressorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"GainNode", DOMWindowPartialV8Internal::GainNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GainNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IIRFilterNode", DOMWindowPartialV8Internal::IIRFilterNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IIRFilterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaElementAudioSourceNode", DOMWindowPartialV8Internal::MediaElementAudioSourceNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaElementAudioSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"OscillatorNode", DOMWindowPartialV8Internal::OscillatorNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OscillatorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"PannerNode", DOMWindowPartialV8Internal::PannerNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PannerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"PeriodicWave", DOMWindowPartialV8Internal::PeriodicWaveConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PeriodicWave::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"StereoPannerNode", DOMWindowPartialV8Internal::StereoPannerNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StereoPannerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WaveShaperNode", DOMWindowPartialV8Internal::WaveShaperNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WaveShaperNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "AnalyserNode", DOMWindowPartialV8Internal::AnalyserNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AnalyserNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioBuffer", DOMWindowPartialV8Internal::AudioBufferConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioBuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioBufferSourceNode", DOMWindowPartialV8Internal::AudioBufferSourceNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioBufferSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "BiquadFilterNode", DOMWindowPartialV8Internal::BiquadFilterNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BiquadFilterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ChannelMergerNode", DOMWindowPartialV8Internal::ChannelMergerNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ChannelMergerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ChannelSplitterNode", DOMWindowPartialV8Internal::ChannelSplitterNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ChannelSplitterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ConstantSourceNode", DOMWindowPartialV8Internal::ConstantSourceNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ConstantSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ConvolverNode", DOMWindowPartialV8Internal::ConvolverNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ConvolverNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "DelayNode", DOMWindowPartialV8Internal::DelayNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DelayNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "DynamicsCompressorNode", DOMWindowPartialV8Internal::DynamicsCompressorNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DynamicsCompressorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "GainNode", DOMWindowPartialV8Internal::GainNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GainNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IIRFilterNode", DOMWindowPartialV8Internal::IIRFilterNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IIRFilterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaElementAudioSourceNode", DOMWindowPartialV8Internal::MediaElementAudioSourceNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaElementAudioSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "OscillatorNode", DOMWindowPartialV8Internal::OscillatorNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OscillatorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "PannerNode", DOMWindowPartialV8Internal::PannerNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PannerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "PeriodicWave", DOMWindowPartialV8Internal::PeriodicWaveConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PeriodicWave::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "StereoPannerNode", DOMWindowPartialV8Internal::StereoPannerNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StereoPannerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WaveShaperNode", DOMWindowPartialV8Internal::WaveShaperNodeConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WaveShaperNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 #if defined(COMPONENT_BUILD) && defined(WIN32) && COMPILER(CLANG)
 #pragma clang diagnostic pop
@@ -1061,827 +1128,840 @@ const V8DOMConfiguration::AttributeConfiguration V8WindowAttributes[] = {
 #pragma clang diagnostic ignored "-Wglobal-constructors"
 #endif
 const V8DOMConfiguration::AttributeConfiguration V8WindowLazyDataAttributes[] = {
-    {"AnalyserNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AnalyserNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AppBannerPromptResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AppBannerPromptResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioBuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioBuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioBufferSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioBufferSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioDestinationNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioDestinationNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioListener", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioListener::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioParam", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioParam::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioProcessingEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioProcessingEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"AudioScheduledSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioScheduledSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"BaseAudioContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BaseAudioContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"BatteryManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BatteryManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"BeforeInstallPromptEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BeforeInstallPromptEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"BiquadFilterNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BiquadFilterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"BlobEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BlobEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"Cache", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Cache::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"CacheStorage", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CacheStorage::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"CanvasRenderingContext2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasRenderingContext2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ChannelMergerNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ChannelMergerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ChannelSplitterNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ChannelSplitterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"CloseEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CloseEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ConstantSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ConstantSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ConvolverNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ConvolverNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"Crypto", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Crypto::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"CryptoKey", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CryptoKey::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"DOMError", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DOMError::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"DelayNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DelayNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"DeviceMotionEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DeviceMotionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"DeviceOrientationEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DeviceOrientationEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"DynamicsCompressorNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DynamicsCompressorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"EventSource", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8EventSource::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"GainNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GainNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"GamepadButton", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GamepadButton::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"Gamepad", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Gamepad::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"GamepadEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GamepadEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"Headers", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Headers::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBCursor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBCursor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBCursorWithValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBCursorWithValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBDatabase", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBDatabase::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBFactory", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBFactory::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBIndex", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBIndex::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBKeyRange", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBKeyRange::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBObjectStore", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObjectStore::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBOpenDBRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBOpenDBRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBTransaction", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBTransaction::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IDBVersionChangeEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBVersionChangeEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"IIRFilterNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IIRFilterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ImageBitmapRenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ImageBitmapRenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MIDIAccess", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIAccess::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MIDIConnectionEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIConnectionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MIDIInput", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIInput::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MIDIInputMap", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIInputMap::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MIDIMessageEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIMessageEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MIDIOutput", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIOutput::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MIDIOutputMap", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIOutputMap::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MIDIPort", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIPort::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaDeviceInfo", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaDeviceInfo::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaDevices", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaDevices::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaElementAudioSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaElementAudioSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaEncryptedEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaEncryptedEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaKeyMessageEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeyMessageEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaKeySession", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeySession::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaKeyStatusMap", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeyStatusMap::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaKeySystemAccess", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeySystemAccess::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaKeys", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeys::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaRecorder", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaRecorder::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaSource", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaSource::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaStreamAudioDestinationNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamAudioDestinationNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaStreamAudioSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamAudioSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaStream", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStream::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaStreamEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaStreamTrack", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamTrack::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MediaStreamTrackEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamTrackEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MimeTypeArray", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MimeTypeArray::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"MimeType", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MimeType::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"OfflineAudioCompletionEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OfflineAudioCompletionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"OfflineAudioContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OfflineAudioContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"OscillatorNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OscillatorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"PannerNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PannerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"PeriodicWave", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PeriodicWave::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"PluginArray", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PluginArray::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"Plugin", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Plugin::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"RTCCertificate", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCCertificate::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"RTCDataChannel", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCDataChannel::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"RTCDataChannelEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCDataChannelEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"RTCIceCandidate", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCIceCandidate::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"RTCPeerConnection", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCPeerConnection::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"RTCPeerConnectionIceEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCPeerConnectionIceEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"RTCSessionDescription", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCSessionDescription::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"Request", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Request::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"Response", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Response::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ScreenOrientation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ScreenOrientation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ScriptProcessorNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ScriptProcessorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ServiceWorker", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ServiceWorker::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ServiceWorkerContainer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ServiceWorkerContainer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ServiceWorkerRegistration", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ServiceWorkerRegistration::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"SourceBuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SourceBuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"SourceBufferList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SourceBufferList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"StereoPannerNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StereoPannerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"Storage", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Storage::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"StorageEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StorageEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"SubtleCrypto", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SubtleCrypto::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"TextDecoder", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TextDecoder::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"TextEncoder", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TextEncoder::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WaveShaperNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WaveShaperNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLActiveInfo", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLActiveInfo::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLBuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLBuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLContextEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLContextEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLFramebuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLFramebuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLProgram", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLProgram::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLQuery", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLQuery::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLRenderbuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLRenderbuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLSampler", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLSampler::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLShader", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLShader::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLShaderPrecisionFormat", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLShaderPrecisionFormat::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLSync", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLSync::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLTexture", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLTexture::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLTransformFeedback", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLTransformFeedback::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLUniformLocation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLUniformLocation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebGLVertexArrayObject", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLVertexArrayObject::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"WebSocket", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebSocket::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"webkitMediaStream", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStream::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"webkitRTCPeerConnection", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCPeerConnection::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "AnalyserNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AnalyserNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AppBannerPromptResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AppBannerPromptResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioBuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioBuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioBufferSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioBufferSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioDestinationNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioDestinationNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioListener", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioListener::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioParam", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioParam::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioProcessingEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioProcessingEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "AudioScheduledSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AudioScheduledSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "BaseAudioContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BaseAudioContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "BatteryManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BatteryManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "BeforeInstallPromptEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BeforeInstallPromptEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "BiquadFilterNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BiquadFilterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "BlobEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BlobEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "Cache", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Cache::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "CacheStorage", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CacheStorage::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "CanvasRenderingContext2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasRenderingContext2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ChannelMergerNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ChannelMergerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ChannelSplitterNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ChannelSplitterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "CloseEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CloseEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ConstantSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ConstantSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ConvolverNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ConvolverNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "Crypto", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Crypto::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "CryptoKey", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CryptoKey::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "DOMError", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DOMError::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "DelayNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DelayNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "DeviceMotionEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DeviceMotionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "DeviceOrientationEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DeviceOrientationEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "DynamicsCompressorNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DynamicsCompressorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "EventSource", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8EventSource::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "GainNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GainNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "GamepadButton", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GamepadButton::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "Gamepad", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Gamepad::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "GamepadEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GamepadEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "Headers", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Headers::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBCursor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBCursor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBCursorWithValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBCursorWithValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBDatabase", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBDatabase::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBFactory", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBFactory::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBIndex", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBIndex::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBKeyRange", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBKeyRange::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBObjectStore", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObjectStore::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBOpenDBRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBOpenDBRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBTransaction", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBTransaction::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IDBVersionChangeEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBVersionChangeEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "IIRFilterNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IIRFilterNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ImageBitmapRenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ImageBitmapRenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MIDIAccess", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIAccess::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MIDIConnectionEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIConnectionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MIDIInput", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIInput::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MIDIInputMap", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIInputMap::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MIDIMessageEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIMessageEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MIDIOutput", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIOutput::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MIDIOutputMap", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIOutputMap::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MIDIPort", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MIDIPort::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaDeviceInfo", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaDeviceInfo::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaDevices", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaDevices::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaElementAudioSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaElementAudioSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaEncryptedEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaEncryptedEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaKeyMessageEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeyMessageEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaKeySession", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeySession::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaKeyStatusMap", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeyStatusMap::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaKeySystemAccess", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeySystemAccess::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaKeys", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaKeys::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaRecorder", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaRecorder::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaSource", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaSource::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaStreamAudioDestinationNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamAudioDestinationNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaStreamAudioSourceNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamAudioSourceNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaStream", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStream::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaStreamEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaStreamTrack", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamTrack::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MediaStreamTrackEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStreamTrackEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MimeTypeArray", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MimeTypeArray::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "MimeType", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MimeType::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "OfflineAudioCompletionEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OfflineAudioCompletionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "OfflineAudioContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OfflineAudioContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "OscillatorNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OscillatorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "PannerNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PannerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "PeriodicWave", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PeriodicWave::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "PluginArray", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PluginArray::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "Plugin", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Plugin::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "RTCCertificate", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCCertificate::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "RTCDataChannel", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCDataChannel::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "RTCDataChannelEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCDataChannelEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "RTCIceCandidate", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCIceCandidate::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "RTCPeerConnection", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCPeerConnection::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "RTCPeerConnectionIceEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCPeerConnectionIceEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "RTCSessionDescription", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCSessionDescription::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "Request", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Request::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "Response", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Response::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ScreenOrientation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ScreenOrientation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ScriptProcessorNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ScriptProcessorNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ServiceWorker", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ServiceWorker::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ServiceWorkerContainer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ServiceWorkerContainer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ServiceWorkerRegistration", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ServiceWorkerRegistration::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "SourceBuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SourceBuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "SourceBufferList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SourceBufferList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "StereoPannerNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StereoPannerNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "Storage", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Storage::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "StorageEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StorageEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "SubtleCrypto", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SubtleCrypto::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "TextDecoder", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TextDecoder::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "TextEncoder", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TextEncoder::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WaveShaperNode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WaveShaperNode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLActiveInfo", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLActiveInfo::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLBuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLBuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLContextEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLContextEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLFramebuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLFramebuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLProgram", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLProgram::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLQuery", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLQuery::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLRenderbuffer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLRenderbuffer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLSampler", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLSampler::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLShader", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLShader::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLShaderPrecisionFormat", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLShaderPrecisionFormat::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLSync", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLSync::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLTexture", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLTexture::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLTransformFeedback", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLTransformFeedback::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLUniformLocation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLUniformLocation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebGLVertexArrayObject", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLVertexArrayObject::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "WebSocket", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebSocket::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "webkitMediaStream", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaStream::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "webkitRTCPeerConnection", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCPeerConnection::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 #if defined(COMPONENT_BUILD) && defined(WIN32) && COMPILER(CLANG)
 #pragma clang diagnostic pop
 #endif
 
 const V8DOMConfiguration::AccessorConfiguration V8WindowAccessors[] = {
-    {"crypto", DOMWindowPartialV8Internal::cryptoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ondevicemotion", DOMWindowPartialV8Internal::ondevicemotionAttributeGetterCallback, DOMWindowPartialV8Internal::ondevicemotionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ondeviceorientation", DOMWindowPartialV8Internal::ondeviceorientationAttributeGetterCallback, DOMWindowPartialV8Internal::ondeviceorientationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"ondeviceorientationabsolute", DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeGetterCallback, DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"indexedDB", DOMWindowPartialV8Internal::indexedDBAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"webkitStorageInfo", DOMWindowPartialV8Internal::webkitStorageInfoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"sessionStorage", DOMWindowPartialV8Internal::sessionStorageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"localStorage", DOMWindowPartialV8Internal::localStorageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "crypto", DOMWindowPartialV8Internal::cryptoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ondevicemotion", DOMWindowPartialV8Internal::ondevicemotionAttributeGetterCallback, DOMWindowPartialV8Internal::ondevicemotionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ondeviceorientation", DOMWindowPartialV8Internal::ondeviceorientationAttributeGetterCallback, DOMWindowPartialV8Internal::ondeviceorientationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "ondeviceorientationabsolute", DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeGetterCallback, DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "indexedDB", DOMWindowPartialV8Internal::indexedDBAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "webkitStorageInfo", DOMWindowPartialV8Internal::webkitStorageInfoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "sessionStorage", DOMWindowPartialV8Internal::sessionStorageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "localStorage", DOMWindowPartialV8Internal::localStorageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8WindowMethods[] = {
-    {"fetch", DOMWindowPartialV8Internal::fetchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::DoNotCheckHolder},
+    { "fetch", DOMWindowPartialV8Internal::fetchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-void V8WindowPartial::installV8WindowTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8Window::installV8WindowTemplate(isolate, world, interfaceTemplate);
+void V8WindowPartial::installV8WindowTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8Window::installV8WindowTemplate(isolate, world, interfaceTemplate);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Global object prototype chain consists of Immutable Prototype Exotic Objects
-  prototypeTemplate->SetImmutableProto();
+    // Global object prototype chain consists of Immutable Prototype Exotic Objects
+    prototypeTemplate->SetImmutableProto();
 
-  // Global objects are Immutable Prototype Exotic Objects
-  instanceTemplate->SetImmutableProto();
+    // Global objects are Immutable Prototype Exotic Objects
+    instanceTemplate->SetImmutableProto();
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8WindowConstants[] = {
-      {"TEMPORARY", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"PERSISTENT", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WindowConstants, WTF_ARRAY_LENGTH(V8WindowConstants));
-  static_assert(0 == DOMWindowFileSystem::kTemporary, "the value of DOMWindow_kTemporary does not match with implementation");
-  static_assert(1 == DOMWindowFileSystem::kPersistent, "the value of DOMWindow_kPersistent does not match with implementation");
-  V8DOMConfiguration::installAttributes(isolate, world, instanceTemplate, prototypeTemplate, V8WindowAttributes, WTF_ARRAY_LENGTH(V8WindowAttributes));
-  V8DOMConfiguration::installLazyDataAttributes(isolate, world, instanceTemplate, prototypeTemplate, V8WindowLazyDataAttributes, WTF_ARRAY_LENGTH(V8WindowLazyDataAttributes));
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WindowAccessors, WTF_ARRAY_LENGTH(V8WindowAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WindowMethods, WTF_ARRAY_LENGTH(V8WindowMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8WindowConstants[] = {
+        { "TEMPORARY", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "PERSISTENT", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WindowConstants, WTF_ARRAY_LENGTH(V8WindowConstants));
+    static_assert(0 == DOMWindowFileSystem::kTemporary, "the value of DOMWindow_kTemporary does not match with implementation");
+    static_assert(1 == DOMWindowFileSystem::kPersistent, "the value of DOMWindow_kPersistent does not match with implementation");
+    V8DOMConfiguration::installAttributes(isolate, world, instanceTemplate, prototypeTemplate, V8WindowAttributes, WTF_ARRAY_LENGTH(V8WindowAttributes));
+    V8DOMConfiguration::installLazyDataAttributes(isolate, world, instanceTemplate, prototypeTemplate, V8WindowLazyDataAttributes, WTF_ARRAY_LENGTH(V8WindowLazyDataAttributes));
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WindowAccessors, WTF_ARRAY_LENGTH(V8WindowAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WindowMethods, WTF_ARRAY_LENGTH(V8WindowMethods));
 
-  if (RuntimeEnabledFeatures::audioWorkletEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoraudioWorkletConfiguration = {"audioWorklet", DOMWindowPartialV8Internal::audioWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoraudioWorkletConfiguration);
-  }
-  if (RuntimeEnabledFeatures::backgroundSyncEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeSyncManagerConfiguration = {"SyncManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SyncManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSyncManagerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::broadcastChannelEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeBroadcastChannelConfiguration = {"BroadcastChannel", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BroadcastChannel::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBroadcastChannelConfiguration);
-  }
-  if (RuntimeEnabledFeatures::budgetEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeBudgetServiceConfiguration = {"BudgetService", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BudgetService::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBudgetServiceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBudgetStateConfiguration = {"BudgetState", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BudgetState::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBudgetStateConfiguration);
-  }
-  if (RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorpaintWorkletConfiguration = {"paintWorklet", DOMWindowPartialV8Internal::paintWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorpaintWorkletConfiguration);
-  }
-  if (RuntimeEnabledFeatures::compositorWorkerEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoranimationWorkletConfiguration = {"animationWorklet", DOMWindowPartialV8Internal::animationWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoranimationWorkletConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCompositorWorkerConfiguration = {"CompositorWorker", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CompositorWorker::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCompositorWorkerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::credentialManagerEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeCredentialConfiguration = {"Credential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Credential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCredentialConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCredentialsContainerConfiguration = {"CredentialsContainer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CredentialsContainer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCredentialsContainerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeFederatedCredentialConfiguration = {"FederatedCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8FederatedCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeFederatedCredentialConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePasswordCredentialConfiguration = {"PasswordCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PasswordCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePasswordCredentialConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSiteBoundCredentialConfiguration = {"SiteBoundCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SiteBoundCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSiteBoundCredentialConfiguration);
-  }
-  if (RuntimeEnabledFeatures::deviceLightEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeDeviceLightEventConfiguration = {"DeviceLightEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DeviceLightEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeDeviceLightEventConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorondevicelightConfiguration = {"ondevicelight", DOMWindowPartialV8Internal::ondevicelightAttributeGetterCallback, DOMWindowPartialV8Internal::ondevicelightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorondevicelightConfiguration);
-  }
-  if (RuntimeEnabledFeatures::durableStorageEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeStorageManagerConfiguration = {"StorageManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StorageManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeStorageManagerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeOffscreenCanvasRenderingContext2DConfiguration = {"OffscreenCanvasRenderingContext2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OffscreenCanvasRenderingContext2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeOffscreenCanvasRenderingContext2DConfiguration);
-  }
-  if (RuntimeEnabledFeatures::globalCacheStorageEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorcachesConfiguration = {"caches", DOMWindowPartialV8Internal::cachesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcachesConfiguration);
-  }
-  if (RuntimeEnabledFeatures::iDBObserverEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeIDBObservationConfiguration = {"IDBObservation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObservation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeIDBObservationConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeIDBObserverConfiguration = {"IDBObserver", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObserver::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeIDBObserverConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeIDBObserverChangesConfiguration = {"IDBObserverChanges", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObserverChanges::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeIDBObserverChangesConfiguration);
-  }
-  if (RuntimeEnabledFeatures::installedAppEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeRelatedApplicationConfiguration = {"RelatedApplication", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RelatedApplication::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeRelatedApplicationConfiguration);
-  }
-  if (RuntimeEnabledFeatures::mediaCaptureFromCanvasEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeCanvasCaptureMediaStreamTrackConfiguration = {"CanvasCaptureMediaStreamTrack", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasCaptureMediaStreamTrack::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCanvasCaptureMediaStreamTrackConfiguration);
-  }
-  if (RuntimeEnabledFeatures::mediaSessionEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeMediaMetadataConfiguration = {"MediaMetadata", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaMetadata::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeMediaMetadataConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeMediaSessionConfiguration = {"MediaSession", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaSession::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeMediaSessionConfiguration);
-  }
-  if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeTrackDefaultConfiguration = {"TrackDefault", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TrackDefault::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeTrackDefaultConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeTrackDefaultListConfiguration = {"TrackDefaultList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TrackDefaultList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeTrackDefaultListConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeVideoPlaybackQualityConfiguration = {"VideoPlaybackQuality", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VideoPlaybackQuality::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeVideoPlaybackQualityConfiguration);
-  }
-  if (RuntimeEnabledFeatures::networkInformationEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeNetworkInformationConfiguration = {"NetworkInformation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NetworkInformation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeNetworkInformationConfiguration);
-  }
-  if (RuntimeEnabledFeatures::notificationsEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeNotificationConfiguration = {"Notification", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Notification::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeNotificationConfiguration);
-  }
-  if (RuntimeEnabledFeatures::paymentAppEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentAppManagerConfiguration = {"PaymentAppManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentAppManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentAppManagerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::paymentRequestEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentAddressConfiguration = {"PaymentAddress", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentAddress::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentAddressConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentRequestConfiguration = {"PaymentRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentRequestConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentRequestUpdateEventConfiguration = {"PaymentRequestUpdateEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentRequestUpdateEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentRequestUpdateEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentResponseConfiguration = {"PaymentResponse", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentResponse::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentResponseConfiguration);
-  }
-  if (RuntimeEnabledFeatures::permissionsEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePermissionsConfiguration = {"Permissions", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Permissions::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePermissionsConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePermissionStatusConfiguration = {"PermissionStatus", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PermissionStatus::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePermissionStatusConfiguration);
-  }
-  if (RuntimeEnabledFeatures::presentationEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConfiguration = {"Presentation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Presentation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationAvailabilityConfiguration = {"PresentationAvailability", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationAvailability::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationAvailabilityConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionConfiguration = {"PresentationConnection", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnection::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConnectionConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionAvailableEventConfiguration = {"PresentationConnectionAvailableEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionAvailableEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConnectionAvailableEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionCloseEventConfiguration = {"PresentationConnectionCloseEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionCloseEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConnectionCloseEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationRequestConfiguration = {"PresentationRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationRequestConfiguration);
-  }
-  if (RuntimeEnabledFeatures::presentationReceiverEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionListConfiguration = {"PresentationConnectionList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConnectionListConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationReceiverConfiguration = {"PresentationReceiver", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationReceiver::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationReceiverConfiguration);
-  }
-  if (RuntimeEnabledFeatures::pushMessagingEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePushManagerConfiguration = {"PushManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePushManagerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePushSubscriptionConfiguration = {"PushSubscription", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushSubscription::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePushSubscriptionConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePushSubscriptionOptionsConfiguration = {"PushSubscriptionOptions", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushSubscriptionOptions::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePushSubscriptionOptionsConfiguration);
-  }
-  if (RuntimeEnabledFeatures::rTCPeerConnectionNewGetStatsEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeRTCStatsReportConfiguration = {"RTCStatsReport", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCStatsReport::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeRTCStatsReportConfiguration);
-  }
-  if (RuntimeEnabledFeatures::remotePlaybackEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeRemotePlaybackConfiguration = {"RemotePlayback", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RemotePlayback::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeRemotePlaybackConfiguration);
-  }
-  if (RuntimeEnabledFeatures::scriptedSpeechEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorspeechSynthesisConfiguration = {"speechSynthesis", DOMWindowPartialV8Internal::speechSynthesisAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorspeechSynthesisConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSpeechSynthesisEventConfiguration = {"SpeechSynthesisEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechSynthesisEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSpeechSynthesisEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSpeechSynthesisUtteranceConfiguration = {"SpeechSynthesisUtterance", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechSynthesisUtterance::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSpeechSynthesisUtteranceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechGrammarConfiguration = {"webkitSpeechGrammar", DOMWindowPartialV8Internal::webkitSpeechGrammarConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechGrammar::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechGrammarConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechGrammarListConfiguration = {"webkitSpeechGrammarList", DOMWindowPartialV8Internal::webkitSpeechGrammarListConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechGrammarList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechGrammarListConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionConfiguration = {"webkitSpeechRecognition", DOMWindowPartialV8Internal::webkitSpeechRecognitionConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognition::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechRecognitionConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionErrorConfiguration = {"webkitSpeechRecognitionError", DOMWindowPartialV8Internal::webkitSpeechRecognitionErrorConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognitionError::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechRecognitionErrorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionEventConfiguration = {"webkitSpeechRecognitionEvent", DOMWindowPartialV8Internal::webkitSpeechRecognitionEventConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognitionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechRecognitionEventConfiguration);
-  }
-  if (RuntimeEnabledFeatures::sensorEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeAccelerometerConfiguration = {"Accelerometer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Accelerometer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAccelerometerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeAccelerometerReadingConfiguration = {"AccelerometerReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AccelerometerReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAccelerometerReadingConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeAmbientLightSensorConfiguration = {"AmbientLightSensor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AmbientLightSensor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAmbientLightSensorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeAmbientLightSensorReadingConfiguration = {"AmbientLightSensorReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AmbientLightSensorReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAmbientLightSensorReadingConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeGyroscopeConfiguration = {"Gyroscope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Gyroscope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeGyroscopeConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeGyroscopeReadingConfiguration = {"GyroscopeReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GyroscopeReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeGyroscopeReadingConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeMagnetometerConfiguration = {"Magnetometer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Magnetometer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeMagnetometerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeMagnetometerReadingConfiguration = {"MagnetometerReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MagnetometerReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeMagnetometerReadingConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSensorConfiguration = {"Sensor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Sensor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSensorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSensorErrorEventConfiguration = {"SensorErrorEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SensorErrorEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSensorErrorEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSensorReadingConfiguration = {"SensorReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SensorReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSensorReadingConfiguration);
-  }
-  if (RuntimeEnabledFeatures::shapeDetectionEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeBarcodeDetectorConfiguration = {"BarcodeDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BarcodeDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBarcodeDetectorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeDetectedBarcodeConfiguration = {"DetectedBarcode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedBarcode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeDetectedBarcodeConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeDetectedFaceConfiguration = {"DetectedFace", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedFace::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeDetectedFaceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeDetectedTextConfiguration = {"DetectedText", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedText::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeDetectedTextConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeFaceDetectorConfiguration = {"FaceDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8FaceDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeFaceDetectorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeTextDetectorConfiguration = {"TextDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TextDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeTextDetectorConfiguration);
-  }
-  if (RuntimeEnabledFeatures::stableBlinkFeaturesEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeCanvasGradientConfiguration = {"CanvasGradient", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasGradient::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCanvasGradientConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCanvasPatternConfiguration = {"CanvasPattern", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasPattern::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCanvasPatternConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePath2DConfiguration = {"Path2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Path2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePath2DConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeWebGL2RenderingContextConfiguration = {"WebGL2RenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGL2RenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeWebGL2RenderingContextConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeWebGLRenderingContextConfiguration = {"WebGLRenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLRenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeWebGLRenderingContextConfiguration);
-  }
-  if (RuntimeEnabledFeatures::webBluetoothEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothConfiguration = {"Bluetooth", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Bluetooth::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothCharacteristicPropertiesConfiguration = {"BluetoothCharacteristicProperties", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothCharacteristicProperties::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothCharacteristicPropertiesConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothDeviceConfiguration = {"BluetoothDevice", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothDevice::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothDeviceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTCharacteristicConfiguration = {"BluetoothRemoteGATTCharacteristic", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTCharacteristic::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothRemoteGATTCharacteristicConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTDescriptorConfiguration = {"BluetoothRemoteGATTDescriptor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTDescriptor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothRemoteGATTDescriptorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTServerConfiguration = {"BluetoothRemoteGATTServer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTServer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothRemoteGATTServerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTServiceConfiguration = {"BluetoothRemoteGATTService", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTService::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothRemoteGATTServiceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothUUIDConfiguration = {"BluetoothUUID", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothUUID::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothUUIDConfiguration);
-  }
-  if (RuntimeEnabledFeatures::webNFCEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeNFCConfiguration = {"NFC", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NFC::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeNFCConfiguration);
-  }
+    if (RuntimeEnabledFeatures::audioWorkletEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoraudioWorkletConfiguration = { "audioWorklet", DOMWindowPartialV8Internal::audioWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoraudioWorkletConfiguration);
+    }
+    if (RuntimeEnabledFeatures::backgroundSyncEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeSyncManagerConfiguration = { "SyncManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SyncManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSyncManagerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::broadcastChannelEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeBroadcastChannelConfiguration = { "BroadcastChannel", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BroadcastChannel::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBroadcastChannelConfiguration);
+    }
+    if (RuntimeEnabledFeatures::budgetEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeBudgetServiceConfiguration = { "BudgetService", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BudgetService::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBudgetServiceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBudgetStateConfiguration = { "BudgetState", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BudgetState::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBudgetStateConfiguration);
+    }
+    if (RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorpaintWorkletConfiguration = { "paintWorklet", DOMWindowPartialV8Internal::paintWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorpaintWorkletConfiguration);
+    }
+    if (RuntimeEnabledFeatures::compositorWorkerEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoranimationWorkletConfiguration = { "animationWorklet", DOMWindowPartialV8Internal::animationWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoranimationWorkletConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCompositorWorkerConfiguration = { "CompositorWorker", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CompositorWorker::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCompositorWorkerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::credentialManagerEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeCredentialConfiguration = { "Credential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Credential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCredentialConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCredentialsContainerConfiguration = { "CredentialsContainer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CredentialsContainer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCredentialsContainerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeFederatedCredentialConfiguration = { "FederatedCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8FederatedCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeFederatedCredentialConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePasswordCredentialConfiguration = { "PasswordCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PasswordCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePasswordCredentialConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSiteBoundCredentialConfiguration = { "SiteBoundCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SiteBoundCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSiteBoundCredentialConfiguration);
+    }
+    if (RuntimeEnabledFeatures::deviceLightEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeDeviceLightEventConfiguration = { "DeviceLightEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DeviceLightEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeDeviceLightEventConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorondevicelightConfiguration = { "ondevicelight", DOMWindowPartialV8Internal::ondevicelightAttributeGetterCallback, DOMWindowPartialV8Internal::ondevicelightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorondevicelightConfiguration);
+    }
+    if (RuntimeEnabledFeatures::durableStorageEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeStorageManagerConfiguration = { "StorageManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StorageManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeStorageManagerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeOffscreenCanvasRenderingContext2DConfiguration = { "OffscreenCanvasRenderingContext2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OffscreenCanvasRenderingContext2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeOffscreenCanvasRenderingContext2DConfiguration);
+    }
+    if (RuntimeEnabledFeatures::globalCacheStorageEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorcachesConfiguration = { "caches", DOMWindowPartialV8Internal::cachesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcachesConfiguration);
+    }
+    if (RuntimeEnabledFeatures::iDBObserverEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeIDBObservationConfiguration = { "IDBObservation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObservation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeIDBObservationConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeIDBObserverConfiguration = { "IDBObserver", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObserver::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeIDBObserverConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeIDBObserverChangesConfiguration = { "IDBObserverChanges", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObserverChanges::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeIDBObserverChangesConfiguration);
+    }
+    if (RuntimeEnabledFeatures::installedAppEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeRelatedApplicationConfiguration = { "RelatedApplication", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RelatedApplication::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeRelatedApplicationConfiguration);
+    }
+    if (RuntimeEnabledFeatures::mediaCaptureFromCanvasEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeCanvasCaptureMediaStreamTrackConfiguration = { "CanvasCaptureMediaStreamTrack", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasCaptureMediaStreamTrack::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCanvasCaptureMediaStreamTrackConfiguration);
+    }
+    if (RuntimeEnabledFeatures::mediaSessionEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeMediaMetadataConfiguration = { "MediaMetadata", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaMetadata::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeMediaMetadataConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeMediaSessionConfiguration = { "MediaSession", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaSession::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeMediaSessionConfiguration);
+    }
+    if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeTrackDefaultConfiguration = { "TrackDefault", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TrackDefault::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeTrackDefaultConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeTrackDefaultListConfiguration = { "TrackDefaultList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TrackDefaultList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeTrackDefaultListConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeVideoPlaybackQualityConfiguration = { "VideoPlaybackQuality", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VideoPlaybackQuality::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeVideoPlaybackQualityConfiguration);
+    }
+    if (RuntimeEnabledFeatures::networkInformationEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeNetworkInformationConfiguration = { "NetworkInformation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NetworkInformation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeNetworkInformationConfiguration);
+    }
+    if (RuntimeEnabledFeatures::notificationsEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeNotificationConfiguration = { "Notification", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Notification::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeNotificationConfiguration);
+    }
+    if (RuntimeEnabledFeatures::paymentAppEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentAppManagerConfiguration = { "PaymentAppManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentAppManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentAppManagerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::paymentRequestEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentAddressConfiguration = { "PaymentAddress", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentAddress::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentAddressConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentRequestConfiguration = { "PaymentRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentRequestConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentRequestUpdateEventConfiguration = { "PaymentRequestUpdateEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentRequestUpdateEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentRequestUpdateEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentResponseConfiguration = { "PaymentResponse", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentResponse::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaymentResponseConfiguration);
+    }
+    if (RuntimeEnabledFeatures::permissionsEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePermissionsConfiguration = { "Permissions", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Permissions::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePermissionsConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePermissionStatusConfiguration = { "PermissionStatus", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PermissionStatus::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePermissionStatusConfiguration);
+    }
+    if (RuntimeEnabledFeatures::presentationEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConfiguration = { "Presentation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Presentation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationAvailabilityConfiguration = { "PresentationAvailability", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationAvailability::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationAvailabilityConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionConfiguration = { "PresentationConnection", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnection::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConnectionConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionAvailableEventConfiguration = { "PresentationConnectionAvailableEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionAvailableEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConnectionAvailableEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionCloseEventConfiguration = { "PresentationConnectionCloseEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionCloseEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConnectionCloseEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationRequestConfiguration = { "PresentationRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationRequestConfiguration);
+    }
+    if (RuntimeEnabledFeatures::presentationReceiverEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionListConfiguration = { "PresentationConnectionList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationConnectionListConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationReceiverConfiguration = { "PresentationReceiver", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationReceiver::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePresentationReceiverConfiguration);
+    }
+    if (RuntimeEnabledFeatures::pushMessagingEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePushManagerConfiguration = { "PushManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePushManagerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePushSubscriptionConfiguration = { "PushSubscription", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushSubscription::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePushSubscriptionConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePushSubscriptionOptionsConfiguration = { "PushSubscriptionOptions", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushSubscriptionOptions::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePushSubscriptionOptionsConfiguration);
+    }
+    if (RuntimeEnabledFeatures::rTCPeerConnectionNewGetStatsEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeRTCStatsReportConfiguration = { "RTCStatsReport", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCStatsReport::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeRTCStatsReportConfiguration);
+    }
+    if (RuntimeEnabledFeatures::remotePlaybackEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeRemotePlaybackConfiguration = { "RemotePlayback", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RemotePlayback::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeRemotePlaybackConfiguration);
+    }
+    if (RuntimeEnabledFeatures::scriptedSpeechEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorspeechSynthesisConfiguration = { "speechSynthesis", DOMWindowPartialV8Internal::speechSynthesisAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorspeechSynthesisConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSpeechSynthesisEventConfiguration = { "SpeechSynthesisEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechSynthesisEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSpeechSynthesisEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSpeechSynthesisUtteranceConfiguration = { "SpeechSynthesisUtterance", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechSynthesisUtterance::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSpeechSynthesisUtteranceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechGrammarConfiguration = { "webkitSpeechGrammar", DOMWindowPartialV8Internal::webkitSpeechGrammarConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechGrammar::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechGrammarConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechGrammarListConfiguration = { "webkitSpeechGrammarList", DOMWindowPartialV8Internal::webkitSpeechGrammarListConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechGrammarList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechGrammarListConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionConfiguration = { "webkitSpeechRecognition", DOMWindowPartialV8Internal::webkitSpeechRecognitionConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognition::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechRecognitionConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionErrorConfiguration = { "webkitSpeechRecognitionError", DOMWindowPartialV8Internal::webkitSpeechRecognitionErrorConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognitionError::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechRecognitionErrorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionEventConfiguration = { "webkitSpeechRecognitionEvent", DOMWindowPartialV8Internal::webkitSpeechRecognitionEventConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognitionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributewebkitSpeechRecognitionEventConfiguration);
+    }
+    if (RuntimeEnabledFeatures::sensorEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeAccelerometerConfiguration = { "Accelerometer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Accelerometer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAccelerometerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeAccelerometerReadingConfiguration = { "AccelerometerReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AccelerometerReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAccelerometerReadingConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeAmbientLightSensorConfiguration = { "AmbientLightSensor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AmbientLightSensor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAmbientLightSensorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeAmbientLightSensorReadingConfiguration = { "AmbientLightSensorReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AmbientLightSensorReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeAmbientLightSensorReadingConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeGyroscopeConfiguration = { "Gyroscope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Gyroscope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeGyroscopeConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeGyroscopeReadingConfiguration = { "GyroscopeReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GyroscopeReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeGyroscopeReadingConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeMagnetometerConfiguration = { "Magnetometer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Magnetometer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeMagnetometerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeMagnetometerReadingConfiguration = { "MagnetometerReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MagnetometerReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeMagnetometerReadingConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSensorConfiguration = { "Sensor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Sensor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSensorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSensorErrorEventConfiguration = { "SensorErrorEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SensorErrorEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSensorErrorEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSensorReadingConfiguration = { "SensorReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SensorReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeSensorReadingConfiguration);
+    }
+    if (RuntimeEnabledFeatures::shapeDetectionEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeBarcodeDetectorConfiguration = { "BarcodeDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BarcodeDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBarcodeDetectorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeDetectedBarcodeConfiguration = { "DetectedBarcode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedBarcode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeDetectedBarcodeConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeDetectedFaceConfiguration = { "DetectedFace", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedFace::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeDetectedFaceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeDetectedTextConfiguration = { "DetectedText", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedText::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeDetectedTextConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeFaceDetectorConfiguration = { "FaceDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8FaceDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeFaceDetectorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeTextDetectorConfiguration = { "TextDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TextDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeTextDetectorConfiguration);
+    }
+    if (RuntimeEnabledFeatures::stableBlinkFeaturesEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeCanvasGradientConfiguration = { "CanvasGradient", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasGradient::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCanvasGradientConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCanvasPatternConfiguration = { "CanvasPattern", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasPattern::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCanvasPatternConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePath2DConfiguration = { "Path2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Path2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePath2DConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeWebGL2RenderingContextConfiguration = { "WebGL2RenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGL2RenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeWebGL2RenderingContextConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeWebGLRenderingContextConfiguration = { "WebGLRenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLRenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeWebGLRenderingContextConfiguration);
+    }
+    if (RuntimeEnabledFeatures::webBluetoothEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothConfiguration = { "Bluetooth", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Bluetooth::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothCharacteristicPropertiesConfiguration = { "BluetoothCharacteristicProperties", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothCharacteristicProperties::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothCharacteristicPropertiesConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothDeviceConfiguration = { "BluetoothDevice", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothDevice::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothDeviceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTCharacteristicConfiguration = { "BluetoothRemoteGATTCharacteristic", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTCharacteristic::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothRemoteGATTCharacteristicConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTDescriptorConfiguration = { "BluetoothRemoteGATTDescriptor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTDescriptor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothRemoteGATTDescriptorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTServerConfiguration = { "BluetoothRemoteGATTServer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTServer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothRemoteGATTServerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTServiceConfiguration = { "BluetoothRemoteGATTService", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTService::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothRemoteGATTServiceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothUUIDConfiguration = { "BluetoothUUID", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothUUID::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeBluetoothUUIDConfiguration);
+    }
+    if (RuntimeEnabledFeatures::webNFCEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeNFCConfiguration = { "NFC", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NFC::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeNFCConfiguration);
+    }
 
-  if (RuntimeEnabledFeatures::fileSystemEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration webkitRequestFileSystemMethodConfiguration = {"webkitRequestFileSystem", DOMWindowPartialV8Internal::webkitRequestFileSystemMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, webkitRequestFileSystemMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::fileSystemEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration webkitResolveLocalFileSystemURLMethodConfiguration = {"webkitResolveLocalFileSystemURL", DOMWindowPartialV8Internal::webkitResolveLocalFileSystemURLMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, webkitResolveLocalFileSystemURLMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::databaseEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration openDatabaseMethodConfiguration = {"openDatabase", DOMWindowPartialV8Internal::openDatabaseMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, openDatabaseMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::fileSystemEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration webkitRequestFileSystemMethodConfiguration = { "webkitRequestFileSystem", DOMWindowPartialV8Internal::webkitRequestFileSystemMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, webkitRequestFileSystemMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::fileSystemEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration webkitResolveLocalFileSystemURLMethodConfiguration = { "webkitResolveLocalFileSystemURL", DOMWindowPartialV8Internal::webkitResolveLocalFileSystemURLMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, webkitResolveLocalFileSystemURLMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::databaseEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration openDatabaseMethodConfiguration = { "openDatabase", DOMWindowPartialV8Internal::openDatabaseMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, openDatabaseMethodConfiguration);
+    }
 }
 
-void V8WindowPartial::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  V8Window::installRuntimeEnabledFeatures(isolate, world, instance, prototype, interface);
+void V8WindowPartial::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    V8Window::installRuntimeEnabledFeatures(isolate, world, instance, prototype, interface);
 
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
 
-  if (RuntimeEnabledFeatures::audioWorkletEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoraudioWorkletConfiguration = {"audioWorklet", DOMWindowPartialV8Internal::audioWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoraudioWorkletConfiguration);
-  }
-  if (RuntimeEnabledFeatures::backgroundSyncEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeSyncManagerConfiguration = {"SyncManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SyncManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSyncManagerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::broadcastChannelEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeBroadcastChannelConfiguration = {"BroadcastChannel", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BroadcastChannel::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBroadcastChannelConfiguration);
-  }
-  if (RuntimeEnabledFeatures::budgetEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeBudgetServiceConfiguration = {"BudgetService", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BudgetService::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBudgetServiceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBudgetStateConfiguration = {"BudgetState", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BudgetState::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBudgetStateConfiguration);
-  }
-  if (RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorpaintWorkletConfiguration = {"paintWorklet", DOMWindowPartialV8Internal::paintWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorpaintWorkletConfiguration);
-  }
-  if (RuntimeEnabledFeatures::compositorWorkerEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoranimationWorkletConfiguration = {"animationWorklet", DOMWindowPartialV8Internal::animationWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoranimationWorkletConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCompositorWorkerConfiguration = {"CompositorWorker", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CompositorWorker::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCompositorWorkerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::credentialManagerEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeCredentialConfiguration = {"Credential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Credential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCredentialConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCredentialsContainerConfiguration = {"CredentialsContainer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CredentialsContainer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCredentialsContainerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeFederatedCredentialConfiguration = {"FederatedCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8FederatedCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeFederatedCredentialConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePasswordCredentialConfiguration = {"PasswordCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PasswordCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePasswordCredentialConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSiteBoundCredentialConfiguration = {"SiteBoundCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SiteBoundCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSiteBoundCredentialConfiguration);
-  }
-  if (RuntimeEnabledFeatures::deviceLightEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeDeviceLightEventConfiguration = {"DeviceLightEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DeviceLightEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeDeviceLightEventConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorondevicelightConfiguration = {"ondevicelight", DOMWindowPartialV8Internal::ondevicelightAttributeGetterCallback, DOMWindowPartialV8Internal::ondevicelightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorondevicelightConfiguration);
-  }
-  if (RuntimeEnabledFeatures::durableStorageEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeStorageManagerConfiguration = {"StorageManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StorageManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeStorageManagerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeOffscreenCanvasRenderingContext2DConfiguration = {"OffscreenCanvasRenderingContext2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OffscreenCanvasRenderingContext2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeOffscreenCanvasRenderingContext2DConfiguration);
-  }
-  if (RuntimeEnabledFeatures::globalCacheStorageEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorcachesConfiguration = {"caches", DOMWindowPartialV8Internal::cachesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorcachesConfiguration);
-  }
-  if (RuntimeEnabledFeatures::iDBObserverEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeIDBObservationConfiguration = {"IDBObservation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObservation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeIDBObservationConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeIDBObserverConfiguration = {"IDBObserver", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObserver::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeIDBObserverConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeIDBObserverChangesConfiguration = {"IDBObserverChanges", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObserverChanges::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeIDBObserverChangesConfiguration);
-  }
-  if (RuntimeEnabledFeatures::installedAppEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeRelatedApplicationConfiguration = {"RelatedApplication", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RelatedApplication::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeRelatedApplicationConfiguration);
-  }
-  if (RuntimeEnabledFeatures::mediaCaptureFromCanvasEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeCanvasCaptureMediaStreamTrackConfiguration = {"CanvasCaptureMediaStreamTrack", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasCaptureMediaStreamTrack::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCanvasCaptureMediaStreamTrackConfiguration);
-  }
-  if (RuntimeEnabledFeatures::mediaSessionEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeMediaMetadataConfiguration = {"MediaMetadata", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaMetadata::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMediaMetadataConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeMediaSessionConfiguration = {"MediaSession", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaSession::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMediaSessionConfiguration);
-  }
-  if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeTrackDefaultConfiguration = {"TrackDefault", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TrackDefault::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeTrackDefaultConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeTrackDefaultListConfiguration = {"TrackDefaultList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TrackDefaultList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeTrackDefaultListConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeVideoPlaybackQualityConfiguration = {"VideoPlaybackQuality", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VideoPlaybackQuality::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVideoPlaybackQualityConfiguration);
-  }
-  if (RuntimeEnabledFeatures::networkInformationEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeNetworkInformationConfiguration = {"NetworkInformation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NetworkInformation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeNetworkInformationConfiguration);
-  }
-  if (RuntimeEnabledFeatures::notificationsEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeNotificationConfiguration = {"Notification", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Notification::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeNotificationConfiguration);
-  }
-  if (RuntimeEnabledFeatures::paymentAppEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentAppManagerConfiguration = {"PaymentAppManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentAppManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentAppManagerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::paymentRequestEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentAddressConfiguration = {"PaymentAddress", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentAddress::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentAddressConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentRequestConfiguration = {"PaymentRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentRequestConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentRequestUpdateEventConfiguration = {"PaymentRequestUpdateEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentRequestUpdateEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentRequestUpdateEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePaymentResponseConfiguration = {"PaymentResponse", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentResponse::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentResponseConfiguration);
-  }
-  if (RuntimeEnabledFeatures::permissionsEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePermissionsConfiguration = {"Permissions", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Permissions::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePermissionsConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePermissionStatusConfiguration = {"PermissionStatus", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PermissionStatus::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePermissionStatusConfiguration);
-  }
-  if (RuntimeEnabledFeatures::presentationEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConfiguration = {"Presentation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Presentation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationAvailabilityConfiguration = {"PresentationAvailability", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationAvailability::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationAvailabilityConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionConfiguration = {"PresentationConnection", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnection::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConnectionConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionAvailableEventConfiguration = {"PresentationConnectionAvailableEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionAvailableEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConnectionAvailableEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionCloseEventConfiguration = {"PresentationConnectionCloseEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionCloseEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConnectionCloseEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationRequestConfiguration = {"PresentationRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationRequestConfiguration);
-  }
-  if (RuntimeEnabledFeatures::presentationReceiverEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionListConfiguration = {"PresentationConnectionList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConnectionListConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePresentationReceiverConfiguration = {"PresentationReceiver", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationReceiver::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationReceiverConfiguration);
-  }
-  if (RuntimeEnabledFeatures::pushMessagingEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePushManagerConfiguration = {"PushManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePushManagerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePushSubscriptionConfiguration = {"PushSubscription", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushSubscription::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePushSubscriptionConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePushSubscriptionOptionsConfiguration = {"PushSubscriptionOptions", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushSubscriptionOptions::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePushSubscriptionOptionsConfiguration);
-  }
-  if (RuntimeEnabledFeatures::rTCPeerConnectionNewGetStatsEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeRTCStatsReportConfiguration = {"RTCStatsReport", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCStatsReport::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeRTCStatsReportConfiguration);
-  }
-  if (RuntimeEnabledFeatures::remotePlaybackEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeRemotePlaybackConfiguration = {"RemotePlayback", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RemotePlayback::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeRemotePlaybackConfiguration);
-  }
-  if (RuntimeEnabledFeatures::scriptedSpeechEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorspeechSynthesisConfiguration = {"speechSynthesis", DOMWindowPartialV8Internal::speechSynthesisAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorspeechSynthesisConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSpeechSynthesisEventConfiguration = {"SpeechSynthesisEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechSynthesisEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSpeechSynthesisEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSpeechSynthesisUtteranceConfiguration = {"SpeechSynthesisUtterance", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechSynthesisUtterance::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSpeechSynthesisUtteranceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechGrammarConfiguration = {"webkitSpeechGrammar", DOMWindowPartialV8Internal::webkitSpeechGrammarConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechGrammar::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechGrammarConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechGrammarListConfiguration = {"webkitSpeechGrammarList", DOMWindowPartialV8Internal::webkitSpeechGrammarListConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechGrammarList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechGrammarListConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionConfiguration = {"webkitSpeechRecognition", DOMWindowPartialV8Internal::webkitSpeechRecognitionConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognition::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechRecognitionConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionErrorConfiguration = {"webkitSpeechRecognitionError", DOMWindowPartialV8Internal::webkitSpeechRecognitionErrorConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognitionError::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechRecognitionErrorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionEventConfiguration = {"webkitSpeechRecognitionEvent", DOMWindowPartialV8Internal::webkitSpeechRecognitionEventConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognitionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechRecognitionEventConfiguration);
-  }
-  if (RuntimeEnabledFeatures::sensorEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeAccelerometerConfiguration = {"Accelerometer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Accelerometer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeAccelerometerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeAccelerometerReadingConfiguration = {"AccelerometerReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AccelerometerReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeAccelerometerReadingConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeAmbientLightSensorConfiguration = {"AmbientLightSensor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AmbientLightSensor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeAmbientLightSensorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeAmbientLightSensorReadingConfiguration = {"AmbientLightSensorReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AmbientLightSensorReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeAmbientLightSensorReadingConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeGyroscopeConfiguration = {"Gyroscope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Gyroscope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeGyroscopeConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeGyroscopeReadingConfiguration = {"GyroscopeReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GyroscopeReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeGyroscopeReadingConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeMagnetometerConfiguration = {"Magnetometer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Magnetometer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMagnetometerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeMagnetometerReadingConfiguration = {"MagnetometerReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MagnetometerReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMagnetometerReadingConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSensorConfiguration = {"Sensor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Sensor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSensorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSensorErrorEventConfiguration = {"SensorErrorEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SensorErrorEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSensorErrorEventConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeSensorReadingConfiguration = {"SensorReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SensorReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSensorReadingConfiguration);
-  }
-  if (RuntimeEnabledFeatures::shapeDetectionEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeBarcodeDetectorConfiguration = {"BarcodeDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BarcodeDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBarcodeDetectorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeDetectedBarcodeConfiguration = {"DetectedBarcode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedBarcode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeDetectedBarcodeConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeDetectedFaceConfiguration = {"DetectedFace", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedFace::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeDetectedFaceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeDetectedTextConfiguration = {"DetectedText", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedText::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeDetectedTextConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeFaceDetectorConfiguration = {"FaceDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8FaceDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeFaceDetectorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeTextDetectorConfiguration = {"TextDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TextDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeTextDetectorConfiguration);
-  }
-  if (RuntimeEnabledFeatures::stableBlinkFeaturesEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeCanvasGradientConfiguration = {"CanvasGradient", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasGradient::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCanvasGradientConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCanvasPatternConfiguration = {"CanvasPattern", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasPattern::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCanvasPatternConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePath2DConfiguration = {"Path2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Path2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePath2DConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeWebGL2RenderingContextConfiguration = {"WebGL2RenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGL2RenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeWebGL2RenderingContextConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeWebGLRenderingContextConfiguration = {"WebGLRenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLRenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeWebGLRenderingContextConfiguration);
-  }
-  if (RuntimeEnabledFeatures::webBluetoothEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothConfiguration = {"Bluetooth", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Bluetooth::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothCharacteristicPropertiesConfiguration = {"BluetoothCharacteristicProperties", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothCharacteristicProperties::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothCharacteristicPropertiesConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothDeviceConfiguration = {"BluetoothDevice", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothDevice::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothDeviceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTCharacteristicConfiguration = {"BluetoothRemoteGATTCharacteristic", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTCharacteristic::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothRemoteGATTCharacteristicConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTDescriptorConfiguration = {"BluetoothRemoteGATTDescriptor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTDescriptor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothRemoteGATTDescriptorConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTServerConfiguration = {"BluetoothRemoteGATTServer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTServer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothRemoteGATTServerConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTServiceConfiguration = {"BluetoothRemoteGATTService", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTService::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothRemoteGATTServiceConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeBluetoothUUIDConfiguration = {"BluetoothUUID", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothUUID::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothUUIDConfiguration);
-  }
-  if (RuntimeEnabledFeatures::webNFCEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeNFCConfiguration = {"NFC", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NFC::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeNFCConfiguration);
-  }
+    if (RuntimeEnabledFeatures::audioWorkletEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoraudioWorkletConfiguration = { "audioWorklet", DOMWindowPartialV8Internal::audioWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoraudioWorkletConfiguration);
+    }
+    if (RuntimeEnabledFeatures::backgroundSyncEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeSyncManagerConfiguration = { "SyncManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SyncManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSyncManagerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::broadcastChannelEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeBroadcastChannelConfiguration = { "BroadcastChannel", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BroadcastChannel::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBroadcastChannelConfiguration);
+    }
+    if (RuntimeEnabledFeatures::budgetEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeBudgetServiceConfiguration = { "BudgetService", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BudgetService::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBudgetServiceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBudgetStateConfiguration = { "BudgetState", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BudgetState::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBudgetStateConfiguration);
+    }
+    if (RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorpaintWorkletConfiguration = { "paintWorklet", DOMWindowPartialV8Internal::paintWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorpaintWorkletConfiguration);
+    }
+    if (RuntimeEnabledFeatures::compositorWorkerEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoranimationWorkletConfiguration = { "animationWorklet", DOMWindowPartialV8Internal::animationWorkletAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoranimationWorkletConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCompositorWorkerConfiguration = { "CompositorWorker", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CompositorWorker::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCompositorWorkerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::credentialManagerEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeCredentialConfiguration = { "Credential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Credential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCredentialConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCredentialsContainerConfiguration = { "CredentialsContainer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CredentialsContainer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCredentialsContainerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeFederatedCredentialConfiguration = { "FederatedCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8FederatedCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeFederatedCredentialConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePasswordCredentialConfiguration = { "PasswordCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PasswordCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePasswordCredentialConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSiteBoundCredentialConfiguration = { "SiteBoundCredential", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SiteBoundCredential::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSiteBoundCredentialConfiguration);
+    }
+    if (RuntimeEnabledFeatures::deviceLightEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeDeviceLightEventConfiguration = { "DeviceLightEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DeviceLightEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeDeviceLightEventConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorondevicelightConfiguration = { "ondevicelight", DOMWindowPartialV8Internal::ondevicelightAttributeGetterCallback, DOMWindowPartialV8Internal::ondevicelightAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorondevicelightConfiguration);
+    }
+    if (RuntimeEnabledFeatures::durableStorageEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeStorageManagerConfiguration = { "StorageManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StorageManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeStorageManagerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeOffscreenCanvasRenderingContext2DConfiguration = { "OffscreenCanvasRenderingContext2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OffscreenCanvasRenderingContext2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeOffscreenCanvasRenderingContext2DConfiguration);
+    }
+    if (RuntimeEnabledFeatures::globalCacheStorageEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorcachesConfiguration = { "caches", DOMWindowPartialV8Internal::cachesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorcachesConfiguration);
+    }
+    if (RuntimeEnabledFeatures::iDBObserverEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeIDBObservationConfiguration = { "IDBObservation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObservation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeIDBObservationConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeIDBObserverConfiguration = { "IDBObserver", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObserver::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeIDBObserverConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeIDBObserverChangesConfiguration = { "IDBObserverChanges", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8IDBObserverChanges::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeIDBObserverChangesConfiguration);
+    }
+    if (RuntimeEnabledFeatures::installedAppEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeRelatedApplicationConfiguration = { "RelatedApplication", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RelatedApplication::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeRelatedApplicationConfiguration);
+    }
+    if (RuntimeEnabledFeatures::mediaCaptureFromCanvasEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeCanvasCaptureMediaStreamTrackConfiguration = { "CanvasCaptureMediaStreamTrack", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasCaptureMediaStreamTrack::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCanvasCaptureMediaStreamTrackConfiguration);
+    }
+    if (RuntimeEnabledFeatures::mediaSessionEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeMediaMetadataConfiguration = { "MediaMetadata", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaMetadata::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMediaMetadataConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeMediaSessionConfiguration = { "MediaSession", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaSession::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMediaSessionConfiguration);
+    }
+    if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeTrackDefaultConfiguration = { "TrackDefault", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TrackDefault::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeTrackDefaultConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeTrackDefaultListConfiguration = { "TrackDefaultList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TrackDefaultList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeTrackDefaultListConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeVideoPlaybackQualityConfiguration = { "VideoPlaybackQuality", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VideoPlaybackQuality::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVideoPlaybackQualityConfiguration);
+    }
+    if (RuntimeEnabledFeatures::networkInformationEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeNetworkInformationConfiguration = { "NetworkInformation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NetworkInformation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeNetworkInformationConfiguration);
+    }
+    if (RuntimeEnabledFeatures::notificationsEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeNotificationConfiguration = { "Notification", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Notification::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeNotificationConfiguration);
+    }
+    if (RuntimeEnabledFeatures::paymentAppEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentAppManagerConfiguration = { "PaymentAppManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentAppManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentAppManagerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::paymentRequestEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentAddressConfiguration = { "PaymentAddress", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentAddress::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentAddressConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentRequestConfiguration = { "PaymentRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentRequestConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentRequestUpdateEventConfiguration = { "PaymentRequestUpdateEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentRequestUpdateEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentRequestUpdateEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePaymentResponseConfiguration = { "PaymentResponse", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaymentResponse::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePaymentResponseConfiguration);
+    }
+    if (RuntimeEnabledFeatures::permissionsEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePermissionsConfiguration = { "Permissions", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Permissions::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePermissionsConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePermissionStatusConfiguration = { "PermissionStatus", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PermissionStatus::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePermissionStatusConfiguration);
+    }
+    if (RuntimeEnabledFeatures::presentationEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConfiguration = { "Presentation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Presentation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationAvailabilityConfiguration = { "PresentationAvailability", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationAvailability::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationAvailabilityConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionConfiguration = { "PresentationConnection", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnection::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConnectionConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionAvailableEventConfiguration = { "PresentationConnectionAvailableEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionAvailableEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConnectionAvailableEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionCloseEventConfiguration = { "PresentationConnectionCloseEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionCloseEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConnectionCloseEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationRequestConfiguration = { "PresentationRequest", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationRequest::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationRequestConfiguration);
+    }
+    if (RuntimeEnabledFeatures::presentationReceiverEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationConnectionListConfiguration = { "PresentationConnectionList", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationConnectionList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationConnectionListConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePresentationReceiverConfiguration = { "PresentationReceiver", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PresentationReceiver::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePresentationReceiverConfiguration);
+    }
+    if (RuntimeEnabledFeatures::pushMessagingEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePushManagerConfiguration = { "PushManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePushManagerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePushSubscriptionConfiguration = { "PushSubscription", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushSubscription::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePushSubscriptionConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePushSubscriptionOptionsConfiguration = { "PushSubscriptionOptions", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PushSubscriptionOptions::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePushSubscriptionOptionsConfiguration);
+    }
+    if (RuntimeEnabledFeatures::rTCPeerConnectionNewGetStatsEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeRTCStatsReportConfiguration = { "RTCStatsReport", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RTCStatsReport::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeRTCStatsReportConfiguration);
+    }
+    if (RuntimeEnabledFeatures::remotePlaybackEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeRemotePlaybackConfiguration = { "RemotePlayback", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8RemotePlayback::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeRemotePlaybackConfiguration);
+    }
+    if (RuntimeEnabledFeatures::scriptedSpeechEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorspeechSynthesisConfiguration = { "speechSynthesis", DOMWindowPartialV8Internal::speechSynthesisAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorspeechSynthesisConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSpeechSynthesisEventConfiguration = { "SpeechSynthesisEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechSynthesisEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSpeechSynthesisEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSpeechSynthesisUtteranceConfiguration = { "SpeechSynthesisUtterance", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechSynthesisUtterance::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSpeechSynthesisUtteranceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechGrammarConfiguration = { "webkitSpeechGrammar", DOMWindowPartialV8Internal::webkitSpeechGrammarConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechGrammar::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechGrammarConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechGrammarListConfiguration = { "webkitSpeechGrammarList", DOMWindowPartialV8Internal::webkitSpeechGrammarListConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechGrammarList::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechGrammarListConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionConfiguration = { "webkitSpeechRecognition", DOMWindowPartialV8Internal::webkitSpeechRecognitionConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognition::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechRecognitionConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionErrorConfiguration = { "webkitSpeechRecognitionError", DOMWindowPartialV8Internal::webkitSpeechRecognitionErrorConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognitionError::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechRecognitionErrorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributewebkitSpeechRecognitionEventConfiguration = { "webkitSpeechRecognitionEvent", DOMWindowPartialV8Internal::webkitSpeechRecognitionEventConstructorGetterCallback, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SpeechRecognitionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributewebkitSpeechRecognitionEventConfiguration);
+    }
+    if (RuntimeEnabledFeatures::sensorEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeAccelerometerConfiguration = { "Accelerometer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Accelerometer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeAccelerometerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeAccelerometerReadingConfiguration = { "AccelerometerReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AccelerometerReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeAccelerometerReadingConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeAmbientLightSensorConfiguration = { "AmbientLightSensor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AmbientLightSensor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeAmbientLightSensorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeAmbientLightSensorReadingConfiguration = { "AmbientLightSensorReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8AmbientLightSensorReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeAmbientLightSensorReadingConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeGyroscopeConfiguration = { "Gyroscope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Gyroscope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeGyroscopeConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeGyroscopeReadingConfiguration = { "GyroscopeReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GyroscopeReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeGyroscopeReadingConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeMagnetometerConfiguration = { "Magnetometer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Magnetometer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMagnetometerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeMagnetometerReadingConfiguration = { "MagnetometerReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MagnetometerReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMagnetometerReadingConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSensorConfiguration = { "Sensor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Sensor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSensorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSensorErrorEventConfiguration = { "SensorErrorEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SensorErrorEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSensorErrorEventConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeSensorReadingConfiguration = { "SensorReading", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8SensorReading::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeSensorReadingConfiguration);
+    }
+    if (RuntimeEnabledFeatures::shapeDetectionEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeBarcodeDetectorConfiguration = { "BarcodeDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BarcodeDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBarcodeDetectorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeDetectedBarcodeConfiguration = { "DetectedBarcode", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedBarcode::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeDetectedBarcodeConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeDetectedFaceConfiguration = { "DetectedFace", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedFace::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeDetectedFaceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeDetectedTextConfiguration = { "DetectedText", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DetectedText::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeDetectedTextConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeFaceDetectorConfiguration = { "FaceDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8FaceDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeFaceDetectorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeTextDetectorConfiguration = { "TextDetector", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8TextDetector::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeTextDetectorConfiguration);
+    }
+    if (RuntimeEnabledFeatures::stableBlinkFeaturesEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeCanvasGradientConfiguration = { "CanvasGradient", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasGradient::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCanvasGradientConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCanvasPatternConfiguration = { "CanvasPattern", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CanvasPattern::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeCanvasPatternConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePath2DConfiguration = { "Path2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Path2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePath2DConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeWebGL2RenderingContextConfiguration = { "WebGL2RenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGL2RenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeWebGL2RenderingContextConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeWebGLRenderingContextConfiguration = { "WebGLRenderingContext", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WebGLRenderingContext::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeWebGLRenderingContextConfiguration);
+    }
+    if (RuntimeEnabledFeatures::webBluetoothEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothConfiguration = { "Bluetooth", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Bluetooth::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothCharacteristicPropertiesConfiguration = { "BluetoothCharacteristicProperties", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothCharacteristicProperties::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothCharacteristicPropertiesConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothDeviceConfiguration = { "BluetoothDevice", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothDevice::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothDeviceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTCharacteristicConfiguration = { "BluetoothRemoteGATTCharacteristic", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTCharacteristic::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothRemoteGATTCharacteristicConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTDescriptorConfiguration = { "BluetoothRemoteGATTDescriptor", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTDescriptor::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothRemoteGATTDescriptorConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTServerConfiguration = { "BluetoothRemoteGATTServer", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTServer::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothRemoteGATTServerConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothRemoteGATTServiceConfiguration = { "BluetoothRemoteGATTService", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothRemoteGATTService::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothRemoteGATTServiceConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeBluetoothUUIDConfiguration = { "BluetoothUUID", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8BluetoothUUID::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeBluetoothUUIDConfiguration);
+    }
+    if (RuntimeEnabledFeatures::webNFCEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeNFCConfiguration = { "NFC", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NFC::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeNFCConfiguration);
+    }
 
-  if (RuntimeEnabledFeatures::fileSystemEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration webkitRequestFileSystemMethodConfiguration = {"webkitRequestFileSystem", DOMWindowPartialV8Internal::webkitRequestFileSystemMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, webkitRequestFileSystemMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::fileSystemEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration webkitResolveLocalFileSystemURLMethodConfiguration = {"webkitResolveLocalFileSystemURL", DOMWindowPartialV8Internal::webkitResolveLocalFileSystemURLMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, webkitResolveLocalFileSystemURLMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::databaseEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration openDatabaseMethodConfiguration = {"openDatabase", DOMWindowPartialV8Internal::openDatabaseMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, openDatabaseMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::fileSystemEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration webkitRequestFileSystemMethodConfiguration = { "webkitRequestFileSystem", DOMWindowPartialV8Internal::webkitRequestFileSystemMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, webkitRequestFileSystemMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::fileSystemEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration webkitResolveLocalFileSystemURLMethodConfiguration = { "webkitResolveLocalFileSystemURL", DOMWindowPartialV8Internal::webkitResolveLocalFileSystemURLMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, webkitResolveLocalFileSystemURLMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::databaseEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration openDatabaseMethodConfiguration = { "openDatabase", DOMWindowPartialV8Internal::openDatabaseMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, openDatabaseMethodConfiguration);
+    }
 }
 
-void V8WindowPartial::installGamepadExtensions(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  const V8DOMConfiguration::AttributeConfiguration attributeGamepadPoseConfiguration = {"GamepadPose", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GamepadPose::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeGamepadPoseConfiguration);
+void V8WindowPartial::installGamepadExtensions(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    const V8DOMConfiguration::AttributeConfiguration attributeGamepadPoseConfiguration = { "GamepadPose", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8GamepadPose::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeGamepadPoseConfiguration);
 }
 
-void V8WindowPartial::installGamepadExtensions(ScriptState* scriptState, v8::Local<v8::Object> instance) {
-  V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-  v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
-  v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
-  ALLOW_UNUSED_LOCAL(interface);
-  installGamepadExtensions(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+void V8WindowPartial::installGamepadExtensions(ScriptState* scriptState, v8::Local<v8::Object> instance)
+{
+    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
+    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
+    ALLOW_UNUSED_LOCAL(interface);
+    installGamepadExtensions(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
 }
 
-void V8WindowPartial::installImageCapture(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  const V8DOMConfiguration::AttributeConfiguration attributeImageCaptureConfiguration = {"ImageCapture", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ImageCapture::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeImageCaptureConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeMediaSettingsRangeConfiguration = {"MediaSettingsRange", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaSettingsRange::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMediaSettingsRangeConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributePhotoCapabilitiesConfiguration = {"PhotoCapabilities", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PhotoCapabilities::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePhotoCapabilitiesConfiguration);
+void V8WindowPartial::installImageCapture(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    const V8DOMConfiguration::AttributeConfiguration attributeImageCaptureConfiguration = { "ImageCapture", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8ImageCapture::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeImageCaptureConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeMediaSettingsRangeConfiguration = { "MediaSettingsRange", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8MediaSettingsRange::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeMediaSettingsRangeConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributePhotoCapabilitiesConfiguration = { "PhotoCapabilities", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PhotoCapabilities::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributePhotoCapabilitiesConfiguration);
 }
 
-void V8WindowPartial::installImageCapture(ScriptState* scriptState, v8::Local<v8::Object> instance) {
-  V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-  v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
-  v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
-  ALLOW_UNUSED_LOCAL(interface);
-  installImageCapture(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+void V8WindowPartial::installImageCapture(ScriptState* scriptState, v8::Local<v8::Object> instance)
+{
+    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
+    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
+    ALLOW_UNUSED_LOCAL(interface);
+    installImageCapture(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
 }
 
-void V8WindowPartial::installServiceWorkerNavigationPreload(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  const V8DOMConfiguration::AttributeConfiguration attributeNavigationPreloadManagerConfiguration = {"NavigationPreloadManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NavigationPreloadManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeNavigationPreloadManagerConfiguration);
+void V8WindowPartial::installServiceWorkerNavigationPreload(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    const V8DOMConfiguration::AttributeConfiguration attributeNavigationPreloadManagerConfiguration = { "NavigationPreloadManager", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8NavigationPreloadManager::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeNavigationPreloadManagerConfiguration);
 }
 
-void V8WindowPartial::installServiceWorkerNavigationPreload(ScriptState* scriptState, v8::Local<v8::Object> instance) {
-  V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-  v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
-  v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
-  ALLOW_UNUSED_LOCAL(interface);
-  installServiceWorkerNavigationPreload(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+void V8WindowPartial::installServiceWorkerNavigationPreload(ScriptState* scriptState, v8::Local<v8::Object> instance)
+{
+    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
+    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
+    ALLOW_UNUSED_LOCAL(interface);
+    installServiceWorkerNavigationPreload(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
 }
 
-void V8WindowPartial::installWebUSB(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBAlternateInterfaceConfiguration = {"USBAlternateInterface", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBAlternateInterface::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBAlternateInterfaceConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBConfigurationConfiguration = {"USBConfiguration", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBConfiguration::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBConfigurationConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBConnectionEventConfiguration = {"USBConnectionEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBConnectionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBConnectionEventConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBDeviceConfiguration = {"USBDevice", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBDevice::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBDeviceConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBEndpointConfiguration = {"USBEndpoint", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBEndpoint::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBEndpointConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBInterfaceConfiguration = {"USBInterface", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBInterface::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBInterfaceConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBInTransferResultConfiguration = {"USBInTransferResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBInTransferResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBInTransferResultConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBIsochronousInTransferPacketConfiguration = {"USBIsochronousInTransferPacket", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBIsochronousInTransferPacket::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBIsochronousInTransferPacketConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBIsochronousInTransferResultConfiguration = {"USBIsochronousInTransferResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBIsochronousInTransferResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBIsochronousInTransferResultConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBIsochronousOutTransferPacketConfiguration = {"USBIsochronousOutTransferPacket", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBIsochronousOutTransferPacket::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBIsochronousOutTransferPacketConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBIsochronousOutTransferResultConfiguration = {"USBIsochronousOutTransferResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBIsochronousOutTransferResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBIsochronousOutTransferResultConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeUSBOutTransferResultConfiguration = {"USBOutTransferResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBOutTransferResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBOutTransferResultConfiguration);
+void V8WindowPartial::installWebUSB(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBAlternateInterfaceConfiguration = { "USBAlternateInterface", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBAlternateInterface::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBAlternateInterfaceConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBConfigurationConfiguration = { "USBConfiguration", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBConfiguration::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBConfigurationConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBConnectionEventConfiguration = { "USBConnectionEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBConnectionEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBConnectionEventConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBDeviceConfiguration = { "USBDevice", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBDevice::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBDeviceConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBEndpointConfiguration = { "USBEndpoint", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBEndpoint::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBEndpointConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBInterfaceConfiguration = { "USBInterface", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBInterface::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBInterfaceConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBInTransferResultConfiguration = { "USBInTransferResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBInTransferResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBInTransferResultConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBIsochronousInTransferPacketConfiguration = { "USBIsochronousInTransferPacket", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBIsochronousInTransferPacket::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBIsochronousInTransferPacketConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBIsochronousInTransferResultConfiguration = { "USBIsochronousInTransferResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBIsochronousInTransferResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBIsochronousInTransferResultConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBIsochronousOutTransferPacketConfiguration = { "USBIsochronousOutTransferPacket", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBIsochronousOutTransferPacket::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBIsochronousOutTransferPacketConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBIsochronousOutTransferResultConfiguration = { "USBIsochronousOutTransferResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBIsochronousOutTransferResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBIsochronousOutTransferResultConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeUSBOutTransferResultConfiguration = { "USBOutTransferResult", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8USBOutTransferResult::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeUSBOutTransferResultConfiguration);
 }
 
-void V8WindowPartial::installWebUSB(ScriptState* scriptState, v8::Local<v8::Object> instance) {
-  V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-  v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
-  v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
-  ALLOW_UNUSED_LOCAL(interface);
-  installWebUSB(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+void V8WindowPartial::installWebUSB(ScriptState* scriptState, v8::Local<v8::Object> instance)
+{
+    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
+    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
+    ALLOW_UNUSED_LOCAL(interface);
+    installWebUSB(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
 }
 
-void V8WindowPartial::installWebVR(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  const V8DOMConfiguration::AttributeConfiguration attributeVRDisplayConfiguration = {"VRDisplay", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRDisplay::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRDisplayConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeVRDisplayCapabilitiesConfiguration = {"VRDisplayCapabilities", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRDisplayCapabilities::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRDisplayCapabilitiesConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeVRDisplayEventConfiguration = {"VRDisplayEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRDisplayEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRDisplayEventConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeVREyeParametersConfiguration = {"VREyeParameters", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VREyeParameters::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVREyeParametersConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeVRFieldOfViewConfiguration = {"VRFieldOfView", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRFieldOfView::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRFieldOfViewConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeVRFrameDataConfiguration = {"VRFrameData", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRFrameData::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRFrameDataConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeVRPoseConfiguration = {"VRPose", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRPose::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRPoseConfiguration);
-  const V8DOMConfiguration::AttributeConfiguration attributeVRStageParametersConfiguration = {"VRStageParameters", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRStageParameters::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRStageParametersConfiguration);
+void V8WindowPartial::installWebVR(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Window::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    const V8DOMConfiguration::AttributeConfiguration attributeVRDisplayConfiguration = { "VRDisplay", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRDisplay::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRDisplayConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeVRDisplayCapabilitiesConfiguration = { "VRDisplayCapabilities", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRDisplayCapabilities::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRDisplayCapabilitiesConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeVRDisplayEventConfiguration = { "VRDisplayEvent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRDisplayEvent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRDisplayEventConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeVREyeParametersConfiguration = { "VREyeParameters", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VREyeParameters::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVREyeParametersConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeVRFieldOfViewConfiguration = { "VRFieldOfView", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRFieldOfView::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRFieldOfViewConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeVRFrameDataConfiguration = { "VRFrameData", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRFrameData::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRFrameDataConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeVRPoseConfiguration = { "VRPose", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRPose::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRPoseConfiguration);
+    const V8DOMConfiguration::AttributeConfiguration attributeVRStageParametersConfiguration = { "VRStageParameters", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8VRStageParameters::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAttribute(isolate, world, instance, prototype, attributeVRStageParametersConfiguration);
 }
 
-void V8WindowPartial::installWebVR(ScriptState* scriptState, v8::Local<v8::Object> instance) {
-  V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-  v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
-  v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
-  ALLOW_UNUSED_LOCAL(interface);
-  installWebVR(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+void V8WindowPartial::installWebVR(ScriptState* scriptState, v8::Local<v8::Object> instance)
+{
+    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8Window::wrapperTypeInfo);
+    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8Window::wrapperTypeInfo);
+    ALLOW_UNUSED_LOCAL(interface);
+    installWebVR(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
 }
 
-void V8WindowPartial::initialize() {
-  // Should be invoked from ModulesInitializer.
-  V8Window::updateWrapperTypeInfo(
-      &V8WindowPartial::installV8WindowTemplate,
-      nullptr);
+void V8WindowPartial::initialize()
+{
+    // Should be invoked from ModulesInitializer.
+    V8Window::updateWrapperTypeInfo(
+        &V8WindowPartial::installV8WindowTemplate,
+        nullptr);
 }
 
-}  // namespace blink
+} // namespace blink

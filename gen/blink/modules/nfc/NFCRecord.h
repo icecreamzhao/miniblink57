@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef NFCRecord_h
 #define NFCRecord_h
 
@@ -21,36 +21,37 @@
 namespace blink {
 
 class MODULES_EXPORT NFCRecord : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  NFCRecord();
-  virtual ~NFCRecord();
-  NFCRecord(const NFCRecord&);
-  NFCRecord& operator=(const NFCRecord&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasData() const;
-  ScriptValue data() const;
-  void setData(ScriptValue);
+public:
+    NFCRecord();
+    virtual ~NFCRecord();
+    NFCRecord(const NFCRecord&);
+    NFCRecord& operator=(const NFCRecord&);
 
-  bool hasMediaType() const;
-  String mediaType() const;
-  void setMediaType(String);
+    bool hasData() const;
+    ScriptValue data() const;
+    void setData(ScriptValue);
 
-  bool hasRecordType() const;
-  String recordType() const;
-  void setRecordType(String);
+    bool hasMediaType() const;
+    String mediaType() const;
+    void setMediaType(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRecordType() const;
+    String recordType() const;
+    void setRecordType(String);
 
- private:
-  ScriptValue m_data;
-  String m_mediaType;
-  String m_recordType;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8NFCRecord;
+private:
+    ScriptValue m_data;
+    String m_mediaType;
+    String m_recordType;
+
+    friend class V8NFCRecord;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // NFCRecord_h
+#endif // NFCRecord_h

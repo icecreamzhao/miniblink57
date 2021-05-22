@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PresentationReceiver.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,66 +47,73 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PresentationReceiver::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PresentationReceiver is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PresentationReceiverV8Internal {
 
-static void connectionListAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void connectionListAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PresentationReceiver* impl = V8PresentationReceiver::toImpl(holder);
+        PresentationReceiver* impl = V8PresentationReceiver::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, impl->connectionList(scriptState).v8Value());
-}
+        v8SetReturnValue(info, impl->connectionList(scriptState).v8Value());
+    }
 
-MODULES_EXPORT void connectionListAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationReceiverV8Internal::connectionListAttributeGetter(info);
-}
+    MODULES_EXPORT void connectionListAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationReceiverV8Internal::connectionListAttributeGetter(info);
+    }
 
 } // namespace PresentationReceiverV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PresentationReceiverAccessors[] = {
-    {"connectionList", PresentationReceiverV8Internal::connectionListAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "connectionList", PresentationReceiverV8Internal::connectionListAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PresentationReceiverTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PresentationReceiver::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PresentationReceiver::internalFieldCount);
+static void installV8PresentationReceiverTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PresentationReceiver::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PresentationReceiver::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::presentationReceiverEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::presentationReceiverEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PresentationReceiverAccessors, WTF_ARRAY_LENGTH(V8PresentationReceiverAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PresentationReceiverAccessors, WTF_ARRAY_LENGTH(V8PresentationReceiverAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8PresentationReceiver::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PresentationReceiverTemplate);
+v8::Local<v8::FunctionTemplate> V8PresentationReceiver::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PresentationReceiverTemplate);
 }
 
-bool V8PresentationReceiver::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PresentationReceiver::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PresentationReceiver::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PresentationReceiver::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PresentationReceiver* V8PresentationReceiver::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PresentationReceiver* V8PresentationReceiver::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

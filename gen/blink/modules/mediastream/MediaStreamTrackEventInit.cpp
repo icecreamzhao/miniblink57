@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaStreamTrackEventInit.h"
 
 #include "modules/mediastream/MediaStreamTrack.h"
 
 namespace blink {
 
-MediaStreamTrackEventInit::MediaStreamTrackEventInit() {
+MediaStreamTrackEventInit::MediaStreamTrackEventInit()
+{
 }
 
-MediaStreamTrackEventInit::~MediaStreamTrackEventInit() {}
+MediaStreamTrackEventInit::~MediaStreamTrackEventInit() { }
 
 MediaStreamTrackEventInit::MediaStreamTrackEventInit(const MediaStreamTrackEventInit&) = default;
 
 MediaStreamTrackEventInit& MediaStreamTrackEventInit::operator=(const MediaStreamTrackEventInit&) = default;
 
-bool MediaStreamTrackEventInit::hasTrack() const {
-  return m_track;
+bool MediaStreamTrackEventInit::hasTrack() const
+{
+    return m_track;
 }
-MediaStreamTrack* MediaStreamTrackEventInit::track() const {
-  return m_track;
+MediaStreamTrack* MediaStreamTrackEventInit::track() const
+{
+    return m_track;
 }
-void MediaStreamTrackEventInit::setTrack(MediaStreamTrack* value) {
-  m_track = value;
-}
-
-DEFINE_TRACE(MediaStreamTrackEventInit) {
-  visitor->trace(m_track);
-  EventInit::trace(visitor);
+void MediaStreamTrackEventInit::setTrack(MediaStreamTrack* value)
+{
+    m_track = value;
 }
 
-}  // namespace blink
+DEFINE_TRACE(MediaStreamTrackEventInit)
+{
+    visitor->trace(m_track);
+    EventInit::trace(visitor);
+}
+
+} // namespace blink

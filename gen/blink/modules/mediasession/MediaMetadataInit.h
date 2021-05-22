@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaMetadataInit_h
 #define MediaMetadataInit_h
 
@@ -22,42 +22,43 @@
 namespace blink {
 
 class MODULES_EXPORT MediaMetadataInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaMetadataInit();
-  virtual ~MediaMetadataInit();
-  MediaMetadataInit(const MediaMetadataInit&);
-  MediaMetadataInit& operator=(const MediaMetadataInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAlbum() const;
-  String album() const;
-  void setAlbum(String);
+public:
+    MediaMetadataInit();
+    virtual ~MediaMetadataInit();
+    MediaMetadataInit(const MediaMetadataInit&);
+    MediaMetadataInit& operator=(const MediaMetadataInit&);
 
-  bool hasArtist() const;
-  String artist() const;
-  void setArtist(String);
+    bool hasAlbum() const;
+    String album() const;
+    void setAlbum(String);
 
-  bool hasArtwork() const;
-  const HeapVector<MediaImage>& artwork() const;
-  void setArtwork(const HeapVector<MediaImage>&);
+    bool hasArtist() const;
+    String artist() const;
+    void setArtist(String);
 
-  bool hasTitle() const;
-  String title() const;
-  void setTitle(String);
+    bool hasArtwork() const;
+    const HeapVector<MediaImage>& artwork() const;
+    void setArtwork(const HeapVector<MediaImage>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTitle() const;
+    String title() const;
+    void setTitle(String);
 
- private:
-  String m_album;
-  String m_artist;
-  bool m_hasArtwork = false;
-  HeapVector<MediaImage> m_artwork;
-  String m_title;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaMetadataInit;
+private:
+    String m_album;
+    String m_artist;
+    bool m_hasArtwork = false;
+    HeapVector<MediaImage> m_artwork;
+    String m_title;
+
+    friend class V8MediaMetadataInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaMetadataInit_h
+#endif // MediaMetadataInit_h

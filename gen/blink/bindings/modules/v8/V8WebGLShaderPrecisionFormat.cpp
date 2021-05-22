@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WebGLShaderPrecisionFormat.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,86 +45,97 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WebGLShaderPrecisionFormat::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WebGLShaderPrecisionFormat is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace WebGLShaderPrecisionFormatV8Internal {
 
-static void rangeMinAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rangeMinAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WebGLShaderPrecisionFormat* impl = V8WebGLShaderPrecisionFormat::toImpl(holder);
+        WebGLShaderPrecisionFormat* impl = V8WebGLShaderPrecisionFormat::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->rangeMin());
-}
+        v8SetReturnValueInt(info, impl->rangeMin());
+    }
 
-MODULES_EXPORT void rangeMinAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLShaderPrecisionFormatV8Internal::rangeMinAttributeGetter(info);
-}
+    MODULES_EXPORT void rangeMinAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLShaderPrecisionFormatV8Internal::rangeMinAttributeGetter(info);
+    }
 
-static void rangeMaxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rangeMaxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WebGLShaderPrecisionFormat* impl = V8WebGLShaderPrecisionFormat::toImpl(holder);
+        WebGLShaderPrecisionFormat* impl = V8WebGLShaderPrecisionFormat::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->rangeMax());
-}
+        v8SetReturnValueInt(info, impl->rangeMax());
+    }
 
-MODULES_EXPORT void rangeMaxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLShaderPrecisionFormatV8Internal::rangeMaxAttributeGetter(info);
-}
+    MODULES_EXPORT void rangeMaxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLShaderPrecisionFormatV8Internal::rangeMaxAttributeGetter(info);
+    }
 
-static void precisionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void precisionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  WebGLShaderPrecisionFormat* impl = V8WebGLShaderPrecisionFormat::toImpl(holder);
+        WebGLShaderPrecisionFormat* impl = V8WebGLShaderPrecisionFormat::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->precision());
-}
+        v8SetReturnValueInt(info, impl->precision());
+    }
 
-MODULES_EXPORT void precisionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLShaderPrecisionFormatV8Internal::precisionAttributeGetter(info);
-}
+    MODULES_EXPORT void precisionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLShaderPrecisionFormatV8Internal::precisionAttributeGetter(info);
+    }
 
 } // namespace WebGLShaderPrecisionFormatV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8WebGLShaderPrecisionFormatAccessors[] = {
-    {"rangeMin", WebGLShaderPrecisionFormatV8Internal::rangeMinAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rangeMax", WebGLShaderPrecisionFormatV8Internal::rangeMaxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"precision", WebGLShaderPrecisionFormatV8Internal::precisionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "rangeMin", WebGLShaderPrecisionFormatV8Internal::rangeMinAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rangeMax", WebGLShaderPrecisionFormatV8Internal::rangeMaxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "precision", WebGLShaderPrecisionFormatV8Internal::precisionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8WebGLShaderPrecisionFormatTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLShaderPrecisionFormat::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLShaderPrecisionFormat::internalFieldCount);
+static void installV8WebGLShaderPrecisionFormatTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLShaderPrecisionFormat::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLShaderPrecisionFormat::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLShaderPrecisionFormatAccessors, WTF_ARRAY_LENGTH(V8WebGLShaderPrecisionFormatAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLShaderPrecisionFormatAccessors, WTF_ARRAY_LENGTH(V8WebGLShaderPrecisionFormatAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8WebGLShaderPrecisionFormat::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLShaderPrecisionFormatTemplate);
+v8::Local<v8::FunctionTemplate> V8WebGLShaderPrecisionFormat::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLShaderPrecisionFormatTemplate);
 }
 
-bool V8WebGLShaderPrecisionFormat::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WebGLShaderPrecisionFormat::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WebGLShaderPrecisionFormat::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WebGLShaderPrecisionFormat::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WebGLShaderPrecisionFormat* V8WebGLShaderPrecisionFormat::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WebGLShaderPrecisionFormat* V8WebGLShaderPrecisionFormat::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,43 +8,51 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "BlobPropertyBag.h"
 
 namespace blink {
 
-BlobPropertyBag::BlobPropertyBag() {
-  setEndings(String("transparent"));
-  setType(String(""));
+BlobPropertyBag::BlobPropertyBag()
+{
+    setEndings(String("transparent"));
+    setType(String(""));
 }
 
-BlobPropertyBag::~BlobPropertyBag() {}
+BlobPropertyBag::~BlobPropertyBag() { }
 
 BlobPropertyBag::BlobPropertyBag(const BlobPropertyBag&) = default;
 
 BlobPropertyBag& BlobPropertyBag::operator=(const BlobPropertyBag&) = default;
 
-bool BlobPropertyBag::hasEndings() const {
-  return !m_endings.isNull();
+bool BlobPropertyBag::hasEndings() const
+{
+    return !m_endings.isNull();
 }
-String BlobPropertyBag::endings() const {
-  return m_endings;
+String BlobPropertyBag::endings() const
+{
+    return m_endings;
 }
-void BlobPropertyBag::setEndings(String value) {
-  m_endings = value;
+void BlobPropertyBag::setEndings(String value)
+{
+    m_endings = value;
 }
-bool BlobPropertyBag::hasType() const {
-  return !m_type.isNull();
+bool BlobPropertyBag::hasType() const
+{
+    return !m_type.isNull();
 }
-String BlobPropertyBag::type() const {
-  return m_type;
+String BlobPropertyBag::type() const
+{
+    return m_type;
 }
-void BlobPropertyBag::setType(String value) {
-  m_type = value;
+void BlobPropertyBag::setType(String value)
+{
+    m_type = value;
 }
 
-DEFINE_TRACE(BlobPropertyBag) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(BlobPropertyBag)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

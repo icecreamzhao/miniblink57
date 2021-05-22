@@ -8,69 +8,84 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "OscillatorOptions.h"
 
 #include "modules/webaudio/PeriodicWave.h"
 
 namespace blink {
 
-OscillatorOptions::OscillatorOptions() {
+OscillatorOptions::OscillatorOptions()
+{
 }
 
-OscillatorOptions::~OscillatorOptions() {}
+OscillatorOptions::~OscillatorOptions() { }
 
 OscillatorOptions::OscillatorOptions(const OscillatorOptions&) = default;
 
 OscillatorOptions& OscillatorOptions::operator=(const OscillatorOptions&) = default;
 
-bool OscillatorOptions::hasDetune() const {
-  return m_hasDetune;
+bool OscillatorOptions::hasDetune() const
+{
+    return m_hasDetune;
 }
-float OscillatorOptions::detune() const {
-  DCHECK(m_hasDetune);
-  return m_detune;
+float OscillatorOptions::detune() const
+{
+    DCHECK(m_hasDetune);
+    return m_detune;
 }
-void OscillatorOptions::setDetune(float value) {
-  m_detune = value;
-  m_hasDetune = true;
+void OscillatorOptions::setDetune(float value)
+{
+    m_detune = value;
+    m_hasDetune = true;
 }
-bool OscillatorOptions::hasFrequency() const {
-  return m_hasFrequency;
+bool OscillatorOptions::hasFrequency() const
+{
+    return m_hasFrequency;
 }
-float OscillatorOptions::frequency() const {
-  DCHECK(m_hasFrequency);
-  return m_frequency;
+float OscillatorOptions::frequency() const
+{
+    DCHECK(m_hasFrequency);
+    return m_frequency;
 }
-void OscillatorOptions::setFrequency(float value) {
-  m_frequency = value;
-  m_hasFrequency = true;
+void OscillatorOptions::setFrequency(float value)
+{
+    m_frequency = value;
+    m_hasFrequency = true;
 }
-bool OscillatorOptions::hasPeriodicWave() const {
-  return m_periodicWave;
+bool OscillatorOptions::hasPeriodicWave() const
+{
+    return m_periodicWave;
 }
-PeriodicWave* OscillatorOptions::periodicWave() const {
-  return m_periodicWave;
+PeriodicWave* OscillatorOptions::periodicWave() const
+{
+    return m_periodicWave;
 }
-void OscillatorOptions::setPeriodicWave(PeriodicWave* value) {
-  m_periodicWave = value;
+void OscillatorOptions::setPeriodicWave(PeriodicWave* value)
+{
+    m_periodicWave = value;
 }
-void OscillatorOptions::setPeriodicWaveToNull() {
-  m_periodicWave = Member<PeriodicWave>();
+void OscillatorOptions::setPeriodicWaveToNull()
+{
+    m_periodicWave = Member<PeriodicWave>();
 }
-bool OscillatorOptions::hasType() const {
-  return !m_type.isNull();
+bool OscillatorOptions::hasType() const
+{
+    return !m_type.isNull();
 }
-String OscillatorOptions::type() const {
-  return m_type;
+String OscillatorOptions::type() const
+{
+    return m_type;
 }
-void OscillatorOptions::setType(String value) {
-  m_type = value;
+void OscillatorOptions::setType(String value)
+{
+    m_type = value;
 }
 
-DEFINE_TRACE(OscillatorOptions) {
-  visitor->trace(m_periodicWave);
-  AudioNodeOptions::trace(visitor);
+DEFINE_TRACE(OscillatorOptions)
+{
+    visitor->trace(m_periodicWave);
+    AudioNodeOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

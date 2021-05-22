@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "USVStringOrURLSearchParams.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -17,90 +17,103 @@
 
 namespace blink {
 
-USVStringOrURLSearchParams::USVStringOrURLSearchParams() : m_type(SpecificTypeNone) {}
-
-String USVStringOrURLSearchParams::getAsUSVString() const {
-  DCHECK(isUSVString());
-  return m_uSVString;
+USVStringOrURLSearchParams::USVStringOrURLSearchParams()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void USVStringOrURLSearchParams::setUSVString(String value) {
-  DCHECK(isNull());
-  m_uSVString = value;
-  m_type = SpecificTypeUSVString;
+String USVStringOrURLSearchParams::getAsUSVString() const
+{
+    DCHECK(isUSVString());
+    return m_uSVString;
 }
 
-USVStringOrURLSearchParams USVStringOrURLSearchParams::fromUSVString(String value) {
-  USVStringOrURLSearchParams container;
-  container.setUSVString(value);
-  return container;
+void USVStringOrURLSearchParams::setUSVString(String value)
+{
+    DCHECK(isNull());
+    m_uSVString = value;
+    m_type = SpecificTypeUSVString;
 }
 
-URLSearchParams* USVStringOrURLSearchParams::getAsURLSearchParams() const {
-  DCHECK(isURLSearchParams());
-  return m_urlSearchParams;
+USVStringOrURLSearchParams USVStringOrURLSearchParams::fromUSVString(String value)
+{
+    USVStringOrURLSearchParams container;
+    container.setUSVString(value);
+    return container;
 }
 
-void USVStringOrURLSearchParams::setURLSearchParams(URLSearchParams* value) {
-  DCHECK(isNull());
-  m_urlSearchParams = value;
-  m_type = SpecificTypeURLSearchParams;
+URLSearchParams* USVStringOrURLSearchParams::getAsURLSearchParams() const
+{
+    DCHECK(isURLSearchParams());
+    return m_urlSearchParams;
 }
 
-USVStringOrURLSearchParams USVStringOrURLSearchParams::fromURLSearchParams(URLSearchParams* value) {
-  USVStringOrURLSearchParams container;
-  container.setURLSearchParams(value);
-  return container;
+void USVStringOrURLSearchParams::setURLSearchParams(URLSearchParams* value)
+{
+    DCHECK(isNull());
+    m_urlSearchParams = value;
+    m_type = SpecificTypeURLSearchParams;
+}
+
+USVStringOrURLSearchParams USVStringOrURLSearchParams::fromURLSearchParams(URLSearchParams* value)
+{
+    USVStringOrURLSearchParams container;
+    container.setURLSearchParams(value);
+    return container;
 }
 
 USVStringOrURLSearchParams::USVStringOrURLSearchParams(const USVStringOrURLSearchParams&) = default;
 USVStringOrURLSearchParams::~USVStringOrURLSearchParams() = default;
 USVStringOrURLSearchParams& USVStringOrURLSearchParams::operator=(const USVStringOrURLSearchParams&) = default;
 
-DEFINE_TRACE(USVStringOrURLSearchParams) {
-  visitor->trace(m_urlSearchParams);
+DEFINE_TRACE(USVStringOrURLSearchParams)
+{
+    visitor->trace(m_urlSearchParams);
 }
 
-void V8USVStringOrURLSearchParams::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, USVStringOrURLSearchParams& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8USVStringOrURLSearchParams::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, USVStringOrURLSearchParams& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8URLSearchParams::hasInstance(v8Value, isolate)) {
-    URLSearchParams* cppValue = V8URLSearchParams::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setURLSearchParams(cppValue);
-    return;
-  }
+    if (V8URLSearchParams::hasInstance(v8Value, isolate)) {
+        URLSearchParams* cppValue = V8URLSearchParams::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setURLSearchParams(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = toUSVString(isolate, v8Value, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setUSVString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = toUSVString(isolate, v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setUSVString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const USVStringOrURLSearchParams& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const USVStringOrURLSearchParams& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case USVStringOrURLSearchParams::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case USVStringOrURLSearchParams::SpecificTypeUSVString:
-      return v8String(isolate, impl.getAsUSVString());
+        return v8String(isolate, impl.getAsUSVString());
     case USVStringOrURLSearchParams::SpecificTypeURLSearchParams:
-      return ToV8(impl.getAsURLSearchParams(), creationContext, isolate);
+        return ToV8(impl.getAsURLSearchParams(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-USVStringOrURLSearchParams NativeValueTraits<USVStringOrURLSearchParams>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  USVStringOrURLSearchParams impl;
-  V8USVStringOrURLSearchParams::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+USVStringOrURLSearchParams NativeValueTraits<USVStringOrURLSearchParams>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    USVStringOrURLSearchParams impl;
+    V8USVStringOrURLSearchParams::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

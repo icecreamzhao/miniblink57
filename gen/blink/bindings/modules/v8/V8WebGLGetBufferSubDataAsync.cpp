@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WebGLGetBufferSubDataAsync.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,120 +51,128 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WebGLGetBufferSubDataAsync::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WebGLGetBufferSubDataAsync is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace WebGLGetBufferSubDataAsyncV8Internal {
 
-static void getBufferSubDataAsyncMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLGetBufferSubDataAsync", "getBufferSubDataAsync");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void getBufferSubDataAsyncMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebGLGetBufferSubDataAsync", "getBufferSubDataAsync");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8WebGLGetBufferSubDataAsync::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  WebGLGetBufferSubDataAsync* impl = V8WebGLGetBufferSubDataAsync::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8WebGLGetBufferSubDataAsync::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        WebGLGetBufferSubDataAsync* impl = V8WebGLGetBufferSubDataAsync::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  unsigned target;
-  long long srcByteOffset;
-  DOMArrayBufferView* dstData;
-  unsigned dstOffset;
-  unsigned length;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned target;
+        long long srcByteOffset;
+        DOMArrayBufferView* dstData;
+        unsigned dstOffset;
+        unsigned length;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  srcByteOffset = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        srcByteOffset = toInt64(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  dstData = info[2]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[2])) : 0;
-  if (!dstData) {
-    exceptionState.throwTypeError("parameter 3 is not of type 'ArrayBufferView'.");
+        dstData = info[2]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[2])) : 0;
+        if (!dstData) {
+            exceptionState.throwTypeError("parameter 3 is not of type 'ArrayBufferView'.");
 
-    return;
-  }
+            return;
+        }
 
-  if (!info[3]->IsUndefined()) {
-    dstOffset = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    dstOffset = 0u;
-  }
-  if (!info[4]->IsUndefined()) {
-    length = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    length = 0u;
-  }
+        if (!info[3]->IsUndefined()) {
+            dstOffset = toUInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            dstOffset = 0u;
+        }
+        if (!info[4]->IsUndefined()) {
+            length = toUInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            length = 0u;
+        }
 
-  ScriptPromise result = impl->getBufferSubDataAsync(scriptState, target, srcByteOffset, dstData, dstOffset, length);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->getBufferSubDataAsync(scriptState, target, srcByteOffset, dstData, dstOffset, length);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void getBufferSubDataAsyncMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLGetBufferSubDataAsyncV8Internal::getBufferSubDataAsyncMethod(info);
-}
+    MODULES_EXPORT void getBufferSubDataAsyncMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLGetBufferSubDataAsyncV8Internal::getBufferSubDataAsyncMethod(info);
+    }
 
 } // namespace WebGLGetBufferSubDataAsyncV8Internal
 
-void V8WebGLGetBufferSubDataAsync::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  WebGLGetBufferSubDataAsync* impl = scriptWrappable->toImpl<WebGLGetBufferSubDataAsync>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8WebGLGetBufferSubDataAsync::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    WebGLGetBufferSubDataAsync* impl = scriptWrappable->toImpl<WebGLGetBufferSubDataAsync>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::MethodConfiguration V8WebGLGetBufferSubDataAsyncMethods[] = {
-    {"getBufferSubDataAsync", WebGLGetBufferSubDataAsyncV8Internal::getBufferSubDataAsyncMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "getBufferSubDataAsync", WebGLGetBufferSubDataAsyncV8Internal::getBufferSubDataAsyncMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8WebGLGetBufferSubDataAsyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLGetBufferSubDataAsync::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLGetBufferSubDataAsync::internalFieldCount);
+static void installV8WebGLGetBufferSubDataAsyncTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLGetBufferSubDataAsync::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLGetBufferSubDataAsync::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLGetBufferSubDataAsyncMethods, WTF_ARRAY_LENGTH(V8WebGLGetBufferSubDataAsyncMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLGetBufferSubDataAsyncMethods, WTF_ARRAY_LENGTH(V8WebGLGetBufferSubDataAsyncMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8WebGLGetBufferSubDataAsync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLGetBufferSubDataAsyncTemplate);
+v8::Local<v8::FunctionTemplate> V8WebGLGetBufferSubDataAsync::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLGetBufferSubDataAsyncTemplate);
 }
 
-bool V8WebGLGetBufferSubDataAsync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WebGLGetBufferSubDataAsync::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WebGLGetBufferSubDataAsync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WebGLGetBufferSubDataAsync::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WebGLGetBufferSubDataAsync* V8WebGLGetBufferSubDataAsync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WebGLGetBufferSubDataAsync* V8WebGLGetBufferSubDataAsync::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

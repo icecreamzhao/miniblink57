@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ScriptProcessorNode.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,91 +47,102 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&ScriptProcessorNode::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ScriptProcessorNode is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ScriptProcessorNodeV8Internal {
 
-static void onaudioprocessAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onaudioprocessAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScriptProcessorNode* impl = V8ScriptProcessorNode::toImpl(holder);
+        ScriptProcessorNode* impl = V8ScriptProcessorNode::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onaudioprocess()));
+        EventListener* cppValue(WTF::getPtr(impl->onaudioprocess()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onaudioprocessAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScriptProcessorNodeV8Internal::onaudioprocessAttributeGetter(info);
-}
+    MODULES_EXPORT void onaudioprocessAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScriptProcessorNodeV8Internal::onaudioprocessAttributeGetter(info);
+    }
 
-static void onaudioprocessAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  ScriptProcessorNode* impl = V8ScriptProcessorNode::toImpl(holder);
+    static void onaudioprocessAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        ScriptProcessorNode* impl = V8ScriptProcessorNode::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onaudioprocess(), v8Value, V8ScriptProcessorNode::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onaudioprocess(), v8Value, V8ScriptProcessorNode::eventListenerCacheIndex);
 
-  impl->setOnaudioprocess(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnaudioprocess(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onaudioprocessAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onaudioprocessAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ScriptProcessorNodeV8Internal::onaudioprocessAttributeSetter(v8Value, info);
-}
+        ScriptProcessorNodeV8Internal::onaudioprocessAttributeSetter(v8Value, info);
+    }
 
-static void bufferSizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bufferSizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScriptProcessorNode* impl = V8ScriptProcessorNode::toImpl(holder);
+        ScriptProcessorNode* impl = V8ScriptProcessorNode::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->bufferSize());
-}
+        v8SetReturnValueInt(info, impl->bufferSize());
+    }
 
-MODULES_EXPORT void bufferSizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScriptProcessorNodeV8Internal::bufferSizeAttributeGetter(info);
-}
+    MODULES_EXPORT void bufferSizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScriptProcessorNodeV8Internal::bufferSizeAttributeGetter(info);
+    }
 
 } // namespace ScriptProcessorNodeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ScriptProcessorNodeAccessors[] = {
-    {"onaudioprocess", ScriptProcessorNodeV8Internal::onaudioprocessAttributeGetterCallback, ScriptProcessorNodeV8Internal::onaudioprocessAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bufferSize", ScriptProcessorNodeV8Internal::bufferSizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "onaudioprocess", ScriptProcessorNodeV8Internal::onaudioprocessAttributeGetterCallback, ScriptProcessorNodeV8Internal::onaudioprocessAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bufferSize", ScriptProcessorNodeV8Internal::bufferSizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8ScriptProcessorNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ScriptProcessorNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8ScriptProcessorNode::internalFieldCount);
+static void installV8ScriptProcessorNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ScriptProcessorNode::wrapperTypeInfo.interfaceName, V8AudioNode::domTemplate(isolate, world), V8ScriptProcessorNode::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ScriptProcessorNodeAccessors, WTF_ARRAY_LENGTH(V8ScriptProcessorNodeAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ScriptProcessorNodeAccessors, WTF_ARRAY_LENGTH(V8ScriptProcessorNodeAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8ScriptProcessorNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ScriptProcessorNodeTemplate);
+v8::Local<v8::FunctionTemplate> V8ScriptProcessorNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ScriptProcessorNodeTemplate);
 }
 
-bool V8ScriptProcessorNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ScriptProcessorNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ScriptProcessorNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ScriptProcessorNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ScriptProcessorNode* V8ScriptProcessorNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ScriptProcessorNode* V8ScriptProcessorNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

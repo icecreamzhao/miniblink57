@@ -8,129 +8,133 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CacheQueryOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8CacheQueryOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, CacheQueryOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8CacheQueryOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, CacheQueryOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> cacheNameValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "cacheName")).ToLocal(&cacheNameValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (cacheNameValue.IsEmpty() || cacheNameValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> cacheName = cacheNameValue;
-    if (!cacheName.prepare(exceptionState))
-      return;
-    impl.setCacheName(cacheName);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> cacheNameValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "cacheName")).ToLocal(&cacheNameValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (cacheNameValue.IsEmpty() || cacheNameValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> cacheName = cacheNameValue;
+        if (!cacheName.prepare(exceptionState))
+            return;
+        impl.setCacheName(cacheName);
+    }
 
-  v8::Local<v8::Value> ignoreMethodValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ignoreMethod")).ToLocal(&ignoreMethodValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (ignoreMethodValue.IsEmpty() || ignoreMethodValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool ignoreMethod = toBoolean(isolate, ignoreMethodValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setIgnoreMethod(ignoreMethod);
-  }
+    v8::Local<v8::Value> ignoreMethodValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ignoreMethod")).ToLocal(&ignoreMethodValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (ignoreMethodValue.IsEmpty() || ignoreMethodValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool ignoreMethod = toBoolean(isolate, ignoreMethodValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setIgnoreMethod(ignoreMethod);
+    }
 
-  v8::Local<v8::Value> ignoreSearchValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ignoreSearch")).ToLocal(&ignoreSearchValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (ignoreSearchValue.IsEmpty() || ignoreSearchValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool ignoreSearch = toBoolean(isolate, ignoreSearchValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setIgnoreSearch(ignoreSearch);
-  }
+    v8::Local<v8::Value> ignoreSearchValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ignoreSearch")).ToLocal(&ignoreSearchValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (ignoreSearchValue.IsEmpty() || ignoreSearchValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool ignoreSearch = toBoolean(isolate, ignoreSearchValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setIgnoreSearch(ignoreSearch);
+    }
 
-  v8::Local<v8::Value> ignoreVaryValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ignoreVary")).ToLocal(&ignoreVaryValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (ignoreVaryValue.IsEmpty() || ignoreVaryValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool ignoreVary = toBoolean(isolate, ignoreVaryValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setIgnoreVary(ignoreVary);
-  }
+    v8::Local<v8::Value> ignoreVaryValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ignoreVary")).ToLocal(&ignoreVaryValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (ignoreVaryValue.IsEmpty() || ignoreVaryValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool ignoreVary = toBoolean(isolate, ignoreVaryValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setIgnoreVary(ignoreVary);
+    }
 }
 
-v8::Local<v8::Value> CacheQueryOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8CacheQueryOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> CacheQueryOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8CacheQueryOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8CacheQueryOptions(const CacheQueryOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasCacheName()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "cacheName"), v8String(isolate, impl.cacheName()))))
-      return false;
-  }
+bool toV8CacheQueryOptions(const CacheQueryOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasCacheName()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "cacheName"), v8String(isolate, impl.cacheName()))))
+            return false;
+    }
 
-  if (impl.hasIgnoreMethod()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreMethod"), v8Boolean(impl.ignoreMethod(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreMethod"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasIgnoreMethod()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreMethod"), v8Boolean(impl.ignoreMethod(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreMethod"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  if (impl.hasIgnoreSearch()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreSearch"), v8Boolean(impl.ignoreSearch(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreSearch"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasIgnoreSearch()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreSearch"), v8Boolean(impl.ignoreSearch(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreSearch"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  if (impl.hasIgnoreVary()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreVary"), v8Boolean(impl.ignoreVary(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreVary"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasIgnoreVary()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreVary"), v8Boolean(impl.ignoreVary(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ignoreVary"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-CacheQueryOptions NativeValueTraits<CacheQueryOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  CacheQueryOptions impl;
-  V8CacheQueryOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+CacheQueryOptions NativeValueTraits<CacheQueryOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    CacheQueryOptions impl;
+    V8CacheQueryOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

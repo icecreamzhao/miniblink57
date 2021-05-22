@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGFETurbulenceElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,248 +53,281 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGFETurbulenceElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGFETurbulenceElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGFETurbulenceElementV8Internal {
 
-CORE_EXPORT void SVG_TURBULENCE_TYPE_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 0);
-}
+    CORE_EXPORT void SVG_TURBULENCE_TYPE_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 0);
+    }
 
-CORE_EXPORT void SVG_TURBULENCE_TYPE_FRACTALNOISEConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 1);
-}
+    CORE_EXPORT void SVG_TURBULENCE_TYPE_FRACTALNOISEConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 1);
+    }
 
-CORE_EXPORT void SVG_TURBULENCE_TYPE_TURBULENCEConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 2);
-}
+    CORE_EXPORT void SVG_TURBULENCE_TYPE_TURBULENCEConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 2);
+    }
 
-CORE_EXPORT void SVG_STITCHTYPE_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 0);
-}
+    CORE_EXPORT void SVG_STITCHTYPE_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 0);
+    }
 
-CORE_EXPORT void SVG_STITCHTYPE_STITCHConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 1);
-}
+    CORE_EXPORT void SVG_STITCHTYPE_STITCHConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 1);
+    }
 
-CORE_EXPORT void SVG_STITCHTYPE_NOSTITCHConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 2);
-}
+    CORE_EXPORT void SVG_STITCHTYPE_NOSTITCHConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 2);
+    }
 
-static void baseFrequencyXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void baseFrequencyXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->baseFrequencyX()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->baseFrequencyX()), impl);
+    }
 
-CORE_EXPORT void baseFrequencyXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void baseFrequencyXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::baseFrequencyXAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::baseFrequencyXAttributeGetter(info);
+    }
 
-static void baseFrequencyYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void baseFrequencyYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->baseFrequencyY()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->baseFrequencyY()), impl);
+    }
 
-CORE_EXPORT void baseFrequencyYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void baseFrequencyYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::baseFrequencyYAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::baseFrequencyYAttributeGetter(info);
+    }
 
-static void numOctavesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void numOctavesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->numOctaves()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->numOctaves()), impl);
+    }
 
-CORE_EXPORT void numOctavesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void numOctavesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::numOctavesAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::numOctavesAttributeGetter(info);
+    }
 
-static void seedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void seedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->seed()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->seed()), impl);
+    }
 
-CORE_EXPORT void seedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void seedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::seedAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::seedAttributeGetter(info);
+    }
 
-static void stitchTilesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void stitchTilesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->stitchTiles()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->stitchTiles()), impl);
+    }
 
-CORE_EXPORT void stitchTilesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void stitchTilesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::stitchTilesAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::stitchTilesAttributeGetter(info);
+    }
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->type()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->type()), impl);
+    }
 
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::typeAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::typeAttributeGetter(info);
+    }
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::xAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::xAttributeGetter(info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::yAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::yAttributeGetter(info);
+    }
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::widthAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::widthAttributeGetter(info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::heightAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::heightAttributeGetter(info);
+    }
 
-static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
+        SVGFETurbulenceElement* impl = V8SVGFETurbulenceElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
+    }
 
-CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFETurbulenceElementV8Internal::resultAttributeGetter(info);
-}
+        SVGFETurbulenceElementV8Internal::resultAttributeGetter(info);
+    }
 
 } // namespace SVGFETurbulenceElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGFETurbulenceElementAccessors[] = {
-    {"baseFrequencyX", SVGFETurbulenceElementV8Internal::baseFrequencyXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"baseFrequencyY", SVGFETurbulenceElementV8Internal::baseFrequencyYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"numOctaves", SVGFETurbulenceElementV8Internal::numOctavesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"seed", SVGFETurbulenceElementV8Internal::seedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stitchTiles", SVGFETurbulenceElementV8Internal::stitchTilesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"type", SVGFETurbulenceElementV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"x", SVGFETurbulenceElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", SVGFETurbulenceElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", SVGFETurbulenceElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", SVGFETurbulenceElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"result", SVGFETurbulenceElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "baseFrequencyX", SVGFETurbulenceElementV8Internal::baseFrequencyXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "baseFrequencyY", SVGFETurbulenceElementV8Internal::baseFrequencyYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "numOctaves", SVGFETurbulenceElementV8Internal::numOctavesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "seed", SVGFETurbulenceElementV8Internal::seedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stitchTiles", SVGFETurbulenceElementV8Internal::stitchTilesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "type", SVGFETurbulenceElementV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "x", SVGFETurbulenceElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", SVGFETurbulenceElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", SVGFETurbulenceElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", SVGFETurbulenceElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "result", SVGFETurbulenceElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGFETurbulenceElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFETurbulenceElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFETurbulenceElement::internalFieldCount);
+static void installV8SVGFETurbulenceElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFETurbulenceElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFETurbulenceElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_TURBULENCE_TYPE_UNKNOWN", SVGFETurbulenceElementV8Internal::SVG_TURBULENCE_TYPE_UNKNOWNConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_TURBULENCE_TYPE_FRACTALNOISE", SVGFETurbulenceElementV8Internal::SVG_TURBULENCE_TYPE_FRACTALNOISEConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_TURBULENCE_TYPE_TURBULENCE", SVGFETurbulenceElementV8Internal::SVG_TURBULENCE_TYPE_TURBULENCEConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_STITCHTYPE_UNKNOWN", SVGFETurbulenceElementV8Internal::SVG_STITCHTYPE_UNKNOWNConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_STITCHTYPE_STITCH", SVGFETurbulenceElementV8Internal::SVG_STITCHTYPE_STITCHConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_STITCHTYPE_NOSTITCH", SVGFETurbulenceElementV8Internal::SVG_STITCHTYPE_NOSTITCHConstantGetterCallback);
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFETurbulenceElementAccessors, WTF_ARRAY_LENGTH(V8SVGFETurbulenceElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_TURBULENCE_TYPE_UNKNOWN", SVGFETurbulenceElementV8Internal::SVG_TURBULENCE_TYPE_UNKNOWNConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_TURBULENCE_TYPE_FRACTALNOISE", SVGFETurbulenceElementV8Internal::SVG_TURBULENCE_TYPE_FRACTALNOISEConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_TURBULENCE_TYPE_TURBULENCE", SVGFETurbulenceElementV8Internal::SVG_TURBULENCE_TYPE_TURBULENCEConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_STITCHTYPE_UNKNOWN", SVGFETurbulenceElementV8Internal::SVG_STITCHTYPE_UNKNOWNConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_STITCHTYPE_STITCH", SVGFETurbulenceElementV8Internal::SVG_STITCHTYPE_STITCHConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_STITCHTYPE_NOSTITCH", SVGFETurbulenceElementV8Internal::SVG_STITCHTYPE_NOSTITCHConstantGetterCallback);
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFETurbulenceElementAccessors, WTF_ARRAY_LENGTH(V8SVGFETurbulenceElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGFETurbulenceElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFETurbulenceElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGFETurbulenceElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFETurbulenceElementTemplate);
 }
 
-bool V8SVGFETurbulenceElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGFETurbulenceElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGFETurbulenceElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGFETurbulenceElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGFETurbulenceElement* V8SVGFETurbulenceElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGFETurbulenceElement* V8SVGFETurbulenceElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

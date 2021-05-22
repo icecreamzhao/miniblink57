@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8BiquadFilterOptions_h
 #define V8BiquadFilterOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8BiquadFilterOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, BiquadFilterOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, BiquadFilterOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8BiquadFilterOptions(const BiquadFilterOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, BiquadFilterOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, BiquadFilterOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<BiquadFilterOptions> {
-  static BiquadFilterOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static BiquadFilterOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<BiquadFilterOptions> {
-  typedef V8BiquadFilterOptions Type;
+    typedef V8BiquadFilterOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8BiquadFilterOptions_h
+#endif // V8BiquadFilterOptions_h

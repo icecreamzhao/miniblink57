@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "USBConnectionEventInit.h"
 
 #include "modules/webusb/USBDevice.h"
 
 namespace blink {
 
-USBConnectionEventInit::USBConnectionEventInit() {
+USBConnectionEventInit::USBConnectionEventInit()
+{
 }
 
-USBConnectionEventInit::~USBConnectionEventInit() {}
+USBConnectionEventInit::~USBConnectionEventInit() { }
 
 USBConnectionEventInit::USBConnectionEventInit(const USBConnectionEventInit&) = default;
 
 USBConnectionEventInit& USBConnectionEventInit::operator=(const USBConnectionEventInit&) = default;
 
-bool USBConnectionEventInit::hasDevice() const {
-  return m_device;
+bool USBConnectionEventInit::hasDevice() const
+{
+    return m_device;
 }
-USBDevice* USBConnectionEventInit::device() const {
-  return m_device;
+USBDevice* USBConnectionEventInit::device() const
+{
+    return m_device;
 }
-void USBConnectionEventInit::setDevice(USBDevice* value) {
-  m_device = value;
-}
-
-DEFINE_TRACE(USBConnectionEventInit) {
-  visitor->trace(m_device);
-  EventInit::trace(visitor);
+void USBConnectionEventInit::setDevice(USBDevice* value)
+{
+    m_device = value;
 }
 
-}  // namespace blink
+DEFINE_TRACE(USBConnectionEventInit)
+{
+    visitor->trace(m_device);
+    EventInit::trace(visitor);
+}
+
+} // namespace blink

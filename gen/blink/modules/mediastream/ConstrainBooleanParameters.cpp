@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ConstrainBooleanParameters.h"
 
 namespace blink {
 
-ConstrainBooleanParameters::ConstrainBooleanParameters() {
+ConstrainBooleanParameters::ConstrainBooleanParameters()
+{
 }
 
-ConstrainBooleanParameters::~ConstrainBooleanParameters() {}
+ConstrainBooleanParameters::~ConstrainBooleanParameters() { }
 
 ConstrainBooleanParameters::ConstrainBooleanParameters(const ConstrainBooleanParameters&) = default;
 
 ConstrainBooleanParameters& ConstrainBooleanParameters::operator=(const ConstrainBooleanParameters&) = default;
 
-bool ConstrainBooleanParameters::hasExact() const {
-  return m_hasExact;
+bool ConstrainBooleanParameters::hasExact() const
+{
+    return m_hasExact;
 }
-bool ConstrainBooleanParameters::exact() const {
-  DCHECK(m_hasExact);
-  return m_exact;
+bool ConstrainBooleanParameters::exact() const
+{
+    DCHECK(m_hasExact);
+    return m_exact;
 }
-void ConstrainBooleanParameters::setExact(bool value) {
-  m_exact = value;
-  m_hasExact = true;
+void ConstrainBooleanParameters::setExact(bool value)
+{
+    m_exact = value;
+    m_hasExact = true;
 }
-bool ConstrainBooleanParameters::hasIdeal() const {
-  return m_hasIdeal;
+bool ConstrainBooleanParameters::hasIdeal() const
+{
+    return m_hasIdeal;
 }
-bool ConstrainBooleanParameters::ideal() const {
-  DCHECK(m_hasIdeal);
-  return m_ideal;
+bool ConstrainBooleanParameters::ideal() const
+{
+    DCHECK(m_hasIdeal);
+    return m_ideal;
 }
-void ConstrainBooleanParameters::setIdeal(bool value) {
-  m_ideal = value;
-  m_hasIdeal = true;
+void ConstrainBooleanParameters::setIdeal(bool value)
+{
+    m_ideal = value;
+    m_hasIdeal = true;
 }
 
-DEFINE_TRACE(ConstrainBooleanParameters) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ConstrainBooleanParameters)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

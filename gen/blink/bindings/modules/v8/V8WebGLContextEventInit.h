@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8WebGLContextEventInit_h
 #define V8WebGLContextEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8WebGLContextEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, WebGLContextEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, WebGLContextEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8WebGLContextEventInit(const WebGLContextEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, WebGLContextEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, WebGLContextEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<WebGLContextEventInit> {
-  static WebGLContextEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static WebGLContextEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<WebGLContextEventInit> {
-  typedef V8WebGLContextEventInit Type;
+    typedef V8WebGLContextEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8WebGLContextEventInit_h
+#endif // V8WebGLContextEventInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FileWriterCallback.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -22,28 +22,30 @@
 namespace blink {
 
 V8FileWriterCallback::V8FileWriterCallback(v8::Local<v8::Function> callback, ScriptState* scriptState)
-    : m_scriptState(scriptState) {
-  m_callback.set(scriptState->isolate(), callback);
+    : m_scriptState(scriptState)
+{
+    m_callback.set(scriptState->isolate(), callback);
 }
 
-V8FileWriterCallback::~V8FileWriterCallback() {}
+V8FileWriterCallback::~V8FileWriterCallback() { }
 
-DEFINE_TRACE(V8FileWriterCallback) {
-  FileWriterCallback::trace(visitor);
+DEFINE_TRACE(V8FileWriterCallback)
+{
+    FileWriterCallback::trace(visitor);
 }
 
-void V8FileWriterCallback::handleEvent(FileWriter* fileWriter) {
-  ExecutionContext* executionContext = m_scriptState->getExecutionContext();
-  if (!executionContext || executionContext->isContextSuspended() ||
-      executionContext->isContextDestroyed())
-    return;
-  if (!m_scriptState->contextIsValid())
-    return;
-  ScriptState::Scope scope(m_scriptState.get());
-  v8::Local<v8::Value> fileWriterHandle = ToV8(fileWriter, m_scriptState->context()->Global(), m_scriptState->isolate());
-  v8::Local<v8::Value> argv[] = { fileWriterHandle };
+void V8FileWriterCallback::handleEvent(FileWriter* fileWriter)
+{
+    ExecutionContext* executionContext = m_scriptState->getExecutionContext();
+    if (!executionContext || executionContext->isContextSuspended() || executionContext->isContextDestroyed())
+        return;
+    if (!m_scriptState->contextIsValid())
+        return;
+    ScriptState::Scope scope(m_scriptState.get());
+    v8::Local<v8::Value> fileWriterHandle = ToV8(fileWriter, m_scriptState->context()->Global(), m_scriptState->isolate());
+    v8::Local<v8::Value> argv[] = { fileWriterHandle };
 
-  V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 1, argv, m_scriptState->isolate());
+    V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 1, argv, m_scriptState->isolate());
 }
 
-}  // namespace blink
+} // namespace blink

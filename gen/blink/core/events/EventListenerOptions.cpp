@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "EventListenerOptions.h"
 
 namespace blink {
 
-EventListenerOptions::EventListenerOptions() {
-  setCapture(false);
+EventListenerOptions::EventListenerOptions()
+{
+    setCapture(false);
 }
 
-EventListenerOptions::~EventListenerOptions() {}
+EventListenerOptions::~EventListenerOptions() { }
 
 EventListenerOptions::EventListenerOptions(const EventListenerOptions&) = default;
 
 EventListenerOptions& EventListenerOptions::operator=(const EventListenerOptions&) = default;
 
-bool EventListenerOptions::hasCapture() const {
-  return m_hasCapture;
+bool EventListenerOptions::hasCapture() const
+{
+    return m_hasCapture;
 }
-bool EventListenerOptions::capture() const {
-  DCHECK(m_hasCapture);
-  return m_capture;
+bool EventListenerOptions::capture() const
+{
+    DCHECK(m_hasCapture);
+    return m_capture;
 }
-void EventListenerOptions::setCapture(bool value) {
-  m_capture = value;
-  m_hasCapture = true;
+void EventListenerOptions::setCapture(bool value)
+{
+    m_capture = value;
+    m_hasCapture = true;
 }
 
-DEFINE_TRACE(EventListenerOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(EventListenerOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

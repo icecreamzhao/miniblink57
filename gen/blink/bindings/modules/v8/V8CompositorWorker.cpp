@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CompositorWorker.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -56,225 +56,244 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&CompositorWorker::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CompositorWorker is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CompositorWorkerV8Internal {
 
-static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CompositorWorker* impl = V8CompositorWorker::toImpl(holder);
+        CompositorWorker* impl = V8CompositorWorker::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onmessage()));
+        EventListener* cppValue(WTF::getPtr(impl->onmessage()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorWorkerV8Internal::onmessageAttributeGetter(info);
-}
-
-static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CompositorWorker* impl = V8CompositorWorker::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8CompositorWorker::eventListenerCacheIndex);
-
-  impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CompositorWorkerV8Internal::onmessageAttributeSetter(v8Value, info);
-}
-
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CompositorWorker* impl = V8CompositorWorker::toImpl(holder);
-
-  EventListener* cppValue(AbstractWorker::onerror(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorWorkerV8Internal::onerrorAttributeGetter(info);
-}
-
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CompositorWorker* impl = V8CompositorWorker::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, AbstractWorker::onerror(*impl), v8Value, V8CompositorWorker::eventListenerCacheIndex);
-
-  AbstractWorker::setOnerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CompositorWorkerV8Internal::onerrorAttributeSetter(v8Value, info);
-}
-
-static void postMessageImpl(const char* interfaceName, CompositorWorker* instance, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, interfaceName, "postMessage");
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Transferables transferables;
-  if (info.Length() > 1) {
-    const int transferablesArgIndex = 1;
-    if (!SerializedScriptValue::extractTransferables(info.GetIsolate(), info[transferablesArgIndex], transferablesArgIndex, transferables, exceptionState)) {
-      return;
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
     }
-  }
 
-  RefPtr<SerializedScriptValue> message;
-  if (instance->canTransferArrayBuffersAndImageBitmaps()) {
-    // This instance supports sending array buffers by move semantics.
-    message = SerializedScriptValue::serialize(info.GetIsolate(), info[0], &transferables, nullptr, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    // This instance doesn't support sending array buffers and image bitmaps
-    // by move semantics. Emulate it by copy-and-neuter semantics that sends
-    // array buffers and image bitmaps via structured clone and then neuters
-    // the original objects
+    MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorWorkerV8Internal::onmessageAttributeGetter(info);
+    }
 
-    // Clear references to array buffers and image bitmaps from transferables
-    // so that the serializer can consider the array buffers as
-    // non-transferable and serialize them into the message.
-    ArrayBufferArray transferableArrayBuffers = transferables.arrayBuffers;
-    transferables.arrayBuffers.clear();
-    ImageBitmapArray transferableImageBitmaps = transferables.imageBitmaps;
-    transferables.imageBitmaps.clear();
-    message = SerializedScriptValue::serialize(info.GetIsolate(), info[0], &transferables, nullptr, exceptionState);
-    if (exceptionState.hadException())
-      return;
+    static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CompositorWorker* impl = V8CompositorWorker::toImpl(holder);
 
-    // Neuter the original array buffers on the sender context.
-    SerializedScriptValue::transferArrayBufferContents(info.GetIsolate(), transferableArrayBuffers, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    // Neuter the original image bitmaps on the sender context.
-    SerializedScriptValue::transferImageBitmapContents(info.GetIsolate(), transferableImageBitmaps, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  }
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8CompositorWorker::eventListenerCacheIndex);
 
-  // FIXME: Only pass context/exceptionState if instance really requires it.
-  ExecutionContext* context = currentExecutionContext(info.GetIsolate());
-  instance->postMessage(context, message.release(), transferables.messagePorts, exceptionState);
-}
+        impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT  void postMessageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  postMessageImpl("CompositorWorker", V8CompositorWorker::toImpl(info.Holder()), info);
-}
+    MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-static void terminateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorWorker* impl = V8CompositorWorker::toImpl(info.Holder());
+        CompositorWorkerV8Internal::onmessageAttributeSetter(v8Value, info);
+    }
 
-  impl->terminate();
-}
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void terminateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorWorkerV8Internal::terminateMethod(info);
-}
+        CompositorWorker* impl = V8CompositorWorker::toImpl(holder);
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CompositorWorker");
+        EventListener* cppValue(AbstractWorker::onerror(*impl));
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-  V8StringResource<> scriptUrl;
-  scriptUrl = info[0];
-  if (!scriptUrl.prepare())
-    return;
+    MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorWorkerV8Internal::onerrorAttributeGetter(info);
+    }
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  CompositorWorker* impl = CompositorWorker::create(executionContext, scriptUrl, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CompositorWorker::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CompositorWorker* impl = V8CompositorWorker::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, AbstractWorker::onerror(*impl), v8Value, V8CompositorWorker::eventListenerCacheIndex);
+
+        AbstractWorker::setOnerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CompositorWorkerV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
+
+    static void postMessageImpl(const char* interfaceName, CompositorWorker* instance, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, interfaceName, "postMessage");
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Transferables transferables;
+        if (info.Length() > 1) {
+            const int transferablesArgIndex = 1;
+            if (!SerializedScriptValue::extractTransferables(info.GetIsolate(), info[transferablesArgIndex], transferablesArgIndex, transferables, exceptionState)) {
+                return;
+            }
+        }
+
+        RefPtr<SerializedScriptValue> message;
+        if (instance->canTransferArrayBuffersAndImageBitmaps()) {
+            // This instance supports sending array buffers by move semantics.
+            message = SerializedScriptValue::serialize(info.GetIsolate(), info[0], &transferables, nullptr, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            // This instance doesn't support sending array buffers and image bitmaps
+            // by move semantics. Emulate it by copy-and-neuter semantics that sends
+            // array buffers and image bitmaps via structured clone and then neuters
+            // the original objects
+
+            // Clear references to array buffers and image bitmaps from transferables
+            // so that the serializer can consider the array buffers as
+            // non-transferable and serialize them into the message.
+            ArrayBufferArray transferableArrayBuffers = transferables.arrayBuffers;
+            transferables.arrayBuffers.clear();
+            ImageBitmapArray transferableImageBitmaps = transferables.imageBitmaps;
+            transferables.imageBitmaps.clear();
+            message = SerializedScriptValue::serialize(info.GetIsolate(), info[0], &transferables, nullptr, exceptionState);
+            if (exceptionState.hadException())
+                return;
+
+            // Neuter the original array buffers on the sender context.
+            SerializedScriptValue::transferArrayBufferContents(info.GetIsolate(), transferableArrayBuffers, exceptionState);
+            if (exceptionState.hadException())
+                return;
+            // Neuter the original image bitmaps on the sender context.
+            SerializedScriptValue::transferImageBitmapContents(info.GetIsolate(), transferableImageBitmaps, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        }
+
+        // FIXME: Only pass context/exceptionState if instance really requires it.
+        ExecutionContext* context = currentExecutionContext(info.GetIsolate());
+        instance->postMessage(context, message.release(), transferables.messagePorts, exceptionState);
+    }
+
+    MODULES_EXPORT void postMessageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        postMessageImpl("CompositorWorker", V8CompositorWorker::toImpl(info.Holder()), info);
+    }
+
+    static void terminateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorWorker* impl = V8CompositorWorker::toImpl(info.Holder());
+
+        impl->terminate();
+    }
+
+    MODULES_EXPORT void terminateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorWorkerV8Internal::terminateMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CompositorWorker");
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> scriptUrl;
+        scriptUrl = info[0];
+        if (!scriptUrl.prepare())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        CompositorWorker* impl = CompositorWorker::create(executionContext, scriptUrl, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CompositorWorker::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace CompositorWorkerV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CompositorWorkerAccessors[] = {
-    {"onmessage", CompositorWorkerV8Internal::onmessageAttributeGetterCallback, CompositorWorkerV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", CompositorWorkerV8Internal::onerrorAttributeGetterCallback, CompositorWorkerV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "onmessage", CompositorWorkerV8Internal::onmessageAttributeGetterCallback, CompositorWorkerV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", CompositorWorkerV8Internal::onerrorAttributeGetterCallback, CompositorWorkerV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8CompositorWorkerMethods[] = {
-    {"postMessage", CompositorWorkerV8Internal::postMessageMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"terminate", CompositorWorkerV8Internal::terminateMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "postMessage", CompositorWorkerV8Internal::postMessageMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "terminate", CompositorWorkerV8Internal::terminateMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8CompositorWorker::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CompositorWorker"));
-    return;
-  }
+void V8CompositorWorker::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CompositorWorker"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  CompositorWorkerV8Internal::constructor(info);
+    CompositorWorkerV8Internal::constructor(info);
 }
 
-static void installV8CompositorWorkerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CompositorWorker::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8CompositorWorker::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8CompositorWorker::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8CompositorWorkerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CompositorWorker::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8CompositorWorker::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8CompositorWorker::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  if (!RuntimeEnabledFeatures::compositorWorkerEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::compositorWorkerEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CompositorWorkerAccessors, WTF_ARRAY_LENGTH(V8CompositorWorkerAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CompositorWorkerMethods, WTF_ARRAY_LENGTH(V8CompositorWorkerMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CompositorWorkerAccessors, WTF_ARRAY_LENGTH(V8CompositorWorkerAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CompositorWorkerMethods, WTF_ARRAY_LENGTH(V8CompositorWorkerMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8CompositorWorker::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CompositorWorkerTemplate);
+v8::Local<v8::FunctionTemplate> V8CompositorWorker::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CompositorWorkerTemplate);
 }
 
-bool V8CompositorWorker::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CompositorWorker::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CompositorWorker::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CompositorWorker::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CompositorWorker* V8CompositorWorker::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CompositorWorker* V8CompositorWorker::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

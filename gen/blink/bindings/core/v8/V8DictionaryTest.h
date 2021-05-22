@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8DictionaryTest_h
 #define V8DictionaryTest_h
 
@@ -23,31 +23,35 @@
 namespace blink {
 
 class V8DictionaryTest {
-  STATIC_ONLY(V8DictionaryTest);
- public:
-  static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static DictionaryTest* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<DictionaryTest>();
-  }
-  static DictionaryTest* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<DictionaryTest>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<DictionaryTest>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8DictionaryTest);
+
+public:
+    static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static DictionaryTest* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<DictionaryTest>();
+    }
+    static DictionaryTest* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<DictionaryTest>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<DictionaryTest>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<DictionaryTest> {
-  typedef V8DictionaryTest Type;
+    typedef V8DictionaryTest Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8DictionaryTest_h
+#endif // V8DictionaryTest_h

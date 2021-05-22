@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef NavigationPreloadState_h
 #define NavigationPreloadState_h
 
@@ -20,32 +20,33 @@
 namespace blink {
 
 class MODULES_EXPORT NavigationPreloadState : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  NavigationPreloadState();
-  virtual ~NavigationPreloadState();
-  NavigationPreloadState(const NavigationPreloadState&);
-  NavigationPreloadState& operator=(const NavigationPreloadState&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasEnabled() const;
-  bool enabled() const;
-  void setEnabled(bool);
+public:
+    NavigationPreloadState();
+    virtual ~NavigationPreloadState();
+    NavigationPreloadState(const NavigationPreloadState&);
+    NavigationPreloadState& operator=(const NavigationPreloadState&);
 
-  bool hasHeaderValue() const;
-  String headerValue() const;
-  void setHeaderValue(String);
+    bool hasEnabled() const;
+    bool enabled() const;
+    void setEnabled(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasHeaderValue() const;
+    String headerValue() const;
+    void setHeaderValue(String);
 
- private:
-  bool m_hasEnabled = false;
-  bool m_enabled;
-  String m_headerValue;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8NavigationPreloadState;
+private:
+    bool m_hasEnabled = false;
+    bool m_enabled;
+    String m_headerValue;
+
+    friend class V8NavigationPreloadState;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // NavigationPreloadState_h
+#endif // NavigationPreloadState_h

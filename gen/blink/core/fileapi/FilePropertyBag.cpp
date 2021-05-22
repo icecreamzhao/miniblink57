@@ -8,34 +8,39 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FilePropertyBag.h"
 
 namespace blink {
 
-FilePropertyBag::FilePropertyBag() {
+FilePropertyBag::FilePropertyBag()
+{
 }
 
-FilePropertyBag::~FilePropertyBag() {}
+FilePropertyBag::~FilePropertyBag() { }
 
 FilePropertyBag::FilePropertyBag(const FilePropertyBag&) = default;
 
 FilePropertyBag& FilePropertyBag::operator=(const FilePropertyBag&) = default;
 
-bool FilePropertyBag::hasLastModified() const {
-  return m_hasLastModified;
+bool FilePropertyBag::hasLastModified() const
+{
+    return m_hasLastModified;
 }
-long long FilePropertyBag::lastModified() const {
-  DCHECK(m_hasLastModified);
-  return m_lastModified;
+long long FilePropertyBag::lastModified() const
+{
+    DCHECK(m_hasLastModified);
+    return m_lastModified;
 }
-void FilePropertyBag::setLastModified(long long value) {
-  m_lastModified = value;
-  m_hasLastModified = true;
+void FilePropertyBag::setLastModified(long long value)
+{
+    m_lastModified = value;
+    m_hasLastModified = true;
 }
 
-DEFINE_TRACE(FilePropertyBag) {
-  BlobPropertyBag::trace(visitor);
+DEFINE_TRACE(FilePropertyBag)
+{
+    BlobPropertyBag::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

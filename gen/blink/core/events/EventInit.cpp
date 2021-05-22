@@ -8,59 +8,70 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "EventInit.h"
 
 namespace blink {
 
-EventInit::EventInit() {
-  setBubbles(false);
-  setCancelable(false);
-  setComposed(false);
+EventInit::EventInit()
+{
+    setBubbles(false);
+    setCancelable(false);
+    setComposed(false);
 }
 
-EventInit::~EventInit() {}
+EventInit::~EventInit() { }
 
 EventInit::EventInit(const EventInit&) = default;
 
 EventInit& EventInit::operator=(const EventInit&) = default;
 
-bool EventInit::hasBubbles() const {
-  return m_hasBubbles;
+bool EventInit::hasBubbles() const
+{
+    return m_hasBubbles;
 }
-bool EventInit::bubbles() const {
-  DCHECK(m_hasBubbles);
-  return m_bubbles;
+bool EventInit::bubbles() const
+{
+    DCHECK(m_hasBubbles);
+    return m_bubbles;
 }
-void EventInit::setBubbles(bool value) {
-  m_bubbles = value;
-  m_hasBubbles = true;
+void EventInit::setBubbles(bool value)
+{
+    m_bubbles = value;
+    m_hasBubbles = true;
 }
-bool EventInit::hasCancelable() const {
-  return m_hasCancelable;
+bool EventInit::hasCancelable() const
+{
+    return m_hasCancelable;
 }
-bool EventInit::cancelable() const {
-  DCHECK(m_hasCancelable);
-  return m_cancelable;
+bool EventInit::cancelable() const
+{
+    DCHECK(m_hasCancelable);
+    return m_cancelable;
 }
-void EventInit::setCancelable(bool value) {
-  m_cancelable = value;
-  m_hasCancelable = true;
+void EventInit::setCancelable(bool value)
+{
+    m_cancelable = value;
+    m_hasCancelable = true;
 }
-bool EventInit::hasComposed() const {
-  return m_hasComposed;
+bool EventInit::hasComposed() const
+{
+    return m_hasComposed;
 }
-bool EventInit::composed() const {
-  DCHECK(m_hasComposed);
-  return m_composed;
+bool EventInit::composed() const
+{
+    DCHECK(m_hasComposed);
+    return m_composed;
 }
-void EventInit::setComposed(bool value) {
-  m_composed = value;
-  m_hasComposed = true;
+void EventInit::setComposed(bool value)
+{
+    m_composed = value;
+    m_hasComposed = true;
 }
 
-DEFINE_TRACE(EventInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(EventInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

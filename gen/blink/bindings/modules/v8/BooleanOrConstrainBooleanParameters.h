@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef BooleanOrConstrainBooleanParameters_h
 #define BooleanOrConstrainBooleanParameters_h
 
@@ -22,58 +22,60 @@
 namespace blink {
 
 class MODULES_EXPORT BooleanOrConstrainBooleanParameters final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  BooleanOrConstrainBooleanParameters();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isBoolean() const { return m_type == SpecificTypeBoolean; }
-  bool getAsBoolean() const;
-  void setBoolean(bool);
-  static BooleanOrConstrainBooleanParameters fromBoolean(bool);
+public:
+    BooleanOrConstrainBooleanParameters();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isConstrainBooleanParameters() const { return m_type == SpecificTypeConstrainBooleanParameters; }
-  const ConstrainBooleanParameters& getAsConstrainBooleanParameters() const;
-  void setConstrainBooleanParameters(const ConstrainBooleanParameters&);
-  static BooleanOrConstrainBooleanParameters fromConstrainBooleanParameters(const ConstrainBooleanParameters&);
+    bool isBoolean() const { return m_type == SpecificTypeBoolean; }
+    bool getAsBoolean() const;
+    void setBoolean(bool);
+    static BooleanOrConstrainBooleanParameters fromBoolean(bool);
 
-  BooleanOrConstrainBooleanParameters(const BooleanOrConstrainBooleanParameters&);
-  ~BooleanOrConstrainBooleanParameters();
-  BooleanOrConstrainBooleanParameters& operator=(const BooleanOrConstrainBooleanParameters&);
-  DECLARE_TRACE();
+    bool isConstrainBooleanParameters() const { return m_type == SpecificTypeConstrainBooleanParameters; }
+    const ConstrainBooleanParameters& getAsConstrainBooleanParameters() const;
+    void setConstrainBooleanParameters(const ConstrainBooleanParameters&);
+    static BooleanOrConstrainBooleanParameters fromConstrainBooleanParameters(const ConstrainBooleanParameters&);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeBoolean,
-    SpecificTypeConstrainBooleanParameters,
-  };
-  SpecificTypes m_type;
+    BooleanOrConstrainBooleanParameters(const BooleanOrConstrainBooleanParameters&);
+    ~BooleanOrConstrainBooleanParameters();
+    BooleanOrConstrainBooleanParameters& operator=(const BooleanOrConstrainBooleanParameters&);
+    DECLARE_TRACE();
 
-  bool m_boolean;
-  ConstrainBooleanParameters m_constrainBooleanParameters;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeBoolean,
+        SpecificTypeConstrainBooleanParameters,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const BooleanOrConstrainBooleanParameters&, v8::Local<v8::Object>, v8::Isolate*);
+    bool m_boolean;
+    ConstrainBooleanParameters m_constrainBooleanParameters;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const BooleanOrConstrainBooleanParameters&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8BooleanOrConstrainBooleanParameters final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, BooleanOrConstrainBooleanParameters&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, BooleanOrConstrainBooleanParameters&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const BooleanOrConstrainBooleanParameters&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, BooleanOrConstrainBooleanParameters& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, BooleanOrConstrainBooleanParameters& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<BooleanOrConstrainBooleanParameters> {
-  MODULES_EXPORT static BooleanOrConstrainBooleanParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static BooleanOrConstrainBooleanParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -81,4 +83,4 @@ struct NativeValueTraits<BooleanOrConstrainBooleanParameters> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::BooleanOrConstrainBooleanParameters);
 
-#endif  // BooleanOrConstrainBooleanParameters_h
+#endif // BooleanOrConstrainBooleanParameters_h

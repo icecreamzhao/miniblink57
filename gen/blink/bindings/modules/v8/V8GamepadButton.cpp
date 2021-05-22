@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8GamepadButton.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,107 +48,121 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&GamepadButton::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "GamepadButton is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace GamepadButtonV8Internal {
 
-static void pressedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pressedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  GamepadButton* impl = V8GamepadButton::toImpl(holder);
+        GamepadButton* impl = V8GamepadButton::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->pressed());
-}
+        v8SetReturnValueBool(info, impl->pressed());
+    }
 
-MODULES_EXPORT void pressedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  GamepadButtonV8Internal::pressedAttributeGetter(info);
-}
+    MODULES_EXPORT void pressedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        GamepadButtonV8Internal::pressedAttributeGetter(info);
+    }
 
-static void touchedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void touchedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  GamepadButton* impl = V8GamepadButton::toImpl(holder);
+        GamepadButton* impl = V8GamepadButton::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->touched());
-}
+        v8SetReturnValueBool(info, impl->touched());
+    }
 
-MODULES_EXPORT void touchedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GamepadButtonTouched);
+    MODULES_EXPORT void touchedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::GamepadButtonTouched);
 
-  GamepadButtonV8Internal::touchedAttributeGetter(info);
-}
+        GamepadButtonV8Internal::touchedAttributeGetter(info);
+    }
 
-static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  GamepadButton* impl = V8GamepadButton::toImpl(holder);
+        GamepadButton* impl = V8GamepadButton::toImpl(holder);
 
-  v8SetReturnValue(info, impl->value());
-}
+        v8SetReturnValue(info, impl->value());
+    }
 
-MODULES_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  GamepadButtonV8Internal::valueAttributeGetter(info);
-}
+    MODULES_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        GamepadButtonV8Internal::valueAttributeGetter(info);
+    }
 
 } // namespace GamepadButtonV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8GamepadButtonAccessors[] = {
-    {"pressed", GamepadButtonV8Internal::pressedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"value", GamepadButtonV8Internal::valueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "pressed", GamepadButtonV8Internal::pressedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "value", GamepadButtonV8Internal::valueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8GamepadButtonTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8GamepadButton::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8GamepadButton::internalFieldCount);
+static void installV8GamepadButtonTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8GamepadButton::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8GamepadButton::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8GamepadButtonAccessors, WTF_ARRAY_LENGTH(V8GamepadButtonAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8GamepadButtonAccessors, WTF_ARRAY_LENGTH(V8GamepadButtonAccessors));
 }
 
-void V8GamepadButton::installGamepadExtensions(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8GamepadButton::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  const V8DOMConfiguration::AccessorConfiguration accessortouchedConfiguration = {"touched", GamepadButtonV8Internal::touchedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessortouchedConfiguration);
+void V8GamepadButton::installGamepadExtensions(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8GamepadButton::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    const V8DOMConfiguration::AccessorConfiguration accessortouchedConfiguration = { "touched", GamepadButtonV8Internal::touchedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessortouchedConfiguration);
 }
 
-void V8GamepadButton::installGamepadExtensions(ScriptState* scriptState, v8::Local<v8::Object> instance) {
-  V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-  v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8GamepadButton::wrapperTypeInfo);
-  v8::Local<v8::Function> interface = perContextData->constructorForType(&V8GamepadButton::wrapperTypeInfo);
-  ALLOW_UNUSED_LOCAL(interface);
-  installGamepadExtensions(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+void V8GamepadButton::installGamepadExtensions(ScriptState* scriptState, v8::Local<v8::Object> instance)
+{
+    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8GamepadButton::wrapperTypeInfo);
+    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8GamepadButton::wrapperTypeInfo);
+    ALLOW_UNUSED_LOCAL(interface);
+    installGamepadExtensions(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
 }
 
-void V8GamepadButton::installGamepadExtensions(ScriptState* scriptState) {
-  installGamepadExtensions(scriptState, v8::Local<v8::Object>());
+void V8GamepadButton::installGamepadExtensions(ScriptState* scriptState)
+{
+    installGamepadExtensions(scriptState, v8::Local<v8::Object>());
 }
 
-v8::Local<v8::FunctionTemplate> V8GamepadButton::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8GamepadButtonTemplate);
+v8::Local<v8::FunctionTemplate> V8GamepadButton::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8GamepadButtonTemplate);
 }
 
-bool V8GamepadButton::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8GamepadButton::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8GamepadButton::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8GamepadButton::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-GamepadButton* V8GamepadButton::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+GamepadButton* V8GamepadButton::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

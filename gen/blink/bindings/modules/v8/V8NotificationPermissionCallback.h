@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8NotificationPermissionCallback_h
 #define V8NotificationPermissionCallback_h
 
@@ -20,21 +20,23 @@
 namespace blink {
 
 class V8NotificationPermissionCallback final : public NotificationPermissionCallback {
- public:
-  static V8NotificationPermissionCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8NotificationPermissionCallback(callback, scriptState);
-  }
+public:
+    static V8NotificationPermissionCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8NotificationPermissionCallback(callback, scriptState);
+    }
 
-  ~V8NotificationPermissionCallback() override;
+    ~V8NotificationPermissionCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  void handleEvent(const String& permission) override;
- private:
-  MODULES_EXPORT V8NotificationPermissionCallback(v8::Local<v8::Function>, ScriptState*);
+    void handleEvent(const String& permission) override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    MODULES_EXPORT V8NotificationPermissionCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8NotificationPermissionCallback_h
+#endif // V8NotificationPermissionCallback_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AssignedNodesOptions_h
 #define AssignedNodesOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class CORE_EXPORT AssignedNodesOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AssignedNodesOptions();
-  virtual ~AssignedNodesOptions();
-  AssignedNodesOptions(const AssignedNodesOptions&);
-  AssignedNodesOptions& operator=(const AssignedNodesOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasFlatten() const;
-  bool flatten() const;
-  void setFlatten(bool);
+public:
+    AssignedNodesOptions();
+    virtual ~AssignedNodesOptions();
+    AssignedNodesOptions(const AssignedNodesOptions&);
+    AssignedNodesOptions& operator=(const AssignedNodesOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasFlatten() const;
+    bool flatten() const;
+    void setFlatten(bool);
 
- private:
-  bool m_hasFlatten = false;
-  bool m_flatten;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AssignedNodesOptions;
+private:
+    bool m_hasFlatten = false;
+    bool m_flatten;
+
+    friend class V8AssignedNodesOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AssignedNodesOptions_h
+#endif // AssignedNodesOptions_h

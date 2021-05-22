@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef HTMLOptionElementOrHTMLOptGroupElement_h
 #define HTMLOptionElementOrHTMLOptGroupElement_h
 
@@ -24,58 +24,60 @@ class HTMLOptGroupElement;
 class HTMLOptionElement;
 
 class CORE_EXPORT HTMLOptionElementOrHTMLOptGroupElement final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  HTMLOptionElementOrHTMLOptGroupElement();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isHTMLOptionElement() const { return m_type == SpecificTypeHTMLOptionElement; }
-  HTMLOptionElement* getAsHTMLOptionElement() const;
-  void setHTMLOptionElement(HTMLOptionElement*);
-  static HTMLOptionElementOrHTMLOptGroupElement fromHTMLOptionElement(HTMLOptionElement*);
+public:
+    HTMLOptionElementOrHTMLOptGroupElement();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isHTMLOptGroupElement() const { return m_type == SpecificTypeHTMLOptGroupElement; }
-  HTMLOptGroupElement* getAsHTMLOptGroupElement() const;
-  void setHTMLOptGroupElement(HTMLOptGroupElement*);
-  static HTMLOptionElementOrHTMLOptGroupElement fromHTMLOptGroupElement(HTMLOptGroupElement*);
+    bool isHTMLOptionElement() const { return m_type == SpecificTypeHTMLOptionElement; }
+    HTMLOptionElement* getAsHTMLOptionElement() const;
+    void setHTMLOptionElement(HTMLOptionElement*);
+    static HTMLOptionElementOrHTMLOptGroupElement fromHTMLOptionElement(HTMLOptionElement*);
 
-  HTMLOptionElementOrHTMLOptGroupElement(const HTMLOptionElementOrHTMLOptGroupElement&);
-  ~HTMLOptionElementOrHTMLOptGroupElement();
-  HTMLOptionElementOrHTMLOptGroupElement& operator=(const HTMLOptionElementOrHTMLOptGroupElement&);
-  DECLARE_TRACE();
+    bool isHTMLOptGroupElement() const { return m_type == SpecificTypeHTMLOptGroupElement; }
+    HTMLOptGroupElement* getAsHTMLOptGroupElement() const;
+    void setHTMLOptGroupElement(HTMLOptGroupElement*);
+    static HTMLOptionElementOrHTMLOptGroupElement fromHTMLOptGroupElement(HTMLOptGroupElement*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeHTMLOptionElement,
-    SpecificTypeHTMLOptGroupElement,
-  };
-  SpecificTypes m_type;
+    HTMLOptionElementOrHTMLOptGroupElement(const HTMLOptionElementOrHTMLOptGroupElement&);
+    ~HTMLOptionElementOrHTMLOptGroupElement();
+    HTMLOptionElementOrHTMLOptGroupElement& operator=(const HTMLOptionElementOrHTMLOptGroupElement&);
+    DECLARE_TRACE();
 
-  Member<HTMLOptionElement> m_htmlOptionElement;
-  Member<HTMLOptGroupElement> m_htmlOptGroupElement;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeHTMLOptionElement,
+        SpecificTypeHTMLOptGroupElement,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLOptionElementOrHTMLOptGroupElement&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<HTMLOptionElement> m_htmlOptionElement;
+    Member<HTMLOptGroupElement> m_htmlOptGroupElement;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLOptionElementOrHTMLOptGroupElement&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8HTMLOptionElementOrHTMLOptGroupElement final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLOptionElementOrHTMLOptGroupElement&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLOptionElementOrHTMLOptGroupElement&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLOptionElementOrHTMLOptGroupElement&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLOptionElementOrHTMLOptGroupElement& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLOptionElementOrHTMLOptGroupElement& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<HTMLOptionElementOrHTMLOptGroupElement> {
-  CORE_EXPORT static HTMLOptionElementOrHTMLOptGroupElement nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static HTMLOptionElementOrHTMLOptGroupElement nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -83,4 +85,4 @@ struct NativeValueTraits<HTMLOptionElementOrHTMLOptGroupElement> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::HTMLOptionElementOrHTMLOptGroupElement);
 
-#endif  // HTMLOptionElementOrHTMLOptGroupElement_h
+#endif // HTMLOptionElementOrHTMLOptGroupElement_h

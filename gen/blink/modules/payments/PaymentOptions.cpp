@@ -8,81 +8,98 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PaymentOptions.h"
 
 namespace blink {
 
-PaymentOptions::PaymentOptions() {
-  setRequestPayerEmail(false);
-  setRequestPayerName(false);
-  setRequestPayerPhone(false);
-  setRequestShipping(false);
-  setShippingType(String("shipping"));
+PaymentOptions::PaymentOptions()
+{
+    setRequestPayerEmail(false);
+    setRequestPayerName(false);
+    setRequestPayerPhone(false);
+    setRequestShipping(false);
+    setShippingType(String("shipping"));
 }
 
-PaymentOptions::~PaymentOptions() {}
+PaymentOptions::~PaymentOptions() { }
 
 PaymentOptions::PaymentOptions(const PaymentOptions&) = default;
 
 PaymentOptions& PaymentOptions::operator=(const PaymentOptions&) = default;
 
-bool PaymentOptions::hasRequestPayerEmail() const {
-  return m_hasRequestPayerEmail;
+bool PaymentOptions::hasRequestPayerEmail() const
+{
+    return m_hasRequestPayerEmail;
 }
-bool PaymentOptions::requestPayerEmail() const {
-  DCHECK(m_hasRequestPayerEmail);
-  return m_requestPayerEmail;
+bool PaymentOptions::requestPayerEmail() const
+{
+    DCHECK(m_hasRequestPayerEmail);
+    return m_requestPayerEmail;
 }
-void PaymentOptions::setRequestPayerEmail(bool value) {
-  m_requestPayerEmail = value;
-  m_hasRequestPayerEmail = true;
+void PaymentOptions::setRequestPayerEmail(bool value)
+{
+    m_requestPayerEmail = value;
+    m_hasRequestPayerEmail = true;
 }
-bool PaymentOptions::hasRequestPayerName() const {
-  return m_hasRequestPayerName;
+bool PaymentOptions::hasRequestPayerName() const
+{
+    return m_hasRequestPayerName;
 }
-bool PaymentOptions::requestPayerName() const {
-  DCHECK(m_hasRequestPayerName);
-  return m_requestPayerName;
+bool PaymentOptions::requestPayerName() const
+{
+    DCHECK(m_hasRequestPayerName);
+    return m_requestPayerName;
 }
-void PaymentOptions::setRequestPayerName(bool value) {
-  m_requestPayerName = value;
-  m_hasRequestPayerName = true;
+void PaymentOptions::setRequestPayerName(bool value)
+{
+    m_requestPayerName = value;
+    m_hasRequestPayerName = true;
 }
-bool PaymentOptions::hasRequestPayerPhone() const {
-  return m_hasRequestPayerPhone;
+bool PaymentOptions::hasRequestPayerPhone() const
+{
+    return m_hasRequestPayerPhone;
 }
-bool PaymentOptions::requestPayerPhone() const {
-  DCHECK(m_hasRequestPayerPhone);
-  return m_requestPayerPhone;
+bool PaymentOptions::requestPayerPhone() const
+{
+    DCHECK(m_hasRequestPayerPhone);
+    return m_requestPayerPhone;
 }
-void PaymentOptions::setRequestPayerPhone(bool value) {
-  m_requestPayerPhone = value;
-  m_hasRequestPayerPhone = true;
+void PaymentOptions::setRequestPayerPhone(bool value)
+{
+    m_requestPayerPhone = value;
+    m_hasRequestPayerPhone = true;
 }
-bool PaymentOptions::hasRequestShipping() const {
-  return m_hasRequestShipping;
+bool PaymentOptions::hasRequestShipping() const
+{
+    return m_hasRequestShipping;
 }
-bool PaymentOptions::requestShipping() const {
-  DCHECK(m_hasRequestShipping);
-  return m_requestShipping;
+bool PaymentOptions::requestShipping() const
+{
+    DCHECK(m_hasRequestShipping);
+    return m_requestShipping;
 }
-void PaymentOptions::setRequestShipping(bool value) {
-  m_requestShipping = value;
-  m_hasRequestShipping = true;
+void PaymentOptions::setRequestShipping(bool value)
+{
+    m_requestShipping = value;
+    m_hasRequestShipping = true;
 }
-bool PaymentOptions::hasShippingType() const {
-  return !m_shippingType.isNull();
+bool PaymentOptions::hasShippingType() const
+{
+    return !m_shippingType.isNull();
 }
-String PaymentOptions::shippingType() const {
-  return m_shippingType;
+String PaymentOptions::shippingType() const
+{
+    return m_shippingType;
 }
-void PaymentOptions::setShippingType(String value) {
-  m_shippingType = value;
+void PaymentOptions::setShippingType(String value)
+{
+    m_shippingType = value;
 }
 
-DEFINE_TRACE(PaymentOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PaymentOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,87 +8,107 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ComputedTimingProperties.h"
 
 namespace blink {
 
-ComputedTimingProperties::ComputedTimingProperties() {
+ComputedTimingProperties::ComputedTimingProperties()
+{
 }
 
-ComputedTimingProperties::~ComputedTimingProperties() {}
+ComputedTimingProperties::~ComputedTimingProperties() { }
 
 ComputedTimingProperties::ComputedTimingProperties(const ComputedTimingProperties&) = default;
 
 ComputedTimingProperties& ComputedTimingProperties::operator=(const ComputedTimingProperties&) = default;
 
-bool ComputedTimingProperties::hasActiveDuration() const {
-  return m_hasActiveDuration;
+bool ComputedTimingProperties::hasActiveDuration() const
+{
+    return m_hasActiveDuration;
 }
-double ComputedTimingProperties::activeDuration() const {
-  DCHECK(m_hasActiveDuration);
-  return m_activeDuration;
+double ComputedTimingProperties::activeDuration() const
+{
+    DCHECK(m_hasActiveDuration);
+    return m_activeDuration;
 }
-void ComputedTimingProperties::setActiveDuration(double value) {
-  m_activeDuration = value;
-  m_hasActiveDuration = true;
+void ComputedTimingProperties::setActiveDuration(double value)
+{
+    m_activeDuration = value;
+    m_hasActiveDuration = true;
 }
-bool ComputedTimingProperties::hasCurrentIteration() const {
-  return m_hasCurrentIteration;
+bool ComputedTimingProperties::hasCurrentIteration() const
+{
+    return m_hasCurrentIteration;
 }
-double ComputedTimingProperties::currentIteration() const {
-  DCHECK(m_hasCurrentIteration);
-  return m_currentIteration;
+double ComputedTimingProperties::currentIteration() const
+{
+    DCHECK(m_hasCurrentIteration);
+    return m_currentIteration;
 }
-void ComputedTimingProperties::setCurrentIteration(double value) {
-  m_currentIteration = value;
-  m_hasCurrentIteration = true;
+void ComputedTimingProperties::setCurrentIteration(double value)
+{
+    m_currentIteration = value;
+    m_hasCurrentIteration = true;
 }
-void ComputedTimingProperties::setCurrentIterationToNull() {
-  m_hasCurrentIteration = false;
+void ComputedTimingProperties::setCurrentIterationToNull()
+{
+    m_hasCurrentIteration = false;
 }
-bool ComputedTimingProperties::hasEndTime() const {
-  return m_hasEndTime;
+bool ComputedTimingProperties::hasEndTime() const
+{
+    return m_hasEndTime;
 }
-double ComputedTimingProperties::endTime() const {
-  DCHECK(m_hasEndTime);
-  return m_endTime;
+double ComputedTimingProperties::endTime() const
+{
+    DCHECK(m_hasEndTime);
+    return m_endTime;
 }
-void ComputedTimingProperties::setEndTime(double value) {
-  m_endTime = value;
-  m_hasEndTime = true;
+void ComputedTimingProperties::setEndTime(double value)
+{
+    m_endTime = value;
+    m_hasEndTime = true;
 }
-bool ComputedTimingProperties::hasLocalTime() const {
-  return m_hasLocalTime;
+bool ComputedTimingProperties::hasLocalTime() const
+{
+    return m_hasLocalTime;
 }
-double ComputedTimingProperties::localTime() const {
-  DCHECK(m_hasLocalTime);
-  return m_localTime;
+double ComputedTimingProperties::localTime() const
+{
+    DCHECK(m_hasLocalTime);
+    return m_localTime;
 }
-void ComputedTimingProperties::setLocalTime(double value) {
-  m_localTime = value;
-  m_hasLocalTime = true;
+void ComputedTimingProperties::setLocalTime(double value)
+{
+    m_localTime = value;
+    m_hasLocalTime = true;
 }
-void ComputedTimingProperties::setLocalTimeToNull() {
-  m_hasLocalTime = false;
+void ComputedTimingProperties::setLocalTimeToNull()
+{
+    m_hasLocalTime = false;
 }
-bool ComputedTimingProperties::hasProgress() const {
-  return m_hasProgress;
+bool ComputedTimingProperties::hasProgress() const
+{
+    return m_hasProgress;
 }
-double ComputedTimingProperties::progress() const {
-  DCHECK(m_hasProgress);
-  return m_progress;
+double ComputedTimingProperties::progress() const
+{
+    DCHECK(m_hasProgress);
+    return m_progress;
 }
-void ComputedTimingProperties::setProgress(double value) {
-  m_progress = value;
-  m_hasProgress = true;
+void ComputedTimingProperties::setProgress(double value)
+{
+    m_progress = value;
+    m_hasProgress = true;
 }
-void ComputedTimingProperties::setProgressToNull() {
-  m_hasProgress = false;
+void ComputedTimingProperties::setProgressToNull()
+{
+    m_hasProgress = false;
 }
 
-DEFINE_TRACE(ComputedTimingProperties) {
-  AnimationEffectTimingProperties::trace(visitor);
+DEFINE_TRACE(ComputedTimingProperties)
+{
+    AnimationEffectTimingProperties::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

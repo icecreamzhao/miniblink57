@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AnimationEventInit_h
 #define AnimationEventInit_h
 
@@ -20,32 +20,33 @@
 namespace blink {
 
 class CORE_EXPORT AnimationEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AnimationEventInit();
-  virtual ~AnimationEventInit();
-  AnimationEventInit(const AnimationEventInit&);
-  AnimationEventInit& operator=(const AnimationEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAnimationName() const;
-  String animationName() const;
-  void setAnimationName(String);
+public:
+    AnimationEventInit();
+    virtual ~AnimationEventInit();
+    AnimationEventInit(const AnimationEventInit&);
+    AnimationEventInit& operator=(const AnimationEventInit&);
 
-  bool hasElapsedTime() const;
-  double elapsedTime() const;
-  void setElapsedTime(double);
+    bool hasAnimationName() const;
+    String animationName() const;
+    void setAnimationName(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasElapsedTime() const;
+    double elapsedTime() const;
+    void setElapsedTime(double);
 
- private:
-  String m_animationName;
-  bool m_hasElapsedTime = false;
-  double m_elapsedTime;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AnimationEventInit;
+private:
+    String m_animationName;
+    bool m_hasElapsedTime = false;
+    double m_elapsedTime;
+
+    friend class V8AnimationEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AnimationEventInit_h
+#endif // AnimationEventInit_h

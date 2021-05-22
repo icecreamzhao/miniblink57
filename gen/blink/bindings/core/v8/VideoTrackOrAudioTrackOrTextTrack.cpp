@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "VideoTrackOrAudioTrackOrTextTrack.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -18,117 +18,133 @@
 
 namespace blink {
 
-VideoTrackOrAudioTrackOrTextTrack::VideoTrackOrAudioTrackOrTextTrack() : m_type(SpecificTypeNone) {}
-
-VideoTrack* VideoTrackOrAudioTrackOrTextTrack::getAsVideoTrack() const {
-  DCHECK(isVideoTrack());
-  return m_videoTrack;
+VideoTrackOrAudioTrackOrTextTrack::VideoTrackOrAudioTrackOrTextTrack()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void VideoTrackOrAudioTrackOrTextTrack::setVideoTrack(VideoTrack* value) {
-  DCHECK(isNull());
-  m_videoTrack = value;
-  m_type = SpecificTypeVideoTrack;
+VideoTrack* VideoTrackOrAudioTrackOrTextTrack::getAsVideoTrack() const
+{
+    DCHECK(isVideoTrack());
+    return m_videoTrack;
 }
 
-VideoTrackOrAudioTrackOrTextTrack VideoTrackOrAudioTrackOrTextTrack::fromVideoTrack(VideoTrack* value) {
-  VideoTrackOrAudioTrackOrTextTrack container;
-  container.setVideoTrack(value);
-  return container;
+void VideoTrackOrAudioTrackOrTextTrack::setVideoTrack(VideoTrack* value)
+{
+    DCHECK(isNull());
+    m_videoTrack = value;
+    m_type = SpecificTypeVideoTrack;
 }
 
-AudioTrack* VideoTrackOrAudioTrackOrTextTrack::getAsAudioTrack() const {
-  DCHECK(isAudioTrack());
-  return m_audioTrack;
+VideoTrackOrAudioTrackOrTextTrack VideoTrackOrAudioTrackOrTextTrack::fromVideoTrack(VideoTrack* value)
+{
+    VideoTrackOrAudioTrackOrTextTrack container;
+    container.setVideoTrack(value);
+    return container;
 }
 
-void VideoTrackOrAudioTrackOrTextTrack::setAudioTrack(AudioTrack* value) {
-  DCHECK(isNull());
-  m_audioTrack = value;
-  m_type = SpecificTypeAudioTrack;
+AudioTrack* VideoTrackOrAudioTrackOrTextTrack::getAsAudioTrack() const
+{
+    DCHECK(isAudioTrack());
+    return m_audioTrack;
 }
 
-VideoTrackOrAudioTrackOrTextTrack VideoTrackOrAudioTrackOrTextTrack::fromAudioTrack(AudioTrack* value) {
-  VideoTrackOrAudioTrackOrTextTrack container;
-  container.setAudioTrack(value);
-  return container;
+void VideoTrackOrAudioTrackOrTextTrack::setAudioTrack(AudioTrack* value)
+{
+    DCHECK(isNull());
+    m_audioTrack = value;
+    m_type = SpecificTypeAudioTrack;
 }
 
-TextTrack* VideoTrackOrAudioTrackOrTextTrack::getAsTextTrack() const {
-  DCHECK(isTextTrack());
-  return m_textTrack;
+VideoTrackOrAudioTrackOrTextTrack VideoTrackOrAudioTrackOrTextTrack::fromAudioTrack(AudioTrack* value)
+{
+    VideoTrackOrAudioTrackOrTextTrack container;
+    container.setAudioTrack(value);
+    return container;
 }
 
-void VideoTrackOrAudioTrackOrTextTrack::setTextTrack(TextTrack* value) {
-  DCHECK(isNull());
-  m_textTrack = value;
-  m_type = SpecificTypeTextTrack;
+TextTrack* VideoTrackOrAudioTrackOrTextTrack::getAsTextTrack() const
+{
+    DCHECK(isTextTrack());
+    return m_textTrack;
 }
 
-VideoTrackOrAudioTrackOrTextTrack VideoTrackOrAudioTrackOrTextTrack::fromTextTrack(TextTrack* value) {
-  VideoTrackOrAudioTrackOrTextTrack container;
-  container.setTextTrack(value);
-  return container;
+void VideoTrackOrAudioTrackOrTextTrack::setTextTrack(TextTrack* value)
+{
+    DCHECK(isNull());
+    m_textTrack = value;
+    m_type = SpecificTypeTextTrack;
+}
+
+VideoTrackOrAudioTrackOrTextTrack VideoTrackOrAudioTrackOrTextTrack::fromTextTrack(TextTrack* value)
+{
+    VideoTrackOrAudioTrackOrTextTrack container;
+    container.setTextTrack(value);
+    return container;
 }
 
 VideoTrackOrAudioTrackOrTextTrack::VideoTrackOrAudioTrackOrTextTrack(const VideoTrackOrAudioTrackOrTextTrack&) = default;
 VideoTrackOrAudioTrackOrTextTrack::~VideoTrackOrAudioTrackOrTextTrack() = default;
 VideoTrackOrAudioTrackOrTextTrack& VideoTrackOrAudioTrackOrTextTrack::operator=(const VideoTrackOrAudioTrackOrTextTrack&) = default;
 
-DEFINE_TRACE(VideoTrackOrAudioTrackOrTextTrack) {
-  visitor->trace(m_videoTrack);
-  visitor->trace(m_audioTrack);
-  visitor->trace(m_textTrack);
+DEFINE_TRACE(VideoTrackOrAudioTrackOrTextTrack)
+{
+    visitor->trace(m_videoTrack);
+    visitor->trace(m_audioTrack);
+    visitor->trace(m_textTrack);
 }
 
-void V8VideoTrackOrAudioTrackOrTextTrack::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, VideoTrackOrAudioTrackOrTextTrack& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8VideoTrackOrAudioTrackOrTextTrack::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, VideoTrackOrAudioTrackOrTextTrack& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8VideoTrack::hasInstance(v8Value, isolate)) {
-    VideoTrack* cppValue = V8VideoTrack::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setVideoTrack(cppValue);
-    return;
-  }
+    if (V8VideoTrack::hasInstance(v8Value, isolate)) {
+        VideoTrack* cppValue = V8VideoTrack::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setVideoTrack(cppValue);
+        return;
+    }
 
-  if (V8AudioTrack::hasInstance(v8Value, isolate)) {
-    AudioTrack* cppValue = V8AudioTrack::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setAudioTrack(cppValue);
-    return;
-  }
+    if (V8AudioTrack::hasInstance(v8Value, isolate)) {
+        AudioTrack* cppValue = V8AudioTrack::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setAudioTrack(cppValue);
+        return;
+    }
 
-  if (V8TextTrack::hasInstance(v8Value, isolate)) {
-    TextTrack* cppValue = V8TextTrack::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setTextTrack(cppValue);
-    return;
-  }
+    if (V8TextTrack::hasInstance(v8Value, isolate)) {
+        TextTrack* cppValue = V8TextTrack::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setTextTrack(cppValue);
+        return;
+    }
 
-  exceptionState.throwTypeError("The provided value is not of type '(VideoTrack or AudioTrack or TextTrack)'");
+    exceptionState.throwTypeError("The provided value is not of type '(VideoTrack or AudioTrack or TextTrack)'");
 }
 
-v8::Local<v8::Value> ToV8(const VideoTrackOrAudioTrackOrTextTrack& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const VideoTrackOrAudioTrackOrTextTrack& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case VideoTrackOrAudioTrackOrTextTrack::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case VideoTrackOrAudioTrackOrTextTrack::SpecificTypeVideoTrack:
-      return ToV8(impl.getAsVideoTrack(), creationContext, isolate);
+        return ToV8(impl.getAsVideoTrack(), creationContext, isolate);
     case VideoTrackOrAudioTrackOrTextTrack::SpecificTypeAudioTrack:
-      return ToV8(impl.getAsAudioTrack(), creationContext, isolate);
+        return ToV8(impl.getAsAudioTrack(), creationContext, isolate);
     case VideoTrackOrAudioTrackOrTextTrack::SpecificTypeTextTrack:
-      return ToV8(impl.getAsTextTrack(), creationContext, isolate);
+        return ToV8(impl.getAsTextTrack(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-VideoTrackOrAudioTrackOrTextTrack NativeValueTraits<VideoTrackOrAudioTrackOrTextTrack>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  VideoTrackOrAudioTrackOrTextTrack impl;
-  V8VideoTrackOrAudioTrackOrTextTrack::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+VideoTrackOrAudioTrackOrTextTrack NativeValueTraits<VideoTrackOrAudioTrackOrTextTrack>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    VideoTrackOrAudioTrackOrTextTrack impl;
+    V8VideoTrackOrAudioTrackOrTextTrack::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

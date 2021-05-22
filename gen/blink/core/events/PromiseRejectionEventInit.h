@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PromiseRejectionEventInit_h
 #define PromiseRejectionEventInit_h
 
@@ -21,32 +21,33 @@
 namespace blink {
 
 class CORE_EXPORT PromiseRejectionEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PromiseRejectionEventInit();
-  virtual ~PromiseRejectionEventInit();
-  PromiseRejectionEventInit(const PromiseRejectionEventInit&);
-  PromiseRejectionEventInit& operator=(const PromiseRejectionEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasPromise() const;
-  ScriptPromise promise() const;
-  void setPromise(ScriptPromise);
+public:
+    PromiseRejectionEventInit();
+    virtual ~PromiseRejectionEventInit();
+    PromiseRejectionEventInit(const PromiseRejectionEventInit&);
+    PromiseRejectionEventInit& operator=(const PromiseRejectionEventInit&);
 
-  bool hasReason() const;
-  ScriptValue reason() const;
-  void setReason(ScriptValue);
+    bool hasPromise() const;
+    ScriptPromise promise() const;
+    void setPromise(ScriptPromise);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasReason() const;
+    ScriptValue reason() const;
+    void setReason(ScriptValue);
 
- private:
-  bool m_hasPromise = false;
-  ScriptPromise m_promise;
-  ScriptValue m_reason;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PromiseRejectionEventInit;
+private:
+    bool m_hasPromise = false;
+    ScriptPromise m_promise;
+    ScriptValue m_reason;
+
+    friend class V8PromiseRejectionEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PromiseRejectionEventInit_h
+#endif // PromiseRejectionEventInit_h

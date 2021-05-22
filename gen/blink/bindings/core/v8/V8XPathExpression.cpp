@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8XPathExpression.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,92 +48,99 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&XPathExpression::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "XPathExpression is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace XPathExpressionV8Internal {
 
-static void evaluateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "XPathExpression", "evaluate");
+    static void evaluateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "XPathExpression", "evaluate");
 
-  XPathExpression* impl = V8XPathExpression::toImpl(info.Holder());
+        XPathExpression* impl = V8XPathExpression::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Node* contextNode;
-  unsigned type;
-  ScriptValue inResult;
-  contextNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!contextNode) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+        Node* contextNode;
+        unsigned type;
+        ScriptValue inResult;
+        contextNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!contextNode) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  if (!info[1]->IsUndefined()) {
-    type = toUInt16(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    type = 0u;
-  }
-  if (!info[2]->IsUndefined()) {
-    inResult = ScriptValue(ScriptState::current(info.GetIsolate()), info[2]);
-  } else {
-    inResult = ScriptValue();
-  }
+        if (!info[1]->IsUndefined()) {
+            type = toUInt16(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            type = 0u;
+        }
+        if (!info[2]->IsUndefined()) {
+            inResult = ScriptValue(ScriptState::current(info.GetIsolate()), info[2]);
+        } else {
+            inResult = ScriptValue();
+        }
 
-  XPathResult* result = impl->evaluate(contextNode, type, inResult, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        XPathResult* result = impl->evaluate(contextNode, type, inResult, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-CORE_EXPORT  void evaluateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XPathExpressionV8Internal::evaluateMethod(info);
-}
+    CORE_EXPORT void evaluateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XPathExpressionV8Internal::evaluateMethod(info);
+    }
 
 } // namespace XPathExpressionV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8XPathExpressionMethods[] = {
-    {"evaluate", XPathExpressionV8Internal::evaluateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "evaluate", XPathExpressionV8Internal::evaluateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8XPathExpressionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XPathExpression::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8XPathExpression::internalFieldCount);
+static void installV8XPathExpressionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XPathExpression::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8XPathExpression::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XPathExpressionMethods, WTF_ARRAY_LENGTH(V8XPathExpressionMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XPathExpressionMethods, WTF_ARRAY_LENGTH(V8XPathExpressionMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8XPathExpression::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XPathExpressionTemplate);
+v8::Local<v8::FunctionTemplate> V8XPathExpression::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XPathExpressionTemplate);
 }
 
-bool V8XPathExpression::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8XPathExpression::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8XPathExpression::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8XPathExpression::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-XPathExpression* V8XPathExpression::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+XPathExpression* V8XPathExpression::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

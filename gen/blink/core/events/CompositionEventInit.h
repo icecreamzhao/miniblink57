@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CompositionEventInit_h
 #define CompositionEventInit_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class CORE_EXPORT CompositionEventInit : public UIEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CompositionEventInit();
-  virtual ~CompositionEventInit();
-  CompositionEventInit(const CompositionEventInit&);
-  CompositionEventInit& operator=(const CompositionEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasData() const;
-  String data() const;
-  void setData(String);
+public:
+    CompositionEventInit();
+    virtual ~CompositionEventInit();
+    CompositionEventInit(const CompositionEventInit&);
+    CompositionEventInit& operator=(const CompositionEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasData() const;
+    String data() const;
+    void setData(String);
 
- private:
-  String m_data;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8CompositionEventInit;
+private:
+    String m_data;
+
+    friend class V8CompositionEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // CompositionEventInit_h
+#endif // CompositionEventInit_h

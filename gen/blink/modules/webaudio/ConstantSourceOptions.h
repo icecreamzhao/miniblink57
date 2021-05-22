@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ConstantSourceOptions_h
 #define ConstantSourceOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT ConstantSourceOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ConstantSourceOptions();
-  virtual ~ConstantSourceOptions();
-  ConstantSourceOptions(const ConstantSourceOptions&);
-  ConstantSourceOptions& operator=(const ConstantSourceOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasOffset() const;
-  float offset() const;
-  void setOffset(float);
+public:
+    ConstantSourceOptions();
+    virtual ~ConstantSourceOptions();
+    ConstantSourceOptions(const ConstantSourceOptions&);
+    ConstantSourceOptions& operator=(const ConstantSourceOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasOffset() const;
+    float offset() const;
+    void setOffset(float);
 
- private:
-  bool m_hasOffset = false;
-  float m_offset;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ConstantSourceOptions;
+private:
+    bool m_hasOffset = false;
+    float m_offset;
+
+    friend class V8ConstantSourceOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ConstantSourceOptions_h
+#endif // ConstantSourceOptions_h

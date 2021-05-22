@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FileWriter.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,405 +50,450 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&FileWriter::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "FileWriter is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace FileWriterV8Internal {
 
-static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->getReadyState());
-}
+        v8SetReturnValueUnsigned(info, impl->getReadyState());
+    }
 
-MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::readyStateAttributeGetter(info);
-}
+    MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::readyStateAttributeGetter(info);
+    }
 
-static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  DOMException* cppValue(WTF::getPtr(impl->error()));
+        DOMException* cppValue(WTF::getPtr(impl->error()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#FileWriter#error";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#FileWriter#error";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::errorAttributeGetter(info);
-}
+    MODULES_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::errorAttributeGetter(info);
+    }
 
-static void positionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void positionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->position()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->position()));
+    }
 
-MODULES_EXPORT void positionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::positionAttributeGetter(info);
-}
+    MODULES_EXPORT void positionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::positionAttributeGetter(info);
+    }
 
-static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->length()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->length()));
+    }
 
-MODULES_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::lengthAttributeGetter(info);
-}
+    MODULES_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::lengthAttributeGetter(info);
+    }
 
-static void onwritestartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onwritestartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onwritestart()));
+        EventListener* cppValue(WTF::getPtr(impl->onwritestart()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onwritestartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::onwritestartAttributeGetter(info);
-}
+    MODULES_EXPORT void onwritestartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::onwritestartAttributeGetter(info);
+    }
 
-static void onwritestartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+    static void onwritestartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onwritestart(), v8Value, V8FileWriter::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onwritestart(), v8Value, V8FileWriter::eventListenerCacheIndex);
 
-  impl->setOnwritestart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnwritestart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onwritestartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onwritestartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  FileWriterV8Internal::onwritestartAttributeSetter(v8Value, info);
-}
+        FileWriterV8Internal::onwritestartAttributeSetter(v8Value, info);
+    }
 
-static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onprogress()));
+        EventListener* cppValue(WTF::getPtr(impl->onprogress()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::onprogressAttributeGetter(info);
-}
+    MODULES_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::onprogressAttributeGetter(info);
+    }
 
-static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+    static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onprogress(), v8Value, V8FileWriter::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onprogress(), v8Value, V8FileWriter::eventListenerCacheIndex);
 
-  impl->setOnprogress(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnprogress(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  FileWriterV8Internal::onprogressAttributeSetter(v8Value, info);
-}
+        FileWriterV8Internal::onprogressAttributeSetter(v8Value, info);
+    }
 
-static void onwriteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onwriteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onwrite()));
+        EventListener* cppValue(WTF::getPtr(impl->onwrite()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onwriteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::onwriteAttributeGetter(info);
-}
+    MODULES_EXPORT void onwriteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::onwriteAttributeGetter(info);
+    }
 
-static void onwriteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+    static void onwriteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onwrite(), v8Value, V8FileWriter::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onwrite(), v8Value, V8FileWriter::eventListenerCacheIndex);
 
-  impl->setOnwrite(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnwrite(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onwriteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onwriteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  FileWriterV8Internal::onwriteAttributeSetter(v8Value, info);
-}
+        FileWriterV8Internal::onwriteAttributeSetter(v8Value, info);
+    }
 
-static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onabort()));
+        EventListener* cppValue(WTF::getPtr(impl->onabort()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::onabortAttributeGetter(info);
-}
+    MODULES_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::onabortAttributeGetter(info);
+    }
 
-static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+    static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onabort(), v8Value, V8FileWriter::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onabort(), v8Value, V8FileWriter::eventListenerCacheIndex);
 
-  impl->setOnabort(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnabort(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  FileWriterV8Internal::onabortAttributeSetter(v8Value, info);
-}
+        FileWriterV8Internal::onabortAttributeSetter(v8Value, info);
+    }
 
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::onerrorAttributeGetter(info);
-}
+    MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::onerrorAttributeGetter(info);
+    }
 
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8FileWriter::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8FileWriter::eventListenerCacheIndex);
 
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  FileWriterV8Internal::onerrorAttributeSetter(v8Value, info);
-}
+        FileWriterV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
 
-static void onwriteendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onwriteendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onwriteend()));
+        EventListener* cppValue(WTF::getPtr(impl->onwriteend()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onwriteendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::onwriteendAttributeGetter(info);
-}
+    MODULES_EXPORT void onwriteendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::onwriteendAttributeGetter(info);
+    }
 
-static void onwriteendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileWriter* impl = V8FileWriter::toImpl(holder);
+    static void onwriteendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileWriter* impl = V8FileWriter::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onwriteend(), v8Value, V8FileWriter::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onwriteend(), v8Value, V8FileWriter::eventListenerCacheIndex);
 
-  impl->setOnwriteend(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnwriteend(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onwriteendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onwriteendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  FileWriterV8Internal::onwriteendAttributeSetter(v8Value, info);
-}
+        FileWriterV8Internal::onwriteendAttributeSetter(v8Value, info);
+    }
 
-static void writeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriter", "write");
+    static void writeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriter", "write");
 
-  FileWriter* impl = V8FileWriter::toImpl(info.Holder());
+        FileWriter* impl = V8FileWriter::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Blob* data;
-  data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+        Blob* data;
+        data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->write(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->write(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void writeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::writeMethod(info);
-}
+    MODULES_EXPORT void writeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::writeMethod(info);
+    }
 
-static void seekMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriter", "seek");
+    static void seekMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriter", "seek");
 
-  FileWriter* impl = V8FileWriter::toImpl(info.Holder());
+        FileWriter* impl = V8FileWriter::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  long long position;
-  position = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        long long position;
+        position = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->seek(position, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->seek(position, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void seekMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::seekMethod(info);
-}
+    MODULES_EXPORT void seekMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::seekMethod(info);
+    }
 
-static void truncateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriter", "truncate");
+    static void truncateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriter", "truncate");
 
-  FileWriter* impl = V8FileWriter::toImpl(info.Holder());
+        FileWriter* impl = V8FileWriter::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  long long size;
-  size = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        long long size;
+        size = toInt64(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->truncate(size, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->truncate(size, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void truncateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::truncateMethod(info);
-}
+    MODULES_EXPORT void truncateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::truncateMethod(info);
+    }
 
-static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriter", "abort");
+    static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileWriter", "abort");
 
-  FileWriter* impl = V8FileWriter::toImpl(info.Holder());
+        FileWriter* impl = V8FileWriter::toImpl(info.Holder());
 
-  impl->abort(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->abort(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileWriterV8Internal::abortMethod(info);
-}
+    MODULES_EXPORT void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileWriterV8Internal::abortMethod(info);
+    }
 
 } // namespace FileWriterV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8FileWriterAccessors[] = {
-    {"readyState", FileWriterV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"error", FileWriterV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"position", FileWriterV8Internal::positionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"length", FileWriterV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwritestart", FileWriterV8Internal::onwritestartAttributeGetterCallback, FileWriterV8Internal::onwritestartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onprogress", FileWriterV8Internal::onprogressAttributeGetterCallback, FileWriterV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwrite", FileWriterV8Internal::onwriteAttributeGetterCallback, FileWriterV8Internal::onwriteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onabort", FileWriterV8Internal::onabortAttributeGetterCallback, FileWriterV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", FileWriterV8Internal::onerrorAttributeGetterCallback, FileWriterV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwriteend", FileWriterV8Internal::onwriteendAttributeGetterCallback, FileWriterV8Internal::onwriteendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "readyState", FileWriterV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "error", FileWriterV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "position", FileWriterV8Internal::positionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "length", FileWriterV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwritestart", FileWriterV8Internal::onwritestartAttributeGetterCallback, FileWriterV8Internal::onwritestartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onprogress", FileWriterV8Internal::onprogressAttributeGetterCallback, FileWriterV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwrite", FileWriterV8Internal::onwriteAttributeGetterCallback, FileWriterV8Internal::onwriteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onabort", FileWriterV8Internal::onabortAttributeGetterCallback, FileWriterV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", FileWriterV8Internal::onerrorAttributeGetterCallback, FileWriterV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwriteend", FileWriterV8Internal::onwriteendAttributeGetterCallback, FileWriterV8Internal::onwriteendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8FileWriterMethods[] = {
-    {"write", FileWriterV8Internal::writeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"seek", FileWriterV8Internal::seekMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"truncate", FileWriterV8Internal::truncateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"abort", FileWriterV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "write", FileWriterV8Internal::writeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "seek", FileWriterV8Internal::seekMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "truncate", FileWriterV8Internal::truncateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "abort", FileWriterV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8FileWriterTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileWriter::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8FileWriter::internalFieldCount);
+static void installV8FileWriterTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileWriter::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8FileWriter::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8FileWriterConstants[] = {
-      {"INIT", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"WRITING", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DONE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8FileWriterConstants, WTF_ARRAY_LENGTH(V8FileWriterConstants));
-  static_assert(0 == FileWriter::kInit, "the value of FileWriter_kInit does not match with implementation");
-  static_assert(1 == FileWriter::kWriting, "the value of FileWriter_kWriting does not match with implementation");
-  static_assert(2 == FileWriter::kDone, "the value of FileWriter_kDone does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileWriterAccessors, WTF_ARRAY_LENGTH(V8FileWriterAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileWriterMethods, WTF_ARRAY_LENGTH(V8FileWriterMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8FileWriterConstants[] = {
+        { "INIT", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "WRITING", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DONE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8FileWriterConstants, WTF_ARRAY_LENGTH(V8FileWriterConstants));
+    static_assert(0 == FileWriter::kInit, "the value of FileWriter_kInit does not match with implementation");
+    static_assert(1 == FileWriter::kWriting, "the value of FileWriter_kWriting does not match with implementation");
+    static_assert(2 == FileWriter::kDone, "the value of FileWriter_kDone does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileWriterAccessors, WTF_ARRAY_LENGTH(V8FileWriterAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileWriterMethods, WTF_ARRAY_LENGTH(V8FileWriterMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8FileWriter::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileWriterTemplate);
+v8::Local<v8::FunctionTemplate> V8FileWriter::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileWriterTemplate);
 }
 
-bool V8FileWriter::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8FileWriter::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8FileWriter::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8FileWriter::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-FileWriter* V8FileWriter::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+FileWriter* V8FileWriter::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

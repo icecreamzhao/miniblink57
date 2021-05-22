@@ -8,47 +8,55 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FileSystemFlags.h"
 
 namespace blink {
 
-FileSystemFlags::FileSystemFlags() {
-  setCreateFlag(false);
-  setExclusive(false);
+FileSystemFlags::FileSystemFlags()
+{
+    setCreateFlag(false);
+    setExclusive(false);
 }
 
-FileSystemFlags::~FileSystemFlags() {}
+FileSystemFlags::~FileSystemFlags() { }
 
 FileSystemFlags::FileSystemFlags(const FileSystemFlags&) = default;
 
 FileSystemFlags& FileSystemFlags::operator=(const FileSystemFlags&) = default;
 
-bool FileSystemFlags::hasCreateFlag() const {
-  return m_hasCreateFlag;
+bool FileSystemFlags::hasCreateFlag() const
+{
+    return m_hasCreateFlag;
 }
-bool FileSystemFlags::createFlag() const {
-  DCHECK(m_hasCreateFlag);
-  return m_createFlag;
+bool FileSystemFlags::createFlag() const
+{
+    DCHECK(m_hasCreateFlag);
+    return m_createFlag;
 }
-void FileSystemFlags::setCreateFlag(bool value) {
-  m_createFlag = value;
-  m_hasCreateFlag = true;
+void FileSystemFlags::setCreateFlag(bool value)
+{
+    m_createFlag = value;
+    m_hasCreateFlag = true;
 }
-bool FileSystemFlags::hasExclusive() const {
-  return m_hasExclusive;
+bool FileSystemFlags::hasExclusive() const
+{
+    return m_hasExclusive;
 }
-bool FileSystemFlags::exclusive() const {
-  DCHECK(m_hasExclusive);
-  return m_exclusive;
+bool FileSystemFlags::exclusive() const
+{
+    DCHECK(m_hasExclusive);
+    return m_exclusive;
 }
-void FileSystemFlags::setExclusive(bool value) {
-  m_exclusive = value;
-  m_hasExclusive = true;
+void FileSystemFlags::setExclusive(bool value)
+{
+    m_exclusive = value;
+    m_hasExclusive = true;
 }
 
-DEFINE_TRACE(FileSystemFlags) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(FileSystemFlags)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

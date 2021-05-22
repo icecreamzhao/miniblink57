@@ -8,85 +8,105 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ImageBitmapOptions.h"
 
 namespace blink {
 
-ImageBitmapOptions::ImageBitmapOptions() {
-  setColorSpaceConversion(String("default"));
-  setImageOrientation(String("none"));
-  setPremultiplyAlpha(String("default"));
-  setResizeQuality(String("low"));
+ImageBitmapOptions::ImageBitmapOptions()
+{
+    setColorSpaceConversion(String("default"));
+    setImageOrientation(String("none"));
+    setPremultiplyAlpha(String("default"));
+    setResizeQuality(String("low"));
 }
 
-ImageBitmapOptions::~ImageBitmapOptions() {}
+ImageBitmapOptions::~ImageBitmapOptions() { }
 
 ImageBitmapOptions::ImageBitmapOptions(const ImageBitmapOptions&) = default;
 
 ImageBitmapOptions& ImageBitmapOptions::operator=(const ImageBitmapOptions&) = default;
 
-bool ImageBitmapOptions::hasColorSpaceConversion() const {
-  return !m_colorSpaceConversion.isNull();
+bool ImageBitmapOptions::hasColorSpaceConversion() const
+{
+    return !m_colorSpaceConversion.isNull();
 }
-String ImageBitmapOptions::colorSpaceConversion() const {
-  return m_colorSpaceConversion;
+String ImageBitmapOptions::colorSpaceConversion() const
+{
+    return m_colorSpaceConversion;
 }
-void ImageBitmapOptions::setColorSpaceConversion(String value) {
-  m_colorSpaceConversion = value;
+void ImageBitmapOptions::setColorSpaceConversion(String value)
+{
+    m_colorSpaceConversion = value;
 }
-bool ImageBitmapOptions::hasImageOrientation() const {
-  return !m_imageOrientation.isNull();
+bool ImageBitmapOptions::hasImageOrientation() const
+{
+    return !m_imageOrientation.isNull();
 }
-String ImageBitmapOptions::imageOrientation() const {
-  return m_imageOrientation;
+String ImageBitmapOptions::imageOrientation() const
+{
+    return m_imageOrientation;
 }
-void ImageBitmapOptions::setImageOrientation(String value) {
-  m_imageOrientation = value;
+void ImageBitmapOptions::setImageOrientation(String value)
+{
+    m_imageOrientation = value;
 }
-bool ImageBitmapOptions::hasPremultiplyAlpha() const {
-  return !m_premultiplyAlpha.isNull();
+bool ImageBitmapOptions::hasPremultiplyAlpha() const
+{
+    return !m_premultiplyAlpha.isNull();
 }
-String ImageBitmapOptions::premultiplyAlpha() const {
-  return m_premultiplyAlpha;
+String ImageBitmapOptions::premultiplyAlpha() const
+{
+    return m_premultiplyAlpha;
 }
-void ImageBitmapOptions::setPremultiplyAlpha(String value) {
-  m_premultiplyAlpha = value;
+void ImageBitmapOptions::setPremultiplyAlpha(String value)
+{
+    m_premultiplyAlpha = value;
 }
-bool ImageBitmapOptions::hasResizeHeight() const {
-  return m_hasResizeHeight;
+bool ImageBitmapOptions::hasResizeHeight() const
+{
+    return m_hasResizeHeight;
 }
-unsigned ImageBitmapOptions::resizeHeight() const {
-  DCHECK(m_hasResizeHeight);
-  return m_resizeHeight;
+unsigned ImageBitmapOptions::resizeHeight() const
+{
+    DCHECK(m_hasResizeHeight);
+    return m_resizeHeight;
 }
-void ImageBitmapOptions::setResizeHeight(unsigned value) {
-  m_resizeHeight = value;
-  m_hasResizeHeight = true;
+void ImageBitmapOptions::setResizeHeight(unsigned value)
+{
+    m_resizeHeight = value;
+    m_hasResizeHeight = true;
 }
-bool ImageBitmapOptions::hasResizeQuality() const {
-  return !m_resizeQuality.isNull();
+bool ImageBitmapOptions::hasResizeQuality() const
+{
+    return !m_resizeQuality.isNull();
 }
-String ImageBitmapOptions::resizeQuality() const {
-  return m_resizeQuality;
+String ImageBitmapOptions::resizeQuality() const
+{
+    return m_resizeQuality;
 }
-void ImageBitmapOptions::setResizeQuality(String value) {
-  m_resizeQuality = value;
+void ImageBitmapOptions::setResizeQuality(String value)
+{
+    m_resizeQuality = value;
 }
-bool ImageBitmapOptions::hasResizeWidth() const {
-  return m_hasResizeWidth;
+bool ImageBitmapOptions::hasResizeWidth() const
+{
+    return m_hasResizeWidth;
 }
-unsigned ImageBitmapOptions::resizeWidth() const {
-  DCHECK(m_hasResizeWidth);
-  return m_resizeWidth;
+unsigned ImageBitmapOptions::resizeWidth() const
+{
+    DCHECK(m_hasResizeWidth);
+    return m_resizeWidth;
 }
-void ImageBitmapOptions::setResizeWidth(unsigned value) {
-  m_resizeWidth = value;
-  m_hasResizeWidth = true;
+void ImageBitmapOptions::setResizeWidth(unsigned value)
+{
+    m_resizeWidth = value;
+    m_hasResizeWidth = true;
 }
 
-DEFINE_TRACE(ImageBitmapOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ImageBitmapOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

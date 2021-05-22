@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8VideoTrackPartial.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -30,58 +30,62 @@ namespace blink {
 
 namespace VideoTrackPartialV8Internal {
 
-static void sourceBufferAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sourceBufferAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  VideoTrack* impl = V8VideoTrack::toImpl(holder);
+        VideoTrack* impl = V8VideoTrack::toImpl(holder);
 
-  SourceBuffer* cppValue(SourceBufferTrackBaseSupplement::sourceBuffer(*impl));
+        SourceBuffer* cppValue(SourceBufferTrackBaseSupplement::sourceBuffer(*impl));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#VideoTrack#sourceBuffer";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#VideoTrack#sourceBuffer";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-void sourceBufferAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VideoTrackPartialV8Internal::sourceBufferAttributeGetter(info);
-}
+    void sourceBufferAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VideoTrackPartialV8Internal::sourceBufferAttributeGetter(info);
+    }
 
 } // namespace VideoTrackPartialV8Internal
 
-void V8VideoTrackPartial::installV8VideoTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8VideoTrack::installV8VideoTrackTemplate(isolate, world, interfaceTemplate);
+void V8VideoTrackPartial::installV8VideoTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8VideoTrack::installV8VideoTrackTemplate(isolate, world, interfaceTemplate);
 
-  if (!RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 
-  if (RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorsourceBufferConfiguration = {"sourceBuffer", VideoTrackPartialV8Internal::sourceBufferAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorsourceBufferConfiguration);
-  }
+    if (RuntimeEnabledFeatures::audioVideoTracksEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorsourceBufferConfiguration = { "sourceBuffer", VideoTrackPartialV8Internal::sourceBufferAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorsourceBufferConfiguration);
+    }
 }
 
-void V8VideoTrackPartial::initialize() {
-  // Should be invoked from ModulesInitializer.
-  V8VideoTrack::updateWrapperTypeInfo(
-      &V8VideoTrackPartial::installV8VideoTrackTemplate,
-      nullptr);
+void V8VideoTrackPartial::initialize()
+{
+    // Should be invoked from ModulesInitializer.
+    V8VideoTrack::updateWrapperTypeInfo(
+        &V8VideoTrackPartial::installV8VideoTrackTemplate,
+        nullptr);
 }
 
-}  // namespace blink
+} // namespace blink

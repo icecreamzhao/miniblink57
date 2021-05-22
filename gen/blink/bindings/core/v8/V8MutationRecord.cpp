@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MutationRecord.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,184 +52,207 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MutationRecord::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MutationRecord is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MutationRecordV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationRecord* impl = V8MutationRecord::toImpl(holder);
+        MutationRecord* impl = V8MutationRecord::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationRecordV8Internal::typeAttributeGetter(info);
-}
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationRecordV8Internal::typeAttributeGetter(info);
+    }
 
-static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationRecord* impl = V8MutationRecord::toImpl(holder);
+        MutationRecord* impl = V8MutationRecord::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->target()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->target()), impl);
+    }
 
-CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationRecordV8Internal::targetAttributeGetter(info);
-}
+    CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationRecordV8Internal::targetAttributeGetter(info);
+    }
 
-static void addedNodesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void addedNodesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationRecord* impl = V8MutationRecord::toImpl(holder);
+        MutationRecord* impl = V8MutationRecord::toImpl(holder);
 
-  NodeList* cppValue(WTF::getPtr(impl->addedNodes()));
+        NodeList* cppValue(WTF::getPtr(impl->addedNodes()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#MutationRecord#addedNodes";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#MutationRecord#addedNodes";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void addedNodesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationRecordV8Internal::addedNodesAttributeGetter(info);
-}
+    CORE_EXPORT void addedNodesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationRecordV8Internal::addedNodesAttributeGetter(info);
+    }
 
-static void removedNodesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void removedNodesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationRecord* impl = V8MutationRecord::toImpl(holder);
+        MutationRecord* impl = V8MutationRecord::toImpl(holder);
 
-  NodeList* cppValue(WTF::getPtr(impl->removedNodes()));
+        NodeList* cppValue(WTF::getPtr(impl->removedNodes()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#MutationRecord#removedNodes";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#MutationRecord#removedNodes";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void removedNodesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationRecordV8Internal::removedNodesAttributeGetter(info);
-}
+    CORE_EXPORT void removedNodesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationRecordV8Internal::removedNodesAttributeGetter(info);
+    }
 
-static void previousSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void previousSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationRecord* impl = V8MutationRecord::toImpl(holder);
+        MutationRecord* impl = V8MutationRecord::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->previousSibling()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->previousSibling()), impl);
+    }
 
-CORE_EXPORT void previousSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationRecordV8Internal::previousSiblingAttributeGetter(info);
-}
+    CORE_EXPORT void previousSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationRecordV8Internal::previousSiblingAttributeGetter(info);
+    }
 
-static void nextSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nextSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationRecord* impl = V8MutationRecord::toImpl(holder);
+        MutationRecord* impl = V8MutationRecord::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->nextSibling()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->nextSibling()), impl);
+    }
 
-CORE_EXPORT void nextSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationRecordV8Internal::nextSiblingAttributeGetter(info);
-}
+    CORE_EXPORT void nextSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationRecordV8Internal::nextSiblingAttributeGetter(info);
+    }
 
-static void attributeNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void attributeNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationRecord* impl = V8MutationRecord::toImpl(holder);
+        MutationRecord* impl = V8MutationRecord::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->attributeName(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->attributeName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void attributeNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationRecordV8Internal::attributeNameAttributeGetter(info);
-}
+    CORE_EXPORT void attributeNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationRecordV8Internal::attributeNameAttributeGetter(info);
+    }
 
-static void attributeNamespaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void attributeNamespaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationRecord* impl = V8MutationRecord::toImpl(holder);
+        MutationRecord* impl = V8MutationRecord::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->attributeNamespace(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->attributeNamespace(), info.GetIsolate());
+    }
 
-CORE_EXPORT void attributeNamespaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationRecordV8Internal::attributeNamespaceAttributeGetter(info);
-}
+    CORE_EXPORT void attributeNamespaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationRecordV8Internal::attributeNamespaceAttributeGetter(info);
+    }
 
-static void oldValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oldValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MutationRecord* impl = V8MutationRecord::toImpl(holder);
+        MutationRecord* impl = V8MutationRecord::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->oldValue(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->oldValue(), info.GetIsolate());
+    }
 
-CORE_EXPORT void oldValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationRecordV8Internal::oldValueAttributeGetter(info);
-}
+    CORE_EXPORT void oldValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationRecordV8Internal::oldValueAttributeGetter(info);
+    }
 
 } // namespace MutationRecordV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MutationRecordAccessors[] = {
-    {"type", MutationRecordV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"target", MutationRecordV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"addedNodes", MutationRecordV8Internal::addedNodesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removedNodes", MutationRecordV8Internal::removedNodesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"previousSibling", MutationRecordV8Internal::previousSiblingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nextSibling", MutationRecordV8Internal::nextSiblingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"attributeName", MutationRecordV8Internal::attributeNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"attributeNamespace", MutationRecordV8Internal::attributeNamespaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oldValue", MutationRecordV8Internal::oldValueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", MutationRecordV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "target", MutationRecordV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "addedNodes", MutationRecordV8Internal::addedNodesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removedNodes", MutationRecordV8Internal::removedNodesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "previousSibling", MutationRecordV8Internal::previousSiblingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nextSibling", MutationRecordV8Internal::nextSiblingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "attributeName", MutationRecordV8Internal::attributeNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "attributeNamespace", MutationRecordV8Internal::attributeNamespaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oldValue", MutationRecordV8Internal::oldValueAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8MutationRecordTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MutationRecord::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MutationRecord::internalFieldCount);
+static void installV8MutationRecordTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MutationRecord::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MutationRecord::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MutationRecordAccessors, WTF_ARRAY_LENGTH(V8MutationRecordAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MutationRecordAccessors, WTF_ARRAY_LENGTH(V8MutationRecordAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8MutationRecord::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MutationRecordTemplate);
+v8::Local<v8::FunctionTemplate> V8MutationRecord::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MutationRecordTemplate);
 }
 
-bool V8MutationRecord::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MutationRecord::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MutationRecord::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MutationRecord::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MutationRecord* V8MutationRecord::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MutationRecord* V8MutationRecord::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

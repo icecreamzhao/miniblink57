@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ScrollToOptions_h
 #define ScrollToOptions_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class CORE_EXPORT ScrollToOptions : public ScrollOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ScrollToOptions();
-  virtual ~ScrollToOptions();
-  ScrollToOptions(const ScrollToOptions&);
-  ScrollToOptions& operator=(const ScrollToOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasLeft() const;
-  double left() const;
-  void setLeft(double);
+public:
+    ScrollToOptions();
+    virtual ~ScrollToOptions();
+    ScrollToOptions(const ScrollToOptions&);
+    ScrollToOptions& operator=(const ScrollToOptions&);
 
-  bool hasTop() const;
-  double top() const;
-  void setTop(double);
+    bool hasLeft() const;
+    double left() const;
+    void setLeft(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTop() const;
+    double top() const;
+    void setTop(double);
 
- private:
-  bool m_hasLeft = false;
-  double m_left;
-  bool m_hasTop = false;
-  double m_top;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ScrollToOptions;
+private:
+    bool m_hasLeft = false;
+    double m_left;
+    bool m_hasTop = false;
+    double m_top;
+
+    friend class V8ScrollToOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ScrollToOptions_h
+#endif // ScrollToOptions_h

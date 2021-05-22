@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef VRDisplayEventInit_h
 #define VRDisplayEventInit_h
 
@@ -22,32 +22,33 @@ namespace blink {
 class VRDisplay;
 
 class MODULES_EXPORT VRDisplayEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  VRDisplayEventInit();
-  virtual ~VRDisplayEventInit();
-  VRDisplayEventInit(const VRDisplayEventInit&);
-  VRDisplayEventInit& operator=(const VRDisplayEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDisplay() const;
-  VRDisplay* display() const;
-  void setDisplay(VRDisplay*);
-  void setDisplayToNull();
+public:
+    VRDisplayEventInit();
+    virtual ~VRDisplayEventInit();
+    VRDisplayEventInit(const VRDisplayEventInit&);
+    VRDisplayEventInit& operator=(const VRDisplayEventInit&);
 
-  bool hasReason() const;
-  String reason() const;
-  void setReason(String);
+    bool hasDisplay() const;
+    VRDisplay* display() const;
+    void setDisplay(VRDisplay*);
+    void setDisplayToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasReason() const;
+    String reason() const;
+    void setReason(String);
 
- private:
-  Member<VRDisplay> m_display;
-  String m_reason;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8VRDisplayEventInit;
+private:
+    Member<VRDisplay> m_display;
+    String m_reason;
+
+    friend class V8VRDisplayEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // VRDisplayEventInit_h
+#endif // VRDisplayEventInit_h

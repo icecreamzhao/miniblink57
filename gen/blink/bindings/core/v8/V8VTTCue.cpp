@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8VTTCue.h"
 
 #include "bindings/core/v8/DoubleOrAutoKeyword.h"
@@ -52,418 +52,460 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&VTTCue::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "VTTCue is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace VTTCueV8Internal {
 
-static void regionIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void regionIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        VTTCue* impl = V8VTTCue::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->regionId(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void regionIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCueV8Internal::regionIdAttributeGetter(info);
+    }
+
+    static void regionIdAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        VTTCue* impl = V8VTTCue::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        impl->setRegionId(cppValue);
+    }
 
-  v8SetReturnValueString(info, impl->regionId(), info.GetIsolate());
-}
+    CORE_EXPORT void regionIdAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-CORE_EXPORT void regionIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCueV8Internal::regionIdAttributeGetter(info);
-}
+        VTTCueV8Internal::regionIdAttributeSetter(v8Value, info);
+    }
 
-static void regionIdAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+    static void verticalAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-  impl->setRegionId(cppValue);
-}
+        v8SetReturnValueString(info, impl->vertical(), info.GetIsolate());
+    }
 
-CORE_EXPORT void regionIdAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void verticalAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCueV8Internal::verticalAttributeGetter(info);
+    }
 
-  VTTCueV8Internal::regionIdAttributeSetter(v8Value, info);
-}
+    static void verticalAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-static void verticalAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "vertical");
 
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  v8SetReturnValueString(info, impl->vertical(), info.GetIsolate());
-}
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "",
+            "rl",
+            "lr",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "DirectionSetting", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
 
-CORE_EXPORT void verticalAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCueV8Internal::verticalAttributeGetter(info);
-}
+        impl->setVertical(cppValue);
+    }
 
-static void verticalAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+    CORE_EXPORT void verticalAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "vertical");
+        VTTCueV8Internal::verticalAttributeSetter(v8Value, info);
+    }
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+    static void snapToLinesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "",
-      "rl",
-      "lr",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "DirectionSetting", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-  impl->setVertical(cppValue);
-}
+        v8SetReturnValueBool(info, impl->snapToLines());
+    }
 
-CORE_EXPORT void verticalAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void snapToLinesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCueV8Internal::snapToLinesAttributeGetter(info);
+    }
 
-  VTTCueV8Internal::verticalAttributeSetter(v8Value, info);
-}
+    static void snapToLinesAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-static void snapToLinesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "snapToLines");
 
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValueBool(info, impl->snapToLines());
-}
+        impl->setSnapToLines(cppValue);
+    }
 
-CORE_EXPORT void snapToLinesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCueV8Internal::snapToLinesAttributeGetter(info);
-}
+    CORE_EXPORT void snapToLinesAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-static void snapToLinesAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        VTTCueV8Internal::snapToLinesAttributeSetter(v8Value, info);
+    }
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "snapToLines");
+    static void lineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-  impl->setSnapToLines(cppValue);
-}
+        DoubleOrAutoKeyword result;
+        impl->line(result);
 
-CORE_EXPORT void snapToLinesAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+        v8SetReturnValue(info, result);
+    }
 
-  VTTCueV8Internal::snapToLinesAttributeSetter(v8Value, info);
-}
+    CORE_EXPORT void lineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCueV8Internal::lineAttributeGetter(info);
+    }
 
-static void lineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lineAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "line");
 
-  DoubleOrAutoKeyword result;
-  impl->line(result);
+        // Prepare the value to be set.
+        DoubleOrAutoKeyword cppValue;
+        V8DoubleOrAutoKeyword::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, result);
-}
+        impl->setLine(cppValue);
+    }
 
-CORE_EXPORT void lineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCueV8Internal::lineAttributeGetter(info);
-}
+    CORE_EXPORT void lineAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-static void lineAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        VTTCueV8Internal::lineAttributeSetter(v8Value, info);
+    }
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "line");
+    static void positionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  // Prepare the value to be set.
-  DoubleOrAutoKeyword cppValue;
-  V8DoubleOrAutoKeyword::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-  impl->setLine(cppValue);
-}
+        DoubleOrAutoKeyword result;
+        impl->position(result);
 
-CORE_EXPORT void lineAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+        v8SetReturnValue(info, result);
+    }
 
-  VTTCueV8Internal::lineAttributeSetter(v8Value, info);
-}
+    CORE_EXPORT void positionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCueV8Internal::positionAttributeGetter(info);
+    }
 
-static void positionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void positionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "position");
 
-  DoubleOrAutoKeyword result;
-  impl->position(result);
+        // Prepare the value to be set.
+        DoubleOrAutoKeyword cppValue;
+        V8DoubleOrAutoKeyword::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, result);
-}
+        impl->setPosition(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void positionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCueV8Internal::positionAttributeGetter(info);
-}
+    CORE_EXPORT void positionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-static void positionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        VTTCueV8Internal::positionAttributeSetter(v8Value, info);
+    }
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "position");
+    static void sizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  // Prepare the value to be set.
-  DoubleOrAutoKeyword cppValue;
-  V8DoubleOrAutoKeyword::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-  impl->setPosition(cppValue, exceptionState);
-}
+        v8SetReturnValue(info, impl->size());
+    }
 
-CORE_EXPORT void positionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void sizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCueV8Internal::sizeAttributeGetter(info);
+    }
 
-  VTTCueV8Internal::positionAttributeSetter(v8Value, info);
-}
+    static void sizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-static void sizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "size");
 
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->size());
-}
+        impl->setSize(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void sizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCueV8Internal::sizeAttributeGetter(info);
-}
+    CORE_EXPORT void sizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-static void sizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        VTTCueV8Internal::sizeAttributeSetter(v8Value, info);
+    }
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "size");
+    static void alignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-  impl->setSize(cppValue, exceptionState);
-}
+        v8SetReturnValueString(info, impl->align(), info.GetIsolate());
+    }
 
-CORE_EXPORT void sizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void alignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCueV8Internal::alignAttributeGetter(info);
+    }
 
-  VTTCueV8Internal::sizeAttributeSetter(v8Value, info);
-}
+    static void alignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-static void alignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "align");
 
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  v8SetReturnValueString(info, impl->align(), info.GetIsolate());
-}
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "start",
+            "middle",
+            "end",
+            "left",
+            "right",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "AlignSetting", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
 
-CORE_EXPORT void alignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCueV8Internal::alignAttributeGetter(info);
-}
+        impl->setAlign(cppValue);
+    }
 
-static void alignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+    CORE_EXPORT void alignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "VTTCue", "align");
+        VTTCueV8Internal::alignAttributeSetter(v8Value, info);
+    }
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+    static void textAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "start",
-      "middle",
-      "end",
-      "left",
-      "right",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "AlignSetting", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-  impl->setAlign(cppValue);
-}
+        v8SetReturnValueString(info, impl->text(), info.GetIsolate());
+    }
 
-CORE_EXPORT void alignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void textAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCueV8Internal::textAttributeGetter(info);
+    }
 
-  VTTCueV8Internal::alignAttributeSetter(v8Value, info);
-}
+    static void textAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        VTTCue* impl = V8VTTCue::toImpl(holder);
 
-static void textAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+        impl->setText(cppValue);
+    }
 
-  v8SetReturnValueString(info, impl->text(), info.GetIsolate());
-}
+    CORE_EXPORT void textAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-CORE_EXPORT void textAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCueV8Internal::textAttributeGetter(info);
-}
+        VTTCueV8Internal::textAttributeSetter(v8Value, info);
+    }
 
-static void textAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  VTTCue* impl = V8VTTCue::toImpl(holder);
+    static void getCueAsHTMLMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCue* impl = V8VTTCue::toImpl(info.Holder());
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        v8SetReturnValue(info, impl->getCueAsHTML());
+    }
 
-  impl->setText(cppValue);
-}
+    CORE_EXPORT void getCueAsHTMLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        VTTCueV8Internal::getCueAsHTMLMethod(info);
+    }
 
-CORE_EXPORT void textAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "VTTCue");
 
-  VTTCueV8Internal::textAttributeSetter(v8Value, info);
-}
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-static void getCueAsHTMLMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCue* impl = V8VTTCue::toImpl(info.Holder());
+        double startTime;
+        double endTime;
+        V8StringResource<> text;
+        startTime = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValue(info, impl->getCueAsHTML());
-}
+        endTime = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-CORE_EXPORT  void getCueAsHTMLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  VTTCueV8Internal::getCueAsHTMLMethod(info);
-}
+        text = info[2];
+        if (!text.prepare())
+            return;
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "VTTCue");
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  double startTime;
-  double endTime;
-  V8StringResource<> text;
-  startTime = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  endTime = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  text = info[2];
-  if (!text.prepare())
-    return;
-
-  Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
-  VTTCue* impl = VTTCue::create(document, startTime, endTime, text);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8VTTCue::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+        VTTCue* impl = VTTCue::create(document, startTime, endTime, text);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8VTTCue::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace VTTCueV8Internal
 
-void V8VTTCue::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  VTTCue* impl = scriptWrappable->toImpl<VTTCue>();
-  // The owner() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->owner())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8VTTCue::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    VTTCue* impl = scriptWrappable->toImpl<VTTCue>();
+    // The owner() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->owner())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8VTTCueAccessors[] = {
-    {"vertical", VTTCueV8Internal::verticalAttributeGetterCallback, VTTCueV8Internal::verticalAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"snapToLines", VTTCueV8Internal::snapToLinesAttributeGetterCallback, VTTCueV8Internal::snapToLinesAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"line", VTTCueV8Internal::lineAttributeGetterCallback, VTTCueV8Internal::lineAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"position", VTTCueV8Internal::positionAttributeGetterCallback, VTTCueV8Internal::positionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"size", VTTCueV8Internal::sizeAttributeGetterCallback, VTTCueV8Internal::sizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"align", VTTCueV8Internal::alignAttributeGetterCallback, VTTCueV8Internal::alignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"text", VTTCueV8Internal::textAttributeGetterCallback, VTTCueV8Internal::textAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "vertical", VTTCueV8Internal::verticalAttributeGetterCallback, VTTCueV8Internal::verticalAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "snapToLines", VTTCueV8Internal::snapToLinesAttributeGetterCallback, VTTCueV8Internal::snapToLinesAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "line", VTTCueV8Internal::lineAttributeGetterCallback, VTTCueV8Internal::lineAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "position", VTTCueV8Internal::positionAttributeGetterCallback, VTTCueV8Internal::positionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "size", VTTCueV8Internal::sizeAttributeGetterCallback, VTTCueV8Internal::sizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "align", VTTCueV8Internal::alignAttributeGetterCallback, VTTCueV8Internal::alignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "text", VTTCueV8Internal::textAttributeGetterCallback, VTTCueV8Internal::textAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8VTTCueMethods[] = {
-    {"getCueAsHTML", VTTCueV8Internal::getCueAsHTMLMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getCueAsHTML", VTTCueV8Internal::getCueAsHTMLMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8VTTCue::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("VTTCue"));
-    return;
-  }
+void V8VTTCue::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("VTTCue"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  VTTCueV8Internal::constructor(info);
+    VTTCueV8Internal::constructor(info);
 }
 
-static void installV8VTTCueTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VTTCue::wrapperTypeInfo.interfaceName, V8TextTrackCue::domTemplate(isolate, world), V8VTTCue::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8VTTCue::constructorCallback);
-  interfaceTemplate->SetLength(3);
+static void installV8VTTCueTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8VTTCue::wrapperTypeInfo.interfaceName, V8TextTrackCue::domTemplate(isolate, world), V8VTTCue::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8VTTCue::constructorCallback);
+    interfaceTemplate->SetLength(3);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VTTCueAccessors, WTF_ARRAY_LENGTH(V8VTTCueAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VTTCueMethods, WTF_ARRAY_LENGTH(V8VTTCueMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VTTCueAccessors, WTF_ARRAY_LENGTH(V8VTTCueAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8VTTCueMethods, WTF_ARRAY_LENGTH(V8VTTCueMethods));
 
-  if (RuntimeEnabledFeatures::webVTTRegionsEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorregionIdConfiguration = {"regionId", VTTCueV8Internal::regionIdAttributeGetterCallback, VTTCueV8Internal::regionIdAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorregionIdConfiguration);
-  }
+    if (RuntimeEnabledFeatures::webVTTRegionsEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorregionIdConfiguration = { "regionId", VTTCueV8Internal::regionIdAttributeGetterCallback, VTTCueV8Internal::regionIdAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorregionIdConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8VTTCue::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VTTCueTemplate);
+v8::Local<v8::FunctionTemplate> V8VTTCue::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8VTTCueTemplate);
 }
 
-bool V8VTTCue::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8VTTCue::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8VTTCue::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8VTTCue::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-VTTCue* V8VTTCue::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+VTTCue* V8VTTCue::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

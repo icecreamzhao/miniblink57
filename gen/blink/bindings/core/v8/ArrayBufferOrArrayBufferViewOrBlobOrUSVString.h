@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ArrayBufferOrArrayBufferViewOrBlobOrUSVString_h
 #define ArrayBufferOrArrayBufferViewOrBlobOrUSVString_h
 
@@ -25,72 +25,74 @@ class DOMArrayBuffer;
 class DOMArrayBufferView;
 
 class CORE_EXPORT ArrayBufferOrArrayBufferViewOrBlobOrUSVString final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ArrayBufferOrArrayBufferViewOrBlobOrUSVString();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isArrayBuffer() const { return m_type == SpecificTypeArrayBuffer; }
-  DOMArrayBuffer* getAsArrayBuffer() const;
-  void setArrayBuffer(DOMArrayBuffer*);
-  static ArrayBufferOrArrayBufferViewOrBlobOrUSVString fromArrayBuffer(DOMArrayBuffer*);
+public:
+    ArrayBufferOrArrayBufferViewOrBlobOrUSVString();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isArrayBufferView() const { return m_type == SpecificTypeArrayBufferView; }
-  DOMArrayBufferView* getAsArrayBufferView() const;
-  void setArrayBufferView(DOMArrayBufferView*);
-  static ArrayBufferOrArrayBufferViewOrBlobOrUSVString fromArrayBufferView(DOMArrayBufferView*);
+    bool isArrayBuffer() const { return m_type == SpecificTypeArrayBuffer; }
+    DOMArrayBuffer* getAsArrayBuffer() const;
+    void setArrayBuffer(DOMArrayBuffer*);
+    static ArrayBufferOrArrayBufferViewOrBlobOrUSVString fromArrayBuffer(DOMArrayBuffer*);
 
-  bool isBlob() const { return m_type == SpecificTypeBlob; }
-  Blob* getAsBlob() const;
-  void setBlob(Blob*);
-  static ArrayBufferOrArrayBufferViewOrBlobOrUSVString fromBlob(Blob*);
+    bool isArrayBufferView() const { return m_type == SpecificTypeArrayBufferView; }
+    DOMArrayBufferView* getAsArrayBufferView() const;
+    void setArrayBufferView(DOMArrayBufferView*);
+    static ArrayBufferOrArrayBufferViewOrBlobOrUSVString fromArrayBufferView(DOMArrayBufferView*);
 
-  bool isUSVString() const { return m_type == SpecificTypeUSVString; }
-  String getAsUSVString() const;
-  void setUSVString(String);
-  static ArrayBufferOrArrayBufferViewOrBlobOrUSVString fromUSVString(String);
+    bool isBlob() const { return m_type == SpecificTypeBlob; }
+    Blob* getAsBlob() const;
+    void setBlob(Blob*);
+    static ArrayBufferOrArrayBufferViewOrBlobOrUSVString fromBlob(Blob*);
 
-  ArrayBufferOrArrayBufferViewOrBlobOrUSVString(const ArrayBufferOrArrayBufferViewOrBlobOrUSVString&);
-  ~ArrayBufferOrArrayBufferViewOrBlobOrUSVString();
-  ArrayBufferOrArrayBufferViewOrBlobOrUSVString& operator=(const ArrayBufferOrArrayBufferViewOrBlobOrUSVString&);
-  DECLARE_TRACE();
+    bool isUSVString() const { return m_type == SpecificTypeUSVString; }
+    String getAsUSVString() const;
+    void setUSVString(String);
+    static ArrayBufferOrArrayBufferViewOrBlobOrUSVString fromUSVString(String);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeArrayBuffer,
-    SpecificTypeArrayBufferView,
-    SpecificTypeBlob,
-    SpecificTypeUSVString,
-  };
-  SpecificTypes m_type;
+    ArrayBufferOrArrayBufferViewOrBlobOrUSVString(const ArrayBufferOrArrayBufferViewOrBlobOrUSVString&);
+    ~ArrayBufferOrArrayBufferViewOrBlobOrUSVString();
+    ArrayBufferOrArrayBufferViewOrBlobOrUSVString& operator=(const ArrayBufferOrArrayBufferViewOrBlobOrUSVString&);
+    DECLARE_TRACE();
 
-  Member<DOMArrayBuffer> m_arrayBuffer;
-  Member<DOMArrayBufferView> m_arrayBufferView;
-  Member<Blob> m_blob;
-  String m_uSVString;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeArrayBuffer,
+        SpecificTypeArrayBufferView,
+        SpecificTypeBlob,
+        SpecificTypeUSVString,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferViewOrBlobOrUSVString&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<DOMArrayBuffer> m_arrayBuffer;
+    Member<DOMArrayBufferView> m_arrayBufferView;
+    Member<Blob> m_blob;
+    String m_uSVString;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferViewOrBlobOrUSVString&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8ArrayBufferOrArrayBufferViewOrBlobOrUSVString final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ArrayBufferOrArrayBufferViewOrBlobOrUSVString&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ArrayBufferOrArrayBufferViewOrBlobOrUSVString&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferViewOrBlobOrUSVString&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ArrayBufferOrArrayBufferViewOrBlobOrUSVString& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ArrayBufferOrArrayBufferViewOrBlobOrUSVString& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ArrayBufferOrArrayBufferViewOrBlobOrUSVString> {
-  CORE_EXPORT static ArrayBufferOrArrayBufferViewOrBlobOrUSVString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static ArrayBufferOrArrayBufferViewOrBlobOrUSVString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -98,4 +100,4 @@ struct NativeValueTraits<ArrayBufferOrArrayBufferViewOrBlobOrUSVString> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::ArrayBufferOrArrayBufferViewOrBlobOrUSVString);
 
-#endif  // ArrayBufferOrArrayBufferViewOrBlobOrUSVString_h
+#endif // ArrayBufferOrArrayBufferViewOrBlobOrUSVString_h

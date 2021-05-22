@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SpeechSynthesis.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,189 +49,214 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SpeechSynthesis::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SpeechSynthesis is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SpeechSynthesisV8Internal {
 
-static void pendingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pendingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->pending());
-}
+        v8SetReturnValueBool(info, impl->pending());
+    }
 
-MODULES_EXPORT void pendingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesisV8Internal::pendingAttributeGetter(info);
-}
+    MODULES_EXPORT void pendingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesisV8Internal::pendingAttributeGetter(info);
+    }
 
-static void speakingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void speakingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->speaking());
-}
+        v8SetReturnValueBool(info, impl->speaking());
+    }
 
-MODULES_EXPORT void speakingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesisV8Internal::speakingAttributeGetter(info);
-}
+    MODULES_EXPORT void speakingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesisV8Internal::speakingAttributeGetter(info);
+    }
 
-static void pausedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pausedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->paused());
-}
+        v8SetReturnValueBool(info, impl->paused());
+    }
 
-MODULES_EXPORT void pausedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesisV8Internal::pausedAttributeGetter(info);
-}
+    MODULES_EXPORT void pausedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesisV8Internal::pausedAttributeGetter(info);
+    }
 
-static void onvoiceschangedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onvoiceschangedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onvoiceschanged()));
+        EventListener* cppValue(WTF::getPtr(impl->onvoiceschanged()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onvoiceschangedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesisV8Internal::onvoiceschangedAttributeGetter(info);
-}
+    MODULES_EXPORT void onvoiceschangedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesisV8Internal::onvoiceschangedAttributeGetter(info);
+    }
 
-static void onvoiceschangedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
+    static void onvoiceschangedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onvoiceschanged(), v8Value, V8SpeechSynthesis::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onvoiceschanged(), v8Value, V8SpeechSynthesis::eventListenerCacheIndex);
 
-  impl->setOnvoiceschanged(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnvoiceschanged(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onvoiceschangedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onvoiceschangedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SpeechSynthesisV8Internal::onvoiceschangedAttributeSetter(v8Value, info);
-}
+        SpeechSynthesisV8Internal::onvoiceschangedAttributeSetter(v8Value, info);
+    }
 
-static void speakMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
+    static void speakMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("speak", "SpeechSynthesis", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("speak", "SpeechSynthesis", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  SpeechSynthesisUtterance* utterance;
-  utterance = V8SpeechSynthesisUtterance::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!utterance) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("speak", "SpeechSynthesis", "parameter 1 is not of type 'SpeechSynthesisUtterance'."));
+        SpeechSynthesisUtterance* utterance;
+        utterance = V8SpeechSynthesisUtterance::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!utterance) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("speak", "SpeechSynthesis", "parameter 1 is not of type 'SpeechSynthesisUtterance'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->speak(utterance);
-}
+        impl->speak(utterance);
+    }
 
-MODULES_EXPORT  void speakMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesisV8Internal::speakMethod(info);
-}
+    MODULES_EXPORT void speakMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesisV8Internal::speakMethod(info);
+    }
 
-static void cancelMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
+    static void cancelMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
 
-  impl->cancel();
-}
+        impl->cancel();
+    }
 
-MODULES_EXPORT  void cancelMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesisV8Internal::cancelMethod(info);
-}
+    MODULES_EXPORT void cancelMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesisV8Internal::cancelMethod(info);
+    }
 
-static void pauseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
+    static void pauseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
 
-  impl->pause();
-}
+        impl->pause();
+    }
 
-MODULES_EXPORT  void pauseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesisV8Internal::pauseMethod(info);
-}
+    MODULES_EXPORT void pauseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesisV8Internal::pauseMethod(info);
+    }
 
-static void resumeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
+    static void resumeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
 
-  impl->resume();
-}
+        impl->resume();
+    }
 
-MODULES_EXPORT  void resumeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesisV8Internal::resumeMethod(info);
-}
+    MODULES_EXPORT void resumeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesisV8Internal::resumeMethod(info);
+    }
 
-static void getVoicesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
+    static void getVoicesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesis* impl = V8SpeechSynthesis::toImpl(info.Holder());
 
-  v8SetReturnValue(info, ToV8(impl->getVoices(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->getVoices(), info.Holder(), info.GetIsolate()));
+    }
 
-MODULES_EXPORT  void getVoicesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechSynthesisV8Internal::getVoicesMethod(info);
-}
+    MODULES_EXPORT void getVoicesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechSynthesisV8Internal::getVoicesMethod(info);
+    }
 
 } // namespace SpeechSynthesisV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SpeechSynthesisAccessors[] = {
-    {"pending", SpeechSynthesisV8Internal::pendingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"speaking", SpeechSynthesisV8Internal::speakingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"paused", SpeechSynthesisV8Internal::pausedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onvoiceschanged", SpeechSynthesisV8Internal::onvoiceschangedAttributeGetterCallback, SpeechSynthesisV8Internal::onvoiceschangedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "pending", SpeechSynthesisV8Internal::pendingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "speaking", SpeechSynthesisV8Internal::speakingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "paused", SpeechSynthesisV8Internal::pausedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onvoiceschanged", SpeechSynthesisV8Internal::onvoiceschangedAttributeGetterCallback, SpeechSynthesisV8Internal::onvoiceschangedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SpeechSynthesisMethods[] = {
-    {"speak", SpeechSynthesisV8Internal::speakMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cancel", SpeechSynthesisV8Internal::cancelMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pause", SpeechSynthesisV8Internal::pauseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"resume", SpeechSynthesisV8Internal::resumeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getVoices", SpeechSynthesisV8Internal::getVoicesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "speak", SpeechSynthesisV8Internal::speakMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cancel", SpeechSynthesisV8Internal::cancelMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pause", SpeechSynthesisV8Internal::pauseMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "resume", SpeechSynthesisV8Internal::resumeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getVoices", SpeechSynthesisV8Internal::getVoicesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SpeechSynthesisTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SpeechSynthesis::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8SpeechSynthesis::internalFieldCount);
+static void installV8SpeechSynthesisTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SpeechSynthesis::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8SpeechSynthesis::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechSynthesisAccessors, WTF_ARRAY_LENGTH(V8SpeechSynthesisAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechSynthesisMethods, WTF_ARRAY_LENGTH(V8SpeechSynthesisMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechSynthesisAccessors, WTF_ARRAY_LENGTH(V8SpeechSynthesisAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechSynthesisMethods, WTF_ARRAY_LENGTH(V8SpeechSynthesisMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SpeechSynthesis::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SpeechSynthesisTemplate);
+v8::Local<v8::FunctionTemplate> V8SpeechSynthesis::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SpeechSynthesisTemplate);
 }
 
-bool V8SpeechSynthesis::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SpeechSynthesis::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SpeechSynthesis::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SpeechSynthesis::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SpeechSynthesis* V8SpeechSynthesis::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SpeechSynthesis* V8SpeechSynthesis::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

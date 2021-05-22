@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCIceCandidateInit_h
 #define RTCIceCandidateInit_h
 
@@ -20,37 +20,38 @@
 namespace blink {
 
 class MODULES_EXPORT RTCIceCandidateInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCIceCandidateInit();
-  virtual ~RTCIceCandidateInit();
-  RTCIceCandidateInit(const RTCIceCandidateInit&);
-  RTCIceCandidateInit& operator=(const RTCIceCandidateInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCandidate() const;
-  String candidate() const;
-  void setCandidate(String);
+public:
+    RTCIceCandidateInit();
+    virtual ~RTCIceCandidateInit();
+    RTCIceCandidateInit(const RTCIceCandidateInit&);
+    RTCIceCandidateInit& operator=(const RTCIceCandidateInit&);
 
-  bool hasSdpMLineIndex() const;
-  unsigned sdpMLineIndex() const;
-  void setSdpMLineIndex(unsigned);
+    bool hasCandidate() const;
+    String candidate() const;
+    void setCandidate(String);
 
-  bool hasSdpMid() const;
-  String sdpMid() const;
-  void setSdpMid(String);
+    bool hasSdpMLineIndex() const;
+    unsigned sdpMLineIndex() const;
+    void setSdpMLineIndex(unsigned);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSdpMid() const;
+    String sdpMid() const;
+    void setSdpMid(String);
 
- private:
-  String m_candidate;
-  bool m_hasSdpMLineIndex = false;
-  unsigned m_sdpMLineIndex;
-  String m_sdpMid;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCIceCandidateInit;
+private:
+    String m_candidate;
+    bool m_hasSdpMLineIndex = false;
+    unsigned m_sdpMLineIndex;
+    String m_sdpMid;
+
+    friend class V8RTCIceCandidateInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCIceCandidateInit_h
+#endif // RTCIceCandidateInit_h

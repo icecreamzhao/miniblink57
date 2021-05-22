@@ -8,64 +8,79 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PaymentAppOption.h"
 
 namespace blink {
 
-PaymentAppOption::PaymentAppOption() {
+PaymentAppOption::PaymentAppOption()
+{
 }
 
-PaymentAppOption::~PaymentAppOption() {}
+PaymentAppOption::~PaymentAppOption() { }
 
 PaymentAppOption::PaymentAppOption(const PaymentAppOption&) = default;
 
 PaymentAppOption& PaymentAppOption::operator=(const PaymentAppOption&) = default;
 
-bool PaymentAppOption::hasEnabledMethods() const {
-  return m_hasEnabledMethods;
+bool PaymentAppOption::hasEnabledMethods() const
+{
+    return m_hasEnabledMethods;
 }
-const Vector<String>& PaymentAppOption::enabledMethods() const {
-  DCHECK(m_hasEnabledMethods);
-  return m_enabledMethods;
+const Vector<String>& PaymentAppOption::enabledMethods() const
+{
+    DCHECK(m_hasEnabledMethods);
+    return m_enabledMethods;
 }
-void PaymentAppOption::setEnabledMethods(const Vector<String>& value) {
-  m_enabledMethods = value;
-  m_hasEnabledMethods = true;
+void PaymentAppOption::setEnabledMethods(const Vector<String>& value)
+{
+    m_enabledMethods = value;
+    m_hasEnabledMethods = true;
 }
-bool PaymentAppOption::hasIcon() const {
-  return !m_icon.isNull();
+bool PaymentAppOption::hasIcon() const
+{
+    return !m_icon.isNull();
 }
-String PaymentAppOption::icon() const {
-  return m_icon;
+String PaymentAppOption::icon() const
+{
+    return m_icon;
 }
-void PaymentAppOption::setIcon(String value) {
-  m_icon = value;
+void PaymentAppOption::setIcon(String value)
+{
+    m_icon = value;
 }
-void PaymentAppOption::setIconToNull() {
-  m_icon = String();
+void PaymentAppOption::setIconToNull()
+{
+    m_icon = String();
 }
-bool PaymentAppOption::hasId() const {
-  return !m_id.isNull();
+bool PaymentAppOption::hasId() const
+{
+    return !m_id.isNull();
 }
-String PaymentAppOption::id() const {
-  return m_id;
+String PaymentAppOption::id() const
+{
+    return m_id;
 }
-void PaymentAppOption::setId(String value) {
-  m_id = value;
+void PaymentAppOption::setId(String value)
+{
+    m_id = value;
 }
-bool PaymentAppOption::hasName() const {
-  return !m_name.isNull();
+bool PaymentAppOption::hasName() const
+{
+    return !m_name.isNull();
 }
-String PaymentAppOption::name() const {
-  return m_name;
+String PaymentAppOption::name() const
+{
+    return m_name;
 }
-void PaymentAppOption::setName(String value) {
-  m_name = value;
+void PaymentAppOption::setName(String value)
+{
+    m_name = value;
 }
 
-DEFINE_TRACE(PaymentAppOption) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PaymentAppOption)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

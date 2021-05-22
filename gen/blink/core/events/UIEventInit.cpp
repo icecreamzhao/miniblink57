@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "UIEventInit.h"
 
 #include "core/frame/DOMWindow.h"
@@ -16,56 +16,69 @@
 
 namespace blink {
 
-UIEventInit::UIEventInit() {
-  setDetail(0);
+UIEventInit::UIEventInit()
+{
+    setDetail(0);
 }
 
-UIEventInit::~UIEventInit() {}
+UIEventInit::~UIEventInit() { }
 
 UIEventInit::UIEventInit(const UIEventInit&) = default;
 
 UIEventInit& UIEventInit::operator=(const UIEventInit&) = default;
 
-bool UIEventInit::hasDetail() const {
-  return m_hasDetail;
+bool UIEventInit::hasDetail() const
+{
+    return m_hasDetail;
 }
-int UIEventInit::detail() const {
-  DCHECK(m_hasDetail);
-  return m_detail;
+int UIEventInit::detail() const
+{
+    DCHECK(m_hasDetail);
+    return m_detail;
 }
-void UIEventInit::setDetail(int value) {
-  m_detail = value;
-  m_hasDetail = true;
+void UIEventInit::setDetail(int value)
+{
+    m_detail = value;
+    m_hasDetail = true;
 }
-bool UIEventInit::hasSourceCapabilities() const {
-  return m_sourceCapabilities;
+bool UIEventInit::hasSourceCapabilities() const
+{
+    return m_sourceCapabilities;
 }
-InputDeviceCapabilities* UIEventInit::sourceCapabilities() const {
-  return m_sourceCapabilities;
+InputDeviceCapabilities* UIEventInit::sourceCapabilities() const
+{
+    return m_sourceCapabilities;
 }
-void UIEventInit::setSourceCapabilities(InputDeviceCapabilities* value) {
-  m_sourceCapabilities = value;
+void UIEventInit::setSourceCapabilities(InputDeviceCapabilities* value)
+{
+    m_sourceCapabilities = value;
 }
-void UIEventInit::setSourceCapabilitiesToNull() {
-  m_sourceCapabilities = Member<InputDeviceCapabilities>();
+void UIEventInit::setSourceCapabilitiesToNull()
+{
+    m_sourceCapabilities = Member<InputDeviceCapabilities>();
 }
-bool UIEventInit::hasView() const {
-  return m_view;
+bool UIEventInit::hasView() const
+{
+    return m_view;
 }
-DOMWindow* UIEventInit::view() const {
-  return m_view;
+DOMWindow* UIEventInit::view() const
+{
+    return m_view;
 }
-void UIEventInit::setView(DOMWindow* value) {
-  m_view = value;
+void UIEventInit::setView(DOMWindow* value)
+{
+    m_view = value;
 }
-void UIEventInit::setViewToNull() {
-  m_view = Member<DOMWindow>();
+void UIEventInit::setViewToNull()
+{
+    m_view = Member<DOMWindow>();
 }
 
-DEFINE_TRACE(UIEventInit) {
-  visitor->trace(m_sourceCapabilities);
-  visitor->trace(m_view);
-  EventInit::trace(visitor);
+DEFINE_TRACE(UIEventInit)
+{
+    visitor->trace(m_sourceCapabilities);
+    visitor->trace(m_view);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

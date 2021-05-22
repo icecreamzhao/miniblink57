@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ImageBitmapRenderingContext.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,103 +49,113 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ImageBitmapRenderingContext::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ImageBitmapRenderingContext is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ImageBitmapRenderingContextV8Internal {
 
-static void canvasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void canvasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ImageBitmapRenderingContext* impl = V8ImageBitmapRenderingContext::toImpl(holder);
+        ImageBitmapRenderingContext* impl = V8ImageBitmapRenderingContext::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->canvas()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->canvas()), impl);
+    }
 
-MODULES_EXPORT void canvasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ImageBitmapRenderingContextV8Internal::canvasAttributeGetter(info);
-}
+    MODULES_EXPORT void canvasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ImageBitmapRenderingContextV8Internal::canvasAttributeGetter(info);
+    }
 
-static void transferFromImageBitmapMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageBitmapRenderingContext", "transferFromImageBitmap");
+    static void transferFromImageBitmapMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ImageBitmapRenderingContext", "transferFromImageBitmap");
 
-  ImageBitmapRenderingContext* impl = V8ImageBitmapRenderingContext::toImpl(info.Holder());
+        ImageBitmapRenderingContext* impl = V8ImageBitmapRenderingContext::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  ImageBitmap* bitmap;
-  bitmap = V8ImageBitmap::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!bitmap && !isUndefinedOrNull(info[0])) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ImageBitmap'.");
+        ImageBitmap* bitmap;
+        bitmap = V8ImageBitmap::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!bitmap && !isUndefinedOrNull(info[0])) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ImageBitmap'.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->transferFromImageBitmap(bitmap, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->transferFromImageBitmap(bitmap, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void transferFromImageBitmapMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ImageBitmapRenderingContextV8Internal::transferFromImageBitmapMethod(info);
-}
+    MODULES_EXPORT void transferFromImageBitmapMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ImageBitmapRenderingContextV8Internal::transferFromImageBitmapMethod(info);
+    }
 
 } // namespace ImageBitmapRenderingContextV8Internal
 
-void V8ImageBitmapRenderingContext::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  ImageBitmapRenderingContext* impl = scriptWrappable->toImpl<ImageBitmapRenderingContext>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8ImageBitmapRenderingContext::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    ImageBitmapRenderingContext* impl = scriptWrappable->toImpl<ImageBitmapRenderingContext>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8ImageBitmapRenderingContextAccessors[] = {
-    {"canvas", ImageBitmapRenderingContextV8Internal::canvasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "canvas", ImageBitmapRenderingContextV8Internal::canvasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8ImageBitmapRenderingContextMethods[] = {
-    {"transferFromImageBitmap", ImageBitmapRenderingContextV8Internal::transferFromImageBitmapMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "transferFromImageBitmap", ImageBitmapRenderingContextV8Internal::transferFromImageBitmapMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8ImageBitmapRenderingContextTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ImageBitmapRenderingContext::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8ImageBitmapRenderingContext::internalFieldCount);
+static void installV8ImageBitmapRenderingContextTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ImageBitmapRenderingContext::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8ImageBitmapRenderingContext::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ImageBitmapRenderingContextAccessors, WTF_ARRAY_LENGTH(V8ImageBitmapRenderingContextAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ImageBitmapRenderingContextMethods, WTF_ARRAY_LENGTH(V8ImageBitmapRenderingContextMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ImageBitmapRenderingContextAccessors, WTF_ARRAY_LENGTH(V8ImageBitmapRenderingContextAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ImageBitmapRenderingContextMethods, WTF_ARRAY_LENGTH(V8ImageBitmapRenderingContextMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8ImageBitmapRenderingContext::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ImageBitmapRenderingContextTemplate);
+v8::Local<v8::FunctionTemplate> V8ImageBitmapRenderingContext::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ImageBitmapRenderingContextTemplate);
 }
 
-bool V8ImageBitmapRenderingContext::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ImageBitmapRenderingContext::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ImageBitmapRenderingContext::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ImageBitmapRenderingContext::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ImageBitmapRenderingContext* V8ImageBitmapRenderingContext::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ImageBitmapRenderingContext* V8ImageBitmapRenderingContext::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

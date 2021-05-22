@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ForeignFetchOptions.h"
 
 namespace blink {
 
-ForeignFetchOptions::ForeignFetchOptions() {
+ForeignFetchOptions::ForeignFetchOptions()
+{
 }
 
-ForeignFetchOptions::~ForeignFetchOptions() {}
+ForeignFetchOptions::~ForeignFetchOptions() { }
 
 ForeignFetchOptions::ForeignFetchOptions(const ForeignFetchOptions&) = default;
 
 ForeignFetchOptions& ForeignFetchOptions::operator=(const ForeignFetchOptions&) = default;
 
-bool ForeignFetchOptions::hasOrigins() const {
-  return m_hasOrigins;
+bool ForeignFetchOptions::hasOrigins() const
+{
+    return m_hasOrigins;
 }
-const Vector<String>& ForeignFetchOptions::origins() const {
-  DCHECK(m_hasOrigins);
-  return m_origins;
+const Vector<String>& ForeignFetchOptions::origins() const
+{
+    DCHECK(m_hasOrigins);
+    return m_origins;
 }
-void ForeignFetchOptions::setOrigins(const Vector<String>& value) {
-  m_origins = value;
-  m_hasOrigins = true;
+void ForeignFetchOptions::setOrigins(const Vector<String>& value)
+{
+    m_origins = value;
+    m_hasOrigins = true;
 }
-bool ForeignFetchOptions::hasScopes() const {
-  return m_hasScopes;
+bool ForeignFetchOptions::hasScopes() const
+{
+    return m_hasScopes;
 }
-const Vector<String>& ForeignFetchOptions::scopes() const {
-  DCHECK(m_hasScopes);
-  return m_scopes;
+const Vector<String>& ForeignFetchOptions::scopes() const
+{
+    DCHECK(m_hasScopes);
+    return m_scopes;
 }
-void ForeignFetchOptions::setScopes(const Vector<String>& value) {
-  m_scopes = value;
-  m_hasScopes = true;
+void ForeignFetchOptions::setScopes(const Vector<String>& value)
+{
+    m_scopes = value;
+    m_hasScopes = true;
 }
 
-DEFINE_TRACE(ForeignFetchOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ForeignFetchOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

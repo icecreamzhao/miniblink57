@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AudioBufferSourceNode.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,339 +52,368 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&AudioBufferSourceNode::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "AudioBufferSourceNode is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace AudioBufferSourceNodeV8Internal {
 
-static void bufferAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void bufferAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->buffer()), impl);
-}
-
-MODULES_EXPORT void bufferAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioBufferSourceNodeV8Internal::bufferAttributeGetter(info);
-}
-
-static void bufferAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioBufferSourceNode", "buffer");
-
-  // Prepare the value to be set.
-  AudioBuffer* cppValue = V8AudioBuffer::toImplWithTypeCheck(info.GetIsolate(), v8Value);
-
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue) {
-    exceptionState.throwTypeError("The provided value is not of type 'AudioBuffer'.");
-    return;
-  }
-
-  impl->setBuffer(cppValue, exceptionState);
-}
-
-MODULES_EXPORT void bufferAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  AudioBufferSourceNodeV8Internal::bufferAttributeSetter(v8Value, info);
-}
-
-static void playbackRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
-
-  AudioParam* cppValue(WTF::getPtr(impl->playbackRate()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#AudioBufferSourceNode#playbackRate";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void playbackRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioBufferSourceNodeV8Internal::playbackRateAttributeGetter(info);
-}
-
-static void detuneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
-
-  AudioParam* cppValue(WTF::getPtr(impl->detune()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#AudioBufferSourceNode#detune";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void detuneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioBufferSourceNodeV8Internal::detuneAttributeGetter(info);
-}
-
-static void loopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->loop());
-}
-
-MODULES_EXPORT void loopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioBufferSourceNodeV8Internal::loopAttributeGetter(info);
-}
-
-static void loopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioBufferSourceNode", "loop");
-
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setLoop(cppValue);
-}
-
-MODULES_EXPORT void loopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  AudioBufferSourceNodeV8Internal::loopAttributeSetter(v8Value, info);
-}
-
-static void loopStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
-
-  v8SetReturnValue(info, impl->loopStart());
-}
-
-MODULES_EXPORT void loopStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioBufferSourceNodeV8Internal::loopStartAttributeGetter(info);
-}
-
-static void loopStartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioBufferSourceNode", "loopStart");
-
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setLoopStart(cppValue);
-}
-
-MODULES_EXPORT void loopStartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  AudioBufferSourceNodeV8Internal::loopStartAttributeSetter(v8Value, info);
-}
-
-static void loopEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
-
-  v8SetReturnValue(info, impl->loopEnd());
-}
-
-MODULES_EXPORT void loopEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioBufferSourceNodeV8Internal::loopEndAttributeGetter(info);
-}
-
-static void loopEndAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioBufferSourceNode", "loopEnd");
-
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setLoopEnd(cppValue);
-}
-
-MODULES_EXPORT void loopEndAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  AudioBufferSourceNodeV8Internal::loopEndAttributeSetter(v8Value, info);
-}
-
-static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "AudioBufferSourceNode", "start");
-
-  AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(info.Holder());
-
-  double when;
-  double grainOffset;
-  double grainDuration;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (!info[0]->IsUndefined()) {
-    when = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    when = 0;
-  }
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->start(when, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValueFast(info, WTF::getPtr(impl->buffer()), impl);
     }
-    return;
-  }
-  grainOffset = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    impl->start(when, grainOffset, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    MODULES_EXPORT void bufferAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioBufferSourceNodeV8Internal::bufferAttributeGetter(info);
     }
-    return;
-  }
-  grainDuration = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  impl->start(when, grainOffset, grainDuration, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void bufferAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
 
-MODULES_EXPORT  void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AudioBufferSourceNodeV8Internal::startMethod(info);
-}
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioBufferSourceNode", "buffer");
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "AudioBufferSourceNode");
+        // Prepare the value to be set.
+        AudioBuffer* cppValue = V8AudioBuffer::toImplWithTypeCheck(info.GetIsolate(), v8Value);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue) {
+            exceptionState.throwTypeError("The provided value is not of type 'AudioBuffer'.");
+            return;
+        }
 
-  BaseAudioContext* context;
-  AudioBufferSourceOptions options;
-  context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!context) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
+        impl->setBuffer(cppValue, exceptionState);
+    }
 
-    return;
-  }
+    MODULES_EXPORT void bufferAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        AudioBufferSourceNodeV8Internal::bufferAttributeSetter(v8Value, info);
+    }
 
-    return;
-  }
-  V8AudioBufferSourceOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void playbackRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AudioBufferSourceNode* impl = AudioBufferSourceNode::create(context, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8AudioBufferSourceNode::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
+
+        AudioParam* cppValue(WTF::getPtr(impl->playbackRate()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#AudioBufferSourceNode#playbackRate";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    MODULES_EXPORT void playbackRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioBufferSourceNodeV8Internal::playbackRateAttributeGetter(info);
+    }
+
+    static void detuneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
+
+        AudioParam* cppValue(WTF::getPtr(impl->detune()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#AudioBufferSourceNode#detune";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    MODULES_EXPORT void detuneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioBufferSourceNodeV8Internal::detuneAttributeGetter(info);
+    }
+
+    static void loopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->loop());
+    }
+
+    MODULES_EXPORT void loopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioBufferSourceNodeV8Internal::loopAttributeGetter(info);
+    }
+
+    static void loopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioBufferSourceNode", "loop");
+
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLoop(cppValue);
+    }
+
+    MODULES_EXPORT void loopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        AudioBufferSourceNodeV8Internal::loopAttributeSetter(v8Value, info);
+    }
+
+    static void loopStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
+
+        v8SetReturnValue(info, impl->loopStart());
+    }
+
+    MODULES_EXPORT void loopStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioBufferSourceNodeV8Internal::loopStartAttributeGetter(info);
+    }
+
+    static void loopStartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioBufferSourceNode", "loopStart");
+
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLoopStart(cppValue);
+    }
+
+    MODULES_EXPORT void loopStartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        AudioBufferSourceNodeV8Internal::loopStartAttributeSetter(v8Value, info);
+    }
+
+    static void loopEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
+
+        v8SetReturnValue(info, impl->loopEnd());
+    }
+
+    MODULES_EXPORT void loopEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioBufferSourceNodeV8Internal::loopEndAttributeGetter(info);
+    }
+
+    static void loopEndAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AudioBufferSourceNode", "loopEnd");
+
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLoopEnd(cppValue);
+    }
+
+    MODULES_EXPORT void loopEndAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        AudioBufferSourceNodeV8Internal::loopEndAttributeSetter(v8Value, info);
+    }
+
+    static void startMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "AudioBufferSourceNode", "start");
+
+        AudioBufferSourceNode* impl = V8AudioBufferSourceNode::toImpl(info.Holder());
+
+        double when;
+        double grainOffset;
+        double grainDuration;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (!info[0]->IsUndefined()) {
+            when = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            when = 0;
+        }
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->start(when, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        grainOffset = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            impl->start(when, grainOffset, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        grainDuration = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->start(when, grainOffset, grainDuration, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void startMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AudioBufferSourceNodeV8Internal::startMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "AudioBufferSourceNode");
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        BaseAudioContext* context;
+        AudioBufferSourceOptions options;
+        context = V8BaseAudioContext::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!context) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'BaseAudioContext'.");
+
+            return;
+        }
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8AudioBufferSourceOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        AudioBufferSourceNode* impl = AudioBufferSourceNode::create(context, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8AudioBufferSourceNode::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace AudioBufferSourceNodeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8AudioBufferSourceNodeAccessors[] = {
-    {"buffer", AudioBufferSourceNodeV8Internal::bufferAttributeGetterCallback, AudioBufferSourceNodeV8Internal::bufferAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"playbackRate", AudioBufferSourceNodeV8Internal::playbackRateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"detune", AudioBufferSourceNodeV8Internal::detuneAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loop", AudioBufferSourceNodeV8Internal::loopAttributeGetterCallback, AudioBufferSourceNodeV8Internal::loopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loopStart", AudioBufferSourceNodeV8Internal::loopStartAttributeGetterCallback, AudioBufferSourceNodeV8Internal::loopStartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loopEnd", AudioBufferSourceNodeV8Internal::loopEndAttributeGetterCallback, AudioBufferSourceNodeV8Internal::loopEndAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "buffer", AudioBufferSourceNodeV8Internal::bufferAttributeGetterCallback, AudioBufferSourceNodeV8Internal::bufferAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "playbackRate", AudioBufferSourceNodeV8Internal::playbackRateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "detune", AudioBufferSourceNodeV8Internal::detuneAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loop", AudioBufferSourceNodeV8Internal::loopAttributeGetterCallback, AudioBufferSourceNodeV8Internal::loopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loopStart", AudioBufferSourceNodeV8Internal::loopStartAttributeGetterCallback, AudioBufferSourceNodeV8Internal::loopStartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loopEnd", AudioBufferSourceNodeV8Internal::loopEndAttributeGetterCallback, AudioBufferSourceNodeV8Internal::loopEndAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8AudioBufferSourceNodeMethods[] = {
-    {"start", AudioBufferSourceNodeV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "start", AudioBufferSourceNodeV8Internal::startMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8AudioBufferSourceNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8AudioBufferSourceNode_Constructor);
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("AudioBufferSourceNode"));
-    return;
-  }
+void V8AudioBufferSourceNode::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8AudioBufferSourceNode_Constructor);
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("AudioBufferSourceNode"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  AudioBufferSourceNodeV8Internal::constructor(info);
+    AudioBufferSourceNodeV8Internal::constructor(info);
 }
 
-static void installV8AudioBufferSourceNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AudioBufferSourceNode::wrapperTypeInfo.interfaceName, V8AudioScheduledSourceNode::domTemplate(isolate, world), V8AudioBufferSourceNode::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8AudioBufferSourceNode::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8AudioBufferSourceNodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AudioBufferSourceNode::wrapperTypeInfo.interfaceName, V8AudioScheduledSourceNode::domTemplate(isolate, world), V8AudioBufferSourceNode::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8AudioBufferSourceNode::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioBufferSourceNodeAccessors, WTF_ARRAY_LENGTH(V8AudioBufferSourceNodeAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioBufferSourceNodeMethods, WTF_ARRAY_LENGTH(V8AudioBufferSourceNodeMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioBufferSourceNodeAccessors, WTF_ARRAY_LENGTH(V8AudioBufferSourceNodeAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AudioBufferSourceNodeMethods, WTF_ARRAY_LENGTH(V8AudioBufferSourceNodeMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8AudioBufferSourceNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AudioBufferSourceNodeTemplate);
+v8::Local<v8::FunctionTemplate> V8AudioBufferSourceNode::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AudioBufferSourceNodeTemplate);
 }
 
-bool V8AudioBufferSourceNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8AudioBufferSourceNode::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8AudioBufferSourceNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8AudioBufferSourceNode::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-AudioBufferSourceNode* V8AudioBufferSourceNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+AudioBufferSourceNode* V8AudioBufferSourceNode::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

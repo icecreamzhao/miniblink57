@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8USBConnectionEventInit_h
 #define V8USBConnectionEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8USBConnectionEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, USBConnectionEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, USBConnectionEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8USBConnectionEventInit(const USBConnectionEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, USBConnectionEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, USBConnectionEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<USBConnectionEventInit> {
-  static USBConnectionEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static USBConnectionEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<USBConnectionEventInit> {
-  typedef V8USBConnectionEventInit Type;
+    typedef V8USBConnectionEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8USBConnectionEventInit_h
+#endif // V8USBConnectionEventInit_h

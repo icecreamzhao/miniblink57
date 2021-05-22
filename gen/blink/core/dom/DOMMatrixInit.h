@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DOMMatrixInit_h
 #define DOMMatrixInit_h
 
@@ -19,159 +19,160 @@
 namespace blink {
 
 class CORE_EXPORT DOMMatrixInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DOMMatrixInit();
-  virtual ~DOMMatrixInit();
-  DOMMatrixInit(const DOMMatrixInit&);
-  DOMMatrixInit& operator=(const DOMMatrixInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasA() const;
-  double a() const;
-  void setA(double);
+public:
+    DOMMatrixInit();
+    virtual ~DOMMatrixInit();
+    DOMMatrixInit(const DOMMatrixInit&);
+    DOMMatrixInit& operator=(const DOMMatrixInit&);
 
-  bool hasB() const;
-  double b() const;
-  void setB(double);
+    bool hasA() const;
+    double a() const;
+    void setA(double);
 
-  bool hasC() const;
-  double c() const;
-  void setC(double);
+    bool hasB() const;
+    double b() const;
+    void setB(double);
 
-  bool hasD() const;
-  double d() const;
-  void setD(double);
+    bool hasC() const;
+    double c() const;
+    void setC(double);
 
-  bool hasE() const;
-  double e() const;
-  void setE(double);
+    bool hasD() const;
+    double d() const;
+    void setD(double);
 
-  bool hasF() const;
-  double f() const;
-  void setF(double);
+    bool hasE() const;
+    double e() const;
+    void setE(double);
 
-  bool hasIs2D() const;
-  bool is2D() const;
-  void setIs2D(bool);
+    bool hasF() const;
+    double f() const;
+    void setF(double);
 
-  bool hasM11() const;
-  double m11() const;
-  void setM11(double);
+    bool hasIs2D() const;
+    bool is2D() const;
+    void setIs2D(bool);
 
-  bool hasM12() const;
-  double m12() const;
-  void setM12(double);
+    bool hasM11() const;
+    double m11() const;
+    void setM11(double);
 
-  bool hasM13() const;
-  double m13() const;
-  void setM13(double);
+    bool hasM12() const;
+    double m12() const;
+    void setM12(double);
 
-  bool hasM14() const;
-  double m14() const;
-  void setM14(double);
+    bool hasM13() const;
+    double m13() const;
+    void setM13(double);
 
-  bool hasM21() const;
-  double m21() const;
-  void setM21(double);
+    bool hasM14() const;
+    double m14() const;
+    void setM14(double);
 
-  bool hasM22() const;
-  double m22() const;
-  void setM22(double);
+    bool hasM21() const;
+    double m21() const;
+    void setM21(double);
 
-  bool hasM23() const;
-  double m23() const;
-  void setM23(double);
+    bool hasM22() const;
+    double m22() const;
+    void setM22(double);
 
-  bool hasM24() const;
-  double m24() const;
-  void setM24(double);
+    bool hasM23() const;
+    double m23() const;
+    void setM23(double);
 
-  bool hasM31() const;
-  double m31() const;
-  void setM31(double);
+    bool hasM24() const;
+    double m24() const;
+    void setM24(double);
 
-  bool hasM32() const;
-  double m32() const;
-  void setM32(double);
+    bool hasM31() const;
+    double m31() const;
+    void setM31(double);
 
-  bool hasM33() const;
-  double m33() const;
-  void setM33(double);
+    bool hasM32() const;
+    double m32() const;
+    void setM32(double);
 
-  bool hasM34() const;
-  double m34() const;
-  void setM34(double);
+    bool hasM33() const;
+    double m33() const;
+    void setM33(double);
 
-  bool hasM41() const;
-  double m41() const;
-  void setM41(double);
+    bool hasM34() const;
+    double m34() const;
+    void setM34(double);
 
-  bool hasM42() const;
-  double m42() const;
-  void setM42(double);
+    bool hasM41() const;
+    double m41() const;
+    void setM41(double);
 
-  bool hasM43() const;
-  double m43() const;
-  void setM43(double);
+    bool hasM42() const;
+    double m42() const;
+    void setM42(double);
 
-  bool hasM44() const;
-  double m44() const;
-  void setM44(double);
+    bool hasM43() const;
+    double m43() const;
+    void setM43(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasM44() const;
+    double m44() const;
+    void setM44(double);
 
- private:
-  bool m_hasA = false;
-  double m_a;
-  bool m_hasB = false;
-  double m_b;
-  bool m_hasC = false;
-  double m_c;
-  bool m_hasD = false;
-  double m_d;
-  bool m_hasE = false;
-  double m_e;
-  bool m_hasF = false;
-  double m_f;
-  bool m_hasIs2D = false;
-  bool m_is2D;
-  bool m_hasM11 = false;
-  double m_m11;
-  bool m_hasM12 = false;
-  double m_m12;
-  bool m_hasM13 = false;
-  double m_m13;
-  bool m_hasM14 = false;
-  double m_m14;
-  bool m_hasM21 = false;
-  double m_m21;
-  bool m_hasM22 = false;
-  double m_m22;
-  bool m_hasM23 = false;
-  double m_m23;
-  bool m_hasM24 = false;
-  double m_m24;
-  bool m_hasM31 = false;
-  double m_m31;
-  bool m_hasM32 = false;
-  double m_m32;
-  bool m_hasM33 = false;
-  double m_m33;
-  bool m_hasM34 = false;
-  double m_m34;
-  bool m_hasM41 = false;
-  double m_m41;
-  bool m_hasM42 = false;
-  double m_m42;
-  bool m_hasM43 = false;
-  double m_m43;
-  bool m_hasM44 = false;
-  double m_m44;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8DOMMatrixInit;
+private:
+    bool m_hasA = false;
+    double m_a;
+    bool m_hasB = false;
+    double m_b;
+    bool m_hasC = false;
+    double m_c;
+    bool m_hasD = false;
+    double m_d;
+    bool m_hasE = false;
+    double m_e;
+    bool m_hasF = false;
+    double m_f;
+    bool m_hasIs2D = false;
+    bool m_is2D;
+    bool m_hasM11 = false;
+    double m_m11;
+    bool m_hasM12 = false;
+    double m_m12;
+    bool m_hasM13 = false;
+    double m_m13;
+    bool m_hasM14 = false;
+    double m_m14;
+    bool m_hasM21 = false;
+    double m_m21;
+    bool m_hasM22 = false;
+    double m_m22;
+    bool m_hasM23 = false;
+    double m_m23;
+    bool m_hasM24 = false;
+    double m_m24;
+    bool m_hasM31 = false;
+    double m_m31;
+    bool m_hasM32 = false;
+    double m_m32;
+    bool m_hasM33 = false;
+    double m_m33;
+    bool m_hasM34 = false;
+    double m_m34;
+    bool m_hasM41 = false;
+    double m_m41;
+    bool m_hasM42 = false;
+    double m_m42;
+    bool m_hasM43 = false;
+    double m_m43;
+    bool m_hasM44 = false;
+    double m_m44;
+
+    friend class V8DOMMatrixInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // DOMMatrixInit_h
+#endif // DOMMatrixInit_h

@@ -8,60 +8,71 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RequestDeviceOptions.h"
 
 namespace blink {
 
-RequestDeviceOptions::RequestDeviceOptions() {
-  setAcceptAllDevices(false);
-  setOptionalServices(HeapVector<StringOrUnsignedLong>());
+RequestDeviceOptions::RequestDeviceOptions()
+{
+    setAcceptAllDevices(false);
+    setOptionalServices(HeapVector<StringOrUnsignedLong>());
 }
 
-RequestDeviceOptions::~RequestDeviceOptions() {}
+RequestDeviceOptions::~RequestDeviceOptions() { }
 
 RequestDeviceOptions::RequestDeviceOptions(const RequestDeviceOptions&) = default;
 
 RequestDeviceOptions& RequestDeviceOptions::operator=(const RequestDeviceOptions&) = default;
 
-bool RequestDeviceOptions::hasAcceptAllDevices() const {
-  return m_hasAcceptAllDevices;
+bool RequestDeviceOptions::hasAcceptAllDevices() const
+{
+    return m_hasAcceptAllDevices;
 }
-bool RequestDeviceOptions::acceptAllDevices() const {
-  DCHECK(m_hasAcceptAllDevices);
-  return m_acceptAllDevices;
+bool RequestDeviceOptions::acceptAllDevices() const
+{
+    DCHECK(m_hasAcceptAllDevices);
+    return m_acceptAllDevices;
 }
-void RequestDeviceOptions::setAcceptAllDevices(bool value) {
-  m_acceptAllDevices = value;
-  m_hasAcceptAllDevices = true;
+void RequestDeviceOptions::setAcceptAllDevices(bool value)
+{
+    m_acceptAllDevices = value;
+    m_hasAcceptAllDevices = true;
 }
-bool RequestDeviceOptions::hasFilters() const {
-  return m_hasFilters;
+bool RequestDeviceOptions::hasFilters() const
+{
+    return m_hasFilters;
 }
-const HeapVector<BluetoothScanFilterInit>& RequestDeviceOptions::filters() const {
-  DCHECK(m_hasFilters);
-  return m_filters;
+const HeapVector<BluetoothScanFilterInit>& RequestDeviceOptions::filters() const
+{
+    DCHECK(m_hasFilters);
+    return m_filters;
 }
-void RequestDeviceOptions::setFilters(const HeapVector<BluetoothScanFilterInit>& value) {
-  m_filters = value;
-  m_hasFilters = true;
+void RequestDeviceOptions::setFilters(const HeapVector<BluetoothScanFilterInit>& value)
+{
+    m_filters = value;
+    m_hasFilters = true;
 }
-bool RequestDeviceOptions::hasOptionalServices() const {
-  return m_hasOptionalServices;
+bool RequestDeviceOptions::hasOptionalServices() const
+{
+    return m_hasOptionalServices;
 }
-const HeapVector<StringOrUnsignedLong>& RequestDeviceOptions::optionalServices() const {
-  DCHECK(m_hasOptionalServices);
-  return m_optionalServices;
+const HeapVector<StringOrUnsignedLong>& RequestDeviceOptions::optionalServices() const
+{
+    DCHECK(m_hasOptionalServices);
+    return m_optionalServices;
 }
-void RequestDeviceOptions::setOptionalServices(const HeapVector<StringOrUnsignedLong>& value) {
-  m_optionalServices = value;
-  m_hasOptionalServices = true;
+void RequestDeviceOptions::setOptionalServices(const HeapVector<StringOrUnsignedLong>& value)
+{
+    m_optionalServices = value;
+    m_hasOptionalServices = true;
 }
 
-DEFINE_TRACE(RequestDeviceOptions) {
-  visitor->trace(m_filters);
-  visitor->trace(m_optionalServices);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(RequestDeviceOptions)
+{
+    visitor->trace(m_filters);
+    visitor->trace(m_optionalServices);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

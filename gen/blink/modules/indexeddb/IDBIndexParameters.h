@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef IDBIndexParameters_h
 #define IDBIndexParameters_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT IDBIndexParameters : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  IDBIndexParameters();
-  virtual ~IDBIndexParameters();
-  IDBIndexParameters(const IDBIndexParameters&);
-  IDBIndexParameters& operator=(const IDBIndexParameters&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMultiEntry() const;
-  bool multiEntry() const;
-  void setMultiEntry(bool);
+public:
+    IDBIndexParameters();
+    virtual ~IDBIndexParameters();
+    IDBIndexParameters(const IDBIndexParameters&);
+    IDBIndexParameters& operator=(const IDBIndexParameters&);
 
-  bool hasUnique() const;
-  bool unique() const;
-  void setUnique(bool);
+    bool hasMultiEntry() const;
+    bool multiEntry() const;
+    void setMultiEntry(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasUnique() const;
+    bool unique() const;
+    void setUnique(bool);
 
- private:
-  bool m_hasMultiEntry = false;
-  bool m_multiEntry;
-  bool m_hasUnique = false;
-  bool m_unique;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8IDBIndexParameters;
+private:
+    bool m_hasMultiEntry = false;
+    bool m_multiEntry;
+    bool m_hasUnique = false;
+    bool m_unique;
+
+    friend class V8IDBIndexParameters;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // IDBIndexParameters_h
+#endif // IDBIndexParameters_h

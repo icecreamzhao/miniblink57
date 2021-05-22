@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PaymentDetailsModifier_h
 #define V8PaymentDetailsModifier_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8PaymentDetailsModifier {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PaymentDetailsModifier&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PaymentDetailsModifier&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8PaymentDetailsModifier(const PaymentDetailsModifier&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PaymentDetailsModifier& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PaymentDetailsModifier& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<PaymentDetailsModifier> {
-  static PaymentDetailsModifier nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static PaymentDetailsModifier nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<PaymentDetailsModifier> {
-  typedef V8PaymentDetailsModifier Type;
+    typedef V8PaymentDetailsModifier Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PaymentDetailsModifier_h
+#endif // V8PaymentDetailsModifier_h

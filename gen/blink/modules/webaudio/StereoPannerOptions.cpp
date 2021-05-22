@@ -8,34 +8,39 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "StereoPannerOptions.h"
 
 namespace blink {
 
-StereoPannerOptions::StereoPannerOptions() {
+StereoPannerOptions::StereoPannerOptions()
+{
 }
 
-StereoPannerOptions::~StereoPannerOptions() {}
+StereoPannerOptions::~StereoPannerOptions() { }
 
 StereoPannerOptions::StereoPannerOptions(const StereoPannerOptions&) = default;
 
 StereoPannerOptions& StereoPannerOptions::operator=(const StereoPannerOptions&) = default;
 
-bool StereoPannerOptions::hasPan() const {
-  return m_hasPan;
+bool StereoPannerOptions::hasPan() const
+{
+    return m_hasPan;
 }
-float StereoPannerOptions::pan() const {
-  DCHECK(m_hasPan);
-  return m_pan;
+float StereoPannerOptions::pan() const
+{
+    DCHECK(m_hasPan);
+    return m_pan;
 }
-void StereoPannerOptions::setPan(float value) {
-  m_pan = value;
-  m_hasPan = true;
+void StereoPannerOptions::setPan(float value)
+{
+    m_pan = value;
+    m_hasPan = true;
 }
 
-DEFINE_TRACE(StereoPannerOptions) {
-  AudioNodeOptions::trace(visitor);
+DEFINE_TRACE(StereoPannerOptions)
+{
+    AudioNodeOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

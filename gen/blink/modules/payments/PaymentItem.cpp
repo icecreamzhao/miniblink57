@@ -8,56 +8,67 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PaymentItem.h"
 
 namespace blink {
 
-PaymentItem::PaymentItem() {
-  setPending(false);
+PaymentItem::PaymentItem()
+{
+    setPending(false);
 }
 
-PaymentItem::~PaymentItem() {}
+PaymentItem::~PaymentItem() { }
 
 PaymentItem::PaymentItem(const PaymentItem&) = default;
 
 PaymentItem& PaymentItem::operator=(const PaymentItem&) = default;
 
-bool PaymentItem::hasAmount() const {
-  return m_hasAmount;
+bool PaymentItem::hasAmount() const
+{
+    return m_hasAmount;
 }
-const PaymentCurrencyAmount& PaymentItem::amount() const {
-  DCHECK(m_hasAmount);
-  return m_amount;
+const PaymentCurrencyAmount& PaymentItem::amount() const
+{
+    DCHECK(m_hasAmount);
+    return m_amount;
 }
-void PaymentItem::setAmount(const PaymentCurrencyAmount& value) {
-  m_amount = value;
-  m_hasAmount = true;
+void PaymentItem::setAmount(const PaymentCurrencyAmount& value)
+{
+    m_amount = value;
+    m_hasAmount = true;
 }
-bool PaymentItem::hasLabel() const {
-  return !m_label.isNull();
+bool PaymentItem::hasLabel() const
+{
+    return !m_label.isNull();
 }
-String PaymentItem::label() const {
-  return m_label;
+String PaymentItem::label() const
+{
+    return m_label;
 }
-void PaymentItem::setLabel(String value) {
-  m_label = value;
+void PaymentItem::setLabel(String value)
+{
+    m_label = value;
 }
-bool PaymentItem::hasPending() const {
-  return m_hasPending;
+bool PaymentItem::hasPending() const
+{
+    return m_hasPending;
 }
-bool PaymentItem::pending() const {
-  DCHECK(m_hasPending);
-  return m_pending;
+bool PaymentItem::pending() const
+{
+    DCHECK(m_hasPending);
+    return m_pending;
 }
-void PaymentItem::setPending(bool value) {
-  m_pending = value;
-  m_hasPending = true;
+void PaymentItem::setPending(bool value)
+{
+    m_pending = value;
+    m_hasPending = true;
 }
 
-DEFINE_TRACE(PaymentItem) {
-  visitor->trace(m_amount);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PaymentItem)
+{
+    visitor->trace(m_amount);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

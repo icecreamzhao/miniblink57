@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RequestOrUSVString.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -17,90 +17,103 @@
 
 namespace blink {
 
-RequestOrUSVString::RequestOrUSVString() : m_type(SpecificTypeNone) {}
-
-Request* RequestOrUSVString::getAsRequest() const {
-  DCHECK(isRequest());
-  return m_request;
+RequestOrUSVString::RequestOrUSVString()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void RequestOrUSVString::setRequest(Request* value) {
-  DCHECK(isNull());
-  m_request = value;
-  m_type = SpecificTypeRequest;
+Request* RequestOrUSVString::getAsRequest() const
+{
+    DCHECK(isRequest());
+    return m_request;
 }
 
-RequestOrUSVString RequestOrUSVString::fromRequest(Request* value) {
-  RequestOrUSVString container;
-  container.setRequest(value);
-  return container;
+void RequestOrUSVString::setRequest(Request* value)
+{
+    DCHECK(isNull());
+    m_request = value;
+    m_type = SpecificTypeRequest;
 }
 
-String RequestOrUSVString::getAsUSVString() const {
-  DCHECK(isUSVString());
-  return m_uSVString;
+RequestOrUSVString RequestOrUSVString::fromRequest(Request* value)
+{
+    RequestOrUSVString container;
+    container.setRequest(value);
+    return container;
 }
 
-void RequestOrUSVString::setUSVString(String value) {
-  DCHECK(isNull());
-  m_uSVString = value;
-  m_type = SpecificTypeUSVString;
+String RequestOrUSVString::getAsUSVString() const
+{
+    DCHECK(isUSVString());
+    return m_uSVString;
 }
 
-RequestOrUSVString RequestOrUSVString::fromUSVString(String value) {
-  RequestOrUSVString container;
-  container.setUSVString(value);
-  return container;
+void RequestOrUSVString::setUSVString(String value)
+{
+    DCHECK(isNull());
+    m_uSVString = value;
+    m_type = SpecificTypeUSVString;
+}
+
+RequestOrUSVString RequestOrUSVString::fromUSVString(String value)
+{
+    RequestOrUSVString container;
+    container.setUSVString(value);
+    return container;
 }
 
 RequestOrUSVString::RequestOrUSVString(const RequestOrUSVString&) = default;
 RequestOrUSVString::~RequestOrUSVString() = default;
 RequestOrUSVString& RequestOrUSVString::operator=(const RequestOrUSVString&) = default;
 
-DEFINE_TRACE(RequestOrUSVString) {
-  visitor->trace(m_request);
+DEFINE_TRACE(RequestOrUSVString)
+{
+    visitor->trace(m_request);
 }
 
-void V8RequestOrUSVString::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RequestOrUSVString& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8RequestOrUSVString::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, RequestOrUSVString& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8Request::hasInstance(v8Value, isolate)) {
-    Request* cppValue = V8Request::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setRequest(cppValue);
-    return;
-  }
+    if (V8Request::hasInstance(v8Value, isolate)) {
+        Request* cppValue = V8Request::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setRequest(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = toUSVString(isolate, v8Value, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setUSVString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = toUSVString(isolate, v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setUSVString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const RequestOrUSVString& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const RequestOrUSVString& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case RequestOrUSVString::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case RequestOrUSVString::SpecificTypeRequest:
-      return ToV8(impl.getAsRequest(), creationContext, isolate);
+        return ToV8(impl.getAsRequest(), creationContext, isolate);
     case RequestOrUSVString::SpecificTypeUSVString:
-      return v8String(isolate, impl.getAsUSVString());
+        return v8String(isolate, impl.getAsUSVString());
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-RequestOrUSVString NativeValueTraits<RequestOrUSVString>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  RequestOrUSVString impl;
-  V8RequestOrUSVString::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+RequestOrUSVString NativeValueTraits<RequestOrUSVString>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    RequestOrUSVString impl;
+    V8RequestOrUSVString::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

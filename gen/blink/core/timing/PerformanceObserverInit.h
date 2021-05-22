@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PerformanceObserverInit_h
 #define PerformanceObserverInit_h
 
@@ -21,27 +21,28 @@
 namespace blink {
 
 class CORE_EXPORT PerformanceObserverInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PerformanceObserverInit();
-  virtual ~PerformanceObserverInit();
-  PerformanceObserverInit(const PerformanceObserverInit&);
-  PerformanceObserverInit& operator=(const PerformanceObserverInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasEntryTypes() const;
-  const Vector<String>& entryTypes() const;
-  void setEntryTypes(const Vector<String>&);
+public:
+    PerformanceObserverInit();
+    virtual ~PerformanceObserverInit();
+    PerformanceObserverInit(const PerformanceObserverInit&);
+    PerformanceObserverInit& operator=(const PerformanceObserverInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasEntryTypes() const;
+    const Vector<String>& entryTypes() const;
+    void setEntryTypes(const Vector<String>&);
 
- private:
-  bool m_hasEntryTypes = false;
-  Vector<String> m_entryTypes;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PerformanceObserverInit;
+private:
+    bool m_hasEntryTypes = false;
+    Vector<String> m_entryTypes;
+
+    friend class V8PerformanceObserverInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PerformanceObserverInit_h
+#endif // PerformanceObserverInit_h

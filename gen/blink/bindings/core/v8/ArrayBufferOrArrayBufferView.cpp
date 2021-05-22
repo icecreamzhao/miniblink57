@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ArrayBufferOrArrayBufferView.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -18,91 +18,104 @@
 
 namespace blink {
 
-ArrayBufferOrArrayBufferView::ArrayBufferOrArrayBufferView() : m_type(SpecificTypeNone) {}
-
-DOMArrayBuffer* ArrayBufferOrArrayBufferView::getAsArrayBuffer() const {
-  DCHECK(isArrayBuffer());
-  return m_arrayBuffer;
+ArrayBufferOrArrayBufferView::ArrayBufferOrArrayBufferView()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void ArrayBufferOrArrayBufferView::setArrayBuffer(DOMArrayBuffer* value) {
-  DCHECK(isNull());
-  m_arrayBuffer = value;
-  m_type = SpecificTypeArrayBuffer;
+DOMArrayBuffer* ArrayBufferOrArrayBufferView::getAsArrayBuffer() const
+{
+    DCHECK(isArrayBuffer());
+    return m_arrayBuffer;
 }
 
-ArrayBufferOrArrayBufferView ArrayBufferOrArrayBufferView::fromArrayBuffer(DOMArrayBuffer* value) {
-  ArrayBufferOrArrayBufferView container;
-  container.setArrayBuffer(value);
-  return container;
+void ArrayBufferOrArrayBufferView::setArrayBuffer(DOMArrayBuffer* value)
+{
+    DCHECK(isNull());
+    m_arrayBuffer = value;
+    m_type = SpecificTypeArrayBuffer;
 }
 
-DOMArrayBufferView* ArrayBufferOrArrayBufferView::getAsArrayBufferView() const {
-  DCHECK(isArrayBufferView());
-  return m_arrayBufferView;
+ArrayBufferOrArrayBufferView ArrayBufferOrArrayBufferView::fromArrayBuffer(DOMArrayBuffer* value)
+{
+    ArrayBufferOrArrayBufferView container;
+    container.setArrayBuffer(value);
+    return container;
 }
 
-void ArrayBufferOrArrayBufferView::setArrayBufferView(DOMArrayBufferView* value) {
-  DCHECK(isNull());
-  m_arrayBufferView = value;
-  m_type = SpecificTypeArrayBufferView;
+DOMArrayBufferView* ArrayBufferOrArrayBufferView::getAsArrayBufferView() const
+{
+    DCHECK(isArrayBufferView());
+    return m_arrayBufferView;
 }
 
-ArrayBufferOrArrayBufferView ArrayBufferOrArrayBufferView::fromArrayBufferView(DOMArrayBufferView* value) {
-  ArrayBufferOrArrayBufferView container;
-  container.setArrayBufferView(value);
-  return container;
+void ArrayBufferOrArrayBufferView::setArrayBufferView(DOMArrayBufferView* value)
+{
+    DCHECK(isNull());
+    m_arrayBufferView = value;
+    m_type = SpecificTypeArrayBufferView;
+}
+
+ArrayBufferOrArrayBufferView ArrayBufferOrArrayBufferView::fromArrayBufferView(DOMArrayBufferView* value)
+{
+    ArrayBufferOrArrayBufferView container;
+    container.setArrayBufferView(value);
+    return container;
 }
 
 ArrayBufferOrArrayBufferView::ArrayBufferOrArrayBufferView(const ArrayBufferOrArrayBufferView&) = default;
 ArrayBufferOrArrayBufferView::~ArrayBufferOrArrayBufferView() = default;
 ArrayBufferOrArrayBufferView& ArrayBufferOrArrayBufferView::operator=(const ArrayBufferOrArrayBufferView&) = default;
 
-DEFINE_TRACE(ArrayBufferOrArrayBufferView) {
-  visitor->trace(m_arrayBuffer);
-  visitor->trace(m_arrayBufferView);
+DEFINE_TRACE(ArrayBufferOrArrayBufferView)
+{
+    visitor->trace(m_arrayBuffer);
+    visitor->trace(m_arrayBufferView);
 }
 
-void V8ArrayBufferOrArrayBufferView::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ArrayBufferOrArrayBufferView& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8ArrayBufferOrArrayBufferView::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ArrayBufferOrArrayBufferView& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (v8Value->IsArrayBuffer()) {
-    DOMArrayBuffer* cppValue = V8ArrayBuffer::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setArrayBuffer(cppValue);
-    return;
-  }
+    if (v8Value->IsArrayBuffer()) {
+        DOMArrayBuffer* cppValue = V8ArrayBuffer::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setArrayBuffer(cppValue);
+        return;
+    }
 
-  if (v8Value->IsArrayBufferView()) {
-    DOMArrayBufferView* cppValue = V8ArrayBufferView::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setArrayBufferView(cppValue);
-    return;
-  }
+    if (v8Value->IsArrayBufferView()) {
+        DOMArrayBufferView* cppValue = V8ArrayBufferView::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setArrayBufferView(cppValue);
+        return;
+    }
 
-  exceptionState.throwTypeError("The provided value is not of type '(ArrayBuffer or ArrayBufferView)'");
+    exceptionState.throwTypeError("The provided value is not of type '(ArrayBuffer or ArrayBufferView)'");
 }
 
-v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferView& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferView& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case ArrayBufferOrArrayBufferView::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case ArrayBufferOrArrayBufferView::SpecificTypeArrayBuffer:
-      return ToV8(impl.getAsArrayBuffer(), creationContext, isolate);
+        return ToV8(impl.getAsArrayBuffer(), creationContext, isolate);
     case ArrayBufferOrArrayBufferView::SpecificTypeArrayBufferView:
-      return ToV8(impl.getAsArrayBufferView(), creationContext, isolate);
+        return ToV8(impl.getAsArrayBufferView(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-ArrayBufferOrArrayBufferView NativeValueTraits<ArrayBufferOrArrayBufferView>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ArrayBufferOrArrayBufferView impl;
-  V8ArrayBufferOrArrayBufferView::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+ArrayBufferOrArrayBufferView NativeValueTraits<ArrayBufferOrArrayBufferView>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ArrayBufferOrArrayBufferView impl;
+    V8ArrayBufferOrArrayBufferView::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

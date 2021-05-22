@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGGraphicsElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,174 +53,197 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGGraphicsElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGGraphicsElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGGraphicsElementV8Internal {
 
-static void transformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void transformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
+        SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->transform()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->transform()), impl);
+    }
 
-CORE_EXPORT void transformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SVGGraphicsElement_Transform_AttributeGetter);
+    CORE_EXPORT void transformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SVGGraphicsElement_Transform_AttributeGetter);
 
-  SVGGraphicsElementV8Internal::transformAttributeGetter(info);
-}
+        SVGGraphicsElementV8Internal::transformAttributeGetter(info);
+    }
 
-static void nearestViewportElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nearestViewportElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
+        SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->nearestViewportElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->nearestViewportElement()), impl);
+    }
 
-CORE_EXPORT void nearestViewportElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGLocatableNearestViewportElement);
+    CORE_EXPORT void nearestViewportElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGLocatableNearestViewportElement);
 
-  SVGGraphicsElementV8Internal::nearestViewportElementAttributeGetter(info);
-}
+        SVGGraphicsElementV8Internal::nearestViewportElementAttributeGetter(info);
+    }
 
-static void farthestViewportElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void farthestViewportElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
+        SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->farthestViewportElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->farthestViewportElement()), impl);
+    }
 
-CORE_EXPORT void farthestViewportElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGLocatableFarthestViewportElement);
+    CORE_EXPORT void farthestViewportElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGLocatableFarthestViewportElement);
 
-  SVGGraphicsElementV8Internal::farthestViewportElementAttributeGetter(info);
-}
+        SVGGraphicsElementV8Internal::farthestViewportElementAttributeGetter(info);
+    }
 
-static void requiredFeaturesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void requiredFeaturesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
+        SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->requiredFeatures()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->requiredFeatures()), impl);
+    }
 
-CORE_EXPORT void requiredFeaturesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
+    CORE_EXPORT void requiredFeaturesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
 
-  SVGGraphicsElementV8Internal::requiredFeaturesAttributeGetter(info);
-}
+        SVGGraphicsElementV8Internal::requiredFeaturesAttributeGetter(info);
+    }
 
-static void requiredExtensionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void requiredExtensionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
+        SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->requiredExtensions()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->requiredExtensions()), impl);
+    }
 
-CORE_EXPORT void requiredExtensionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
+    CORE_EXPORT void requiredExtensionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
 
-  SVGGraphicsElementV8Internal::requiredExtensionsAttributeGetter(info);
-}
+        SVGGraphicsElementV8Internal::requiredExtensionsAttributeGetter(info);
+    }
 
-static void systemLanguageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void systemLanguageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
+        SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->systemLanguage()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->systemLanguage()), impl);
+    }
 
-CORE_EXPORT void systemLanguageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
+    CORE_EXPORT void systemLanguageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMSVGTests);
 
-  SVGGraphicsElementV8Internal::systemLanguageAttributeGetter(info);
-}
+        SVGGraphicsElementV8Internal::systemLanguageAttributeGetter(info);
+    }
 
-static void getBBoxMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(info.Holder());
+    static void getBBoxMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(info.Holder());
 
-  v8SetReturnValueFast(info, impl->getBBoxFromJavascript(), impl);
-}
+        v8SetReturnValueFast(info, impl->getBBoxFromJavascript(), impl);
+    }
 
-CORE_EXPORT  void getBBoxMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGraphicsElementV8Internal::getBBoxMethod(info);
-}
+    CORE_EXPORT void getBBoxMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGraphicsElementV8Internal::getBBoxMethod(info);
+    }
 
-static void getCTMMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(info.Holder());
+    static void getCTMMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(info.Holder());
 
-  v8SetReturnValueFast(info, impl->getCTMFromJavascript(), impl);
-}
+        v8SetReturnValueFast(info, impl->getCTMFromJavascript(), impl);
+    }
 
-CORE_EXPORT  void getCTMMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGraphicsElementV8Internal::getCTMMethod(info);
-}
+    CORE_EXPORT void getCTMMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGraphicsElementV8Internal::getCTMMethod(info);
+    }
 
-static void getScreenCTMMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(info.Holder());
+    static void getScreenCTMMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGraphicsElement* impl = V8SVGGraphicsElement::toImpl(info.Holder());
 
-  v8SetReturnValueFast(info, impl->getScreenCTMFromJavascript(), impl);
-}
+        v8SetReturnValueFast(info, impl->getScreenCTMFromJavascript(), impl);
+    }
 
-CORE_EXPORT  void getScreenCTMMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGGraphicsElementV8Internal::getScreenCTMMethod(info);
-}
+    CORE_EXPORT void getScreenCTMMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGGraphicsElementV8Internal::getScreenCTMMethod(info);
+    }
 
 } // namespace SVGGraphicsElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGGraphicsElementAccessors[] = {
-    {"transform", SVGGraphicsElementV8Internal::transformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nearestViewportElement", SVGGraphicsElementV8Internal::nearestViewportElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"farthestViewportElement", SVGGraphicsElementV8Internal::farthestViewportElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"requiredFeatures", SVGGraphicsElementV8Internal::requiredFeaturesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"requiredExtensions", SVGGraphicsElementV8Internal::requiredExtensionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"systemLanguage", SVGGraphicsElementV8Internal::systemLanguageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "transform", SVGGraphicsElementV8Internal::transformAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nearestViewportElement", SVGGraphicsElementV8Internal::nearestViewportElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "farthestViewportElement", SVGGraphicsElementV8Internal::farthestViewportElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "requiredFeatures", SVGGraphicsElementV8Internal::requiredFeaturesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "requiredExtensions", SVGGraphicsElementV8Internal::requiredExtensionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "systemLanguage", SVGGraphicsElementV8Internal::systemLanguageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGGraphicsElementMethods[] = {
-    {"getBBox", SVGGraphicsElementV8Internal::getBBoxMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getCTM", SVGGraphicsElementV8Internal::getCTMMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getScreenCTM", SVGGraphicsElementV8Internal::getScreenCTMMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getBBox", SVGGraphicsElementV8Internal::getBBoxMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getCTM", SVGGraphicsElementV8Internal::getCTMMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getScreenCTM", SVGGraphicsElementV8Internal::getScreenCTMMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGGraphicsElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGGraphicsElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGGraphicsElement::internalFieldCount);
+static void installV8SVGGraphicsElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGGraphicsElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGGraphicsElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGraphicsElementAccessors, WTF_ARRAY_LENGTH(V8SVGGraphicsElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGraphicsElementMethods, WTF_ARRAY_LENGTH(V8SVGGraphicsElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGraphicsElementAccessors, WTF_ARRAY_LENGTH(V8SVGGraphicsElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGGraphicsElementMethods, WTF_ARRAY_LENGTH(V8SVGGraphicsElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGGraphicsElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGGraphicsElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGGraphicsElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGGraphicsElementTemplate);
 }
 
-bool V8SVGGraphicsElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGGraphicsElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGGraphicsElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGGraphicsElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGGraphicsElement* V8SVGGraphicsElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGGraphicsElement* V8SVGGraphicsElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CompositorProxy.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,311 +49,340 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CompositorProxy::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CompositorProxy is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CompositorProxyV8Internal {
 
-static void initializedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void initializedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
+        CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->initialized());
-}
+        v8SetReturnValueBool(info, impl->initialized());
+    }
 
-CORE_EXPORT void initializedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorProxyV8Internal::initializedAttributeGetter(info);
-}
+    CORE_EXPORT void initializedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorProxyV8Internal::initializedAttributeGetter(info);
+    }
 
-static void opacityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void opacityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
+        CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "CompositorProxy", "opacity");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "CompositorProxy", "opacity");
 
-  double cppValue(impl->opacity(exceptionState));
+        double cppValue(impl->opacity(exceptionState));
 
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void opacityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorProxyV8Internal::opacityAttributeGetter(info);
-}
+    CORE_EXPORT void opacityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorProxyV8Internal::opacityAttributeGetter(info);
+    }
 
-static void opacityAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
+    static void opacityAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CompositorProxy", "opacity");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CompositorProxy", "opacity");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setOpacity(cppValue, exceptionState);
-}
+        impl->setOpacity(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void opacityAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void opacityAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CompositorProxyV8Internal::opacityAttributeSetter(v8Value, info);
-}
+        CompositorProxyV8Internal::opacityAttributeSetter(v8Value, info);
+    }
 
-static void scrollLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
+        CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "CompositorProxy", "scrollLeft");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "CompositorProxy", "scrollLeft");
 
-  double cppValue(impl->scrollLeft(exceptionState));
+        double cppValue(impl->scrollLeft(exceptionState));
 
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void scrollLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorProxyV8Internal::scrollLeftAttributeGetter(info);
-}
+    CORE_EXPORT void scrollLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorProxyV8Internal::scrollLeftAttributeGetter(info);
+    }
 
-static void scrollLeftAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
+    static void scrollLeftAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CompositorProxy", "scrollLeft");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CompositorProxy", "scrollLeft");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setScrollLeft(cppValue, exceptionState);
-}
+        impl->setScrollLeft(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void scrollLeftAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void scrollLeftAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CompositorProxyV8Internal::scrollLeftAttributeSetter(v8Value, info);
-}
+        CompositorProxyV8Internal::scrollLeftAttributeSetter(v8Value, info);
+    }
 
-static void scrollTopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollTopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
+        CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "CompositorProxy", "scrollTop");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "CompositorProxy", "scrollTop");
 
-  double cppValue(impl->scrollTop(exceptionState));
+        double cppValue(impl->scrollTop(exceptionState));
 
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void scrollTopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorProxyV8Internal::scrollTopAttributeGetter(info);
-}
+    CORE_EXPORT void scrollTopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorProxyV8Internal::scrollTopAttributeGetter(info);
+    }
 
-static void scrollTopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
+    static void scrollTopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CompositorProxy", "scrollTop");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CompositorProxy", "scrollTop");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setScrollTop(cppValue, exceptionState);
-}
+        impl->setScrollTop(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void scrollTopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void scrollTopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CompositorProxyV8Internal::scrollTopAttributeSetter(v8Value, info);
-}
+        CompositorProxyV8Internal::scrollTopAttributeSetter(v8Value, info);
+    }
 
-static void transformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void transformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
+        CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "CompositorProxy", "transform");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "CompositorProxy", "transform");
 
-  DOMMatrix* cppValue(impl->transform(exceptionState));
+        DOMMatrix* cppValue(impl->transform(exceptionState));
 
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
 
-  v8SetReturnValueFast(info, cppValue, impl);
-}
+        v8SetReturnValueFast(info, cppValue, impl);
+    }
 
-CORE_EXPORT void transformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorProxyV8Internal::transformAttributeGetter(info);
-}
+    CORE_EXPORT void transformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorProxyV8Internal::transformAttributeGetter(info);
+    }
 
-static void transformAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
+    static void transformAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CompositorProxy* impl = V8CompositorProxy::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CompositorProxy", "transform");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CompositorProxy", "transform");
 
-  // Prepare the value to be set.
-  DOMMatrix* cppValue = V8DOMMatrix::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+        // Prepare the value to be set.
+        DOMMatrix* cppValue = V8DOMMatrix::toImplWithTypeCheck(info.GetIsolate(), v8Value);
 
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue) {
-    exceptionState.throwTypeError("The provided value is not of type 'DOMMatrix'.");
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue) {
+            exceptionState.throwTypeError("The provided value is not of type 'DOMMatrix'.");
+            return;
+        }
 
-  impl->setTransform(cppValue, exceptionState);
-}
+        impl->setTransform(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void transformAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void transformAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CompositorProxyV8Internal::transformAttributeSetter(v8Value, info);
-}
+        CompositorProxyV8Internal::transformAttributeSetter(v8Value, info);
+    }
 
-static void supportsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorProxy* impl = V8CompositorProxy::toImpl(info.Holder());
+    static void supportsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorProxy* impl = V8CompositorProxy::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("supports", "CompositorProxy", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("supports", "CompositorProxy", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> attribute;
-  attribute = info[0];
-  if (!attribute.prepare())
-    return;
+        V8StringResource<> attribute;
+        attribute = info[0];
+        if (!attribute.prepare())
+            return;
 
-  v8SetReturnValueBool(info, impl->supports(attribute));
-}
+        v8SetReturnValueBool(info, impl->supports(attribute));
+    }
 
-CORE_EXPORT  void supportsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorProxyV8Internal::supportsMethod(info);
-}
+    CORE_EXPORT void supportsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorProxyV8Internal::supportsMethod(info);
+    }
 
-static void disconnectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorProxy* impl = V8CompositorProxy::toImpl(info.Holder());
+    static void disconnectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorProxy* impl = V8CompositorProxy::toImpl(info.Holder());
 
-  impl->disconnect();
-}
+        impl->disconnect();
+    }
 
-CORE_EXPORT  void disconnectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CompositorProxyV8Internal::disconnectMethod(info);
-}
+    CORE_EXPORT void disconnectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CompositorProxyV8Internal::disconnectMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CompositorProxy");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "CompositorProxy");
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  Element* element;
-  Vector<String> attributeArray;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
+        Element* element;
+        Vector<String> attributeArray;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Element'.");
 
-    return;
-  }
+            return;
+        }
 
-  attributeArray = toImplArray<Vector<String>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
+        attributeArray = toImplArray<Vector<String>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  CompositorProxy* impl = CompositorProxy::create(executionContext, element, attributeArray, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CompositorProxy::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        CompositorProxy* impl = CompositorProxy::create(executionContext, element, attributeArray, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8CompositorProxy::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace CompositorProxyV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CompositorProxyAccessors[] = {
-    {"initialized", CompositorProxyV8Internal::initializedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"opacity", CompositorProxyV8Internal::opacityAttributeGetterCallback, CompositorProxyV8Internal::opacityAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollLeft", CompositorProxyV8Internal::scrollLeftAttributeGetterCallback, CompositorProxyV8Internal::scrollLeftAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollTop", CompositorProxyV8Internal::scrollTopAttributeGetterCallback, CompositorProxyV8Internal::scrollTopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"transform", CompositorProxyV8Internal::transformAttributeGetterCallback, CompositorProxyV8Internal::transformAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "initialized", CompositorProxyV8Internal::initializedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "opacity", CompositorProxyV8Internal::opacityAttributeGetterCallback, CompositorProxyV8Internal::opacityAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollLeft", CompositorProxyV8Internal::scrollLeftAttributeGetterCallback, CompositorProxyV8Internal::scrollLeftAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollTop", CompositorProxyV8Internal::scrollTopAttributeGetterCallback, CompositorProxyV8Internal::scrollTopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "transform", CompositorProxyV8Internal::transformAttributeGetterCallback, CompositorProxyV8Internal::transformAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8CompositorProxyMethods[] = {
-    {"supports", CompositorProxyV8Internal::supportsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disconnect", CompositorProxyV8Internal::disconnectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "supports", CompositorProxyV8Internal::supportsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disconnect", CompositorProxyV8Internal::disconnectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8CompositorProxy::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CompositorProxy"));
-    return;
-  }
+void V8CompositorProxy::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("CompositorProxy"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  CompositorProxyV8Internal::constructor(info);
+    CompositorProxyV8Internal::constructor(info);
 }
 
-static void installV8CompositorProxyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CompositorProxy::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CompositorProxy::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8CompositorProxy::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8CompositorProxyTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CompositorProxy::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CompositorProxy::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8CompositorProxy::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  if (!RuntimeEnabledFeatures::compositorWorkerEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::compositorWorkerEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CompositorProxyAccessors, WTF_ARRAY_LENGTH(V8CompositorProxyAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CompositorProxyMethods, WTF_ARRAY_LENGTH(V8CompositorProxyMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CompositorProxyAccessors, WTF_ARRAY_LENGTH(V8CompositorProxyAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CompositorProxyMethods, WTF_ARRAY_LENGTH(V8CompositorProxyMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8CompositorProxy::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CompositorProxyTemplate);
+v8::Local<v8::FunctionTemplate> V8CompositorProxy::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CompositorProxyTemplate);
 }
 
-bool V8CompositorProxy::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CompositorProxy::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CompositorProxy::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CompositorProxy::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CompositorProxy* V8CompositorProxy::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CompositorProxy* V8CompositorProxy::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

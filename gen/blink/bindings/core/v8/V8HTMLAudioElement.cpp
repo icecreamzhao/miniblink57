@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLAudioElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,7 +48,7 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&HTMLAudioElement::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLAudioElement is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
@@ -68,77 +68,84 @@ const WrapperTypeInfo V8HTMLAudioElementConstructor::wrapperTypeInfo = { gin::kE
 #pragma clang diagnostic pop
 #endif
 
-static void V8HTMLAudioElementConstructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Audio"));
-    return;
-  }
+static void V8HTMLAudioElementConstructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Audio"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  V8StringResource<> src;
-  if (!info[0]->IsUndefined()) {
-    src = info[0];
-    if (!src.prepare())
-      return;
-  } else {
-    src = nullptr;
-  }
+    V8StringResource<> src;
+    if (!info[0]->IsUndefined()) {
+        src = info[0];
+        if (!src.prepare())
+            return;
+    } else {
+        src = nullptr;
+    }
 
-  Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
-  HTMLAudioElement* impl = HTMLAudioElement::createForJSConstructor(document, src);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8HTMLAudioElementConstructor::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
+    Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+    HTMLAudioElement* impl = HTMLAudioElement::createForJSConstructor(document, src);
+    v8::Local<v8::Object> wrapper = info.Holder();
+    wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8HTMLAudioElementConstructor::wrapperTypeInfo, wrapper);
+    v8SetReturnValue(info, wrapper);
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLAudioElementConstructor::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  static int domTemplateKey; // This address is used for a key to look up the dom template.
-  V8PerIsolateData* data = V8PerIsolateData::from(isolate);
-  v8::Local<v8::FunctionTemplate> result = data->findInterfaceTemplate(world, &domTemplateKey);
-  if (!result.IsEmpty())
+v8::Local<v8::FunctionTemplate> V8HTMLAudioElementConstructor::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    static int domTemplateKey; // This address is used for a key to look up the dom template.
+    V8PerIsolateData* data = V8PerIsolateData::from(isolate);
+    v8::Local<v8::FunctionTemplate> result = data->findInterfaceTemplate(world, &domTemplateKey);
+    if (!result.IsEmpty())
+        return result;
+
+    result = v8::FunctionTemplate::New(isolate, V8HTMLAudioElementConstructorCallback);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = result->InstanceTemplate();
+    instanceTemplate->SetInternalFieldCount(V8HTMLAudioElement::internalFieldCount);
+    result->SetClassName(v8AtomicString(isolate, "HTMLAudioElement"));
+    result->Inherit(V8HTMLAudioElement::domTemplate(isolate, world));
+    data->setInterfaceTemplate(world, &domTemplateKey, result);
     return result;
-
-  result = v8::FunctionTemplate::New(isolate, V8HTMLAudioElementConstructorCallback);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = result->InstanceTemplate();
-  instanceTemplate->SetInternalFieldCount(V8HTMLAudioElement::internalFieldCount);
-  result->SetClassName(v8AtomicString(isolate, "HTMLAudioElement"));
-  result->Inherit(V8HTMLAudioElement::domTemplate(isolate, world));
-  data->setInterfaceTemplate(world, &domTemplateKey, result);
-  return result;
 }
 
-static void installV8HTMLAudioElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLAudioElement::wrapperTypeInfo.interfaceName, V8HTMLMediaElement::domTemplate(isolate, world), V8HTMLAudioElement::internalFieldCount);
+static void installV8HTMLAudioElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLAudioElement::wrapperTypeInfo.interfaceName, V8HTMLMediaElement::domTemplate(isolate, world), V8HTMLAudioElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLAudioElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLAudioElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLAudioElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLAudioElementTemplate);
 }
 
-bool V8HTMLAudioElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLAudioElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLAudioElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLAudioElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLAudioElement* V8HTMLAudioElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLAudioElement* V8HTMLAudioElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

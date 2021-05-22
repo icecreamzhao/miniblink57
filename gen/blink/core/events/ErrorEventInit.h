@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ErrorEventInit_h
 #define ErrorEventInit_h
 
@@ -21,48 +21,49 @@
 namespace blink {
 
 class CORE_EXPORT ErrorEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ErrorEventInit();
-  virtual ~ErrorEventInit();
-  ErrorEventInit(const ErrorEventInit&);
-  ErrorEventInit& operator=(const ErrorEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasColno() const;
-  unsigned colno() const;
-  void setColno(unsigned);
+public:
+    ErrorEventInit();
+    virtual ~ErrorEventInit();
+    ErrorEventInit(const ErrorEventInit&);
+    ErrorEventInit& operator=(const ErrorEventInit&);
 
-  bool hasError() const;
-  ScriptValue error() const;
-  void setError(ScriptValue);
+    bool hasColno() const;
+    unsigned colno() const;
+    void setColno(unsigned);
 
-  bool hasFilename() const;
-  String filename() const;
-  void setFilename(String);
+    bool hasError() const;
+    ScriptValue error() const;
+    void setError(ScriptValue);
 
-  bool hasLineno() const;
-  unsigned lineno() const;
-  void setLineno(unsigned);
+    bool hasFilename() const;
+    String filename() const;
+    void setFilename(String);
 
-  bool hasMessage() const;
-  String message() const;
-  void setMessage(String);
+    bool hasLineno() const;
+    unsigned lineno() const;
+    void setLineno(unsigned);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMessage() const;
+    String message() const;
+    void setMessage(String);
 
- private:
-  bool m_hasColno = false;
-  unsigned m_colno;
-  ScriptValue m_error;
-  String m_filename;
-  bool m_hasLineno = false;
-  unsigned m_lineno;
-  String m_message;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ErrorEventInit;
+private:
+    bool m_hasColno = false;
+    unsigned m_colno;
+    ScriptValue m_error;
+    String m_filename;
+    bool m_hasLineno = false;
+    unsigned m_lineno;
+    String m_message;
+
+    friend class V8ErrorEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ErrorEventInit_h
+#endif // ErrorEventInit_h

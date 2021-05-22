@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef Canvas2DContextAttributes_h
 #define Canvas2DContextAttributes_h
 
@@ -20,32 +20,33 @@
 namespace blink {
 
 class MODULES_EXPORT Canvas2DContextAttributes : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  Canvas2DContextAttributes();
-  virtual ~Canvas2DContextAttributes();
-  Canvas2DContextAttributes(const Canvas2DContextAttributes&);
-  Canvas2DContextAttributes& operator=(const Canvas2DContextAttributes&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAlpha() const;
-  bool alpha() const;
-  void setAlpha(bool);
+public:
+    Canvas2DContextAttributes();
+    virtual ~Canvas2DContextAttributes();
+    Canvas2DContextAttributes(const Canvas2DContextAttributes&);
+    Canvas2DContextAttributes& operator=(const Canvas2DContextAttributes&);
 
-  bool hasColorSpace() const;
-  String colorSpace() const;
-  void setColorSpace(String);
+    bool hasAlpha() const;
+    bool alpha() const;
+    void setAlpha(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasColorSpace() const;
+    String colorSpace() const;
+    void setColorSpace(String);
 
- private:
-  bool m_hasAlpha = false;
-  bool m_alpha;
-  String m_colorSpace;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8Canvas2DContextAttributes;
+private:
+    bool m_hasAlpha = false;
+    bool m_alpha;
+    String m_colorSpace;
+
+    friend class V8Canvas2DContextAttributes;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // Canvas2DContextAttributes_h
+#endif // Canvas2DContextAttributes_h

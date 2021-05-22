@@ -8,117 +8,130 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "LongOrConstrainLongRange.h"
 
 #include "bindings/core/v8/ToV8.h"
 
 namespace blink {
 
-LongOrConstrainLongRange::LongOrConstrainLongRange() : m_type(SpecificTypeNone) {}
-
-int LongOrConstrainLongRange::getAsLong() const {
-  DCHECK(isLong());
-  return m_long;
+LongOrConstrainLongRange::LongOrConstrainLongRange()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void LongOrConstrainLongRange::setLong(int value) {
-  DCHECK(isNull());
-  m_long = value;
-  m_type = SpecificTypeLong;
+int LongOrConstrainLongRange::getAsLong() const
+{
+    DCHECK(isLong());
+    return m_long;
 }
 
-LongOrConstrainLongRange LongOrConstrainLongRange::fromLong(int value) {
-  LongOrConstrainLongRange container;
-  container.setLong(value);
-  return container;
+void LongOrConstrainLongRange::setLong(int value)
+{
+    DCHECK(isNull());
+    m_long = value;
+    m_type = SpecificTypeLong;
 }
 
-const ConstrainLongRange& LongOrConstrainLongRange::getAsConstrainLongRange() const {
-  DCHECK(isConstrainLongRange());
-  return m_constrainLongRange;
+LongOrConstrainLongRange LongOrConstrainLongRange::fromLong(int value)
+{
+    LongOrConstrainLongRange container;
+    container.setLong(value);
+    return container;
 }
 
-void LongOrConstrainLongRange::setConstrainLongRange(const ConstrainLongRange& value) {
-  DCHECK(isNull());
-  m_constrainLongRange = value;
-  m_type = SpecificTypeConstrainLongRange;
+const ConstrainLongRange& LongOrConstrainLongRange::getAsConstrainLongRange() const
+{
+    DCHECK(isConstrainLongRange());
+    return m_constrainLongRange;
 }
 
-LongOrConstrainLongRange LongOrConstrainLongRange::fromConstrainLongRange(const ConstrainLongRange& value) {
-  LongOrConstrainLongRange container;
-  container.setConstrainLongRange(value);
-  return container;
+void LongOrConstrainLongRange::setConstrainLongRange(const ConstrainLongRange& value)
+{
+    DCHECK(isNull());
+    m_constrainLongRange = value;
+    m_type = SpecificTypeConstrainLongRange;
+}
+
+LongOrConstrainLongRange LongOrConstrainLongRange::fromConstrainLongRange(const ConstrainLongRange& value)
+{
+    LongOrConstrainLongRange container;
+    container.setConstrainLongRange(value);
+    return container;
 }
 
 LongOrConstrainLongRange::LongOrConstrainLongRange(const LongOrConstrainLongRange&) = default;
 LongOrConstrainLongRange::~LongOrConstrainLongRange() = default;
 LongOrConstrainLongRange& LongOrConstrainLongRange::operator=(const LongOrConstrainLongRange&) = default;
 
-DEFINE_TRACE(LongOrConstrainLongRange) {
-  visitor->trace(m_constrainLongRange);
+DEFINE_TRACE(LongOrConstrainLongRange)
+{
+    visitor->trace(m_constrainLongRange);
 }
 
-void V8LongOrConstrainLongRange::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, LongOrConstrainLongRange& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8LongOrConstrainLongRange::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, LongOrConstrainLongRange& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (isUndefinedOrNull(v8Value)) {
-    ConstrainLongRange cppValue;
-    V8ConstrainLongRange::toImpl(isolate, v8Value, cppValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setConstrainLongRange(cppValue);
-    return;
-  }
+    if (isUndefinedOrNull(v8Value)) {
+        ConstrainLongRange cppValue;
+        V8ConstrainLongRange::toImpl(isolate, v8Value, cppValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setConstrainLongRange(cppValue);
+        return;
+    }
 
-  if (v8Value->IsObject()) {
-    ConstrainLongRange cppValue;
-    V8ConstrainLongRange::toImpl(isolate, v8Value, cppValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setConstrainLongRange(cppValue);
-    return;
-  }
+    if (v8Value->IsObject()) {
+        ConstrainLongRange cppValue;
+        V8ConstrainLongRange::toImpl(isolate, v8Value, cppValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setConstrainLongRange(cppValue);
+        return;
+    }
 
-  if (v8Value->IsNumber()) {
-    int cppValue = toInt32(isolate, v8Value, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setLong(cppValue);
-    return;
-  }
+    if (v8Value->IsNumber()) {
+        int cppValue = toInt32(isolate, v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setLong(cppValue);
+        return;
+    }
 
-  {
-    int cppValue = toInt32(isolate, v8Value, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setLong(cppValue);
-    return;
-  }
+    {
+        int cppValue = toInt32(isolate, v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setLong(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const LongOrConstrainLongRange& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const LongOrConstrainLongRange& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case LongOrConstrainLongRange::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case LongOrConstrainLongRange::SpecificTypeLong:
-      return v8::Integer::New(isolate, impl.getAsLong());
+        return v8::Integer::New(isolate, impl.getAsLong());
     case LongOrConstrainLongRange::SpecificTypeConstrainLongRange:
-      return ToV8(impl.getAsConstrainLongRange(), creationContext, isolate);
+        return ToV8(impl.getAsConstrainLongRange(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-LongOrConstrainLongRange NativeValueTraits<LongOrConstrainLongRange>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  LongOrConstrainLongRange impl;
-  V8LongOrConstrainLongRange::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+LongOrConstrainLongRange NativeValueTraits<LongOrConstrainLongRange>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    LongOrConstrainLongRange impl;
+    V8LongOrConstrainLongRange::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

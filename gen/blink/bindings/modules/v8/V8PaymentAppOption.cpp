@@ -8,132 +8,136 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PaymentAppOption.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8PaymentAppOption::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PaymentAppOption& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): id, name.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8PaymentAppOption::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PaymentAppOption& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): id, name.");
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> enabledMethodsValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "enabledMethods")).ToLocal(&enabledMethodsValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (enabledMethodsValue.IsEmpty() || enabledMethodsValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    Vector<String> enabledMethods = toImplArray<Vector<String>>(enabledMethodsValue, 0, isolate, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setEnabledMethods(enabledMethods);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> enabledMethodsValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "enabledMethods")).ToLocal(&enabledMethodsValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (enabledMethodsValue.IsEmpty() || enabledMethodsValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        Vector<String> enabledMethods = toImplArray<Vector<String>>(enabledMethodsValue, 0, isolate, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setEnabledMethods(enabledMethods);
+    }
 
-  v8::Local<v8::Value> iconValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "icon")).ToLocal(&iconValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (iconValue.IsEmpty() || iconValue->IsUndefined()) {
-    // Do nothing.
-  } else if (iconValue->IsNull()) {
-    impl.setIconToNull();
-  } else {
-    V8StringResource<> icon = iconValue;
-    if (!icon.prepare(exceptionState))
-      return;
-    impl.setIcon(icon);
-  }
+    v8::Local<v8::Value> iconValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "icon")).ToLocal(&iconValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (iconValue.IsEmpty() || iconValue->IsUndefined()) {
+        // Do nothing.
+    } else if (iconValue->IsNull()) {
+        impl.setIconToNull();
+    } else {
+        V8StringResource<> icon = iconValue;
+        if (!icon.prepare(exceptionState))
+            return;
+        impl.setIcon(icon);
+    }
 
-  v8::Local<v8::Value> idValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "id")).ToLocal(&idValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (idValue.IsEmpty() || idValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member id is undefined.");
-    return;
-  } else {
-    V8StringResource<> id = idValue;
-    if (!id.prepare(exceptionState))
-      return;
-    impl.setId(id);
-  }
+    v8::Local<v8::Value> idValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "id")).ToLocal(&idValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (idValue.IsEmpty() || idValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member id is undefined.");
+        return;
+    } else {
+        V8StringResource<> id = idValue;
+        if (!id.prepare(exceptionState))
+            return;
+        impl.setId(id);
+    }
 
-  v8::Local<v8::Value> nameValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "name")).ToLocal(&nameValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (nameValue.IsEmpty() || nameValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member name is undefined.");
-    return;
-  } else {
-    V8StringResource<> name = nameValue;
-    if (!name.prepare(exceptionState))
-      return;
-    impl.setName(name);
-  }
+    v8::Local<v8::Value> nameValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "name")).ToLocal(&nameValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (nameValue.IsEmpty() || nameValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member name is undefined.");
+        return;
+    } else {
+        V8StringResource<> name = nameValue;
+        if (!name.prepare(exceptionState))
+            return;
+        impl.setName(name);
+    }
 }
 
-v8::Local<v8::Value> PaymentAppOption::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8PaymentAppOption(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> PaymentAppOption::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8PaymentAppOption(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8PaymentAppOption(const PaymentAppOption& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasEnabledMethods()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "enabledMethods"), ToV8(impl.enabledMethods(), creationContext, isolate))))
-      return false;
-  }
+bool toV8PaymentAppOption(const PaymentAppOption& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasEnabledMethods()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "enabledMethods"), ToV8(impl.enabledMethods(), creationContext, isolate))))
+            return false;
+    }
 
-  if (impl.hasIcon()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "icon"), v8String(isolate, impl.icon()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "icon"), v8::Null(isolate))))
-      return false;
-  }
+    if (impl.hasIcon()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "icon"), v8String(isolate, impl.icon()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "icon"), v8::Null(isolate))))
+            return false;
+    }
 
-  if (impl.hasId()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "id"), v8String(isolate, impl.id()))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasId()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "id"), v8String(isolate, impl.id()))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasName()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "name"), v8String(isolate, impl.name()))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasName()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "name"), v8String(isolate, impl.name()))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  return true;
+    return true;
 }
 
-PaymentAppOption NativeValueTraits<PaymentAppOption>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  PaymentAppOption impl;
-  V8PaymentAppOption::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+PaymentAppOption NativeValueTraits<PaymentAppOption>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    PaymentAppOption impl;
+    V8PaymentAppOption::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

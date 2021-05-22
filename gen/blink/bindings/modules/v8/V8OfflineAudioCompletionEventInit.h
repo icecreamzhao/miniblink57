@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8OfflineAudioCompletionEventInit_h
 #define V8OfflineAudioCompletionEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8OfflineAudioCompletionEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, OfflineAudioCompletionEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, OfflineAudioCompletionEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8OfflineAudioCompletionEventInit(const OfflineAudioCompletionEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, OfflineAudioCompletionEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, OfflineAudioCompletionEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<OfflineAudioCompletionEventInit> {
-  static OfflineAudioCompletionEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static OfflineAudioCompletionEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<OfflineAudioCompletionEventInit> {
-  typedef V8OfflineAudioCompletionEventInit Type;
+    typedef V8OfflineAudioCompletionEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8OfflineAudioCompletionEventInit_h
+#endif // V8OfflineAudioCompletionEventInit_h

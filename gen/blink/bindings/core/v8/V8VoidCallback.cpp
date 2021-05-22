@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8VoidCallback.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -21,27 +21,29 @@
 namespace blink {
 
 V8VoidCallback::V8VoidCallback(v8::Local<v8::Function> callback, ScriptState* scriptState)
-    : m_scriptState(scriptState) {
-  m_callback.set(scriptState->isolate(), callback);
+    : m_scriptState(scriptState)
+{
+    m_callback.set(scriptState->isolate(), callback);
 }
 
-V8VoidCallback::~V8VoidCallback() {}
+V8VoidCallback::~V8VoidCallback() { }
 
-DEFINE_TRACE(V8VoidCallback) {
-  VoidCallback::trace(visitor);
+DEFINE_TRACE(V8VoidCallback)
+{
+    VoidCallback::trace(visitor);
 }
 
-void V8VoidCallback::handleEvent() {
-  ExecutionContext* executionContext = m_scriptState->getExecutionContext();
-  if (!executionContext || executionContext->isContextSuspended() ||
-      executionContext->isContextDestroyed())
-    return;
-  if (!m_scriptState->contextIsValid())
-    return;
-  ScriptState::Scope scope(m_scriptState.get());
-  v8::Local<v8::Value> *argv = 0;
+void V8VoidCallback::handleEvent()
+{
+    ExecutionContext* executionContext = m_scriptState->getExecutionContext();
+    if (!executionContext || executionContext->isContextSuspended() || executionContext->isContextDestroyed())
+        return;
+    if (!m_scriptState->contextIsValid())
+        return;
+    ScriptState::Scope scope(m_scriptState.get());
+    v8::Local<v8::Value>* argv = 0;
 
-  V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 0, argv, m_scriptState->isolate());
+    V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 0, argv, m_scriptState->isolate());
 }
 
-}  // namespace blink
+} // namespace blink

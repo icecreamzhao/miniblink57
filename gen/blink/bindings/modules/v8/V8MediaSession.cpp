@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaSession.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,193 +50,209 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MediaSession::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaSession is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaSessionV8Internal {
 
-static void metadataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void metadataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaSession* impl = V8MediaSession::toImpl(holder);
+        MediaSession* impl = V8MediaSession::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->metadata()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->metadata()), impl);
+    }
 
-MODULES_EXPORT void metadataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_Metadata_AttributeGetter);
+    MODULES_EXPORT void metadataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_Metadata_AttributeGetter);
 
-  MediaSessionV8Internal::metadataAttributeGetter(info);
-}
+        MediaSessionV8Internal::metadataAttributeGetter(info);
+    }
 
-static void metadataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaSession* impl = V8MediaSession::toImpl(holder);
+    static void metadataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaSession* impl = V8MediaSession::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "MediaSession", "metadata");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "MediaSession", "metadata");
 
-  // Prepare the value to be set.
-  MediaMetadata* cppValue = V8MediaMetadata::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+        // Prepare the value to be set.
+        MediaMetadata* cppValue = V8MediaMetadata::toImplWithTypeCheck(info.GetIsolate(), v8Value);
 
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue && !isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("The provided value is not of type 'MediaMetadata'.");
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue && !isUndefinedOrNull(v8Value)) {
+            exceptionState.throwTypeError("The provided value is not of type 'MediaMetadata'.");
+            return;
+        }
 
-  impl->setMetadata(cppValue);
-}
+        impl->setMetadata(cppValue);
+    }
 
-MODULES_EXPORT void metadataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void metadataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_Metadata_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_Metadata_AttributeSetter);
 
-  MediaSessionV8Internal::metadataAttributeSetter(v8Value, info);
-}
+        MediaSessionV8Internal::metadataAttributeSetter(v8Value, info);
+    }
 
-static void playbackStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void playbackStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaSession* impl = V8MediaSession::toImpl(holder);
+        MediaSession* impl = V8MediaSession::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->playbackState(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->playbackState(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void playbackStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_PlaybackState_AttributeGetter);
+    MODULES_EXPORT void playbackStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_PlaybackState_AttributeGetter);
 
-  MediaSessionV8Internal::playbackStateAttributeGetter(info);
-}
+        MediaSessionV8Internal::playbackStateAttributeGetter(info);
+    }
 
-static void playbackStateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaSession* impl = V8MediaSession::toImpl(holder);
+    static void playbackStateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaSession* impl = V8MediaSession::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "MediaSession", "playbackState");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "MediaSession", "playbackState");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "none",
-      "paused",
-      "playing",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "MediaSessionPlaybackState", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "none",
+            "paused",
+            "playing",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "MediaSessionPlaybackState", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
 
-  impl->setPlaybackState(cppValue);
-}
+        impl->setPlaybackState(cppValue);
+    }
 
-MODULES_EXPORT void playbackStateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void playbackStateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_PlaybackState_AttributeSetter);
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_PlaybackState_AttributeSetter);
 
-  MediaSessionV8Internal::playbackStateAttributeSetter(v8Value, info);
-}
+        MediaSessionV8Internal::playbackStateAttributeSetter(v8Value, info);
+    }
 
-static void setActionHandlerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSession", "setActionHandler");
+    static void setActionHandlerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSession", "setActionHandler");
 
-  MediaSession* impl = V8MediaSession::toImpl(info.Holder());
+        MediaSession* impl = V8MediaSession::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> action;
-  MediaSessionActionHandler* handler;
-  action = info[0];
-  if (!action.prepare())
-    return;
-  const char* validActionValues[] = {
-      "play",
-      "pause",
-      "previoustrack",
-      "nexttrack",
-      "seekbackward",
-      "seekforward",
-  };
-  if (!isValidEnum(action, validActionValues, WTF_ARRAY_LENGTH(validActionValues), "MediaSessionAction", exceptionState)) {
-    return;
-  }
+        V8StringResource<> action;
+        MediaSessionActionHandler* handler;
+        action = info[0];
+        if (!action.prepare())
+            return;
+        const char* validActionValues[] = {
+            "play",
+            "pause",
+            "previoustrack",
+            "nexttrack",
+            "seekbackward",
+            "seekforward",
+        };
+        if (!isValidEnum(action, validActionValues, WTF_ARRAY_LENGTH(validActionValues), "MediaSessionAction", exceptionState)) {
+            return;
+        }
 
-  if (!isUndefinedOrNull(info[1]) && !(info[1]->IsObject() && v8::Local<v8::Object>::Cast(info[1])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+        if (!isUndefinedOrNull(info[1]) && !(info[1]->IsObject() && v8::Local<v8::Object>::Cast(info[1])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
 
-    return;
-  }
-  handler = MediaSessionActionHandler::create(ScriptState::current(info.GetIsolate()), info[1]);
+            return;
+        }
+        handler = MediaSessionActionHandler::create(ScriptState::current(info.GetIsolate()), info[1]);
 
-  impl->setActionHandler(action, handler);
-}
+        impl->setActionHandler(action, handler);
+    }
 
-MODULES_EXPORT  void setActionHandlerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_SetActionHandler_Method);
-  MediaSessionV8Internal::setActionHandlerMethod(info);
-}
+    MODULES_EXPORT void setActionHandlerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MediaSession_SetActionHandler_Method);
+        MediaSessionV8Internal::setActionHandlerMethod(info);
+    }
 
 } // namespace MediaSessionV8Internal
 
-void V8MediaSession::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  V8MediaSession::visitDOMWrapperCustom(isolate, scriptWrappable, wrapper);
+void V8MediaSession::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    V8MediaSession::visitDOMWrapperCustom(isolate, scriptWrappable, wrapper);
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaSessionAccessors[] = {
-    {"metadata", MediaSessionV8Internal::metadataAttributeGetterCallback, MediaSessionV8Internal::metadataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"playbackState", MediaSessionV8Internal::playbackStateAttributeGetterCallback, MediaSessionV8Internal::playbackStateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "metadata", MediaSessionV8Internal::metadataAttributeGetterCallback, MediaSessionV8Internal::metadataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "playbackState", MediaSessionV8Internal::playbackStateAttributeGetterCallback, MediaSessionV8Internal::playbackStateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MediaSessionMethods[] = {
-    {"setActionHandler", MediaSessionV8Internal::setActionHandlerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "setActionHandler", MediaSessionV8Internal::setActionHandlerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8MediaSessionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaSession::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaSession::internalFieldCount);
+static void installV8MediaSessionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaSession::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaSession::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::mediaSessionEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::mediaSessionEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSessionAccessors, WTF_ARRAY_LENGTH(V8MediaSessionAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSessionMethods, WTF_ARRAY_LENGTH(V8MediaSessionMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSessionAccessors, WTF_ARRAY_LENGTH(V8MediaSessionAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSessionMethods, WTF_ARRAY_LENGTH(V8MediaSessionMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaSession::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaSessionTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaSession::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaSessionTemplate);
 }
 
-bool V8MediaSession::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaSession::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaSession::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaSession::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaSession* V8MediaSession::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaSession* V8MediaSession::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

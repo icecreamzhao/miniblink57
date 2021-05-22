@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCDTMFToneChangeEventInit_h
 #define RTCDTMFToneChangeEventInit_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class MODULES_EXPORT RTCDTMFToneChangeEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCDTMFToneChangeEventInit();
-  virtual ~RTCDTMFToneChangeEventInit();
-  RTCDTMFToneChangeEventInit(const RTCDTMFToneChangeEventInit&);
-  RTCDTMFToneChangeEventInit& operator=(const RTCDTMFToneChangeEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasTone() const;
-  String tone() const;
-  void setTone(String);
+public:
+    RTCDTMFToneChangeEventInit();
+    virtual ~RTCDTMFToneChangeEventInit();
+    RTCDTMFToneChangeEventInit(const RTCDTMFToneChangeEventInit&);
+    RTCDTMFToneChangeEventInit& operator=(const RTCDTMFToneChangeEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTone() const;
+    String tone() const;
+    void setTone(String);
 
- private:
-  String m_tone;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCDTMFToneChangeEventInit;
+private:
+    String m_tone;
+
+    friend class V8RTCDTMFToneChangeEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCDTMFToneChangeEventInit_h
+#endif // RTCDTMFToneChangeEventInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef GyroscopeReadingInit_h
 #define GyroscopeReadingInit_h
 
@@ -19,39 +19,40 @@
 namespace blink {
 
 class MODULES_EXPORT GyroscopeReadingInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  GyroscopeReadingInit();
-  virtual ~GyroscopeReadingInit();
-  GyroscopeReadingInit(const GyroscopeReadingInit&);
-  GyroscopeReadingInit& operator=(const GyroscopeReadingInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasX() const;
-  double x() const;
-  void setX(double);
+public:
+    GyroscopeReadingInit();
+    virtual ~GyroscopeReadingInit();
+    GyroscopeReadingInit(const GyroscopeReadingInit&);
+    GyroscopeReadingInit& operator=(const GyroscopeReadingInit&);
 
-  bool hasY() const;
-  double y() const;
-  void setY(double);
+    bool hasX() const;
+    double x() const;
+    void setX(double);
 
-  bool hasZ() const;
-  double z() const;
-  void setZ(double);
+    bool hasY() const;
+    double y() const;
+    void setY(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasZ() const;
+    double z() const;
+    void setZ(double);
 
- private:
-  bool m_hasX = false;
-  double m_x;
-  bool m_hasY = false;
-  double m_y;
-  bool m_hasZ = false;
-  double m_z;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8GyroscopeReadingInit;
+private:
+    bool m_hasX = false;
+    double m_x;
+    bool m_hasY = false;
+    double m_y;
+    bool m_hasZ = false;
+    double m_z;
+
+    friend class V8GyroscopeReadingInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // GyroscopeReadingInit_h
+#endif // GyroscopeReadingInit_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8StereoPannerOptions_h
 #define V8StereoPannerOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8StereoPannerOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StereoPannerOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StereoPannerOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8StereoPannerOptions(const StereoPannerOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StereoPannerOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StereoPannerOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<StereoPannerOptions> {
-  static StereoPannerOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static StereoPannerOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<StereoPannerOptions> {
-  typedef V8StereoPannerOptions Type;
+    typedef V8StereoPannerOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8StereoPannerOptions_h
+#endif // V8StereoPannerOptions_h

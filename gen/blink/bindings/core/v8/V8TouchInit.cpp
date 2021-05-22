@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TouchInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,328 +16,332 @@
 
 namespace blink {
 
-void V8TouchInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, TouchInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): identifier, target.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> clientXValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "clientX")).ToLocal(&clientXValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (clientXValue.IsEmpty() || clientXValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    double clientX = toRestrictedDouble(isolate, clientXValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setClientX(clientX);
-  }
-
-  v8::Local<v8::Value> clientYValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "clientY")).ToLocal(&clientYValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (clientYValue.IsEmpty() || clientYValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    double clientY = toRestrictedDouble(isolate, clientYValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setClientY(clientY);
-  }
-
-  v8::Local<v8::Value> forceValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "force")).ToLocal(&forceValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (forceValue.IsEmpty() || forceValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    float force = toRestrictedFloat(isolate, forceValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setForce(force);
-  }
-
-  v8::Local<v8::Value> identifierValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "identifier")).ToLocal(&identifierValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (identifierValue.IsEmpty() || identifierValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member identifier is undefined.");
-    return;
-  } else {
-    int identifier = toInt32(isolate, identifierValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setIdentifier(identifier);
-  }
-
-  v8::Local<v8::Value> pageXValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "pageX")).ToLocal(&pageXValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (pageXValue.IsEmpty() || pageXValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    double pageX = toRestrictedDouble(isolate, pageXValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setPageX(pageX);
-  }
-
-  v8::Local<v8::Value> pageYValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "pageY")).ToLocal(&pageYValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (pageYValue.IsEmpty() || pageYValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    double pageY = toRestrictedDouble(isolate, pageYValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setPageY(pageY);
-  }
-
-  v8::Local<v8::Value> radiusXValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "radiusX")).ToLocal(&radiusXValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (radiusXValue.IsEmpty() || radiusXValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    float radiusX = toRestrictedFloat(isolate, radiusXValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setRadiusX(radiusX);
-  }
-
-  v8::Local<v8::Value> radiusYValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "radiusY")).ToLocal(&radiusYValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (radiusYValue.IsEmpty() || radiusYValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    float radiusY = toRestrictedFloat(isolate, radiusYValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setRadiusY(radiusY);
-  }
-
-  v8::Local<v8::Value> regionValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "region")).ToLocal(&regionValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (regionValue.IsEmpty() || regionValue->IsUndefined()) {
-    // Do nothing.
-  } else if (regionValue->IsNull()) {
-    impl.setRegionToNull();
-  } else {
-    V8StringResource<> region = regionValue;
-    if (!region.prepare(exceptionState))
-      return;
-    impl.setRegion(region);
-  }
-
-  v8::Local<v8::Value> rotationAngleValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "rotationAngle")).ToLocal(&rotationAngleValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (rotationAngleValue.IsEmpty() || rotationAngleValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    float rotationAngle = toRestrictedFloat(isolate, rotationAngleValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setRotationAngle(rotationAngle);
-  }
-
-  v8::Local<v8::Value> screenXValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "screenX")).ToLocal(&screenXValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (screenXValue.IsEmpty() || screenXValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    double screenX = toRestrictedDouble(isolate, screenXValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setScreenX(screenX);
-  }
-
-  v8::Local<v8::Value> screenYValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "screenY")).ToLocal(&screenYValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (screenYValue.IsEmpty() || screenYValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    double screenY = toRestrictedDouble(isolate, screenYValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setScreenY(screenY);
-  }
-
-  v8::Local<v8::Value> targetValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "target")).ToLocal(&targetValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (targetValue.IsEmpty() || targetValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member target is undefined.");
-    return;
-  } else {
-    EventTarget* target = toEventTarget(isolate, targetValue);
-    if (!target) {
-      exceptionState.throwTypeError("member target is not of type EventTarget.");
-      return;
+void V8TouchInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, TouchInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): identifier, target.");
+        return;
     }
-    impl.setTarget(target);
-  }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> clientXValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "clientX")).ToLocal(&clientXValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (clientXValue.IsEmpty() || clientXValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        double clientX = toRestrictedDouble(isolate, clientXValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setClientX(clientX);
+    }
+
+    v8::Local<v8::Value> clientYValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "clientY")).ToLocal(&clientYValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (clientYValue.IsEmpty() || clientYValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        double clientY = toRestrictedDouble(isolate, clientYValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setClientY(clientY);
+    }
+
+    v8::Local<v8::Value> forceValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "force")).ToLocal(&forceValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (forceValue.IsEmpty() || forceValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        float force = toRestrictedFloat(isolate, forceValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setForce(force);
+    }
+
+    v8::Local<v8::Value> identifierValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "identifier")).ToLocal(&identifierValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (identifierValue.IsEmpty() || identifierValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member identifier is undefined.");
+        return;
+    } else {
+        int identifier = toInt32(isolate, identifierValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setIdentifier(identifier);
+    }
+
+    v8::Local<v8::Value> pageXValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "pageX")).ToLocal(&pageXValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (pageXValue.IsEmpty() || pageXValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        double pageX = toRestrictedDouble(isolate, pageXValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setPageX(pageX);
+    }
+
+    v8::Local<v8::Value> pageYValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "pageY")).ToLocal(&pageYValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (pageYValue.IsEmpty() || pageYValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        double pageY = toRestrictedDouble(isolate, pageYValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setPageY(pageY);
+    }
+
+    v8::Local<v8::Value> radiusXValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "radiusX")).ToLocal(&radiusXValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (radiusXValue.IsEmpty() || radiusXValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        float radiusX = toRestrictedFloat(isolate, radiusXValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setRadiusX(radiusX);
+    }
+
+    v8::Local<v8::Value> radiusYValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "radiusY")).ToLocal(&radiusYValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (radiusYValue.IsEmpty() || radiusYValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        float radiusY = toRestrictedFloat(isolate, radiusYValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setRadiusY(radiusY);
+    }
+
+    v8::Local<v8::Value> regionValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "region")).ToLocal(&regionValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (regionValue.IsEmpty() || regionValue->IsUndefined()) {
+        // Do nothing.
+    } else if (regionValue->IsNull()) {
+        impl.setRegionToNull();
+    } else {
+        V8StringResource<> region = regionValue;
+        if (!region.prepare(exceptionState))
+            return;
+        impl.setRegion(region);
+    }
+
+    v8::Local<v8::Value> rotationAngleValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "rotationAngle")).ToLocal(&rotationAngleValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (rotationAngleValue.IsEmpty() || rotationAngleValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        float rotationAngle = toRestrictedFloat(isolate, rotationAngleValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setRotationAngle(rotationAngle);
+    }
+
+    v8::Local<v8::Value> screenXValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "screenX")).ToLocal(&screenXValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (screenXValue.IsEmpty() || screenXValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        double screenX = toRestrictedDouble(isolate, screenXValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setScreenX(screenX);
+    }
+
+    v8::Local<v8::Value> screenYValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "screenY")).ToLocal(&screenYValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (screenYValue.IsEmpty() || screenYValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        double screenY = toRestrictedDouble(isolate, screenYValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setScreenY(screenY);
+    }
+
+    v8::Local<v8::Value> targetValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "target")).ToLocal(&targetValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (targetValue.IsEmpty() || targetValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member target is undefined.");
+        return;
+    } else {
+        EventTarget* target = toEventTarget(isolate, targetValue);
+        if (!target) {
+            exceptionState.throwTypeError("member target is not of type EventTarget.");
+            return;
+        }
+        impl.setTarget(target);
+    }
 }
 
-v8::Local<v8::Value> TouchInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8TouchInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> TouchInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8TouchInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8TouchInit(const TouchInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasClientX()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "clientX"), v8::Number::New(isolate, impl.clientX()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "clientX"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+bool toV8TouchInit(const TouchInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasClientX()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "clientX"), v8::Number::New(isolate, impl.clientX()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "clientX"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasClientY()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "clientY"), v8::Number::New(isolate, impl.clientY()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "clientY"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+    if (impl.hasClientY()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "clientY"), v8::Number::New(isolate, impl.clientY()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "clientY"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasForce()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "force"), v8::Number::New(isolate, impl.force()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "force"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+    if (impl.hasForce()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "force"), v8::Number::New(isolate, impl.force()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "force"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasIdentifier()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "identifier"), v8::Integer::New(isolate, impl.identifier()))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasIdentifier()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "identifier"), v8::Integer::New(isolate, impl.identifier()))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasPageX()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "pageX"), v8::Number::New(isolate, impl.pageX()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "pageX"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+    if (impl.hasPageX()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "pageX"), v8::Number::New(isolate, impl.pageX()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "pageX"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasPageY()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "pageY"), v8::Number::New(isolate, impl.pageY()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "pageY"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+    if (impl.hasPageY()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "pageY"), v8::Number::New(isolate, impl.pageY()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "pageY"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasRadiusX()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "radiusX"), v8::Number::New(isolate, impl.radiusX()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "radiusX"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+    if (impl.hasRadiusX()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "radiusX"), v8::Number::New(isolate, impl.radiusX()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "radiusX"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasRadiusY()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "radiusY"), v8::Number::New(isolate, impl.radiusY()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "radiusY"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+    if (impl.hasRadiusY()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "radiusY"), v8::Number::New(isolate, impl.radiusY()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "radiusY"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasRegion()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "region"), v8String(isolate, impl.region()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "region"), v8::Null(isolate))))
-      return false;
-  }
+    if (impl.hasRegion()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "region"), v8String(isolate, impl.region()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "region"), v8::Null(isolate))))
+            return false;
+    }
 
-  if (impl.hasRotationAngle()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "rotationAngle"), v8::Number::New(isolate, impl.rotationAngle()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "rotationAngle"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+    if (impl.hasRotationAngle()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "rotationAngle"), v8::Number::New(isolate, impl.rotationAngle()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "rotationAngle"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasScreenX()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "screenX"), v8::Number::New(isolate, impl.screenX()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "screenX"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+    if (impl.hasScreenX()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "screenX"), v8::Number::New(isolate, impl.screenX()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "screenX"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasScreenY()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "screenY"), v8::Number::New(isolate, impl.screenY()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "screenY"), v8::Number::New(isolate, 0))))
-      return false;
-  }
+    if (impl.hasScreenY()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "screenY"), v8::Number::New(isolate, impl.screenY()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "screenY"), v8::Number::New(isolate, 0))))
+            return false;
+    }
 
-  if (impl.hasTarget()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "target"), ToV8(impl.target(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasTarget()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "target"), ToV8(impl.target(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  return true;
+    return true;
 }
 
-TouchInit NativeValueTraits<TouchInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  TouchInit impl;
-  V8TouchInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+TouchInit NativeValueTraits<TouchInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    TouchInit impl;
+    V8TouchInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

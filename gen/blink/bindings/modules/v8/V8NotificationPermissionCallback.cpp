@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8NotificationPermissionCallback.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -21,28 +21,30 @@
 namespace blink {
 
 V8NotificationPermissionCallback::V8NotificationPermissionCallback(v8::Local<v8::Function> callback, ScriptState* scriptState)
-    : m_scriptState(scriptState) {
-  m_callback.set(scriptState->isolate(), callback);
+    : m_scriptState(scriptState)
+{
+    m_callback.set(scriptState->isolate(), callback);
 }
 
-V8NotificationPermissionCallback::~V8NotificationPermissionCallback() {}
+V8NotificationPermissionCallback::~V8NotificationPermissionCallback() { }
 
-DEFINE_TRACE(V8NotificationPermissionCallback) {
-  NotificationPermissionCallback::trace(visitor);
+DEFINE_TRACE(V8NotificationPermissionCallback)
+{
+    NotificationPermissionCallback::trace(visitor);
 }
 
-void V8NotificationPermissionCallback::handleEvent(const String& permission) {
-  ExecutionContext* executionContext = m_scriptState->getExecutionContext();
-  if (!executionContext || executionContext->isContextSuspended() ||
-      executionContext->isContextDestroyed())
-    return;
-  if (!m_scriptState->contextIsValid())
-    return;
-  ScriptState::Scope scope(m_scriptState.get());
-  v8::Local<v8::Value> permissionHandle = v8String(m_scriptState->isolate(), permission);
-  v8::Local<v8::Value> argv[] = { permissionHandle };
+void V8NotificationPermissionCallback::handleEvent(const String& permission)
+{
+    ExecutionContext* executionContext = m_scriptState->getExecutionContext();
+    if (!executionContext || executionContext->isContextSuspended() || executionContext->isContextDestroyed())
+        return;
+    if (!m_scriptState->contextIsValid())
+        return;
+    ScriptState::Scope scope(m_scriptState.get());
+    v8::Local<v8::Value> permissionHandle = v8String(m_scriptState->isolate(), permission);
+    v8::Local<v8::Value> argv[] = { permissionHandle };
 
-  V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 1, argv, m_scriptState->isolate());
+    V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 1, argv, m_scriptState->isolate());
 }
 
-}  // namespace blink
+} // namespace blink

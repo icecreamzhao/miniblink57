@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ExtendableEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,42 +16,46 @@
 
 namespace blink {
 
-void V8ExtendableEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ExtendableEventInit& impl, ExceptionState& exceptionState) {
-//   if (isUndefinedOrNull(v8Value)) {
-//     return;
-//   }
-//   if (!v8Value->IsObject()) {
-//     exceptionState.throwTypeError("cannot convert to dictionary.");
-//     return;
-//   }
-// 
-//   V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-//   if (exceptionState.hadException())
-//     return;
-  DebugBreak();
+void V8ExtendableEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ExtendableEventInit& impl, ExceptionState& exceptionState)
+{
+    //   if (isUndefinedOrNull(v8Value)) {
+    //     return;
+    //   }
+    //   if (!v8Value->IsObject()) {
+    //     exceptionState.throwTypeError("cannot convert to dictionary.");
+    //     return;
+    //   }
+    //
+    //   V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
+    //   if (exceptionState.hadException())
+    //     return;
+    DebugBreak();
 }
 
-v8::Local<v8::Value> ExtendableEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-//   v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-//   if (!toV8ExtendableEventInit(*this, v8Object, creationContext, isolate))
-//     return v8::Undefined(isolate);
-//   return v8Object;
-  DebugBreak();
-  return v8::Undefined(isolate);
+v8::Local<v8::Value> ExtendableEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    //   v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    //   if (!toV8ExtendableEventInit(*this, v8Object, creationContext, isolate))
+    //     return v8::Undefined(isolate);
+    //   return v8Object;
+    DebugBreak();
+    return v8::Undefined(isolate);
 }
 
-bool toV8ExtendableEventInit(const ExtendableEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-//   if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-//     return false;
+bool toV8ExtendableEventInit(const ExtendableEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    //   if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+    //     return false;
 
-  DebugBreak();
-  return true;
+    DebugBreak();
+    return true;
 }
 
-ExtendableEventInit NativeValueTraits<ExtendableEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ExtendableEventInit impl;
-  V8ExtendableEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ExtendableEventInit NativeValueTraits<ExtendableEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ExtendableEventInit impl;
+    V8ExtendableEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

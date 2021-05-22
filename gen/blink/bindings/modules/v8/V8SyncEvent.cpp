@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SyncEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,122 +48,133 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SyncEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SyncEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SyncEventV8Internal {
 
-static void tagAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void tagAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SyncEvent* impl = V8SyncEvent::toImpl(holder);
+        SyncEvent* impl = V8SyncEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->tag(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->tag(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void tagAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SyncEventV8Internal::tagAttributeGetter(info);
-}
+    MODULES_EXPORT void tagAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SyncEventV8Internal::tagAttributeGetter(info);
+    }
 
-static void lastChanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lastChanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SyncEvent* impl = V8SyncEvent::toImpl(holder);
+        SyncEvent* impl = V8SyncEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->lastChance());
-}
+        v8SetReturnValueBool(info, impl->lastChance());
+    }
 
-MODULES_EXPORT void lastChanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SyncEventV8Internal::lastChanceAttributeGetter(info);
-}
+    MODULES_EXPORT void lastChanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SyncEventV8Internal::lastChanceAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "SyncEvent");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "SyncEvent");
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  SyncEventInit init;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        SyncEventInit init;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('init') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('init') is not an object.");
 
-    return;
-  }
-  V8SyncEventInit::toImpl(info.GetIsolate(), info[1], init, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8SyncEventInit::toImpl(info.GetIsolate(), info[1], init, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SyncEvent* impl = SyncEvent::create(type, init);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SyncEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        SyncEvent* impl = SyncEvent::create(type, init);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SyncEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace SyncEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SyncEventAccessors[] = {
-    {"tag", SyncEventV8Internal::tagAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastChance", SyncEventV8Internal::lastChanceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "tag", SyncEventV8Internal::tagAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastChance", SyncEventV8Internal::lastChanceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8SyncEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SyncEvent"));
-    return;
-  }
+void V8SyncEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SyncEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  SyncEventV8Internal::constructor(info);
+    SyncEventV8Internal::constructor(info);
 }
 
-static void installV8SyncEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SyncEvent::wrapperTypeInfo.interfaceName, V8ExtendableEvent::domTemplate(isolate, world), V8SyncEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8SyncEvent::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8SyncEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SyncEvent::wrapperTypeInfo.interfaceName, V8ExtendableEvent::domTemplate(isolate, world), V8SyncEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8SyncEvent::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  if (!RuntimeEnabledFeatures::backgroundSyncEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::backgroundSyncEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SyncEventAccessors, WTF_ARRAY_LENGTH(V8SyncEventAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SyncEventAccessors, WTF_ARRAY_LENGTH(V8SyncEventAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SyncEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SyncEventTemplate);
+v8::Local<v8::FunctionTemplate> V8SyncEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SyncEventTemplate);
 }
 
-bool V8SyncEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SyncEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SyncEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SyncEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SyncEvent* V8SyncEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SyncEvent* V8SyncEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

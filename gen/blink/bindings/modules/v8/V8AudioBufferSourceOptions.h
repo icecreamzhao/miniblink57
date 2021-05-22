@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AudioBufferSourceOptions_h
 #define V8AudioBufferSourceOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8AudioBufferSourceOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AudioBufferSourceOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AudioBufferSourceOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8AudioBufferSourceOptions(const AudioBufferSourceOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AudioBufferSourceOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AudioBufferSourceOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<AudioBufferSourceOptions> {
-  static AudioBufferSourceOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static AudioBufferSourceOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<AudioBufferSourceOptions> {
-  typedef V8AudioBufferSourceOptions Type;
+    typedef V8AudioBufferSourceOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8AudioBufferSourceOptions_h
+#endif // V8AudioBufferSourceOptions_h

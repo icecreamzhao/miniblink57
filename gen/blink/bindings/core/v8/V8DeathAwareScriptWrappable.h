@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8DeathAwareScriptWrappable_h
 #define V8DeathAwareScriptWrappable_h
 
@@ -23,31 +23,35 @@
 namespace blink {
 
 class V8DeathAwareScriptWrappable {
-  STATIC_ONLY(V8DeathAwareScriptWrappable);
- public:
-  static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static DeathAwareScriptWrappable* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<DeathAwareScriptWrappable>();
-  }
-  static DeathAwareScriptWrappable* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<DeathAwareScriptWrappable>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<DeathAwareScriptWrappable>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8DeathAwareScriptWrappable);
+
+public:
+    static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static DeathAwareScriptWrappable* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<DeathAwareScriptWrappable>();
+    }
+    static DeathAwareScriptWrappable* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<DeathAwareScriptWrappable>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<DeathAwareScriptWrappable>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<DeathAwareScriptWrappable> {
-  typedef V8DeathAwareScriptWrappable Type;
+    typedef V8DeathAwareScriptWrappable Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8DeathAwareScriptWrappable_h
+#endif // V8DeathAwareScriptWrappable_h

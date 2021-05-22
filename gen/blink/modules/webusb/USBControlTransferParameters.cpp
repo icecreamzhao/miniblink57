@@ -8,74 +8,91 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "USBControlTransferParameters.h"
 
 namespace blink {
 
-USBControlTransferParameters::USBControlTransferParameters() {
+USBControlTransferParameters::USBControlTransferParameters()
+{
 }
 
-USBControlTransferParameters::~USBControlTransferParameters() {}
+USBControlTransferParameters::~USBControlTransferParameters() { }
 
 USBControlTransferParameters::USBControlTransferParameters(const USBControlTransferParameters&) = default;
 
 USBControlTransferParameters& USBControlTransferParameters::operator=(const USBControlTransferParameters&) = default;
 
-bool USBControlTransferParameters::hasIndex() const {
-  return m_hasIndex;
+bool USBControlTransferParameters::hasIndex() const
+{
+    return m_hasIndex;
 }
-unsigned USBControlTransferParameters::index() const {
-  DCHECK(m_hasIndex);
-  return m_index;
+unsigned USBControlTransferParameters::index() const
+{
+    DCHECK(m_hasIndex);
+    return m_index;
 }
-void USBControlTransferParameters::setIndex(unsigned value) {
-  m_index = value;
-  m_hasIndex = true;
+void USBControlTransferParameters::setIndex(unsigned value)
+{
+    m_index = value;
+    m_hasIndex = true;
 }
-bool USBControlTransferParameters::hasRecipient() const {
-  return !m_recipient.isNull();
+bool USBControlTransferParameters::hasRecipient() const
+{
+    return !m_recipient.isNull();
 }
-String USBControlTransferParameters::recipient() const {
-  return m_recipient;
+String USBControlTransferParameters::recipient() const
+{
+    return m_recipient;
 }
-void USBControlTransferParameters::setRecipient(String value) {
-  m_recipient = value;
+void USBControlTransferParameters::setRecipient(String value)
+{
+    m_recipient = value;
 }
-bool USBControlTransferParameters::hasRequest() const {
-  return m_hasRequest;
+bool USBControlTransferParameters::hasRequest() const
+{
+    return m_hasRequest;
 }
-unsigned USBControlTransferParameters::request() const {
-  DCHECK(m_hasRequest);
-  return m_request;
+unsigned USBControlTransferParameters::request() const
+{
+    DCHECK(m_hasRequest);
+    return m_request;
 }
-void USBControlTransferParameters::setRequest(unsigned value) {
-  m_request = value;
-  m_hasRequest = true;
+void USBControlTransferParameters::setRequest(unsigned value)
+{
+    m_request = value;
+    m_hasRequest = true;
 }
-bool USBControlTransferParameters::hasRequestType() const {
-  return !m_requestType.isNull();
+bool USBControlTransferParameters::hasRequestType() const
+{
+    return !m_requestType.isNull();
 }
-String USBControlTransferParameters::requestType() const {
-  return m_requestType;
+String USBControlTransferParameters::requestType() const
+{
+    return m_requestType;
 }
-void USBControlTransferParameters::setRequestType(String value) {
-  m_requestType = value;
+void USBControlTransferParameters::setRequestType(String value)
+{
+    m_requestType = value;
 }
-bool USBControlTransferParameters::hasValue() const {
-  return m_hasValue;
+bool USBControlTransferParameters::hasValue() const
+{
+    return m_hasValue;
 }
-unsigned USBControlTransferParameters::value() const {
-  DCHECK(m_hasValue);
-  return m_value;
+unsigned USBControlTransferParameters::value() const
+{
+    DCHECK(m_hasValue);
+    return m_value;
 }
-void USBControlTransferParameters::setValue(unsigned value) {
-  m_value = value;
-  m_hasValue = true;
+void USBControlTransferParameters::setValue(unsigned value)
+{
+    m_value = value;
+    m_hasValue = true;
 }
 
-DEFINE_TRACE(USBControlTransferParameters) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(USBControlTransferParameters)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

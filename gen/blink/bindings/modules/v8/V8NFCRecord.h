@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8NFCRecord_h
 #define V8NFCRecord_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8NFCRecord {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, NFCRecord&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, NFCRecord&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8NFCRecord(const NFCRecord&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, NFCRecord& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, NFCRecord& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<NFCRecord> {
-  static NFCRecord nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static NFCRecord nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<NFCRecord> {
-  typedef V8NFCRecord Type;
+    typedef V8NFCRecord Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8NFCRecord_h
+#endif // V8NFCRecord_h

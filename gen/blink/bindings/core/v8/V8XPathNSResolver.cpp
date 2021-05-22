@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8XPathNSResolver.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,63 +45,70 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&XPathNSResolver::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "XPathNSResolver is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace XPathNSResolverV8Internal {
 
-static void lookupNamespaceURIMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XPathNSResolver* impl = V8XPathNSResolver::toImpl(info.Holder());
+    static void lookupNamespaceURIMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XPathNSResolver* impl = V8XPathNSResolver::toImpl(info.Holder());
 
-  V8StringResource<> prefix;
-  prefix = info[0];
-  if (!prefix.prepare())
-    return;
+        V8StringResource<> prefix;
+        prefix = info[0];
+        if (!prefix.prepare())
+            return;
 
-  v8SetReturnValueStringOrNull(info, impl->lookupNamespaceURI(prefix), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->lookupNamespaceURI(prefix), info.GetIsolate());
+    }
 
-CORE_EXPORT  void lookupNamespaceURIMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  XPathNSResolverV8Internal::lookupNamespaceURIMethod(info);
-}
+    CORE_EXPORT void lookupNamespaceURIMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        XPathNSResolverV8Internal::lookupNamespaceURIMethod(info);
+    }
 
 } // namespace XPathNSResolverV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8XPathNSResolverMethods[] = {
-    {"lookupNamespaceURI", XPathNSResolverV8Internal::lookupNamespaceURIMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "lookupNamespaceURI", XPathNSResolverV8Internal::lookupNamespaceURIMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8XPathNSResolverTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XPathNSResolver::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8XPathNSResolver::internalFieldCount);
+static void installV8XPathNSResolverTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8XPathNSResolver::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8XPathNSResolver::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XPathNSResolverMethods, WTF_ARRAY_LENGTH(V8XPathNSResolverMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8XPathNSResolverMethods, WTF_ARRAY_LENGTH(V8XPathNSResolverMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8XPathNSResolver::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XPathNSResolverTemplate);
+v8::Local<v8::FunctionTemplate> V8XPathNSResolver::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8XPathNSResolverTemplate);
 }
 
-bool V8XPathNSResolver::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8XPathNSResolver::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8XPathNSResolver::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8XPathNSResolver::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-XPathNSResolver* V8XPathNSResolver::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+XPathNSResolver* V8XPathNSResolver::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

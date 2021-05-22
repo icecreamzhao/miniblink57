@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef BiquadFilterOptions_h
 #define BiquadFilterOptions_h
 
@@ -20,50 +20,51 @@
 namespace blink {
 
 class MODULES_EXPORT BiquadFilterOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  BiquadFilterOptions();
-  virtual ~BiquadFilterOptions();
-  BiquadFilterOptions(const BiquadFilterOptions&);
-  BiquadFilterOptions& operator=(const BiquadFilterOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasQ() const;
-  float Q() const;
-  void setQ(float);
+public:
+    BiquadFilterOptions();
+    virtual ~BiquadFilterOptions();
+    BiquadFilterOptions(const BiquadFilterOptions&);
+    BiquadFilterOptions& operator=(const BiquadFilterOptions&);
 
-  bool hasDetune() const;
-  float detune() const;
-  void setDetune(float);
+    bool hasQ() const;
+    float Q() const;
+    void setQ(float);
 
-  bool hasFrequency() const;
-  float frequency() const;
-  void setFrequency(float);
+    bool hasDetune() const;
+    float detune() const;
+    void setDetune(float);
 
-  bool hasGain() const;
-  float gain() const;
-  void setGain(float);
+    bool hasFrequency() const;
+    float frequency() const;
+    void setFrequency(float);
 
-  bool hasType() const;
-  String type() const;
-  void setType(String);
+    bool hasGain() const;
+    float gain() const;
+    void setGain(float);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasType() const;
+    String type() const;
+    void setType(String);
 
- private:
-  bool m_hasQ = false;
-  float m_Q;
-  bool m_hasDetune = false;
-  float m_detune;
-  bool m_hasFrequency = false;
-  float m_frequency;
-  bool m_hasGain = false;
-  float m_gain;
-  String m_type;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8BiquadFilterOptions;
+private:
+    bool m_hasQ = false;
+    float m_Q;
+    bool m_hasDetune = false;
+    float m_detune;
+    bool m_hasFrequency = false;
+    float m_frequency;
+    bool m_hasGain = false;
+    float m_gain;
+    String m_type;
+
+    friend class V8BiquadFilterOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // BiquadFilterOptions_h
+#endif // BiquadFilterOptions_h

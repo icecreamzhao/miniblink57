@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FormDataOptions_h
 #define FormDataOptions_h
 
@@ -20,31 +20,32 @@
 namespace blink {
 
 class MODULES_EXPORT FormDataOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FormDataOptions();
-  virtual ~FormDataOptions();
-  FormDataOptions(const FormDataOptions&);
-  FormDataOptions& operator=(const FormDataOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasIdName() const;
-  String idName() const;
-  void setIdName(String);
+public:
+    FormDataOptions();
+    virtual ~FormDataOptions();
+    FormDataOptions(const FormDataOptions&);
+    FormDataOptions& operator=(const FormDataOptions&);
 
-  bool hasPasswordName() const;
-  String passwordName() const;
-  void setPasswordName(String);
+    bool hasIdName() const;
+    String idName() const;
+    void setIdName(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPasswordName() const;
+    String passwordName() const;
+    void setPasswordName(String);
 
- private:
-  String m_idName;
-  String m_passwordName;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8FormDataOptions;
+private:
+    String m_idName;
+    String m_passwordName;
+
+    friend class V8FormDataOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // FormDataOptions_h
+#endif // FormDataOptions_h

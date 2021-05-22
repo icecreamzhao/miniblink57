@@ -8,22 +8,24 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RTCAnswerOptions.h"
 
 namespace blink {
 
-RTCAnswerOptions::RTCAnswerOptions() {
+RTCAnswerOptions::RTCAnswerOptions()
+{
 }
 
-RTCAnswerOptions::~RTCAnswerOptions() {}
+RTCAnswerOptions::~RTCAnswerOptions() { }
 
 RTCAnswerOptions::RTCAnswerOptions(const RTCAnswerOptions&) = default;
 
 RTCAnswerOptions& RTCAnswerOptions::operator=(const RTCAnswerOptions&) = default;
 
-DEFINE_TRACE(RTCAnswerOptions) {
-  RTCOfferAnswerOptions::trace(visitor);
+DEFINE_TRACE(RTCAnswerOptions)
+{
+    RTCOfferAnswerOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,47 +8,55 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FaceDetectorOptions.h"
 
 namespace blink {
 
-FaceDetectorOptions::FaceDetectorOptions() {
-  setFastMode(false);
-  setMaxDetectedFaces(10u);
+FaceDetectorOptions::FaceDetectorOptions()
+{
+    setFastMode(false);
+    setMaxDetectedFaces(10u);
 }
 
-FaceDetectorOptions::~FaceDetectorOptions() {}
+FaceDetectorOptions::~FaceDetectorOptions() { }
 
 FaceDetectorOptions::FaceDetectorOptions(const FaceDetectorOptions&) = default;
 
 FaceDetectorOptions& FaceDetectorOptions::operator=(const FaceDetectorOptions&) = default;
 
-bool FaceDetectorOptions::hasFastMode() const {
-  return m_hasFastMode;
+bool FaceDetectorOptions::hasFastMode() const
+{
+    return m_hasFastMode;
 }
-bool FaceDetectorOptions::fastMode() const {
-  DCHECK(m_hasFastMode);
-  return m_fastMode;
+bool FaceDetectorOptions::fastMode() const
+{
+    DCHECK(m_hasFastMode);
+    return m_fastMode;
 }
-void FaceDetectorOptions::setFastMode(bool value) {
-  m_fastMode = value;
-  m_hasFastMode = true;
+void FaceDetectorOptions::setFastMode(bool value)
+{
+    m_fastMode = value;
+    m_hasFastMode = true;
 }
-bool FaceDetectorOptions::hasMaxDetectedFaces() const {
-  return m_hasMaxDetectedFaces;
+bool FaceDetectorOptions::hasMaxDetectedFaces() const
+{
+    return m_hasMaxDetectedFaces;
 }
-unsigned FaceDetectorOptions::maxDetectedFaces() const {
-  DCHECK(m_hasMaxDetectedFaces);
-  return m_maxDetectedFaces;
+unsigned FaceDetectorOptions::maxDetectedFaces() const
+{
+    DCHECK(m_hasMaxDetectedFaces);
+    return m_maxDetectedFaces;
 }
-void FaceDetectorOptions::setMaxDetectedFaces(unsigned value) {
-  m_maxDetectedFaces = value;
-  m_hasMaxDetectedFaces = true;
+void FaceDetectorOptions::setMaxDetectedFaces(unsigned value)
+{
+    m_maxDetectedFaces = value;
+    m_hasMaxDetectedFaces = true;
 }
 
-DEFINE_TRACE(FaceDetectorOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(FaceDetectorOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PointerEventInit_h
 #define PointerEventInit_h
 
@@ -22,86 +22,87 @@ namespace blink {
 class PointerEvent;
 
 class CORE_EXPORT PointerEventInit : public MouseEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PointerEventInit();
-  virtual ~PointerEventInit();
-  PointerEventInit(const PointerEventInit&);
-  PointerEventInit& operator=(const PointerEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCoalescedEvents() const;
-  const HeapVector<Member<PointerEvent>>& coalescedEvents() const;
-  void setCoalescedEvents(const HeapVector<Member<PointerEvent>>&);
+public:
+    PointerEventInit();
+    virtual ~PointerEventInit();
+    PointerEventInit(const PointerEventInit&);
+    PointerEventInit& operator=(const PointerEventInit&);
 
-  bool hasHeight() const;
-  double height() const;
-  void setHeight(double);
+    bool hasCoalescedEvents() const;
+    const HeapVector<Member<PointerEvent>>& coalescedEvents() const;
+    void setCoalescedEvents(const HeapVector<Member<PointerEvent>>&);
 
-  bool hasIsPrimary() const;
-  bool isPrimary() const;
-  void setIsPrimary(bool);
+    bool hasHeight() const;
+    double height() const;
+    void setHeight(double);
 
-  bool hasPointerId() const;
-  int pointerId() const;
-  void setPointerId(int);
+    bool hasIsPrimary() const;
+    bool isPrimary() const;
+    void setIsPrimary(bool);
 
-  bool hasPointerType() const;
-  String pointerType() const;
-  void setPointerType(String);
+    bool hasPointerId() const;
+    int pointerId() const;
+    void setPointerId(int);
 
-  bool hasPressure() const;
-  float pressure() const;
-  void setPressure(float);
+    bool hasPointerType() const;
+    String pointerType() const;
+    void setPointerType(String);
 
-  bool hasTangentialPressure() const;
-  float tangentialPressure() const;
-  void setTangentialPressure(float);
+    bool hasPressure() const;
+    float pressure() const;
+    void setPressure(float);
 
-  bool hasTiltX() const;
-  int tiltX() const;
-  void setTiltX(int);
+    bool hasTangentialPressure() const;
+    float tangentialPressure() const;
+    void setTangentialPressure(float);
 
-  bool hasTiltY() const;
-  int tiltY() const;
-  void setTiltY(int);
+    bool hasTiltX() const;
+    int tiltX() const;
+    void setTiltX(int);
 
-  bool hasTwist() const;
-  int twist() const;
-  void setTwist(int);
+    bool hasTiltY() const;
+    int tiltY() const;
+    void setTiltY(int);
 
-  bool hasWidth() const;
-  double width() const;
-  void setWidth(double);
+    bool hasTwist() const;
+    int twist() const;
+    void setTwist(int);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasWidth() const;
+    double width() const;
+    void setWidth(double);
 
- private:
-  bool m_hasCoalescedEvents = false;
-  HeapVector<Member<PointerEvent>> m_coalescedEvents;
-  bool m_hasHeight = false;
-  double m_height;
-  bool m_hasIsPrimary = false;
-  bool m_isPrimary;
-  bool m_hasPointerId = false;
-  int m_pointerId;
-  String m_pointerType;
-  bool m_hasPressure = false;
-  float m_pressure;
-  bool m_hasTangentialPressure = false;
-  float m_tangentialPressure;
-  bool m_hasTiltX = false;
-  int m_tiltX;
-  bool m_hasTiltY = false;
-  int m_tiltY;
-  bool m_hasTwist = false;
-  int m_twist;
-  bool m_hasWidth = false;
-  double m_width;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PointerEventInit;
+private:
+    bool m_hasCoalescedEvents = false;
+    HeapVector<Member<PointerEvent>> m_coalescedEvents;
+    bool m_hasHeight = false;
+    double m_height;
+    bool m_hasIsPrimary = false;
+    bool m_isPrimary;
+    bool m_hasPointerId = false;
+    int m_pointerId;
+    String m_pointerType;
+    bool m_hasPressure = false;
+    float m_pressure;
+    bool m_hasTangentialPressure = false;
+    float m_tangentialPressure;
+    bool m_hasTiltX = false;
+    int m_tiltX;
+    bool m_hasTiltY = false;
+    int m_tiltY;
+    bool m_hasTwist = false;
+    int m_twist;
+    bool m_hasWidth = false;
+    double m_width;
+
+    friend class V8PointerEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PointerEventInit_h
+#endif // PointerEventInit_h

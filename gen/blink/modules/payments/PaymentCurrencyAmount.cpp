@@ -8,51 +8,62 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PaymentCurrencyAmount.h"
 
 namespace blink {
 
-PaymentCurrencyAmount::PaymentCurrencyAmount() {
-  setCurrencySystem(String("urn:iso:std:iso:4217"));
+PaymentCurrencyAmount::PaymentCurrencyAmount()
+{
+    setCurrencySystem(String("urn:iso:std:iso:4217"));
 }
 
-PaymentCurrencyAmount::~PaymentCurrencyAmount() {}
+PaymentCurrencyAmount::~PaymentCurrencyAmount() { }
 
 PaymentCurrencyAmount::PaymentCurrencyAmount(const PaymentCurrencyAmount&) = default;
 
 PaymentCurrencyAmount& PaymentCurrencyAmount::operator=(const PaymentCurrencyAmount&) = default;
 
-bool PaymentCurrencyAmount::hasCurrency() const {
-  return !m_currency.isNull();
+bool PaymentCurrencyAmount::hasCurrency() const
+{
+    return !m_currency.isNull();
 }
-String PaymentCurrencyAmount::currency() const {
-  return m_currency;
+String PaymentCurrencyAmount::currency() const
+{
+    return m_currency;
 }
-void PaymentCurrencyAmount::setCurrency(String value) {
-  m_currency = value;
+void PaymentCurrencyAmount::setCurrency(String value)
+{
+    m_currency = value;
 }
-bool PaymentCurrencyAmount::hasCurrencySystem() const {
-  return !m_currencySystem.isNull();
+bool PaymentCurrencyAmount::hasCurrencySystem() const
+{
+    return !m_currencySystem.isNull();
 }
-String PaymentCurrencyAmount::currencySystem() const {
-  return m_currencySystem;
+String PaymentCurrencyAmount::currencySystem() const
+{
+    return m_currencySystem;
 }
-void PaymentCurrencyAmount::setCurrencySystem(String value) {
-  m_currencySystem = value;
+void PaymentCurrencyAmount::setCurrencySystem(String value)
+{
+    m_currencySystem = value;
 }
-bool PaymentCurrencyAmount::hasValue() const {
-  return !m_value.isNull();
+bool PaymentCurrencyAmount::hasValue() const
+{
+    return !m_value.isNull();
 }
-String PaymentCurrencyAmount::value() const {
-  return m_value;
+String PaymentCurrencyAmount::value() const
+{
+    return m_value;
 }
-void PaymentCurrencyAmount::setValue(String value) {
-  m_value = value;
+void PaymentCurrencyAmount::setValue(String value)
+{
+    m_value = value;
 }
 
-DEFINE_TRACE(PaymentCurrencyAmount) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PaymentCurrencyAmount)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

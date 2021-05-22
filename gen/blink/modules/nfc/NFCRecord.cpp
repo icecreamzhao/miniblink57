@@ -8,50 +8,61 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "NFCRecord.h"
 
 namespace blink {
 
-NFCRecord::NFCRecord() {
+NFCRecord::NFCRecord()
+{
 }
 
-NFCRecord::~NFCRecord() {}
+NFCRecord::~NFCRecord() { }
 
 NFCRecord::NFCRecord(const NFCRecord&) = default;
 
 NFCRecord& NFCRecord::operator=(const NFCRecord&) = default;
 
-bool NFCRecord::hasData() const {
-  return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
+bool NFCRecord::hasData() const
+{
+    return !(m_data.isEmpty() || m_data.isNull() || m_data.isUndefined());
 }
-ScriptValue NFCRecord::data() const {
-  return m_data;
+ScriptValue NFCRecord::data() const
+{
+    return m_data;
 }
-void NFCRecord::setData(ScriptValue value) {
-  m_data = value;
+void NFCRecord::setData(ScriptValue value)
+{
+    m_data = value;
 }
-bool NFCRecord::hasMediaType() const {
-  return !m_mediaType.isNull();
+bool NFCRecord::hasMediaType() const
+{
+    return !m_mediaType.isNull();
 }
-String NFCRecord::mediaType() const {
-  return m_mediaType;
+String NFCRecord::mediaType() const
+{
+    return m_mediaType;
 }
-void NFCRecord::setMediaType(String value) {
-  m_mediaType = value;
+void NFCRecord::setMediaType(String value)
+{
+    m_mediaType = value;
 }
-bool NFCRecord::hasRecordType() const {
-  return !m_recordType.isNull();
+bool NFCRecord::hasRecordType() const
+{
+    return !m_recordType.isNull();
 }
-String NFCRecord::recordType() const {
-  return m_recordType;
+String NFCRecord::recordType() const
+{
+    return m_recordType;
 }
-void NFCRecord::setRecordType(String value) {
-  m_recordType = value;
+void NFCRecord::setRecordType(String value)
+{
+    m_recordType = value;
 }
 
-DEFINE_TRACE(NFCRecord) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(NFCRecord)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

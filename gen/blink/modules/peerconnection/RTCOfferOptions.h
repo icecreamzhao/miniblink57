@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCOfferOptions_h
 #define RTCOfferOptions_h
 
@@ -19,39 +19,40 @@
 namespace blink {
 
 class MODULES_EXPORT RTCOfferOptions : public RTCOfferAnswerOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCOfferOptions();
-  virtual ~RTCOfferOptions();
-  RTCOfferOptions(const RTCOfferOptions&);
-  RTCOfferOptions& operator=(const RTCOfferOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasIceRestart() const;
-  bool iceRestart() const;
-  void setIceRestart(bool);
+public:
+    RTCOfferOptions();
+    virtual ~RTCOfferOptions();
+    RTCOfferOptions(const RTCOfferOptions&);
+    RTCOfferOptions& operator=(const RTCOfferOptions&);
 
-  bool hasOfferToReceiveAudio() const;
-  int offerToReceiveAudio() const;
-  void setOfferToReceiveAudio(int);
+    bool hasIceRestart() const;
+    bool iceRestart() const;
+    void setIceRestart(bool);
 
-  bool hasOfferToReceiveVideo() const;
-  int offerToReceiveVideo() const;
-  void setOfferToReceiveVideo(int);
+    bool hasOfferToReceiveAudio() const;
+    int offerToReceiveAudio() const;
+    void setOfferToReceiveAudio(int);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasOfferToReceiveVideo() const;
+    int offerToReceiveVideo() const;
+    void setOfferToReceiveVideo(int);
 
- private:
-  bool m_hasIceRestart = false;
-  bool m_iceRestart;
-  bool m_hasOfferToReceiveAudio = false;
-  int m_offerToReceiveAudio;
-  bool m_hasOfferToReceiveVideo = false;
-  int m_offerToReceiveVideo;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCOfferOptions;
+private:
+    bool m_hasIceRestart = false;
+    bool m_iceRestart;
+    bool m_hasOfferToReceiveAudio = false;
+    int m_offerToReceiveAudio;
+    bool m_hasOfferToReceiveVideo = false;
+    int m_offerToReceiveVideo;
+
+    friend class V8RTCOfferOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCOfferOptions_h
+#endif // RTCOfferOptions_h

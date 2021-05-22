@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8BluetoothUUID.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,147 +47,160 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&BluetoothUUID::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "BluetoothUUID is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BluetoothUUIDV8Internal {
 
-static void getServiceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothUUID", "getService");
+    static void getServiceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothUUID", "getService");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  StringOrUnsignedLong name;
-  V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], name, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        StringOrUnsignedLong name;
+        V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], name, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  String result = BluetoothUUID::getService(name, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
+        String result = BluetoothUUID::getService(name, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
 
-MODULES_EXPORT  void getServiceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothUUIDV8Internal::getServiceMethod(info);
-}
+    MODULES_EXPORT void getServiceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothUUIDV8Internal::getServiceMethod(info);
+    }
 
-static void getCharacteristicMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothUUID", "getCharacteristic");
+    static void getCharacteristicMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothUUID", "getCharacteristic");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  StringOrUnsignedLong name;
-  V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], name, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        StringOrUnsignedLong name;
+        V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], name, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  String result = BluetoothUUID::getCharacteristic(name, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
+        String result = BluetoothUUID::getCharacteristic(name, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
 
-MODULES_EXPORT  void getCharacteristicMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothUUIDV8Internal::getCharacteristicMethod(info);
-}
+    MODULES_EXPORT void getCharacteristicMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothUUIDV8Internal::getCharacteristicMethod(info);
+    }
 
-static void getDescriptorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothUUID", "getDescriptor");
+    static void getDescriptorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothUUID", "getDescriptor");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  StringOrUnsignedLong name;
-  V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], name, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        StringOrUnsignedLong name;
+        V8StringOrUnsignedLong::toImpl(info.GetIsolate(), info[0], name, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  String result = BluetoothUUID::getDescriptor(name, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
+        String result = BluetoothUUID::getDescriptor(name, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
 
-MODULES_EXPORT  void getDescriptorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothUUIDV8Internal::getDescriptorMethod(info);
-}
+    MODULES_EXPORT void getDescriptorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothUUIDV8Internal::getDescriptorMethod(info);
+    }
 
-static void canonicalUUIDMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothUUID", "canonicalUUID");
+    static void canonicalUUIDMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BluetoothUUID", "canonicalUUID");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned alias;
-  alias = toUInt32(info.GetIsolate(), info[0], EnforceRange, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned alias;
+        alias = toUInt32(info.GetIsolate(), info[0], EnforceRange, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValueString(info, BluetoothUUID::canonicalUUID(alias), info.GetIsolate());
-}
+        v8SetReturnValueString(info, BluetoothUUID::canonicalUUID(alias), info.GetIsolate());
+    }
 
-MODULES_EXPORT  void canonicalUUIDMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BluetoothUUIDV8Internal::canonicalUUIDMethod(info);
-}
+    MODULES_EXPORT void canonicalUUIDMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BluetoothUUIDV8Internal::canonicalUUIDMethod(info);
+    }
 
 } // namespace BluetoothUUIDV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8BluetoothUUIDMethods[] = {
-    {"getService", BluetoothUUIDV8Internal::getServiceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
-    {"getCharacteristic", BluetoothUUIDV8Internal::getCharacteristicMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
-    {"getDescriptor", BluetoothUUIDV8Internal::getDescriptorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
-    {"canonicalUUID", BluetoothUUIDV8Internal::canonicalUUIDMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
+    { "getService", BluetoothUUIDV8Internal::getServiceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
+    { "getCharacteristic", BluetoothUUIDV8Internal::getCharacteristicMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
+    { "getDescriptor", BluetoothUUIDV8Internal::getDescriptorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
+    { "canonicalUUID", BluetoothUUIDV8Internal::canonicalUUIDMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8BluetoothUUIDTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BluetoothUUID::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8BluetoothUUID::internalFieldCount);
+static void installV8BluetoothUUIDTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BluetoothUUID::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8BluetoothUUID::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::webBluetoothEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::webBluetoothEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothUUIDMethods, WTF_ARRAY_LENGTH(V8BluetoothUUIDMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BluetoothUUIDMethods, WTF_ARRAY_LENGTH(V8BluetoothUUIDMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8BluetoothUUID::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BluetoothUUIDTemplate);
+v8::Local<v8::FunctionTemplate> V8BluetoothUUID::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BluetoothUUIDTemplate);
 }
 
-bool V8BluetoothUUID::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8BluetoothUUID::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8BluetoothUUID::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8BluetoothUUID::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-BluetoothUUID* V8BluetoothUUID::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+BluetoothUUID* V8BluetoothUUID::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

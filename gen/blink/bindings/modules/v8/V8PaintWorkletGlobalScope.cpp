@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PaintWorkletGlobalScope.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -76,152 +76,159 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PaintWorkletGlobalScope::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PaintWorkletGlobalScope is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PaintWorkletGlobalScopeV8Internal {
 
-static void registerPaintMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintWorkletGlobalScope", "registerPaint");
+    static void registerPaintMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PaintWorkletGlobalScope", "registerPaint");
 
-  PaintWorkletGlobalScope* impl = V8PaintWorkletGlobalScope::toImpl(info.Holder());
+        PaintWorkletGlobalScope* impl = V8PaintWorkletGlobalScope::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> name;
-  ScriptValue paintCtor;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        ScriptValue paintCtor;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  if (!(info[1]->IsObject() && v8::Local<v8::Object>::Cast(info[1])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+        if (!(info[1]->IsObject() && v8::Local<v8::Object>::Cast(info[1])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
 
-    return;
-  }
-  paintCtor = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
+            return;
+        }
+        paintCtor = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
 
-  impl->registerPaint(name, paintCtor, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->registerPaint(name, paintCtor, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void registerPaintMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PaintWorkletGlobalScopeV8Internal::registerPaintMethod(info);
-}
+    MODULES_EXPORT void registerPaintMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PaintWorkletGlobalScopeV8Internal::registerPaintMethod(info);
+    }
 
 } // namespace PaintWorkletGlobalScopeV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8PaintWorkletGlobalScopeMethods[] = {
-    {"registerPaint", PaintWorkletGlobalScopeV8Internal::registerPaintMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "registerPaint", PaintWorkletGlobalScopeV8Internal::registerPaintMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PaintWorkletGlobalScopeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaintWorkletGlobalScope::wrapperTypeInfo.interfaceName, V8WorkletGlobalScope::domTemplate(isolate, world), V8PaintWorkletGlobalScope::internalFieldCount);
+static void installV8PaintWorkletGlobalScopeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PaintWorkletGlobalScope::wrapperTypeInfo.interfaceName, V8WorkletGlobalScope::domTemplate(isolate, world), V8PaintWorkletGlobalScope::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Global object prototype chain consists of Immutable Prototype Exotic Objects
-  prototypeTemplate->SetImmutableProto();
+    // Global object prototype chain consists of Immutable Prototype Exotic Objects
+    prototypeTemplate->SetImmutableProto();
 
-  // Global objects are Immutable Prototype Exotic Objects
-  instanceTemplate->SetImmutableProto();
+    // Global objects are Immutable Prototype Exotic Objects
+    instanceTemplate->SetImmutableProto();
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaintWorkletGlobalScopeMethods, WTF_ARRAY_LENGTH(V8PaintWorkletGlobalScopeMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PaintWorkletGlobalScopeMethods, WTF_ARRAY_LENGTH(V8PaintWorkletGlobalScopeMethods));
 
-  if (RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributePaintRenderingContext2DConfiguration = {"PaintRenderingContext2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaintRenderingContext2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaintRenderingContext2DConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePaintSizeConfiguration = {"PaintSize", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaintSize::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaintSizeConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePaintWorkletGlobalScopeConfiguration = {"PaintWorkletGlobalScope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaintWorkletGlobalScope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaintWorkletGlobalScopeConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributePath2DConfiguration = {"Path2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Path2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePath2DConfiguration);
-  }
-  if (RuntimeEnabledFeatures::cssTypedOMEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSAngleValueConfiguration = {"CSSAngleValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSAngleValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSAngleValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSCalcLengthConfiguration = {"CSSCalcLength", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSCalcLength::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSCalcLengthConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSImageValueConfiguration = {"CSSImageValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSImageValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSImageValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSKeywordValueConfiguration = {"CSSKeywordValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSKeywordValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSKeywordValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSLengthValueConfiguration = {"CSSLengthValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSLengthValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSLengthValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSMatrixTransformComponentConfiguration = {"CSSMatrixTransformComponent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSMatrixTransformComponent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSMatrixTransformComponentConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSNumberValueConfiguration = {"CSSNumberValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSNumberValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSNumberValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSPerspectiveConfiguration = {"CSSPerspective", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSPerspective::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSPerspectiveConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSPositionValueConfiguration = {"CSSPositionValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSPositionValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSPositionValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSResourceValueConfiguration = {"CSSResourceValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSResourceValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSResourceValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSRotationConfiguration = {"CSSRotation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSRotation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSRotationConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSScaleConfiguration = {"CSSScale", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSScale::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSScaleConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSSimpleLengthConfiguration = {"CSSSimpleLength", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSSimpleLength::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSSimpleLengthConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSSkewConfiguration = {"CSSSkew", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSSkew::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSSkewConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSStyleValueConfiguration = {"CSSStyleValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSStyleValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSStyleValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSTransformComponentConfiguration = {"CSSTransformComponent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSTransformComponent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSTransformComponentConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSTransformValueConfiguration = {"CSSTransformValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSTransformValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSTransformValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSTranslationConfiguration = {"CSSTranslation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSTranslation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSTranslationConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSUnparsedValueConfiguration = {"CSSUnparsedValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSUnparsedValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSUnparsedValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSURLImageValueConfiguration = {"CSSURLImageValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSURLImageValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSURLImageValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeCSSVariableReferenceValueConfiguration = {"CSSVariableReferenceValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSVariableReferenceValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSVariableReferenceValueConfiguration);
-    const V8DOMConfiguration::AttributeConfiguration attributeStylePropertyMapConfiguration = {"StylePropertyMap", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StylePropertyMap::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeStylePropertyMapConfiguration);
-  }
-  if (RuntimeEnabledFeatures::workletEnabled()) {
-    const V8DOMConfiguration::AttributeConfiguration attributeWorkletGlobalScopeConfiguration = {"WorkletGlobalScope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WorkletGlobalScope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeWorkletGlobalScopeConfiguration);
-  }
+    if (RuntimeEnabledFeatures::cssPaintAPIEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributePaintRenderingContext2DConfiguration = { "PaintRenderingContext2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaintRenderingContext2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaintRenderingContext2DConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePaintSizeConfiguration = { "PaintSize", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaintSize::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaintSizeConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePaintWorkletGlobalScopeConfiguration = { "PaintWorkletGlobalScope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8PaintWorkletGlobalScope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePaintWorkletGlobalScopeConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributePath2DConfiguration = { "Path2D", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Path2D::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributePath2DConfiguration);
+    }
+    if (RuntimeEnabledFeatures::cssTypedOMEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSAngleValueConfiguration = { "CSSAngleValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSAngleValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSAngleValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSCalcLengthConfiguration = { "CSSCalcLength", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSCalcLength::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSCalcLengthConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSImageValueConfiguration = { "CSSImageValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSImageValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSImageValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSKeywordValueConfiguration = { "CSSKeywordValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSKeywordValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSKeywordValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSLengthValueConfiguration = { "CSSLengthValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSLengthValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSLengthValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSMatrixTransformComponentConfiguration = { "CSSMatrixTransformComponent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSMatrixTransformComponent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSMatrixTransformComponentConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSNumberValueConfiguration = { "CSSNumberValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSNumberValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSNumberValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSPerspectiveConfiguration = { "CSSPerspective", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSPerspective::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSPerspectiveConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSPositionValueConfiguration = { "CSSPositionValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSPositionValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSPositionValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSResourceValueConfiguration = { "CSSResourceValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSResourceValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSResourceValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSRotationConfiguration = { "CSSRotation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSRotation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSRotationConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSScaleConfiguration = { "CSSScale", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSScale::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSScaleConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSSimpleLengthConfiguration = { "CSSSimpleLength", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSSimpleLength::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSSimpleLengthConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSSkewConfiguration = { "CSSSkew", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSSkew::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSSkewConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSStyleValueConfiguration = { "CSSStyleValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSStyleValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSStyleValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSTransformComponentConfiguration = { "CSSTransformComponent", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSTransformComponent::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSTransformComponentConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSTransformValueConfiguration = { "CSSTransformValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSTransformValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSTransformValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSTranslationConfiguration = { "CSSTranslation", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSTranslation::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSTranslationConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSUnparsedValueConfiguration = { "CSSUnparsedValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSUnparsedValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSUnparsedValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSURLImageValueConfiguration = { "CSSURLImageValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSURLImageValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSURLImageValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeCSSVariableReferenceValueConfiguration = { "CSSVariableReferenceValue", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8CSSVariableReferenceValue::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeCSSVariableReferenceValueConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeStylePropertyMapConfiguration = { "StylePropertyMap", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8StylePropertyMap::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeStylePropertyMapConfiguration);
+    }
+    if (RuntimeEnabledFeatures::workletEnabled()) {
+        const V8DOMConfiguration::AttributeConfiguration attributeWorkletGlobalScopeConfiguration = { "WorkletGlobalScope", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8WorkletGlobalScope::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeWorkletGlobalScopeConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8PaintWorkletGlobalScope::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaintWorkletGlobalScopeTemplate);
+v8::Local<v8::FunctionTemplate> V8PaintWorkletGlobalScope::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PaintWorkletGlobalScopeTemplate);
 }
 
-bool V8PaintWorkletGlobalScope::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PaintWorkletGlobalScope::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PaintWorkletGlobalScope::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PaintWorkletGlobalScope::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PaintWorkletGlobalScope* V8PaintWorkletGlobalScope::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PaintWorkletGlobalScope* V8PaintWorkletGlobalScope::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

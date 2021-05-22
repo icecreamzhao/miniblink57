@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ConstrainBooleanParameters_h
 #define V8ConstrainBooleanParameters_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ConstrainBooleanParameters {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstrainBooleanParameters&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstrainBooleanParameters&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ConstrainBooleanParameters(const ConstrainBooleanParameters&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstrainBooleanParameters& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstrainBooleanParameters& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ConstrainBooleanParameters> {
-  static ConstrainBooleanParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ConstrainBooleanParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ConstrainBooleanParameters> {
-  typedef V8ConstrainBooleanParameters Type;
+    typedef V8ConstrainBooleanParameters Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ConstrainBooleanParameters_h
+#endif // V8ConstrainBooleanParameters_h

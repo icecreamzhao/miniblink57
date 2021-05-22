@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8RTCDTMFSender_h
 #define V8RTCDTMFSender_h
 
@@ -25,32 +25,36 @@
 namespace blink {
 
 class V8RTCDTMFSender {
-  STATIC_ONLY(V8RTCDTMFSender);
- public:
-  MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static RTCDTMFSender* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<RTCDTMFSender>();
-  }
-  MODULES_EXPORT static RTCDTMFSender* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<RTCDTMFSender>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<RTCDTMFSender>());
-  }
-  static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
+    STATIC_ONLY(V8RTCDTMFSender);
+
+public:
+    MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static RTCDTMFSender* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<RTCDTMFSender>();
+    }
+    MODULES_EXPORT static RTCDTMFSender* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<RTCDTMFSender>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<RTCDTMFSender>());
+    }
+    static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
 };
 
 template <>
 struct V8TypeOf<RTCDTMFSender> {
-  typedef V8RTCDTMFSender Type;
+    typedef V8RTCDTMFSender Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8RTCDTMFSender_h
+#endif // V8RTCDTMFSender_h

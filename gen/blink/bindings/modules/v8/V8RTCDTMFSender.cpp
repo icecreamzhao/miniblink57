@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RTCDTMFSender.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,213 +49,234 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&RTCDTMFSender::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "RTCDTMFSender is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace RTCDTMFSenderV8Internal {
 
-static void canInsertDTMFAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void canInsertDTMFAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
+        RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->canInsertDTMF());
-}
-
-MODULES_EXPORT void canInsertDTMFAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDTMFSenderV8Internal::canInsertDTMFAttributeGetter(info);
-}
-
-static void trackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
-
-  MediaStreamTrack* cppValue(WTF::getPtr(impl->track()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#RTCDTMFSender#track";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void trackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDTMFSenderV8Internal::trackAttributeGetter(info);
-}
-
-static void toneBufferAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->toneBuffer(), info.GetIsolate());
-}
-
-MODULES_EXPORT void toneBufferAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDTMFSenderV8Internal::toneBufferAttributeGetter(info);
-}
-
-static void durationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
-
-  v8SetReturnValueInt(info, impl->duration());
-}
-
-MODULES_EXPORT void durationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDTMFSenderV8Internal::durationAttributeGetter(info);
-}
-
-static void interToneGapAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
-
-  v8SetReturnValueInt(info, impl->interToneGap());
-}
-
-MODULES_EXPORT void interToneGapAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDTMFSenderV8Internal::interToneGapAttributeGetter(info);
-}
-
-static void ontonechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->ontonechange()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void ontonechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDTMFSenderV8Internal::ontonechangeAttributeGetter(info);
-}
-
-static void ontonechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ontonechange(), v8Value, V8RTCDTMFSender::eventListenerCacheIndex);
-
-  impl->setOntonechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void ontonechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCDTMFSenderV8Internal::ontonechangeAttributeSetter(v8Value, info);
-}
-
-static void insertDTMFMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDTMFSender", "insertDTMF");
-
-  RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> tones;
-  int duration;
-  int interToneGap;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  tones = info[0];
-  if (!tones.prepare())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->insertDTMF(tones, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValueBool(info, impl->canInsertDTMF());
     }
-    return;
-  }
-  duration = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    impl->insertDTMF(tones, duration, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    MODULES_EXPORT void canInsertDTMFAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDTMFSenderV8Internal::canInsertDTMFAttributeGetter(info);
     }
-    return;
-  }
-  interToneGap = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  impl->insertDTMF(tones, duration, interToneGap, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void trackAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void insertDTMFMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDTMFSenderV8Internal::insertDTMFMethod(info);
-}
+        RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
+
+        MediaStreamTrack* cppValue(WTF::getPtr(impl->track()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#RTCDTMFSender#track";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    MODULES_EXPORT void trackAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDTMFSenderV8Internal::trackAttributeGetter(info);
+    }
+
+    static void toneBufferAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->toneBuffer(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void toneBufferAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDTMFSenderV8Internal::toneBufferAttributeGetter(info);
+    }
+
+    static void durationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
+
+        v8SetReturnValueInt(info, impl->duration());
+    }
+
+    MODULES_EXPORT void durationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDTMFSenderV8Internal::durationAttributeGetter(info);
+    }
+
+    static void interToneGapAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
+
+        v8SetReturnValueInt(info, impl->interToneGap());
+    }
+
+    MODULES_EXPORT void interToneGapAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDTMFSenderV8Internal::interToneGapAttributeGetter(info);
+    }
+
+    static void ontonechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->ontonechange()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void ontonechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDTMFSenderV8Internal::ontonechangeAttributeGetter(info);
+    }
+
+    static void ontonechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ontonechange(), v8Value, V8RTCDTMFSender::eventListenerCacheIndex);
+
+        impl->setOntonechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void ontonechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCDTMFSenderV8Internal::ontonechangeAttributeSetter(v8Value, info);
+    }
+
+    static void insertDTMFMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDTMFSender", "insertDTMF");
+
+        RTCDTMFSender* impl = V8RTCDTMFSender::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> tones;
+        int duration;
+        int interToneGap;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        tones = info[0];
+        if (!tones.prepare())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->insertDTMF(tones, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        duration = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            impl->insertDTMF(tones, duration, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        interToneGap = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->insertDTMF(tones, duration, interToneGap, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void insertDTMFMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDTMFSenderV8Internal::insertDTMFMethod(info);
+    }
 
 } // namespace RTCDTMFSenderV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8RTCDTMFSenderAccessors[] = {
-    {"canInsertDTMF", RTCDTMFSenderV8Internal::canInsertDTMFAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"track", RTCDTMFSenderV8Internal::trackAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"toneBuffer", RTCDTMFSenderV8Internal::toneBufferAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"duration", RTCDTMFSenderV8Internal::durationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"interToneGap", RTCDTMFSenderV8Internal::interToneGapAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ontonechange", RTCDTMFSenderV8Internal::ontonechangeAttributeGetterCallback, RTCDTMFSenderV8Internal::ontonechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "canInsertDTMF", RTCDTMFSenderV8Internal::canInsertDTMFAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "track", RTCDTMFSenderV8Internal::trackAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "toneBuffer", RTCDTMFSenderV8Internal::toneBufferAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "duration", RTCDTMFSenderV8Internal::durationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "interToneGap", RTCDTMFSenderV8Internal::interToneGapAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ontonechange", RTCDTMFSenderV8Internal::ontonechangeAttributeGetterCallback, RTCDTMFSenderV8Internal::ontonechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8RTCDTMFSenderMethods[] = {
-    {"insertDTMF", RTCDTMFSenderV8Internal::insertDTMFMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "insertDTMF", RTCDTMFSenderV8Internal::insertDTMFMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8RTCDTMFSenderTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCDTMFSender::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8RTCDTMFSender::internalFieldCount);
+static void installV8RTCDTMFSenderTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCDTMFSender::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8RTCDTMFSender::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCDTMFSenderAccessors, WTF_ARRAY_LENGTH(V8RTCDTMFSenderAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCDTMFSenderMethods, WTF_ARRAY_LENGTH(V8RTCDTMFSenderMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCDTMFSenderAccessors, WTF_ARRAY_LENGTH(V8RTCDTMFSenderAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCDTMFSenderMethods, WTF_ARRAY_LENGTH(V8RTCDTMFSenderMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8RTCDTMFSender::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCDTMFSenderTemplate);
+v8::Local<v8::FunctionTemplate> V8RTCDTMFSender::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCDTMFSenderTemplate);
 }
 
-bool V8RTCDTMFSender::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8RTCDTMFSender::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8RTCDTMFSender::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8RTCDTMFSender::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-RTCDTMFSender* V8RTCDTMFSender::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+RTCDTMFSender* V8RTCDTMFSender::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

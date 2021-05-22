@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CanvasCaptureMediaStreamTrack.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,79 +48,88 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&CanvasCaptureMediaStreamTrack::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CanvasCaptureMediaStreamTrack is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CanvasCaptureMediaStreamTrackV8Internal {
 
-static void canvasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void canvasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CanvasCaptureMediaStreamTrack* impl = V8CanvasCaptureMediaStreamTrack::toImpl(holder);
+        CanvasCaptureMediaStreamTrack* impl = V8CanvasCaptureMediaStreamTrack::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->canvas()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->canvas()), impl);
+    }
 
-MODULES_EXPORT void canvasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasCaptureMediaStreamTrackV8Internal::canvasAttributeGetter(info);
-}
+    MODULES_EXPORT void canvasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasCaptureMediaStreamTrackV8Internal::canvasAttributeGetter(info);
+    }
 
-static void requestFrameMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasCaptureMediaStreamTrack* impl = V8CanvasCaptureMediaStreamTrack::toImpl(info.Holder());
+    static void requestFrameMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasCaptureMediaStreamTrack* impl = V8CanvasCaptureMediaStreamTrack::toImpl(info.Holder());
 
-  impl->requestFrame();
-}
+        impl->requestFrame();
+    }
 
-MODULES_EXPORT  void requestFrameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasCaptureMediaStreamTrackV8Internal::requestFrameMethod(info);
-}
+    MODULES_EXPORT void requestFrameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasCaptureMediaStreamTrackV8Internal::requestFrameMethod(info);
+    }
 
 } // namespace CanvasCaptureMediaStreamTrackV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8CanvasCaptureMediaStreamTrackAccessors[] = {
-    {"canvas", CanvasCaptureMediaStreamTrackV8Internal::canvasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "canvas", CanvasCaptureMediaStreamTrackV8Internal::canvasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8CanvasCaptureMediaStreamTrackMethods[] = {
-    {"requestFrame", CanvasCaptureMediaStreamTrackV8Internal::requestFrameMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "requestFrame", CanvasCaptureMediaStreamTrackV8Internal::requestFrameMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CanvasCaptureMediaStreamTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CanvasCaptureMediaStreamTrack::wrapperTypeInfo.interfaceName, V8MediaStreamTrack::domTemplate(isolate, world), V8CanvasCaptureMediaStreamTrack::internalFieldCount);
+static void installV8CanvasCaptureMediaStreamTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CanvasCaptureMediaStreamTrack::wrapperTypeInfo.interfaceName, V8MediaStreamTrack::domTemplate(isolate, world), V8CanvasCaptureMediaStreamTrack::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::mediaCaptureFromCanvasEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::mediaCaptureFromCanvasEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CanvasCaptureMediaStreamTrackAccessors, WTF_ARRAY_LENGTH(V8CanvasCaptureMediaStreamTrackAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CanvasCaptureMediaStreamTrackMethods, WTF_ARRAY_LENGTH(V8CanvasCaptureMediaStreamTrackMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CanvasCaptureMediaStreamTrackAccessors, WTF_ARRAY_LENGTH(V8CanvasCaptureMediaStreamTrackAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CanvasCaptureMediaStreamTrackMethods, WTF_ARRAY_LENGTH(V8CanvasCaptureMediaStreamTrackMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8CanvasCaptureMediaStreamTrack::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CanvasCaptureMediaStreamTrackTemplate);
+v8::Local<v8::FunctionTemplate> V8CanvasCaptureMediaStreamTrack::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CanvasCaptureMediaStreamTrackTemplate);
 }
 
-bool V8CanvasCaptureMediaStreamTrack::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CanvasCaptureMediaStreamTrack::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CanvasCaptureMediaStreamTrack::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CanvasCaptureMediaStreamTrack::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CanvasCaptureMediaStreamTrack* V8CanvasCaptureMediaStreamTrack::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CanvasCaptureMediaStreamTrack* V8CanvasCaptureMediaStreamTrack::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

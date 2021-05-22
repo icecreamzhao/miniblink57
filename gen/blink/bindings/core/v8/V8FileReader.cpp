@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FileReader.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,467 +53,514 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&FileReader::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "FileReader is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace FileReaderV8Internal {
 
-static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FileReader* impl = V8FileReader::toImpl(holder);
+        FileReader* impl = V8FileReader::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->getReadyState());
-}
-
-CORE_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::readyStateAttributeGetter(info);
-}
-
-static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  StringOrArrayBuffer result;
-  impl->result(result);
-
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::resultAttributeGetter(info);
-}
-
-static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  DOMException* cppValue(WTF::getPtr(impl->error()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#FileReader#error";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-CORE_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::errorAttributeGetter(info);
-}
-
-static void onloadstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onloadstart()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onloadstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::onloadstartAttributeGetter(info);
-}
-
-static void onloadstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadstart(), v8Value, V8FileReader::eventListenerCacheIndex);
-
-  impl->setOnloadstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onloadstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  FileReaderV8Internal::onloadstartAttributeSetter(v8Value, info);
-}
-
-static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onprogress()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::onprogressAttributeGetter(info);
-}
-
-static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onprogress(), v8Value, V8FileReader::eventListenerCacheIndex);
-
-  impl->setOnprogress(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  FileReaderV8Internal::onprogressAttributeSetter(v8Value, info);
-}
-
-static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onload()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::onloadAttributeGetter(info);
-}
-
-static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onload(), v8Value, V8FileReader::eventListenerCacheIndex);
-
-  impl->setOnload(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  FileReaderV8Internal::onloadAttributeSetter(v8Value, info);
-}
-
-static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onabort()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::onabortAttributeGetter(info);
-}
-
-static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onabort(), v8Value, V8FileReader::eventListenerCacheIndex);
-
-  impl->setOnabort(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  FileReaderV8Internal::onabortAttributeSetter(v8Value, info);
-}
-
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::onerrorAttributeGetter(info);
-}
-
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8FileReader::eventListenerCacheIndex);
-
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  FileReaderV8Internal::onerrorAttributeSetter(v8Value, info);
-}
-
-static void onloadendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onloadend()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onloadendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::onloadendAttributeGetter(info);
-}
-
-static void onloadendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  FileReader* impl = V8FileReader::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadend(), v8Value, V8FileReader::eventListenerCacheIndex);
-
-  impl->setOnloadend(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onloadendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  FileReaderV8Internal::onloadendAttributeSetter(v8Value, info);
-}
-
-static void readAsArrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReader", "readAsArrayBuffer");
-
-  FileReader* impl = V8FileReader::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Blob* blob;
-  blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!blob) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
-
-    return;
-  }
-
-  impl->readAsArrayBuffer(blob, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void readAsArrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::readAsArrayBufferMethod(info);
-}
-
-static void readAsBinaryStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReader", "readAsBinaryString");
-
-  FileReader* impl = V8FileReader::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Blob* blob;
-  blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!blob) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
-
-    return;
-  }
-
-  impl->readAsBinaryString(blob, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void readAsBinaryStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::readAsBinaryStringMethod(info);
-}
-
-static void readAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReader", "readAsText");
-
-  FileReader* impl = V8FileReader::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Blob* blob;
-  V8StringResource<> label;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!blob) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
-
-    return;
-  }
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->readAsText(blob, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValueUnsigned(info, impl->getReadyState());
     }
-    return;
-  }
-  label = info[1];
-  if (!label.prepare())
-    return;
 
-  impl->readAsText(blob, label, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    CORE_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::readyStateAttributeGetter(info);
+    }
 
-CORE_EXPORT  void readAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::readAsTextMethod(info);
-}
+    static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void readAsDataURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReader", "readAsDataURL");
+        FileReader* impl = V8FileReader::toImpl(holder);
 
-  FileReader* impl = V8FileReader::toImpl(info.Holder());
+        StringOrArrayBuffer result;
+        impl->result(result);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        v8SetReturnValue(info, result);
+    }
 
-  Blob* blob;
-  blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!blob) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+    CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::resultAttributeGetter(info);
+    }
 
-    return;
-  }
+    static void errorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  impl->readAsDataURL(blob, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        FileReader* impl = V8FileReader::toImpl(holder);
 
-CORE_EXPORT  void readAsDataURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::readAsDataURLMethod(info);
-}
+        DOMException* cppValue(WTF::getPtr(impl->error()));
 
-static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReader* impl = V8FileReader::toImpl(info.Holder());
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#FileReader#error";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  impl->abort();
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT  void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FileReaderV8Internal::abortMethod(info);
-}
+    CORE_EXPORT void errorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::errorAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  FileReader* impl = FileReader::create(executionContext);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8FileReader::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void onloadstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onloadstart()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onloadstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::onloadstartAttributeGetter(info);
+    }
+
+    static void onloadstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadstart(), v8Value, V8FileReader::eventListenerCacheIndex);
+
+        impl->setOnloadstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onloadstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        FileReaderV8Internal::onloadstartAttributeSetter(v8Value, info);
+    }
+
+    static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onprogress()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::onprogressAttributeGetter(info);
+    }
+
+    static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onprogress(), v8Value, V8FileReader::eventListenerCacheIndex);
+
+        impl->setOnprogress(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        FileReaderV8Internal::onprogressAttributeSetter(v8Value, info);
+    }
+
+    static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onload()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::onloadAttributeGetter(info);
+    }
+
+    static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onload(), v8Value, V8FileReader::eventListenerCacheIndex);
+
+        impl->setOnload(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        FileReaderV8Internal::onloadAttributeSetter(v8Value, info);
+    }
+
+    static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onabort()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::onabortAttributeGetter(info);
+    }
+
+    static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onabort(), v8Value, V8FileReader::eventListenerCacheIndex);
+
+        impl->setOnabort(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        FileReaderV8Internal::onabortAttributeSetter(v8Value, info);
+    }
+
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::onerrorAttributeGetter(info);
+    }
+
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8FileReader::eventListenerCacheIndex);
+
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        FileReaderV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
+
+    static void onloadendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onloadend()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onloadendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::onloadendAttributeGetter(info);
+    }
+
+    static void onloadendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        FileReader* impl = V8FileReader::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onloadend(), v8Value, V8FileReader::eventListenerCacheIndex);
+
+        impl->setOnloadend(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onloadendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        FileReaderV8Internal::onloadendAttributeSetter(v8Value, info);
+    }
+
+    static void readAsArrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReader", "readAsArrayBuffer");
+
+        FileReader* impl = V8FileReader::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Blob* blob;
+        blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!blob) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+
+            return;
+        }
+
+        impl->readAsArrayBuffer(blob, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void readAsArrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::readAsArrayBufferMethod(info);
+    }
+
+    static void readAsBinaryStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReader", "readAsBinaryString");
+
+        FileReader* impl = V8FileReader::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Blob* blob;
+        blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!blob) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+
+            return;
+        }
+
+        impl->readAsBinaryString(blob, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void readAsBinaryStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::readAsBinaryStringMethod(info);
+    }
+
+    static void readAsTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReader", "readAsText");
+
+        FileReader* impl = V8FileReader::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Blob* blob;
+        V8StringResource<> label;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!blob) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+
+            return;
+        }
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->readAsText(blob, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        label = info[1];
+        if (!label.prepare())
+            return;
+
+        impl->readAsText(blob, label, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void readAsTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::readAsTextMethod(info);
+    }
+
+    static void readAsDataURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FileReader", "readAsDataURL");
+
+        FileReader* impl = V8FileReader::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Blob* blob;
+        blob = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!blob) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+
+            return;
+        }
+
+        impl->readAsDataURL(blob, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void readAsDataURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::readAsDataURLMethod(info);
+    }
+
+    static void abortMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReader* impl = V8FileReader::toImpl(info.Holder());
+
+        impl->abort();
+    }
+
+    CORE_EXPORT void abortMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FileReaderV8Internal::abortMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        FileReader* impl = FileReader::create(executionContext);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8FileReader::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace FileReaderV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8FileReaderAccessors[] = {
-    {"readyState", FileReaderV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"result", FileReaderV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"error", FileReaderV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadstart", FileReaderV8Internal::onloadstartAttributeGetterCallback, FileReaderV8Internal::onloadstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onprogress", FileReaderV8Internal::onprogressAttributeGetterCallback, FileReaderV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onload", FileReaderV8Internal::onloadAttributeGetterCallback, FileReaderV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onabort", FileReaderV8Internal::onabortAttributeGetterCallback, FileReaderV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", FileReaderV8Internal::onerrorAttributeGetterCallback, FileReaderV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadend", FileReaderV8Internal::onloadendAttributeGetterCallback, FileReaderV8Internal::onloadendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "readyState", FileReaderV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "result", FileReaderV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "error", FileReaderV8Internal::errorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadstart", FileReaderV8Internal::onloadstartAttributeGetterCallback, FileReaderV8Internal::onloadstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onprogress", FileReaderV8Internal::onprogressAttributeGetterCallback, FileReaderV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onload", FileReaderV8Internal::onloadAttributeGetterCallback, FileReaderV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onabort", FileReaderV8Internal::onabortAttributeGetterCallback, FileReaderV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", FileReaderV8Internal::onerrorAttributeGetterCallback, FileReaderV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadend", FileReaderV8Internal::onloadendAttributeGetterCallback, FileReaderV8Internal::onloadendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8FileReaderMethods[] = {
-    {"readAsArrayBuffer", FileReaderV8Internal::readAsArrayBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readAsBinaryString", FileReaderV8Internal::readAsBinaryStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readAsText", FileReaderV8Internal::readAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readAsDataURL", FileReaderV8Internal::readAsDataURLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"abort", FileReaderV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "readAsArrayBuffer", FileReaderV8Internal::readAsArrayBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readAsBinaryString", FileReaderV8Internal::readAsBinaryStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readAsText", FileReaderV8Internal::readAsTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readAsDataURL", FileReaderV8Internal::readAsDataURLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "abort", FileReaderV8Internal::abortMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8FileReader::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("FileReader"));
-    return;
-  }
+void V8FileReader::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("FileReader"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  FileReaderV8Internal::constructor(info);
+    FileReaderV8Internal::constructor(info);
 }
 
-static void installV8FileReaderTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileReader::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8FileReader::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8FileReader::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8FileReaderTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FileReader::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8FileReader::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8FileReader::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8FileReaderConstants[] = {
-      {"EMPTY", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"LOADING", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DONE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8FileReaderConstants, WTF_ARRAY_LENGTH(V8FileReaderConstants));
-  static_assert(0 == FileReader::kEmpty, "the value of FileReader_kEmpty does not match with implementation");
-  static_assert(1 == FileReader::kLoading, "the value of FileReader_kLoading does not match with implementation");
-  static_assert(2 == FileReader::kDone, "the value of FileReader_kDone does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileReaderAccessors, WTF_ARRAY_LENGTH(V8FileReaderAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileReaderMethods, WTF_ARRAY_LENGTH(V8FileReaderMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8FileReaderConstants[] = {
+        { "EMPTY", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "LOADING", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DONE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8FileReaderConstants, WTF_ARRAY_LENGTH(V8FileReaderConstants));
+    static_assert(0 == FileReader::kEmpty, "the value of FileReader_kEmpty does not match with implementation");
+    static_assert(1 == FileReader::kLoading, "the value of FileReader_kLoading does not match with implementation");
+    static_assert(2 == FileReader::kDone, "the value of FileReader_kDone does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileReaderAccessors, WTF_ARRAY_LENGTH(V8FileReaderAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FileReaderMethods, WTF_ARRAY_LENGTH(V8FileReaderMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8FileReader::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileReaderTemplate);
+v8::Local<v8::FunctionTemplate> V8FileReader::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FileReaderTemplate);
 }
 
-bool V8FileReader::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8FileReader::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8FileReader::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8FileReader::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-FileReader* V8FileReader::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+FileReader* V8FileReader::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

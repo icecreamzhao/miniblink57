@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8IntersectionObserverEntry.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,159 +49,176 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&IntersectionObserverEntry::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "IntersectionObserverEntry is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace IntersectionObserverEntryV8Internal {
 
-static void timeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void timeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
+        IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
 
-  v8SetReturnValue(info, impl->time());
-}
+        v8SetReturnValue(info, impl->time());
+    }
 
-CORE_EXPORT void timeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IntersectionObserverEntryV8Internal::timeAttributeGetter(info);
-}
+    CORE_EXPORT void timeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IntersectionObserverEntryV8Internal::timeAttributeGetter(info);
+    }
 
-static void rootBoundsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void rootBoundsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
+        IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
 
-  ClientRect* cppValue(WTF::getPtr(impl->rootBounds()));
+        ClientRect* cppValue(WTF::getPtr(impl->rootBounds()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#IntersectionObserverEntry#rootBounds";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#IntersectionObserverEntry#rootBounds";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void rootBoundsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IntersectionObserverEntryV8Internal::rootBoundsAttributeGetter(info);
-}
+    CORE_EXPORT void rootBoundsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IntersectionObserverEntryV8Internal::rootBoundsAttributeGetter(info);
+    }
 
-static void boundingClientRectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void boundingClientRectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
+        IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
 
-  ClientRect* cppValue(WTF::getPtr(impl->boundingClientRect()));
+        ClientRect* cppValue(WTF::getPtr(impl->boundingClientRect()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#IntersectionObserverEntry#boundingClientRect";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#IntersectionObserverEntry#boundingClientRect";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void boundingClientRectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IntersectionObserverEntryV8Internal::boundingClientRectAttributeGetter(info);
-}
+    CORE_EXPORT void boundingClientRectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IntersectionObserverEntryV8Internal::boundingClientRectAttributeGetter(info);
+    }
 
-static void intersectionRectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void intersectionRectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
+        IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
 
-  ClientRect* cppValue(WTF::getPtr(impl->intersectionRect()));
+        ClientRect* cppValue(WTF::getPtr(impl->intersectionRect()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#IntersectionObserverEntry#intersectionRect";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#IntersectionObserverEntry#intersectionRect";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void intersectionRectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IntersectionObserverEntryV8Internal::intersectionRectAttributeGetter(info);
-}
+    CORE_EXPORT void intersectionRectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IntersectionObserverEntryV8Internal::intersectionRectAttributeGetter(info);
+    }
 
-static void intersectionRatioAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void intersectionRatioAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
+        IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
 
-  v8SetReturnValue(info, impl->intersectionRatio());
-}
+        v8SetReturnValue(info, impl->intersectionRatio());
+    }
 
-CORE_EXPORT void intersectionRatioAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IntersectionObserverEntryV8Internal::intersectionRatioAttributeGetter(info);
-}
+    CORE_EXPORT void intersectionRatioAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IntersectionObserverEntryV8Internal::intersectionRatioAttributeGetter(info);
+    }
 
-static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
+        IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->target()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->target()), impl);
+    }
 
-CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  IntersectionObserverEntryV8Internal::targetAttributeGetter(info);
-}
+    CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IntersectionObserverEntryV8Internal::targetAttributeGetter(info);
+    }
 
 } // namespace IntersectionObserverEntryV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8IntersectionObserverEntryAccessors[] = {
-    {"time", IntersectionObserverEntryV8Internal::timeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rootBounds", IntersectionObserverEntryV8Internal::rootBoundsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"boundingClientRect", IntersectionObserverEntryV8Internal::boundingClientRectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"intersectionRect", IntersectionObserverEntryV8Internal::intersectionRectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"intersectionRatio", IntersectionObserverEntryV8Internal::intersectionRatioAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"target", IntersectionObserverEntryV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "time", IntersectionObserverEntryV8Internal::timeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rootBounds", IntersectionObserverEntryV8Internal::rootBoundsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "boundingClientRect", IntersectionObserverEntryV8Internal::boundingClientRectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "intersectionRect", IntersectionObserverEntryV8Internal::intersectionRectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "intersectionRatio", IntersectionObserverEntryV8Internal::intersectionRatioAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "target", IntersectionObserverEntryV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8IntersectionObserverEntryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IntersectionObserverEntry::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8IntersectionObserverEntry::internalFieldCount);
+static void installV8IntersectionObserverEntryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8IntersectionObserverEntry::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8IntersectionObserverEntry::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::intersectionObserverEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::intersectionObserverEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IntersectionObserverEntryAccessors, WTF_ARRAY_LENGTH(V8IntersectionObserverEntryAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8IntersectionObserverEntryAccessors, WTF_ARRAY_LENGTH(V8IntersectionObserverEntryAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8IntersectionObserverEntry::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IntersectionObserverEntryTemplate);
+v8::Local<v8::FunctionTemplate> V8IntersectionObserverEntry::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8IntersectionObserverEntryTemplate);
 }
 
-bool V8IntersectionObserverEntry::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8IntersectionObserverEntry::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8IntersectionObserverEntry::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8IntersectionObserverEntry::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-IntersectionObserverEntry* V8IntersectionObserverEntry::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+IntersectionObserverEntry* V8IntersectionObserverEntry::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

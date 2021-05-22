@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ArrayBufferView.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -58,44 +58,46 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DOMArrayBufferView::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMArrayBufferView is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
-DOMArrayBufferView* V8ArrayBufferView::toImpl(v8::Local<v8::Object> object) {
-  DCHECK(object->IsArrayBufferView());
-  ScriptWrappable* scriptWrappable = toScriptWrappable(object);
-  if (scriptWrappable)
-    return scriptWrappable->toImpl<DOMArrayBufferView>();
+DOMArrayBufferView* V8ArrayBufferView::toImpl(v8::Local<v8::Object> object)
+{
+    DCHECK(object->IsArrayBufferView());
+    ScriptWrappable* scriptWrappable = toScriptWrappable(object);
+    if (scriptWrappable)
+        return scriptWrappable->toImpl<DOMArrayBufferView>();
 
-  if (object->IsInt8Array())
-    return V8Int8Array::toImpl(object);
-  if (object->IsInt16Array())
-    return V8Int16Array::toImpl(object);
-  if (object->IsInt32Array())
-    return V8Int32Array::toImpl(object);
-  if (object->IsUint8Array())
-    return V8Uint8Array::toImpl(object);
-  if (object->IsUint8ClampedArray())
-    return V8Uint8ClampedArray::toImpl(object);
-  if (object->IsUint16Array())
-    return V8Uint16Array::toImpl(object);
-  if (object->IsUint32Array())
-    return V8Uint32Array::toImpl(object);
-  if (object->IsFloat32Array())
-    return V8Float32Array::toImpl(object);
-  if (object->IsFloat64Array())
-    return V8Float64Array::toImpl(object);
-  if (object->IsDataView())
-    return V8DataView::toImpl(object);
+    if (object->IsInt8Array())
+        return V8Int8Array::toImpl(object);
+    if (object->IsInt16Array())
+        return V8Int16Array::toImpl(object);
+    if (object->IsInt32Array())
+        return V8Int32Array::toImpl(object);
+    if (object->IsUint8Array())
+        return V8Uint8Array::toImpl(object);
+    if (object->IsUint8ClampedArray())
+        return V8Uint8ClampedArray::toImpl(object);
+    if (object->IsUint16Array())
+        return V8Uint16Array::toImpl(object);
+    if (object->IsUint32Array())
+        return V8Uint32Array::toImpl(object);
+    if (object->IsFloat32Array())
+        return V8Float32Array::toImpl(object);
+    if (object->IsFloat64Array())
+        return V8Float64Array::toImpl(object);
+    if (object->IsDataView())
+        return V8DataView::toImpl(object);
 
-  NOTREACHED();
-  return 0;
+    NOTREACHED();
+    return 0;
 }
 
-DOMArrayBufferView* V8ArrayBufferView::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return value->IsArrayBufferView() ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMArrayBufferView* V8ArrayBufferView::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return value->IsArrayBufferView() ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

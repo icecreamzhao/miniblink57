@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8CredentialRequestOptions_h
 #define V8CredentialRequestOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8CredentialRequestOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CredentialRequestOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, CredentialRequestOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8CredentialRequestOptions(const CredentialRequestOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CredentialRequestOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, CredentialRequestOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<CredentialRequestOptions> {
-  static CredentialRequestOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static CredentialRequestOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<CredentialRequestOptions> {
-  typedef V8CredentialRequestOptions Type;
+    typedef V8CredentialRequestOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8CredentialRequestOptions_h
+#endif // V8CredentialRequestOptions_h

@@ -8,72 +8,90 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "NotificationAction.h"
 
 namespace blink {
 
-NotificationAction::NotificationAction() {
-  setType(String("button"));
+NotificationAction::NotificationAction()
+{
+    setType(String("button"));
 }
 
-NotificationAction::~NotificationAction() {}
+NotificationAction::~NotificationAction() { }
 
 NotificationAction::NotificationAction(const NotificationAction&) = default;
 
 NotificationAction& NotificationAction::operator=(const NotificationAction&) = default;
 
-bool NotificationAction::hasAction() const {
-  return !m_action.isNull();
+bool NotificationAction::hasAction() const
+{
+    return !m_action.isNull();
 }
-String NotificationAction::action() const {
-  return m_action;
+String NotificationAction::action() const
+{
+    return m_action;
 }
-void NotificationAction::setAction(String value) {
-  m_action = value;
+void NotificationAction::setAction(String value)
+{
+    m_action = value;
 }
-bool NotificationAction::hasIcon() const {
-  return !m_icon.isNull();
+bool NotificationAction::hasIcon() const
+{
+    return !m_icon.isNull();
 }
-String NotificationAction::icon() const {
-  return m_icon;
+String NotificationAction::icon() const
+{
+    return m_icon;
 }
-void NotificationAction::setIcon(String value) {
-  m_icon = value;
+void NotificationAction::setIcon(String value)
+{
+    m_icon = value;
 }
-bool NotificationAction::hasPlaceholder() const {
-  return !m_placeholder.isNull();
+bool NotificationAction::hasPlaceholder() const
+{
+    return !m_placeholder.isNull();
 }
-String NotificationAction::placeholder() const {
-  return m_placeholder;
+String NotificationAction::placeholder() const
+{
+    return m_placeholder;
 }
-void NotificationAction::setPlaceholder(String value) {
-  m_placeholder = value;
+void NotificationAction::setPlaceholder(String value)
+{
+    m_placeholder = value;
 }
-void NotificationAction::setPlaceholderToNull() {
-  m_placeholder = String();
+void NotificationAction::setPlaceholderToNull()
+{
+    m_placeholder = String();
 }
-bool NotificationAction::hasTitle() const {
-  return !m_title.isNull();
+bool NotificationAction::hasTitle() const
+{
+    return !m_title.isNull();
 }
-String NotificationAction::title() const {
-  return m_title;
+String NotificationAction::title() const
+{
+    return m_title;
 }
-void NotificationAction::setTitle(String value) {
-  m_title = value;
+void NotificationAction::setTitle(String value)
+{
+    m_title = value;
 }
-bool NotificationAction::hasType() const {
-  return !m_type.isNull();
+bool NotificationAction::hasType() const
+{
+    return !m_type.isNull();
 }
-String NotificationAction::type() const {
-  return m_type;
+String NotificationAction::type() const
+{
+    return m_type;
 }
-void NotificationAction::setType(String value) {
-  m_type = value;
+void NotificationAction::setType(String value)
+{
+    m_type = value;
 }
 
-DEFINE_TRACE(NotificationAction) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(NotificationAction)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

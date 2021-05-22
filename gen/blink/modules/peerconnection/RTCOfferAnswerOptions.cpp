@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RTCOfferAnswerOptions.h"
 
 namespace blink {
 
-RTCOfferAnswerOptions::RTCOfferAnswerOptions() {
-  setVoiceActivityDetection(true);
+RTCOfferAnswerOptions::RTCOfferAnswerOptions()
+{
+    setVoiceActivityDetection(true);
 }
 
-RTCOfferAnswerOptions::~RTCOfferAnswerOptions() {}
+RTCOfferAnswerOptions::~RTCOfferAnswerOptions() { }
 
 RTCOfferAnswerOptions::RTCOfferAnswerOptions(const RTCOfferAnswerOptions&) = default;
 
 RTCOfferAnswerOptions& RTCOfferAnswerOptions::operator=(const RTCOfferAnswerOptions&) = default;
 
-bool RTCOfferAnswerOptions::hasVoiceActivityDetection() const {
-  return m_hasVoiceActivityDetection;
+bool RTCOfferAnswerOptions::hasVoiceActivityDetection() const
+{
+    return m_hasVoiceActivityDetection;
 }
-bool RTCOfferAnswerOptions::voiceActivityDetection() const {
-  DCHECK(m_hasVoiceActivityDetection);
-  return m_voiceActivityDetection;
+bool RTCOfferAnswerOptions::voiceActivityDetection() const
+{
+    DCHECK(m_hasVoiceActivityDetection);
+    return m_voiceActivityDetection;
 }
-void RTCOfferAnswerOptions::setVoiceActivityDetection(bool value) {
-  m_voiceActivityDetection = value;
-  m_hasVoiceActivityDetection = true;
+void RTCOfferAnswerOptions::setVoiceActivityDetection(bool value)
+{
+    m_voiceActivityDetection = value;
+    m_hasVoiceActivityDetection = true;
 }
 
-DEFINE_TRACE(RTCOfferAnswerOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(RTCOfferAnswerOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

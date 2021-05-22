@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_function.h.tmpl
 
-// clang-format off
+// clang-format on
 
 #ifndef PerformanceObserverCallback_h
 #define PerformanceObserverCallback_h
@@ -26,32 +26,34 @@ class PerformanceObserverEntryList;
 class PerformanceObserver;
 
 class CORE_EXPORT PerformanceObserverCallback final : public GarbageCollectedFinalized<PerformanceObserverCallback>, public TraceWrapperBase {
- public:
-  static PerformanceObserverCallback* create(ScriptState* scriptState, v8::Local<v8::Value> callback);
+public:
+    static PerformanceObserverCallback* create(ScriptState* scriptState, v8::Local<v8::Value> callback);
 
-  ~PerformanceObserverCallback() = default;
+    ~PerformanceObserverCallback() = default;
 
-  DECLARE_TRACE();
-  DECLARE_TRACE_WRAPPERS();
+    DECLARE_TRACE();
+    DECLARE_TRACE_WRAPPERS();
 
-  bool call(ScriptWrappable* scriptWrappable, PerformanceObserverEntryList* entries, PerformanceObserver* observer);
+    bool call(ScriptWrappable* scriptWrappable, PerformanceObserverEntryList* entries, PerformanceObserver* observer);
 
-  v8::Local<v8::Function> v8Value(v8::Isolate* isolate) {
-    return m_callback.newLocal(isolate);
-  }
+    v8::Local<v8::Function> v8Value(v8::Isolate* isolate)
+    {
+        return m_callback.newLocal(isolate);
+    }
 
-  void setWrapperReference(v8::Isolate* isolate, const v8::Persistent<v8::Object>& wrapper) {
-    DCHECK(!m_callback.isEmpty());
-    m_callback.setReference(wrapper, isolate);
-  }
+    void setWrapperReference(v8::Isolate* isolate, const v8::Persistent<v8::Object>& wrapper)
+    {
+        DCHECK(!m_callback.isEmpty());
+        m_callback.setReference(wrapper, isolate);
+    }
 
- private:
-  PerformanceObserverCallback(ScriptState*, v8::Local<v8::Function>);
+private:
+    PerformanceObserverCallback(ScriptState*, v8::Local<v8::Function>);
 
-  RefPtr<ScriptState> m_scriptState;
-  TraceWrapperV8Reference<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
+    TraceWrapperV8Reference<v8::Function> m_callback;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PerformanceObserverCallback_h
+#endif // PerformanceObserverCallback_h

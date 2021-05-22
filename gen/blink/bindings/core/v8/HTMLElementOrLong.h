@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef HTMLElementOrLong_h
 #define HTMLElementOrLong_h
 
@@ -23,58 +23,60 @@ namespace blink {
 class HTMLElement;
 
 class CORE_EXPORT HTMLElementOrLong final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  HTMLElementOrLong();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isHTMLElement() const { return m_type == SpecificTypeHTMLElement; }
-  HTMLElement* getAsHTMLElement() const;
-  void setHTMLElement(HTMLElement*);
-  static HTMLElementOrLong fromHTMLElement(HTMLElement*);
+public:
+    HTMLElementOrLong();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isLong() const { return m_type == SpecificTypeLong; }
-  int getAsLong() const;
-  void setLong(int);
-  static HTMLElementOrLong fromLong(int);
+    bool isHTMLElement() const { return m_type == SpecificTypeHTMLElement; }
+    HTMLElement* getAsHTMLElement() const;
+    void setHTMLElement(HTMLElement*);
+    static HTMLElementOrLong fromHTMLElement(HTMLElement*);
 
-  HTMLElementOrLong(const HTMLElementOrLong&);
-  ~HTMLElementOrLong();
-  HTMLElementOrLong& operator=(const HTMLElementOrLong&);
-  DECLARE_TRACE();
+    bool isLong() const { return m_type == SpecificTypeLong; }
+    int getAsLong() const;
+    void setLong(int);
+    static HTMLElementOrLong fromLong(int);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeHTMLElement,
-    SpecificTypeLong,
-  };
-  SpecificTypes m_type;
+    HTMLElementOrLong(const HTMLElementOrLong&);
+    ~HTMLElementOrLong();
+    HTMLElementOrLong& operator=(const HTMLElementOrLong&);
+    DECLARE_TRACE();
 
-  Member<HTMLElement> m_htmlElement;
-  int m_long;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeHTMLElement,
+        SpecificTypeLong,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLElementOrLong&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<HTMLElement> m_htmlElement;
+    int m_long;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLElementOrLong&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8HTMLElementOrLong final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLElementOrLong&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLElementOrLong&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLElementOrLong&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLElementOrLong& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLElementOrLong& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<HTMLElementOrLong> {
-  CORE_EXPORT static HTMLElementOrLong nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static HTMLElementOrLong nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -82,4 +84,4 @@ struct NativeValueTraits<HTMLElementOrLong> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::HTMLElementOrLong);
 
-#endif  // HTMLElementOrLong_h
+#endif // HTMLElementOrLong_h

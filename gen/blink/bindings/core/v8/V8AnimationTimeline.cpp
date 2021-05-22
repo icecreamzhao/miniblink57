@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AnimationTimeline.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,108 +47,119 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&AnimationTimeline::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "AnimationTimeline is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace AnimationTimelineV8Internal {
 
-static void currentTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void currentTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AnimationTimeline* impl = V8AnimationTimeline::toImpl(holder);
+        AnimationTimeline* impl = V8AnimationTimeline::toImpl(holder);
 
-  bool isNull = false;
+        bool isNull = false;
 
-  double cppValue(impl->currentTime(isNull));
+        double cppValue(impl->currentTime(isNull));
 
-  if (isNull) {
-    v8SetReturnValueNull(info);
-    return;
-  }
+        if (isNull) {
+            v8SetReturnValueNull(info);
+            return;
+        }
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void currentTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationTimelineV8Internal::currentTimeAttributeGetter(info);
-}
+    CORE_EXPORT void currentTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationTimelineV8Internal::currentTimeAttributeGetter(info);
+    }
 
-static void currentTimeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  AnimationTimeline* impl = V8AnimationTimeline::toImpl(holder);
+    static void currentTimeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        AnimationTimeline* impl = V8AnimationTimeline::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AnimationTimeline", "currentTime");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "AnimationTimeline", "currentTime");
 
-  // Prepare the value to be set.
-  double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toRestrictedDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setCurrentTime(cppValue);
-}
+        impl->setCurrentTime(cppValue);
+    }
 
-CORE_EXPORT void currentTimeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void currentTimeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  AnimationTimelineV8Internal::currentTimeAttributeSetter(v8Value, info);
-}
+        AnimationTimelineV8Internal::currentTimeAttributeSetter(v8Value, info);
+    }
 
-static void getAnimationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationTimeline* impl = V8AnimationTimeline::toImpl(info.Holder());
+    static void getAnimationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationTimeline* impl = V8AnimationTimeline::toImpl(info.Holder());
 
-  v8SetReturnValue(info, ToV8(impl->getAnimations(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->getAnimations(), info.Holder(), info.GetIsolate()));
+    }
 
-CORE_EXPORT  void getAnimationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AnimationTimelineV8Internal::getAnimationsMethod(info);
-}
+    CORE_EXPORT void getAnimationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AnimationTimelineV8Internal::getAnimationsMethod(info);
+    }
 
 } // namespace AnimationTimelineV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8AnimationTimelineAccessors[] = {
-    {"currentTime", AnimationTimelineV8Internal::currentTimeAttributeGetterCallback, AnimationTimelineV8Internal::currentTimeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "currentTime", AnimationTimelineV8Internal::currentTimeAttributeGetterCallback, AnimationTimelineV8Internal::currentTimeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8AnimationTimelineMethods[] = {
-    {"getAnimations", AnimationTimelineV8Internal::getAnimationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getAnimations", AnimationTimelineV8Internal::getAnimationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8AnimationTimelineTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AnimationTimeline::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8AnimationTimeline::internalFieldCount);
+static void installV8AnimationTimelineTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AnimationTimeline::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8AnimationTimeline::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationTimelineAccessors, WTF_ARRAY_LENGTH(V8AnimationTimelineAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationTimelineMethods, WTF_ARRAY_LENGTH(V8AnimationTimelineMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationTimelineAccessors, WTF_ARRAY_LENGTH(V8AnimationTimelineAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AnimationTimelineMethods, WTF_ARRAY_LENGTH(V8AnimationTimelineMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8AnimationTimeline::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AnimationTimelineTemplate);
+v8::Local<v8::FunctionTemplate> V8AnimationTimeline::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AnimationTimelineTemplate);
 }
 
-bool V8AnimationTimeline::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8AnimationTimeline::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8AnimationTimeline::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8AnimationTimeline::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-AnimationTimeline* V8AnimationTimeline::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+AnimationTimeline* V8AnimationTimeline::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

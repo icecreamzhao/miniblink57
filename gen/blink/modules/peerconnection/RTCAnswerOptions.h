@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RTCAnswerOptions_h
 #define RTCAnswerOptions_h
 
@@ -19,21 +19,21 @@
 namespace blink {
 
 class MODULES_EXPORT RTCAnswerOptions : public RTCOfferAnswerOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RTCAnswerOptions();
-  virtual ~RTCAnswerOptions();
-  RTCAnswerOptions(const RTCAnswerOptions&);
-  RTCAnswerOptions& operator=(const RTCAnswerOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+public:
+    RTCAnswerOptions();
+    virtual ~RTCAnswerOptions();
+    RTCAnswerOptions(const RTCAnswerOptions&);
+    RTCAnswerOptions& operator=(const RTCAnswerOptions&);
 
- private:
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RTCAnswerOptions;
+private:
+    friend class V8RTCAnswerOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RTCAnswerOptions_h
+#endif // RTCAnswerOptions_h

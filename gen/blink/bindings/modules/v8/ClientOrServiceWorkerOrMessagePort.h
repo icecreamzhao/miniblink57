@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ClientOrServiceWorkerOrMessagePort_h
 #define ClientOrServiceWorkerOrMessagePort_h
 
@@ -25,65 +25,67 @@ class ServiceWorker;
 class ServiceWorkerClient;
 
 class MODULES_EXPORT ClientOrServiceWorkerOrMessagePort final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ClientOrServiceWorkerOrMessagePort();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isClient() const { return m_type == SpecificTypeClient; }
-  ServiceWorkerClient* getAsClient() const;
-  void setClient(ServiceWorkerClient*);
-  static ClientOrServiceWorkerOrMessagePort fromClient(ServiceWorkerClient*);
+public:
+    ClientOrServiceWorkerOrMessagePort();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isServiceWorker() const { return m_type == SpecificTypeServiceWorker; }
-  ServiceWorker* getAsServiceWorker() const;
-  void setServiceWorker(ServiceWorker*);
-  static ClientOrServiceWorkerOrMessagePort fromServiceWorker(ServiceWorker*);
+    bool isClient() const { return m_type == SpecificTypeClient; }
+    ServiceWorkerClient* getAsClient() const;
+    void setClient(ServiceWorkerClient*);
+    static ClientOrServiceWorkerOrMessagePort fromClient(ServiceWorkerClient*);
 
-  bool isMessagePort() const { return m_type == SpecificTypeMessagePort; }
-  MessagePort* getAsMessagePort() const;
-  void setMessagePort(MessagePort*);
-  static ClientOrServiceWorkerOrMessagePort fromMessagePort(MessagePort*);
+    bool isServiceWorker() const { return m_type == SpecificTypeServiceWorker; }
+    ServiceWorker* getAsServiceWorker() const;
+    void setServiceWorker(ServiceWorker*);
+    static ClientOrServiceWorkerOrMessagePort fromServiceWorker(ServiceWorker*);
 
-  ClientOrServiceWorkerOrMessagePort(const ClientOrServiceWorkerOrMessagePort&);
-  ~ClientOrServiceWorkerOrMessagePort();
-  ClientOrServiceWorkerOrMessagePort& operator=(const ClientOrServiceWorkerOrMessagePort&);
-  DECLARE_TRACE();
+    bool isMessagePort() const { return m_type == SpecificTypeMessagePort; }
+    MessagePort* getAsMessagePort() const;
+    void setMessagePort(MessagePort*);
+    static ClientOrServiceWorkerOrMessagePort fromMessagePort(MessagePort*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeClient,
-    SpecificTypeServiceWorker,
-    SpecificTypeMessagePort,
-  };
-  SpecificTypes m_type;
+    ClientOrServiceWorkerOrMessagePort(const ClientOrServiceWorkerOrMessagePort&);
+    ~ClientOrServiceWorkerOrMessagePort();
+    ClientOrServiceWorkerOrMessagePort& operator=(const ClientOrServiceWorkerOrMessagePort&);
+    DECLARE_TRACE();
 
-  Member<ServiceWorkerClient> m_client;
-  Member<ServiceWorker> m_serviceWorker;
-  Member<MessagePort> m_messagePort;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeClient,
+        SpecificTypeServiceWorker,
+        SpecificTypeMessagePort,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const ClientOrServiceWorkerOrMessagePort&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<ServiceWorkerClient> m_client;
+    Member<ServiceWorker> m_serviceWorker;
+    Member<MessagePort> m_messagePort;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const ClientOrServiceWorkerOrMessagePort&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8ClientOrServiceWorkerOrMessagePort final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ClientOrServiceWorkerOrMessagePort&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ClientOrServiceWorkerOrMessagePort&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const ClientOrServiceWorkerOrMessagePort&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ClientOrServiceWorkerOrMessagePort& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ClientOrServiceWorkerOrMessagePort& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ClientOrServiceWorkerOrMessagePort> {
-  MODULES_EXPORT static ClientOrServiceWorkerOrMessagePort nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static ClientOrServiceWorkerOrMessagePort nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -91,4 +93,4 @@ struct NativeValueTraits<ClientOrServiceWorkerOrMessagePort> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::ClientOrServiceWorkerOrMessagePort);
 
-#endif  // ClientOrServiceWorkerOrMessagePort_h
+#endif // ClientOrServiceWorkerOrMessagePort_h

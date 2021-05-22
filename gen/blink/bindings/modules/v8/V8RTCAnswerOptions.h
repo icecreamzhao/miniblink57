@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8RTCAnswerOptions_h
 #define V8RTCAnswerOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8RTCAnswerOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCAnswerOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCAnswerOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8RTCAnswerOptions(const RTCAnswerOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCAnswerOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCAnswerOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<RTCAnswerOptions> {
-  static RTCAnswerOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static RTCAnswerOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<RTCAnswerOptions> {
-  typedef V8RTCAnswerOptions Type;
+    typedef V8RTCAnswerOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8RTCAnswerOptions_h
+#endif // V8RTCAnswerOptions_h

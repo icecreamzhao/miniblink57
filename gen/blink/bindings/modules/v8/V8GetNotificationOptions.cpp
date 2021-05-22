@@ -8,66 +8,70 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8GetNotificationOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8GetNotificationOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, GetNotificationOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8GetNotificationOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, GetNotificationOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> tagValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "tag")).ToLocal(&tagValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (tagValue.IsEmpty() || tagValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> tag = tagValue;
-    if (!tag.prepare(exceptionState))
-      return;
-    impl.setTag(tag);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> tagValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "tag")).ToLocal(&tagValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (tagValue.IsEmpty() || tagValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> tag = tagValue;
+        if (!tag.prepare(exceptionState))
+            return;
+        impl.setTag(tag);
+    }
 }
 
-v8::Local<v8::Value> GetNotificationOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8GetNotificationOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> GetNotificationOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8GetNotificationOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8GetNotificationOptions(const GetNotificationOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasTag()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "tag"), v8String(isolate, impl.tag()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "tag"), v8String(isolate, String("")))))
-      return false;
-  }
+bool toV8GetNotificationOptions(const GetNotificationOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasTag()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "tag"), v8String(isolate, impl.tag()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "tag"), v8String(isolate, String("")))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-GetNotificationOptions NativeValueTraits<GetNotificationOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  GetNotificationOptions impl;
-  V8GetNotificationOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+GetNotificationOptions NativeValueTraits<GetNotificationOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    GetNotificationOptions impl;
+    V8GetNotificationOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

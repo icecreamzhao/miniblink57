@@ -8,66 +8,80 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaMetadataInit.h"
 
 namespace blink {
 
-MediaMetadataInit::MediaMetadataInit() {
-  setAlbum(String(""));
-  setArtist(String(""));
-  setArtwork(HeapVector<MediaImage>());
-  setTitle(String(""));
+MediaMetadataInit::MediaMetadataInit()
+{
+    setAlbum(String(""));
+    setArtist(String(""));
+    setArtwork(HeapVector<MediaImage>());
+    setTitle(String(""));
 }
 
-MediaMetadataInit::~MediaMetadataInit() {}
+MediaMetadataInit::~MediaMetadataInit() { }
 
 MediaMetadataInit::MediaMetadataInit(const MediaMetadataInit&) = default;
 
 MediaMetadataInit& MediaMetadataInit::operator=(const MediaMetadataInit&) = default;
 
-bool MediaMetadataInit::hasAlbum() const {
-  return !m_album.isNull();
+bool MediaMetadataInit::hasAlbum() const
+{
+    return !m_album.isNull();
 }
-String MediaMetadataInit::album() const {
-  return m_album;
+String MediaMetadataInit::album() const
+{
+    return m_album;
 }
-void MediaMetadataInit::setAlbum(String value) {
-  m_album = value;
+void MediaMetadataInit::setAlbum(String value)
+{
+    m_album = value;
 }
-bool MediaMetadataInit::hasArtist() const {
-  return !m_artist.isNull();
+bool MediaMetadataInit::hasArtist() const
+{
+    return !m_artist.isNull();
 }
-String MediaMetadataInit::artist() const {
-  return m_artist;
+String MediaMetadataInit::artist() const
+{
+    return m_artist;
 }
-void MediaMetadataInit::setArtist(String value) {
-  m_artist = value;
+void MediaMetadataInit::setArtist(String value)
+{
+    m_artist = value;
 }
-bool MediaMetadataInit::hasArtwork() const {
-  return m_hasArtwork;
+bool MediaMetadataInit::hasArtwork() const
+{
+    return m_hasArtwork;
 }
-const HeapVector<MediaImage>& MediaMetadataInit::artwork() const {
-  DCHECK(m_hasArtwork);
-  return m_artwork;
+const HeapVector<MediaImage>& MediaMetadataInit::artwork() const
+{
+    DCHECK(m_hasArtwork);
+    return m_artwork;
 }
-void MediaMetadataInit::setArtwork(const HeapVector<MediaImage>& value) {
-  m_artwork = value;
-  m_hasArtwork = true;
+void MediaMetadataInit::setArtwork(const HeapVector<MediaImage>& value)
+{
+    m_artwork = value;
+    m_hasArtwork = true;
 }
-bool MediaMetadataInit::hasTitle() const {
-  return !m_title.isNull();
+bool MediaMetadataInit::hasTitle() const
+{
+    return !m_title.isNull();
 }
-String MediaMetadataInit::title() const {
-  return m_title;
+String MediaMetadataInit::title() const
+{
+    return m_title;
 }
-void MediaMetadataInit::setTitle(String value) {
-  m_title = value;
+void MediaMetadataInit::setTitle(String value)
+{
+    m_title = value;
 }
 
-DEFINE_TRACE(MediaMetadataInit) {
-  visitor->trace(m_artwork);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(MediaMetadataInit)
+{
+    visitor->trace(m_artwork);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

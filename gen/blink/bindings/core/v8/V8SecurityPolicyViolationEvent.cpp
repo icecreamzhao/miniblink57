@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SecurityPolicyViolationEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,254 +49,285 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SecurityPolicyViolationEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SecurityPolicyViolationEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SecurityPolicyViolationEventV8Internal {
 
-static void documentURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void documentURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->documentURI(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->documentURI(), info.GetIsolate());
+    }
 
-CORE_EXPORT void documentURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SecurityPolicyViolationEvent_DocumentURI_AttributeGetter);
+    CORE_EXPORT void documentURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SecurityPolicyViolationEvent_DocumentURI_AttributeGetter);
 
-  SecurityPolicyViolationEventV8Internal::documentURIAttributeGetter(info);
-}
+        SecurityPolicyViolationEventV8Internal::documentURIAttributeGetter(info);
+    }
 
-static void referrerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void referrerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->referrer(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->referrer(), info.GetIsolate());
+    }
 
-CORE_EXPORT void referrerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SecurityPolicyViolationEventV8Internal::referrerAttributeGetter(info);
-}
+    CORE_EXPORT void referrerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SecurityPolicyViolationEventV8Internal::referrerAttributeGetter(info);
+    }
 
-static void blockedURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void blockedURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->blockedURI(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->blockedURI(), info.GetIsolate());
+    }
 
-CORE_EXPORT void blockedURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SecurityPolicyViolationEvent_BlockedURI_AttributeGetter);
+    CORE_EXPORT void blockedURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SecurityPolicyViolationEvent_BlockedURI_AttributeGetter);
 
-  SecurityPolicyViolationEventV8Internal::blockedURIAttributeGetter(info);
-}
+        SecurityPolicyViolationEventV8Internal::blockedURIAttributeGetter(info);
+    }
 
-static void violatedDirectiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void violatedDirectiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->violatedDirective(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->violatedDirective(), info.GetIsolate());
+    }
 
-CORE_EXPORT void violatedDirectiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SecurityPolicyViolationEventV8Internal::violatedDirectiveAttributeGetter(info);
-}
+    CORE_EXPORT void violatedDirectiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SecurityPolicyViolationEventV8Internal::violatedDirectiveAttributeGetter(info);
+    }
 
-static void effectiveDirectiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void effectiveDirectiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->effectiveDirective(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->effectiveDirective(), info.GetIsolate());
+    }
 
-CORE_EXPORT void effectiveDirectiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SecurityPolicyViolationEventV8Internal::effectiveDirectiveAttributeGetter(info);
-}
+    CORE_EXPORT void effectiveDirectiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SecurityPolicyViolationEventV8Internal::effectiveDirectiveAttributeGetter(info);
+    }
 
-static void originalPolicyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void originalPolicyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->originalPolicy(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->originalPolicy(), info.GetIsolate());
+    }
 
-CORE_EXPORT void originalPolicyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SecurityPolicyViolationEventV8Internal::originalPolicyAttributeGetter(info);
-}
+    CORE_EXPORT void originalPolicyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SecurityPolicyViolationEventV8Internal::originalPolicyAttributeGetter(info);
+    }
 
-static void dispositionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dispositionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->disposition(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->disposition(), info.GetIsolate());
+    }
 
-CORE_EXPORT void dispositionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SecurityPolicyViolationEventV8Internal::dispositionAttributeGetter(info);
-}
+    CORE_EXPORT void dispositionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SecurityPolicyViolationEventV8Internal::dispositionAttributeGetter(info);
+    }
 
-static void sourceFileAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sourceFileAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->sourceFile(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->sourceFile(), info.GetIsolate());
+    }
 
-CORE_EXPORT void sourceFileAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SecurityPolicyViolationEventV8Internal::sourceFileAttributeGetter(info);
-}
+    CORE_EXPORT void sourceFileAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SecurityPolicyViolationEventV8Internal::sourceFileAttributeGetter(info);
+    }
 
-static void statusCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void statusCodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->statusCode());
-}
+        v8SetReturnValueUnsigned(info, impl->statusCode());
+    }
 
-CORE_EXPORT void statusCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SecurityPolicyViolationEvent_StatusCode_AttributeGetter);
+    CORE_EXPORT void statusCodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SecurityPolicyViolationEvent_StatusCode_AttributeGetter);
 
-  SecurityPolicyViolationEventV8Internal::statusCodeAttributeGetter(info);
-}
+        SecurityPolicyViolationEventV8Internal::statusCodeAttributeGetter(info);
+    }
 
-static void lineNumberAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lineNumberAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->lineNumber());
-}
+        v8SetReturnValueInt(info, impl->lineNumber());
+    }
 
-CORE_EXPORT void lineNumberAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SecurityPolicyViolationEventV8Internal::lineNumberAttributeGetter(info);
-}
+    CORE_EXPORT void lineNumberAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SecurityPolicyViolationEventV8Internal::lineNumberAttributeGetter(info);
+    }
 
-static void columnNumberAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void columnNumberAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->columnNumber());
-}
+        v8SetReturnValueInt(info, impl->columnNumber());
+    }
 
-CORE_EXPORT void columnNumberAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SecurityPolicyViolationEventV8Internal::columnNumberAttributeGetter(info);
-}
+    CORE_EXPORT void columnNumberAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SecurityPolicyViolationEventV8Internal::columnNumberAttributeGetter(info);
+    }
 
-static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
+        SecurityPolicyViolationEvent* impl = V8SecurityPolicyViolationEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isTrusted());
-}
+        v8SetReturnValueBool(info, impl->isTrusted());
+    }
 
-CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SecurityPolicyViolationEventV8Internal::isTrustedAttributeGetter(info);
-}
+    CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SecurityPolicyViolationEventV8Internal::isTrustedAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "SecurityPolicyViolationEvent");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "SecurityPolicyViolationEvent");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  SecurityPolicyViolationEventInit eventInitDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        SecurityPolicyViolationEventInit eventInitDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
 
-    return;
-  }
-  V8SecurityPolicyViolationEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8SecurityPolicyViolationEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SecurityPolicyViolationEvent* impl = SecurityPolicyViolationEvent::create(type, eventInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SecurityPolicyViolationEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        SecurityPolicyViolationEvent* impl = SecurityPolicyViolationEvent::create(type, eventInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SecurityPolicyViolationEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace SecurityPolicyViolationEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SecurityPolicyViolationEventAccessors[] = {
-    {"documentURI", SecurityPolicyViolationEventV8Internal::documentURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"referrer", SecurityPolicyViolationEventV8Internal::referrerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"blockedURI", SecurityPolicyViolationEventV8Internal::blockedURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"violatedDirective", SecurityPolicyViolationEventV8Internal::violatedDirectiveAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"effectiveDirective", SecurityPolicyViolationEventV8Internal::effectiveDirectiveAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"originalPolicy", SecurityPolicyViolationEventV8Internal::originalPolicyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disposition", SecurityPolicyViolationEventV8Internal::dispositionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sourceFile", SecurityPolicyViolationEventV8Internal::sourceFileAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"statusCode", SecurityPolicyViolationEventV8Internal::statusCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineNumber", SecurityPolicyViolationEventV8Internal::lineNumberAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"columnNumber", SecurityPolicyViolationEventV8Internal::columnNumberAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTrusted", SecurityPolicyViolationEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "documentURI", SecurityPolicyViolationEventV8Internal::documentURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "referrer", SecurityPolicyViolationEventV8Internal::referrerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "blockedURI", SecurityPolicyViolationEventV8Internal::blockedURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "violatedDirective", SecurityPolicyViolationEventV8Internal::violatedDirectiveAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "effectiveDirective", SecurityPolicyViolationEventV8Internal::effectiveDirectiveAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "originalPolicy", SecurityPolicyViolationEventV8Internal::originalPolicyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disposition", SecurityPolicyViolationEventV8Internal::dispositionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sourceFile", SecurityPolicyViolationEventV8Internal::sourceFileAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "statusCode", SecurityPolicyViolationEventV8Internal::statusCodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineNumber", SecurityPolicyViolationEventV8Internal::lineNumberAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "columnNumber", SecurityPolicyViolationEventV8Internal::columnNumberAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTrusted", SecurityPolicyViolationEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
-void V8SecurityPolicyViolationEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SecurityPolicyViolationEvent"));
-    return;
-  }
+void V8SecurityPolicyViolationEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SecurityPolicyViolationEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  SecurityPolicyViolationEventV8Internal::constructor(info);
+    SecurityPolicyViolationEventV8Internal::constructor(info);
 }
 
-static void installV8SecurityPolicyViolationEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SecurityPolicyViolationEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8SecurityPolicyViolationEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8SecurityPolicyViolationEvent::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8SecurityPolicyViolationEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SecurityPolicyViolationEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8SecurityPolicyViolationEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8SecurityPolicyViolationEvent::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SecurityPolicyViolationEventAccessors, WTF_ARRAY_LENGTH(V8SecurityPolicyViolationEventAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SecurityPolicyViolationEventAccessors, WTF_ARRAY_LENGTH(V8SecurityPolicyViolationEventAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SecurityPolicyViolationEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SecurityPolicyViolationEventTemplate);
+v8::Local<v8::FunctionTemplate> V8SecurityPolicyViolationEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SecurityPolicyViolationEventTemplate);
 }
 
-bool V8SecurityPolicyViolationEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SecurityPolicyViolationEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SecurityPolicyViolationEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SecurityPolicyViolationEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SecurityPolicyViolationEvent* V8SecurityPolicyViolationEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SecurityPolicyViolationEvent* V8SecurityPolicyViolationEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

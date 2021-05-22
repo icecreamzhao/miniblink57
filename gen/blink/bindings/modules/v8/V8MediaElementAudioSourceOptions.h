@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8MediaElementAudioSourceOptions_h
 #define V8MediaElementAudioSourceOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8MediaElementAudioSourceOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaElementAudioSourceOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaElementAudioSourceOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8MediaElementAudioSourceOptions(const MediaElementAudioSourceOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaElementAudioSourceOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaElementAudioSourceOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<MediaElementAudioSourceOptions> {
-  static MediaElementAudioSourceOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static MediaElementAudioSourceOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<MediaElementAudioSourceOptions> {
-  typedef V8MediaElementAudioSourceOptions Type;
+    typedef V8MediaElementAudioSourceOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8MediaElementAudioSourceOptions_h
+#endif // V8MediaElementAudioSourceOptions_h

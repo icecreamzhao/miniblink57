@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8EventListenerOptions_h
 #define V8EventListenerOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8EventListenerOptions {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, EventListenerOptions&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, EventListenerOptions&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8EventListenerOptions(const EventListenerOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, EventListenerOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, EventListenerOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<EventListenerOptions> {
-  static EventListenerOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static EventListenerOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<EventListenerOptions> {
-  typedef V8EventListenerOptions Type;
+    typedef V8EventListenerOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8EventListenerOptions_h
+#endif // V8EventListenerOptions_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext_h
 #define OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext_h
 
@@ -25,65 +25,67 @@ class WebGL2RenderingContext;
 class WebGLRenderingContext;
 
 class MODULES_EXPORT OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isOffscreenCanvasRenderingContext2D() const { return m_type == SpecificTypeOffscreenCanvasRenderingContext2D; }
-  OffscreenCanvasRenderingContext2D* getAsOffscreenCanvasRenderingContext2D() const;
-  void setOffscreenCanvasRenderingContext2D(OffscreenCanvasRenderingContext2D*);
-  static OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext fromOffscreenCanvasRenderingContext2D(OffscreenCanvasRenderingContext2D*);
+public:
+    OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isWebGLRenderingContext() const { return m_type == SpecificTypeWebGLRenderingContext; }
-  WebGLRenderingContext* getAsWebGLRenderingContext() const;
-  void setWebGLRenderingContext(WebGLRenderingContext*);
-  static OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext fromWebGLRenderingContext(WebGLRenderingContext*);
+    bool isOffscreenCanvasRenderingContext2D() const { return m_type == SpecificTypeOffscreenCanvasRenderingContext2D; }
+    OffscreenCanvasRenderingContext2D* getAsOffscreenCanvasRenderingContext2D() const;
+    void setOffscreenCanvasRenderingContext2D(OffscreenCanvasRenderingContext2D*);
+    static OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext fromOffscreenCanvasRenderingContext2D(OffscreenCanvasRenderingContext2D*);
 
-  bool isWebGL2RenderingContext() const { return m_type == SpecificTypeWebGL2RenderingContext; }
-  WebGL2RenderingContext* getAsWebGL2RenderingContext() const;
-  void setWebGL2RenderingContext(WebGL2RenderingContext*);
-  static OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext fromWebGL2RenderingContext(WebGL2RenderingContext*);
+    bool isWebGLRenderingContext() const { return m_type == SpecificTypeWebGLRenderingContext; }
+    WebGLRenderingContext* getAsWebGLRenderingContext() const;
+    void setWebGLRenderingContext(WebGLRenderingContext*);
+    static OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext fromWebGLRenderingContext(WebGLRenderingContext*);
 
-  OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext(const OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext&);
-  ~OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext();
-  OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext& operator=(const OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext&);
-  DECLARE_TRACE();
+    bool isWebGL2RenderingContext() const { return m_type == SpecificTypeWebGL2RenderingContext; }
+    WebGL2RenderingContext* getAsWebGL2RenderingContext() const;
+    void setWebGL2RenderingContext(WebGL2RenderingContext*);
+    static OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext fromWebGL2RenderingContext(WebGL2RenderingContext*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeOffscreenCanvasRenderingContext2D,
-    SpecificTypeWebGLRenderingContext,
-    SpecificTypeWebGL2RenderingContext,
-  };
-  SpecificTypes m_type;
+    OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext(const OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext&);
+    ~OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext();
+    OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext& operator=(const OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext&);
+    DECLARE_TRACE();
 
-  Member<OffscreenCanvasRenderingContext2D> m_offscreenCanvasRenderingContext2D;
-  Member<WebGLRenderingContext> m_webGLRenderingContext;
-  Member<WebGL2RenderingContext> m_webGL2RenderingContext;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeOffscreenCanvasRenderingContext2D,
+        SpecificTypeWebGLRenderingContext,
+        SpecificTypeWebGL2RenderingContext,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<OffscreenCanvasRenderingContext2D> m_offscreenCanvasRenderingContext2D;
+    Member<WebGLRenderingContext> m_webGLRenderingContext;
+    Member<WebGL2RenderingContext> m_webGL2RenderingContext;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext> {
-  MODULES_EXPORT static OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -91,4 +93,4 @@ struct NativeValueTraits<OffscreenCanvasRenderingContext2DOrWebGLRenderingContex
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext);
 
-#endif  // OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext_h
+#endif // OffscreenCanvasRenderingContext2DOrWebGLRenderingContextOrWebGL2RenderingContext_h

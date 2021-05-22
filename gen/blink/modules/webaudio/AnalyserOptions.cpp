@@ -8,71 +8,85 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AnalyserOptions.h"
 
 namespace blink {
 
-AnalyserOptions::AnalyserOptions() {
-  setFftSize(2048u);
-  setMaxDecibels(-30);
-  setMinDecibels(-100);
-  setSmoothingTimeConstant(0.8);
+AnalyserOptions::AnalyserOptions()
+{
+    setFftSize(2048u);
+    setMaxDecibels(-30);
+    setMinDecibels(-100);
+    setSmoothingTimeConstant(0.8);
 }
 
-AnalyserOptions::~AnalyserOptions() {}
+AnalyserOptions::~AnalyserOptions() { }
 
 AnalyserOptions::AnalyserOptions(const AnalyserOptions&) = default;
 
 AnalyserOptions& AnalyserOptions::operator=(const AnalyserOptions&) = default;
 
-bool AnalyserOptions::hasFftSize() const {
-  return m_hasFftSize;
+bool AnalyserOptions::hasFftSize() const
+{
+    return m_hasFftSize;
 }
-unsigned AnalyserOptions::fftSize() const {
-  DCHECK(m_hasFftSize);
-  return m_fftSize;
+unsigned AnalyserOptions::fftSize() const
+{
+    DCHECK(m_hasFftSize);
+    return m_fftSize;
 }
-void AnalyserOptions::setFftSize(unsigned value) {
-  m_fftSize = value;
-  m_hasFftSize = true;
+void AnalyserOptions::setFftSize(unsigned value)
+{
+    m_fftSize = value;
+    m_hasFftSize = true;
 }
-bool AnalyserOptions::hasMaxDecibels() const {
-  return m_hasMaxDecibels;
+bool AnalyserOptions::hasMaxDecibels() const
+{
+    return m_hasMaxDecibels;
 }
-float AnalyserOptions::maxDecibels() const {
-  DCHECK(m_hasMaxDecibels);
-  return m_maxDecibels;
+float AnalyserOptions::maxDecibels() const
+{
+    DCHECK(m_hasMaxDecibels);
+    return m_maxDecibels;
 }
-void AnalyserOptions::setMaxDecibels(float value) {
-  m_maxDecibels = value;
-  m_hasMaxDecibels = true;
+void AnalyserOptions::setMaxDecibels(float value)
+{
+    m_maxDecibels = value;
+    m_hasMaxDecibels = true;
 }
-bool AnalyserOptions::hasMinDecibels() const {
-  return m_hasMinDecibels;
+bool AnalyserOptions::hasMinDecibels() const
+{
+    return m_hasMinDecibels;
 }
-float AnalyserOptions::minDecibels() const {
-  DCHECK(m_hasMinDecibels);
-  return m_minDecibels;
+float AnalyserOptions::minDecibels() const
+{
+    DCHECK(m_hasMinDecibels);
+    return m_minDecibels;
 }
-void AnalyserOptions::setMinDecibels(float value) {
-  m_minDecibels = value;
-  m_hasMinDecibels = true;
+void AnalyserOptions::setMinDecibels(float value)
+{
+    m_minDecibels = value;
+    m_hasMinDecibels = true;
 }
-bool AnalyserOptions::hasSmoothingTimeConstant() const {
-  return m_hasSmoothingTimeConstant;
+bool AnalyserOptions::hasSmoothingTimeConstant() const
+{
+    return m_hasSmoothingTimeConstant;
 }
-float AnalyserOptions::smoothingTimeConstant() const {
-  DCHECK(m_hasSmoothingTimeConstant);
-  return m_smoothingTimeConstant;
+float AnalyserOptions::smoothingTimeConstant() const
+{
+    DCHECK(m_hasSmoothingTimeConstant);
+    return m_smoothingTimeConstant;
 }
-void AnalyserOptions::setSmoothingTimeConstant(float value) {
-  m_smoothingTimeConstant = value;
-  m_hasSmoothingTimeConstant = true;
+void AnalyserOptions::setSmoothingTimeConstant(float value)
+{
+    m_smoothingTimeConstant = value;
+    m_hasSmoothingTimeConstant = true;
 }
 
-DEFINE_TRACE(AnalyserOptions) {
-  AudioNodeOptions::trace(visitor);
+DEFINE_TRACE(AnalyserOptions)
+{
+    AudioNodeOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

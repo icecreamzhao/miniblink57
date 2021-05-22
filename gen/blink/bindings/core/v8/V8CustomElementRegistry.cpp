@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CustomElementRegistry.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,158 +53,169 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CustomElementRegistry::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CustomElementRegistry is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CustomElementRegistryV8Internal {
 
-static void defineMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CustomElementRegistry", "define");
+    static void defineMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CustomElementRegistry", "define");
 
-  CustomElementRegistry* impl = V8CustomElementRegistry::toImpl(info.Holder());
+        CustomElementRegistry* impl = V8CustomElementRegistry::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> name;
-  ScriptValue constructor;
-  ElementDefinitionOptions options;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        ScriptValue constructor;
+        ElementDefinitionOptions options;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  if (!(info[1]->IsObject() && v8::Local<v8::Object>::Cast(info[1])->IsCallable())) {
-    exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+        if (!(info[1]->IsObject() && v8::Local<v8::Object>::Cast(info[1])->IsCallable())) {
+            exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
 
-    return;
-  }
-  constructor = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
+            return;
+        }
+        constructor = ScriptValue(ScriptState::current(info.GetIsolate()), info[1]);
 
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
 
-    return;
-  }
-  V8ElementDefinitionOptions::toImpl(info.GetIsolate(), info[2], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8ElementDefinitionOptions::toImpl(info.GetIsolate(), info[2], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->define(scriptState, name, constructor, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->define(scriptState, name, constructor, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void defineMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CustomElementRegistryDefine);
-  CEReactionsScope ceReactionsScope;
-  CustomElementRegistryV8Internal::defineMethod(info);
-}
+    CORE_EXPORT void defineMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::CustomElementRegistryDefine);
+        CEReactionsScope ceReactionsScope;
+        CustomElementRegistryV8Internal::defineMethod(info);
+    }
 
-static void getMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CustomElementRegistry* impl = V8CustomElementRegistry::toImpl(info.Holder());
+    static void getMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CustomElementRegistry* impl = V8CustomElementRegistry::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("get", "CustomElementRegistry", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("get", "CustomElementRegistry", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  v8SetReturnValue(info, impl->get(name).v8Value());
-}
+        v8SetReturnValue(info, impl->get(name).v8Value());
+    }
 
-CORE_EXPORT  void getMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CustomElementRegistryV8Internal::getMethod(info);
-}
+    CORE_EXPORT void getMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CustomElementRegistryV8Internal::getMethod(info);
+    }
 
-static void whenDefinedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CustomElementRegistry", "whenDefined");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void whenDefinedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CustomElementRegistry", "whenDefined");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8CustomElementRegistry::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  CustomElementRegistry* impl = V8CustomElementRegistry::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8CustomElementRegistry::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        CustomElementRegistry* impl = V8CustomElementRegistry::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare(exceptionState))
-    return;
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare(exceptionState))
+            return;
 
-  ScriptPromise result = impl->whenDefined(scriptState, name, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->whenDefined(scriptState, name, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-CORE_EXPORT  void whenDefinedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CustomElementRegistryV8Internal::whenDefinedMethod(info);
-}
+    CORE_EXPORT void whenDefinedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CustomElementRegistryV8Internal::whenDefinedMethod(info);
+    }
 
 } // namespace CustomElementRegistryV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8CustomElementRegistryMethods[] = {
-    {"define", CustomElementRegistryV8Internal::defineMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"get", CustomElementRegistryV8Internal::getMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"whenDefined", CustomElementRegistryV8Internal::whenDefinedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "define", CustomElementRegistryV8Internal::defineMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "get", CustomElementRegistryV8Internal::getMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "whenDefined", CustomElementRegistryV8Internal::whenDefinedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8CustomElementRegistryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CustomElementRegistry::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CustomElementRegistry::internalFieldCount);
+static void installV8CustomElementRegistryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CustomElementRegistry::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CustomElementRegistry::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::customElementsV1Enabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::customElementsV1Enabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CustomElementRegistryMethods, WTF_ARRAY_LENGTH(V8CustomElementRegistryMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CustomElementRegistryMethods, WTF_ARRAY_LENGTH(V8CustomElementRegistryMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8CustomElementRegistry::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CustomElementRegistryTemplate);
+v8::Local<v8::FunctionTemplate> V8CustomElementRegistry::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CustomElementRegistryTemplate);
 }
 
-bool V8CustomElementRegistry::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CustomElementRegistry::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CustomElementRegistry::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CustomElementRegistry::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CustomElementRegistry* V8CustomElementRegistry::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CustomElementRegistry* V8CustomElementRegistry::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

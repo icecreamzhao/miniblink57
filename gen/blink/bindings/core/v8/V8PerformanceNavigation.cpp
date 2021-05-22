@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PerformanceNavigation.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,102 +47,113 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PerformanceNavigation::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PerformanceNavigation is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PerformanceNavigationV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceNavigation* impl = V8PerformanceNavigation::toImpl(holder);
+        PerformanceNavigation* impl = V8PerformanceNavigation::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->type());
-}
+        v8SetReturnValueUnsigned(info, impl->type());
+    }
 
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceNavigationV8Internal::typeAttributeGetter(info);
-}
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceNavigationV8Internal::typeAttributeGetter(info);
+    }
 
-static void redirectCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void redirectCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceNavigation* impl = V8PerformanceNavigation::toImpl(holder);
+        PerformanceNavigation* impl = V8PerformanceNavigation::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->redirectCount());
-}
+        v8SetReturnValueUnsigned(info, impl->redirectCount());
+    }
 
-CORE_EXPORT void redirectCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceNavigationV8Internal::redirectCountAttributeGetter(info);
-}
+    CORE_EXPORT void redirectCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceNavigationV8Internal::redirectCountAttributeGetter(info);
+    }
 
-static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceNavigation* impl = V8PerformanceNavigation::toImpl(info.Holder());
+    static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceNavigation* impl = V8PerformanceNavigation::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue result = impl->toJSONForBinding(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->toJSONForBinding(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-CORE_EXPORT  void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceNavigationV8Internal::toJSONMethod(info);
-}
+    CORE_EXPORT void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceNavigationV8Internal::toJSONMethod(info);
+    }
 
 } // namespace PerformanceNavigationV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PerformanceNavigationAccessors[] = {
-    {"type", PerformanceNavigationV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"redirectCount", PerformanceNavigationV8Internal::redirectCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", PerformanceNavigationV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "redirectCount", PerformanceNavigationV8Internal::redirectCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8PerformanceNavigationMethods[] = {
-    {"toJSON", PerformanceNavigationV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "toJSON", PerformanceNavigationV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PerformanceNavigationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PerformanceNavigation::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PerformanceNavigation::internalFieldCount);
+static void installV8PerformanceNavigationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PerformanceNavigation::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PerformanceNavigation::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8PerformanceNavigationConstants[] = {
-      {"TYPE_NAVIGATE", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"TYPE_RELOAD", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"TYPE_BACK_FORWARD", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"TYPE_RESERVED", 255, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8PerformanceNavigationConstants, WTF_ARRAY_LENGTH(V8PerformanceNavigationConstants));
-  static_assert(0 == PerformanceNavigation::kTypeNavigate, "the value of PerformanceNavigation_kTypeNavigate does not match with implementation");
-  static_assert(1 == PerformanceNavigation::kTypeReload, "the value of PerformanceNavigation_kTypeReload does not match with implementation");
-  static_assert(2 == PerformanceNavigation::kTypeBackForward, "the value of PerformanceNavigation_kTypeBackForward does not match with implementation");
-  static_assert(255 == PerformanceNavigation::kTypeReserved, "the value of PerformanceNavigation_kTypeReserved does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceNavigationAccessors, WTF_ARRAY_LENGTH(V8PerformanceNavigationAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceNavigationMethods, WTF_ARRAY_LENGTH(V8PerformanceNavigationMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8PerformanceNavigationConstants[] = {
+        { "TYPE_NAVIGATE", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "TYPE_RELOAD", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "TYPE_BACK_FORWARD", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "TYPE_RESERVED", 255, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8PerformanceNavigationConstants, WTF_ARRAY_LENGTH(V8PerformanceNavigationConstants));
+    static_assert(0 == PerformanceNavigation::kTypeNavigate, "the value of PerformanceNavigation_kTypeNavigate does not match with implementation");
+    static_assert(1 == PerformanceNavigation::kTypeReload, "the value of PerformanceNavigation_kTypeReload does not match with implementation");
+    static_assert(2 == PerformanceNavigation::kTypeBackForward, "the value of PerformanceNavigation_kTypeBackForward does not match with implementation");
+    static_assert(255 == PerformanceNavigation::kTypeReserved, "the value of PerformanceNavigation_kTypeReserved does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceNavigationAccessors, WTF_ARRAY_LENGTH(V8PerformanceNavigationAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceNavigationMethods, WTF_ARRAY_LENGTH(V8PerformanceNavigationMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8PerformanceNavigation::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PerformanceNavigationTemplate);
+v8::Local<v8::FunctionTemplate> V8PerformanceNavigation::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PerformanceNavigationTemplate);
 }
 
-bool V8PerformanceNavigation::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PerformanceNavigation::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PerformanceNavigation::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PerformanceNavigation::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PerformanceNavigation* V8PerformanceNavigation::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PerformanceNavigation* V8PerformanceNavigation::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

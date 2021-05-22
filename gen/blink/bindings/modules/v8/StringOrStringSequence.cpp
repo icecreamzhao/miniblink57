@@ -8,98 +8,111 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "StringOrStringSequence.h"
 
 #include "bindings/core/v8/ToV8.h"
 
 namespace blink {
 
-StringOrStringSequence::StringOrStringSequence() : m_type(SpecificTypeNone) {}
-
-String StringOrStringSequence::getAsString() const {
-  DCHECK(isString());
-  return m_string;
+StringOrStringSequence::StringOrStringSequence()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void StringOrStringSequence::setString(String value) {
-  DCHECK(isNull());
-  m_string = value;
-  m_type = SpecificTypeString;
+String StringOrStringSequence::getAsString() const
+{
+    DCHECK(isString());
+    return m_string;
 }
 
-StringOrStringSequence StringOrStringSequence::fromString(String value) {
-  StringOrStringSequence container;
-  container.setString(value);
-  return container;
+void StringOrStringSequence::setString(String value)
+{
+    DCHECK(isNull());
+    m_string = value;
+    m_type = SpecificTypeString;
 }
 
-const Vector<String>& StringOrStringSequence::getAsStringSequence() const {
-  DCHECK(isStringSequence());
-  return m_stringSequence;
+StringOrStringSequence StringOrStringSequence::fromString(String value)
+{
+    StringOrStringSequence container;
+    container.setString(value);
+    return container;
 }
 
-void StringOrStringSequence::setStringSequence(const Vector<String>& value) {
-  DCHECK(isNull());
-  m_stringSequence = value;
-  m_type = SpecificTypeStringSequence;
+const Vector<String>& StringOrStringSequence::getAsStringSequence() const
+{
+    DCHECK(isStringSequence());
+    return m_stringSequence;
 }
 
-StringOrStringSequence StringOrStringSequence::fromStringSequence(const Vector<String>& value) {
-  StringOrStringSequence container;
-  container.setStringSequence(value);
-  return container;
+void StringOrStringSequence::setStringSequence(const Vector<String>& value)
+{
+    DCHECK(isNull());
+    m_stringSequence = value;
+    m_type = SpecificTypeStringSequence;
+}
+
+StringOrStringSequence StringOrStringSequence::fromStringSequence(const Vector<String>& value)
+{
+    StringOrStringSequence container;
+    container.setStringSequence(value);
+    return container;
 }
 
 StringOrStringSequence::StringOrStringSequence(const StringOrStringSequence&) = default;
 StringOrStringSequence::~StringOrStringSequence() = default;
 StringOrStringSequence& StringOrStringSequence::operator=(const StringOrStringSequence&) = default;
 
-DEFINE_TRACE(StringOrStringSequence) {
+DEFINE_TRACE(StringOrStringSequence)
+{
 }
 
-void V8StringOrStringSequence::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, StringOrStringSequence& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8StringOrStringSequence::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, StringOrStringSequence& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (v8Value->IsArray()) {
-    Vector<String> cppValue = toImplArray<Vector<String>>(v8Value, 0, isolate, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setStringSequence(cppValue);
-    return;
-  }
+    if (v8Value->IsArray()) {
+        Vector<String> cppValue = toImplArray<Vector<String>>(v8Value, 0, isolate, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setStringSequence(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = v8Value;
-    if (!cppValue.prepare(exceptionState))
-      return;
-    impl.setString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare(exceptionState))
+            return;
+        impl.setString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const StringOrStringSequence& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const StringOrStringSequence& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case StringOrStringSequence::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case StringOrStringSequence::SpecificTypeString:
-      return v8String(isolate, impl.getAsString());
+        return v8String(isolate, impl.getAsString());
     case StringOrStringSequence::SpecificTypeStringSequence:
-      return ToV8(impl.getAsStringSequence(), creationContext, isolate);
+        return ToV8(impl.getAsStringSequence(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-StringOrStringSequence NativeValueTraits<StringOrStringSequence>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  StringOrStringSequence impl;
-  V8StringOrStringSequence::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+StringOrStringSequence NativeValueTraits<StringOrStringSequence>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    StringOrStringSequence impl;
+    V8StringOrStringSequence::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

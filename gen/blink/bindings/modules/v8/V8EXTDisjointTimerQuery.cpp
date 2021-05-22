@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8EXTDisjointTimerQuery.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,276 +50,298 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&EXTDisjointTimerQuery::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "EXTDisjointTimerQuery is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace EXTDisjointTimerQueryV8Internal {
 
-static void createQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
+    static void createQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->createQueryEXT());
-}
+        v8SetReturnValue(info, impl->createQueryEXT());
+    }
 
-MODULES_EXPORT  void createQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQueryV8Internal::createQueryEXTMethod(info);
-}
+    MODULES_EXPORT void createQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQueryV8Internal::createQueryEXTMethod(info);
+    }
 
-static void deleteQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
+    static void deleteQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteQueryEXT", "EXTDisjointTimerQuery", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteQueryEXT", "EXTDisjointTimerQuery", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  WebGLTimerQueryEXT* query;
-  query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!query && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteQueryEXT", "EXTDisjointTimerQuery", "parameter 1 is not of type 'WebGLTimerQueryEXT'."));
+        WebGLTimerQueryEXT* query;
+        query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!query && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("deleteQueryEXT", "EXTDisjointTimerQuery", "parameter 1 is not of type 'WebGLTimerQueryEXT'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->deleteQueryEXT(query);
-}
+        impl->deleteQueryEXT(query);
+    }
 
-MODULES_EXPORT  void deleteQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQueryV8Internal::deleteQueryEXTMethod(info);
-}
+    MODULES_EXPORT void deleteQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQueryV8Internal::deleteQueryEXTMethod(info);
+    }
 
-static void isQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
+    static void isQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isQueryEXT", "EXTDisjointTimerQuery", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isQueryEXT", "EXTDisjointTimerQuery", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  WebGLTimerQueryEXT* query;
-  query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!query && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isQueryEXT", "EXTDisjointTimerQuery", "parameter 1 is not of type 'WebGLTimerQueryEXT'."));
+        WebGLTimerQueryEXT* query;
+        query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!query && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isQueryEXT", "EXTDisjointTimerQuery", "parameter 1 is not of type 'WebGLTimerQueryEXT'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValueBool(info, impl->isQueryEXT(query));
-}
+        v8SetReturnValueBool(info, impl->isQueryEXT(query));
+    }
 
-MODULES_EXPORT  void isQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQueryV8Internal::isQueryEXTMethod(info);
-}
+    MODULES_EXPORT void isQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQueryV8Internal::isQueryEXTMethod(info);
+    }
 
-static void beginQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "beginQueryEXT");
+    static void beginQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "beginQueryEXT");
 
-  EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
+        EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  unsigned target;
-  WebGLTimerQueryEXT* query;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned target;
+        WebGLTimerQueryEXT* query;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!query) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'WebGLTimerQueryEXT'.");
+        query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!query) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'WebGLTimerQueryEXT'.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->beginQueryEXT(target, query);
-}
+        impl->beginQueryEXT(target, query);
+    }
 
-MODULES_EXPORT  void beginQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQueryV8Internal::beginQueryEXTMethod(info);
-}
+    MODULES_EXPORT void beginQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQueryV8Internal::beginQueryEXTMethod(info);
+    }
 
-static void endQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "endQueryEXT");
+    static void endQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "endQueryEXT");
 
-  EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
+        EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned target;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned target;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->endQueryEXT(target);
-}
+        impl->endQueryEXT(target);
+    }
 
-MODULES_EXPORT  void endQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQueryV8Internal::endQueryEXTMethod(info);
-}
+    MODULES_EXPORT void endQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQueryV8Internal::endQueryEXTMethod(info);
+    }
 
-static void queryCounterEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "queryCounterEXT");
+    static void queryCounterEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "queryCounterEXT");
 
-  EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
+        EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  WebGLTimerQueryEXT* query;
-  unsigned target;
-  query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!query) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLTimerQueryEXT'.");
+        WebGLTimerQueryEXT* query;
+        unsigned target;
+        query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!query) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLTimerQueryEXT'.");
 
-    return;
-  }
+            return;
+        }
 
-  target = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        target = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->queryCounterEXT(query, target);
-}
+        impl->queryCounterEXT(query, target);
+    }
 
-MODULES_EXPORT  void queryCounterEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQueryV8Internal::queryCounterEXTMethod(info);
-}
+    MODULES_EXPORT void queryCounterEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQueryV8Internal::queryCounterEXTMethod(info);
+    }
 
-static void getQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "getQueryEXT");
+    static void getQueryEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "getQueryEXT");
 
-  EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
+        EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  unsigned target;
-  unsigned pname;
-  target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned target;
+        unsigned pname;
+        target = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptValue result = impl->getQueryEXT(scriptState, target, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->getQueryEXT(scriptState, target, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void getQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQueryV8Internal::getQueryEXTMethod(info);
-}
+    MODULES_EXPORT void getQueryEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQueryV8Internal::getQueryEXTMethod(info);
+    }
 
-static void getQueryObjectEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "getQueryObjectEXT");
+    static void getQueryObjectEXTMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EXTDisjointTimerQuery", "getQueryObjectEXT");
 
-  EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
+        EXTDisjointTimerQuery* impl = V8EXTDisjointTimerQuery::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  WebGLTimerQueryEXT* query;
-  unsigned pname;
-  query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!query) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'WebGLTimerQueryEXT'.");
+        WebGLTimerQueryEXT* query;
+        unsigned pname;
+        query = V8WebGLTimerQueryEXT::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!query) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'WebGLTimerQueryEXT'.");
 
-    return;
-  }
+            return;
+        }
 
-  pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        pname = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptValue result = impl->getQueryObjectEXT(scriptState, query, pname);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->getQueryObjectEXT(scriptState, query, pname);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void getQueryObjectEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EXTDisjointTimerQueryV8Internal::getQueryObjectEXTMethod(info);
-}
+    MODULES_EXPORT void getQueryObjectEXTMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EXTDisjointTimerQueryV8Internal::getQueryObjectEXTMethod(info);
+    }
 
 } // namespace EXTDisjointTimerQueryV8Internal
 
-void V8EXTDisjointTimerQuery::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  EXTDisjointTimerQuery* impl = scriptWrappable->toImpl<EXTDisjointTimerQuery>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8EXTDisjointTimerQuery::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    EXTDisjointTimerQuery* impl = scriptWrappable->toImpl<EXTDisjointTimerQuery>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::MethodConfiguration V8EXTDisjointTimerQueryMethods[] = {
-    {"createQueryEXT", EXTDisjointTimerQueryV8Internal::createQueryEXTMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"deleteQueryEXT", EXTDisjointTimerQueryV8Internal::deleteQueryEXTMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isQueryEXT", EXTDisjointTimerQueryV8Internal::isQueryEXTMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"beginQueryEXT", EXTDisjointTimerQueryV8Internal::beginQueryEXTMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"endQueryEXT", EXTDisjointTimerQueryV8Internal::endQueryEXTMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"queryCounterEXT", EXTDisjointTimerQueryV8Internal::queryCounterEXTMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getQueryEXT", EXTDisjointTimerQueryV8Internal::getQueryEXTMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getQueryObjectEXT", EXTDisjointTimerQueryV8Internal::getQueryObjectEXTMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "createQueryEXT", EXTDisjointTimerQueryV8Internal::createQueryEXTMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "deleteQueryEXT", EXTDisjointTimerQueryV8Internal::deleteQueryEXTMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isQueryEXT", EXTDisjointTimerQueryV8Internal::isQueryEXTMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "beginQueryEXT", EXTDisjointTimerQueryV8Internal::beginQueryEXTMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "endQueryEXT", EXTDisjointTimerQueryV8Internal::endQueryEXTMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "queryCounterEXT", EXTDisjointTimerQueryV8Internal::queryCounterEXTMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getQueryEXT", EXTDisjointTimerQueryV8Internal::getQueryEXTMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getQueryObjectEXT", EXTDisjointTimerQueryV8Internal::getQueryObjectEXTMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8EXTDisjointTimerQueryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8EXTDisjointTimerQuery::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8EXTDisjointTimerQuery::internalFieldCount);
+static void installV8EXTDisjointTimerQueryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8EXTDisjointTimerQuery::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8EXTDisjointTimerQuery::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8EXTDisjointTimerQueryConstants[] = {
-      {"QUERY_COUNTER_BITS_EXT", 0x8864, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"CURRENT_QUERY_EXT", 0x8865, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"QUERY_RESULT_EXT", 0x8866, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"QUERY_RESULT_AVAILABLE_EXT", 0x8867, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TIME_ELAPSED_EXT", 0x88BF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"TIMESTAMP_EXT", 0x8E28, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"GPU_DISJOINT_EXT", 0x8FBB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8EXTDisjointTimerQueryConstants, WTF_ARRAY_LENGTH(V8EXTDisjointTimerQueryConstants));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EXTDisjointTimerQueryMethods, WTF_ARRAY_LENGTH(V8EXTDisjointTimerQueryMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8EXTDisjointTimerQueryConstants[] = {
+        { "QUERY_COUNTER_BITS_EXT", 0x8864, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "CURRENT_QUERY_EXT", 0x8865, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "QUERY_RESULT_EXT", 0x8866, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "QUERY_RESULT_AVAILABLE_EXT", 0x8867, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TIME_ELAPSED_EXT", 0x88BF, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "TIMESTAMP_EXT", 0x8E28, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "GPU_DISJOINT_EXT", 0x8FBB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8EXTDisjointTimerQueryConstants, WTF_ARRAY_LENGTH(V8EXTDisjointTimerQueryConstants));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EXTDisjointTimerQueryMethods, WTF_ARRAY_LENGTH(V8EXTDisjointTimerQueryMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8EXTDisjointTimerQuery::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EXTDisjointTimerQueryTemplate);
+v8::Local<v8::FunctionTemplate> V8EXTDisjointTimerQuery::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EXTDisjointTimerQueryTemplate);
 }
 
-bool V8EXTDisjointTimerQuery::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8EXTDisjointTimerQuery::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8EXTDisjointTimerQuery::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8EXTDisjointTimerQuery::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-EXTDisjointTimerQuery* V8EXTDisjointTimerQuery::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+EXTDisjointTimerQuery* V8EXTDisjointTimerQuery::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

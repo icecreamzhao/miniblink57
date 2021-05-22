@@ -8,43 +8,51 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FormDataOptions.h"
 
 namespace blink {
 
-FormDataOptions::FormDataOptions() {
-  setIdName(String("username"));
-  setPasswordName(String("password"));
+FormDataOptions::FormDataOptions()
+{
+    setIdName(String("username"));
+    setPasswordName(String("password"));
 }
 
-FormDataOptions::~FormDataOptions() {}
+FormDataOptions::~FormDataOptions() { }
 
 FormDataOptions::FormDataOptions(const FormDataOptions&) = default;
 
 FormDataOptions& FormDataOptions::operator=(const FormDataOptions&) = default;
 
-bool FormDataOptions::hasIdName() const {
-  return !m_idName.isNull();
+bool FormDataOptions::hasIdName() const
+{
+    return !m_idName.isNull();
 }
-String FormDataOptions::idName() const {
-  return m_idName;
+String FormDataOptions::idName() const
+{
+    return m_idName;
 }
-void FormDataOptions::setIdName(String value) {
-  m_idName = value;
+void FormDataOptions::setIdName(String value)
+{
+    m_idName = value;
 }
-bool FormDataOptions::hasPasswordName() const {
-  return !m_passwordName.isNull();
+bool FormDataOptions::hasPasswordName() const
+{
+    return !m_passwordName.isNull();
 }
-String FormDataOptions::passwordName() const {
-  return m_passwordName;
+String FormDataOptions::passwordName() const
+{
+    return m_passwordName;
 }
-void FormDataOptions::setPasswordName(String value) {
-  m_passwordName = value;
+void FormDataOptions::setPasswordName(String value)
+{
+    m_passwordName = value;
 }
 
-DEFINE_TRACE(FormDataOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(FormDataOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

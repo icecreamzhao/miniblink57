@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8SharedArrayBuffer_h
 #define V8SharedArrayBuffer_h
 
@@ -24,26 +24,29 @@
 namespace blink {
 
 class V8SharedArrayBuffer {
-  STATIC_ONLY(V8SharedArrayBuffer);
- public:
-  CORE_EXPORT static DOMSharedArrayBuffer* toImpl(v8::Local<v8::Object> object);
-  CORE_EXPORT static DOMSharedArrayBuffer* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<DOMSharedArrayBuffer>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<DOMSharedArrayBuffer>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8SharedArrayBuffer);
+
+public:
+    CORE_EXPORT static DOMSharedArrayBuffer* toImpl(v8::Local<v8::Object> object);
+    CORE_EXPORT static DOMSharedArrayBuffer* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<DOMSharedArrayBuffer>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<DOMSharedArrayBuffer>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<DOMSharedArrayBuffer> {
-  typedef V8SharedArrayBuffer Type;
+    typedef V8SharedArrayBuffer Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8SharedArrayBuffer_h
+#endif // V8SharedArrayBuffer_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef TextDecoderOptions_h
 #define TextDecoderOptions_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT TextDecoderOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  TextDecoderOptions();
-  virtual ~TextDecoderOptions();
-  TextDecoderOptions(const TextDecoderOptions&);
-  TextDecoderOptions& operator=(const TextDecoderOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasFatal() const;
-  bool fatal() const;
-  void setFatal(bool);
+public:
+    TextDecoderOptions();
+    virtual ~TextDecoderOptions();
+    TextDecoderOptions(const TextDecoderOptions&);
+    TextDecoderOptions& operator=(const TextDecoderOptions&);
 
-  bool hasIgnoreBOM() const;
-  bool ignoreBOM() const;
-  void setIgnoreBOM(bool);
+    bool hasFatal() const;
+    bool fatal() const;
+    void setFatal(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasIgnoreBOM() const;
+    bool ignoreBOM() const;
+    void setIgnoreBOM(bool);
 
- private:
-  bool m_hasFatal = false;
-  bool m_fatal;
-  bool m_hasIgnoreBOM = false;
-  bool m_ignoreBOM;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8TextDecoderOptions;
+private:
+    bool m_hasFatal = false;
+    bool m_fatal;
+    bool m_hasIgnoreBOM = false;
+    bool m_ignoreBOM;
+
+    friend class V8TextDecoderOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // TextDecoderOptions_h
+#endif // TextDecoderOptions_h

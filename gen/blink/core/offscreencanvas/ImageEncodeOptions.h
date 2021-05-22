@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ImageEncodeOptions_h
 #define ImageEncodeOptions_h
 
@@ -20,32 +20,33 @@
 namespace blink {
 
 class CORE_EXPORT ImageEncodeOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ImageEncodeOptions();
-  virtual ~ImageEncodeOptions();
-  ImageEncodeOptions(const ImageEncodeOptions&);
-  ImageEncodeOptions& operator=(const ImageEncodeOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasQuality() const;
-  double quality() const;
-  void setQuality(double);
+public:
+    ImageEncodeOptions();
+    virtual ~ImageEncodeOptions();
+    ImageEncodeOptions(const ImageEncodeOptions&);
+    ImageEncodeOptions& operator=(const ImageEncodeOptions&);
 
-  bool hasType() const;
-  String type() const;
-  void setType(String);
+    bool hasQuality() const;
+    double quality() const;
+    void setQuality(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasType() const;
+    String type() const;
+    void setType(String);
 
- private:
-  bool m_hasQuality = false;
-  double m_quality;
-  String m_type;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ImageEncodeOptions;
+private:
+    bool m_hasQuality = false;
+    double m_quality;
+    String m_type;
+
+    friend class V8ImageEncodeOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ImageEncodeOptions_h
+#endif // ImageEncodeOptions_h

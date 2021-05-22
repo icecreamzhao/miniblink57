@@ -8,41 +8,49 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PresentationConnectionCloseEventInit.h"
 
 namespace blink {
 
-PresentationConnectionCloseEventInit::PresentationConnectionCloseEventInit() {
+PresentationConnectionCloseEventInit::PresentationConnectionCloseEventInit()
+{
 }
 
-PresentationConnectionCloseEventInit::~PresentationConnectionCloseEventInit() {}
+PresentationConnectionCloseEventInit::~PresentationConnectionCloseEventInit() { }
 
 PresentationConnectionCloseEventInit::PresentationConnectionCloseEventInit(const PresentationConnectionCloseEventInit&) = default;
 
 PresentationConnectionCloseEventInit& PresentationConnectionCloseEventInit::operator=(const PresentationConnectionCloseEventInit&) = default;
 
-bool PresentationConnectionCloseEventInit::hasMessage() const {
-  return !m_message.isNull();
+bool PresentationConnectionCloseEventInit::hasMessage() const
+{
+    return !m_message.isNull();
 }
-String PresentationConnectionCloseEventInit::message() const {
-  return m_message;
+String PresentationConnectionCloseEventInit::message() const
+{
+    return m_message;
 }
-void PresentationConnectionCloseEventInit::setMessage(String value) {
-  m_message = value;
+void PresentationConnectionCloseEventInit::setMessage(String value)
+{
+    m_message = value;
 }
-bool PresentationConnectionCloseEventInit::hasReason() const {
-  return !m_reason.isNull();
+bool PresentationConnectionCloseEventInit::hasReason() const
+{
+    return !m_reason.isNull();
 }
-String PresentationConnectionCloseEventInit::reason() const {
-  return m_reason;
+String PresentationConnectionCloseEventInit::reason() const
+{
+    return m_reason;
 }
-void PresentationConnectionCloseEventInit::setReason(String value) {
-  m_reason = value;
+void PresentationConnectionCloseEventInit::setReason(String value)
+{
+    m_reason = value;
 }
 
-DEFINE_TRACE(PresentationConnectionCloseEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(PresentationConnectionCloseEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

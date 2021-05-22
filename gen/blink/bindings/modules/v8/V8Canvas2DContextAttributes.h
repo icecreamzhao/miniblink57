@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8Canvas2DContextAttributes_h
 #define V8Canvas2DContextAttributes_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8Canvas2DContextAttributes {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, Canvas2DContextAttributes&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, Canvas2DContextAttributes&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8Canvas2DContextAttributes(const Canvas2DContextAttributes&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, Canvas2DContextAttributes& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, Canvas2DContextAttributes& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<Canvas2DContextAttributes> {
-  static Canvas2DContextAttributes nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static Canvas2DContextAttributes nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<Canvas2DContextAttributes> {
-  typedef V8Canvas2DContextAttributes Type;
+    typedef V8Canvas2DContextAttributes Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8Canvas2DContextAttributes_h
+#endif // V8Canvas2DContextAttributes_h

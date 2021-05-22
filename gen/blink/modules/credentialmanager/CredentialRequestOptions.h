@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CredentialRequestOptions_h
 #define CredentialRequestOptions_h
 
@@ -20,39 +20,40 @@
 namespace blink {
 
 class MODULES_EXPORT CredentialRequestOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CredentialRequestOptions();
-  virtual ~CredentialRequestOptions();
-  CredentialRequestOptions(const CredentialRequestOptions&);
-  CredentialRequestOptions& operator=(const CredentialRequestOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasFederated() const;
-  const FederatedCredentialRequestOptions& federated() const;
-  void setFederated(const FederatedCredentialRequestOptions&);
+public:
+    CredentialRequestOptions();
+    virtual ~CredentialRequestOptions();
+    CredentialRequestOptions(const CredentialRequestOptions&);
+    CredentialRequestOptions& operator=(const CredentialRequestOptions&);
 
-  bool hasPassword() const;
-  bool password() const;
-  void setPassword(bool);
+    bool hasFederated() const;
+    const FederatedCredentialRequestOptions& federated() const;
+    void setFederated(const FederatedCredentialRequestOptions&);
 
-  bool hasUnmediated() const;
-  bool unmediated() const;
-  void setUnmediated(bool);
+    bool hasPassword() const;
+    bool password() const;
+    void setPassword(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasUnmediated() const;
+    bool unmediated() const;
+    void setUnmediated(bool);
 
- private:
-  bool m_hasFederated = false;
-  FederatedCredentialRequestOptions m_federated;
-  bool m_hasPassword = false;
-  bool m_password;
-  bool m_hasUnmediated = false;
-  bool m_unmediated;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8CredentialRequestOptions;
+private:
+    bool m_hasFederated = false;
+    FederatedCredentialRequestOptions m_federated;
+    bool m_hasPassword = false;
+    bool m_password;
+    bool m_hasUnmediated = false;
+    bool m_unmediated;
+
+    friend class V8CredentialRequestOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // CredentialRequestOptions_h
+#endif // CredentialRequestOptions_h

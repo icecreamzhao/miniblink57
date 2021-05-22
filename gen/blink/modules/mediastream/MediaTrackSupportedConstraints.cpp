@@ -8,179 +8,220 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaTrackSupportedConstraints.h"
 
 namespace blink {
 
-MediaTrackSupportedConstraints::MediaTrackSupportedConstraints() {
-  setAspectRatio(true);
-  setChannelCount(true);
-  setDeviceId(true);
-  setEchoCancellation(true);
-  setFacingMode(true);
-  setFrameRate(true);
-  setGroupId(true);
-  setHeight(true);
-  setLatency(true);
-  setSampleRate(true);
-  setSampleSize(true);
-  setVolume(true);
-  setWidth(true);
+MediaTrackSupportedConstraints::MediaTrackSupportedConstraints()
+{
+    setAspectRatio(true);
+    setChannelCount(true);
+    setDeviceId(true);
+    setEchoCancellation(true);
+    setFacingMode(true);
+    setFrameRate(true);
+    setGroupId(true);
+    setHeight(true);
+    setLatency(true);
+    setSampleRate(true);
+    setSampleSize(true);
+    setVolume(true);
+    setWidth(true);
 }
 
-MediaTrackSupportedConstraints::~MediaTrackSupportedConstraints() {}
+MediaTrackSupportedConstraints::~MediaTrackSupportedConstraints() { }
 
 MediaTrackSupportedConstraints::MediaTrackSupportedConstraints(const MediaTrackSupportedConstraints&) = default;
 
 MediaTrackSupportedConstraints& MediaTrackSupportedConstraints::operator=(const MediaTrackSupportedConstraints&) = default;
 
-bool MediaTrackSupportedConstraints::hasAspectRatio() const {
-  return m_hasAspectRatio;
+bool MediaTrackSupportedConstraints::hasAspectRatio() const
+{
+    return m_hasAspectRatio;
 }
-bool MediaTrackSupportedConstraints::aspectRatio() const {
-  DCHECK(m_hasAspectRatio);
-  return m_aspectRatio;
+bool MediaTrackSupportedConstraints::aspectRatio() const
+{
+    DCHECK(m_hasAspectRatio);
+    return m_aspectRatio;
 }
-void MediaTrackSupportedConstraints::setAspectRatio(bool value) {
-  m_aspectRatio = value;
-  m_hasAspectRatio = true;
+void MediaTrackSupportedConstraints::setAspectRatio(bool value)
+{
+    m_aspectRatio = value;
+    m_hasAspectRatio = true;
 }
-bool MediaTrackSupportedConstraints::hasChannelCount() const {
-  return m_hasChannelCount;
+bool MediaTrackSupportedConstraints::hasChannelCount() const
+{
+    return m_hasChannelCount;
 }
-bool MediaTrackSupportedConstraints::channelCount() const {
-  DCHECK(m_hasChannelCount);
-  return m_channelCount;
+bool MediaTrackSupportedConstraints::channelCount() const
+{
+    DCHECK(m_hasChannelCount);
+    return m_channelCount;
 }
-void MediaTrackSupportedConstraints::setChannelCount(bool value) {
-  m_channelCount = value;
-  m_hasChannelCount = true;
+void MediaTrackSupportedConstraints::setChannelCount(bool value)
+{
+    m_channelCount = value;
+    m_hasChannelCount = true;
 }
-bool MediaTrackSupportedConstraints::hasDeviceId() const {
-  return m_hasDeviceId;
+bool MediaTrackSupportedConstraints::hasDeviceId() const
+{
+    return m_hasDeviceId;
 }
-bool MediaTrackSupportedConstraints::deviceId() const {
-  DCHECK(m_hasDeviceId);
-  return m_deviceId;
+bool MediaTrackSupportedConstraints::deviceId() const
+{
+    DCHECK(m_hasDeviceId);
+    return m_deviceId;
 }
-void MediaTrackSupportedConstraints::setDeviceId(bool value) {
-  m_deviceId = value;
-  m_hasDeviceId = true;
+void MediaTrackSupportedConstraints::setDeviceId(bool value)
+{
+    m_deviceId = value;
+    m_hasDeviceId = true;
 }
-bool MediaTrackSupportedConstraints::hasEchoCancellation() const {
-  return m_hasEchoCancellation;
+bool MediaTrackSupportedConstraints::hasEchoCancellation() const
+{
+    return m_hasEchoCancellation;
 }
-bool MediaTrackSupportedConstraints::echoCancellation() const {
-  DCHECK(m_hasEchoCancellation);
-  return m_echoCancellation;
+bool MediaTrackSupportedConstraints::echoCancellation() const
+{
+    DCHECK(m_hasEchoCancellation);
+    return m_echoCancellation;
 }
-void MediaTrackSupportedConstraints::setEchoCancellation(bool value) {
-  m_echoCancellation = value;
-  m_hasEchoCancellation = true;
+void MediaTrackSupportedConstraints::setEchoCancellation(bool value)
+{
+    m_echoCancellation = value;
+    m_hasEchoCancellation = true;
 }
-bool MediaTrackSupportedConstraints::hasFacingMode() const {
-  return m_hasFacingMode;
+bool MediaTrackSupportedConstraints::hasFacingMode() const
+{
+    return m_hasFacingMode;
 }
-bool MediaTrackSupportedConstraints::facingMode() const {
-  DCHECK(m_hasFacingMode);
-  return m_facingMode;
+bool MediaTrackSupportedConstraints::facingMode() const
+{
+    DCHECK(m_hasFacingMode);
+    return m_facingMode;
 }
-void MediaTrackSupportedConstraints::setFacingMode(bool value) {
-  m_facingMode = value;
-  m_hasFacingMode = true;
+void MediaTrackSupportedConstraints::setFacingMode(bool value)
+{
+    m_facingMode = value;
+    m_hasFacingMode = true;
 }
-bool MediaTrackSupportedConstraints::hasFrameRate() const {
-  return m_hasFrameRate;
+bool MediaTrackSupportedConstraints::hasFrameRate() const
+{
+    return m_hasFrameRate;
 }
-bool MediaTrackSupportedConstraints::frameRate() const {
-  DCHECK(m_hasFrameRate);
-  return m_frameRate;
+bool MediaTrackSupportedConstraints::frameRate() const
+{
+    DCHECK(m_hasFrameRate);
+    return m_frameRate;
 }
-void MediaTrackSupportedConstraints::setFrameRate(bool value) {
-  m_frameRate = value;
-  m_hasFrameRate = true;
+void MediaTrackSupportedConstraints::setFrameRate(bool value)
+{
+    m_frameRate = value;
+    m_hasFrameRate = true;
 }
-bool MediaTrackSupportedConstraints::hasGroupId() const {
-  return m_hasGroupId;
+bool MediaTrackSupportedConstraints::hasGroupId() const
+{
+    return m_hasGroupId;
 }
-bool MediaTrackSupportedConstraints::groupId() const {
-  DCHECK(m_hasGroupId);
-  return m_groupId;
+bool MediaTrackSupportedConstraints::groupId() const
+{
+    DCHECK(m_hasGroupId);
+    return m_groupId;
 }
-void MediaTrackSupportedConstraints::setGroupId(bool value) {
-  m_groupId = value;
-  m_hasGroupId = true;
+void MediaTrackSupportedConstraints::setGroupId(bool value)
+{
+    m_groupId = value;
+    m_hasGroupId = true;
 }
-bool MediaTrackSupportedConstraints::hasHeight() const {
-  return m_hasHeight;
+bool MediaTrackSupportedConstraints::hasHeight() const
+{
+    return m_hasHeight;
 }
-bool MediaTrackSupportedConstraints::height() const {
-  DCHECK(m_hasHeight);
-  return m_height;
+bool MediaTrackSupportedConstraints::height() const
+{
+    DCHECK(m_hasHeight);
+    return m_height;
 }
-void MediaTrackSupportedConstraints::setHeight(bool value) {
-  m_height = value;
-  m_hasHeight = true;
+void MediaTrackSupportedConstraints::setHeight(bool value)
+{
+    m_height = value;
+    m_hasHeight = true;
 }
-bool MediaTrackSupportedConstraints::hasLatency() const {
-  return m_hasLatency;
+bool MediaTrackSupportedConstraints::hasLatency() const
+{
+    return m_hasLatency;
 }
-bool MediaTrackSupportedConstraints::latency() const {
-  DCHECK(m_hasLatency);
-  return m_latency;
+bool MediaTrackSupportedConstraints::latency() const
+{
+    DCHECK(m_hasLatency);
+    return m_latency;
 }
-void MediaTrackSupportedConstraints::setLatency(bool value) {
-  m_latency = value;
-  m_hasLatency = true;
+void MediaTrackSupportedConstraints::setLatency(bool value)
+{
+    m_latency = value;
+    m_hasLatency = true;
 }
-bool MediaTrackSupportedConstraints::hasSampleRate() const {
-  return m_hasSampleRate;
+bool MediaTrackSupportedConstraints::hasSampleRate() const
+{
+    return m_hasSampleRate;
 }
-bool MediaTrackSupportedConstraints::sampleRate() const {
-  DCHECK(m_hasSampleRate);
-  return m_sampleRate;
+bool MediaTrackSupportedConstraints::sampleRate() const
+{
+    DCHECK(m_hasSampleRate);
+    return m_sampleRate;
 }
-void MediaTrackSupportedConstraints::setSampleRate(bool value) {
-  m_sampleRate = value;
-  m_hasSampleRate = true;
+void MediaTrackSupportedConstraints::setSampleRate(bool value)
+{
+    m_sampleRate = value;
+    m_hasSampleRate = true;
 }
-bool MediaTrackSupportedConstraints::hasSampleSize() const {
-  return m_hasSampleSize;
+bool MediaTrackSupportedConstraints::hasSampleSize() const
+{
+    return m_hasSampleSize;
 }
-bool MediaTrackSupportedConstraints::sampleSize() const {
-  DCHECK(m_hasSampleSize);
-  return m_sampleSize;
+bool MediaTrackSupportedConstraints::sampleSize() const
+{
+    DCHECK(m_hasSampleSize);
+    return m_sampleSize;
 }
-void MediaTrackSupportedConstraints::setSampleSize(bool value) {
-  m_sampleSize = value;
-  m_hasSampleSize = true;
+void MediaTrackSupportedConstraints::setSampleSize(bool value)
+{
+    m_sampleSize = value;
+    m_hasSampleSize = true;
 }
-bool MediaTrackSupportedConstraints::hasVolume() const {
-  return m_hasVolume;
+bool MediaTrackSupportedConstraints::hasVolume() const
+{
+    return m_hasVolume;
 }
-bool MediaTrackSupportedConstraints::volume() const {
-  DCHECK(m_hasVolume);
-  return m_volume;
+bool MediaTrackSupportedConstraints::volume() const
+{
+    DCHECK(m_hasVolume);
+    return m_volume;
 }
-void MediaTrackSupportedConstraints::setVolume(bool value) {
-  m_volume = value;
-  m_hasVolume = true;
+void MediaTrackSupportedConstraints::setVolume(bool value)
+{
+    m_volume = value;
+    m_hasVolume = true;
 }
-bool MediaTrackSupportedConstraints::hasWidth() const {
-  return m_hasWidth;
+bool MediaTrackSupportedConstraints::hasWidth() const
+{
+    return m_hasWidth;
 }
-bool MediaTrackSupportedConstraints::width() const {
-  DCHECK(m_hasWidth);
-  return m_width;
+bool MediaTrackSupportedConstraints::width() const
+{
+    DCHECK(m_hasWidth);
+    return m_width;
 }
-void MediaTrackSupportedConstraints::setWidth(bool value) {
-  m_width = value;
-  m_hasWidth = true;
+void MediaTrackSupportedConstraints::setWidth(bool value)
+{
+    m_width = value;
+    m_hasWidth = true;
 }
 
-DEFINE_TRACE(MediaTrackSupportedConstraints) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(MediaTrackSupportedConstraints)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

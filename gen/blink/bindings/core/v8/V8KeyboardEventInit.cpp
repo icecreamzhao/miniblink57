@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8KeyboardEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,154 +16,158 @@
 
 namespace blink {
 
-void V8KeyboardEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, KeyboardEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8KeyboardEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, KeyboardEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8EventModifierInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> codeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "code")).ToLocal(&codeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (codeValue.IsEmpty() || codeValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> code = codeValue;
-    if (!code.prepare(exceptionState))
-      return;
-    impl.setCode(code);
-  }
-
-  v8::Local<v8::Value> isComposingValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "isComposing")).ToLocal(&isComposingValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (isComposingValue.IsEmpty() || isComposingValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool isComposing = toBoolean(isolate, isComposingValue, exceptionState);
+    V8EventModifierInit::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setIsComposing(isComposing);
-  }
+        return;
 
-  v8::Local<v8::Value> keyValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "key")).ToLocal(&keyValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (keyValue.IsEmpty() || keyValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> key = keyValue;
-    if (!key.prepare(exceptionState))
-      return;
-    impl.setKey(key);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> codeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "code")).ToLocal(&codeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (codeValue.IsEmpty() || codeValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> code = codeValue;
+        if (!code.prepare(exceptionState))
+            return;
+        impl.setCode(code);
+    }
 
-  v8::Local<v8::Value> locationValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "location")).ToLocal(&locationValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (locationValue.IsEmpty() || locationValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned location = toUInt32(isolate, locationValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setLocation(location);
-  }
+    v8::Local<v8::Value> isComposingValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "isComposing")).ToLocal(&isComposingValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (isComposingValue.IsEmpty() || isComposingValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool isComposing = toBoolean(isolate, isComposingValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setIsComposing(isComposing);
+    }
 
-  v8::Local<v8::Value> repeatValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "repeat")).ToLocal(&repeatValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (repeatValue.IsEmpty() || repeatValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool repeat = toBoolean(isolate, repeatValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setRepeat(repeat);
-  }
+    v8::Local<v8::Value> keyValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "key")).ToLocal(&keyValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (keyValue.IsEmpty() || keyValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> key = keyValue;
+        if (!key.prepare(exceptionState))
+            return;
+        impl.setKey(key);
+    }
+
+    v8::Local<v8::Value> locationValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "location")).ToLocal(&locationValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (locationValue.IsEmpty() || locationValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned location = toUInt32(isolate, locationValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setLocation(location);
+    }
+
+    v8::Local<v8::Value> repeatValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "repeat")).ToLocal(&repeatValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (repeatValue.IsEmpty() || repeatValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool repeat = toBoolean(isolate, repeatValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setRepeat(repeat);
+    }
 }
 
-v8::Local<v8::Value> KeyboardEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8KeyboardEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> KeyboardEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8KeyboardEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8KeyboardEventInit(const KeyboardEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventModifierInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8KeyboardEventInit(const KeyboardEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventModifierInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasCode()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "code"), v8String(isolate, impl.code()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "code"), v8String(isolate, String("")))))
-      return false;
-  }
+    if (impl.hasCode()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "code"), v8String(isolate, impl.code()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "code"), v8String(isolate, String("")))))
+            return false;
+    }
 
-  if (impl.hasIsComposing()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "isComposing"), v8Boolean(impl.isComposing(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "isComposing"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasIsComposing()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "isComposing"), v8Boolean(impl.isComposing(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "isComposing"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  if (impl.hasKey()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "key"), v8String(isolate, impl.key()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "key"), v8String(isolate, String("")))))
-      return false;
-  }
+    if (impl.hasKey()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "key"), v8String(isolate, impl.key()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "key"), v8String(isolate, String("")))))
+            return false;
+    }
 
-  if (impl.hasLocation()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "location"), v8::Integer::NewFromUnsigned(isolate, impl.location()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "location"), v8::Integer::NewFromUnsigned(isolate, 0u))))
-      return false;
-  }
+    if (impl.hasLocation()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "location"), v8::Integer::NewFromUnsigned(isolate, impl.location()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "location"), v8::Integer::NewFromUnsigned(isolate, 0u))))
+            return false;
+    }
 
-  if (impl.hasRepeat()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "repeat"), v8Boolean(impl.repeat(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "repeat"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasRepeat()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "repeat"), v8Boolean(impl.repeat(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "repeat"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-KeyboardEventInit NativeValueTraits<KeyboardEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  KeyboardEventInit impl;
-  V8KeyboardEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+KeyboardEventInit NativeValueTraits<KeyboardEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    KeyboardEventInit impl;
+    V8KeyboardEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

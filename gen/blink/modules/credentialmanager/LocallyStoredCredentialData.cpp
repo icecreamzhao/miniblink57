@@ -8,41 +8,49 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "LocallyStoredCredentialData.h"
 
 namespace blink {
 
-LocallyStoredCredentialData::LocallyStoredCredentialData() {
+LocallyStoredCredentialData::LocallyStoredCredentialData()
+{
 }
 
-LocallyStoredCredentialData::~LocallyStoredCredentialData() {}
+LocallyStoredCredentialData::~LocallyStoredCredentialData() { }
 
 LocallyStoredCredentialData::LocallyStoredCredentialData(const LocallyStoredCredentialData&) = default;
 
 LocallyStoredCredentialData& LocallyStoredCredentialData::operator=(const LocallyStoredCredentialData&) = default;
 
-bool LocallyStoredCredentialData::hasIconURL() const {
-  return !m_iconURL.isNull();
+bool LocallyStoredCredentialData::hasIconURL() const
+{
+    return !m_iconURL.isNull();
 }
-String LocallyStoredCredentialData::iconURL() const {
-  return m_iconURL;
+String LocallyStoredCredentialData::iconURL() const
+{
+    return m_iconURL;
 }
-void LocallyStoredCredentialData::setIconURL(String value) {
-  m_iconURL = value;
+void LocallyStoredCredentialData::setIconURL(String value)
+{
+    m_iconURL = value;
 }
-bool LocallyStoredCredentialData::hasName() const {
-  return !m_name.isNull();
+bool LocallyStoredCredentialData::hasName() const
+{
+    return !m_name.isNull();
 }
-String LocallyStoredCredentialData::name() const {
-  return m_name;
+String LocallyStoredCredentialData::name() const
+{
+    return m_name;
 }
-void LocallyStoredCredentialData::setName(String value) {
-  m_name = value;
+void LocallyStoredCredentialData::setName(String value)
+{
+    m_name = value;
 }
 
-DEFINE_TRACE(LocallyStoredCredentialData) {
-  CredentialData::trace(visitor);
+DEFINE_TRACE(LocallyStoredCredentialData)
+{
+    CredentialData::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

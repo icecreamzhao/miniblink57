@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AddEventListenerOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,85 +16,89 @@
 
 namespace blink {
 
-void V8AddEventListenerOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, AddEventListenerOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8AddEventListenerOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, AddEventListenerOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8EventListenerOptions::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> onceValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "once")).ToLocal(&onceValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (onceValue.IsEmpty() || onceValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool once = toBoolean(isolate, onceValue, exceptionState);
+    V8EventListenerOptions::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setOnce(once);
-  }
+        return;
 
-  v8::Local<v8::Value> passiveValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "passive")).ToLocal(&passiveValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (passiveValue.IsEmpty() || passiveValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool passive = toBoolean(isolate, passiveValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setPassive(passive);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> onceValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "once")).ToLocal(&onceValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (onceValue.IsEmpty() || onceValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool once = toBoolean(isolate, onceValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setOnce(once);
+    }
+
+    v8::Local<v8::Value> passiveValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "passive")).ToLocal(&passiveValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (passiveValue.IsEmpty() || passiveValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool passive = toBoolean(isolate, passiveValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setPassive(passive);
+    }
 }
 
-v8::Local<v8::Value> AddEventListenerOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8AddEventListenerOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> AddEventListenerOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8AddEventListenerOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8AddEventListenerOptions(const AddEventListenerOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventListenerOptions(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8AddEventListenerOptions(const AddEventListenerOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventListenerOptions(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasOnce()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "once"), v8Boolean(impl.once(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "once"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasOnce()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "once"), v8Boolean(impl.once(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "once"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  if (impl.hasPassive()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "passive"), v8Boolean(impl.passive(), isolate))))
-      return false;
-  }
+    if (impl.hasPassive()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "passive"), v8Boolean(impl.passive(), isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-AddEventListenerOptions NativeValueTraits<AddEventListenerOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  AddEventListenerOptions impl;
-  V8AddEventListenerOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+AddEventListenerOptions NativeValueTraits<AddEventListenerOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    AddEventListenerOptions impl;
+    V8AddEventListenerOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

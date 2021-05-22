@@ -8,65 +8,80 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "NFCWatchOptions.h"
 
 namespace blink {
 
-NFCWatchOptions::NFCWatchOptions() {
-  setMediaType(String(""));
-  setMode(String("web-nfc-only"));
-  setURL(String(""));
+NFCWatchOptions::NFCWatchOptions()
+{
+    setMediaType(String(""));
+    setMode(String("web-nfc-only"));
+    setURL(String(""));
 }
 
-NFCWatchOptions::~NFCWatchOptions() {}
+NFCWatchOptions::~NFCWatchOptions() { }
 
 NFCWatchOptions::NFCWatchOptions(const NFCWatchOptions&) = default;
 
 NFCWatchOptions& NFCWatchOptions::operator=(const NFCWatchOptions&) = default;
 
-bool NFCWatchOptions::hasMediaType() const {
-  return !m_mediaType.isNull();
+bool NFCWatchOptions::hasMediaType() const
+{
+    return !m_mediaType.isNull();
 }
-String NFCWatchOptions::mediaType() const {
-  return m_mediaType;
+String NFCWatchOptions::mediaType() const
+{
+    return m_mediaType;
 }
-void NFCWatchOptions::setMediaType(String value) {
-  m_mediaType = value;
+void NFCWatchOptions::setMediaType(String value)
+{
+    m_mediaType = value;
 }
-bool NFCWatchOptions::hasMode() const {
-  return !m_mode.isNull();
+bool NFCWatchOptions::hasMode() const
+{
+    return !m_mode.isNull();
 }
-String NFCWatchOptions::mode() const {
-  return m_mode;
+String NFCWatchOptions::mode() const
+{
+    return m_mode;
 }
-void NFCWatchOptions::setMode(String value) {
-  m_mode = value;
+void NFCWatchOptions::setMode(String value)
+{
+    m_mode = value;
 }
-bool NFCWatchOptions::hasRecordType() const {
-  return !m_recordType.isNull();
+bool NFCWatchOptions::hasRecordType() const
+{
+    return !m_recordType.isNull();
 }
-String NFCWatchOptions::recordType() const {
-  return m_recordType;
+String NFCWatchOptions::recordType() const
+{
+    return m_recordType;
 }
-void NFCWatchOptions::setRecordType(String value) {
-  m_recordType = value;
+void NFCWatchOptions::setRecordType(String value)
+{
+    m_recordType = value;
 }
-void NFCWatchOptions::setRecordTypeToNull() {
-  m_recordType = String();
+void NFCWatchOptions::setRecordTypeToNull()
+{
+    m_recordType = String();
 }
-bool NFCWatchOptions::hasURL() const {
-  return !m_url.isNull();
+bool NFCWatchOptions::hasURL() const
+{
+    return !m_url.isNull();
 }
-String NFCWatchOptions::url() const {
-  return m_url;
+String NFCWatchOptions::url() const
+{
+    return m_url;
 }
-void NFCWatchOptions::setURL(String value) {
-  m_url = value;
+void NFCWatchOptions::setURL(String value)
+{
+    m_url = value;
 }
 
-DEFINE_TRACE(NFCWatchOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(NFCWatchOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

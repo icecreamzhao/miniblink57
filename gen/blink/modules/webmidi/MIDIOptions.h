@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MIDIOptions_h
 #define MIDIOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT MIDIOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MIDIOptions();
-  virtual ~MIDIOptions();
-  MIDIOptions(const MIDIOptions&);
-  MIDIOptions& operator=(const MIDIOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasSysex() const;
-  bool sysex() const;
-  void setSysex(bool);
+public:
+    MIDIOptions();
+    virtual ~MIDIOptions();
+    MIDIOptions(const MIDIOptions&);
+    MIDIOptions& operator=(const MIDIOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSysex() const;
+    bool sysex() const;
+    void setSysex(bool);
 
- private:
-  bool m_hasSysex = false;
-  bool m_sysex;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MIDIOptions;
+private:
+    bool m_hasSysex = false;
+    bool m_sysex;
+
+    friend class V8MIDIOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MIDIOptions_h
+#endif // MIDIOptions_h

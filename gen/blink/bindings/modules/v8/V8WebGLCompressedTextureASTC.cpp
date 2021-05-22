@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WebGLCompressedTextureASTC.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,7 +47,7 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WebGLCompressedTextureASTC::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WebGLCompressedTextureASTC is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
@@ -56,75 +56,81 @@ namespace WebGLCompressedTextureASTCV8Internal {
 
 } // namespace WebGLCompressedTextureASTCV8Internal
 
-void V8WebGLCompressedTextureASTC::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  WebGLCompressedTextureASTC* impl = scriptWrappable->toImpl<WebGLCompressedTextureASTC>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8WebGLCompressedTextureASTC::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    WebGLCompressedTextureASTC* impl = scriptWrappable->toImpl<WebGLCompressedTextureASTC>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
-static void installV8WebGLCompressedTextureASTCTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLCompressedTextureASTC::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLCompressedTextureASTC::internalFieldCount);
+static void installV8WebGLCompressedTextureASTCTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLCompressedTextureASTC::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLCompressedTextureASTC::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8WebGLCompressedTextureASTCConstants[] = {
-      {"COMPRESSED_RGBA_ASTC_4x4_KHR", 0x93B0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_5x4_KHR", 0x93B1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_5x5_KHR", 0x93B2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_6x5_KHR", 0x93B3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_6x6_KHR", 0x93B4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_8x5_KHR", 0x93B5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_8x6_KHR", 0x93B6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_8x8_KHR", 0x93B7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_10x5_KHR", 0x93B8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_10x6_KHR", 0x93B9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_10x8_KHR", 0x93BA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_10x10_KHR", 0x93BB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_12x10_KHR", 0x93BC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_RGBA_ASTC_12x12_KHR", 0x93BD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR", 0x93D0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR", 0x93D1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR", 0x93D2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR", 0x93D3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR", 0x93D4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR", 0x93D5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR", 0x93D6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR", 0x93D7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR", 0x93D8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR", 0x93D9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR", 0x93DA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR", 0x93DB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR", 0x93DC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR", 0x93DD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebGLCompressedTextureASTCConstants, WTF_ARRAY_LENGTH(V8WebGLCompressedTextureASTCConstants));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8WebGLCompressedTextureASTCConstants[] = {
+        { "COMPRESSED_RGBA_ASTC_4x4_KHR", 0x93B0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_5x4_KHR", 0x93B1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_5x5_KHR", 0x93B2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_6x5_KHR", 0x93B3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_6x6_KHR", 0x93B4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_8x5_KHR", 0x93B5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_8x6_KHR", 0x93B6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_8x8_KHR", 0x93B7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_10x5_KHR", 0x93B8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_10x6_KHR", 0x93B9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_10x8_KHR", 0x93BA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_10x10_KHR", 0x93BB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_12x10_KHR", 0x93BC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_RGBA_ASTC_12x12_KHR", 0x93BD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR", 0x93D0, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR", 0x93D1, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR", 0x93D2, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR", 0x93D3, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR", 0x93D4, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR", 0x93D5, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR", 0x93D6, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR", 0x93D7, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR", 0x93D8, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR", 0x93D9, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR", 0x93DA, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR", 0x93DB, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR", 0x93DC, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR", 0x93DD, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebGLCompressedTextureASTCConstants, WTF_ARRAY_LENGTH(V8WebGLCompressedTextureASTCConstants));
 }
 
-v8::Local<v8::FunctionTemplate> V8WebGLCompressedTextureASTC::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLCompressedTextureASTCTemplate);
+v8::Local<v8::FunctionTemplate> V8WebGLCompressedTextureASTC::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLCompressedTextureASTCTemplate);
 }
 
-bool V8WebGLCompressedTextureASTC::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WebGLCompressedTextureASTC::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WebGLCompressedTextureASTC::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WebGLCompressedTextureASTC::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WebGLCompressedTextureASTC* V8WebGLCompressedTextureASTC::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WebGLCompressedTextureASTC* V8WebGLCompressedTextureASTC::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

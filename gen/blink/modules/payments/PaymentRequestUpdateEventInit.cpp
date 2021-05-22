@@ -8,22 +8,24 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PaymentRequestUpdateEventInit.h"
 
 namespace blink {
 
-PaymentRequestUpdateEventInit::PaymentRequestUpdateEventInit() {
+PaymentRequestUpdateEventInit::PaymentRequestUpdateEventInit()
+{
 }
 
-PaymentRequestUpdateEventInit::~PaymentRequestUpdateEventInit() {}
+PaymentRequestUpdateEventInit::~PaymentRequestUpdateEventInit() { }
 
 PaymentRequestUpdateEventInit::PaymentRequestUpdateEventInit(const PaymentRequestUpdateEventInit&) = default;
 
 PaymentRequestUpdateEventInit& PaymentRequestUpdateEventInit::operator=(const PaymentRequestUpdateEventInit&) = default;
 
-DEFINE_TRACE(PaymentRequestUpdateEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(PaymentRequestUpdateEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

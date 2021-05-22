@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FederatedCredentialData.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,63 +16,67 @@
 
 namespace blink {
 
-void V8FederatedCredentialData::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, FederatedCredentialData& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8FederatedCredentialData::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, FederatedCredentialData& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8LocallyStoredCredentialData::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> providerValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "provider")).ToLocal(&providerValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (providerValue.IsEmpty() || providerValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> provider = toUSVString(isolate, providerValue, exceptionState);
+    V8LocallyStoredCredentialData::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setProvider(provider);
-  }
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> providerValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "provider")).ToLocal(&providerValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (providerValue.IsEmpty() || providerValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> provider = toUSVString(isolate, providerValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setProvider(provider);
+    }
 }
 
-v8::Local<v8::Value> FederatedCredentialData::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8FederatedCredentialData(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> FederatedCredentialData::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8FederatedCredentialData(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8FederatedCredentialData(const FederatedCredentialData& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8LocallyStoredCredentialData(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8FederatedCredentialData(const FederatedCredentialData& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8LocallyStoredCredentialData(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasProvider()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "provider"), v8String(isolate, impl.provider()))))
-      return false;
-  }
+    if (impl.hasProvider()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "provider"), v8String(isolate, impl.provider()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-FederatedCredentialData NativeValueTraits<FederatedCredentialData>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  FederatedCredentialData impl;
-  V8FederatedCredentialData::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+FederatedCredentialData NativeValueTraits<FederatedCredentialData>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    FederatedCredentialData impl;
+    V8FederatedCredentialData::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WindowClient.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,133 +48,146 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ServiceWorkerWindowClient::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ServiceWorkerWindowClient is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ServiceWorkerWindowClientV8Internal {
 
-static void visibilityStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void visibilityStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ServiceWorkerWindowClient* impl = V8WindowClient::toImpl(holder);
+        ServiceWorkerWindowClient* impl = V8WindowClient::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->visibilityState(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->visibilityState(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void visibilityStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ServiceWorkerWindowClientV8Internal::visibilityStateAttributeGetter(info);
-}
+    MODULES_EXPORT void visibilityStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ServiceWorkerWindowClientV8Internal::visibilityStateAttributeGetter(info);
+    }
 
-static void focusedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void focusedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ServiceWorkerWindowClient* impl = V8WindowClient::toImpl(holder);
+        ServiceWorkerWindowClient* impl = V8WindowClient::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->focused());
-}
+        v8SetReturnValueBool(info, impl->focused());
+    }
 
-MODULES_EXPORT void focusedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ServiceWorkerWindowClientV8Internal::focusedAttributeGetter(info);
-}
+    MODULES_EXPORT void focusedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ServiceWorkerWindowClientV8Internal::focusedAttributeGetter(info);
+    }
 
-static void focusMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WindowClient", "focus");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void focusMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WindowClient", "focus");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8WindowClient::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  ServiceWorkerWindowClient* impl = V8WindowClient::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8WindowClient::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        ServiceWorkerWindowClient* impl = V8WindowClient::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->focus(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->focus(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void focusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ServiceWorkerWindowClientV8Internal::focusMethod(info);
-}
+    MODULES_EXPORT void focusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ServiceWorkerWindowClientV8Internal::focusMethod(info);
+    }
 
-static void navigateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WindowClient", "navigate");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void navigateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WindowClient", "navigate");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8WindowClient::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  ServiceWorkerWindowClient* impl = V8WindowClient::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8WindowClient::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        ServiceWorkerWindowClient* impl = V8WindowClient::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> url;
-  url = toUSVString(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        V8StringResource<> url;
+        url = toUSVString(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = impl->navigate(scriptState, url);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->navigate(scriptState, url);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void navigateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ServiceWorkerWindowClientV8Internal::navigateMethod(info);
-}
+    MODULES_EXPORT void navigateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ServiceWorkerWindowClientV8Internal::navigateMethod(info);
+    }
 
 } // namespace ServiceWorkerWindowClientV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8WindowClientAccessors[] = {
-    {"visibilityState", ServiceWorkerWindowClientV8Internal::visibilityStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"focused", ServiceWorkerWindowClientV8Internal::focusedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "visibilityState", ServiceWorkerWindowClientV8Internal::visibilityStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "focused", ServiceWorkerWindowClientV8Internal::focusedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8WindowClientMethods[] = {
-    {"focus", ServiceWorkerWindowClientV8Internal::focusMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"navigate", ServiceWorkerWindowClientV8Internal::navigateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "focus", ServiceWorkerWindowClientV8Internal::focusMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "navigate", ServiceWorkerWindowClientV8Internal::navigateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8WindowClientTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WindowClient::wrapperTypeInfo.interfaceName, V8Client::domTemplate(isolate, world), V8WindowClient::internalFieldCount);
+static void installV8WindowClientTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WindowClient::wrapperTypeInfo.interfaceName, V8Client::domTemplate(isolate, world), V8WindowClient::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WindowClientAccessors, WTF_ARRAY_LENGTH(V8WindowClientAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WindowClientMethods, WTF_ARRAY_LENGTH(V8WindowClientMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WindowClientAccessors, WTF_ARRAY_LENGTH(V8WindowClientAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WindowClientMethods, WTF_ARRAY_LENGTH(V8WindowClientMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8WindowClient::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WindowClientTemplate);
+v8::Local<v8::FunctionTemplate> V8WindowClient::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WindowClientTemplate);
 }
 
-bool V8WindowClient::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WindowClient::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WindowClient::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WindowClient::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ServiceWorkerWindowClient* V8WindowClient::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ServiceWorkerWindowClient* V8WindowClient::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

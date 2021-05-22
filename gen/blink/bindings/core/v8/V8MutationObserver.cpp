@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MutationObserver.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,128 +49,141 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MutationObserver::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MutationObserver is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MutationObserverV8Internal {
 
-static void observeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MutationObserver", "observe");
+    static void observeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MutationObserver", "observe");
 
-  MutationObserver* impl = V8MutationObserver::toImpl(info.Holder());
+        MutationObserver* impl = V8MutationObserver::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  Node* target;
-  MutationObserverInit options;
-  target = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!target) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+        Node* target;
+        MutationObserverInit options;
+        target = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!target) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-    return;
-  }
-  V8MutationObserverInit::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8MutationObserverInit::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->observe(target, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->observe(target, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void observeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationObserverV8Internal::observeMethod(info);
-}
+    CORE_EXPORT void observeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationObserverV8Internal::observeMethod(info);
+    }
 
-static void disconnectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationObserver* impl = V8MutationObserver::toImpl(info.Holder());
+    static void disconnectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationObserver* impl = V8MutationObserver::toImpl(info.Holder());
 
-  impl->disconnect();
-}
+        impl->disconnect();
+    }
 
-CORE_EXPORT  void disconnectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationObserverV8Internal::disconnectMethod(info);
-}
+    CORE_EXPORT void disconnectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationObserverV8Internal::disconnectMethod(info);
+    }
 
-static void takeRecordsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationObserver* impl = V8MutationObserver::toImpl(info.Holder());
+    static void takeRecordsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationObserver* impl = V8MutationObserver::toImpl(info.Holder());
 
-  v8SetReturnValue(info, ToV8(impl->takeRecords(), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(impl->takeRecords(), info.Holder(), info.GetIsolate()));
+    }
 
-CORE_EXPORT  void takeRecordsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MutationObserverV8Internal::takeRecordsMethod(info);
-}
+    CORE_EXPORT void takeRecordsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MutationObserverV8Internal::takeRecordsMethod(info);
+    }
 
 } // namespace MutationObserverV8Internal
 
-void V8MutationObserver::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  V8MutationObserver::visitDOMWrapperCustom(isolate, scriptWrappable, wrapper);
+void V8MutationObserver::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    V8MutationObserver::visitDOMWrapperCustom(isolate, scriptWrappable, wrapper);
 }
 
 const V8DOMConfiguration::MethodConfiguration V8MutationObserverMethods[] = {
-    {"observe", MutationObserverV8Internal::observeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disconnect", MutationObserverV8Internal::disconnectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"takeRecords", MutationObserverV8Internal::takeRecordsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "observe", MutationObserverV8Internal::observeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disconnect", MutationObserverV8Internal::disconnectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "takeRecords", MutationObserverV8Internal::takeRecordsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8MutationObserver::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MutationObserver"));
-    return;
-  }
+void V8MutationObserver::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MutationObserver"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  V8MutationObserver::constructorCustom(info);
+    V8MutationObserver::constructorCustom(info);
 }
 
-static void installV8MutationObserverTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MutationObserver::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MutationObserver::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8MutationObserver::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8MutationObserverTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MutationObserver::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MutationObserver::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8MutationObserver::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MutationObserverMethods, WTF_ARRAY_LENGTH(V8MutationObserverMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MutationObserverMethods, WTF_ARRAY_LENGTH(V8MutationObserverMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MutationObserver::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MutationObserverTemplate);
+v8::Local<v8::FunctionTemplate> V8MutationObserver::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MutationObserverTemplate);
 }
 
-bool V8MutationObserver::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MutationObserver::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MutationObserver::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MutationObserver::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MutationObserver* V8MutationObserver::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MutationObserver* V8MutationObserver::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

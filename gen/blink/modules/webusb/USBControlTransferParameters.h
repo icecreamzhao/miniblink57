@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef USBControlTransferParameters_h
 #define USBControlTransferParameters_h
 
@@ -20,49 +20,50 @@
 namespace blink {
 
 class MODULES_EXPORT USBControlTransferParameters : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  USBControlTransferParameters();
-  virtual ~USBControlTransferParameters();
-  USBControlTransferParameters(const USBControlTransferParameters&);
-  USBControlTransferParameters& operator=(const USBControlTransferParameters&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasIndex() const;
-  unsigned index() const;
-  void setIndex(unsigned);
+public:
+    USBControlTransferParameters();
+    virtual ~USBControlTransferParameters();
+    USBControlTransferParameters(const USBControlTransferParameters&);
+    USBControlTransferParameters& operator=(const USBControlTransferParameters&);
 
-  bool hasRecipient() const;
-  String recipient() const;
-  void setRecipient(String);
+    bool hasIndex() const;
+    unsigned index() const;
+    void setIndex(unsigned);
 
-  bool hasRequest() const;
-  unsigned request() const;
-  void setRequest(unsigned);
+    bool hasRecipient() const;
+    String recipient() const;
+    void setRecipient(String);
 
-  bool hasRequestType() const;
-  String requestType() const;
-  void setRequestType(String);
+    bool hasRequest() const;
+    unsigned request() const;
+    void setRequest(unsigned);
 
-  bool hasValue() const;
-  unsigned value() const;
-  void setValue(unsigned);
+    bool hasRequestType() const;
+    String requestType() const;
+    void setRequestType(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasValue() const;
+    unsigned value() const;
+    void setValue(unsigned);
 
- private:
-  bool m_hasIndex = false;
-  unsigned m_index;
-  String m_recipient;
-  bool m_hasRequest = false;
-  unsigned m_request;
-  String m_requestType;
-  bool m_hasValue = false;
-  unsigned m_value;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8USBControlTransferParameters;
+private:
+    bool m_hasIndex = false;
+    unsigned m_index;
+    String m_recipient;
+    bool m_hasRequest = false;
+    unsigned m_request;
+    String m_requestType;
+    bool m_hasValue = false;
+    unsigned m_value;
+
+    friend class V8USBControlTransferParameters;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // USBControlTransferParameters_h
+#endif // USBControlTransferParameters_h

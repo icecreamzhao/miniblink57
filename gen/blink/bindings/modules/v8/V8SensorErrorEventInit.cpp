@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SensorErrorEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -17,65 +17,69 @@
 
 namespace blink {
 
-void V8SensorErrorEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, SensorErrorEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> errorValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "error")).ToLocal(&errorValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (errorValue.IsEmpty() || errorValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    DOMException* error = V8DOMException::toImplWithTypeCheck(isolate, errorValue);
-    if (!error) {
-      exceptionState.throwTypeError("member error is not of type DOMException.");
-      return;
+void V8SensorErrorEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, SensorErrorEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
     }
-    impl.setError(error);
-  }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
+
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
+    if (exceptionState.hadException())
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> errorValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "error")).ToLocal(&errorValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (errorValue.IsEmpty() || errorValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        DOMException* error = V8DOMException::toImplWithTypeCheck(isolate, errorValue);
+        if (!error) {
+            exceptionState.throwTypeError("member error is not of type DOMException.");
+            return;
+        }
+        impl.setError(error);
+    }
 }
 
-v8::Local<v8::Value> SensorErrorEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8SensorErrorEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> SensorErrorEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8SensorErrorEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8SensorErrorEventInit(const SensorErrorEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8SensorErrorEventInit(const SensorErrorEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasError()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "error"), ToV8(impl.error(), creationContext, isolate))))
-      return false;
-  }
+    if (impl.hasError()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "error"), ToV8(impl.error(), creationContext, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-SensorErrorEventInit NativeValueTraits<SensorErrorEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  SensorErrorEventInit impl;
-  V8SensorErrorEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+SensorErrorEventInit NativeValueTraits<SensorErrorEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    SensorErrorEventInit impl;
+    V8SensorErrorEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

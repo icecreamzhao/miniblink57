@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8VoidCallback_h
 #define V8VoidCallback_h
 
@@ -20,21 +20,23 @@
 namespace blink {
 
 class V8VoidCallback final : public VoidCallback {
- public:
-  static V8VoidCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8VoidCallback(callback, scriptState);
-  }
+public:
+    static V8VoidCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8VoidCallback(callback, scriptState);
+    }
 
-  ~V8VoidCallback() override;
+    ~V8VoidCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  void handleEvent() override;
- private:
-  CORE_EXPORT V8VoidCallback(v8::Local<v8::Function>, ScriptState*);
+    void handleEvent() override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    CORE_EXPORT V8VoidCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8VoidCallback_h
+#endif // V8VoidCallback_h

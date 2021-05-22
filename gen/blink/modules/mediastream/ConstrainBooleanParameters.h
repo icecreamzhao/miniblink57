@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ConstrainBooleanParameters_h
 #define ConstrainBooleanParameters_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT ConstrainBooleanParameters : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ConstrainBooleanParameters();
-  virtual ~ConstrainBooleanParameters();
-  ConstrainBooleanParameters(const ConstrainBooleanParameters&);
-  ConstrainBooleanParameters& operator=(const ConstrainBooleanParameters&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasExact() const;
-  bool exact() const;
-  void setExact(bool);
+public:
+    ConstrainBooleanParameters();
+    virtual ~ConstrainBooleanParameters();
+    ConstrainBooleanParameters(const ConstrainBooleanParameters&);
+    ConstrainBooleanParameters& operator=(const ConstrainBooleanParameters&);
 
-  bool hasIdeal() const;
-  bool ideal() const;
-  void setIdeal(bool);
+    bool hasExact() const;
+    bool exact() const;
+    void setExact(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasIdeal() const;
+    bool ideal() const;
+    void setIdeal(bool);
 
- private:
-  bool m_hasExact = false;
-  bool m_exact;
-  bool m_hasIdeal = false;
-  bool m_ideal;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ConstrainBooleanParameters;
+private:
+    bool m_hasExact = false;
+    bool m_exact;
+    bool m_hasIdeal = false;
+    bool m_ideal;
+
+    friend class V8ConstrainBooleanParameters;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ConstrainBooleanParameters_h
+#endif // ConstrainBooleanParameters_h

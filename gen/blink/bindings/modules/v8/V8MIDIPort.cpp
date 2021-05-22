@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MIDIPort.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,219 +50,246 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&MIDIPort::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MIDIPort is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MIDIPortV8Internal {
 
-static void connectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void connectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MIDIPort* impl = V8MIDIPort::toImpl(holder);
+        MIDIPort* impl = V8MIDIPort::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->connection(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->connection(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void connectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::connectionAttributeGetter(info);
-}
+    MODULES_EXPORT void connectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::connectionAttributeGetter(info);
+    }
 
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MIDIPort* impl = V8MIDIPort::toImpl(holder);
+        MIDIPort* impl = V8MIDIPort::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->id(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->id(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::idAttributeGetter(info);
-}
+    MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::idAttributeGetter(info);
+    }
 
-static void manufacturerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void manufacturerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MIDIPort* impl = V8MIDIPort::toImpl(holder);
+        MIDIPort* impl = V8MIDIPort::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->manufacturer(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->manufacturer(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void manufacturerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::manufacturerAttributeGetter(info);
-}
+    MODULES_EXPORT void manufacturerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::manufacturerAttributeGetter(info);
+    }
 
-static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MIDIPort* impl = V8MIDIPort::toImpl(holder);
+        MIDIPort* impl = V8MIDIPort::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->name(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->name(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::nameAttributeGetter(info);
-}
+    MODULES_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::nameAttributeGetter(info);
+    }
 
-static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MIDIPort* impl = V8MIDIPort::toImpl(holder);
+        MIDIPort* impl = V8MIDIPort::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->state(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->state(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::stateAttributeGetter(info);
-}
+    MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::stateAttributeGetter(info);
+    }
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MIDIPort* impl = V8MIDIPort::toImpl(holder);
+        MIDIPort* impl = V8MIDIPort::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::typeAttributeGetter(info);
-}
+    MODULES_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::typeAttributeGetter(info);
+    }
 
-static void versionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void versionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MIDIPort* impl = V8MIDIPort::toImpl(holder);
+        MIDIPort* impl = V8MIDIPort::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->version(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->version(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void versionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::versionAttributeGetter(info);
-}
+    MODULES_EXPORT void versionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::versionAttributeGetter(info);
+    }
 
-static void onstatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onstatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MIDIPort* impl = V8MIDIPort::toImpl(holder);
+        MIDIPort* impl = V8MIDIPort::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onstatechange()));
+        EventListener* cppValue(WTF::getPtr(impl->onstatechange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onstatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::onstatechangeAttributeGetter(info);
-}
+    MODULES_EXPORT void onstatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::onstatechangeAttributeGetter(info);
+    }
 
-static void onstatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MIDIPort* impl = V8MIDIPort::toImpl(holder);
+    static void onstatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MIDIPort* impl = V8MIDIPort::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onstatechange(), v8Value, V8MIDIPort::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onstatechange(), v8Value, V8MIDIPort::eventListenerCacheIndex);
 
-  impl->setOnstatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnstatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onstatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onstatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MIDIPortV8Internal::onstatechangeAttributeSetter(v8Value, info);
-}
+        MIDIPortV8Internal::onstatechangeAttributeSetter(v8Value, info);
+    }
 
-static void openMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIPort", "open");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void openMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIPort", "open");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8MIDIPort::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  MIDIPort* impl = V8MIDIPort::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8MIDIPort::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        MIDIPort* impl = V8MIDIPort::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->open(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->open(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void openMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::openMethod(info);
-}
+    MODULES_EXPORT void openMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::openMethod(info);
+    }
 
-static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIPort", "close");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MIDIPort", "close");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8MIDIPort::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  MIDIPort* impl = V8MIDIPort::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8MIDIPort::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        MIDIPort* impl = V8MIDIPort::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->close(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->close(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MIDIPortV8Internal::closeMethod(info);
-}
+    MODULES_EXPORT void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MIDIPortV8Internal::closeMethod(info);
+    }
 
 } // namespace MIDIPortV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MIDIPortAccessors[] = {
-    {"connection", MIDIPortV8Internal::connectionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"id", MIDIPortV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"manufacturer", MIDIPortV8Internal::manufacturerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"name", MIDIPortV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"state", MIDIPortV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"type", MIDIPortV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"version", MIDIPortV8Internal::versionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onstatechange", MIDIPortV8Internal::onstatechangeAttributeGetterCallback, MIDIPortV8Internal::onstatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "connection", MIDIPortV8Internal::connectionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "id", MIDIPortV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "manufacturer", MIDIPortV8Internal::manufacturerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "name", MIDIPortV8Internal::nameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "state", MIDIPortV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "type", MIDIPortV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "version", MIDIPortV8Internal::versionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onstatechange", MIDIPortV8Internal::onstatechangeAttributeGetterCallback, MIDIPortV8Internal::onstatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MIDIPortMethods[] = {
-    {"open", MIDIPortV8Internal::openMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"close", MIDIPortV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "open", MIDIPortV8Internal::openMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "close", MIDIPortV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8MIDIPortTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MIDIPort::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MIDIPort::internalFieldCount);
+static void installV8MIDIPortTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MIDIPort::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MIDIPort::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MIDIPortAccessors, WTF_ARRAY_LENGTH(V8MIDIPortAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MIDIPortMethods, WTF_ARRAY_LENGTH(V8MIDIPortMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MIDIPortAccessors, WTF_ARRAY_LENGTH(V8MIDIPortAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MIDIPortMethods, WTF_ARRAY_LENGTH(V8MIDIPortMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MIDIPort::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MIDIPortTemplate);
+v8::Local<v8::FunctionTemplate> V8MIDIPort::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MIDIPortTemplate);
 }
 
-bool V8MIDIPort::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MIDIPort::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MIDIPort::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MIDIPort::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MIDIPort* V8MIDIPort::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MIDIPort* V8MIDIPort::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

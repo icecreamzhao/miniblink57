@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8AmbientLightSensorReading.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,104 +48,113 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&AmbientLightSensorReading::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "AmbientLightSensorReading is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace AmbientLightSensorReadingV8Internal {
 
-static void illuminanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void illuminanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  AmbientLightSensorReading* impl = V8AmbientLightSensorReading::toImpl(holder);
+        AmbientLightSensorReading* impl = V8AmbientLightSensorReading::toImpl(holder);
 
-  v8SetReturnValue(info, impl->illuminance());
-}
+        v8SetReturnValue(info, impl->illuminance());
+    }
 
-MODULES_EXPORT void illuminanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  AmbientLightSensorReadingV8Internal::illuminanceAttributeGetter(info);
-}
+    MODULES_EXPORT void illuminanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        AmbientLightSensorReadingV8Internal::illuminanceAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "AmbientLightSensorReading");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "AmbientLightSensorReading");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  AmbientLightSensorReadingInit ambientLightSensorReadingInit;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('ambientLightSensorReadingInit') is not an object.");
+        AmbientLightSensorReadingInit ambientLightSensorReadingInit;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('ambientLightSensorReadingInit') is not an object.");
 
-    return;
-  }
-  V8AmbientLightSensorReadingInit::toImpl(info.GetIsolate(), info[0], ambientLightSensorReadingInit, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8AmbientLightSensorReadingInit::toImpl(info.GetIsolate(), info[0], ambientLightSensorReadingInit, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  AmbientLightSensorReading* impl = AmbientLightSensorReading::create(ambientLightSensorReadingInit);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8AmbientLightSensorReading::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        AmbientLightSensorReading* impl = AmbientLightSensorReading::create(ambientLightSensorReadingInit);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8AmbientLightSensorReading::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace AmbientLightSensorReadingV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8AmbientLightSensorReadingAccessors[] = {
-    {"illuminance", AmbientLightSensorReadingV8Internal::illuminanceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "illuminance", AmbientLightSensorReadingV8Internal::illuminanceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8AmbientLightSensorReading::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("AmbientLightSensorReading"));
-    return;
-  }
+void V8AmbientLightSensorReading::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("AmbientLightSensorReading"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  AmbientLightSensorReadingV8Internal::constructor(info);
+    AmbientLightSensorReadingV8Internal::constructor(info);
 }
 
-static void installV8AmbientLightSensorReadingTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AmbientLightSensorReading::wrapperTypeInfo.interfaceName, V8SensorReading::domTemplate(isolate, world), V8AmbientLightSensorReading::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8AmbientLightSensorReading::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8AmbientLightSensorReadingTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8AmbientLightSensorReading::wrapperTypeInfo.interfaceName, V8SensorReading::domTemplate(isolate, world), V8AmbientLightSensorReading::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8AmbientLightSensorReading::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  if (!RuntimeEnabledFeatures::sensorEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::sensorEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AmbientLightSensorReadingAccessors, WTF_ARRAY_LENGTH(V8AmbientLightSensorReadingAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8AmbientLightSensorReadingAccessors, WTF_ARRAY_LENGTH(V8AmbientLightSensorReadingAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8AmbientLightSensorReading::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AmbientLightSensorReadingTemplate);
+v8::Local<v8::FunctionTemplate> V8AmbientLightSensorReading::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8AmbientLightSensorReadingTemplate);
 }
 
-bool V8AmbientLightSensorReading::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8AmbientLightSensorReading::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8AmbientLightSensorReading::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8AmbientLightSensorReading::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-AmbientLightSensorReading* V8AmbientLightSensorReading::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+AmbientLightSensorReading* V8AmbientLightSensorReading::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

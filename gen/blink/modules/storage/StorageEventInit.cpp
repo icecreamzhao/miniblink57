@@ -8,83 +8,104 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "StorageEventInit.h"
 
 #include "modules/storage/Storage.h"
 
 namespace blink {
 
-StorageEventInit::StorageEventInit() {
+StorageEventInit::StorageEventInit()
+{
 }
 
-StorageEventInit::~StorageEventInit() {}
+StorageEventInit::~StorageEventInit() { }
 
 StorageEventInit::StorageEventInit(const StorageEventInit&) = default;
 
 StorageEventInit& StorageEventInit::operator=(const StorageEventInit&) = default;
 
-bool StorageEventInit::hasKey() const {
-  return !m_key.isNull();
+bool StorageEventInit::hasKey() const
+{
+    return !m_key.isNull();
 }
-String StorageEventInit::key() const {
-  return m_key;
+String StorageEventInit::key() const
+{
+    return m_key;
 }
-void StorageEventInit::setKey(String value) {
-  m_key = value;
+void StorageEventInit::setKey(String value)
+{
+    m_key = value;
 }
-void StorageEventInit::setKeyToNull() {
-  m_key = String();
+void StorageEventInit::setKeyToNull()
+{
+    m_key = String();
 }
-bool StorageEventInit::hasNewValue() const {
-  return !m_newValue.isNull();
+bool StorageEventInit::hasNewValue() const
+{
+    return !m_newValue.isNull();
 }
-String StorageEventInit::newValue() const {
-  return m_newValue;
+String StorageEventInit::newValue() const
+{
+    return m_newValue;
 }
-void StorageEventInit::setNewValue(String value) {
-  m_newValue = value;
+void StorageEventInit::setNewValue(String value)
+{
+    m_newValue = value;
 }
-void StorageEventInit::setNewValueToNull() {
-  m_newValue = String();
+void StorageEventInit::setNewValueToNull()
+{
+    m_newValue = String();
 }
-bool StorageEventInit::hasOldValue() const {
-  return !m_oldValue.isNull();
+bool StorageEventInit::hasOldValue() const
+{
+    return !m_oldValue.isNull();
 }
-String StorageEventInit::oldValue() const {
-  return m_oldValue;
+String StorageEventInit::oldValue() const
+{
+    return m_oldValue;
 }
-void StorageEventInit::setOldValue(String value) {
-  m_oldValue = value;
+void StorageEventInit::setOldValue(String value)
+{
+    m_oldValue = value;
 }
-void StorageEventInit::setOldValueToNull() {
-  m_oldValue = String();
+void StorageEventInit::setOldValueToNull()
+{
+    m_oldValue = String();
 }
-bool StorageEventInit::hasStorageArea() const {
-  return m_storageArea;
+bool StorageEventInit::hasStorageArea() const
+{
+    return m_storageArea;
 }
-Storage* StorageEventInit::storageArea() const {
-  return m_storageArea;
+Storage* StorageEventInit::storageArea() const
+{
+    return m_storageArea;
 }
-void StorageEventInit::setStorageArea(Storage* value) {
-  m_storageArea = value;
+void StorageEventInit::setStorageArea(Storage* value)
+{
+    m_storageArea = value;
 }
-void StorageEventInit::setStorageAreaToNull() {
-  m_storageArea = Member<Storage>();
+void StorageEventInit::setStorageAreaToNull()
+{
+    m_storageArea = Member<Storage>();
 }
-bool StorageEventInit::hasURL() const {
-  return !m_url.isNull();
+bool StorageEventInit::hasURL() const
+{
+    return !m_url.isNull();
 }
-String StorageEventInit::url() const {
-  return m_url;
+String StorageEventInit::url() const
+{
+    return m_url;
 }
-void StorageEventInit::setURL(String value) {
-  m_url = value;
+void StorageEventInit::setURL(String value)
+{
+    m_url = value;
 }
 
-DEFINE_TRACE(StorageEventInit) {
-  visitor->trace(m_storageArea);
-  EventInit::trace(visitor);
+DEFINE_TRACE(StorageEventInit)
+{
+    visitor->trace(m_storageArea);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

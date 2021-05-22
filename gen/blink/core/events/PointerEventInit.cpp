@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PointerEventInit.h"
 
 #include "core/events/PointerEvent.h"
@@ -16,149 +16,184 @@
 
 namespace blink {
 
-PointerEventInit::PointerEventInit() {
-  setCoalescedEvents(HeapVector<Member<PointerEvent>>());
-  setHeight(1);
-  setIsPrimary(false);
-  setPointerId(0);
-  setPointerType(String(""));
-  setPressure(0);
-  setTangentialPressure(0);
-  setTiltX(0);
-  setTiltY(0);
-  setTwist(0);
-  setWidth(1);
+PointerEventInit::PointerEventInit()
+{
+    setCoalescedEvents(HeapVector<Member<PointerEvent>>());
+    setHeight(1);
+    setIsPrimary(false);
+    setPointerId(0);
+    setPointerType(String(""));
+    setPressure(0);
+    setTangentialPressure(0);
+    setTiltX(0);
+    setTiltY(0);
+    setTwist(0);
+    setWidth(1);
 }
 
-PointerEventInit::~PointerEventInit() {}
+PointerEventInit::~PointerEventInit() { }
 
 PointerEventInit::PointerEventInit(const PointerEventInit&) = default;
 
 PointerEventInit& PointerEventInit::operator=(const PointerEventInit&) = default;
 
-bool PointerEventInit::hasCoalescedEvents() const {
-  return m_hasCoalescedEvents;
+bool PointerEventInit::hasCoalescedEvents() const
+{
+    return m_hasCoalescedEvents;
 }
-const HeapVector<Member<PointerEvent>>& PointerEventInit::coalescedEvents() const {
-  DCHECK(m_hasCoalescedEvents);
-  return m_coalescedEvents;
+const HeapVector<Member<PointerEvent>>& PointerEventInit::coalescedEvents() const
+{
+    DCHECK(m_hasCoalescedEvents);
+    return m_coalescedEvents;
 }
-void PointerEventInit::setCoalescedEvents(const HeapVector<Member<PointerEvent>>& value) {
-  m_coalescedEvents = value;
-  m_hasCoalescedEvents = true;
+void PointerEventInit::setCoalescedEvents(const HeapVector<Member<PointerEvent>>& value)
+{
+    m_coalescedEvents = value;
+    m_hasCoalescedEvents = true;
 }
-bool PointerEventInit::hasHeight() const {
-  return m_hasHeight;
+bool PointerEventInit::hasHeight() const
+{
+    return m_hasHeight;
 }
-double PointerEventInit::height() const {
-  DCHECK(m_hasHeight);
-  return m_height;
+double PointerEventInit::height() const
+{
+    DCHECK(m_hasHeight);
+    return m_height;
 }
-void PointerEventInit::setHeight(double value) {
-  m_height = value;
-  m_hasHeight = true;
+void PointerEventInit::setHeight(double value)
+{
+    m_height = value;
+    m_hasHeight = true;
 }
-bool PointerEventInit::hasIsPrimary() const {
-  return m_hasIsPrimary;
+bool PointerEventInit::hasIsPrimary() const
+{
+    return m_hasIsPrimary;
 }
-bool PointerEventInit::isPrimary() const {
-  DCHECK(m_hasIsPrimary);
-  return m_isPrimary;
+bool PointerEventInit::isPrimary() const
+{
+    DCHECK(m_hasIsPrimary);
+    return m_isPrimary;
 }
-void PointerEventInit::setIsPrimary(bool value) {
-  m_isPrimary = value;
-  m_hasIsPrimary = true;
+void PointerEventInit::setIsPrimary(bool value)
+{
+    m_isPrimary = value;
+    m_hasIsPrimary = true;
 }
-bool PointerEventInit::hasPointerId() const {
-  return m_hasPointerId;
+bool PointerEventInit::hasPointerId() const
+{
+    return m_hasPointerId;
 }
-int PointerEventInit::pointerId() const {
-  DCHECK(m_hasPointerId);
-  return m_pointerId;
+int PointerEventInit::pointerId() const
+{
+    DCHECK(m_hasPointerId);
+    return m_pointerId;
 }
-void PointerEventInit::setPointerId(int value) {
-  m_pointerId = value;
-  m_hasPointerId = true;
+void PointerEventInit::setPointerId(int value)
+{
+    m_pointerId = value;
+    m_hasPointerId = true;
 }
-bool PointerEventInit::hasPointerType() const {
-  return !m_pointerType.isNull();
+bool PointerEventInit::hasPointerType() const
+{
+    return !m_pointerType.isNull();
 }
-String PointerEventInit::pointerType() const {
-  return m_pointerType;
+String PointerEventInit::pointerType() const
+{
+    return m_pointerType;
 }
-void PointerEventInit::setPointerType(String value) {
-  m_pointerType = value;
+void PointerEventInit::setPointerType(String value)
+{
+    m_pointerType = value;
 }
-bool PointerEventInit::hasPressure() const {
-  return m_hasPressure;
+bool PointerEventInit::hasPressure() const
+{
+    return m_hasPressure;
 }
-float PointerEventInit::pressure() const {
-  DCHECK(m_hasPressure);
-  return m_pressure;
+float PointerEventInit::pressure() const
+{
+    DCHECK(m_hasPressure);
+    return m_pressure;
 }
-void PointerEventInit::setPressure(float value) {
-  m_pressure = value;
-  m_hasPressure = true;
+void PointerEventInit::setPressure(float value)
+{
+    m_pressure = value;
+    m_hasPressure = true;
 }
-bool PointerEventInit::hasTangentialPressure() const {
-  return m_hasTangentialPressure;
+bool PointerEventInit::hasTangentialPressure() const
+{
+    return m_hasTangentialPressure;
 }
-float PointerEventInit::tangentialPressure() const {
-  DCHECK(m_hasTangentialPressure);
-  return m_tangentialPressure;
+float PointerEventInit::tangentialPressure() const
+{
+    DCHECK(m_hasTangentialPressure);
+    return m_tangentialPressure;
 }
-void PointerEventInit::setTangentialPressure(float value) {
-  m_tangentialPressure = value;
-  m_hasTangentialPressure = true;
+void PointerEventInit::setTangentialPressure(float value)
+{
+    m_tangentialPressure = value;
+    m_hasTangentialPressure = true;
 }
-bool PointerEventInit::hasTiltX() const {
-  return m_hasTiltX;
+bool PointerEventInit::hasTiltX() const
+{
+    return m_hasTiltX;
 }
-int PointerEventInit::tiltX() const {
-  DCHECK(m_hasTiltX);
-  return m_tiltX;
+int PointerEventInit::tiltX() const
+{
+    DCHECK(m_hasTiltX);
+    return m_tiltX;
 }
-void PointerEventInit::setTiltX(int value) {
-  m_tiltX = value;
-  m_hasTiltX = true;
+void PointerEventInit::setTiltX(int value)
+{
+    m_tiltX = value;
+    m_hasTiltX = true;
 }
-bool PointerEventInit::hasTiltY() const {
-  return m_hasTiltY;
+bool PointerEventInit::hasTiltY() const
+{
+    return m_hasTiltY;
 }
-int PointerEventInit::tiltY() const {
-  DCHECK(m_hasTiltY);
-  return m_tiltY;
+int PointerEventInit::tiltY() const
+{
+    DCHECK(m_hasTiltY);
+    return m_tiltY;
 }
-void PointerEventInit::setTiltY(int value) {
-  m_tiltY = value;
-  m_hasTiltY = true;
+void PointerEventInit::setTiltY(int value)
+{
+    m_tiltY = value;
+    m_hasTiltY = true;
 }
-bool PointerEventInit::hasTwist() const {
-  return m_hasTwist;
+bool PointerEventInit::hasTwist() const
+{
+    return m_hasTwist;
 }
-int PointerEventInit::twist() const {
-  DCHECK(m_hasTwist);
-  return m_twist;
+int PointerEventInit::twist() const
+{
+    DCHECK(m_hasTwist);
+    return m_twist;
 }
-void PointerEventInit::setTwist(int value) {
-  m_twist = value;
-  m_hasTwist = true;
+void PointerEventInit::setTwist(int value)
+{
+    m_twist = value;
+    m_hasTwist = true;
 }
-bool PointerEventInit::hasWidth() const {
-  return m_hasWidth;
+bool PointerEventInit::hasWidth() const
+{
+    return m_hasWidth;
 }
-double PointerEventInit::width() const {
-  DCHECK(m_hasWidth);
-  return m_width;
+double PointerEventInit::width() const
+{
+    DCHECK(m_hasWidth);
+    return m_width;
 }
-void PointerEventInit::setWidth(double value) {
-  m_width = value;
-  m_hasWidth = true;
+void PointerEventInit::setWidth(double value)
+{
+    m_width = value;
+    m_hasWidth = true;
 }
 
-DEFINE_TRACE(PointerEventInit) {
-  visitor->trace(m_coalescedEvents);
-  MouseEventInit::trace(visitor);
+DEFINE_TRACE(PointerEventInit)
+{
+    visitor->trace(m_coalescedEvents);
+    MouseEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

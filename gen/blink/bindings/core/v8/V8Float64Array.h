@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8Float64Array_h
 #define V8Float64Array_h
 
@@ -26,26 +26,29 @@
 namespace blink {
 
 class V8Float64Array {
-  STATIC_ONLY(V8Float64Array);
- public:
-  CORE_EXPORT static DOMFloat64Array* toImpl(v8::Local<v8::Object> object);
-  CORE_EXPORT static DOMFloat64Array* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<DOMFloat64Array>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<DOMFloat64Array>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8Float64Array);
+
+public:
+    CORE_EXPORT static DOMFloat64Array* toImpl(v8::Local<v8::Object> object);
+    CORE_EXPORT static DOMFloat64Array* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<DOMFloat64Array>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<DOMFloat64Array>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<DOMFloat64Array> {
-  typedef V8Float64Array Type;
+    typedef V8Float64Array Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8Float64Array_h
+#endif // V8Float64Array_h

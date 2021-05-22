@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef VideoTrackOrAudioTrackOrTextTrack_h
 #define VideoTrackOrAudioTrackOrTextTrack_h
 
@@ -25,65 +25,67 @@ class TextTrack;
 class VideoTrack;
 
 class CORE_EXPORT VideoTrackOrAudioTrackOrTextTrack final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  VideoTrackOrAudioTrackOrTextTrack();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isVideoTrack() const { return m_type == SpecificTypeVideoTrack; }
-  VideoTrack* getAsVideoTrack() const;
-  void setVideoTrack(VideoTrack*);
-  static VideoTrackOrAudioTrackOrTextTrack fromVideoTrack(VideoTrack*);
+public:
+    VideoTrackOrAudioTrackOrTextTrack();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isAudioTrack() const { return m_type == SpecificTypeAudioTrack; }
-  AudioTrack* getAsAudioTrack() const;
-  void setAudioTrack(AudioTrack*);
-  static VideoTrackOrAudioTrackOrTextTrack fromAudioTrack(AudioTrack*);
+    bool isVideoTrack() const { return m_type == SpecificTypeVideoTrack; }
+    VideoTrack* getAsVideoTrack() const;
+    void setVideoTrack(VideoTrack*);
+    static VideoTrackOrAudioTrackOrTextTrack fromVideoTrack(VideoTrack*);
 
-  bool isTextTrack() const { return m_type == SpecificTypeTextTrack; }
-  TextTrack* getAsTextTrack() const;
-  void setTextTrack(TextTrack*);
-  static VideoTrackOrAudioTrackOrTextTrack fromTextTrack(TextTrack*);
+    bool isAudioTrack() const { return m_type == SpecificTypeAudioTrack; }
+    AudioTrack* getAsAudioTrack() const;
+    void setAudioTrack(AudioTrack*);
+    static VideoTrackOrAudioTrackOrTextTrack fromAudioTrack(AudioTrack*);
 
-  VideoTrackOrAudioTrackOrTextTrack(const VideoTrackOrAudioTrackOrTextTrack&);
-  ~VideoTrackOrAudioTrackOrTextTrack();
-  VideoTrackOrAudioTrackOrTextTrack& operator=(const VideoTrackOrAudioTrackOrTextTrack&);
-  DECLARE_TRACE();
+    bool isTextTrack() const { return m_type == SpecificTypeTextTrack; }
+    TextTrack* getAsTextTrack() const;
+    void setTextTrack(TextTrack*);
+    static VideoTrackOrAudioTrackOrTextTrack fromTextTrack(TextTrack*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeVideoTrack,
-    SpecificTypeAudioTrack,
-    SpecificTypeTextTrack,
-  };
-  SpecificTypes m_type;
+    VideoTrackOrAudioTrackOrTextTrack(const VideoTrackOrAudioTrackOrTextTrack&);
+    ~VideoTrackOrAudioTrackOrTextTrack();
+    VideoTrackOrAudioTrackOrTextTrack& operator=(const VideoTrackOrAudioTrackOrTextTrack&);
+    DECLARE_TRACE();
 
-  Member<VideoTrack> m_videoTrack;
-  Member<AudioTrack> m_audioTrack;
-  Member<TextTrack> m_textTrack;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeVideoTrack,
+        SpecificTypeAudioTrack,
+        SpecificTypeTextTrack,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const VideoTrackOrAudioTrackOrTextTrack&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<VideoTrack> m_videoTrack;
+    Member<AudioTrack> m_audioTrack;
+    Member<TextTrack> m_textTrack;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const VideoTrackOrAudioTrackOrTextTrack&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8VideoTrackOrAudioTrackOrTextTrack final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, VideoTrackOrAudioTrackOrTextTrack&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, VideoTrackOrAudioTrackOrTextTrack&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const VideoTrackOrAudioTrackOrTextTrack&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, VideoTrackOrAudioTrackOrTextTrack& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, VideoTrackOrAudioTrackOrTextTrack& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<VideoTrackOrAudioTrackOrTextTrack> {
-  CORE_EXPORT static VideoTrackOrAudioTrackOrTextTrack nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static VideoTrackOrAudioTrackOrTextTrack nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -91,4 +93,4 @@ struct NativeValueTraits<VideoTrackOrAudioTrackOrTextTrack> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::VideoTrackOrAudioTrackOrTextTrack);
 
-#endif  // VideoTrackOrAudioTrackOrTextTrack_h
+#endif // VideoTrackOrAudioTrackOrTextTrack_h

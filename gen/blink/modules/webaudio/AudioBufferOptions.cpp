@@ -8,57 +8,68 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AudioBufferOptions.h"
 
 namespace blink {
 
-AudioBufferOptions::AudioBufferOptions() {
-  setNumberOfChannels(1u);
+AudioBufferOptions::AudioBufferOptions()
+{
+    setNumberOfChannels(1u);
 }
 
-AudioBufferOptions::~AudioBufferOptions() {}
+AudioBufferOptions::~AudioBufferOptions() { }
 
 AudioBufferOptions::AudioBufferOptions(const AudioBufferOptions&) = default;
 
 AudioBufferOptions& AudioBufferOptions::operator=(const AudioBufferOptions&) = default;
 
-bool AudioBufferOptions::hasLength() const {
-  return m_hasLength;
+bool AudioBufferOptions::hasLength() const
+{
+    return m_hasLength;
 }
-unsigned AudioBufferOptions::length() const {
-  DCHECK(m_hasLength);
-  return m_length;
+unsigned AudioBufferOptions::length() const
+{
+    DCHECK(m_hasLength);
+    return m_length;
 }
-void AudioBufferOptions::setLength(unsigned value) {
-  m_length = value;
-  m_hasLength = true;
+void AudioBufferOptions::setLength(unsigned value)
+{
+    m_length = value;
+    m_hasLength = true;
 }
-bool AudioBufferOptions::hasNumberOfChannels() const {
-  return m_hasNumberOfChannels;
+bool AudioBufferOptions::hasNumberOfChannels() const
+{
+    return m_hasNumberOfChannels;
 }
-unsigned AudioBufferOptions::numberOfChannels() const {
-  DCHECK(m_hasNumberOfChannels);
-  return m_numberOfChannels;
+unsigned AudioBufferOptions::numberOfChannels() const
+{
+    DCHECK(m_hasNumberOfChannels);
+    return m_numberOfChannels;
 }
-void AudioBufferOptions::setNumberOfChannels(unsigned value) {
-  m_numberOfChannels = value;
-  m_hasNumberOfChannels = true;
+void AudioBufferOptions::setNumberOfChannels(unsigned value)
+{
+    m_numberOfChannels = value;
+    m_hasNumberOfChannels = true;
 }
-bool AudioBufferOptions::hasSampleRate() const {
-  return m_hasSampleRate;
+bool AudioBufferOptions::hasSampleRate() const
+{
+    return m_hasSampleRate;
 }
-float AudioBufferOptions::sampleRate() const {
-  DCHECK(m_hasSampleRate);
-  return m_sampleRate;
+float AudioBufferOptions::sampleRate() const
+{
+    DCHECK(m_hasSampleRate);
+    return m_sampleRate;
 }
-void AudioBufferOptions::setSampleRate(float value) {
-  m_sampleRate = value;
-  m_hasSampleRate = true;
+void AudioBufferOptions::setSampleRate(float value)
+{
+    m_sampleRate = value;
+    m_hasSampleRate = true;
 }
 
-DEFINE_TRACE(AudioBufferOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(AudioBufferOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8BatteryManager.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,223 +47,252 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&BatteryManager::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "BatteryManager is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BatteryManagerV8Internal {
 
-static void chargingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void chargingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->charging());
-}
+        v8SetReturnValueBool(info, impl->charging());
+    }
 
-MODULES_EXPORT void chargingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BatteryManagerV8Internal::chargingAttributeGetter(info);
-}
+    MODULES_EXPORT void chargingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BatteryManagerV8Internal::chargingAttributeGetter(info);
+    }
 
-static void chargingTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void chargingTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  v8SetReturnValue(info, impl->chargingTime());
-}
+        v8SetReturnValue(info, impl->chargingTime());
+    }
 
-MODULES_EXPORT void chargingTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BatteryManagerV8Internal::chargingTimeAttributeGetter(info);
-}
+    MODULES_EXPORT void chargingTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BatteryManagerV8Internal::chargingTimeAttributeGetter(info);
+    }
 
-static void dischargingTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void dischargingTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  v8SetReturnValue(info, impl->dischargingTime());
-}
+        v8SetReturnValue(info, impl->dischargingTime());
+    }
 
-MODULES_EXPORT void dischargingTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BatteryManagerV8Internal::dischargingTimeAttributeGetter(info);
-}
+    MODULES_EXPORT void dischargingTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BatteryManagerV8Internal::dischargingTimeAttributeGetter(info);
+    }
 
-static void levelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void levelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  v8SetReturnValue(info, impl->level());
-}
+        v8SetReturnValue(info, impl->level());
+    }
 
-MODULES_EXPORT void levelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BatteryManagerV8Internal::levelAttributeGetter(info);
-}
+    MODULES_EXPORT void levelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BatteryManagerV8Internal::levelAttributeGetter(info);
+    }
 
-static void onchargingchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onchargingchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onchargingchange()));
+        EventListener* cppValue(WTF::getPtr(impl->onchargingchange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onchargingchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BatteryManagerV8Internal::onchargingchangeAttributeGetter(info);
-}
+    MODULES_EXPORT void onchargingchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BatteryManagerV8Internal::onchargingchangeAttributeGetter(info);
+    }
 
-static void onchargingchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+    static void onchargingchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchargingchange(), v8Value, V8BatteryManager::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchargingchange(), v8Value, V8BatteryManager::eventListenerCacheIndex);
 
-  impl->setOnchargingchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnchargingchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onchargingchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onchargingchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  BatteryManagerV8Internal::onchargingchangeAttributeSetter(v8Value, info);
-}
+        BatteryManagerV8Internal::onchargingchangeAttributeSetter(v8Value, info);
+    }
 
-static void onchargingtimechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onchargingtimechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onchargingtimechange()));
+        EventListener* cppValue(WTF::getPtr(impl->onchargingtimechange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onchargingtimechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BatteryManagerV8Internal::onchargingtimechangeAttributeGetter(info);
-}
+    MODULES_EXPORT void onchargingtimechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BatteryManagerV8Internal::onchargingtimechangeAttributeGetter(info);
+    }
 
-static void onchargingtimechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+    static void onchargingtimechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchargingtimechange(), v8Value, V8BatteryManager::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchargingtimechange(), v8Value, V8BatteryManager::eventListenerCacheIndex);
 
-  impl->setOnchargingtimechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnchargingtimechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onchargingtimechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onchargingtimechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  BatteryManagerV8Internal::onchargingtimechangeAttributeSetter(v8Value, info);
-}
+        BatteryManagerV8Internal::onchargingtimechangeAttributeSetter(v8Value, info);
+    }
 
-static void ondischargingtimechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ondischargingtimechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->ondischargingtimechange()));
+        EventListener* cppValue(WTF::getPtr(impl->ondischargingtimechange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void ondischargingtimechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BatteryManagerV8Internal::ondischargingtimechangeAttributeGetter(info);
-}
+    MODULES_EXPORT void ondischargingtimechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BatteryManagerV8Internal::ondischargingtimechangeAttributeGetter(info);
+    }
 
-static void ondischargingtimechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+    static void ondischargingtimechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondischargingtimechange(), v8Value, V8BatteryManager::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->ondischargingtimechange(), v8Value, V8BatteryManager::eventListenerCacheIndex);
 
-  impl->setOndischargingtimechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOndischargingtimechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void ondischargingtimechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void ondischargingtimechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  BatteryManagerV8Internal::ondischargingtimechangeAttributeSetter(v8Value, info);
-}
+        BatteryManagerV8Internal::ondischargingtimechangeAttributeSetter(v8Value, info);
+    }
 
-static void onlevelchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onlevelchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onlevelchange()));
+        EventListener* cppValue(WTF::getPtr(impl->onlevelchange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-MODULES_EXPORT void onlevelchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BatteryManagerV8Internal::onlevelchangeAttributeGetter(info);
-}
+    MODULES_EXPORT void onlevelchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BatteryManagerV8Internal::onlevelchangeAttributeGetter(info);
+    }
 
-static void onlevelchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  BatteryManager* impl = V8BatteryManager::toImpl(holder);
+    static void onlevelchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        BatteryManager* impl = V8BatteryManager::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onlevelchange(), v8Value, V8BatteryManager::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onlevelchange(), v8Value, V8BatteryManager::eventListenerCacheIndex);
 
-  impl->setOnlevelchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnlevelchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-MODULES_EXPORT void onlevelchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void onlevelchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  BatteryManagerV8Internal::onlevelchangeAttributeSetter(v8Value, info);
-}
+        BatteryManagerV8Internal::onlevelchangeAttributeSetter(v8Value, info);
+    }
 
 } // namespace BatteryManagerV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8BatteryManagerAccessors[] = {
-    {"charging", BatteryManagerV8Internal::chargingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"chargingTime", BatteryManagerV8Internal::chargingTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dischargingTime", BatteryManagerV8Internal::dischargingTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"level", BatteryManagerV8Internal::levelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onchargingchange", BatteryManagerV8Internal::onchargingchangeAttributeGetterCallback, BatteryManagerV8Internal::onchargingchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onchargingtimechange", BatteryManagerV8Internal::onchargingtimechangeAttributeGetterCallback, BatteryManagerV8Internal::onchargingtimechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondischargingtimechange", BatteryManagerV8Internal::ondischargingtimechangeAttributeGetterCallback, BatteryManagerV8Internal::ondischargingtimechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onlevelchange", BatteryManagerV8Internal::onlevelchangeAttributeGetterCallback, BatteryManagerV8Internal::onlevelchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "charging", BatteryManagerV8Internal::chargingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "chargingTime", BatteryManagerV8Internal::chargingTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dischargingTime", BatteryManagerV8Internal::dischargingTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "level", BatteryManagerV8Internal::levelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onchargingchange", BatteryManagerV8Internal::onchargingchangeAttributeGetterCallback, BatteryManagerV8Internal::onchargingchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onchargingtimechange", BatteryManagerV8Internal::onchargingtimechangeAttributeGetterCallback, BatteryManagerV8Internal::onchargingtimechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondischargingtimechange", BatteryManagerV8Internal::ondischargingtimechangeAttributeGetterCallback, BatteryManagerV8Internal::ondischargingtimechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onlevelchange", BatteryManagerV8Internal::onlevelchangeAttributeGetterCallback, BatteryManagerV8Internal::onlevelchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8BatteryManagerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BatteryManager::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8BatteryManager::internalFieldCount);
+static void installV8BatteryManagerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BatteryManager::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8BatteryManager::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BatteryManagerAccessors, WTF_ARRAY_LENGTH(V8BatteryManagerAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BatteryManagerAccessors, WTF_ARRAY_LENGTH(V8BatteryManagerAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8BatteryManager::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BatteryManagerTemplate);
+v8::Local<v8::FunctionTemplate> V8BatteryManager::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BatteryManagerTemplate);
 }
 
-bool V8BatteryManager::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8BatteryManager::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8BatteryManager::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8BatteryManager::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-BatteryManager* V8BatteryManager::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+BatteryManager* V8BatteryManager::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

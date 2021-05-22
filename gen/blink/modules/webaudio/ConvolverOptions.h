@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ConvolverOptions_h
 #define ConvolverOptions_h
 
@@ -21,33 +21,34 @@ namespace blink {
 class AudioBuffer;
 
 class MODULES_EXPORT ConvolverOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ConvolverOptions();
-  virtual ~ConvolverOptions();
-  ConvolverOptions(const ConvolverOptions&);
-  ConvolverOptions& operator=(const ConvolverOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasBuffer() const;
-  AudioBuffer* buffer() const;
-  void setBuffer(AudioBuffer*);
-  void setBufferToNull();
+public:
+    ConvolverOptions();
+    virtual ~ConvolverOptions();
+    ConvolverOptions(const ConvolverOptions&);
+    ConvolverOptions& operator=(const ConvolverOptions&);
 
-  bool hasDisableNormalization() const;
-  bool disableNormalization() const;
-  void setDisableNormalization(bool);
+    bool hasBuffer() const;
+    AudioBuffer* buffer() const;
+    void setBuffer(AudioBuffer*);
+    void setBufferToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasDisableNormalization() const;
+    bool disableNormalization() const;
+    void setDisableNormalization(bool);
 
- private:
-  Member<AudioBuffer> m_buffer;
-  bool m_hasDisableNormalization = false;
-  bool m_disableNormalization;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ConvolverOptions;
+private:
+    Member<AudioBuffer> m_buffer;
+    bool m_hasDisableNormalization = false;
+    bool m_disableNormalization;
+
+    friend class V8ConvolverOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ConvolverOptions_h
+#endif // ConvolverOptions_h

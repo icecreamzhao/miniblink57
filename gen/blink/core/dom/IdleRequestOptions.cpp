@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "IdleRequestOptions.h"
 
 namespace blink {
 
-IdleRequestOptions::IdleRequestOptions() {
-  setTimeout(0u);
+IdleRequestOptions::IdleRequestOptions()
+{
+    setTimeout(0u);
 }
 
-IdleRequestOptions::~IdleRequestOptions() {}
+IdleRequestOptions::~IdleRequestOptions() { }
 
 IdleRequestOptions::IdleRequestOptions(const IdleRequestOptions&) = default;
 
 IdleRequestOptions& IdleRequestOptions::operator=(const IdleRequestOptions&) = default;
 
-bool IdleRequestOptions::hasTimeout() const {
-  return m_hasTimeout;
+bool IdleRequestOptions::hasTimeout() const
+{
+    return m_hasTimeout;
 }
-unsigned IdleRequestOptions::timeout() const {
-  DCHECK(m_hasTimeout);
-  return m_timeout;
+unsigned IdleRequestOptions::timeout() const
+{
+    DCHECK(m_hasTimeout);
+    return m_timeout;
 }
-void IdleRequestOptions::setTimeout(unsigned value) {
-  m_timeout = value;
-  m_hasTimeout = true;
+void IdleRequestOptions::setTimeout(unsigned value)
+{
+    m_timeout = value;
+    m_hasTimeout = true;
 }
 
-DEFINE_TRACE(IdleRequestOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(IdleRequestOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

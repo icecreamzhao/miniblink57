@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef HTMLScriptElementOrSVGScriptElement_h
 #define HTMLScriptElementOrSVGScriptElement_h
 
@@ -24,58 +24,60 @@ class HTMLScriptElement;
 class SVGScriptElement;
 
 class CORE_EXPORT HTMLScriptElementOrSVGScriptElement final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  HTMLScriptElementOrSVGScriptElement();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isHTMLScriptElement() const { return m_type == SpecificTypeHTMLScriptElement; }
-  HTMLScriptElement* getAsHTMLScriptElement() const;
-  void setHTMLScriptElement(HTMLScriptElement*);
-  static HTMLScriptElementOrSVGScriptElement fromHTMLScriptElement(HTMLScriptElement*);
+public:
+    HTMLScriptElementOrSVGScriptElement();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isSVGScriptElement() const { return m_type == SpecificTypeSVGScriptElement; }
-  SVGScriptElement* getAsSVGScriptElement() const;
-  void setSVGScriptElement(SVGScriptElement*);
-  static HTMLScriptElementOrSVGScriptElement fromSVGScriptElement(SVGScriptElement*);
+    bool isHTMLScriptElement() const { return m_type == SpecificTypeHTMLScriptElement; }
+    HTMLScriptElement* getAsHTMLScriptElement() const;
+    void setHTMLScriptElement(HTMLScriptElement*);
+    static HTMLScriptElementOrSVGScriptElement fromHTMLScriptElement(HTMLScriptElement*);
 
-  HTMLScriptElementOrSVGScriptElement(const HTMLScriptElementOrSVGScriptElement&);
-  ~HTMLScriptElementOrSVGScriptElement();
-  HTMLScriptElementOrSVGScriptElement& operator=(const HTMLScriptElementOrSVGScriptElement&);
-  DECLARE_TRACE();
+    bool isSVGScriptElement() const { return m_type == SpecificTypeSVGScriptElement; }
+    SVGScriptElement* getAsSVGScriptElement() const;
+    void setSVGScriptElement(SVGScriptElement*);
+    static HTMLScriptElementOrSVGScriptElement fromSVGScriptElement(SVGScriptElement*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeHTMLScriptElement,
-    SpecificTypeSVGScriptElement,
-  };
-  SpecificTypes m_type;
+    HTMLScriptElementOrSVGScriptElement(const HTMLScriptElementOrSVGScriptElement&);
+    ~HTMLScriptElementOrSVGScriptElement();
+    HTMLScriptElementOrSVGScriptElement& operator=(const HTMLScriptElementOrSVGScriptElement&);
+    DECLARE_TRACE();
 
-  Member<HTMLScriptElement> m_htmlScriptElement;
-  Member<SVGScriptElement> m_svgScriptElement;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeHTMLScriptElement,
+        SpecificTypeSVGScriptElement,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLScriptElementOrSVGScriptElement&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<HTMLScriptElement> m_htmlScriptElement;
+    Member<SVGScriptElement> m_svgScriptElement;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLScriptElementOrSVGScriptElement&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8HTMLScriptElementOrSVGScriptElement final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLScriptElementOrSVGScriptElement&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HTMLScriptElementOrSVGScriptElement&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const HTMLScriptElementOrSVGScriptElement&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLScriptElementOrSVGScriptElement& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HTMLScriptElementOrSVGScriptElement& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<HTMLScriptElementOrSVGScriptElement> {
-  CORE_EXPORT static HTMLScriptElementOrSVGScriptElement nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static HTMLScriptElementOrSVGScriptElement nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -83,4 +85,4 @@ struct NativeValueTraits<HTMLScriptElementOrSVGScriptElement> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::HTMLScriptElementOrSVGScriptElement);
 
-#endif  // HTMLScriptElementOrSVGScriptElement_h
+#endif // HTMLScriptElementOrSVGScriptElement_h

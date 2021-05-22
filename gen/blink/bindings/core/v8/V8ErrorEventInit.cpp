@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ErrorEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -17,137 +17,141 @@
 
 namespace blink {
 
-void V8ErrorEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ErrorEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8ErrorEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ErrorEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> colnoValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "colno")).ToLocal(&colnoValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (colnoValue.IsEmpty() || colnoValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned colno = toUInt32(isolate, colnoValue, NormalConversion, exceptionState);
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setColno(colno);
-  }
+        return;
 
-  v8::Local<v8::Value> errorValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "error")).ToLocal(&errorValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (errorValue.IsEmpty() || errorValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    ScriptValue error = ScriptValue(ScriptState::current(isolate), errorValue);
-    impl.setError(error);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> colnoValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "colno")).ToLocal(&colnoValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (colnoValue.IsEmpty() || colnoValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned colno = toUInt32(isolate, colnoValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setColno(colno);
+    }
 
-  v8::Local<v8::Value> filenameValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "filename")).ToLocal(&filenameValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (filenameValue.IsEmpty() || filenameValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> filename = filenameValue;
-    if (!filename.prepare(exceptionState))
-      return;
-    impl.setFilename(filename);
-  }
+    v8::Local<v8::Value> errorValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "error")).ToLocal(&errorValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (errorValue.IsEmpty() || errorValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        ScriptValue error = ScriptValue(ScriptState::current(isolate), errorValue);
+        impl.setError(error);
+    }
 
-  v8::Local<v8::Value> linenoValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "lineno")).ToLocal(&linenoValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (linenoValue.IsEmpty() || linenoValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    unsigned lineno = toUInt32(isolate, linenoValue, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setLineno(lineno);
-  }
+    v8::Local<v8::Value> filenameValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "filename")).ToLocal(&filenameValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (filenameValue.IsEmpty() || filenameValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> filename = filenameValue;
+        if (!filename.prepare(exceptionState))
+            return;
+        impl.setFilename(filename);
+    }
 
-  v8::Local<v8::Value> messageValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "message")).ToLocal(&messageValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (messageValue.IsEmpty() || messageValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> message = messageValue;
-    if (!message.prepare(exceptionState))
-      return;
-    impl.setMessage(message);
-  }
+    v8::Local<v8::Value> linenoValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "lineno")).ToLocal(&linenoValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (linenoValue.IsEmpty() || linenoValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        unsigned lineno = toUInt32(isolate, linenoValue, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setLineno(lineno);
+    }
+
+    v8::Local<v8::Value> messageValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "message")).ToLocal(&messageValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (messageValue.IsEmpty() || messageValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> message = messageValue;
+        if (!message.prepare(exceptionState))
+            return;
+        impl.setMessage(message);
+    }
 }
 
-v8::Local<v8::Value> ErrorEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ErrorEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ErrorEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ErrorEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ErrorEventInit(const ErrorEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8ErrorEventInit(const ErrorEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasColno()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "colno"), v8::Integer::NewFromUnsigned(isolate, impl.colno()))))
-      return false;
-  }
+    if (impl.hasColno()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "colno"), v8::Integer::NewFromUnsigned(isolate, impl.colno()))))
+            return false;
+    }
 
-  if (impl.hasError()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "error"), impl.error().v8Value())))
-      return false;
-  }
+    if (impl.hasError()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "error"), impl.error().v8Value())))
+            return false;
+    }
 
-  if (impl.hasFilename()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "filename"), v8String(isolate, impl.filename()))))
-      return false;
-  }
+    if (impl.hasFilename()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "filename"), v8String(isolate, impl.filename()))))
+            return false;
+    }
 
-  if (impl.hasLineno()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "lineno"), v8::Integer::NewFromUnsigned(isolate, impl.lineno()))))
-      return false;
-  }
+    if (impl.hasLineno()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "lineno"), v8::Integer::NewFromUnsigned(isolate, impl.lineno()))))
+            return false;
+    }
 
-  if (impl.hasMessage()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "message"), v8String(isolate, impl.message()))))
-      return false;
-  }
+    if (impl.hasMessage()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "message"), v8String(isolate, impl.message()))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-ErrorEventInit NativeValueTraits<ErrorEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ErrorEventInit impl;
-  V8ErrorEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ErrorEventInit NativeValueTraits<ErrorEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ErrorEventInit impl;
+    V8ErrorEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

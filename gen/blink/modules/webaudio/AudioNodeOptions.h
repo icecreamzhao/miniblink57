@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AudioNodeOptions_h
 #define AudioNodeOptions_h
 
@@ -20,37 +20,38 @@
 namespace blink {
 
 class MODULES_EXPORT AudioNodeOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AudioNodeOptions();
-  virtual ~AudioNodeOptions();
-  AudioNodeOptions(const AudioNodeOptions&);
-  AudioNodeOptions& operator=(const AudioNodeOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasChannelCount() const;
-  unsigned channelCount() const;
-  void setChannelCount(unsigned);
+public:
+    AudioNodeOptions();
+    virtual ~AudioNodeOptions();
+    AudioNodeOptions(const AudioNodeOptions&);
+    AudioNodeOptions& operator=(const AudioNodeOptions&);
 
-  bool hasChannelCountMode() const;
-  String channelCountMode() const;
-  void setChannelCountMode(String);
+    bool hasChannelCount() const;
+    unsigned channelCount() const;
+    void setChannelCount(unsigned);
 
-  bool hasChannelInterpretation() const;
-  String channelInterpretation() const;
-  void setChannelInterpretation(String);
+    bool hasChannelCountMode() const;
+    String channelCountMode() const;
+    void setChannelCountMode(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasChannelInterpretation() const;
+    String channelInterpretation() const;
+    void setChannelInterpretation(String);
 
- private:
-  bool m_hasChannelCount = false;
-  unsigned m_channelCount;
-  String m_channelCountMode;
-  String m_channelInterpretation;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AudioNodeOptions;
+private:
+    bool m_hasChannelCount = false;
+    unsigned m_channelCount;
+    String m_channelCountMode;
+    String m_channelInterpretation;
+
+    friend class V8AudioNodeOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AudioNodeOptions_h
+#endif // AudioNodeOptions_h

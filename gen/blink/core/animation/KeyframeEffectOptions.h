@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef KeyframeEffectOptions_h
 #define KeyframeEffectOptions_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class CORE_EXPORT KeyframeEffectOptions : public AnimationEffectTimingProperties {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  KeyframeEffectOptions();
-  virtual ~KeyframeEffectOptions();
-  KeyframeEffectOptions(const KeyframeEffectOptions&);
-  KeyframeEffectOptions& operator=(const KeyframeEffectOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasId() const;
-  String id() const;
-  void setId(String);
+public:
+    KeyframeEffectOptions();
+    virtual ~KeyframeEffectOptions();
+    KeyframeEffectOptions(const KeyframeEffectOptions&);
+    KeyframeEffectOptions& operator=(const KeyframeEffectOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasId() const;
+    String id() const;
+    void setId(String);
 
- private:
-  String m_id;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8KeyframeEffectOptions;
+private:
+    String m_id;
+
+    friend class V8KeyframeEffectOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // KeyframeEffectOptions_h
+#endif // KeyframeEffectOptions_h

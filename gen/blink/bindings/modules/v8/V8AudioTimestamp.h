@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AudioTimestamp_h
 #define V8AudioTimestamp_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8AudioTimestamp {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AudioTimestamp&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AudioTimestamp&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8AudioTimestamp(const AudioTimestamp&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AudioTimestamp& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AudioTimestamp& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<AudioTimestamp> {
-  static AudioTimestamp nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static AudioTimestamp nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<AudioTimestamp> {
-  typedef V8AudioTimestamp Type;
+    typedef V8AudioTimestamp Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8AudioTimestamp_h
+#endif // V8AudioTimestamp_h

@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PeriodicWaveOptions.h"
 
 namespace blink {
 
-PeriodicWaveOptions::PeriodicWaveOptions() {
+PeriodicWaveOptions::PeriodicWaveOptions()
+{
 }
 
-PeriodicWaveOptions::~PeriodicWaveOptions() {}
+PeriodicWaveOptions::~PeriodicWaveOptions() { }
 
 PeriodicWaveOptions::PeriodicWaveOptions(const PeriodicWaveOptions&) = default;
 
 PeriodicWaveOptions& PeriodicWaveOptions::operator=(const PeriodicWaveOptions&) = default;
 
-bool PeriodicWaveOptions::hasImag() const {
-  return m_hasImag;
+bool PeriodicWaveOptions::hasImag() const
+{
+    return m_hasImag;
 }
-const Vector<float>& PeriodicWaveOptions::imag() const {
-  DCHECK(m_hasImag);
-  return m_imag;
+const Vector<float>& PeriodicWaveOptions::imag() const
+{
+    DCHECK(m_hasImag);
+    return m_imag;
 }
-void PeriodicWaveOptions::setImag(const Vector<float>& value) {
-  m_imag = value;
-  m_hasImag = true;
+void PeriodicWaveOptions::setImag(const Vector<float>& value)
+{
+    m_imag = value;
+    m_hasImag = true;
 }
-bool PeriodicWaveOptions::hasReal() const {
-  return m_hasReal;
+bool PeriodicWaveOptions::hasReal() const
+{
+    return m_hasReal;
 }
-const Vector<float>& PeriodicWaveOptions::real() const {
-  DCHECK(m_hasReal);
-  return m_real;
+const Vector<float>& PeriodicWaveOptions::real() const
+{
+    DCHECK(m_hasReal);
+    return m_real;
 }
-void PeriodicWaveOptions::setReal(const Vector<float>& value) {
-  m_real = value;
-  m_hasReal = true;
+void PeriodicWaveOptions::setReal(const Vector<float>& value)
+{
+    m_real = value;
+    m_hasReal = true;
 }
 
-DEFINE_TRACE(PeriodicWaveOptions) {
-  PeriodicWaveConstraints::trace(visitor);
+DEFINE_TRACE(PeriodicWaveOptions)
+{
+    PeriodicWaveConstraints::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

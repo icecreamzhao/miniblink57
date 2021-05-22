@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TextTrack.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -56,376 +56,412 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&TextTrack::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "TextTrack is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TextTrackV8Internal {
 
-static void kindAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void kindAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->kind(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->kind(), info.GetIsolate());
+    }
 
-CORE_EXPORT void kindAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::kindAttributeGetter(info);
-}
+    CORE_EXPORT void kindAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::kindAttributeGetter(info);
+    }
 
-static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->label(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->label(), info.GetIsolate());
+    }
 
-CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::labelAttributeGetter(info);
-}
+    CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::labelAttributeGetter(info);
+    }
 
-static void languageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void languageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->language(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->language(), info.GetIsolate());
+    }
 
-CORE_EXPORT void languageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::languageAttributeGetter(info);
-}
+    CORE_EXPORT void languageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::languageAttributeGetter(info);
+    }
 
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->id(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->id(), info.GetIsolate());
+    }
 
-CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::idAttributeGetter(info);
-}
+    CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::idAttributeGetter(info);
+    }
 
-static void modeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void modeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->mode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->mode(), info.GetIsolate());
+    }
 
-CORE_EXPORT void modeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::modeAttributeGetter(info);
-}
+    CORE_EXPORT void modeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::modeAttributeGetter(info);
+    }
 
-static void modeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+    static void modeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TextTrack", "mode");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "TextTrack", "mode");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "disabled",
-      "hidden",
-      "showing",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "TextTrackMode", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "disabled",
+            "hidden",
+            "showing",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "TextTrackMode", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
 
-  impl->setMode(cppValue);
-}
+        impl->setMode(cppValue);
+    }
 
-CORE_EXPORT void modeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void modeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TextTrackV8Internal::modeAttributeSetter(v8Value, info);
-}
+        TextTrackV8Internal::modeAttributeSetter(v8Value, info);
+    }
 
-static void cuesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void cuesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  TextTrackCueList* cppValue(WTF::getPtr(impl->cues()));
+        TextTrackCueList* cppValue(WTF::getPtr(impl->cues()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#TextTrack#cues";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#TextTrack#cues";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void cuesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::cuesAttributeGetter(info);
-}
+    CORE_EXPORT void cuesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::cuesAttributeGetter(info);
+    }
 
-static void activeCuesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void activeCuesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  TextTrackCueList* cppValue(WTF::getPtr(impl->activeCues()));
+        TextTrackCueList* cppValue(WTF::getPtr(impl->activeCues()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#TextTrack#activeCues";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#TextTrack#activeCues";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void activeCuesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::activeCuesAttributeGetter(info);
-}
+    CORE_EXPORT void activeCuesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::activeCuesAttributeGetter(info);
+    }
 
-static void oncuechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncuechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->oncuechange()));
+        EventListener* cppValue(WTF::getPtr(impl->oncuechange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncuechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::oncuechangeAttributeGetter(info);
-}
+    CORE_EXPORT void oncuechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::oncuechangeAttributeGetter(info);
+    }
 
-static void oncuechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+    static void oncuechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncuechange(), v8Value, V8TextTrack::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->oncuechange(), v8Value, V8TextTrack::eventListenerCacheIndex);
 
-  impl->setOncuechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOncuechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncuechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncuechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  TextTrackV8Internal::oncuechangeAttributeSetter(v8Value, info);
-}
+        TextTrackV8Internal::oncuechangeAttributeSetter(v8Value, info);
+    }
 
-static void regionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void regionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  TextTrack* impl = V8TextTrack::toImpl(holder);
+        TextTrack* impl = V8TextTrack::toImpl(holder);
 
-  VTTRegionList* cppValue(WTF::getPtr(impl->regions()));
+        VTTRegionList* cppValue(WTF::getPtr(impl->regions()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#TextTrack#regions";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#TextTrack#regions";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-CORE_EXPORT void regionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::regionsAttributeGetter(info);
-}
+    CORE_EXPORT void regionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::regionsAttributeGetter(info);
+    }
 
-static void addCueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrack* impl = V8TextTrack::toImpl(info.Holder());
+    static void addCueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrack* impl = V8TextTrack::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addCue", "TextTrack", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addCue", "TextTrack", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  TextTrackCue* cue;
-  cue = V8TextTrackCue::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!cue) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addCue", "TextTrack", "parameter 1 is not of type 'TextTrackCue'."));
+        TextTrackCue* cue;
+        cue = V8TextTrackCue::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!cue) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addCue", "TextTrack", "parameter 1 is not of type 'TextTrackCue'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->addCue(cue);
-}
+        impl->addCue(cue);
+    }
 
-CORE_EXPORT  void addCueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::addCueMethod(info);
-}
+    CORE_EXPORT void addCueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::addCueMethod(info);
+    }
 
-static void removeCueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TextTrack", "removeCue");
+    static void removeCueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TextTrack", "removeCue");
 
-  TextTrack* impl = V8TextTrack::toImpl(info.Holder());
+        TextTrack* impl = V8TextTrack::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  TextTrackCue* cue;
-  cue = V8TextTrackCue::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!cue) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'TextTrackCue'.");
+        TextTrackCue* cue;
+        cue = V8TextTrackCue::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!cue) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'TextTrackCue'.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->removeCue(cue, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->removeCue(cue, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void removeCueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::removeCueMethod(info);
-}
+    CORE_EXPORT void removeCueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::removeCueMethod(info);
+    }
 
-static void addRegionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrack* impl = V8TextTrack::toImpl(info.Holder());
+    static void addRegionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrack* impl = V8TextTrack::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addRegion", "TextTrack", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addRegion", "TextTrack", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  VTTRegion* region;
-  region = V8VTTRegion::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!region) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addRegion", "TextTrack", "parameter 1 is not of type 'VTTRegion'."));
+        VTTRegion* region;
+        region = V8VTTRegion::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!region) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addRegion", "TextTrack", "parameter 1 is not of type 'VTTRegion'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->addRegion(region);
-}
+        impl->addRegion(region);
+    }
 
-CORE_EXPORT  void addRegionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::addRegionMethod(info);
-}
+    CORE_EXPORT void addRegionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::addRegionMethod(info);
+    }
 
-static void removeRegionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TextTrack", "removeRegion");
+    static void removeRegionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "TextTrack", "removeRegion");
 
-  TextTrack* impl = V8TextTrack::toImpl(info.Holder());
+        TextTrack* impl = V8TextTrack::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  VTTRegion* region;
-  region = V8VTTRegion::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!region) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'VTTRegion'.");
+        VTTRegion* region;
+        region = V8VTTRegion::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!region) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'VTTRegion'.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->removeRegion(region, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->removeRegion(region, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void removeRegionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextTrackV8Internal::removeRegionMethod(info);
-}
+    CORE_EXPORT void removeRegionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextTrackV8Internal::removeRegionMethod(info);
+    }
 
 } // namespace TextTrackV8Internal
 
-void V8TextTrack::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  TextTrack* impl = scriptWrappable->toImpl<TextTrack>();
-  // The owner() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->owner())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8TextTrack::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    TextTrack* impl = scriptWrappable->toImpl<TextTrack>();
+    // The owner() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->owner())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8TextTrackAccessors[] = {
-    {"kind", TextTrackV8Internal::kindAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"label", TextTrackV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"language", TextTrackV8Internal::languageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"id", TextTrackV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mode", TextTrackV8Internal::modeAttributeGetterCallback, TextTrackV8Internal::modeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cues", TextTrackV8Internal::cuesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"activeCues", TextTrackV8Internal::activeCuesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncuechange", TextTrackV8Internal::oncuechangeAttributeGetterCallback, TextTrackV8Internal::oncuechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "kind", TextTrackV8Internal::kindAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "label", TextTrackV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "language", TextTrackV8Internal::languageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "id", TextTrackV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mode", TextTrackV8Internal::modeAttributeGetterCallback, TextTrackV8Internal::modeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cues", TextTrackV8Internal::cuesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "activeCues", TextTrackV8Internal::activeCuesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncuechange", TextTrackV8Internal::oncuechangeAttributeGetterCallback, TextTrackV8Internal::oncuechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8TextTrackMethods[] = {
-    {"addCue", TextTrackV8Internal::addCueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeCue", TextTrackV8Internal::removeCueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "addCue", TextTrackV8Internal::addCueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeCue", TextTrackV8Internal::removeCueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8TextTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TextTrack::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8TextTrack::internalFieldCount);
+static void installV8TextTrackTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8TextTrack::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8TextTrack::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextTrackAccessors, WTF_ARRAY_LENGTH(V8TextTrackAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextTrackMethods, WTF_ARRAY_LENGTH(V8TextTrackMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextTrackAccessors, WTF_ARRAY_LENGTH(V8TextTrackAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextTrackMethods, WTF_ARRAY_LENGTH(V8TextTrackMethods));
 
-  if (RuntimeEnabledFeatures::webVTTRegionsEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorregionsConfiguration = {"regions", TextTrackV8Internal::regionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorregionsConfiguration);
-  }
+    if (RuntimeEnabledFeatures::webVTTRegionsEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorregionsConfiguration = { "regions", TextTrackV8Internal::regionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorregionsConfiguration);
+    }
 
-  if (RuntimeEnabledFeatures::webVTTRegionsEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration addRegionMethodConfiguration = {"addRegion", TextTrackV8Internal::addRegionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, addRegionMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::webVTTRegionsEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration removeRegionMethodConfiguration = {"removeRegion", TextTrackV8Internal::removeRegionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, removeRegionMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::webVTTRegionsEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration addRegionMethodConfiguration = { "addRegion", TextTrackV8Internal::addRegionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, addRegionMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::webVTTRegionsEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration removeRegionMethodConfiguration = { "removeRegion", TextTrackV8Internal::removeRegionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, removeRegionMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8TextTrack::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TextTrackTemplate);
+v8::Local<v8::FunctionTemplate> V8TextTrack::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TextTrackTemplate);
 }
 
-bool V8TextTrack::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8TextTrack::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8TextTrack::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8TextTrack::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-TextTrack* V8TextTrack::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+TextTrack* V8TextTrack::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

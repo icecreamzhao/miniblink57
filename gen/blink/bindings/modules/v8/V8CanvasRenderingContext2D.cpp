@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CanvasRenderingContext2D.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -67,2828 +67,3029 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CanvasRenderingContext2D::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CanvasRenderingContext2D is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CanvasRenderingContext2DV8Internal {
 
-static void canvasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void canvasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->canvas()), impl);
-}
-
-MODULES_EXPORT void canvasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::canvasAttributeGetter(info);
-}
-
-static void currentTransformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->currentTransform()), impl);
-}
-
-MODULES_EXPORT void currentTransformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::currentTransformAttributeGetter(info);
-}
-
-static void currentTransformAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "currentTransform");
-
-  // Prepare the value to be set.
-  SVGMatrixTearOff* cppValue = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), v8Value);
-
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue) {
-    exceptionState.throwTypeError("The provided value is not of type 'SVGMatrix'.");
-    return;
-  }
-
-  impl->setCurrentTransform(cppValue);
-}
-
-MODULES_EXPORT void currentTransformAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::currentTransformAttributeSetter(v8Value, info);
-}
-
-static void globalAlphaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->globalAlpha());
-}
-
-MODULES_EXPORT void globalAlphaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::globalAlphaAttributeGetter(info);
-}
-
-static void globalAlphaAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "globalAlpha");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setGlobalAlpha(cppValue);
-}
-
-MODULES_EXPORT void globalAlphaAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::globalAlphaAttributeSetter(v8Value, info);
-}
-
-static void globalCompositeOperationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->globalCompositeOperation(), info.GetIsolate());
-}
-
-MODULES_EXPORT void globalCompositeOperationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::globalCompositeOperationAttributeGetter(info);
-}
-
-static void globalCompositeOperationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setGlobalCompositeOperation(cppValue);
-}
-
-MODULES_EXPORT void globalCompositeOperationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::globalCompositeOperationAttributeSetter(v8Value, info);
-}
-
-static void filterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->filter(), info.GetIsolate());
-}
-
-MODULES_EXPORT void filterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::filterAttributeGetter(info);
-}
-
-static void filterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setFilter(cppValue);
-}
-
-MODULES_EXPORT void filterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::filterAttributeSetter(v8Value, info);
-}
-
-static void imageSmoothingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->imageSmoothingEnabled());
-}
-
-MODULES_EXPORT void imageSmoothingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::UnprefixedImageSmoothingEnabled);
-
-  CanvasRenderingContext2DV8Internal::imageSmoothingEnabledAttributeGetter(info);
-}
-
-static void imageSmoothingEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "imageSmoothingEnabled");
-
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setImageSmoothingEnabled(cppValue);
-}
-
-MODULES_EXPORT void imageSmoothingEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::UnprefixedImageSmoothingEnabled);
-
-  CanvasRenderingContext2DV8Internal::imageSmoothingEnabledAttributeSetter(v8Value, info);
-}
-
-static void imageSmoothingQualityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->imageSmoothingQuality(), info.GetIsolate());
-}
-
-MODULES_EXPORT void imageSmoothingQualityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::imageSmoothingQualityAttributeGetter(info);
-}
-
-static void imageSmoothingQualityAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "imageSmoothingQuality");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "low",
-      "medium",
-      "high",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "ImageSmoothingQuality", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
-
-  impl->setImageSmoothingQuality(cppValue);
-}
-
-MODULES_EXPORT void imageSmoothingQualityAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::imageSmoothingQualityAttributeSetter(v8Value, info);
-}
-
-static void strokeStyleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  StringOrCanvasGradientOrCanvasPattern result;
-  impl->strokeStyle(result);
-
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT void strokeStyleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::strokeStyleAttributeGetter(info);
-}
-
-static void strokeStyleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "strokeStyle");
-
-  // Prepare the value to be set.
-  StringOrCanvasGradientOrCanvasPattern cppValue;
-  V8StringOrCanvasGradientOrCanvasPattern::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setStrokeStyle(cppValue);
-}
-
-MODULES_EXPORT void strokeStyleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::strokeStyleAttributeSetter(v8Value, info);
-}
-
-static void fillStyleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  StringOrCanvasGradientOrCanvasPattern result;
-  impl->fillStyle(result);
-
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT void fillStyleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::fillStyleAttributeGetter(info);
-}
-
-static void fillStyleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "fillStyle");
-
-  // Prepare the value to be set.
-  StringOrCanvasGradientOrCanvasPattern cppValue;
-  V8StringOrCanvasGradientOrCanvasPattern::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setFillStyle(cppValue);
-}
-
-MODULES_EXPORT void fillStyleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::fillStyleAttributeSetter(v8Value, info);
-}
-
-static void shadowOffsetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->shadowOffsetX());
-}
-
-MODULES_EXPORT void shadowOffsetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::shadowOffsetXAttributeGetter(info);
-}
-
-static void shadowOffsetXAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "shadowOffsetX");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setShadowOffsetX(cppValue);
-}
-
-MODULES_EXPORT void shadowOffsetXAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::shadowOffsetXAttributeSetter(v8Value, info);
-}
-
-static void shadowOffsetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->shadowOffsetY());
-}
-
-MODULES_EXPORT void shadowOffsetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::shadowOffsetYAttributeGetter(info);
-}
-
-static void shadowOffsetYAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "shadowOffsetY");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setShadowOffsetY(cppValue);
-}
-
-MODULES_EXPORT void shadowOffsetYAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::shadowOffsetYAttributeSetter(v8Value, info);
-}
-
-static void shadowBlurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->shadowBlur());
-}
-
-MODULES_EXPORT void shadowBlurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::shadowBlurAttributeGetter(info);
-}
-
-static void shadowBlurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "shadowBlur");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setShadowBlur(cppValue);
-}
-
-MODULES_EXPORT void shadowBlurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::shadowBlurAttributeSetter(v8Value, info);
-}
-
-static void shadowColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->shadowColor(), info.GetIsolate());
-}
-
-MODULES_EXPORT void shadowColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::shadowColorAttributeGetter(info);
-}
-
-static void shadowColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setShadowColor(cppValue);
-}
-
-MODULES_EXPORT void shadowColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::shadowColorAttributeSetter(v8Value, info);
-}
-
-static void lineWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->lineWidth());
-}
-
-MODULES_EXPORT void lineWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::lineWidthAttributeGetter(info);
-}
-
-static void lineWidthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "lineWidth");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setLineWidth(cppValue);
-}
-
-MODULES_EXPORT void lineWidthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::lineWidthAttributeSetter(v8Value, info);
-}
-
-static void lineCapAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->lineCap(), info.GetIsolate());
-}
-
-MODULES_EXPORT void lineCapAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::lineCapAttributeGetter(info);
-}
-
-static void lineCapAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setLineCap(cppValue);
-}
-
-MODULES_EXPORT void lineCapAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::lineCapAttributeSetter(v8Value, info);
-}
-
-static void lineJoinAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->lineJoin(), info.GetIsolate());
-}
-
-MODULES_EXPORT void lineJoinAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::lineJoinAttributeGetter(info);
-}
-
-static void lineJoinAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setLineJoin(cppValue);
-}
-
-MODULES_EXPORT void lineJoinAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::lineJoinAttributeSetter(v8Value, info);
-}
-
-static void miterLimitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->miterLimit());
-}
-
-MODULES_EXPORT void miterLimitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::miterLimitAttributeGetter(info);
-}
-
-static void miterLimitAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "miterLimit");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setMiterLimit(cppValue);
-}
-
-MODULES_EXPORT void miterLimitAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::miterLimitAttributeSetter(v8Value, info);
-}
-
-static void lineDashOffsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValue(info, impl->lineDashOffset());
-}
-
-MODULES_EXPORT void lineDashOffsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::lineDashOffsetAttributeGetter(info);
-}
-
-static void lineDashOffsetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "lineDashOffset");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setLineDashOffset(cppValue);
-}
-
-MODULES_EXPORT void lineDashOffsetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::lineDashOffsetAttributeSetter(v8Value, info);
-}
-
-static void fontAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->font(), info.GetIsolate());
-}
-
-MODULES_EXPORT void fontAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::fontAttributeGetter(info);
-}
-
-static void fontAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setFont(cppValue);
-}
-
-MODULES_EXPORT void fontAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::fontAttributeSetter(v8Value, info);
-}
-
-static void textAlignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->textAlign(), info.GetIsolate());
-}
-
-MODULES_EXPORT void textAlignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::textAlignAttributeGetter(info);
-}
-
-static void textAlignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setTextAlign(cppValue);
-}
-
-MODULES_EXPORT void textAlignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::textAlignAttributeSetter(v8Value, info);
-}
-
-static void textBaselineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->textBaseline(), info.GetIsolate());
-}
-
-MODULES_EXPORT void textBaselineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::textBaselineAttributeGetter(info);
-}
-
-static void textBaselineAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setTextBaseline(cppValue);
-}
-
-MODULES_EXPORT void textBaselineAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::textBaselineAttributeSetter(v8Value, info);
-}
-
-static void directionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->direction(), info.GetIsolate());
-}
-
-MODULES_EXPORT void directionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::directionAttributeGetter(info);
-}
-
-static void directionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setDirection(cppValue);
-}
-
-MODULES_EXPORT void directionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CanvasRenderingContext2DV8Internal::directionAttributeSetter(v8Value, info);
-}
-
-static void saveMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  impl->save();
-}
-
-MODULES_EXPORT  void saveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::saveMethod(info);
-}
-
-static void restoreMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  impl->restore();
-}
-
-MODULES_EXPORT  void restoreMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::restoreMethod(info);
-}
-
-static void scaleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "scale");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scale(x, y);
-}
-
-MODULES_EXPORT  void scaleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::scaleMethod(info);
-}
-
-static void rotateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "rotate");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  double angle;
-  angle = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->rotate(angle);
-}
-
-MODULES_EXPORT  void rotateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::rotateMethod(info);
-}
-
-static void translateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "translate");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->translate(x, y);
-}
-
-MODULES_EXPORT  void translateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::translateMethod(info);
-}
-
-static void transformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "transform");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 6)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-    return;
-  }
-
-  double a;
-  double b;
-  double c;
-  double d;
-  double e;
-  double f;
-  a = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  b = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  c = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  d = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  e = toDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  f = toDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->transform(a, b, c, d, e, f);
-}
-
-MODULES_EXPORT  void transformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::transformMethod(info);
-}
-
-static void setTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "setTransform");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 6)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-    return;
-  }
-
-  double a;
-  double b;
-  double c;
-  double d;
-  double e;
-  double f;
-  a = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  b = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  c = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  d = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  e = toDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  f = toDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setTransform(a, b, c, d, e, f);
-}
-
-MODULES_EXPORT  void setTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::setTransformMethod(info);
-}
-
-static void resetTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  impl->resetTransform();
-}
-
-MODULES_EXPORT  void resetTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::resetTransformMethod(info);
-}
-
-static void createLinearGradientMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createLinearGradient");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  double x0;
-  double y0;
-  double x1;
-  double y1;
-  x0 = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y0 = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x1 = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y1 = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValue(info, impl->createLinearGradient(x0, y0, x1, y1));
-}
-
-MODULES_EXPORT  void createLinearGradientMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::createLinearGradientMethod(info);
-}
-
-static void createRadialGradientMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createRadialGradient");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 6)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-    return;
-  }
-
-  double x0;
-  double y0;
-  double r0;
-  double x1;
-  double y1;
-  double r1;
-  x0 = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y0 = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  r0 = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x1 = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y1 = toRestrictedDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  r1 = toRestrictedDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  CanvasGradient* result = impl->createRadialGradient(x0, y0, r0, x1, y1, r1, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createRadialGradientMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::createRadialGradientMethod(info);
-}
-
-static void createPatternMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createPattern");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
-  V8StringResource<TreatNullAsNullString> repetitionType;
-  V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  repetitionType = info[1];
-  if (!repetitionType.prepare())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  CanvasPattern* result = impl->createPattern(executionContext, image, repetitionType, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createPatternMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::createPatternMethod(info);
-}
-
-static void clearRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "clearRect");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  double width;
-  double height;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->clearRect(x, y, width, height);
-}
-
-MODULES_EXPORT  void clearRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::clearRectMethod(info);
-}
-
-static void fillRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fillRect");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  double width;
-  double height;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->fillRect(x, y, width, height);
-}
-
-MODULES_EXPORT  void fillRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::fillRectMethod(info);
-}
-
-static void strokeRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "strokeRect");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  double x;
-  double y;
-  double width;
-  double height;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->strokeRect(x, y, width, height);
-}
-
-MODULES_EXPORT  void strokeRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::strokeRectMethod(info);
-}
-
-static void beginPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  impl->beginPath();
-}
-
-MODULES_EXPORT  void beginPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::beginPathMethod(info);
-}
-
-static void fill1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fill");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->fill();
-    return;
-  }
-  winding = info[0];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  impl->fill(winding);
-}
-
-static void fill2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fill");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
-
-    return;
-  }
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->fill(path);
-    return;
-  }
-  winding = info[1];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  impl->fill(path, winding);
-}
-
-static void fillMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 0:
-      if (true) {
-        fill1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (info[0]->IsUndefined()) {
-        fill1Method(info);
-        return;
-      }
-      if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
-        fill2Method(info);
-        return;
-      }
-      if (true) {
-        fill1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        fill2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fill");
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-MODULES_EXPORT  void fillMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::fillMethod(info);
-}
-
-static void stroke1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  impl->stroke();
-}
-
-static void stroke2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("stroke", "CanvasRenderingContext2D", "parameter 1 is not of type 'Path2D'."));
-
-    return;
-  }
-
-  impl->stroke(path);
-}
-
-static void strokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(1, info.Length())) {
-    case 0:
-      if (true) {
-        stroke1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (true) {
-        stroke2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "stroke");
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-MODULES_EXPORT  void strokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::strokeMethod(info);
-}
-
-static void drawFocusIfNeeded1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  Element* element;
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("drawFocusIfNeeded", "CanvasRenderingContext2D", "parameter 1 is not of type 'Element'."));
-
-    return;
-  }
-
-  impl->drawFocusIfNeeded(element);
-}
-
-static void drawFocusIfNeeded2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  Element* element;
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("drawFocusIfNeeded", "CanvasRenderingContext2D", "parameter 1 is not of type 'Path2D'."));
-
-    return;
-  }
-
-  element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!element) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("drawFocusIfNeeded", "CanvasRenderingContext2D", "parameter 2 is not of type 'Element'."));
-
-    return;
-  }
-
-  impl->drawFocusIfNeeded(path, element);
-}
-
-static void drawFocusIfNeededMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 1:
-      if (true) {
-        drawFocusIfNeeded1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        drawFocusIfNeeded2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawFocusIfNeeded");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValueFast(info, WTF::getPtr(impl->canvas()), impl);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void drawFocusIfNeededMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::drawFocusIfNeededMethod(info);
-}
-
-static void scrollPathIntoViewMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->scrollPathIntoView();
-    return;
-  }
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollPathIntoView", "CanvasRenderingContext2D", "parameter 1 is not of type 'Path2D'."));
-
-    return;
-  }
-
-  impl->scrollPathIntoView(path);
-}
-
-MODULES_EXPORT  void scrollPathIntoViewMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::scrollPathIntoViewMethod(info);
-}
-
-static void clip1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "clip");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->clip();
-    return;
-  }
-  winding = info[0];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  impl->clip(winding);
-}
-
-static void clip2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "clip");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
-
-    return;
-  }
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->clip(path);
-    return;
-  }
-  winding = info[1];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  impl->clip(path, winding);
-}
-
-static void clipMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 0:
-      if (true) {
-        clip1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (info[0]->IsUndefined()) {
-        clip1Method(info);
-        return;
-      }
-      if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
-        clip2Method(info);
-        return;
-      }
-      if (true) {
-        clip1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        clip2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "clip");
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-MODULES_EXPORT  void clipMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::clipMethod(info);
-}
-
-static void isPointInPath1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInPath");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  double x;
-  double y;
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    v8SetReturnValueBool(info, impl->isPointInPath(x, y));
-    return;
-  }
-  winding = info[2];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isPointInPath(x, y, winding));
-}
-
-static void isPointInPath2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInPath");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  double x;
-  double y;
-  V8StringResource<> winding;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
-
-    return;
-  }
-
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 3)) {
-    v8SetReturnValueBool(info, impl->isPointInPath(path, x, y));
-    return;
-  }
-  winding = info[3];
-  if (!winding.prepare())
-    return;
-  const char* validWindingValues[] = {
-      "nonzero",
-      "evenodd",
-  };
-  if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
-    return;
-  }
-
-  v8SetReturnValueBool(info, impl->isPointInPath(path, x, y, winding));
-}
-
-static void isPointInPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(4, info.Length())) {
-    case 2:
-      if (true) {
-        isPointInPath1Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
-        isPointInPath2Method(info);
-        return;
-      }
-      if (true) {
-        isPointInPath1Method(info);
-        return;
-      }
-      break;
-    case 4:
-      if (true) {
-        isPointInPath2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInPath");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+    MODULES_EXPORT void canvasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::canvasAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void isPointInPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::isPointInPathMethod(info);
-}
+    static void currentTransformAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void isPointInStroke1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInStroke");
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
 
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  double x;
-  double y;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueBool(info, impl->isPointInStroke(x, y));
-}
-
-static void isPointInStroke2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInStroke");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  Path2D* path;
-  double x;
-  double y;
-  path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!path) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
-
-    return;
-  }
-
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8SetReturnValueBool(info, impl->isPointInStroke(path, x, y));
-}
-
-static void isPointInStrokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 2:
-      if (true) {
-        isPointInStroke1Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        isPointInStroke2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInStroke");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+        v8SetReturnValueFast(info, WTF::getPtr(impl->currentTransform()), impl);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void isPointInStrokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::isPointInStrokeMethod(info);
-}
-
-static void fillTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fillText");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  V8StringResource<> text;
-  double x;
-  double y;
-  double maxWidth;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  text = info[0];
-  if (!text.prepare())
-    return;
-
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 3)) {
-    impl->fillText(text, x, y);
-    return;
-  }
-  maxWidth = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->fillText(text, x, y, maxWidth);
-}
-
-MODULES_EXPORT  void fillTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::fillTextMethod(info);
-}
-
-static void strokeTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "strokeText");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  V8StringResource<> text;
-  double x;
-  double y;
-  double maxWidth;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  text = info[0];
-  if (!text.prepare())
-    return;
-
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 3)) {
-    impl->strokeText(text, x, y);
-    return;
-  }
-  maxWidth = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->strokeText(text, x, y, maxWidth);
-}
-
-MODULES_EXPORT  void strokeTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::strokeTextMethod(info);
-}
-
-static void measureTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("measureText", "CanvasRenderingContext2D", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> text;
-  text = info[0];
-  if (!text.prepare())
-    return;
-
-  v8SetReturnValue(info, impl->measureText(text));
-}
-
-MODULES_EXPORT  void measureTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::measureTextMethod(info);
-}
-
-static void drawImage1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawImage");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
-  double x;
-  double y;
-  V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->drawImage(executionContext, image, x, y, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void drawImage2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawImage");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
-  double x;
-  double y;
-  double width;
-  double height;
-  V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->drawImage(executionContext, image, x, y, width, height, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void drawImage3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawImage");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
-  double sx;
-  double sy;
-  double sw;
-  double sh;
-  double dx;
-  double dy;
-  double dw;
-  double dh;
-  V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sx = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sy = toDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sw = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sh = toDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dx = toDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dy = toDouble(info.GetIsolate(), info[6], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dw = toDouble(info.GetIsolate(), info[7], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dh = toDouble(info.GetIsolate(), info[8], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  impl->drawImage(executionContext, image, sx, sy, sw, sh, dx, dy, dw, dh, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void drawImageMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(9, info.Length())) {
-    case 3:
-      if (true) {
-        drawImage1Method(info);
-        return;
-      }
-      break;
-    case 5:
-      if (true) {
-        drawImage2Method(info);
-        return;
-      }
-      break;
-    case 9:
-      if (true) {
-        drawImage3Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawImage");
-
-  if (isArityError) {
-    if (info.Length() < 3) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-      return;
+    MODULES_EXPORT void currentTransformAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::currentTransformAttributeGetter(info);
     }
-    if (info.Length() >= 3) {
-      exceptionState.throwTypeError(ExceptionMessages::invalidArity("[3, 5, 9]", info.Length()));
-      return;
+
+    static void currentTransformAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "currentTransform");
+
+        // Prepare the value to be set.
+        SVGMatrixTearOff* cppValue = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue) {
+            exceptionState.throwTypeError("The provided value is not of type 'SVGMatrix'.");
+            return;
+        }
+
+        impl->setCurrentTransform(cppValue);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void drawImageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::drawImageMethod(info);
-}
+    MODULES_EXPORT void currentTransformAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-static void addHitRegionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "addHitRegion");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  HitRegionOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
-
-    return;
-  }
-  V8HitRegionOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->addHitRegion(options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void addHitRegionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::addHitRegionMethod(info);
-}
-
-static void removeHitRegionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeHitRegion", "CanvasRenderingContext2D", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> id;
-  id = info[0];
-  if (!id.prepare())
-    return;
-
-  impl->removeHitRegion(id);
-}
-
-MODULES_EXPORT  void removeHitRegionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::removeHitRegionMethod(info);
-}
-
-static void clearHitRegionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  impl->clearHitRegions();
-}
-
-MODULES_EXPORT  void clearHitRegionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::clearHitRegionsMethod(info);
-}
-
-static void createImageData1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createImageData");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  ImageData* imagedata;
-  imagedata = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!imagedata) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ImageData'.");
-
-    return;
-  }
-
-  ImageData* result = impl->createImageData(imagedata, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-static void createImageData2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createImageData");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  double sw;
-  double sh;
-  sw = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sh = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ImageData* result = impl->createImageData(sw, sh, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-static void createImageDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 1:
-      if (true) {
-        createImageData1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        createImageData2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createImageData");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        CanvasRenderingContext2DV8Internal::currentTransformAttributeSetter(v8Value, info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void createImageDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::createImageDataMethod(info);
-}
+    static void globalAlphaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void getImageDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "getImageData");
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
 
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  double sx;
-  double sy;
-  double sw;
-  double sh;
-  sx = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sy = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sw = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sh = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ImageData* result = impl->getImageData(sx, sy, sw, sh, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void getImageDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::getImageDataMethod(info);
-}
-
-static void putImageData1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "putImageData");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  ImageData* imagedata;
-  double dx;
-  double dy;
-  imagedata = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!imagedata) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ImageData'.");
-
-    return;
-  }
-
-  dx = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dy = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->putImageData(imagedata, dx, dy, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void putImageData2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "putImageData");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  ImageData* imagedata;
-  double dx;
-  double dy;
-  double dirtyX;
-  double dirtyY;
-  double dirtyWidth;
-  double dirtyHeight;
-  imagedata = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!imagedata) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ImageData'.");
-
-    return;
-  }
-
-  dx = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dy = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dirtyX = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dirtyY = toRestrictedDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dirtyWidth = toRestrictedDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  dirtyHeight = toRestrictedDouble(info.GetIsolate(), info[6], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->putImageData(imagedata, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void putImageDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(7, info.Length())) {
-    case 3:
-      if (true) {
-        putImageData1Method(info);
-        return;
-      }
-      break;
-    case 7:
-      if (true) {
-        putImageData2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "putImageData");
-
-  if (isArityError) {
-    if (info.Length() < 3) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-      return;
+        v8SetReturnValue(info, impl->globalAlpha());
     }
-    if (info.Length() >= 3) {
-      exceptionState.throwTypeError(ExceptionMessages::invalidArity("[3, 7]", info.Length()));
-      return;
+
+    MODULES_EXPORT void globalAlphaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::globalAlphaAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void putImageDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::putImageDataMethod(info);
-}
+    static void globalAlphaAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
 
-static void isContextLostMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "globalAlpha");
 
-  v8SetReturnValueBool(info, impl->isContextLost());
-}
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-MODULES_EXPORT  void isContextLostMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::isContextLostMethod(info);
-}
+        impl->setGlobalAlpha(cppValue);
+    }
 
-static void getContextAttributesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+    MODULES_EXPORT void globalAlphaAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  Canvas2DContextAttributes result;
-  impl->getContextAttributes(result);
-  v8SetReturnValue(info, result);
-}
+        CanvasRenderingContext2DV8Internal::globalAlphaAttributeSetter(v8Value, info);
+    }
 
-MODULES_EXPORT  void getContextAttributesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::getContextAttributesMethod(info);
-}
+    static void globalCompositeOperationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void setLineDashMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "setLineDash");
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
 
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+        v8SetReturnValueString(info, impl->globalCompositeOperation(), info.GetIsolate());
+    }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+    MODULES_EXPORT void globalCompositeOperationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::globalCompositeOperationAttributeGetter(info);
+    }
 
-  Vector<double> dash;
-  dash = toImplArray<Vector<double>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void globalCompositeOperationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
 
-  impl->setLineDash(dash);
-}
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-MODULES_EXPORT  void setLineDashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::setLineDashMethod(info);
-}
+        impl->setGlobalCompositeOperation(cppValue);
+    }
 
-static void getLineDashMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+    MODULES_EXPORT void globalCompositeOperationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  v8SetReturnValue(info, ToV8(impl->getLineDash(), info.Holder(), info.GetIsolate()));
-}
+        CanvasRenderingContext2DV8Internal::globalCompositeOperationAttributeSetter(v8Value, info);
+    }
 
-MODULES_EXPORT  void getLineDashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::getLineDashMethod(info);
-}
+    static void filterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void closePathMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
 
-  impl->closePath();
-}
+        v8SetReturnValueString(info, impl->filter(), info.GetIsolate());
+    }
 
-MODULES_EXPORT  void closePathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::closePathMethod(info);
-}
+    MODULES_EXPORT void filterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::filterAttributeGetter(info);
+    }
 
-static void moveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "moveTo");
+    static void filterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
 
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        impl->setFilter(cppValue);
+    }
 
-  float x;
-  float y;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+    MODULES_EXPORT void filterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        CanvasRenderingContext2DV8Internal::filterAttributeSetter(v8Value, info);
+    }
 
-  impl->moveTo(x, y);
-}
+    static void imageSmoothingEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void moveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::moveToMethod(info);
-}
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
 
-static void lineToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "lineTo");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  float x;
-  float y;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->lineTo(x, y);
-}
-
-MODULES_EXPORT  void lineToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::lineToMethod(info);
-}
-
-static void quadraticCurveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "quadraticCurveTo");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  float cpx;
-  float cpy;
-  float x;
-  float y;
-  cpx = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  cpy = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->quadraticCurveTo(cpx, cpy, x, y);
-}
-
-MODULES_EXPORT  void quadraticCurveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::quadraticCurveToMethod(info);
-}
-
-static void bezierCurveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "bezierCurveTo");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 6)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
-    return;
-  }
-
-  float cp1x;
-  float cp1y;
-  float cp2x;
-  float cp2y;
-  float x;
-  float y;
-  cp1x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  cp1y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  cp2x = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  cp2y = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
-}
-
-MODULES_EXPORT  void bezierCurveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::bezierCurveToMethod(info);
-}
-
-static void arcToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "arcTo");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  float x1;
-  float y1;
-  float x2;
-  float y2;
-  float radius;
-  x1 = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y1 = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  x2 = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y2 = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radius = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->arcTo(x1, y1, x2, y2, radius, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void arcToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::arcToMethod(info);
-}
-
-static void rectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "rect");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
-
-  float x;
-  float y;
-  float width;
-  float height;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  width = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->rect(x, y, width, height);
-}
-
-MODULES_EXPORT  void rectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::rectMethod(info);
-}
-
-static void arcMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "arc");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
-
-  float x;
-  float y;
-  float radius;
-  float startAngle;
-  float endAngle;
-  bool anticlockwise;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radius = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  startAngle = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  endAngle = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  anticlockwise = toBoolean(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->arc(x, y, radius, startAngle, endAngle, anticlockwise, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void arcMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::arcMethod(info);
-}
-
-static void ellipseMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "ellipse");
-
-  CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 7)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
-    return;
-  }
-
-  float x;
-  float y;
-  float radiusX;
-  float radiusY;
-  float rotation;
-  float startAngle;
-  float endAngle;
-  bool anticlockwise;
-  x = toFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radiusX = toFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radiusY = toFloat(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  rotation = toFloat(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  startAngle = toFloat(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  endAngle = toFloat(info.GetIsolate(), info[6], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  anticlockwise = toBoolean(info.GetIsolate(), info[7], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void ellipseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasRenderingContext2DV8Internal::ellipseMethod(info);
-}
+        v8SetReturnValueBool(info, impl->imageSmoothingEnabled());
+    }
+
+    MODULES_EXPORT void imageSmoothingEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::UnprefixedImageSmoothingEnabled);
+
+        CanvasRenderingContext2DV8Internal::imageSmoothingEnabledAttributeGetter(info);
+    }
+
+    static void imageSmoothingEnabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "imageSmoothingEnabled");
+
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setImageSmoothingEnabled(cppValue);
+    }
+
+    MODULES_EXPORT void imageSmoothingEnabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::UnprefixedImageSmoothingEnabled);
+
+        CanvasRenderingContext2DV8Internal::imageSmoothingEnabledAttributeSetter(v8Value, info);
+    }
+
+    static void imageSmoothingQualityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->imageSmoothingQuality(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void imageSmoothingQualityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::imageSmoothingQualityAttributeGetter(info);
+    }
+
+    static void imageSmoothingQualityAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "imageSmoothingQuality");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "low",
+            "medium",
+            "high",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "ImageSmoothingQuality", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
+
+        impl->setImageSmoothingQuality(cppValue);
+    }
+
+    MODULES_EXPORT void imageSmoothingQualityAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::imageSmoothingQualityAttributeSetter(v8Value, info);
+    }
+
+    static void strokeStyleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        StringOrCanvasGradientOrCanvasPattern result;
+        impl->strokeStyle(result);
+
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void strokeStyleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::strokeStyleAttributeGetter(info);
+    }
+
+    static void strokeStyleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "strokeStyle");
+
+        // Prepare the value to be set.
+        StringOrCanvasGradientOrCanvasPattern cppValue;
+        V8StringOrCanvasGradientOrCanvasPattern::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setStrokeStyle(cppValue);
+    }
+
+    MODULES_EXPORT void strokeStyleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::strokeStyleAttributeSetter(v8Value, info);
+    }
+
+    static void fillStyleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        StringOrCanvasGradientOrCanvasPattern result;
+        impl->fillStyle(result);
+
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void fillStyleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::fillStyleAttributeGetter(info);
+    }
+
+    static void fillStyleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "fillStyle");
+
+        // Prepare the value to be set.
+        StringOrCanvasGradientOrCanvasPattern cppValue;
+        V8StringOrCanvasGradientOrCanvasPattern::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setFillStyle(cppValue);
+    }
+
+    MODULES_EXPORT void fillStyleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::fillStyleAttributeSetter(v8Value, info);
+    }
+
+    static void shadowOffsetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->shadowOffsetX());
+    }
+
+    MODULES_EXPORT void shadowOffsetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::shadowOffsetXAttributeGetter(info);
+    }
+
+    static void shadowOffsetXAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "shadowOffsetX");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setShadowOffsetX(cppValue);
+    }
+
+    MODULES_EXPORT void shadowOffsetXAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::shadowOffsetXAttributeSetter(v8Value, info);
+    }
+
+    static void shadowOffsetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->shadowOffsetY());
+    }
+
+    MODULES_EXPORT void shadowOffsetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::shadowOffsetYAttributeGetter(info);
+    }
+
+    static void shadowOffsetYAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "shadowOffsetY");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setShadowOffsetY(cppValue);
+    }
+
+    MODULES_EXPORT void shadowOffsetYAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::shadowOffsetYAttributeSetter(v8Value, info);
+    }
+
+    static void shadowBlurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->shadowBlur());
+    }
+
+    MODULES_EXPORT void shadowBlurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::shadowBlurAttributeGetter(info);
+    }
+
+    static void shadowBlurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "shadowBlur");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setShadowBlur(cppValue);
+    }
+
+    MODULES_EXPORT void shadowBlurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::shadowBlurAttributeSetter(v8Value, info);
+    }
+
+    static void shadowColorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->shadowColor(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void shadowColorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::shadowColorAttributeGetter(info);
+    }
+
+    static void shadowColorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setShadowColor(cppValue);
+    }
+
+    MODULES_EXPORT void shadowColorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::shadowColorAttributeSetter(v8Value, info);
+    }
+
+    static void lineWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->lineWidth());
+    }
+
+    MODULES_EXPORT void lineWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::lineWidthAttributeGetter(info);
+    }
+
+    static void lineWidthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "lineWidth");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLineWidth(cppValue);
+    }
+
+    MODULES_EXPORT void lineWidthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::lineWidthAttributeSetter(v8Value, info);
+    }
+
+    static void lineCapAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->lineCap(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void lineCapAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::lineCapAttributeGetter(info);
+    }
+
+    static void lineCapAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setLineCap(cppValue);
+    }
+
+    MODULES_EXPORT void lineCapAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::lineCapAttributeSetter(v8Value, info);
+    }
+
+    static void lineJoinAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->lineJoin(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void lineJoinAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::lineJoinAttributeGetter(info);
+    }
+
+    static void lineJoinAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setLineJoin(cppValue);
+    }
+
+    MODULES_EXPORT void lineJoinAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::lineJoinAttributeSetter(v8Value, info);
+    }
+
+    static void miterLimitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->miterLimit());
+    }
+
+    MODULES_EXPORT void miterLimitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::miterLimitAttributeGetter(info);
+    }
+
+    static void miterLimitAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "miterLimit");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setMiterLimit(cppValue);
+    }
+
+    MODULES_EXPORT void miterLimitAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::miterLimitAttributeSetter(v8Value, info);
+    }
+
+    static void lineDashOffsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValue(info, impl->lineDashOffset());
+    }
+
+    MODULES_EXPORT void lineDashOffsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::lineDashOffsetAttributeGetter(info);
+    }
+
+    static void lineDashOffsetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "CanvasRenderingContext2D", "lineDashOffset");
+
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLineDashOffset(cppValue);
+    }
+
+    MODULES_EXPORT void lineDashOffsetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::lineDashOffsetAttributeSetter(v8Value, info);
+    }
+
+    static void fontAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->font(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void fontAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::fontAttributeGetter(info);
+    }
+
+    static void fontAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setFont(cppValue);
+    }
+
+    MODULES_EXPORT void fontAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::fontAttributeSetter(v8Value, info);
+    }
+
+    static void textAlignAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->textAlign(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void textAlignAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::textAlignAttributeGetter(info);
+    }
+
+    static void textAlignAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setTextAlign(cppValue);
+    }
+
+    MODULES_EXPORT void textAlignAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::textAlignAttributeSetter(v8Value, info);
+    }
+
+    static void textBaselineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->textBaseline(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void textBaselineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::textBaselineAttributeGetter(info);
+    }
+
+    static void textBaselineAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setTextBaseline(cppValue);
+    }
+
+    MODULES_EXPORT void textBaselineAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::textBaselineAttributeSetter(v8Value, info);
+    }
+
+    static void directionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->direction(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void directionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::directionAttributeGetter(info);
+    }
+
+    static void directionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setDirection(cppValue);
+    }
+
+    MODULES_EXPORT void directionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CanvasRenderingContext2DV8Internal::directionAttributeSetter(v8Value, info);
+    }
+
+    static void saveMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        impl->save();
+    }
+
+    MODULES_EXPORT void saveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::saveMethod(info);
+    }
+
+    static void restoreMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        impl->restore();
+    }
+
+    MODULES_EXPORT void restoreMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::restoreMethod(info);
+    }
+
+    static void scaleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "scale");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->scale(x, y);
+    }
+
+    MODULES_EXPORT void scaleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::scaleMethod(info);
+    }
+
+    static void rotateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "rotate");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        double angle;
+        angle = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->rotate(angle);
+    }
+
+    MODULES_EXPORT void rotateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::rotateMethod(info);
+    }
+
+    static void translateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "translate");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->translate(x, y);
+    }
+
+    MODULES_EXPORT void translateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::translateMethod(info);
+    }
+
+    static void transformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "transform");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 6)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+            return;
+        }
+
+        double a;
+        double b;
+        double c;
+        double d;
+        double e;
+        double f;
+        a = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        b = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        c = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        d = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        e = toDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        f = toDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->transform(a, b, c, d, e, f);
+    }
+
+    MODULES_EXPORT void transformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::transformMethod(info);
+    }
+
+    static void setTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "setTransform");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 6)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+            return;
+        }
+
+        double a;
+        double b;
+        double c;
+        double d;
+        double e;
+        double f;
+        a = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        b = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        c = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        d = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        e = toDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        f = toDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setTransform(a, b, c, d, e, f);
+    }
+
+    MODULES_EXPORT void setTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::setTransformMethod(info);
+    }
+
+    static void resetTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        impl->resetTransform();
+    }
+
+    MODULES_EXPORT void resetTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::resetTransformMethod(info);
+    }
+
+    static void createLinearGradientMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createLinearGradient");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        double x0;
+        double y0;
+        double x1;
+        double y1;
+        x0 = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y0 = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x1 = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y1 = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, impl->createLinearGradient(x0, y0, x1, y1));
+    }
+
+    MODULES_EXPORT void createLinearGradientMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::createLinearGradientMethod(info);
+    }
+
+    static void createRadialGradientMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createRadialGradient");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 6)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+            return;
+        }
+
+        double x0;
+        double y0;
+        double r0;
+        double x1;
+        double y1;
+        double r1;
+        x0 = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y0 = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        r0 = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x1 = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y1 = toRestrictedDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        r1 = toRestrictedDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        CanvasGradient* result = impl->createRadialGradient(x0, y0, r0, x1, y1, r1, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createRadialGradientMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::createRadialGradientMethod(info);
+    }
+
+    static void createPatternMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createPattern");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
+        V8StringResource<TreatNullAsNullString> repetitionType;
+        V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        repetitionType = info[1];
+        if (!repetitionType.prepare())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        CanvasPattern* result = impl->createPattern(executionContext, image, repetitionType, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createPatternMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::createPatternMethod(info);
+    }
+
+    static void clearRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "clearRect");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        double width;
+        double height;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->clearRect(x, y, width, height);
+    }
+
+    MODULES_EXPORT void clearRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::clearRectMethod(info);
+    }
+
+    static void fillRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fillRect");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        double width;
+        double height;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->fillRect(x, y, width, height);
+    }
+
+    MODULES_EXPORT void fillRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::fillRectMethod(info);
+    }
+
+    static void strokeRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "strokeRect");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        double x;
+        double y;
+        double width;
+        double height;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->strokeRect(x, y, width, height);
+    }
+
+    MODULES_EXPORT void strokeRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::strokeRectMethod(info);
+    }
+
+    static void beginPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        impl->beginPath();
+    }
+
+    MODULES_EXPORT void beginPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::beginPathMethod(info);
+    }
+
+    static void fill1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fill");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->fill();
+            return;
+        }
+        winding = info[0];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        impl->fill(winding);
+    }
+
+    static void fill2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fill");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
+
+            return;
+        }
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->fill(path);
+            return;
+        }
+        winding = info[1];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        impl->fill(path, winding);
+    }
+
+    static void fillMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 0:
+            if (true) {
+                fill1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (info[0]->IsUndefined()) {
+                fill1Method(info);
+                return;
+            }
+            if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
+                fill2Method(info);
+                return;
+            }
+            if (true) {
+                fill1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                fill2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fill");
+
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void fillMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::fillMethod(info);
+    }
+
+    static void stroke1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        impl->stroke();
+    }
+
+    static void stroke2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("stroke", "CanvasRenderingContext2D", "parameter 1 is not of type 'Path2D'."));
+
+            return;
+        }
+
+        impl->stroke(path);
+    }
+
+    static void strokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(1, info.Length())) {
+        case 0:
+            if (true) {
+                stroke1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (true) {
+                stroke2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "stroke");
+
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void strokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::strokeMethod(info);
+    }
+
+    static void drawFocusIfNeeded1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        Element* element;
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("drawFocusIfNeeded", "CanvasRenderingContext2D", "parameter 1 is not of type 'Element'."));
+
+            return;
+        }
+
+        impl->drawFocusIfNeeded(element);
+    }
+
+    static void drawFocusIfNeeded2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        Element* element;
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("drawFocusIfNeeded", "CanvasRenderingContext2D", "parameter 1 is not of type 'Path2D'."));
+
+            return;
+        }
+
+        element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!element) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("drawFocusIfNeeded", "CanvasRenderingContext2D", "parameter 2 is not of type 'Element'."));
+
+            return;
+        }
+
+        impl->drawFocusIfNeeded(path, element);
+    }
+
+    static void drawFocusIfNeededMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 1:
+            if (true) {
+                drawFocusIfNeeded1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                drawFocusIfNeeded2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawFocusIfNeeded");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void drawFocusIfNeededMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::drawFocusIfNeededMethod(info);
+    }
+
+    static void scrollPathIntoViewMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->scrollPathIntoView();
+            return;
+        }
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("scrollPathIntoView", "CanvasRenderingContext2D", "parameter 1 is not of type 'Path2D'."));
+
+            return;
+        }
+
+        impl->scrollPathIntoView(path);
+    }
+
+    MODULES_EXPORT void scrollPathIntoViewMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::scrollPathIntoViewMethod(info);
+    }
+
+    static void clip1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "clip");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->clip();
+            return;
+        }
+        winding = info[0];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        impl->clip(winding);
+    }
+
+    static void clip2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "clip");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
+
+            return;
+        }
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->clip(path);
+            return;
+        }
+        winding = info[1];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        impl->clip(path, winding);
+    }
+
+    static void clipMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 0:
+            if (true) {
+                clip1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (info[0]->IsUndefined()) {
+                clip1Method(info);
+                return;
+            }
+            if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
+                clip2Method(info);
+                return;
+            }
+            if (true) {
+                clip1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                clip2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "clip");
+
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void clipMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::clipMethod(info);
+    }
+
+    static void isPointInPath1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInPath");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        double x;
+        double y;
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            v8SetReturnValueBool(info, impl->isPointInPath(x, y));
+            return;
+        }
+        winding = info[2];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isPointInPath(x, y, winding));
+    }
+
+    static void isPointInPath2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInPath");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        double x;
+        double y;
+        V8StringResource<> winding;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
+
+            return;
+        }
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 3)) {
+            v8SetReturnValueBool(info, impl->isPointInPath(path, x, y));
+            return;
+        }
+        winding = info[3];
+        if (!winding.prepare())
+            return;
+        const char* validWindingValues[] = {
+            "nonzero",
+            "evenodd",
+        };
+        if (!isValidEnum(winding, validWindingValues, WTF_ARRAY_LENGTH(validWindingValues), "CanvasFillRule", exceptionState)) {
+            return;
+        }
+
+        v8SetReturnValueBool(info, impl->isPointInPath(path, x, y, winding));
+    }
+
+    static void isPointInPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(4, info.Length())) {
+        case 2:
+            if (true) {
+                isPointInPath1Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (V8Path2D::hasInstance(info[0], info.GetIsolate())) {
+                isPointInPath2Method(info);
+                return;
+            }
+            if (true) {
+                isPointInPath1Method(info);
+                return;
+            }
+            break;
+        case 4:
+            if (true) {
+                isPointInPath2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInPath");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void isPointInPathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::isPointInPathMethod(info);
+    }
+
+    static void isPointInStroke1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInStroke");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        double x;
+        double y;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueBool(info, impl->isPointInStroke(x, y));
+    }
+
+    static void isPointInStroke2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInStroke");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        Path2D* path;
+        double x;
+        double y;
+        path = V8Path2D::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!path) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Path2D'.");
+
+            return;
+        }
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueBool(info, impl->isPointInStroke(path, x, y));
+    }
+
+    static void isPointInStrokeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 2:
+            if (true) {
+                isPointInStroke1Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                isPointInStroke2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "isPointInStroke");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void isPointInStrokeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::isPointInStrokeMethod(info);
+    }
+
+    static void fillTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fillText");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        V8StringResource<> text;
+        double x;
+        double y;
+        double maxWidth;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        text = info[0];
+        if (!text.prepare())
+            return;
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 3)) {
+            impl->fillText(text, x, y);
+            return;
+        }
+        maxWidth = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->fillText(text, x, y, maxWidth);
+    }
+
+    MODULES_EXPORT void fillTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::fillTextMethod(info);
+    }
+
+    static void strokeTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "strokeText");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        V8StringResource<> text;
+        double x;
+        double y;
+        double maxWidth;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        text = info[0];
+        if (!text.prepare())
+            return;
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 3)) {
+            impl->strokeText(text, x, y);
+            return;
+        }
+        maxWidth = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->strokeText(text, x, y, maxWidth);
+    }
+
+    MODULES_EXPORT void strokeTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::strokeTextMethod(info);
+    }
+
+    static void measureTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("measureText", "CanvasRenderingContext2D", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> text;
+        text = info[0];
+        if (!text.prepare())
+            return;
+
+        v8SetReturnValue(info, impl->measureText(text));
+    }
+
+    MODULES_EXPORT void measureTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::measureTextMethod(info);
+    }
+
+    static void drawImage1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawImage");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
+        double x;
+        double y;
+        V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->drawImage(executionContext, image, x, y, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void drawImage2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawImage");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
+        double x;
+        double y;
+        double width;
+        double height;
+        V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->drawImage(executionContext, image, x, y, width, height, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void drawImage3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawImage");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas image;
+        double sx;
+        double sy;
+        double sw;
+        double sh;
+        double dx;
+        double dy;
+        double dw;
+        double dh;
+        V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(info.GetIsolate(), info[0], image, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sx = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sy = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sw = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sh = toDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dx = toDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dy = toDouble(info.GetIsolate(), info[6], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dw = toDouble(info.GetIsolate(), info[7], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dh = toDouble(info.GetIsolate(), info[8], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        impl->drawImage(executionContext, image, sx, sy, sw, sh, dx, dy, dw, dh, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void drawImageMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(9, info.Length())) {
+        case 3:
+            if (true) {
+                drawImage1Method(info);
+                return;
+            }
+            break;
+        case 5:
+            if (true) {
+                drawImage2Method(info);
+                return;
+            }
+            break;
+        case 9:
+            if (true) {
+                drawImage3Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "drawImage");
+
+        if (isArityError) {
+            if (info.Length() < 3) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+                return;
+            }
+            if (info.Length() >= 3) {
+                exceptionState.throwTypeError(ExceptionMessages::invalidArity("[3, 5, 9]", info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void drawImageMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::drawImageMethod(info);
+    }
+
+    static void addHitRegionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "addHitRegion");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        HitRegionOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
+
+            return;
+        }
+        V8HitRegionOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->addHitRegion(options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void addHitRegionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::addHitRegionMethod(info);
+    }
+
+    static void removeHitRegionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeHitRegion", "CanvasRenderingContext2D", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> id;
+        id = info[0];
+        if (!id.prepare())
+            return;
+
+        impl->removeHitRegion(id);
+    }
+
+    MODULES_EXPORT void removeHitRegionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::removeHitRegionMethod(info);
+    }
+
+    static void clearHitRegionsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        impl->clearHitRegions();
+    }
+
+    MODULES_EXPORT void clearHitRegionsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::clearHitRegionsMethod(info);
+    }
+
+    static void createImageData1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createImageData");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        ImageData* imagedata;
+        imagedata = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!imagedata) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ImageData'.");
+
+            return;
+        }
+
+        ImageData* result = impl->createImageData(imagedata, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    static void createImageData2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createImageData");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        double sw;
+        double sh;
+        sw = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sh = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ImageData* result = impl->createImageData(sw, sh, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    static void createImageDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 1:
+            if (true) {
+                createImageData1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                createImageData2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "createImageData");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void createImageDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::createImageDataMethod(info);
+    }
+
+    static void getImageDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "getImageData");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        double sx;
+        double sy;
+        double sw;
+        double sh;
+        sx = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sy = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sw = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        sh = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ImageData* result = impl->getImageData(sx, sy, sw, sh, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void getImageDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::getImageDataMethod(info);
+    }
+
+    static void putImageData1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "putImageData");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        ImageData* imagedata;
+        double dx;
+        double dy;
+        imagedata = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!imagedata) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ImageData'.");
+
+            return;
+        }
+
+        dx = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dy = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->putImageData(imagedata, dx, dy, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void putImageData2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "putImageData");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        ImageData* imagedata;
+        double dx;
+        double dy;
+        double dirtyX;
+        double dirtyY;
+        double dirtyWidth;
+        double dirtyHeight;
+        imagedata = V8ImageData::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!imagedata) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ImageData'.");
+
+            return;
+        }
+
+        dx = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dy = toRestrictedDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dirtyX = toRestrictedDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dirtyY = toRestrictedDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dirtyWidth = toRestrictedDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        dirtyHeight = toRestrictedDouble(info.GetIsolate(), info[6], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->putImageData(imagedata, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void putImageDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(7, info.Length())) {
+        case 3:
+            if (true) {
+                putImageData1Method(info);
+                return;
+            }
+            break;
+        case 7:
+            if (true) {
+                putImageData2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "putImageData");
+
+        if (isArityError) {
+            if (info.Length() < 3) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+                return;
+            }
+            if (info.Length() >= 3) {
+                exceptionState.throwTypeError(ExceptionMessages::invalidArity("[3, 7]", info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void putImageDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::putImageDataMethod(info);
+    }
+
+    static void isContextLostMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        v8SetReturnValueBool(info, impl->isContextLost());
+    }
+
+    MODULES_EXPORT void isContextLostMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::isContextLostMethod(info);
+    }
+
+    static void getContextAttributesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        Canvas2DContextAttributes result;
+        impl->getContextAttributes(result);
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void getContextAttributesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::getContextAttributesMethod(info);
+    }
+
+    static void setLineDashMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "setLineDash");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Vector<double> dash;
+        dash = toImplArray<Vector<double>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLineDash(dash);
+    }
+
+    MODULES_EXPORT void setLineDashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::setLineDashMethod(info);
+    }
+
+    static void getLineDashMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(impl->getLineDash(), info.Holder(), info.GetIsolate()));
+    }
+
+    MODULES_EXPORT void getLineDashMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::getLineDashMethod(info);
+    }
+
+    static void closePathMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        impl->closePath();
+    }
+
+    MODULES_EXPORT void closePathMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::closePathMethod(info);
+    }
+
+    static void moveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "moveTo");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->moveTo(x, y);
+    }
+
+    MODULES_EXPORT void moveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::moveToMethod(info);
+    }
+
+    static void lineToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "lineTo");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->lineTo(x, y);
+    }
+
+    MODULES_EXPORT void lineToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::lineToMethod(info);
+    }
+
+    static void quadraticCurveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "quadraticCurveTo");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        float cpx;
+        float cpy;
+        float x;
+        float y;
+        cpx = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        cpy = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->quadraticCurveTo(cpx, cpy, x, y);
+    }
+
+    MODULES_EXPORT void quadraticCurveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::quadraticCurveToMethod(info);
+    }
+
+    static void bezierCurveToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "bezierCurveTo");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 6)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(6, info.Length()));
+            return;
+        }
+
+        float cp1x;
+        float cp1y;
+        float cp2x;
+        float cp2y;
+        float x;
+        float y;
+        cp1x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        cp1y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        cp2x = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        cp2y = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+    }
+
+    MODULES_EXPORT void bezierCurveToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::bezierCurveToMethod(info);
+    }
+
+    static void arcToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "arcTo");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        float radius;
+        x1 = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y1 = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        x2 = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y2 = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radius = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->arcTo(x1, y1, x2, y2, radius, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void arcToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::arcToMethod(info);
+    }
+
+    static void rectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "rect");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        float width;
+        float height;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        width = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->rect(x, y, width, height);
+    }
+
+    MODULES_EXPORT void rectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::rectMethod(info);
+    }
+
+    static void arcMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "arc");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        float radius;
+        float startAngle;
+        float endAngle;
+        bool anticlockwise;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radius = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        startAngle = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        endAngle = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        anticlockwise = toBoolean(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->arc(x, y, radius, startAngle, endAngle, anticlockwise, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void arcMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::arcMethod(info);
+    }
+
+    static void ellipseMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "ellipse");
+
+        CanvasRenderingContext2D* impl = V8CanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 7)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(7, info.Length()));
+            return;
+        }
+
+        float x;
+        float y;
+        float radiusX;
+        float radiusY;
+        float rotation;
+        float startAngle;
+        float endAngle;
+        bool anticlockwise;
+        x = toFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radiusX = toFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radiusY = toFloat(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        rotation = toFloat(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        startAngle = toFloat(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        endAngle = toFloat(info.GetIsolate(), info[6], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        anticlockwise = toBoolean(info.GetIsolate(), info[7], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void ellipseMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasRenderingContext2DV8Internal::ellipseMethod(info);
+    }
 
 } // namespace CanvasRenderingContext2DV8Internal
 
-void V8CanvasRenderingContext2D::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  CanvasRenderingContext2D* impl = scriptWrappable->toImpl<CanvasRenderingContext2D>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8CanvasRenderingContext2D::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    CanvasRenderingContext2D* impl = scriptWrappable->toImpl<CanvasRenderingContext2D>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8CanvasRenderingContext2DAccessors[] = {
-    {"canvas", CanvasRenderingContext2DV8Internal::canvasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"globalAlpha", CanvasRenderingContext2DV8Internal::globalAlphaAttributeGetterCallback, CanvasRenderingContext2DV8Internal::globalAlphaAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"globalCompositeOperation", CanvasRenderingContext2DV8Internal::globalCompositeOperationAttributeGetterCallback, CanvasRenderingContext2DV8Internal::globalCompositeOperationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"filter", CanvasRenderingContext2DV8Internal::filterAttributeGetterCallback, CanvasRenderingContext2DV8Internal::filterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"imageSmoothingEnabled", CanvasRenderingContext2DV8Internal::imageSmoothingEnabledAttributeGetterCallback, CanvasRenderingContext2DV8Internal::imageSmoothingEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"imageSmoothingQuality", CanvasRenderingContext2DV8Internal::imageSmoothingQualityAttributeGetterCallback, CanvasRenderingContext2DV8Internal::imageSmoothingQualityAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"strokeStyle", CanvasRenderingContext2DV8Internal::strokeStyleAttributeGetterCallback, CanvasRenderingContext2DV8Internal::strokeStyleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fillStyle", CanvasRenderingContext2DV8Internal::fillStyleAttributeGetterCallback, CanvasRenderingContext2DV8Internal::fillStyleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowOffsetX", CanvasRenderingContext2DV8Internal::shadowOffsetXAttributeGetterCallback, CanvasRenderingContext2DV8Internal::shadowOffsetXAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowOffsetY", CanvasRenderingContext2DV8Internal::shadowOffsetYAttributeGetterCallback, CanvasRenderingContext2DV8Internal::shadowOffsetYAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowBlur", CanvasRenderingContext2DV8Internal::shadowBlurAttributeGetterCallback, CanvasRenderingContext2DV8Internal::shadowBlurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowColor", CanvasRenderingContext2DV8Internal::shadowColorAttributeGetterCallback, CanvasRenderingContext2DV8Internal::shadowColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineWidth", CanvasRenderingContext2DV8Internal::lineWidthAttributeGetterCallback, CanvasRenderingContext2DV8Internal::lineWidthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineCap", CanvasRenderingContext2DV8Internal::lineCapAttributeGetterCallback, CanvasRenderingContext2DV8Internal::lineCapAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineJoin", CanvasRenderingContext2DV8Internal::lineJoinAttributeGetterCallback, CanvasRenderingContext2DV8Internal::lineJoinAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"miterLimit", CanvasRenderingContext2DV8Internal::miterLimitAttributeGetterCallback, CanvasRenderingContext2DV8Internal::miterLimitAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineDashOffset", CanvasRenderingContext2DV8Internal::lineDashOffsetAttributeGetterCallback, CanvasRenderingContext2DV8Internal::lineDashOffsetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"font", CanvasRenderingContext2DV8Internal::fontAttributeGetterCallback, CanvasRenderingContext2DV8Internal::fontAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"textAlign", CanvasRenderingContext2DV8Internal::textAlignAttributeGetterCallback, CanvasRenderingContext2DV8Internal::textAlignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"textBaseline", CanvasRenderingContext2DV8Internal::textBaselineAttributeGetterCallback, CanvasRenderingContext2DV8Internal::textBaselineAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "canvas", CanvasRenderingContext2DV8Internal::canvasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "globalAlpha", CanvasRenderingContext2DV8Internal::globalAlphaAttributeGetterCallback, CanvasRenderingContext2DV8Internal::globalAlphaAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "globalCompositeOperation", CanvasRenderingContext2DV8Internal::globalCompositeOperationAttributeGetterCallback, CanvasRenderingContext2DV8Internal::globalCompositeOperationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "filter", CanvasRenderingContext2DV8Internal::filterAttributeGetterCallback, CanvasRenderingContext2DV8Internal::filterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "imageSmoothingEnabled", CanvasRenderingContext2DV8Internal::imageSmoothingEnabledAttributeGetterCallback, CanvasRenderingContext2DV8Internal::imageSmoothingEnabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "imageSmoothingQuality", CanvasRenderingContext2DV8Internal::imageSmoothingQualityAttributeGetterCallback, CanvasRenderingContext2DV8Internal::imageSmoothingQualityAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "strokeStyle", CanvasRenderingContext2DV8Internal::strokeStyleAttributeGetterCallback, CanvasRenderingContext2DV8Internal::strokeStyleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fillStyle", CanvasRenderingContext2DV8Internal::fillStyleAttributeGetterCallback, CanvasRenderingContext2DV8Internal::fillStyleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowOffsetX", CanvasRenderingContext2DV8Internal::shadowOffsetXAttributeGetterCallback, CanvasRenderingContext2DV8Internal::shadowOffsetXAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowOffsetY", CanvasRenderingContext2DV8Internal::shadowOffsetYAttributeGetterCallback, CanvasRenderingContext2DV8Internal::shadowOffsetYAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowBlur", CanvasRenderingContext2DV8Internal::shadowBlurAttributeGetterCallback, CanvasRenderingContext2DV8Internal::shadowBlurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowColor", CanvasRenderingContext2DV8Internal::shadowColorAttributeGetterCallback, CanvasRenderingContext2DV8Internal::shadowColorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineWidth", CanvasRenderingContext2DV8Internal::lineWidthAttributeGetterCallback, CanvasRenderingContext2DV8Internal::lineWidthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineCap", CanvasRenderingContext2DV8Internal::lineCapAttributeGetterCallback, CanvasRenderingContext2DV8Internal::lineCapAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineJoin", CanvasRenderingContext2DV8Internal::lineJoinAttributeGetterCallback, CanvasRenderingContext2DV8Internal::lineJoinAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "miterLimit", CanvasRenderingContext2DV8Internal::miterLimitAttributeGetterCallback, CanvasRenderingContext2DV8Internal::miterLimitAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineDashOffset", CanvasRenderingContext2DV8Internal::lineDashOffsetAttributeGetterCallback, CanvasRenderingContext2DV8Internal::lineDashOffsetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "font", CanvasRenderingContext2DV8Internal::fontAttributeGetterCallback, CanvasRenderingContext2DV8Internal::fontAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "textAlign", CanvasRenderingContext2DV8Internal::textAlignAttributeGetterCallback, CanvasRenderingContext2DV8Internal::textAlignAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "textBaseline", CanvasRenderingContext2DV8Internal::textBaselineAttributeGetterCallback, CanvasRenderingContext2DV8Internal::textBaselineAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8CanvasRenderingContext2DMethods[] = {
-    {"save", CanvasRenderingContext2DV8Internal::saveMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"restore", CanvasRenderingContext2DV8Internal::restoreMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scale", CanvasRenderingContext2DV8Internal::scaleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rotate", CanvasRenderingContext2DV8Internal::rotateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"translate", CanvasRenderingContext2DV8Internal::translateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"transform", CanvasRenderingContext2DV8Internal::transformMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTransform", CanvasRenderingContext2DV8Internal::setTransformMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"resetTransform", CanvasRenderingContext2DV8Internal::resetTransformMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createLinearGradient", CanvasRenderingContext2DV8Internal::createLinearGradientMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createRadialGradient", CanvasRenderingContext2DV8Internal::createRadialGradientMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createPattern", CanvasRenderingContext2DV8Internal::createPatternMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearRect", CanvasRenderingContext2DV8Internal::clearRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fillRect", CanvasRenderingContext2DV8Internal::fillRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"strokeRect", CanvasRenderingContext2DV8Internal::strokeRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"beginPath", CanvasRenderingContext2DV8Internal::beginPathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fill", CanvasRenderingContext2DV8Internal::fillMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stroke", CanvasRenderingContext2DV8Internal::strokeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"drawFocusIfNeeded", CanvasRenderingContext2DV8Internal::drawFocusIfNeededMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clip", CanvasRenderingContext2DV8Internal::clipMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isPointInPath", CanvasRenderingContext2DV8Internal::isPointInPathMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isPointInStroke", CanvasRenderingContext2DV8Internal::isPointInStrokeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fillText", CanvasRenderingContext2DV8Internal::fillTextMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"strokeText", CanvasRenderingContext2DV8Internal::strokeTextMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"measureText", CanvasRenderingContext2DV8Internal::measureTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"drawImage", CanvasRenderingContext2DV8Internal::drawImageMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createImageData", CanvasRenderingContext2DV8Internal::createImageDataMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getImageData", CanvasRenderingContext2DV8Internal::getImageDataMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"putImageData", CanvasRenderingContext2DV8Internal::putImageDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getContextAttributes", CanvasRenderingContext2DV8Internal::getContextAttributesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setLineDash", CanvasRenderingContext2DV8Internal::setLineDashMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getLineDash", CanvasRenderingContext2DV8Internal::getLineDashMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"closePath", CanvasRenderingContext2DV8Internal::closePathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"moveTo", CanvasRenderingContext2DV8Internal::moveToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lineTo", CanvasRenderingContext2DV8Internal::lineToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"quadraticCurveTo", CanvasRenderingContext2DV8Internal::quadraticCurveToMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bezierCurveTo", CanvasRenderingContext2DV8Internal::bezierCurveToMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"arcTo", CanvasRenderingContext2DV8Internal::arcToMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rect", CanvasRenderingContext2DV8Internal::rectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"arc", CanvasRenderingContext2DV8Internal::arcMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ellipse", CanvasRenderingContext2DV8Internal::ellipseMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "save", CanvasRenderingContext2DV8Internal::saveMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "restore", CanvasRenderingContext2DV8Internal::restoreMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scale", CanvasRenderingContext2DV8Internal::scaleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rotate", CanvasRenderingContext2DV8Internal::rotateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "translate", CanvasRenderingContext2DV8Internal::translateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "transform", CanvasRenderingContext2DV8Internal::transformMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTransform", CanvasRenderingContext2DV8Internal::setTransformMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "resetTransform", CanvasRenderingContext2DV8Internal::resetTransformMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createLinearGradient", CanvasRenderingContext2DV8Internal::createLinearGradientMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createRadialGradient", CanvasRenderingContext2DV8Internal::createRadialGradientMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createPattern", CanvasRenderingContext2DV8Internal::createPatternMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearRect", CanvasRenderingContext2DV8Internal::clearRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fillRect", CanvasRenderingContext2DV8Internal::fillRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "strokeRect", CanvasRenderingContext2DV8Internal::strokeRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "beginPath", CanvasRenderingContext2DV8Internal::beginPathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fill", CanvasRenderingContext2DV8Internal::fillMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stroke", CanvasRenderingContext2DV8Internal::strokeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "drawFocusIfNeeded", CanvasRenderingContext2DV8Internal::drawFocusIfNeededMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clip", CanvasRenderingContext2DV8Internal::clipMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isPointInPath", CanvasRenderingContext2DV8Internal::isPointInPathMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isPointInStroke", CanvasRenderingContext2DV8Internal::isPointInStrokeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fillText", CanvasRenderingContext2DV8Internal::fillTextMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "strokeText", CanvasRenderingContext2DV8Internal::strokeTextMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "measureText", CanvasRenderingContext2DV8Internal::measureTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "drawImage", CanvasRenderingContext2DV8Internal::drawImageMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createImageData", CanvasRenderingContext2DV8Internal::createImageDataMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getImageData", CanvasRenderingContext2DV8Internal::getImageDataMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "putImageData", CanvasRenderingContext2DV8Internal::putImageDataMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getContextAttributes", CanvasRenderingContext2DV8Internal::getContextAttributesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setLineDash", CanvasRenderingContext2DV8Internal::setLineDashMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getLineDash", CanvasRenderingContext2DV8Internal::getLineDashMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "closePath", CanvasRenderingContext2DV8Internal::closePathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "moveTo", CanvasRenderingContext2DV8Internal::moveToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lineTo", CanvasRenderingContext2DV8Internal::lineToMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "quadraticCurveTo", CanvasRenderingContext2DV8Internal::quadraticCurveToMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bezierCurveTo", CanvasRenderingContext2DV8Internal::bezierCurveToMethodCallback, 0, 6, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "arcTo", CanvasRenderingContext2DV8Internal::arcToMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rect", CanvasRenderingContext2DV8Internal::rectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "arc", CanvasRenderingContext2DV8Internal::arcMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ellipse", CanvasRenderingContext2DV8Internal::ellipseMethodCallback, 0, 7, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8CanvasRenderingContext2DTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CanvasRenderingContext2D::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CanvasRenderingContext2D::internalFieldCount);
+static void installV8CanvasRenderingContext2DTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CanvasRenderingContext2D::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CanvasRenderingContext2D::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CanvasRenderingContext2DAccessors, WTF_ARRAY_LENGTH(V8CanvasRenderingContext2DAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CanvasRenderingContext2DMethods, WTF_ARRAY_LENGTH(V8CanvasRenderingContext2DMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CanvasRenderingContext2DAccessors, WTF_ARRAY_LENGTH(V8CanvasRenderingContext2DAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8CanvasRenderingContext2DMethods, WTF_ARRAY_LENGTH(V8CanvasRenderingContext2DMethods));
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorcurrentTransformConfiguration = {"currentTransform", CanvasRenderingContext2DV8Internal::currentTransformAttributeGetterCallback, CanvasRenderingContext2DV8Internal::currentTransformAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcurrentTransformConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessordirectionConfiguration = {"direction", CanvasRenderingContext2DV8Internal::directionAttributeGetterCallback, CanvasRenderingContext2DV8Internal::directionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessordirectionConfiguration);
-  }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorcurrentTransformConfiguration = { "currentTransform", CanvasRenderingContext2DV8Internal::currentTransformAttributeGetterCallback, CanvasRenderingContext2DV8Internal::currentTransformAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcurrentTransformConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessordirectionConfiguration = { "direction", CanvasRenderingContext2DV8Internal::directionAttributeGetterCallback, CanvasRenderingContext2DV8Internal::directionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessordirectionConfiguration);
+    }
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration scrollPathIntoViewMethodConfiguration = {"scrollPathIntoView", CanvasRenderingContext2DV8Internal::scrollPathIntoViewMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, scrollPathIntoViewMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration addHitRegionMethodConfiguration = {"addHitRegion", CanvasRenderingContext2DV8Internal::addHitRegionMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, addHitRegionMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration removeHitRegionMethodConfiguration = {"removeHitRegion", CanvasRenderingContext2DV8Internal::removeHitRegionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, removeHitRegionMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration clearHitRegionsMethodConfiguration = {"clearHitRegions", CanvasRenderingContext2DV8Internal::clearHitRegionsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, clearHitRegionsMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration isContextLostMethodConfiguration = {"isContextLost", CanvasRenderingContext2DV8Internal::isContextLostMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, isContextLostMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration scrollPathIntoViewMethodConfiguration = { "scrollPathIntoView", CanvasRenderingContext2DV8Internal::scrollPathIntoViewMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, scrollPathIntoViewMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration addHitRegionMethodConfiguration = { "addHitRegion", CanvasRenderingContext2DV8Internal::addHitRegionMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, addHitRegionMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration removeHitRegionMethodConfiguration = { "removeHitRegion", CanvasRenderingContext2DV8Internal::removeHitRegionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, removeHitRegionMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration clearHitRegionsMethodConfiguration = { "clearHitRegions", CanvasRenderingContext2DV8Internal::clearHitRegionsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, clearHitRegionsMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration isContextLostMethodConfiguration = { "isContextLost", CanvasRenderingContext2DV8Internal::isContextLostMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, isContextLostMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8CanvasRenderingContext2D::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CanvasRenderingContext2DTemplate);
+v8::Local<v8::FunctionTemplate> V8CanvasRenderingContext2D::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CanvasRenderingContext2DTemplate);
 }
 
-bool V8CanvasRenderingContext2D::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CanvasRenderingContext2D::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CanvasRenderingContext2D::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CanvasRenderingContext2D::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CanvasRenderingContext2D* V8CanvasRenderingContext2D::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CanvasRenderingContext2D* V8CanvasRenderingContext2D::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

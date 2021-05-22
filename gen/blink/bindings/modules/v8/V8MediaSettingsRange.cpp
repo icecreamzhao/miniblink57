@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaSettingsRange.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,99 +45,112 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MediaSettingsRange::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaSettingsRange is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaSettingsRangeV8Internal {
 
-static void maxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void maxAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaSettingsRange* impl = V8MediaSettingsRange::toImpl(holder);
+        MediaSettingsRange* impl = V8MediaSettingsRange::toImpl(holder);
 
-  v8SetReturnValue(info, impl->max());
-}
+        v8SetReturnValue(info, impl->max());
+    }
 
-MODULES_EXPORT void maxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSettingsRangeV8Internal::maxAttributeGetter(info);
-}
+    MODULES_EXPORT void maxAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSettingsRangeV8Internal::maxAttributeGetter(info);
+    }
 
-static void minAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void minAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaSettingsRange* impl = V8MediaSettingsRange::toImpl(holder);
+        MediaSettingsRange* impl = V8MediaSettingsRange::toImpl(holder);
 
-  v8SetReturnValue(info, impl->min());
-}
+        v8SetReturnValue(info, impl->min());
+    }
 
-MODULES_EXPORT void minAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSettingsRangeV8Internal::minAttributeGetter(info);
-}
+    MODULES_EXPORT void minAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSettingsRangeV8Internal::minAttributeGetter(info);
+    }
 
-static void currentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void currentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaSettingsRange* impl = V8MediaSettingsRange::toImpl(holder);
+        MediaSettingsRange* impl = V8MediaSettingsRange::toImpl(holder);
 
-  v8SetReturnValue(info, impl->current());
-}
+        v8SetReturnValue(info, impl->current());
+    }
 
-MODULES_EXPORT void currentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSettingsRangeV8Internal::currentAttributeGetter(info);
-}
+    MODULES_EXPORT void currentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSettingsRangeV8Internal::currentAttributeGetter(info);
+    }
 
-static void stepAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void stepAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaSettingsRange* impl = V8MediaSettingsRange::toImpl(holder);
+        MediaSettingsRange* impl = V8MediaSettingsRange::toImpl(holder);
 
-  v8SetReturnValue(info, impl->step());
-}
+        v8SetReturnValue(info, impl->step());
+    }
 
-MODULES_EXPORT void stepAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSettingsRangeV8Internal::stepAttributeGetter(info);
-}
+    MODULES_EXPORT void stepAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSettingsRangeV8Internal::stepAttributeGetter(info);
+    }
 
 } // namespace MediaSettingsRangeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaSettingsRangeAccessors[] = {
-    {"max", MediaSettingsRangeV8Internal::maxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"min", MediaSettingsRangeV8Internal::minAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"current", MediaSettingsRangeV8Internal::currentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"step", MediaSettingsRangeV8Internal::stepAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "max", MediaSettingsRangeV8Internal::maxAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "min", MediaSettingsRangeV8Internal::minAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "current", MediaSettingsRangeV8Internal::currentAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "step", MediaSettingsRangeV8Internal::stepAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8MediaSettingsRangeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaSettingsRange::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaSettingsRange::internalFieldCount);
+static void installV8MediaSettingsRangeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaSettingsRange::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaSettingsRange::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSettingsRangeAccessors, WTF_ARRAY_LENGTH(V8MediaSettingsRangeAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSettingsRangeAccessors, WTF_ARRAY_LENGTH(V8MediaSettingsRangeAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaSettingsRange::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaSettingsRangeTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaSettingsRange::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaSettingsRangeTemplate);
 }
 
-bool V8MediaSettingsRange::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaSettingsRange::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaSettingsRange::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaSettingsRange::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaSettingsRange* V8MediaSettingsRange::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaSettingsRange* V8MediaSettingsRange::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

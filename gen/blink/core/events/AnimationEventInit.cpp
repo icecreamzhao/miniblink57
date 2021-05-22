@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AnimationEventInit.h"
 
 namespace blink {
 
-AnimationEventInit::AnimationEventInit() {
-  setAnimationName(String(""));
-  setElapsedTime(0);
+AnimationEventInit::AnimationEventInit()
+{
+    setAnimationName(String(""));
+    setElapsedTime(0);
 }
 
-AnimationEventInit::~AnimationEventInit() {}
+AnimationEventInit::~AnimationEventInit() { }
 
 AnimationEventInit::AnimationEventInit(const AnimationEventInit&) = default;
 
 AnimationEventInit& AnimationEventInit::operator=(const AnimationEventInit&) = default;
 
-bool AnimationEventInit::hasAnimationName() const {
-  return !m_animationName.isNull();
+bool AnimationEventInit::hasAnimationName() const
+{
+    return !m_animationName.isNull();
 }
-String AnimationEventInit::animationName() const {
-  return m_animationName;
+String AnimationEventInit::animationName() const
+{
+    return m_animationName;
 }
-void AnimationEventInit::setAnimationName(String value) {
-  m_animationName = value;
+void AnimationEventInit::setAnimationName(String value)
+{
+    m_animationName = value;
 }
-bool AnimationEventInit::hasElapsedTime() const {
-  return m_hasElapsedTime;
+bool AnimationEventInit::hasElapsedTime() const
+{
+    return m_hasElapsedTime;
 }
-double AnimationEventInit::elapsedTime() const {
-  DCHECK(m_hasElapsedTime);
-  return m_elapsedTime;
+double AnimationEventInit::elapsedTime() const
+{
+    DCHECK(m_hasElapsedTime);
+    return m_elapsedTime;
 }
-void AnimationEventInit::setElapsedTime(double value) {
-  m_elapsedTime = value;
-  m_hasElapsedTime = true;
+void AnimationEventInit::setElapsedTime(double value)
+{
+    m_elapsedTime = value;
+    m_hasElapsedTime = true;
 }
 
-DEFINE_TRACE(AnimationEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(AnimationEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

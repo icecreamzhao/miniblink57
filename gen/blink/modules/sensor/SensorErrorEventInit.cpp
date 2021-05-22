@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "SensorErrorEventInit.h"
 
 #include "core/dom/DOMException.h"
 
 namespace blink {
 
-SensorErrorEventInit::SensorErrorEventInit() {
+SensorErrorEventInit::SensorErrorEventInit()
+{
 }
 
-SensorErrorEventInit::~SensorErrorEventInit() {}
+SensorErrorEventInit::~SensorErrorEventInit() { }
 
 SensorErrorEventInit::SensorErrorEventInit(const SensorErrorEventInit&) = default;
 
 SensorErrorEventInit& SensorErrorEventInit::operator=(const SensorErrorEventInit&) = default;
 
-bool SensorErrorEventInit::hasError() const {
-  return m_error;
+bool SensorErrorEventInit::hasError() const
+{
+    return m_error;
 }
-DOMException* SensorErrorEventInit::error() const {
-  return m_error;
+DOMException* SensorErrorEventInit::error() const
+{
+    return m_error;
 }
-void SensorErrorEventInit::setError(DOMException* value) {
-  m_error = value;
-}
-
-DEFINE_TRACE(SensorErrorEventInit) {
-  visitor->trace(m_error);
-  EventInit::trace(visitor);
+void SensorErrorEventInit::setError(DOMException* value)
+{
+    m_error = value;
 }
 
-}  // namespace blink
+DEFINE_TRACE(SensorErrorEventInit)
+{
+    visitor->trace(m_error);
+    EventInit::trace(visitor);
+}
+
+} // namespace blink

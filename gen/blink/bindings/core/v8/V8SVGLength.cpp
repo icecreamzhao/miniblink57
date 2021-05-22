@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGLength.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,260 +46,284 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGLengthTearOff::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGLengthTearOff is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGLengthTearOffV8Internal {
 
-static void unitTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void unitTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
+        SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->unitType());
-}
+        v8SetReturnValueUnsigned(info, impl->unitType());
+    }
 
-CORE_EXPORT void unitTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGLengthTearOffV8Internal::unitTypeAttributeGetter(info);
-}
+    CORE_EXPORT void unitTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGLengthTearOffV8Internal::unitTypeAttributeGetter(info);
+    }
 
-static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
+        SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "SVGLength", "value");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "SVGLength", "value");
 
-  float cppValue(impl->value(exceptionState));
+        float cppValue(impl->value(exceptionState));
 
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
 
-  v8SetReturnValue(info, cppValue);
-}
+        v8SetReturnValue(info, cppValue);
+    }
 
-CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGLengthTearOffV8Internal::valueAttributeGetter(info);
-}
+    CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGLengthTearOffV8Internal::valueAttributeGetter(info);
+    }
 
-static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
+    static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGLength", "value");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGLength", "value");
 
-  // Prepare the value to be set.
-  float cppValue = toRestrictedFloat(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        float cppValue = toRestrictedFloat(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setValue(cppValue, exceptionState);
-}
+        impl->setValue(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGLengthTearOffV8Internal::valueAttributeSetter(v8Value, info);
-}
+        SVGLengthTearOffV8Internal::valueAttributeSetter(v8Value, info);
+    }
 
-static void valueInSpecifiedUnitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void valueInSpecifiedUnitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
+        SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
 
-  v8SetReturnValue(info, impl->valueInSpecifiedUnits());
-}
+        v8SetReturnValue(info, impl->valueInSpecifiedUnits());
+    }
 
-CORE_EXPORT void valueInSpecifiedUnitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGLengthTearOffV8Internal::valueInSpecifiedUnitsAttributeGetter(info);
-}
+    CORE_EXPORT void valueInSpecifiedUnitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGLengthTearOffV8Internal::valueInSpecifiedUnitsAttributeGetter(info);
+    }
 
-static void valueInSpecifiedUnitsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
+    static void valueInSpecifiedUnitsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGLength", "valueInSpecifiedUnits");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGLength", "valueInSpecifiedUnits");
 
-  // Prepare the value to be set.
-  float cppValue = toRestrictedFloat(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        float cppValue = toRestrictedFloat(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setValueInSpecifiedUnits(cppValue, exceptionState);
-}
+        impl->setValueInSpecifiedUnits(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void valueInSpecifiedUnitsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void valueInSpecifiedUnitsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGLengthTearOffV8Internal::valueInSpecifiedUnitsAttributeSetter(v8Value, info);
-}
+        SVGLengthTearOffV8Internal::valueInSpecifiedUnitsAttributeSetter(v8Value, info);
+    }
 
-static void valueAsStringAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void valueAsStringAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
+        SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->valueAsString(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->valueAsString(), info.GetIsolate());
+    }
 
-CORE_EXPORT void valueAsStringAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGLengthTearOffV8Internal::valueAsStringAttributeGetter(info);
-}
+    CORE_EXPORT void valueAsStringAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGLengthTearOffV8Internal::valueAsStringAttributeGetter(info);
+    }
 
-static void valueAsStringAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
+    static void valueAsStringAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        SVGLengthTearOff* impl = V8SVGLength::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGLength", "valueAsString");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "SVGLength", "valueAsString");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setValueAsString(cppValue, exceptionState);
-}
+        impl->setValueAsString(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void valueAsStringAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void valueAsStringAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  SVGLengthTearOffV8Internal::valueAsStringAttributeSetter(v8Value, info);
-}
+        SVGLengthTearOffV8Internal::valueAsStringAttributeSetter(v8Value, info);
+    }
 
-static void newValueSpecifiedUnitsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGLength", "newValueSpecifiedUnits");
+    static void newValueSpecifiedUnitsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGLength", "newValueSpecifiedUnits");
 
-  SVGLengthTearOff* impl = V8SVGLength::toImpl(info.Holder());
+        SVGLengthTearOff* impl = V8SVGLength::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  unsigned unitType;
-  float valueInSpecifiedUnits;
-  unitType = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned unitType;
+        float valueInSpecifiedUnits;
+        unitType = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  valueInSpecifiedUnits = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        valueInSpecifiedUnits = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->newValueSpecifiedUnits(unitType, valueInSpecifiedUnits, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->newValueSpecifiedUnits(unitType, valueInSpecifiedUnits, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void newValueSpecifiedUnitsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGLengthTearOffV8Internal::newValueSpecifiedUnitsMethod(info);
-}
+    CORE_EXPORT void newValueSpecifiedUnitsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGLengthTearOffV8Internal::newValueSpecifiedUnitsMethod(info);
+    }
 
-static void convertToSpecifiedUnitsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGLength", "convertToSpecifiedUnits");
+    static void convertToSpecifiedUnitsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGLength", "convertToSpecifiedUnits");
 
-  SVGLengthTearOff* impl = V8SVGLength::toImpl(info.Holder());
+        SVGLengthTearOff* impl = V8SVGLength::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned unitType;
-  unitType = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned unitType;
+        unitType = toUInt16(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->convertToSpecifiedUnits(unitType, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->convertToSpecifiedUnits(unitType, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void convertToSpecifiedUnitsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGLengthTearOffV8Internal::convertToSpecifiedUnitsMethod(info);
-}
+    CORE_EXPORT void convertToSpecifiedUnitsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGLengthTearOffV8Internal::convertToSpecifiedUnitsMethod(info);
+    }
 
 } // namespace SVGLengthTearOffV8Internal
 
-void V8SVGLength::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  SVGLengthTearOff* impl = scriptWrappable->toImpl<SVGLengthTearOff>();
-  SVGElement* contextElement = impl->contextElement();
-  if (contextElement) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
-  }
+void V8SVGLength::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    SVGLengthTearOff* impl = scriptWrappable->toImpl<SVGLengthTearOff>();
+    SVGElement* contextElement = impl->contextElement();
+    if (contextElement) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGLengthAccessors[] = {
-    {"unitType", SVGLengthTearOffV8Internal::unitTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"value", SVGLengthTearOffV8Internal::valueAttributeGetterCallback, SVGLengthTearOffV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"valueInSpecifiedUnits", SVGLengthTearOffV8Internal::valueInSpecifiedUnitsAttributeGetterCallback, SVGLengthTearOffV8Internal::valueInSpecifiedUnitsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"valueAsString", SVGLengthTearOffV8Internal::valueAsStringAttributeGetterCallback, SVGLengthTearOffV8Internal::valueAsStringAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "unitType", SVGLengthTearOffV8Internal::unitTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "value", SVGLengthTearOffV8Internal::valueAttributeGetterCallback, SVGLengthTearOffV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "valueInSpecifiedUnits", SVGLengthTearOffV8Internal::valueInSpecifiedUnitsAttributeGetterCallback, SVGLengthTearOffV8Internal::valueInSpecifiedUnitsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "valueAsString", SVGLengthTearOffV8Internal::valueAsStringAttributeGetterCallback, SVGLengthTearOffV8Internal::valueAsStringAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGLengthMethods[] = {
-    {"newValueSpecifiedUnits", SVGLengthTearOffV8Internal::newValueSpecifiedUnitsMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"convertToSpecifiedUnits", SVGLengthTearOffV8Internal::convertToSpecifiedUnitsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "newValueSpecifiedUnits", SVGLengthTearOffV8Internal::newValueSpecifiedUnitsMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "convertToSpecifiedUnits", SVGLengthTearOffV8Internal::convertToSpecifiedUnitsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGLengthTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGLength::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGLength::internalFieldCount);
+static void installV8SVGLengthTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGLength::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGLength::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8SVGLengthConstants[] = {
-      {"SVG_LENGTHTYPE_UNKNOWN", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_NUMBER", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_PERCENTAGE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_EMS", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_EXS", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_PX", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_CM", 6, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_MM", 7, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_IN", 8, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_PT", 9, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_LENGTHTYPE_PC", 10, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SVGLengthConstants, WTF_ARRAY_LENGTH(V8SVGLengthConstants));
-  static_assert(0 == SVGLengthTearOff::kSvgLengthtypeUnknown, "the value of SVGLengthTearOff_kSvgLengthtypeUnknown does not match with implementation");
-  static_assert(1 == SVGLengthTearOff::kSvgLengthtypeNumber, "the value of SVGLengthTearOff_kSvgLengthtypeNumber does not match with implementation");
-  static_assert(2 == SVGLengthTearOff::kSvgLengthtypePercentage, "the value of SVGLengthTearOff_kSvgLengthtypePercentage does not match with implementation");
-  static_assert(3 == SVGLengthTearOff::kSvgLengthtypeEms, "the value of SVGLengthTearOff_kSvgLengthtypeEms does not match with implementation");
-  static_assert(4 == SVGLengthTearOff::kSvgLengthtypeExs, "the value of SVGLengthTearOff_kSvgLengthtypeExs does not match with implementation");
-  static_assert(5 == SVGLengthTearOff::kSvgLengthtypePx, "the value of SVGLengthTearOff_kSvgLengthtypePx does not match with implementation");
-  static_assert(6 == SVGLengthTearOff::kSvgLengthtypeCm, "the value of SVGLengthTearOff_kSvgLengthtypeCm does not match with implementation");
-  static_assert(7 == SVGLengthTearOff::kSvgLengthtypeMm, "the value of SVGLengthTearOff_kSvgLengthtypeMm does not match with implementation");
-  static_assert(8 == SVGLengthTearOff::kSvgLengthtypeIn, "the value of SVGLengthTearOff_kSvgLengthtypeIn does not match with implementation");
-  static_assert(9 == SVGLengthTearOff::kSvgLengthtypePt, "the value of SVGLengthTearOff_kSvgLengthtypePt does not match with implementation");
-  static_assert(10 == SVGLengthTearOff::kSvgLengthtypePc, "the value of SVGLengthTearOff_kSvgLengthtypePc does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGLengthAccessors, WTF_ARRAY_LENGTH(V8SVGLengthAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGLengthMethods, WTF_ARRAY_LENGTH(V8SVGLengthMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8SVGLengthConstants[] = {
+        { "SVG_LENGTHTYPE_UNKNOWN", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_NUMBER", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_PERCENTAGE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_EMS", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_EXS", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_PX", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_CM", 6, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_MM", 7, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_IN", 8, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_PT", 9, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_LENGTHTYPE_PC", 10, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SVGLengthConstants, WTF_ARRAY_LENGTH(V8SVGLengthConstants));
+    static_assert(0 == SVGLengthTearOff::kSvgLengthtypeUnknown, "the value of SVGLengthTearOff_kSvgLengthtypeUnknown does not match with implementation");
+    static_assert(1 == SVGLengthTearOff::kSvgLengthtypeNumber, "the value of SVGLengthTearOff_kSvgLengthtypeNumber does not match with implementation");
+    static_assert(2 == SVGLengthTearOff::kSvgLengthtypePercentage, "the value of SVGLengthTearOff_kSvgLengthtypePercentage does not match with implementation");
+    static_assert(3 == SVGLengthTearOff::kSvgLengthtypeEms, "the value of SVGLengthTearOff_kSvgLengthtypeEms does not match with implementation");
+    static_assert(4 == SVGLengthTearOff::kSvgLengthtypeExs, "the value of SVGLengthTearOff_kSvgLengthtypeExs does not match with implementation");
+    static_assert(5 == SVGLengthTearOff::kSvgLengthtypePx, "the value of SVGLengthTearOff_kSvgLengthtypePx does not match with implementation");
+    static_assert(6 == SVGLengthTearOff::kSvgLengthtypeCm, "the value of SVGLengthTearOff_kSvgLengthtypeCm does not match with implementation");
+    static_assert(7 == SVGLengthTearOff::kSvgLengthtypeMm, "the value of SVGLengthTearOff_kSvgLengthtypeMm does not match with implementation");
+    static_assert(8 == SVGLengthTearOff::kSvgLengthtypeIn, "the value of SVGLengthTearOff_kSvgLengthtypeIn does not match with implementation");
+    static_assert(9 == SVGLengthTearOff::kSvgLengthtypePt, "the value of SVGLengthTearOff_kSvgLengthtypePt does not match with implementation");
+    static_assert(10 == SVGLengthTearOff::kSvgLengthtypePc, "the value of SVGLengthTearOff_kSvgLengthtypePc does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGLengthAccessors, WTF_ARRAY_LENGTH(V8SVGLengthAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGLengthMethods, WTF_ARRAY_LENGTH(V8SVGLengthMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGLength::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGLengthTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGLength::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGLengthTemplate);
 }
 
-bool V8SVGLength::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGLength::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGLength::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGLength::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGLengthTearOff* V8SVGLength::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGLengthTearOff* V8SVGLength::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

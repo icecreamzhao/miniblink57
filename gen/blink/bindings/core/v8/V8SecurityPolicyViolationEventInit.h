@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8SecurityPolicyViolationEventInit_h
 #define V8SecurityPolicyViolationEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8SecurityPolicyViolationEventInit {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, SecurityPolicyViolationEventInit&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, SecurityPolicyViolationEventInit&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8SecurityPolicyViolationEventInit(const SecurityPolicyViolationEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, SecurityPolicyViolationEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, SecurityPolicyViolationEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<SecurityPolicyViolationEventInit> {
-  static SecurityPolicyViolationEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static SecurityPolicyViolationEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<SecurityPolicyViolationEventInit> {
-  typedef V8SecurityPolicyViolationEventInit Type;
+    typedef V8SecurityPolicyViolationEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8SecurityPolicyViolationEventInit_h
+#endif // V8SecurityPolicyViolationEventInit_h

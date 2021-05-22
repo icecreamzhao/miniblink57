@@ -8,56 +8,67 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "NFCPushOptions.h"
 
 namespace blink {
 
-NFCPushOptions::NFCPushOptions() {
-  setIgnoreRead(true);
-  setTarget(String("any"));
+NFCPushOptions::NFCPushOptions()
+{
+    setIgnoreRead(true);
+    setTarget(String("any"));
 }
 
-NFCPushOptions::~NFCPushOptions() {}
+NFCPushOptions::~NFCPushOptions() { }
 
 NFCPushOptions::NFCPushOptions(const NFCPushOptions&) = default;
 
 NFCPushOptions& NFCPushOptions::operator=(const NFCPushOptions&) = default;
 
-bool NFCPushOptions::hasIgnoreRead() const {
-  return m_hasIgnoreRead;
+bool NFCPushOptions::hasIgnoreRead() const
+{
+    return m_hasIgnoreRead;
 }
-bool NFCPushOptions::ignoreRead() const {
-  DCHECK(m_hasIgnoreRead);
-  return m_ignoreRead;
+bool NFCPushOptions::ignoreRead() const
+{
+    DCHECK(m_hasIgnoreRead);
+    return m_ignoreRead;
 }
-void NFCPushOptions::setIgnoreRead(bool value) {
-  m_ignoreRead = value;
-  m_hasIgnoreRead = true;
+void NFCPushOptions::setIgnoreRead(bool value)
+{
+    m_ignoreRead = value;
+    m_hasIgnoreRead = true;
 }
-bool NFCPushOptions::hasTarget() const {
-  return !m_target.isNull();
+bool NFCPushOptions::hasTarget() const
+{
+    return !m_target.isNull();
 }
-String NFCPushOptions::target() const {
-  return m_target;
+String NFCPushOptions::target() const
+{
+    return m_target;
 }
-void NFCPushOptions::setTarget(String value) {
-  m_target = value;
+void NFCPushOptions::setTarget(String value)
+{
+    m_target = value;
 }
-bool NFCPushOptions::hasTimeout() const {
-  return m_hasTimeout;
+bool NFCPushOptions::hasTimeout() const
+{
+    return m_hasTimeout;
 }
-double NFCPushOptions::timeout() const {
-  DCHECK(m_hasTimeout);
-  return m_timeout;
+double NFCPushOptions::timeout() const
+{
+    DCHECK(m_hasTimeout);
+    return m_timeout;
 }
-void NFCPushOptions::setTimeout(double value) {
-  m_timeout = value;
-  m_hasTimeout = true;
+void NFCPushOptions::setTimeout(double value)
+{
+    m_timeout = value;
+    m_hasTimeout = true;
 }
 
-DEFINE_TRACE(NFCPushOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(NFCPushOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

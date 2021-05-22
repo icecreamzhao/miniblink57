@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8BaseAudioContext.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -83,826 +83,891 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&BaseAudioContext::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "BaseAudioContext is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace BaseAudioContextV8Internal {
 
-static void destinationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void destinationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
 
-  AudioDestinationNode* cppValue(WTF::getPtr(impl->destination()));
+        AudioDestinationNode* cppValue(WTF::getPtr(impl->destination()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BaseAudioContext#destination";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BaseAudioContext#destination";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void destinationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BaseAudioContextV8Internal::destinationAttributeGetter(info);
-}
-
-static void currentTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
-
-  v8SetReturnValue(info, impl->currentTime());
-}
-
-MODULES_EXPORT void currentTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BaseAudioContextV8Internal::currentTimeAttributeGetter(info);
-}
-
-static void sampleRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
-
-  v8SetReturnValue(info, impl->sampleRate());
-}
-
-MODULES_EXPORT void sampleRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BaseAudioContextV8Internal::sampleRateAttributeGetter(info);
-}
-
-static void listenerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
-
-  AudioListener* cppValue(WTF::getPtr(impl->listener()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#BaseAudioContext#listener";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void listenerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BaseAudioContextV8Internal::listenerAttributeGetter(info);
-}
-
-static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->state(), info.GetIsolate());
-}
-
-MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BaseAudioContextV8Internal::stateAttributeGetter(info);
-}
-
-static void onstatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onstatechange()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onstatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BaseAudioContextV8Internal::onstatechangeAttributeGetter(info);
-}
-
-static void onstatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onstatechange(), v8Value, V8BaseAudioContext::eventListenerCacheIndex);
-
-  impl->setOnstatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onstatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  BaseAudioContextV8Internal::onstatechangeAttributeSetter(v8Value, info);
-}
-
-static void createBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createBuffer");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
-
-  unsigned numberOfChannels;
-  unsigned numberOfFrames;
-  float sampleRate;
-  numberOfChannels = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  numberOfFrames = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  sampleRate = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  AudioBuffer* result = impl->createBuffer(numberOfChannels, numberOfFrames, sampleRate, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  BaseAudioContextV8Internal::createBufferMethod(info);
-}
-
-static void decodeAudioDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "decodeAudioData");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BaseAudioContext::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  DOMArrayBuffer* audioData;
-  AudioBufferCallback* successCallback;
-  AudioBufferCallback* errorCallback;
-  audioData = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
-  if (!audioData) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBuffer'.");
-
-    return;
-  }
-
-  if (!isUndefinedOrNull(info[1])) {
-    if (!info[1]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    successCallback = V8AudioBufferCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-  } else {
-    successCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
-
-      return;
+    MODULES_EXPORT void destinationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BaseAudioContextV8Internal::destinationAttributeGetter(info);
     }
-    errorCallback = V8AudioBufferCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  ScriptPromise result = impl->decodeAudioData(scriptState, audioData, successCallback, errorCallback, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+    static void currentTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void decodeAudioDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextDecodeAudioData);
-  BaseAudioContextV8Internal::decodeAudioDataMethod(info);
-}
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
 
-static void createBufferSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createBufferSource");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  AudioBufferSourceNode* result = impl->createBufferSource(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createBufferSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateBufferSource);
-  BaseAudioContextV8Internal::createBufferSourceMethod(info);
-}
-
-static void createConstantSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createConstantSource");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  ConstantSourceNode* result = impl->createConstantSource(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createConstantSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateConstantSource);
-  BaseAudioContextV8Internal::createConstantSourceMethod(info);
-}
-
-static void createGainMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createGain");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  GainNode* result = impl->createGain(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createGainMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateGain);
-  BaseAudioContextV8Internal::createGainMethod(info);
-}
-
-static void createDelayMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createDelay");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  double maxDelayTime;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    DelayNode* result = impl->createDelay(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValue(info, impl->currentTime());
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  maxDelayTime = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  DelayNode* result = impl->createDelay(maxDelayTime, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createDelayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateDelay);
-  BaseAudioContextV8Internal::createDelayMethod(info);
-}
-
-static void createBiquadFilterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createBiquadFilter");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  BiquadFilterNode* result = impl->createBiquadFilter(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createBiquadFilterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateBiquadFilter);
-  BaseAudioContextV8Internal::createBiquadFilterMethod(info);
-}
-
-static void createIIRFilterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createIIRFilter");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  Vector<double> feedForward;
-  Vector<double> feedBack;
-  feedForward = toImplArray<Vector<double>>(info[0], 1, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  feedBack = toImplArray<Vector<double>>(info[1], 2, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  IIRFilterNode* result = impl->createIIRFilter(feedForward, feedBack, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createIIRFilterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateIIRFilter);
-  BaseAudioContextV8Internal::createIIRFilterMethod(info);
-}
-
-static void createWaveShaperMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createWaveShaper");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  WaveShaperNode* result = impl->createWaveShaper(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createWaveShaperMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateWaveShaper);
-  BaseAudioContextV8Internal::createWaveShaperMethod(info);
-}
-
-static void createPannerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createPanner");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  PannerNode* result = impl->createPanner(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createPannerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreatePannerAutomated);
-  BaseAudioContextV8Internal::createPannerMethod(info);
-}
-
-static void createConvolverMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createConvolver");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  ConvolverNode* result = impl->createConvolver(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createConvolverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateConvolver);
-  BaseAudioContextV8Internal::createConvolverMethod(info);
-}
-
-static void createDynamicsCompressorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createDynamicsCompressor");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  DynamicsCompressorNode* result = impl->createDynamicsCompressor(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createDynamicsCompressorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateDynamicsCompressor);
-  BaseAudioContextV8Internal::createDynamicsCompressorMethod(info);
-}
-
-static void createAnalyserMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createAnalyser");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  AnalyserNode* result = impl->createAnalyser(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createAnalyserMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateAnalyser);
-  BaseAudioContextV8Internal::createAnalyserMethod(info);
-}
-
-static void createScriptProcessorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createScriptProcessor");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  unsigned bufferSize;
-  unsigned numberOfInputChannels;
-  unsigned numberOfOutputChannels;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ScriptProcessorNode* result = impl->createScriptProcessor(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    MODULES_EXPORT void currentTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BaseAudioContextV8Internal::currentTimeAttributeGetter(info);
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  bufferSize = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    ScriptProcessorNode* result = impl->createScriptProcessor(bufferSize, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    static void sampleRateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
+
+        v8SetReturnValue(info, impl->sampleRate());
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  numberOfInputChannels = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    ScriptProcessorNode* result = impl->createScriptProcessor(bufferSize, numberOfInputChannels, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    MODULES_EXPORT void sampleRateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BaseAudioContextV8Internal::sampleRateAttributeGetter(info);
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  numberOfOutputChannels = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  ScriptProcessorNode* result = impl->createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+    static void listenerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void createScriptProcessorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateScriptProcessor);
-  BaseAudioContextV8Internal::createScriptProcessorMethod(info);
-}
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
 
-static void createStereoPannerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createStereoPanner");
+        AudioListener* cppValue(WTF::getPtr(impl->listener()));
 
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#BaseAudioContext#listener";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  StereoPannerNode* result = impl->createStereoPanner(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createStereoPannerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateStereoPanner);
-  BaseAudioContextV8Internal::createStereoPannerMethod(info);
-}
-
-static void createOscillatorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createOscillator");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  OscillatorNode* result = impl->createOscillator(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createOscillatorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateOscillator);
-  BaseAudioContextV8Internal::createOscillatorMethod(info);
-}
-
-static void createPeriodicWaveMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createPeriodicWave");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  DOMFloat32Array* real;
-  DOMFloat32Array* imag;
-  PeriodicWaveConstraints options;
-  real = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
-  if (!real) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
-
-    return;
-  }
-
-  imag = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
-  if (!imag) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
-
-    return;
-  }
-
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
-
-    return;
-  }
-  V8PeriodicWaveConstraints::toImpl(info.GetIsolate(), info[2], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  PeriodicWave* result = impl->createPeriodicWave(real, imag, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createPeriodicWaveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreatePeriodicWave);
-  BaseAudioContextV8Internal::createPeriodicWaveMethod(info);
-}
-
-static void createChannelSplitterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createChannelSplitter");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  unsigned numberOfOutputs;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ChannelSplitterNode* result = impl->createChannelSplitter(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValue(info, v8Value);
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  numberOfOutputs = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  ChannelSplitterNode* result = impl->createChannelSplitter(numberOfOutputs, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void createChannelSplitterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateChannelSplitter);
-  BaseAudioContextV8Internal::createChannelSplitterMethod(info);
-}
-
-static void createChannelMergerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createChannelMerger");
-
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
-
-  unsigned numberOfInputs;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ChannelMergerNode* result = impl->createChannelMerger(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    MODULES_EXPORT void listenerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BaseAudioContextV8Internal::listenerAttributeGetter(info);
     }
-    v8SetReturnValue(info, result);
-    return;
-  }
-  numberOfInputs = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  ChannelMergerNode* result = impl->createChannelMerger(numberOfInputs, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+    static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void createChannelMergerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateChannelMerger);
-  BaseAudioContextV8Internal::createChannelMergerMethod(info);
-}
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
 
-static void resumeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "resume");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        v8SetReturnValueString(info, impl->state(), info.GetIsolate());
+    }
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8BaseAudioContext::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+    MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BaseAudioContextV8Internal::stateAttributeGetter(info);
+    }
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    static void onstatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScriptPromise result = impl->resumeContext(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
 
-MODULES_EXPORT  void resumeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextResume);
-  BaseAudioContextV8Internal::resumeMethod(info);
-}
+        EventListener* cppValue(WTF::getPtr(impl->onstatechange()));
 
-static void createMediaElementSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createMediaElementSource");
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+    MODULES_EXPORT void onstatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BaseAudioContextV8Internal::onstatechangeAttributeGetter(info);
+    }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+    static void onstatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(holder);
 
-  HTMLMediaElement* mediaElement;
-  mediaElement = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!mediaElement) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'HTMLMediaElement'.");
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onstatechange(), v8Value, V8BaseAudioContext::eventListenerCacheIndex);
 
-    return;
-  }
+        impl->setOnstatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-  MediaElementAudioSourceNode* result = impl->createMediaElementSource(mediaElement, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+    MODULES_EXPORT void onstatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-MODULES_EXPORT  void createMediaElementSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateMediaElementSource);
-  BaseAudioContextV8Internal::createMediaElementSourceMethod(info);
-}
+        BaseAudioContextV8Internal::onstatechangeAttributeSetter(v8Value, info);
+    }
 
-static void createMediaStreamSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createMediaStreamSource");
+    static void createBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createBuffer");
 
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  MediaStream* mediaStream;
-  mediaStream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!mediaStream) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'MediaStream'.");
+        unsigned numberOfChannels;
+        unsigned numberOfFrames;
+        float sampleRate;
+        numberOfChannels = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-    return;
-  }
+        numberOfFrames = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  MediaStreamAudioSourceNode* result = impl->createMediaStreamSource(mediaStream, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        sampleRate = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-MODULES_EXPORT  void createMediaStreamSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateMediaStreamSource);
-  BaseAudioContextV8Internal::createMediaStreamSourceMethod(info);
-}
+        AudioBuffer* result = impl->createBuffer(numberOfChannels, numberOfFrames, sampleRate, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
 
-static void createMediaStreamDestinationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createMediaStreamDestination");
+    MODULES_EXPORT void createBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        BaseAudioContextV8Internal::createBufferMethod(info);
+    }
 
-  BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+    static void decodeAudioDataMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "decodeAudioData");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  MediaStreamAudioDestinationNode* result = impl->createMediaStreamDestination(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BaseAudioContext::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
 
-MODULES_EXPORT  void createMediaStreamDestinationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateMediaStreamDestination);
-  BaseAudioContextV8Internal::createMediaStreamDestinationMethod(info);
-}
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        DOMArrayBuffer* audioData;
+        AudioBufferCallback* successCallback;
+        AudioBufferCallback* errorCallback;
+        audioData = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
+        if (!audioData) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBuffer'.");
+
+            return;
+        }
+
+        if (!isUndefinedOrNull(info[1])) {
+            if (!info[1]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+
+                return;
+            }
+            successCallback = V8AudioBufferCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+        } else {
+            successCallback = nullptr;
+        }
+
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 3 is not a function.");
+
+                return;
+            }
+            errorCallback = V8AudioBufferCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        ScriptPromise result = impl->decodeAudioData(scriptState, audioData, successCallback, errorCallback, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void decodeAudioDataMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextDecodeAudioData);
+        BaseAudioContextV8Internal::decodeAudioDataMethod(info);
+    }
+
+    static void createBufferSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createBufferSource");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        AudioBufferSourceNode* result = impl->createBufferSource(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createBufferSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateBufferSource);
+        BaseAudioContextV8Internal::createBufferSourceMethod(info);
+    }
+
+    static void createConstantSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createConstantSource");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        ConstantSourceNode* result = impl->createConstantSource(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createConstantSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateConstantSource);
+        BaseAudioContextV8Internal::createConstantSourceMethod(info);
+    }
+
+    static void createGainMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createGain");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        GainNode* result = impl->createGain(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createGainMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateGain);
+        BaseAudioContextV8Internal::createGainMethod(info);
+    }
+
+    static void createDelayMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createDelay");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        double maxDelayTime;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            DelayNode* result = impl->createDelay(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        maxDelayTime = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        DelayNode* result = impl->createDelay(maxDelayTime, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createDelayMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateDelay);
+        BaseAudioContextV8Internal::createDelayMethod(info);
+    }
+
+    static void createBiquadFilterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createBiquadFilter");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        BiquadFilterNode* result = impl->createBiquadFilter(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createBiquadFilterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateBiquadFilter);
+        BaseAudioContextV8Internal::createBiquadFilterMethod(info);
+    }
+
+    static void createIIRFilterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createIIRFilter");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        Vector<double> feedForward;
+        Vector<double> feedBack;
+        feedForward = toImplArray<Vector<double>>(info[0], 1, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        feedBack = toImplArray<Vector<double>>(info[1], 2, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        IIRFilterNode* result = impl->createIIRFilter(feedForward, feedBack, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createIIRFilterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateIIRFilter);
+        BaseAudioContextV8Internal::createIIRFilterMethod(info);
+    }
+
+    static void createWaveShaperMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createWaveShaper");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        WaveShaperNode* result = impl->createWaveShaper(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createWaveShaperMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateWaveShaper);
+        BaseAudioContextV8Internal::createWaveShaperMethod(info);
+    }
+
+    static void createPannerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createPanner");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        PannerNode* result = impl->createPanner(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createPannerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreatePannerAutomated);
+        BaseAudioContextV8Internal::createPannerMethod(info);
+    }
+
+    static void createConvolverMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createConvolver");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        ConvolverNode* result = impl->createConvolver(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createConvolverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateConvolver);
+        BaseAudioContextV8Internal::createConvolverMethod(info);
+    }
+
+    static void createDynamicsCompressorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createDynamicsCompressor");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        DynamicsCompressorNode* result = impl->createDynamicsCompressor(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createDynamicsCompressorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateDynamicsCompressor);
+        BaseAudioContextV8Internal::createDynamicsCompressorMethod(info);
+    }
+
+    static void createAnalyserMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createAnalyser");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        AnalyserNode* result = impl->createAnalyser(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createAnalyserMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateAnalyser);
+        BaseAudioContextV8Internal::createAnalyserMethod(info);
+    }
+
+    static void createScriptProcessorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createScriptProcessor");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        unsigned bufferSize;
+        unsigned numberOfInputChannels;
+        unsigned numberOfOutputChannels;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ScriptProcessorNode* result = impl->createScriptProcessor(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        bufferSize = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            ScriptProcessorNode* result = impl->createScriptProcessor(bufferSize, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        numberOfInputChannels = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            ScriptProcessorNode* result = impl->createScriptProcessor(bufferSize, numberOfInputChannels, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        numberOfOutputChannels = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptProcessorNode* result = impl->createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createScriptProcessorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateScriptProcessor);
+        BaseAudioContextV8Internal::createScriptProcessorMethod(info);
+    }
+
+    static void createStereoPannerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createStereoPanner");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        StereoPannerNode* result = impl->createStereoPanner(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createStereoPannerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateStereoPanner);
+        BaseAudioContextV8Internal::createStereoPannerMethod(info);
+    }
+
+    static void createOscillatorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createOscillator");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        OscillatorNode* result = impl->createOscillator(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createOscillatorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateOscillator);
+        BaseAudioContextV8Internal::createOscillatorMethod(info);
+    }
+
+    static void createPeriodicWaveMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createPeriodicWave");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        DOMFloat32Array* real;
+        DOMFloat32Array* imag;
+        PeriodicWaveConstraints options;
+        real = info[0]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[0])) : 0;
+        if (!real) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Float32Array'.");
+
+            return;
+        }
+
+        imag = info[1]->IsFloat32Array() ? V8Float32Array::toImpl(v8::Local<v8::Float32Array>::Cast(info[1])) : 0;
+        if (!imag) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Float32Array'.");
+
+            return;
+        }
+
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
+
+            return;
+        }
+        V8PeriodicWaveConstraints::toImpl(info.GetIsolate(), info[2], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        PeriodicWave* result = impl->createPeriodicWave(real, imag, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createPeriodicWaveMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreatePeriodicWave);
+        BaseAudioContextV8Internal::createPeriodicWaveMethod(info);
+    }
+
+    static void createChannelSplitterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createChannelSplitter");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        unsigned numberOfOutputs;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ChannelSplitterNode* result = impl->createChannelSplitter(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        numberOfOutputs = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ChannelSplitterNode* result = impl->createChannelSplitter(numberOfOutputs, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createChannelSplitterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateChannelSplitter);
+        BaseAudioContextV8Internal::createChannelSplitterMethod(info);
+    }
+
+    static void createChannelMergerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createChannelMerger");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        unsigned numberOfInputs;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ChannelMergerNode* result = impl->createChannelMerger(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValue(info, result);
+            return;
+        }
+        numberOfInputs = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ChannelMergerNode* result = impl->createChannelMerger(numberOfInputs, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createChannelMergerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateChannelMerger);
+        BaseAudioContextV8Internal::createChannelMergerMethod(info);
+    }
+
+    static void resumeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "resume");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8BaseAudioContext::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->resumeContext(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void resumeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextResume);
+        BaseAudioContextV8Internal::resumeMethod(info);
+    }
+
+    static void createMediaElementSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createMediaElementSource");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        HTMLMediaElement* mediaElement;
+        mediaElement = V8HTMLMediaElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!mediaElement) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'HTMLMediaElement'.");
+
+            return;
+        }
+
+        MediaElementAudioSourceNode* result = impl->createMediaElementSource(mediaElement, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createMediaElementSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateMediaElementSource);
+        BaseAudioContextV8Internal::createMediaElementSourceMethod(info);
+    }
+
+    static void createMediaStreamSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createMediaStreamSource");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        MediaStream* mediaStream;
+        mediaStream = V8MediaStream::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!mediaStream) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'MediaStream'.");
+
+            return;
+        }
+
+        MediaStreamAudioSourceNode* result = impl->createMediaStreamSource(mediaStream, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createMediaStreamSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateMediaStreamSource);
+        BaseAudioContextV8Internal::createMediaStreamSourceMethod(info);
+    }
+
+    static void createMediaStreamDestinationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "BaseAudioContext", "createMediaStreamDestination");
+
+        BaseAudioContext* impl = V8BaseAudioContext::toImpl(info.Holder());
+
+        MediaStreamAudioDestinationNode* result = impl->createMediaStreamDestination(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void createMediaStreamDestinationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::AudioContextCreateMediaStreamDestination);
+        BaseAudioContextV8Internal::createMediaStreamDestinationMethod(info);
+    }
 
 } // namespace BaseAudioContextV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8BaseAudioContextAccessors[] = {
-    {"destination", BaseAudioContextV8Internal::destinationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"currentTime", BaseAudioContextV8Internal::currentTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sampleRate", BaseAudioContextV8Internal::sampleRateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"listener", BaseAudioContextV8Internal::listenerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"state", BaseAudioContextV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onstatechange", BaseAudioContextV8Internal::onstatechangeAttributeGetterCallback, BaseAudioContextV8Internal::onstatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "destination", BaseAudioContextV8Internal::destinationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "currentTime", BaseAudioContextV8Internal::currentTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sampleRate", BaseAudioContextV8Internal::sampleRateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "listener", BaseAudioContextV8Internal::listenerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "state", BaseAudioContextV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onstatechange", BaseAudioContextV8Internal::onstatechangeAttributeGetterCallback, BaseAudioContextV8Internal::onstatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8BaseAudioContextMethods[] = {
-    {"createBuffer", BaseAudioContextV8Internal::createBufferMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"decodeAudioData", BaseAudioContextV8Internal::decodeAudioDataMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"createBufferSource", BaseAudioContextV8Internal::createBufferSourceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createConstantSource", BaseAudioContextV8Internal::createConstantSourceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createGain", BaseAudioContextV8Internal::createGainMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createDelay", BaseAudioContextV8Internal::createDelayMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createBiquadFilter", BaseAudioContextV8Internal::createBiquadFilterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createIIRFilter", BaseAudioContextV8Internal::createIIRFilterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createWaveShaper", BaseAudioContextV8Internal::createWaveShaperMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createPanner", BaseAudioContextV8Internal::createPannerMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createConvolver", BaseAudioContextV8Internal::createConvolverMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createDynamicsCompressor", BaseAudioContextV8Internal::createDynamicsCompressorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createAnalyser", BaseAudioContextV8Internal::createAnalyserMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createScriptProcessor", BaseAudioContextV8Internal::createScriptProcessorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createStereoPanner", BaseAudioContextV8Internal::createStereoPannerMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createOscillator", BaseAudioContextV8Internal::createOscillatorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createPeriodicWave", BaseAudioContextV8Internal::createPeriodicWaveMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createChannelSplitter", BaseAudioContextV8Internal::createChannelSplitterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createChannelMerger", BaseAudioContextV8Internal::createChannelMergerMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"resume", BaseAudioContextV8Internal::resumeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"createMediaElementSource", BaseAudioContextV8Internal::createMediaElementSourceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createMediaStreamSource", BaseAudioContextV8Internal::createMediaStreamSourceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createMediaStreamDestination", BaseAudioContextV8Internal::createMediaStreamDestinationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "createBuffer", BaseAudioContextV8Internal::createBufferMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "decodeAudioData", BaseAudioContextV8Internal::decodeAudioDataMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "createBufferSource", BaseAudioContextV8Internal::createBufferSourceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createConstantSource", BaseAudioContextV8Internal::createConstantSourceMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createGain", BaseAudioContextV8Internal::createGainMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createDelay", BaseAudioContextV8Internal::createDelayMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createBiquadFilter", BaseAudioContextV8Internal::createBiquadFilterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createIIRFilter", BaseAudioContextV8Internal::createIIRFilterMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createWaveShaper", BaseAudioContextV8Internal::createWaveShaperMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createPanner", BaseAudioContextV8Internal::createPannerMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createConvolver", BaseAudioContextV8Internal::createConvolverMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createDynamicsCompressor", BaseAudioContextV8Internal::createDynamicsCompressorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createAnalyser", BaseAudioContextV8Internal::createAnalyserMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createScriptProcessor", BaseAudioContextV8Internal::createScriptProcessorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createStereoPanner", BaseAudioContextV8Internal::createStereoPannerMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createOscillator", BaseAudioContextV8Internal::createOscillatorMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createPeriodicWave", BaseAudioContextV8Internal::createPeriodicWaveMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createChannelSplitter", BaseAudioContextV8Internal::createChannelSplitterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createChannelMerger", BaseAudioContextV8Internal::createChannelMergerMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "resume", BaseAudioContextV8Internal::resumeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "createMediaElementSource", BaseAudioContextV8Internal::createMediaElementSourceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createMediaStreamSource", BaseAudioContextV8Internal::createMediaStreamSourceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createMediaStreamDestination", BaseAudioContextV8Internal::createMediaStreamDestinationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8BaseAudioContextTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BaseAudioContext::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8BaseAudioContext::internalFieldCount);
+static void installV8BaseAudioContextTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8BaseAudioContext::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8BaseAudioContext::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BaseAudioContextAccessors, WTF_ARRAY_LENGTH(V8BaseAudioContextAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BaseAudioContextMethods, WTF_ARRAY_LENGTH(V8BaseAudioContextMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BaseAudioContextAccessors, WTF_ARRAY_LENGTH(V8BaseAudioContextAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8BaseAudioContextMethods, WTF_ARRAY_LENGTH(V8BaseAudioContextMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8BaseAudioContext::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BaseAudioContextTemplate);
+v8::Local<v8::FunctionTemplate> V8BaseAudioContext::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8BaseAudioContextTemplate);
 }
 
-bool V8BaseAudioContext::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8BaseAudioContext::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8BaseAudioContext::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8BaseAudioContext::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-BaseAudioContext* V8BaseAudioContext::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+BaseAudioContext* V8BaseAudioContext::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

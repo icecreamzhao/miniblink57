@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ANGLEInstancedArrays.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,170 +47,182 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&ANGLEInstancedArrays::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "ANGLEInstancedArrays is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ANGLEInstancedArraysV8Internal {
 
-static void drawArraysInstancedANGLEMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ANGLEInstancedArrays", "drawArraysInstancedANGLE");
+    static void drawArraysInstancedANGLEMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ANGLEInstancedArrays", "drawArraysInstancedANGLE");
 
-  ANGLEInstancedArrays* impl = V8ANGLEInstancedArrays::toImpl(info.Holder());
+        ANGLEInstancedArrays* impl = V8ANGLEInstancedArrays::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
 
-  unsigned mode;
-  int first;
-  int count;
-  int primcount;
-  mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned mode;
+        int first;
+        int count;
+        int primcount;
+        mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  first = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        first = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  count = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        count = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  primcount = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        primcount = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->drawArraysInstancedANGLE(mode, first, count, primcount);
-}
+        impl->drawArraysInstancedANGLE(mode, first, count, primcount);
+    }
 
-MODULES_EXPORT  void drawArraysInstancedANGLEMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ANGLEInstancedArraysV8Internal::drawArraysInstancedANGLEMethod(info);
-}
+    MODULES_EXPORT void drawArraysInstancedANGLEMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ANGLEInstancedArraysV8Internal::drawArraysInstancedANGLEMethod(info);
+    }
 
-static void drawElementsInstancedANGLEMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ANGLEInstancedArrays", "drawElementsInstancedANGLE");
+    static void drawElementsInstancedANGLEMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ANGLEInstancedArrays", "drawElementsInstancedANGLE");
 
-  ANGLEInstancedArrays* impl = V8ANGLEInstancedArrays::toImpl(info.Holder());
+        ANGLEInstancedArrays* impl = V8ANGLEInstancedArrays::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 5)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 5)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(5, info.Length()));
+            return;
+        }
 
-  unsigned mode;
-  int count;
-  unsigned type;
-  long long offset;
-  int primcount;
-  mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned mode;
+        int count;
+        unsigned type;
+        long long offset;
+        int primcount;
+        mode = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  count = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        count = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  type = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        type = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  offset = toInt64(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        offset = toInt64(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  primcount = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        primcount = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->drawElementsInstancedANGLE(mode, count, type, offset, primcount);
-}
+        impl->drawElementsInstancedANGLE(mode, count, type, offset, primcount);
+    }
 
-MODULES_EXPORT  void drawElementsInstancedANGLEMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ANGLEInstancedArraysV8Internal::drawElementsInstancedANGLEMethod(info);
-}
+    MODULES_EXPORT void drawElementsInstancedANGLEMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ANGLEInstancedArraysV8Internal::drawElementsInstancedANGLEMethod(info);
+    }
 
-static void vertexAttribDivisorANGLEMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ANGLEInstancedArrays", "vertexAttribDivisorANGLE");
+    static void vertexAttribDivisorANGLEMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "ANGLEInstancedArrays", "vertexAttribDivisorANGLE");
 
-  ANGLEInstancedArrays* impl = V8ANGLEInstancedArrays::toImpl(info.Holder());
+        ANGLEInstancedArrays* impl = V8ANGLEInstancedArrays::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  unsigned index;
-  int divisor;
-  index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned index;
+        int divisor;
+        index = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  divisor = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        divisor = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->vertexAttribDivisorANGLE(index, divisor);
-}
+        impl->vertexAttribDivisorANGLE(index, divisor);
+    }
 
-MODULES_EXPORT  void vertexAttribDivisorANGLEMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ANGLEInstancedArraysV8Internal::vertexAttribDivisorANGLEMethod(info);
-}
+    MODULES_EXPORT void vertexAttribDivisorANGLEMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ANGLEInstancedArraysV8Internal::vertexAttribDivisorANGLEMethod(info);
+    }
 
 } // namespace ANGLEInstancedArraysV8Internal
 
-void V8ANGLEInstancedArrays::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  ANGLEInstancedArrays* impl = scriptWrappable->toImpl<ANGLEInstancedArrays>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8ANGLEInstancedArrays::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    ANGLEInstancedArrays* impl = scriptWrappable->toImpl<ANGLEInstancedArrays>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::MethodConfiguration V8ANGLEInstancedArraysMethods[] = {
-    {"drawArraysInstancedANGLE", ANGLEInstancedArraysV8Internal::drawArraysInstancedANGLEMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"drawElementsInstancedANGLE", ANGLEInstancedArraysV8Internal::drawElementsInstancedANGLEMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"vertexAttribDivisorANGLE", ANGLEInstancedArraysV8Internal::vertexAttribDivisorANGLEMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "drawArraysInstancedANGLE", ANGLEInstancedArraysV8Internal::drawArraysInstancedANGLEMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "drawElementsInstancedANGLE", ANGLEInstancedArraysV8Internal::drawElementsInstancedANGLEMethodCallback, 0, 5, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "vertexAttribDivisorANGLE", ANGLEInstancedArraysV8Internal::vertexAttribDivisorANGLEMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8ANGLEInstancedArraysTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ANGLEInstancedArrays::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8ANGLEInstancedArrays::internalFieldCount);
+static void installV8ANGLEInstancedArraysTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8ANGLEInstancedArrays::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8ANGLEInstancedArrays::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8ANGLEInstancedArraysConstants[] = {
-      {"VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE", 0x88FE, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8ANGLEInstancedArraysConstants, WTF_ARRAY_LENGTH(V8ANGLEInstancedArraysConstants));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ANGLEInstancedArraysMethods, WTF_ARRAY_LENGTH(V8ANGLEInstancedArraysMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8ANGLEInstancedArraysConstants[] = {
+        { "VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE", 0x88FE, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8ANGLEInstancedArraysConstants, WTF_ARRAY_LENGTH(V8ANGLEInstancedArraysConstants));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ANGLEInstancedArraysMethods, WTF_ARRAY_LENGTH(V8ANGLEInstancedArraysMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8ANGLEInstancedArrays::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ANGLEInstancedArraysTemplate);
+v8::Local<v8::FunctionTemplate> V8ANGLEInstancedArrays::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ANGLEInstancedArraysTemplate);
 }
 
-bool V8ANGLEInstancedArrays::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8ANGLEInstancedArrays::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8ANGLEInstancedArrays::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8ANGLEInstancedArrays::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-ANGLEInstancedArrays* V8ANGLEInstancedArrays::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+ANGLEInstancedArrays* V8ANGLEInstancedArrays::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

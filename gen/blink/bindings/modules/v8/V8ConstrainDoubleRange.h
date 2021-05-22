@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ConstrainDoubleRange_h
 #define V8ConstrainDoubleRange_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ConstrainDoubleRange {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstrainDoubleRange&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ConstrainDoubleRange&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ConstrainDoubleRange(const ConstrainDoubleRange&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstrainDoubleRange& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ConstrainDoubleRange& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ConstrainDoubleRange> {
-  static ConstrainDoubleRange nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ConstrainDoubleRange nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ConstrainDoubleRange> {
-  typedef V8ConstrainDoubleRange Type;
+    typedef V8ConstrainDoubleRange Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ConstrainDoubleRange_h
+#endif // V8ConstrainDoubleRange_h

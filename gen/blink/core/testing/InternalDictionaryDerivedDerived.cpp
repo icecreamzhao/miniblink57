@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "InternalDictionaryDerivedDerived.h"
 
 namespace blink {
 
-InternalDictionaryDerivedDerived::InternalDictionaryDerivedDerived() {
+InternalDictionaryDerivedDerived::InternalDictionaryDerivedDerived()
+{
 }
 
-InternalDictionaryDerivedDerived::~InternalDictionaryDerivedDerived() {}
+InternalDictionaryDerivedDerived::~InternalDictionaryDerivedDerived() { }
 
 InternalDictionaryDerivedDerived::InternalDictionaryDerivedDerived(const InternalDictionaryDerivedDerived&) = default;
 
 InternalDictionaryDerivedDerived& InternalDictionaryDerivedDerived::operator=(const InternalDictionaryDerivedDerived&) = default;
 
-bool InternalDictionaryDerivedDerived::hasDerivedDerivedStringMember() const {
-  return !m_derivedDerivedStringMember.isNull();
+bool InternalDictionaryDerivedDerived::hasDerivedDerivedStringMember() const
+{
+    return !m_derivedDerivedStringMember.isNull();
 }
-String InternalDictionaryDerivedDerived::derivedDerivedStringMember() const {
-  return m_derivedDerivedStringMember;
+String InternalDictionaryDerivedDerived::derivedDerivedStringMember() const
+{
+    return m_derivedDerivedStringMember;
 }
-void InternalDictionaryDerivedDerived::setDerivedDerivedStringMember(String value) {
-  m_derivedDerivedStringMember = value;
+void InternalDictionaryDerivedDerived::setDerivedDerivedStringMember(String value)
+{
+    m_derivedDerivedStringMember = value;
 }
 
-DEFINE_TRACE(InternalDictionaryDerivedDerived) {
-  InternalDictionaryDerived::trace(visitor);
+DEFINE_TRACE(InternalDictionaryDerivedDerived)
+{
+    InternalDictionaryDerived::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

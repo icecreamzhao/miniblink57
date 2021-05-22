@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CSSCalcDictionary_h
 #define CSSCalcDictionary_h
 
@@ -19,126 +19,127 @@
 namespace blink {
 
 class CORE_EXPORT CSSCalcDictionary : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CSSCalcDictionary();
-  virtual ~CSSCalcDictionary();
-  CSSCalcDictionary(const CSSCalcDictionary&);
-  CSSCalcDictionary& operator=(const CSSCalcDictionary&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCh() const;
-  double ch() const;
-  void setCh(double);
-  void setChToNull();
+public:
+    CSSCalcDictionary();
+    virtual ~CSSCalcDictionary();
+    CSSCalcDictionary(const CSSCalcDictionary&);
+    CSSCalcDictionary& operator=(const CSSCalcDictionary&);
 
-  bool hasCm() const;
-  double cm() const;
-  void setCm(double);
-  void setCmToNull();
+    bool hasCh() const;
+    double ch() const;
+    void setCh(double);
+    void setChToNull();
 
-  bool hasEm() const;
-  double em() const;
-  void setEm(double);
-  void setEmToNull();
+    bool hasCm() const;
+    double cm() const;
+    void setCm(double);
+    void setCmToNull();
 
-  bool hasEx() const;
-  double ex() const;
-  void setEx(double);
-  void setExToNull();
+    bool hasEm() const;
+    double em() const;
+    void setEm(double);
+    void setEmToNull();
 
-  bool hasIn() const;
-  double in() const;
-  void setIn(double);
-  void setInToNull();
+    bool hasEx() const;
+    double ex() const;
+    void setEx(double);
+    void setExToNull();
 
-  bool hasMm() const;
-  double mm() const;
-  void setMm(double);
-  void setMmToNull();
+    bool hasIn() const;
+    double in() const;
+    void setIn(double);
+    void setInToNull();
 
-  bool hasPc() const;
-  double pc() const;
-  void setPc(double);
-  void setPcToNull();
+    bool hasMm() const;
+    double mm() const;
+    void setMm(double);
+    void setMmToNull();
 
-  bool hasPercent() const;
-  double percent() const;
-  void setPercent(double);
-  void setPercentToNull();
+    bool hasPc() const;
+    double pc() const;
+    void setPc(double);
+    void setPcToNull();
 
-  bool hasPt() const;
-  double pt() const;
-  void setPt(double);
-  void setPtToNull();
+    bool hasPercent() const;
+    double percent() const;
+    void setPercent(double);
+    void setPercentToNull();
 
-  bool hasPx() const;
-  double px() const;
-  void setPx(double);
-  void setPxToNull();
+    bool hasPt() const;
+    double pt() const;
+    void setPt(double);
+    void setPtToNull();
 
-  bool hasRem() const;
-  double rem() const;
-  void setRem(double);
-  void setRemToNull();
+    bool hasPx() const;
+    double px() const;
+    void setPx(double);
+    void setPxToNull();
 
-  bool hasVh() const;
-  double vh() const;
-  void setVh(double);
-  void setVhToNull();
+    bool hasRem() const;
+    double rem() const;
+    void setRem(double);
+    void setRemToNull();
 
-  bool hasVmax() const;
-  double vmax() const;
-  void setVmax(double);
-  void setVmaxToNull();
+    bool hasVh() const;
+    double vh() const;
+    void setVh(double);
+    void setVhToNull();
 
-  bool hasVmin() const;
-  double vmin() const;
-  void setVmin(double);
-  void setVminToNull();
+    bool hasVmax() const;
+    double vmax() const;
+    void setVmax(double);
+    void setVmaxToNull();
 
-  bool hasVw() const;
-  double vw() const;
-  void setVw(double);
-  void setVwToNull();
+    bool hasVmin() const;
+    double vmin() const;
+    void setVmin(double);
+    void setVminToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasVw() const;
+    double vw() const;
+    void setVw(double);
+    void setVwToNull();
 
- private:
-  bool m_hasCh = false;
-  double m_ch;
-  bool m_hasCm = false;
-  double m_cm;
-  bool m_hasEm = false;
-  double m_em;
-  bool m_hasEx = false;
-  double m_ex;
-  bool m_hasIn = false;
-  double m_in;
-  bool m_hasMm = false;
-  double m_mm;
-  bool m_hasPc = false;
-  double m_pc;
-  bool m_hasPercent = false;
-  double m_percent;
-  bool m_hasPt = false;
-  double m_pt;
-  bool m_hasPx = false;
-  double m_px;
-  bool m_hasRem = false;
-  double m_rem;
-  bool m_hasVh = false;
-  double m_vh;
-  bool m_hasVmax = false;
-  double m_vmax;
-  bool m_hasVmin = false;
-  double m_vmin;
-  bool m_hasVw = false;
-  double m_vw;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8CSSCalcDictionary;
+private:
+    bool m_hasCh = false;
+    double m_ch;
+    bool m_hasCm = false;
+    double m_cm;
+    bool m_hasEm = false;
+    double m_em;
+    bool m_hasEx = false;
+    double m_ex;
+    bool m_hasIn = false;
+    double m_in;
+    bool m_hasMm = false;
+    double m_mm;
+    bool m_hasPc = false;
+    double m_pc;
+    bool m_hasPercent = false;
+    double m_percent;
+    bool m_hasPt = false;
+    double m_pt;
+    bool m_hasPx = false;
+    double m_px;
+    bool m_hasRem = false;
+    double m_rem;
+    bool m_hasVh = false;
+    double m_vh;
+    bool m_hasVmax = false;
+    double m_vmax;
+    bool m_hasVmin = false;
+    double m_vmin;
+    bool m_hasVw = false;
+    double m_vw;
+
+    friend class V8CSSCalcDictionary;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // CSSCalcDictionary_h
+#endif // CSSCalcDictionary_h

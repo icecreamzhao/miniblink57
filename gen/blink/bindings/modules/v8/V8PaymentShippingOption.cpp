@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PaymentShippingOption.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,127 +16,131 @@
 
 namespace blink {
 
-void V8PaymentShippingOption::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PaymentShippingOption& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): amount, id, label.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8PaymentShippingOption::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PaymentShippingOption& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): amount, id, label.");
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> amountValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "amount")).ToLocal(&amountValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (amountValue.IsEmpty() || amountValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member amount is undefined.");
-    return;
-  } else {
-    PaymentCurrencyAmount amount;
-    V8PaymentCurrencyAmount::toImpl(isolate, amountValue, amount, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setAmount(amount);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> amountValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "amount")).ToLocal(&amountValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (amountValue.IsEmpty() || amountValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member amount is undefined.");
+        return;
+    } else {
+        PaymentCurrencyAmount amount;
+        V8PaymentCurrencyAmount::toImpl(isolate, amountValue, amount, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setAmount(amount);
+    }
 
-  v8::Local<v8::Value> idValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "id")).ToLocal(&idValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (idValue.IsEmpty() || idValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member id is undefined.");
-    return;
-  } else {
-    V8StringResource<> id = idValue;
-    if (!id.prepare(exceptionState))
-      return;
-    impl.setId(id);
-  }
+    v8::Local<v8::Value> idValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "id")).ToLocal(&idValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (idValue.IsEmpty() || idValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member id is undefined.");
+        return;
+    } else {
+        V8StringResource<> id = idValue;
+        if (!id.prepare(exceptionState))
+            return;
+        impl.setId(id);
+    }
 
-  v8::Local<v8::Value> labelValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "label")).ToLocal(&labelValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (labelValue.IsEmpty() || labelValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member label is undefined.");
-    return;
-  } else {
-    V8StringResource<> label = labelValue;
-    if (!label.prepare(exceptionState))
-      return;
-    impl.setLabel(label);
-  }
+    v8::Local<v8::Value> labelValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "label")).ToLocal(&labelValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (labelValue.IsEmpty() || labelValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member label is undefined.");
+        return;
+    } else {
+        V8StringResource<> label = labelValue;
+        if (!label.prepare(exceptionState))
+            return;
+        impl.setLabel(label);
+    }
 
-  v8::Local<v8::Value> selectedValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "selected")).ToLocal(&selectedValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (selectedValue.IsEmpty() || selectedValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool selected = toBoolean(isolate, selectedValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setSelected(selected);
-  }
+    v8::Local<v8::Value> selectedValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "selected")).ToLocal(&selectedValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (selectedValue.IsEmpty() || selectedValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool selected = toBoolean(isolate, selectedValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setSelected(selected);
+    }
 }
 
-v8::Local<v8::Value> PaymentShippingOption::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8PaymentShippingOption(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> PaymentShippingOption::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8PaymentShippingOption(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8PaymentShippingOption(const PaymentShippingOption& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasAmount()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "amount"), ToV8(impl.amount(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+bool toV8PaymentShippingOption(const PaymentShippingOption& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasAmount()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "amount"), ToV8(impl.amount(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasId()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "id"), v8String(isolate, impl.id()))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasId()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "id"), v8String(isolate, impl.id()))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasLabel()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "label"), v8String(isolate, impl.label()))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasLabel()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "label"), v8String(isolate, impl.label()))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasSelected()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "selected"), v8Boolean(impl.selected(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "selected"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasSelected()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "selected"), v8Boolean(impl.selected(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "selected"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-PaymentShippingOption NativeValueTraits<PaymentShippingOption>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  PaymentShippingOption impl;
-  V8PaymentShippingOption::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+PaymentShippingOption NativeValueTraits<PaymentShippingOption>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    PaymentShippingOption impl;
+    V8PaymentShippingOption::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

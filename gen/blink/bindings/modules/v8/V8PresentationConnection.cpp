@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PresentationConnection.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -54,405 +54,446 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PresentationConnection::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PresentationConnection is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PresentationConnectionV8Internal {
 
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->id(), info.GetIsolate());
-}
-
-MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionV8Internal::idAttributeGetter(info);
-}
-
-static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->url(), info.GetIsolate());
-}
-
-MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionV8Internal::urlAttributeGetter(info);
-}
-
-static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->state(), info.GetIsolate());
-}
-
-MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionV8Internal::stateAttributeGetter(info);
-}
-
-static void onconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onconnect()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionV8Internal::onconnectAttributeGetter(info);
-}
-
-static void onconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnect(), v8Value, V8PresentationConnection::eventListenerCacheIndex);
-
-  impl->setOnconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PresentationConnectionV8Internal::onconnectAttributeSetter(v8Value, info);
-}
-
-static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onclose()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionV8Internal::oncloseAttributeGetter(info);
-}
-
-static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onclose(), v8Value, V8PresentationConnection::eventListenerCacheIndex);
-
-  impl->setOnclose(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PresentationConnectionV8Internal::oncloseAttributeSetter(v8Value, info);
-}
-
-static void onterminateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onterminate()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onterminateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionV8Internal::onterminateAttributeGetter(info);
-}
-
-static void onterminateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onterminate(), v8Value, V8PresentationConnection::eventListenerCacheIndex);
-
-  impl->setOnterminate(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onterminateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PresentationConnectionV8Internal::onterminateAttributeSetter(v8Value, info);
-}
-
-static void binaryTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->binaryType(), info.GetIsolate());
-}
-
-MODULES_EXPORT void binaryTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionV8Internal::binaryTypeAttributeGetter(info);
-}
-
-static void binaryTypeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PresentationConnection", "binaryType");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "blob",
-      "arraybuffer",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "BinaryType", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
-
-  impl->setBinaryType(cppValue);
-}
-
-MODULES_EXPORT void binaryTypeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PresentationConnectionV8Internal::binaryTypeAttributeSetter(v8Value, info);
-}
-
-static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onmessage()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionV8Internal::onmessageAttributeGetter(info);
-}
-
-static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8PresentationConnection::eventListenerCacheIndex);
-
-  impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  PresentationConnectionV8Internal::onmessageAttributeSetter(v8Value, info);
-}
-
-static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
-
-  impl->close();
-}
-
-MODULES_EXPORT  void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionClose);
-  PresentationConnectionV8Internal::closeMethod(info);
-}
-
-static void terminateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
-
-  impl->terminate();
-}
-
-MODULES_EXPORT  void terminateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionTerminate);
-  PresentationConnectionV8Internal::terminateMethod(info);
-}
-
-static void send1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
-
-  V8StringResource<> message;
-  message = info[0];
-  if (!message.prepare())
-    return;
-
-  impl->send(message, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void send2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
-
-  Blob* data;
-  data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
-
-    return;
-  }
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void send3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
-
-  DOMArrayBuffer* data;
-  data = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBuffer'.");
-
-    return;
-  }
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void send4Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
-
-  PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
-
-  DOMArrayBufferView* data;
-  data = info[0]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void sendMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(1, info.Length())) {
-    case 1:
-      if (V8Blob::hasInstance(info[0], info.GetIsolate())) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionSend);
-        send2Method(info);
-        return;
-      }
-      if (info[0]->IsArrayBuffer()) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionSend);
-        send3Method(info);
-        return;
-      }
-      if (info[0]->IsArrayBufferView()) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionSend);
-        send4Method(info);
-        return;
-      }
-      if (true) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionSend);
-        send1Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValueString(info, impl->id(), info.GetIsolate());
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void sendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PresentationConnectionV8Internal::sendMethod(info);
-}
+    MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionV8Internal::idAttributeGetter(info);
+    }
+
+    static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->url(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionV8Internal::urlAttributeGetter(info);
+    }
+
+    static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->state(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionV8Internal::stateAttributeGetter(info);
+    }
+
+    static void onconnectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onconnect()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onconnectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionV8Internal::onconnectAttributeGetter(info);
+    }
+
+    static void onconnectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onconnect(), v8Value, V8PresentationConnection::eventListenerCacheIndex);
+
+        impl->setOnconnect(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onconnectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PresentationConnectionV8Internal::onconnectAttributeSetter(v8Value, info);
+    }
+
+    static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onclose()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionV8Internal::oncloseAttributeGetter(info);
+    }
+
+    static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onclose(), v8Value, V8PresentationConnection::eventListenerCacheIndex);
+
+        impl->setOnclose(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PresentationConnectionV8Internal::oncloseAttributeSetter(v8Value, info);
+    }
+
+    static void onterminateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onterminate()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onterminateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionV8Internal::onterminateAttributeGetter(info);
+    }
+
+    static void onterminateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onterminate(), v8Value, V8PresentationConnection::eventListenerCacheIndex);
+
+        impl->setOnterminate(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onterminateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PresentationConnectionV8Internal::onterminateAttributeSetter(v8Value, info);
+    }
+
+    static void binaryTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->binaryType(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void binaryTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionV8Internal::binaryTypeAttributeGetter(info);
+    }
+
+    static void binaryTypeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PresentationConnection", "binaryType");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "blob",
+            "arraybuffer",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "BinaryType", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
+
+        impl->setBinaryType(cppValue);
+    }
+
+    MODULES_EXPORT void binaryTypeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PresentationConnectionV8Internal::binaryTypeAttributeSetter(v8Value, info);
+    }
+
+    static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onmessage()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionV8Internal::onmessageAttributeGetter(info);
+    }
+
+    static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PresentationConnection* impl = V8PresentationConnection::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8PresentationConnection::eventListenerCacheIndex);
+
+        impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        PresentationConnectionV8Internal::onmessageAttributeSetter(v8Value, info);
+    }
+
+    static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
+
+        impl->close();
+    }
+
+    MODULES_EXPORT void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionClose);
+        PresentationConnectionV8Internal::closeMethod(info);
+    }
+
+    static void terminateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
+
+        impl->terminate();
+    }
+
+    MODULES_EXPORT void terminateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionTerminate);
+        PresentationConnectionV8Internal::terminateMethod(info);
+    }
+
+    static void send1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
+
+        V8StringResource<> message;
+        message = info[0];
+        if (!message.prepare())
+            return;
+
+        impl->send(message, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void send2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
+
+        Blob* data;
+        data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+
+            return;
+        }
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void send3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
+
+        DOMArrayBuffer* data;
+        data = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBuffer'.");
+
+            return;
+        }
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void send4Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
+
+        PresentationConnection* impl = V8PresentationConnection::toImpl(info.Holder());
+
+        DOMArrayBufferView* data;
+        data = info[0]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void sendMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(1, info.Length())) {
+        case 1:
+            if (V8Blob::hasInstance(info[0], info.GetIsolate())) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionSend);
+                send2Method(info);
+                return;
+            }
+            if (info[0]->IsArrayBuffer()) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionSend);
+                send3Method(info);
+                return;
+            }
+            if (info[0]->IsArrayBufferView()) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionSend);
+                send4Method(info);
+                return;
+            }
+            if (true) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PresentationConnectionSend);
+                send1Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PresentationConnection", "send");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void sendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PresentationConnectionV8Internal::sendMethod(info);
+    }
 
 } // namespace PresentationConnectionV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PresentationConnectionAccessors[] = {
-    {"id", PresentationConnectionV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"url", PresentationConnectionV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"state", PresentationConnectionV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onconnect", PresentationConnectionV8Internal::onconnectAttributeGetterCallback, PresentationConnectionV8Internal::onconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onclose", PresentationConnectionV8Internal::oncloseAttributeGetterCallback, PresentationConnectionV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onterminate", PresentationConnectionV8Internal::onterminateAttributeGetterCallback, PresentationConnectionV8Internal::onterminateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"binaryType", PresentationConnectionV8Internal::binaryTypeAttributeGetterCallback, PresentationConnectionV8Internal::binaryTypeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmessage", PresentationConnectionV8Internal::onmessageAttributeGetterCallback, PresentationConnectionV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "id", PresentationConnectionV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "url", PresentationConnectionV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "state", PresentationConnectionV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onconnect", PresentationConnectionV8Internal::onconnectAttributeGetterCallback, PresentationConnectionV8Internal::onconnectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onclose", PresentationConnectionV8Internal::oncloseAttributeGetterCallback, PresentationConnectionV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onterminate", PresentationConnectionV8Internal::onterminateAttributeGetterCallback, PresentationConnectionV8Internal::onterminateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "binaryType", PresentationConnectionV8Internal::binaryTypeAttributeGetterCallback, PresentationConnectionV8Internal::binaryTypeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmessage", PresentationConnectionV8Internal::onmessageAttributeGetterCallback, PresentationConnectionV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8PresentationConnectionMethods[] = {
-    {"close", PresentationConnectionV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"terminate", PresentationConnectionV8Internal::terminateMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"send", PresentationConnectionV8Internal::sendMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "close", PresentationConnectionV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "terminate", PresentationConnectionV8Internal::terminateMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "send", PresentationConnectionV8Internal::sendMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PresentationConnectionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PresentationConnection::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8PresentationConnection::internalFieldCount);
+static void installV8PresentationConnectionTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PresentationConnection::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8PresentationConnection::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::presentationEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::presentationEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PresentationConnectionAccessors, WTF_ARRAY_LENGTH(V8PresentationConnectionAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PresentationConnectionMethods, WTF_ARRAY_LENGTH(V8PresentationConnectionMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PresentationConnectionAccessors, WTF_ARRAY_LENGTH(V8PresentationConnectionAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PresentationConnectionMethods, WTF_ARRAY_LENGTH(V8PresentationConnectionMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8PresentationConnection::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PresentationConnectionTemplate);
+v8::Local<v8::FunctionTemplate> V8PresentationConnection::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PresentationConnectionTemplate);
 }
 
-bool V8PresentationConnection::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PresentationConnection::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PresentationConnection::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PresentationConnection::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PresentationConnection* V8PresentationConnection::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PresentationConnection* V8PresentationConnection::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

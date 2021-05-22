@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Request.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -54,351 +54,388 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&Request::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Request is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace RequestV8Internal {
 
-static void methodAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void methodAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Request* impl = V8Request::toImpl(holder);
+        Request* impl = V8Request::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->method(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->method(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void methodAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::methodAttributeGetter(info);
-}
+    MODULES_EXPORT void methodAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::methodAttributeGetter(info);
+    }
 
-static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Request* impl = V8Request::toImpl(holder);
+        Request* impl = V8Request::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->url(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->url(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::urlAttributeGetter(info);
-}
+    MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::urlAttributeGetter(info);
+    }
 
-static void headersAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void headersAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Request* impl = V8Request::toImpl(holder);
+        Request* impl = V8Request::toImpl(holder);
 
-  Headers* cppValue(WTF::getPtr(impl->getHeaders()));
+        Headers* cppValue(WTF::getPtr(impl->getHeaders()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#Request#headers";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Request#headers";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void headersAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::headersAttributeGetter(info);
-}
+    MODULES_EXPORT void headersAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::headersAttributeGetter(info);
+    }
 
-static void referrerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void referrerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Request* impl = V8Request::toImpl(holder);
+        Request* impl = V8Request::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->referrer(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->referrer(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void referrerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::referrerAttributeGetter(info);
-}
+    MODULES_EXPORT void referrerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::referrerAttributeGetter(info);
+    }
 
-static void referrerPolicyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void referrerPolicyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Request* impl = V8Request::toImpl(holder);
+        Request* impl = V8Request::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->getReferrerPolicy(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getReferrerPolicy(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void referrerPolicyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::referrerPolicyAttributeGetter(info);
-}
+    MODULES_EXPORT void referrerPolicyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::referrerPolicyAttributeGetter(info);
+    }
 
-static void modeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void modeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Request* impl = V8Request::toImpl(holder);
+        Request* impl = V8Request::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->mode(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->mode(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void modeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::modeAttributeGetter(info);
-}
+    MODULES_EXPORT void modeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::modeAttributeGetter(info);
+    }
 
-static void credentialsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void credentialsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Request* impl = V8Request::toImpl(holder);
+        Request* impl = V8Request::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->credentials(), info.GetIsolate());
-}
-
-MODULES_EXPORT void credentialsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::credentialsAttributeGetter(info);
-}
-
-static void redirectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Request* impl = V8Request::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->redirect(), info.GetIsolate());
-}
-
-MODULES_EXPORT void redirectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::redirectAttributeGetter(info);
-}
-
-static void integrityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Request* impl = V8Request::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->integrity(), info.GetIsolate());
-}
-
-MODULES_EXPORT void integrityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::integrityAttributeGetter(info);
-}
-
-static void bodyUsedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Request* impl = V8Request::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->bodyUsed());
-}
-
-MODULES_EXPORT void bodyUsedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::bodyUsedAttributeGetter(info);
-}
-
-static void cloneMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "clone");
-
-  Request* impl = V8Request::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  Request* result = impl->clone(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void cloneMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::cloneMethod(info);
-}
-
-static void arrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "arrayBuffer");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Request::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Request* impl = V8Request::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  ScriptPromise result = impl->arrayBuffer(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void arrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::arrayBufferMethod(info);
-}
-
-static void blobMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "blob");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Request::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Request* impl = V8Request::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  ScriptPromise result = impl->blob(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void blobMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::blobMethod(info);
-}
-
-static void jsonMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "json");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Request::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Request* impl = V8Request::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  ScriptPromise result = impl->json(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void jsonMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::jsonMethod(info);
-}
-
-static void textMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "text");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8Request::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  Request* impl = V8Request::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  ScriptPromise result = impl->text(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void textMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RequestV8Internal::textMethod(info);
-}
-
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Request");
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  RequestOrUSVString input;
-  Dictionary requestInitDict;
-  V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], input, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('requestInitDict') is not an object.");
-
-    return;
-  }
-  requestInitDict = Dictionary(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  Request* impl = Request::create(scriptState, input, requestInitDict, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Request::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        v8SetReturnValueString(info, impl->credentials(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void credentialsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::credentialsAttributeGetter(info);
+    }
+
+    static void redirectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Request* impl = V8Request::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->redirect(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void redirectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::redirectAttributeGetter(info);
+    }
+
+    static void integrityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Request* impl = V8Request::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->integrity(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void integrityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::integrityAttributeGetter(info);
+    }
+
+    static void bodyUsedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Request* impl = V8Request::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->bodyUsed());
+    }
+
+    MODULES_EXPORT void bodyUsedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::bodyUsedAttributeGetter(info);
+    }
+
+    static void cloneMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "clone");
+
+        Request* impl = V8Request::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        Request* result = impl->clone(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void cloneMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::cloneMethod(info);
+    }
+
+    static void arrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "arrayBuffer");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Request::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Request* impl = V8Request::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->arrayBuffer(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void arrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::arrayBufferMethod(info);
+    }
+
+    static void blobMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "blob");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Request::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Request* impl = V8Request::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->blob(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void blobMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::blobMethod(info);
+    }
+
+    static void jsonMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "json");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Request::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Request* impl = V8Request::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->json(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void jsonMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::jsonMethod(info);
+    }
+
+    static void textMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Request", "text");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8Request::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        Request* impl = V8Request::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ScriptPromise result = impl->text(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void textMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RequestV8Internal::textMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "Request");
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        RequestOrUSVString input;
+        Dictionary requestInitDict;
+        V8RequestOrUSVString::toImpl(info.GetIsolate(), info[0], input, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('requestInitDict') is not an object.");
+
+            return;
+        }
+        requestInitDict = Dictionary(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        Request* impl = Request::create(scriptState, input, requestInitDict, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Request::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace RequestV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8RequestAccessors[] = {
-    {"method", RequestV8Internal::methodAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"url", RequestV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"headers", RequestV8Internal::headersAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"referrer", RequestV8Internal::referrerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"referrerPolicy", RequestV8Internal::referrerPolicyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"mode", RequestV8Internal::modeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"credentials", RequestV8Internal::credentialsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"redirect", RequestV8Internal::redirectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"integrity", RequestV8Internal::integrityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bodyUsed", RequestV8Internal::bodyUsedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "method", RequestV8Internal::methodAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "url", RequestV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "headers", RequestV8Internal::headersAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "referrer", RequestV8Internal::referrerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "referrerPolicy", RequestV8Internal::referrerPolicyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "mode", RequestV8Internal::modeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "credentials", RequestV8Internal::credentialsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "redirect", RequestV8Internal::redirectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "integrity", RequestV8Internal::integrityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bodyUsed", RequestV8Internal::bodyUsedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8RequestMethods[] = {
-    {"clone", RequestV8Internal::cloneMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"arrayBuffer", RequestV8Internal::arrayBufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"blob", RequestV8Internal::blobMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"json", RequestV8Internal::jsonMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"text", RequestV8Internal::textMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "clone", RequestV8Internal::cloneMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "arrayBuffer", RequestV8Internal::arrayBufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "blob", RequestV8Internal::blobMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "json", RequestV8Internal::jsonMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "text", RequestV8Internal::textMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-void V8Request::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Request"));
-    return;
-  }
+void V8Request::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Request"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  RequestV8Internal::constructor(info);
+    RequestV8Internal::constructor(info);
 }
 
-static void installV8RequestTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Request::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Request::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8Request::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8RequestTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Request::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Request::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8Request::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RequestAccessors, WTF_ARRAY_LENGTH(V8RequestAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RequestMethods, WTF_ARRAY_LENGTH(V8RequestMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RequestAccessors, WTF_ARRAY_LENGTH(V8RequestAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RequestMethods, WTF_ARRAY_LENGTH(V8RequestMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Request::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RequestTemplate);
+v8::Local<v8::FunctionTemplate> V8Request::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RequestTemplate);
 }
 
-bool V8Request::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Request::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Request::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Request::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Request* V8Request::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Request* V8Request::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AccelerometerReadingInit_h
 #define AccelerometerReadingInit_h
 
@@ -19,39 +19,40 @@
 namespace blink {
 
 class MODULES_EXPORT AccelerometerReadingInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AccelerometerReadingInit();
-  virtual ~AccelerometerReadingInit();
-  AccelerometerReadingInit(const AccelerometerReadingInit&);
-  AccelerometerReadingInit& operator=(const AccelerometerReadingInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasX() const;
-  double x() const;
-  void setX(double);
+public:
+    AccelerometerReadingInit();
+    virtual ~AccelerometerReadingInit();
+    AccelerometerReadingInit(const AccelerometerReadingInit&);
+    AccelerometerReadingInit& operator=(const AccelerometerReadingInit&);
 
-  bool hasY() const;
-  double y() const;
-  void setY(double);
+    bool hasX() const;
+    double x() const;
+    void setX(double);
 
-  bool hasZ() const;
-  double z() const;
-  void setZ(double);
+    bool hasY() const;
+    double y() const;
+    void setY(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasZ() const;
+    double z() const;
+    void setZ(double);
 
- private:
-  bool m_hasX = false;
-  double m_x;
-  bool m_hasY = false;
-  double m_y;
-  bool m_hasZ = false;
-  double m_z;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AccelerometerReadingInit;
+private:
+    bool m_hasX = false;
+    double m_x;
+    bool m_hasY = false;
+    double m_y;
+    bool m_hasZ = false;
+    double m_z;
+
+    friend class V8AccelerometerReadingInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AccelerometerReadingInit_h
+#endif // AccelerometerReadingInit_h

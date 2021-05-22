@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData_h
 #define ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData_h
 
@@ -27,86 +27,88 @@ class Document;
 class FormData;
 
 class CORE_EXPORT ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isArrayBuffer() const { return m_type == SpecificTypeArrayBuffer; }
-  DOMArrayBuffer* getAsArrayBuffer() const;
-  void setArrayBuffer(DOMArrayBuffer*);
-  static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromArrayBuffer(DOMArrayBuffer*);
+public:
+    ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isArrayBufferView() const { return m_type == SpecificTypeArrayBufferView; }
-  DOMArrayBufferView* getAsArrayBufferView() const;
-  void setArrayBufferView(DOMArrayBufferView*);
-  static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromArrayBufferView(DOMArrayBufferView*);
+    bool isArrayBuffer() const { return m_type == SpecificTypeArrayBuffer; }
+    DOMArrayBuffer* getAsArrayBuffer() const;
+    void setArrayBuffer(DOMArrayBuffer*);
+    static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromArrayBuffer(DOMArrayBuffer*);
 
-  bool isBlob() const { return m_type == SpecificTypeBlob; }
-  Blob* getAsBlob() const;
-  void setBlob(Blob*);
-  static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromBlob(Blob*);
+    bool isArrayBufferView() const { return m_type == SpecificTypeArrayBufferView; }
+    DOMArrayBufferView* getAsArrayBufferView() const;
+    void setArrayBufferView(DOMArrayBufferView*);
+    static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromArrayBufferView(DOMArrayBufferView*);
 
-  bool isDocument() const { return m_type == SpecificTypeDocument; }
-  Document* getAsDocument() const;
-  void setDocument(Document*);
-  static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromDocument(Document*);
+    bool isBlob() const { return m_type == SpecificTypeBlob; }
+    Blob* getAsBlob() const;
+    void setBlob(Blob*);
+    static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromBlob(Blob*);
 
-  bool isString() const { return m_type == SpecificTypeString; }
-  String getAsString() const;
-  void setString(String);
-  static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromString(String);
+    bool isDocument() const { return m_type == SpecificTypeDocument; }
+    Document* getAsDocument() const;
+    void setDocument(Document*);
+    static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromDocument(Document*);
 
-  bool isFormData() const { return m_type == SpecificTypeFormData; }
-  FormData* getAsFormData() const;
-  void setFormData(FormData*);
-  static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromFormData(FormData*);
+    bool isString() const { return m_type == SpecificTypeString; }
+    String getAsString() const;
+    void setString(String);
+    static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromString(String);
 
-  ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData(const ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData&);
-  ~ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData();
-  ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData& operator=(const ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData&);
-  DECLARE_TRACE();
+    bool isFormData() const { return m_type == SpecificTypeFormData; }
+    FormData* getAsFormData() const;
+    void setFormData(FormData*);
+    static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData fromFormData(FormData*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeArrayBuffer,
-    SpecificTypeArrayBufferView,
-    SpecificTypeBlob,
-    SpecificTypeDocument,
-    SpecificTypeString,
-    SpecificTypeFormData,
-  };
-  SpecificTypes m_type;
+    ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData(const ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData&);
+    ~ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData();
+    ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData& operator=(const ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData&);
+    DECLARE_TRACE();
 
-  Member<DOMArrayBuffer> m_arrayBuffer;
-  Member<DOMArrayBufferView> m_arrayBufferView;
-  Member<Blob> m_blob;
-  Member<Document> m_document;
-  String m_string;
-  Member<FormData> m_formData;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeArrayBuffer,
+        SpecificTypeArrayBufferView,
+        SpecificTypeBlob,
+        SpecificTypeDocument,
+        SpecificTypeString,
+        SpecificTypeFormData,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<DOMArrayBuffer> m_arrayBuffer;
+    Member<DOMArrayBufferView> m_arrayBufferView;
+    Member<Blob> m_blob;
+    Member<Document> m_document;
+    String m_string;
+    Member<FormData> m_formData;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData> {
-  CORE_EXPORT static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -114,4 +116,4 @@ struct NativeValueTraits<ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrF
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData);
 
-#endif  // ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData_h
+#endif // ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrStringOrFormData_h

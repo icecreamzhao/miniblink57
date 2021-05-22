@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8NFC.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -54,219 +54,232 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&NFC::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "NFC is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace NFCV8Internal {
 
-static void pushMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NFC", "push");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void pushMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NFC", "push");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8NFC::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  NFC* impl = V8NFC::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8NFC::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        NFC* impl = V8NFC::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  StringOrArrayBufferOrNFCMessage message;
-  NFCPushOptions options;
-  V8StringOrArrayBufferOrNFCMessage::toImpl(info.GetIsolate(), info[0], message, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        StringOrArrayBufferOrNFCMessage message;
+        NFCPushOptions options;
+        V8StringOrArrayBufferOrNFCMessage::toImpl(info.GetIsolate(), info[0], message, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-    return;
-  }
-  V8NFCPushOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8NFCPushOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptPromise result = impl->push(scriptState, message, options);
-  v8SetReturnValue(info, result.v8Value());
-}
-
-MODULES_EXPORT  void pushMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NFCV8Internal::pushMethod(info);
-}
-
-static void cancelPushMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NFC", "cancelPush");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
-
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8NFC::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  NFC* impl = V8NFC::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  V8StringResource<> target;
-  if (!info[0]->IsUndefined()) {
-    target = info[0];
-    if (!target.prepare(exceptionState))
-      return;
-    const char* validTargetValues[] = {
-        "tag",
-        "peer",
-        "any",
-    };
-    if (!isValidEnum(target, validTargetValues, WTF_ARRAY_LENGTH(validTargetValues), "NFCPushTarget", exceptionState)) {
-      return;
+        ScriptPromise result = impl->push(scriptState, message, options);
+        v8SetReturnValue(info, result.v8Value());
     }
-  } else {
-    target = String("any");
-  }
 
-  ScriptPromise result = impl->cancelPush(scriptState, target);
-  v8SetReturnValue(info, result.v8Value());
-}
+    MODULES_EXPORT void pushMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NFCV8Internal::pushMethod(info);
+    }
 
-MODULES_EXPORT  void cancelPushMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NFCV8Internal::cancelPushMethod(info);
-}
+    static void cancelPushMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NFC", "cancelPush");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-static void watchMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NFC", "watch");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8NFC::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        NFC* impl = V8NFC::toImpl(info.Holder());
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8NFC::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  NFC* impl = V8NFC::toImpl(info.Holder());
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        V8StringResource<> target;
+        if (!info[0]->IsUndefined()) {
+            target = info[0];
+            if (!target.prepare(exceptionState))
+                return;
+            const char* validTargetValues[] = {
+                "tag",
+                "peer",
+                "any",
+            };
+            if (!isValidEnum(target, validTargetValues, WTF_ARRAY_LENGTH(validTargetValues), "NFCPushTarget", exceptionState)) {
+                return;
+            }
+        } else {
+            target = String("any");
+        }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        ScriptPromise result = impl->cancelPush(scriptState, target);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-  MessageCallback* callback;
-  NFCWatchOptions options;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+    MODULES_EXPORT void cancelPushMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NFCV8Internal::cancelPushMethod(info);
+    }
 
-    return;
-  }
-  callback = V8MessageCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+    static void watchMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NFC", "watch");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8NFC::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        NFC* impl = V8NFC::toImpl(info.Holder());
 
-    return;
-  }
-  V8NFCWatchOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->watch(scriptState, callback, options);
-  v8SetReturnValue(info, result.v8Value());
-}
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-MODULES_EXPORT  void watchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NFCV8Internal::watchMethod(info);
-}
+        MessageCallback* callback;
+        NFCWatchOptions options;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
 
-static void cancelWatchMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NFC", "cancelWatch");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+            return;
+        }
+        callback = V8MessageCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8NFC::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  NFC* impl = V8NFC::toImpl(info.Holder());
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+            return;
+        }
+        V8NFCWatchOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  int id;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    ScriptPromise result = impl->cancelWatch(scriptState);
-    v8SetReturnValue(info, result.v8Value());
-    return;
-  }
-  id = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        ScriptPromise result = impl->watch(scriptState, callback, options);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-  ScriptPromise result = impl->cancelWatch(scriptState, id);
-  v8SetReturnValue(info, result.v8Value());
-}
+    MODULES_EXPORT void watchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NFCV8Internal::watchMethod(info);
+    }
 
-MODULES_EXPORT  void cancelWatchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NFCV8Internal::cancelWatchMethod(info);
-}
+    static void cancelWatchMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "NFC", "cancelWatch");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8NFC::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        NFC* impl = V8NFC::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        int id;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            ScriptPromise result = impl->cancelWatch(scriptState);
+            v8SetReturnValue(info, result.v8Value());
+            return;
+        }
+        id = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptPromise result = impl->cancelWatch(scriptState, id);
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    MODULES_EXPORT void cancelWatchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NFCV8Internal::cancelWatchMethod(info);
+    }
 
 } // namespace NFCV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8NFCMethods[] = {
-    {"push", NFCV8Internal::pushMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"cancelPush", NFCV8Internal::cancelPushMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"watch", NFCV8Internal::watchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"cancelWatch", NFCV8Internal::cancelWatchMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "push", NFCV8Internal::pushMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "cancelPush", NFCV8Internal::cancelPushMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "watch", NFCV8Internal::watchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "cancelWatch", NFCV8Internal::cancelWatchMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8NFCTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NFC::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NFC::internalFieldCount);
+static void installV8NFCTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8NFC::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8NFC::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::webNFCEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::webNFCEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NFCMethods, WTF_ARRAY_LENGTH(V8NFCMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NFCMethods, WTF_ARRAY_LENGTH(V8NFCMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8NFC::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NFCTemplate);
+v8::Local<v8::FunctionTemplate> V8NFC::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NFCTemplate);
 }
 
-bool V8NFC::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8NFC::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8NFC::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8NFC::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-NFC* V8NFC::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+NFC* V8NFC::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

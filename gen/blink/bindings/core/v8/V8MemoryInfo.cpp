@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MemoryInfo.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,92 +46,103 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MemoryInfo::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MemoryInfo is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MemoryInfoV8Internal {
 
-static void totalJSHeapSizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void totalJSHeapSizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MemoryInfo* impl = V8MemoryInfo::toImpl(holder);
+        MemoryInfo* impl = V8MemoryInfo::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->totalJSHeapSize());
-}
+        v8SetReturnValueUnsigned(info, impl->totalJSHeapSize());
+    }
 
-CORE_EXPORT void totalJSHeapSizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MemoryInfo_TotalJSHeapSize_AttributeGetter);
+    CORE_EXPORT void totalJSHeapSizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MemoryInfo_TotalJSHeapSize_AttributeGetter);
 
-  MemoryInfoV8Internal::totalJSHeapSizeAttributeGetter(info);
-}
+        MemoryInfoV8Internal::totalJSHeapSizeAttributeGetter(info);
+    }
 
-static void usedJSHeapSizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void usedJSHeapSizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MemoryInfo* impl = V8MemoryInfo::toImpl(holder);
+        MemoryInfo* impl = V8MemoryInfo::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->usedJSHeapSize());
-}
+        v8SetReturnValueUnsigned(info, impl->usedJSHeapSize());
+    }
 
-CORE_EXPORT void usedJSHeapSizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MemoryInfo_UsedJSHeapSize_AttributeGetter);
+    CORE_EXPORT void usedJSHeapSizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MemoryInfo_UsedJSHeapSize_AttributeGetter);
 
-  MemoryInfoV8Internal::usedJSHeapSizeAttributeGetter(info);
-}
+        MemoryInfoV8Internal::usedJSHeapSizeAttributeGetter(info);
+    }
 
-static void jsHeapSizeLimitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void jsHeapSizeLimitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MemoryInfo* impl = V8MemoryInfo::toImpl(holder);
+        MemoryInfo* impl = V8MemoryInfo::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->jsHeapSizeLimit());
-}
+        v8SetReturnValueUnsigned(info, impl->jsHeapSizeLimit());
+    }
 
-CORE_EXPORT void jsHeapSizeLimitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MemoryInfo_JSHeapSizeLimit_AttributeGetter);
+    CORE_EXPORT void jsHeapSizeLimitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MemoryInfo_JSHeapSizeLimit_AttributeGetter);
 
-  MemoryInfoV8Internal::jsHeapSizeLimitAttributeGetter(info);
-}
+        MemoryInfoV8Internal::jsHeapSizeLimitAttributeGetter(info);
+    }
 
 } // namespace MemoryInfoV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MemoryInfoAccessors[] = {
-    {"totalJSHeapSize", MemoryInfoV8Internal::totalJSHeapSizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"usedJSHeapSize", MemoryInfoV8Internal::usedJSHeapSizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"jsHeapSizeLimit", MemoryInfoV8Internal::jsHeapSizeLimitAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "totalJSHeapSize", MemoryInfoV8Internal::totalJSHeapSizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "usedJSHeapSize", MemoryInfoV8Internal::usedJSHeapSizeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "jsHeapSizeLimit", MemoryInfoV8Internal::jsHeapSizeLimitAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8MemoryInfoTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MemoryInfo::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MemoryInfo::internalFieldCount);
+static void installV8MemoryInfoTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MemoryInfo::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MemoryInfo::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MemoryInfoAccessors, WTF_ARRAY_LENGTH(V8MemoryInfoAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MemoryInfoAccessors, WTF_ARRAY_LENGTH(V8MemoryInfoAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8MemoryInfo::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MemoryInfoTemplate);
+v8::Local<v8::FunctionTemplate> V8MemoryInfo::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MemoryInfoTemplate);
 }
 
-bool V8MemoryInfo::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MemoryInfo::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MemoryInfo::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MemoryInfo::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MemoryInfo* V8MemoryInfo::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MemoryInfo* V8MemoryInfo::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

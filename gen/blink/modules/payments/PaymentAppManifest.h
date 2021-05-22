@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentAppManifest_h
 #define PaymentAppManifest_h
 
@@ -22,38 +22,39 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentAppManifest : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentAppManifest();
-  virtual ~PaymentAppManifest();
-  PaymentAppManifest(const PaymentAppManifest&);
-  PaymentAppManifest& operator=(const PaymentAppManifest&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasIcon() const;
-  String icon() const;
-  void setIcon(String);
-  void setIconToNull();
+public:
+    PaymentAppManifest();
+    virtual ~PaymentAppManifest();
+    PaymentAppManifest(const PaymentAppManifest&);
+    PaymentAppManifest& operator=(const PaymentAppManifest&);
 
-  bool hasName() const;
-  String name() const;
-  void setName(String);
+    bool hasIcon() const;
+    String icon() const;
+    void setIcon(String);
+    void setIconToNull();
 
-  bool hasOptions() const;
-  const HeapVector<PaymentAppOption>& options() const;
-  void setOptions(const HeapVector<PaymentAppOption>&);
+    bool hasName() const;
+    String name() const;
+    void setName(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasOptions() const;
+    const HeapVector<PaymentAppOption>& options() const;
+    void setOptions(const HeapVector<PaymentAppOption>&);
 
- private:
-  String m_icon;
-  String m_name;
-  bool m_hasOptions = false;
-  HeapVector<PaymentAppOption> m_options;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentAppManifest;
+private:
+    String m_icon;
+    String m_name;
+    bool m_hasOptions = false;
+    HeapVector<PaymentAppOption> m_options;
+
+    friend class V8PaymentAppManifest;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentAppManifest_h
+#endif // PaymentAppManifest_h

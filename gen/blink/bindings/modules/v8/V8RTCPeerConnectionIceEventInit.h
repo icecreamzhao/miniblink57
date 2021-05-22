@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8RTCPeerConnectionIceEventInit_h
 #define V8RTCPeerConnectionIceEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8RTCPeerConnectionIceEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCPeerConnectionIceEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RTCPeerConnectionIceEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8RTCPeerConnectionIceEventInit(const RTCPeerConnectionIceEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCPeerConnectionIceEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RTCPeerConnectionIceEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<RTCPeerConnectionIceEventInit> {
-  static RTCPeerConnectionIceEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static RTCPeerConnectionIceEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<RTCPeerConnectionIceEventInit> {
-  typedef V8RTCPeerConnectionIceEventInit Type;
+    typedef V8RTCPeerConnectionIceEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8RTCPeerConnectionIceEventInit_h
+#endif // V8RTCPeerConnectionIceEventInit_h

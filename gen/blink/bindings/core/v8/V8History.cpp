@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8History.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -51,272 +51,295 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&History::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "History is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HistoryV8Internal {
 
-static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  History* impl = V8History::toImpl(holder);
+        History* impl = V8History::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->length());
-}
-
-CORE_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HistoryV8Internal::lengthAttributeGetter(info);
-}
-
-static void scrollRestorationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  History* impl = V8History::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->scrollRestoration(), info.GetIsolate());
-}
-
-CORE_EXPORT void scrollRestorationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8History_ScrollRestoration_AttributeGetter);
-
-  HistoryV8Internal::scrollRestorationAttributeGetter(info);
-}
-
-static void scrollRestorationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  History* impl = V8History::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "History", "scrollRestoration");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "auto",
-      "manual",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "ScrollRestoration", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
-
-  impl->setScrollRestoration(cppValue);
-}
-
-CORE_EXPORT void scrollRestorationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8History_ScrollRestoration_AttributeSetter);
-
-  HistoryV8Internal::scrollRestorationAttributeSetter(v8Value, info);
-}
-
-static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  History* impl = V8History::toImpl(holder);
-
-  // [CachedAttribute]
-  v8::Local<v8::String> propertyName = v8AtomicString(info.GetIsolate(), "state");
-  if (!impl->stateChanged()) {
-    v8::Local<v8::Value> v8Value = V8HiddenValue::getHiddenValue(ScriptState::forFunctionObject(info), holder, propertyName);
-    if (!v8Value.IsEmpty() && !v8Value->IsUndefined()) {
-      v8SetReturnValue(info, v8Value);
-      return;
+        v8SetReturnValueUnsigned(info, impl->length());
     }
-  }
 
-  RefPtr<SerializedScriptValue> cppValue(WTF::getPtr(impl->state()));
+    CORE_EXPORT void lengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HistoryV8Internal::lengthAttributeGetter(info);
+    }
 
-  // [CachedAttribute]
-  v8::Local<v8::Value> v8Value(v8Deserialize(info.GetIsolate(), cppValue));
-  V8HiddenValue::setHiddenValue(ScriptState::forFunctionObject(info), holder, propertyName, v8Value);
+    static void scrollRestorationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  v8SetReturnValue(info, v8Value);
-}
+        History* impl = V8History::toImpl(holder);
 
-CORE_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HistoryV8Internal::stateAttributeGetter(info);
-}
+        v8SetReturnValueString(info, impl->scrollRestoration(), info.GetIsolate());
+    }
 
-static void goMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "History", "go");
+    CORE_EXPORT void scrollRestorationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8History_ScrollRestoration_AttributeGetter);
 
-  History* impl = V8History::toImpl(info.Holder());
+        HistoryV8Internal::scrollRestorationAttributeGetter(info);
+    }
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    static void scrollRestorationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        History* impl = V8History::toImpl(holder);
 
-  int delta;
-  if (!info[0]->IsUndefined()) {
-    delta = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    delta = 0;
-  }
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "History", "scrollRestoration");
 
-  impl->go(scriptState, delta);
-}
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-CORE_EXPORT  void goMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HistoryV8Internal::goMethod(info);
-}
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "auto",
+            "manual",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "ScrollRestoration", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
 
-static void backMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  History* impl = V8History::toImpl(info.Holder());
+        impl->setScrollRestoration(cppValue);
+    }
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    CORE_EXPORT void scrollRestorationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  impl->back(scriptState);
-}
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8History_ScrollRestoration_AttributeSetter);
 
-CORE_EXPORT  void backMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HistoryV8Internal::backMethod(info);
-}
+        HistoryV8Internal::scrollRestorationAttributeSetter(v8Value, info);
+    }
 
-static void forwardMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  History* impl = V8History::toImpl(info.Holder());
+    static void stateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        History* impl = V8History::toImpl(holder);
 
-  impl->forward(scriptState);
-}
+        // [CachedAttribute]
+        v8::Local<v8::String> propertyName = v8AtomicString(info.GetIsolate(), "state");
+        if (!impl->stateChanged()) {
+            v8::Local<v8::Value> v8Value = V8HiddenValue::getHiddenValue(ScriptState::forFunctionObject(info), holder, propertyName);
+            if (!v8Value.IsEmpty() && !v8Value->IsUndefined()) {
+                v8SetReturnValue(info, v8Value);
+                return;
+            }
+        }
 
-CORE_EXPORT  void forwardMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HistoryV8Internal::forwardMethod(info);
-}
+        RefPtr<SerializedScriptValue> cppValue(WTF::getPtr(impl->state()));
 
-static void pushStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "History", "pushState");
+        // [CachedAttribute]
+        v8::Local<v8::Value> v8Value(v8Deserialize(info.GetIsolate(), cppValue));
+        V8HiddenValue::setHiddenValue(ScriptState::forFunctionObject(info), holder, propertyName, v8Value);
 
-  History* impl = V8History::toImpl(info.Holder());
+        v8SetReturnValue(info, v8Value);
+    }
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+    CORE_EXPORT void stateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HistoryV8Internal::stateAttributeGetter(info);
+    }
 
-  RefPtr<SerializedScriptValue> data;
-  V8StringResource<> title;
-  V8StringResource<TreatNullAndUndefinedAsNullString> url;
-  data = SerializedScriptValue::serialize(info.GetIsolate(), info[0], nullptr, nullptr, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void goMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "History", "go");
 
-  title = info[1];
-  if (!title.prepare())
-    return;
+        History* impl = V8History::toImpl(info.Holder());
 
-  if (!info[2]->IsUndefined()) {
-    url = info[2];
-    if (!url.prepare())
-      return;
-  } else {
-    url = nullptr;
-  }
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  impl->pushState(data, title, url, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        int delta;
+        if (!info[0]->IsUndefined()) {
+            delta = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            delta = 0;
+        }
 
-CORE_EXPORT  void pushStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HistoryV8Internal::pushStateMethod(info);
-}
+        impl->go(scriptState, delta);
+    }
 
-static void replaceStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "History", "replaceState");
+    CORE_EXPORT void goMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HistoryV8Internal::goMethod(info);
+    }
 
-  History* impl = V8History::toImpl(info.Holder());
+    static void backMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        History* impl = V8History::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  RefPtr<SerializedScriptValue> data;
-  V8StringResource<> title;
-  V8StringResource<TreatNullAndUndefinedAsNullString> url;
-  data = SerializedScriptValue::serialize(info.GetIsolate(), info[0], nullptr, nullptr, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        impl->back(scriptState);
+    }
 
-  title = info[1];
-  if (!title.prepare())
-    return;
+    CORE_EXPORT void backMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HistoryV8Internal::backMethod(info);
+    }
 
-  if (!info[2]->IsUndefined()) {
-    url = info[2];
-    if (!url.prepare())
-      return;
-  } else {
-    url = nullptr;
-  }
+    static void forwardMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        History* impl = V8History::toImpl(info.Holder());
 
-  impl->replaceState(data, title, url, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-CORE_EXPORT  void replaceStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HistoryV8Internal::replaceStateMethod(info);
-}
+        impl->forward(scriptState);
+    }
+
+    CORE_EXPORT void forwardMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HistoryV8Internal::forwardMethod(info);
+    }
+
+    static void pushStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "History", "pushState");
+
+        History* impl = V8History::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        RefPtr<SerializedScriptValue> data;
+        V8StringResource<> title;
+        V8StringResource<TreatNullAndUndefinedAsNullString> url;
+        data = SerializedScriptValue::serialize(info.GetIsolate(), info[0], nullptr, nullptr, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        title = info[1];
+        if (!title.prepare())
+            return;
+
+        if (!info[2]->IsUndefined()) {
+            url = info[2];
+            if (!url.prepare())
+                return;
+        } else {
+            url = nullptr;
+        }
+
+        impl->pushState(data, title, url, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void pushStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HistoryV8Internal::pushStateMethod(info);
+    }
+
+    static void replaceStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "History", "replaceState");
+
+        History* impl = V8History::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        RefPtr<SerializedScriptValue> data;
+        V8StringResource<> title;
+        V8StringResource<TreatNullAndUndefinedAsNullString> url;
+        data = SerializedScriptValue::serialize(info.GetIsolate(), info[0], nullptr, nullptr, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        title = info[1];
+        if (!title.prepare())
+            return;
+
+        if (!info[2]->IsUndefined()) {
+            url = info[2];
+            if (!url.prepare())
+                return;
+        } else {
+            url = nullptr;
+        }
+
+        impl->replaceState(data, title, url, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void replaceStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HistoryV8Internal::replaceStateMethod(info);
+    }
 
 } // namespace HistoryV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HistoryAccessors[] = {
-    {"length", HistoryV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollRestoration", HistoryV8Internal::scrollRestorationAttributeGetterCallback, HistoryV8Internal::scrollRestorationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"state", HistoryV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "length", HistoryV8Internal::lengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollRestoration", HistoryV8Internal::scrollRestorationAttributeGetterCallback, HistoryV8Internal::scrollRestorationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "state", HistoryV8Internal::stateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HistoryMethods[] = {
-    {"go", HistoryV8Internal::goMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"back", HistoryV8Internal::backMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forward", HistoryV8Internal::forwardMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pushState", HistoryV8Internal::pushStateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"replaceState", HistoryV8Internal::replaceStateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "go", HistoryV8Internal::goMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "back", HistoryV8Internal::backMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forward", HistoryV8Internal::forwardMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pushState", HistoryV8Internal::pushStateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "replaceState", HistoryV8Internal::replaceStateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HistoryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8History::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8History::internalFieldCount);
+static void installV8HistoryTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8History::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8History::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HistoryAccessors, WTF_ARRAY_LENGTH(V8HistoryAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HistoryMethods, WTF_ARRAY_LENGTH(V8HistoryMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HistoryAccessors, WTF_ARRAY_LENGTH(V8HistoryAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HistoryMethods, WTF_ARRAY_LENGTH(V8HistoryMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8History::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HistoryTemplate);
+v8::Local<v8::FunctionTemplate> V8History::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HistoryTemplate);
 }
 
-bool V8History::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8History::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8History::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8History::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-History* V8History::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+History* V8History::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AccelerometerOptions.h"
 
 namespace blink {
 
-AccelerometerOptions::AccelerometerOptions() {
-  setIncludeGravity(true);
+AccelerometerOptions::AccelerometerOptions()
+{
+    setIncludeGravity(true);
 }
 
-AccelerometerOptions::~AccelerometerOptions() {}
+AccelerometerOptions::~AccelerometerOptions() { }
 
 AccelerometerOptions::AccelerometerOptions(const AccelerometerOptions&) = default;
 
 AccelerometerOptions& AccelerometerOptions::operator=(const AccelerometerOptions&) = default;
 
-bool AccelerometerOptions::hasIncludeGravity() const {
-  return m_hasIncludeGravity;
+bool AccelerometerOptions::hasIncludeGravity() const
+{
+    return m_hasIncludeGravity;
 }
-bool AccelerometerOptions::includeGravity() const {
-  DCHECK(m_hasIncludeGravity);
-  return m_includeGravity;
+bool AccelerometerOptions::includeGravity() const
+{
+    DCHECK(m_hasIncludeGravity);
+    return m_includeGravity;
 }
-void AccelerometerOptions::setIncludeGravity(bool value) {
-  m_includeGravity = value;
-  m_hasIncludeGravity = true;
+void AccelerometerOptions::setIncludeGravity(bool value)
+{
+    m_includeGravity = value;
+    m_hasIncludeGravity = true;
 }
 
-DEFINE_TRACE(AccelerometerOptions) {
-  SensorOptions::trace(visitor);
+DEFINE_TRACE(AccelerometerOptions)
+{
+    SensorOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

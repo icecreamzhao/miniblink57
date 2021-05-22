@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLButtonElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -57,516 +57,577 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLButtonElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLButtonElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLButtonElementV8Internal {
 
-static void autofocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void autofocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::autofocusAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::autofocusAttr));
+    }
 
-CORE_EXPORT void autofocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::autofocusAttributeGetter(info);
-}
+    CORE_EXPORT void autofocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::autofocusAttributeGetter(info);
+    }
 
-static void autofocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void autofocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLButtonElement", "autofocus");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLButtonElement", "autofocus");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::autofocusAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::autofocusAttr, cppValue);
+    }
 
-CORE_EXPORT void autofocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void autofocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLButtonElementV8Internal::autofocusAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::autofocusAttributeSetter(v8Value, info);
+    }
 
-static void disabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void disabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::disabledAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::disabledAttr));
+    }
 
-CORE_EXPORT void disabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::disabledAttributeGetter(info);
-}
+    CORE_EXPORT void disabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::disabledAttributeGetter(info);
+    }
 
-static void disabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void disabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLButtonElement", "disabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLButtonElement", "disabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::disabledAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::disabledAttr, cppValue);
+    }
 
-CORE_EXPORT void disabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void disabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLButtonElementV8Internal::disabledAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::disabledAttributeSetter(v8Value, info);
+    }
 
-static void formAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void formAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->formOwner()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->formOwner()), impl);
+    }
 
-CORE_EXPORT void formAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::formAttributeGetter(info);
-}
+    CORE_EXPORT void formAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::formAttributeGetter(info);
+    }
 
-static void formActionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void formActionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->formAction(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->formAction(), info.GetIsolate());
+    }
 
-CORE_EXPORT void formActionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::formActionAttributeGetter(info);
-}
+    CORE_EXPORT void formActionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::formActionAttributeGetter(info);
+    }
 
-static void formActionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void formActionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setFormAction(cppValue);
-}
+        impl->setFormAction(cppValue);
+    }
 
-CORE_EXPORT void formActionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void formActionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLButtonElementV8Internal::formActionAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::formActionAttributeSetter(v8Value, info);
+    }
 
-static void formEnctypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void formEnctypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->formEnctype(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->formEnctype(), info.GetIsolate());
+    }
 
-CORE_EXPORT void formEnctypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::formEnctypeAttributeGetter(info);
-}
+    CORE_EXPORT void formEnctypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::formEnctypeAttributeGetter(info);
+    }
 
-static void formEnctypeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void formEnctypeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setFormEnctype(cppValue);
-}
+        impl->setFormEnctype(cppValue);
+    }
 
-CORE_EXPORT void formEnctypeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void formEnctypeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLButtonElementV8Internal::formEnctypeAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::formEnctypeAttributeSetter(v8Value, info);
+    }
 
-static void formMethodAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void formMethodAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->formMethod(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->formMethod(), info.GetIsolate());
+    }
 
-CORE_EXPORT void formMethodAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::formMethodAttributeGetter(info);
-}
+    CORE_EXPORT void formMethodAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::formMethodAttributeGetter(info);
+    }
 
-static void formMethodAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void formMethodAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setFormMethod(cppValue);
-}
+        impl->setFormMethod(cppValue);
+    }
 
-CORE_EXPORT void formMethodAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void formMethodAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLButtonElementV8Internal::formMethodAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::formMethodAttributeSetter(v8Value, info);
+    }
 
-static void formNoValidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void formNoValidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::formnovalidateAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::formnovalidateAttr));
+    }
 
-CORE_EXPORT void formNoValidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::formNoValidateAttributeGetter(info);
-}
+    CORE_EXPORT void formNoValidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::formNoValidateAttributeGetter(info);
+    }
 
-static void formNoValidateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void formNoValidateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLButtonElement", "formNoValidate");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLButtonElement", "formNoValidate");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::formnovalidateAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::formnovalidateAttr, cppValue);
+    }
 
-CORE_EXPORT void formNoValidateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void formNoValidateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLButtonElementV8Internal::formNoValidateAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::formNoValidateAttributeSetter(v8Value, info);
+    }
 
-static void formTargetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void formTargetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::formtargetAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::formtargetAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void formTargetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::formTargetAttributeGetter(info);
-}
+    CORE_EXPORT void formTargetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::formTargetAttributeGetter(info);
+    }
 
-static void formTargetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void formTargetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::formtargetAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::formtargetAttr, cppValue);
+    }
 
-CORE_EXPORT void formTargetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void formTargetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLButtonElementV8Internal::formTargetAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::formTargetAttributeSetter(v8Value, info);
+    }
 
-static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->getNameAttribute(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getNameAttribute(), info.GetIsolate());
+    }
 
-CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::nameAttributeGetter(info);
-}
+    CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::nameAttributeGetter(info);
+    }
 
-static void nameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void nameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::nameAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::nameAttr, cppValue);
+    }
 
-CORE_EXPORT void nameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void nameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLButtonElementV8Internal::nameAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::nameAttributeSetter(v8Value, info);
+    }
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
 
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::typeAttributeGetter(info);
-}
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::typeAttributeGetter(info);
+    }
 
-static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void typeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setType(cppValue);
-}
+        impl->setType(cppValue);
+    }
 
-CORE_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void typeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLButtonElementV8Internal::typeAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::typeAttributeSetter(v8Value, info);
+    }
 
-static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::valueAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::valueAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::valueAttributeGetter(info);
-}
+    CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::valueAttributeGetter(info);
+    }
 
-static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+    static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::valueAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::valueAttr, cppValue);
+    }
 
-CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLButtonElementV8Internal::valueAttributeSetter(v8Value, info);
-}
+        HTMLButtonElementV8Internal::valueAttributeSetter(v8Value, info);
+    }
 
-static void willValidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void willValidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->willValidate());
-}
+        v8SetReturnValueBool(info, impl->willValidate());
+    }
 
-CORE_EXPORT void willValidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::willValidateAttributeGetter(info);
-}
+    CORE_EXPORT void willValidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::willValidateAttributeGetter(info);
+    }
 
-static void validityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void validityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->validity()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->validity()), impl);
+    }
 
-CORE_EXPORT void validityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::validityAttributeGetter(info);
-}
+    CORE_EXPORT void validityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::validityAttributeGetter(info);
+    }
 
-static void validationMessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void validationMessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->validationMessage(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->validationMessage(), info.GetIsolate());
+    }
 
-CORE_EXPORT void validationMessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::validationMessageAttributeGetter(info);
-}
+    CORE_EXPORT void validationMessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::validationMessageAttributeGetter(info);
+    }
 
-static void labelsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->labels()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->labels()), impl);
+    }
 
-CORE_EXPORT void labelsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::labelsAttributeGetter(info);
-}
+    CORE_EXPORT void labelsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::labelsAttributeGetter(info);
+    }
 
-static void checkValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(info.Holder());
+    static void checkValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(info.Holder());
 
-  v8SetReturnValueBool(info, impl->checkValidity());
-}
+        v8SetReturnValueBool(info, impl->checkValidity());
+    }
 
-CORE_EXPORT  void checkValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::checkValidityMethod(info);
-}
+    CORE_EXPORT void checkValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::checkValidityMethod(info);
+    }
 
-static void reportValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(info.Holder());
+    static void reportValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(info.Holder());
 
-  v8SetReturnValueBool(info, impl->reportValidity());
-}
+        v8SetReturnValueBool(info, impl->reportValidity());
+    }
 
-CORE_EXPORT  void reportValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::reportValidityMethod(info);
-}
+    CORE_EXPORT void reportValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::reportValidityMethod(info);
+    }
 
-static void setCustomValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(info.Holder());
+    static void setCustomValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElement* impl = V8HTMLButtonElement::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setCustomValidity", "HTMLButtonElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setCustomValidity", "HTMLButtonElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> error;
-  error = info[0];
-  if (!error.prepare())
-    return;
+        V8StringResource<> error;
+        error = info[0];
+        if (!error.prepare())
+            return;
 
-  impl->setCustomValidity(error);
-}
+        impl->setCustomValidity(error);
+    }
 
-CORE_EXPORT  void setCustomValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLButtonElementV8Internal::setCustomValidityMethod(info);
-}
+    CORE_EXPORT void setCustomValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLButtonElementV8Internal::setCustomValidityMethod(info);
+    }
 
 } // namespace HTMLButtonElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLButtonElementAccessors[] = {
-    {"autofocus", HTMLButtonElementV8Internal::autofocusAttributeGetterCallback, HTMLButtonElementV8Internal::autofocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disabled", HTMLButtonElementV8Internal::disabledAttributeGetterCallback, HTMLButtonElementV8Internal::disabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"form", HTMLButtonElementV8Internal::formAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"formAction", HTMLButtonElementV8Internal::formActionAttributeGetterCallback, HTMLButtonElementV8Internal::formActionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"formEnctype", HTMLButtonElementV8Internal::formEnctypeAttributeGetterCallback, HTMLButtonElementV8Internal::formEnctypeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"formMethod", HTMLButtonElementV8Internal::formMethodAttributeGetterCallback, HTMLButtonElementV8Internal::formMethodAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"formNoValidate", HTMLButtonElementV8Internal::formNoValidateAttributeGetterCallback, HTMLButtonElementV8Internal::formNoValidateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"formTarget", HTMLButtonElementV8Internal::formTargetAttributeGetterCallback, HTMLButtonElementV8Internal::formTargetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"name", HTMLButtonElementV8Internal::nameAttributeGetterCallback, HTMLButtonElementV8Internal::nameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"type", HTMLButtonElementV8Internal::typeAttributeGetterCallback, HTMLButtonElementV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"value", HTMLButtonElementV8Internal::valueAttributeGetterCallback, HTMLButtonElementV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"willValidate", HTMLButtonElementV8Internal::willValidateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"validity", HTMLButtonElementV8Internal::validityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"validationMessage", HTMLButtonElementV8Internal::validationMessageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"labels", HTMLButtonElementV8Internal::labelsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "autofocus", HTMLButtonElementV8Internal::autofocusAttributeGetterCallback, HTMLButtonElementV8Internal::autofocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disabled", HTMLButtonElementV8Internal::disabledAttributeGetterCallback, HTMLButtonElementV8Internal::disabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "form", HTMLButtonElementV8Internal::formAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "formAction", HTMLButtonElementV8Internal::formActionAttributeGetterCallback, HTMLButtonElementV8Internal::formActionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "formEnctype", HTMLButtonElementV8Internal::formEnctypeAttributeGetterCallback, HTMLButtonElementV8Internal::formEnctypeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "formMethod", HTMLButtonElementV8Internal::formMethodAttributeGetterCallback, HTMLButtonElementV8Internal::formMethodAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "formNoValidate", HTMLButtonElementV8Internal::formNoValidateAttributeGetterCallback, HTMLButtonElementV8Internal::formNoValidateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "formTarget", HTMLButtonElementV8Internal::formTargetAttributeGetterCallback, HTMLButtonElementV8Internal::formTargetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "name", HTMLButtonElementV8Internal::nameAttributeGetterCallback, HTMLButtonElementV8Internal::nameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "type", HTMLButtonElementV8Internal::typeAttributeGetterCallback, HTMLButtonElementV8Internal::typeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "value", HTMLButtonElementV8Internal::valueAttributeGetterCallback, HTMLButtonElementV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "willValidate", HTMLButtonElementV8Internal::willValidateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "validity", HTMLButtonElementV8Internal::validityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "validationMessage", HTMLButtonElementV8Internal::validationMessageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "labels", HTMLButtonElementV8Internal::labelsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLButtonElementMethods[] = {
-    {"checkValidity", HTMLButtonElementV8Internal::checkValidityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"reportValidity", HTMLButtonElementV8Internal::reportValidityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setCustomValidity", HTMLButtonElementV8Internal::setCustomValidityMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "checkValidity", HTMLButtonElementV8Internal::checkValidityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "reportValidity", HTMLButtonElementV8Internal::reportValidityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setCustomValidity", HTMLButtonElementV8Internal::setCustomValidityMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLButtonElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLButtonElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLButtonElement::internalFieldCount);
+static void installV8HTMLButtonElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLButtonElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLButtonElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLButtonElementAccessors, WTF_ARRAY_LENGTH(V8HTMLButtonElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLButtonElementMethods, WTF_ARRAY_LENGTH(V8HTMLButtonElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLButtonElementAccessors, WTF_ARRAY_LENGTH(V8HTMLButtonElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLButtonElementMethods, WTF_ARRAY_LENGTH(V8HTMLButtonElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLButtonElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLButtonElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLButtonElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLButtonElementTemplate);
 }
 
-bool V8HTMLButtonElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLButtonElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLButtonElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLButtonElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLButtonElement* V8HTMLButtonElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLButtonElement* V8HTMLButtonElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

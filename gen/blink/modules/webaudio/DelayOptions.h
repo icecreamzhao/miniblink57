@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DelayOptions_h
 #define DelayOptions_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT DelayOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DelayOptions();
-  virtual ~DelayOptions();
-  DelayOptions(const DelayOptions&);
-  DelayOptions& operator=(const DelayOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDelayTime() const;
-  double delayTime() const;
-  void setDelayTime(double);
+public:
+    DelayOptions();
+    virtual ~DelayOptions();
+    DelayOptions(const DelayOptions&);
+    DelayOptions& operator=(const DelayOptions&);
 
-  bool hasMaxDelayTime() const;
-  double maxDelayTime() const;
-  void setMaxDelayTime(double);
+    bool hasDelayTime() const;
+    double delayTime() const;
+    void setDelayTime(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMaxDelayTime() const;
+    double maxDelayTime() const;
+    void setMaxDelayTime(double);
 
- private:
-  bool m_hasDelayTime = false;
-  double m_delayTime;
-  bool m_hasMaxDelayTime = false;
-  double m_maxDelayTime;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8DelayOptions;
+private:
+    bool m_hasDelayTime = false;
+    double m_delayTime;
+    bool m_hasMaxDelayTime = false;
+    double m_maxDelayTime;
+
+    friend class V8DelayOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // DelayOptions_h
+#endif // DelayOptions_h

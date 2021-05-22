@@ -8,47 +8,55 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaStreamConstraints.h"
 
 #include "bindings/modules/v8/BooleanOrMediaTrackConstraints.h"
 
 namespace blink {
 
-MediaStreamConstraints::MediaStreamConstraints() {
-  setAudio(BooleanOrMediaTrackConstraints::fromBoolean(false));
-  setVideo(BooleanOrMediaTrackConstraints::fromBoolean(false));
+MediaStreamConstraints::MediaStreamConstraints()
+{
+    setAudio(BooleanOrMediaTrackConstraints::fromBoolean(false));
+    setVideo(BooleanOrMediaTrackConstraints::fromBoolean(false));
 }
 
-MediaStreamConstraints::~MediaStreamConstraints() {}
+MediaStreamConstraints::~MediaStreamConstraints() { }
 
 MediaStreamConstraints::MediaStreamConstraints(const MediaStreamConstraints&) = default;
 
 MediaStreamConstraints& MediaStreamConstraints::operator=(const MediaStreamConstraints&) = default;
 
-bool MediaStreamConstraints::hasAudio() const {
-  return !m_audio.isNull();
+bool MediaStreamConstraints::hasAudio() const
+{
+    return !m_audio.isNull();
 }
-const BooleanOrMediaTrackConstraints& MediaStreamConstraints::audio() const {
-  return m_audio;
+const BooleanOrMediaTrackConstraints& MediaStreamConstraints::audio() const
+{
+    return m_audio;
 }
-void MediaStreamConstraints::setAudio(const BooleanOrMediaTrackConstraints& value) {
-  m_audio = value;
+void MediaStreamConstraints::setAudio(const BooleanOrMediaTrackConstraints& value)
+{
+    m_audio = value;
 }
-bool MediaStreamConstraints::hasVideo() const {
-  return !m_video.isNull();
+bool MediaStreamConstraints::hasVideo() const
+{
+    return !m_video.isNull();
 }
-const BooleanOrMediaTrackConstraints& MediaStreamConstraints::video() const {
-  return m_video;
+const BooleanOrMediaTrackConstraints& MediaStreamConstraints::video() const
+{
+    return m_video;
 }
-void MediaStreamConstraints::setVideo(const BooleanOrMediaTrackConstraints& value) {
-  m_video = value;
+void MediaStreamConstraints::setVideo(const BooleanOrMediaTrackConstraints& value)
+{
+    m_video = value;
 }
 
-DEFINE_TRACE(MediaStreamConstraints) {
-  visitor->trace(m_audio);
-  visitor->trace(m_video);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(MediaStreamConstraints)
+{
+    visitor->trace(m_audio);
+    visitor->trace(m_video);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

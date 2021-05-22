@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RTCIceCandidate.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,204 +49,225 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&RTCIceCandidate::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "RTCIceCandidate is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace RTCIceCandidateV8Internal {
 
-static void candidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void candidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
+        RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->candidate(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->candidate(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void candidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCIceCandidateV8Internal::candidateAttributeGetter(info);
-}
+    MODULES_EXPORT void candidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCIceCandidateV8Internal::candidateAttributeGetter(info);
+    }
 
-static void candidateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
+    static void candidateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setCandidate(cppValue);
-}
+        impl->setCandidate(cppValue);
+    }
 
-MODULES_EXPORT void candidateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void candidateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  RTCIceCandidateV8Internal::candidateAttributeSetter(v8Value, info);
-}
+        RTCIceCandidateV8Internal::candidateAttributeSetter(v8Value, info);
+    }
 
-static void sdpMidAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sdpMidAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
+        RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->sdpMid(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->sdpMid(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void sdpMidAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCIceCandidateV8Internal::sdpMidAttributeGetter(info);
-}
+    MODULES_EXPORT void sdpMidAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCIceCandidateV8Internal::sdpMidAttributeGetter(info);
+    }
 
-static void sdpMidAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
+    static void sdpMidAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setSdpMid(cppValue);
-}
+        impl->setSdpMid(cppValue);
+    }
 
-MODULES_EXPORT void sdpMidAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void sdpMidAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  RTCIceCandidateV8Internal::sdpMidAttributeSetter(v8Value, info);
-}
+        RTCIceCandidateV8Internal::sdpMidAttributeSetter(v8Value, info);
+    }
 
-static void sdpMLineIndexAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void sdpMLineIndexAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
+        RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->sdpMLineIndex());
-}
+        v8SetReturnValueUnsigned(info, impl->sdpMLineIndex());
+    }
 
-MODULES_EXPORT void sdpMLineIndexAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCIceCandidateV8Internal::sdpMLineIndexAttributeGetter(info);
-}
+    MODULES_EXPORT void sdpMLineIndexAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCIceCandidateV8Internal::sdpMLineIndexAttributeGetter(info);
+    }
 
-static void sdpMLineIndexAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
+    static void sdpMLineIndexAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "RTCIceCandidate", "sdpMLineIndex");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "RTCIceCandidate", "sdpMLineIndex");
 
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt16(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt16(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setSdpMLineIndex(cppValue);
-}
+        impl->setSdpMLineIndex(cppValue);
+    }
 
-MODULES_EXPORT void sdpMLineIndexAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void sdpMLineIndexAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  RTCIceCandidateV8Internal::sdpMLineIndexAttributeSetter(v8Value, info);
-}
+        RTCIceCandidateV8Internal::sdpMLineIndexAttributeSetter(v8Value, info);
+    }
 
-static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(info.Holder());
+    static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCIceCandidate* impl = V8RTCIceCandidate::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue result = impl->toJSONForBinding(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->toJSONForBinding(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCIceCandidateV8Internal::toJSONMethod(info);
-}
+    MODULES_EXPORT void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCIceCandidateV8Internal::toJSONMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "RTCIceCandidate");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "RTCIceCandidate");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  RTCIceCandidateInit candidateInitDict;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('candidateInitDict') is not an object.");
+        RTCIceCandidateInit candidateInitDict;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('candidateInitDict') is not an object.");
 
-    return;
-  }
-  V8RTCIceCandidateInit::toImpl(info.GetIsolate(), info[0], candidateInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8RTCIceCandidateInit::toImpl(info.GetIsolate(), info[0], candidateInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  RTCIceCandidate* impl = RTCIceCandidate::create(executionContext, candidateInitDict, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8RTCIceCandidate::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        RTCIceCandidate* impl = RTCIceCandidate::create(executionContext, candidateInitDict, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8RTCIceCandidate::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace RTCIceCandidateV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8RTCIceCandidateAccessors[] = {
-    {"candidate", RTCIceCandidateV8Internal::candidateAttributeGetterCallback, RTCIceCandidateV8Internal::candidateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sdpMid", RTCIceCandidateV8Internal::sdpMidAttributeGetterCallback, RTCIceCandidateV8Internal::sdpMidAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"sdpMLineIndex", RTCIceCandidateV8Internal::sdpMLineIndexAttributeGetterCallback, RTCIceCandidateV8Internal::sdpMLineIndexAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "candidate", RTCIceCandidateV8Internal::candidateAttributeGetterCallback, RTCIceCandidateV8Internal::candidateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sdpMid", RTCIceCandidateV8Internal::sdpMidAttributeGetterCallback, RTCIceCandidateV8Internal::sdpMidAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "sdpMLineIndex", RTCIceCandidateV8Internal::sdpMLineIndexAttributeGetterCallback, RTCIceCandidateV8Internal::sdpMLineIndexAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8RTCIceCandidateMethods[] = {
-    {"toJSON", RTCIceCandidateV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "toJSON", RTCIceCandidateV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8RTCIceCandidate::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("RTCIceCandidate"));
-    return;
-  }
+void V8RTCIceCandidate::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("RTCIceCandidate"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  RTCIceCandidateV8Internal::constructor(info);
+    RTCIceCandidateV8Internal::constructor(info);
 }
 
-static void installV8RTCIceCandidateTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCIceCandidate::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8RTCIceCandidate::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8RTCIceCandidate::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8RTCIceCandidateTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCIceCandidate::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8RTCIceCandidate::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8RTCIceCandidate::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCIceCandidateAccessors, WTF_ARRAY_LENGTH(V8RTCIceCandidateAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCIceCandidateMethods, WTF_ARRAY_LENGTH(V8RTCIceCandidateMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCIceCandidateAccessors, WTF_ARRAY_LENGTH(V8RTCIceCandidateAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCIceCandidateMethods, WTF_ARRAY_LENGTH(V8RTCIceCandidateMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8RTCIceCandidate::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCIceCandidateTemplate);
+v8::Local<v8::FunctionTemplate> V8RTCIceCandidate::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCIceCandidateTemplate);
 }
 
-bool V8RTCIceCandidate::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8RTCIceCandidate::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8RTCIceCandidate::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8RTCIceCandidate::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-RTCIceCandidate* V8RTCIceCandidate::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+RTCIceCandidate* V8RTCIceCandidate::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef StringOrStringSequenceOrConstrainDOMStringParameters_h
 #define StringOrStringSequenceOrConstrainDOMStringParameters_h
 
@@ -22,65 +22,67 @@
 namespace blink {
 
 class MODULES_EXPORT StringOrStringSequenceOrConstrainDOMStringParameters final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  StringOrStringSequenceOrConstrainDOMStringParameters();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isString() const { return m_type == SpecificTypeString; }
-  String getAsString() const;
-  void setString(String);
-  static StringOrStringSequenceOrConstrainDOMStringParameters fromString(String);
+public:
+    StringOrStringSequenceOrConstrainDOMStringParameters();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isStringSequence() const { return m_type == SpecificTypeStringSequence; }
-  const Vector<String>& getAsStringSequence() const;
-  void setStringSequence(const Vector<String>&);
-  static StringOrStringSequenceOrConstrainDOMStringParameters fromStringSequence(const Vector<String>&);
+    bool isString() const { return m_type == SpecificTypeString; }
+    String getAsString() const;
+    void setString(String);
+    static StringOrStringSequenceOrConstrainDOMStringParameters fromString(String);
 
-  bool isConstrainDOMStringParameters() const { return m_type == SpecificTypeConstrainDOMStringParameters; }
-  const ConstrainDOMStringParameters& getAsConstrainDOMStringParameters() const;
-  void setConstrainDOMStringParameters(const ConstrainDOMStringParameters&);
-  static StringOrStringSequenceOrConstrainDOMStringParameters fromConstrainDOMStringParameters(const ConstrainDOMStringParameters&);
+    bool isStringSequence() const { return m_type == SpecificTypeStringSequence; }
+    const Vector<String>& getAsStringSequence() const;
+    void setStringSequence(const Vector<String>&);
+    static StringOrStringSequenceOrConstrainDOMStringParameters fromStringSequence(const Vector<String>&);
 
-  StringOrStringSequenceOrConstrainDOMStringParameters(const StringOrStringSequenceOrConstrainDOMStringParameters&);
-  ~StringOrStringSequenceOrConstrainDOMStringParameters();
-  StringOrStringSequenceOrConstrainDOMStringParameters& operator=(const StringOrStringSequenceOrConstrainDOMStringParameters&);
-  DECLARE_TRACE();
+    bool isConstrainDOMStringParameters() const { return m_type == SpecificTypeConstrainDOMStringParameters; }
+    const ConstrainDOMStringParameters& getAsConstrainDOMStringParameters() const;
+    void setConstrainDOMStringParameters(const ConstrainDOMStringParameters&);
+    static StringOrStringSequenceOrConstrainDOMStringParameters fromConstrainDOMStringParameters(const ConstrainDOMStringParameters&);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeString,
-    SpecificTypeStringSequence,
-    SpecificTypeConstrainDOMStringParameters,
-  };
-  SpecificTypes m_type;
+    StringOrStringSequenceOrConstrainDOMStringParameters(const StringOrStringSequenceOrConstrainDOMStringParameters&);
+    ~StringOrStringSequenceOrConstrainDOMStringParameters();
+    StringOrStringSequenceOrConstrainDOMStringParameters& operator=(const StringOrStringSequenceOrConstrainDOMStringParameters&);
+    DECLARE_TRACE();
 
-  String m_string;
-  Vector<String> m_stringSequence;
-  ConstrainDOMStringParameters m_constrainDOMStringParameters;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeString,
+        SpecificTypeStringSequence,
+        SpecificTypeConstrainDOMStringParameters,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrStringSequenceOrConstrainDOMStringParameters&, v8::Local<v8::Object>, v8::Isolate*);
+    String m_string;
+    Vector<String> m_stringSequence;
+    ConstrainDOMStringParameters m_constrainDOMStringParameters;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrStringSequenceOrConstrainDOMStringParameters&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8StringOrStringSequenceOrConstrainDOMStringParameters final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrStringSequenceOrConstrainDOMStringParameters&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, StringOrStringSequenceOrConstrainDOMStringParameters&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const StringOrStringSequenceOrConstrainDOMStringParameters&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrStringSequenceOrConstrainDOMStringParameters& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, StringOrStringSequenceOrConstrainDOMStringParameters& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<StringOrStringSequenceOrConstrainDOMStringParameters> {
-  MODULES_EXPORT static StringOrStringSequenceOrConstrainDOMStringParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static StringOrStringSequenceOrConstrainDOMStringParameters nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -88,4 +90,4 @@ struct NativeValueTraits<StringOrStringSequenceOrConstrainDOMStringParameters> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::StringOrStringSequenceOrConstrainDOMStringParameters);
 
-#endif  // StringOrStringSequenceOrConstrainDOMStringParameters_h
+#endif // StringOrStringSequenceOrConstrainDOMStringParameters_h

@@ -8,111 +8,124 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "EventListenerOptionsOrBoolean.h"
 
 #include "bindings/core/v8/ToV8.h"
 
 namespace blink {
 
-EventListenerOptionsOrBoolean::EventListenerOptionsOrBoolean() : m_type(SpecificTypeNone) {}
-
-const EventListenerOptions& EventListenerOptionsOrBoolean::getAsEventListenerOptions() const {
-  DCHECK(isEventListenerOptions());
-  return m_eventListenerOptions;
+EventListenerOptionsOrBoolean::EventListenerOptionsOrBoolean()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void EventListenerOptionsOrBoolean::setEventListenerOptions(const EventListenerOptions& value) {
-  DCHECK(isNull());
-  m_eventListenerOptions = value;
-  m_type = SpecificTypeEventListenerOptions;
+const EventListenerOptions& EventListenerOptionsOrBoolean::getAsEventListenerOptions() const
+{
+    DCHECK(isEventListenerOptions());
+    return m_eventListenerOptions;
 }
 
-EventListenerOptionsOrBoolean EventListenerOptionsOrBoolean::fromEventListenerOptions(const EventListenerOptions& value) {
-  EventListenerOptionsOrBoolean container;
-  container.setEventListenerOptions(value);
-  return container;
+void EventListenerOptionsOrBoolean::setEventListenerOptions(const EventListenerOptions& value)
+{
+    DCHECK(isNull());
+    m_eventListenerOptions = value;
+    m_type = SpecificTypeEventListenerOptions;
 }
 
-bool EventListenerOptionsOrBoolean::getAsBoolean() const {
-  DCHECK(isBoolean());
-  return m_boolean;
+EventListenerOptionsOrBoolean EventListenerOptionsOrBoolean::fromEventListenerOptions(const EventListenerOptions& value)
+{
+    EventListenerOptionsOrBoolean container;
+    container.setEventListenerOptions(value);
+    return container;
 }
 
-void EventListenerOptionsOrBoolean::setBoolean(bool value) {
-  DCHECK(isNull());
-  m_boolean = value;
-  m_type = SpecificTypeBoolean;
+bool EventListenerOptionsOrBoolean::getAsBoolean() const
+{
+    DCHECK(isBoolean());
+    return m_boolean;
 }
 
-EventListenerOptionsOrBoolean EventListenerOptionsOrBoolean::fromBoolean(bool value) {
-  EventListenerOptionsOrBoolean container;
-  container.setBoolean(value);
-  return container;
+void EventListenerOptionsOrBoolean::setBoolean(bool value)
+{
+    DCHECK(isNull());
+    m_boolean = value;
+    m_type = SpecificTypeBoolean;
+}
+
+EventListenerOptionsOrBoolean EventListenerOptionsOrBoolean::fromBoolean(bool value)
+{
+    EventListenerOptionsOrBoolean container;
+    container.setBoolean(value);
+    return container;
 }
 
 EventListenerOptionsOrBoolean::EventListenerOptionsOrBoolean(const EventListenerOptionsOrBoolean&) = default;
 EventListenerOptionsOrBoolean::~EventListenerOptionsOrBoolean() = default;
 EventListenerOptionsOrBoolean& EventListenerOptionsOrBoolean::operator=(const EventListenerOptionsOrBoolean&) = default;
 
-DEFINE_TRACE(EventListenerOptionsOrBoolean) {
-  visitor->trace(m_eventListenerOptions);
+DEFINE_TRACE(EventListenerOptionsOrBoolean)
+{
+    visitor->trace(m_eventListenerOptions);
 }
 
-void V8EventListenerOptionsOrBoolean::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, EventListenerOptionsOrBoolean& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8EventListenerOptionsOrBoolean::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, EventListenerOptionsOrBoolean& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (isUndefinedOrNull(v8Value)) {
-    EventListenerOptions cppValue;
-    V8EventListenerOptions::toImpl(isolate, v8Value, cppValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setEventListenerOptions(cppValue);
-    return;
-  }
+    if (isUndefinedOrNull(v8Value)) {
+        EventListenerOptions cppValue;
+        V8EventListenerOptions::toImpl(isolate, v8Value, cppValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setEventListenerOptions(cppValue);
+        return;
+    }
 
-  if (v8Value->IsObject()) {
-    EventListenerOptions cppValue;
-    V8EventListenerOptions::toImpl(isolate, v8Value, cppValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setEventListenerOptions(cppValue);
-    return;
-  }
+    if (v8Value->IsObject()) {
+        EventListenerOptions cppValue;
+        V8EventListenerOptions::toImpl(isolate, v8Value, cppValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setEventListenerOptions(cppValue);
+        return;
+    }
 
-  if (v8Value->IsBoolean()) {
-    impl.setBoolean(v8Value.As<v8::Boolean>()->Value());
-    return;
-  }
+    if (v8Value->IsBoolean()) {
+        impl.setBoolean(v8Value.As<v8::Boolean>()->Value());
+        return;
+    }
 
-  {
-    impl.setBoolean(v8Value->BooleanValue());
-    return;
-  }
+    {
+        impl.setBoolean(v8Value->BooleanValue());
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const EventListenerOptionsOrBoolean& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const EventListenerOptionsOrBoolean& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case EventListenerOptionsOrBoolean::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case EventListenerOptionsOrBoolean::SpecificTypeEventListenerOptions:
-      return ToV8(impl.getAsEventListenerOptions(), creationContext, isolate);
+        return ToV8(impl.getAsEventListenerOptions(), creationContext, isolate);
     case EventListenerOptionsOrBoolean::SpecificTypeBoolean:
-      return v8Boolean(impl.getAsBoolean(), isolate);
+        return v8Boolean(impl.getAsBoolean(), isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-EventListenerOptionsOrBoolean NativeValueTraits<EventListenerOptionsOrBoolean>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  EventListenerOptionsOrBoolean impl;
-  V8EventListenerOptionsOrBoolean::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+EventListenerOptionsOrBoolean NativeValueTraits<EventListenerOptionsOrBoolean>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    EventListenerOptionsOrBoolean impl;
+    V8EventListenerOptionsOrBoolean::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

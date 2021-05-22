@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PeriodicWaveOptions_h
 #define PeriodicWaveOptions_h
 
@@ -20,33 +20,34 @@
 namespace blink {
 
 class MODULES_EXPORT PeriodicWaveOptions : public PeriodicWaveConstraints {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PeriodicWaveOptions();
-  virtual ~PeriodicWaveOptions();
-  PeriodicWaveOptions(const PeriodicWaveOptions&);
-  PeriodicWaveOptions& operator=(const PeriodicWaveOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasImag() const;
-  const Vector<float>& imag() const;
-  void setImag(const Vector<float>&);
+public:
+    PeriodicWaveOptions();
+    virtual ~PeriodicWaveOptions();
+    PeriodicWaveOptions(const PeriodicWaveOptions&);
+    PeriodicWaveOptions& operator=(const PeriodicWaveOptions&);
 
-  bool hasReal() const;
-  const Vector<float>& real() const;
-  void setReal(const Vector<float>&);
+    bool hasImag() const;
+    const Vector<float>& imag() const;
+    void setImag(const Vector<float>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasReal() const;
+    const Vector<float>& real() const;
+    void setReal(const Vector<float>&);
 
- private:
-  bool m_hasImag = false;
-  Vector<float> m_imag;
-  bool m_hasReal = false;
-  Vector<float> m_real;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PeriodicWaveOptions;
+private:
+    bool m_hasImag = false;
+    Vector<float> m_imag;
+    bool m_hasReal = false;
+    Vector<float> m_real;
+
+    friend class V8PeriodicWaveOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PeriodicWaveOptions_h
+#endif // PeriodicWaveOptions_h

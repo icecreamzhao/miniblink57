@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ExtendableEventInit_h
 #define ExtendableEventInit_h
 
@@ -19,21 +19,21 @@
 namespace blink {
 
 class MODULES_EXPORT ExtendableEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ExtendableEventInit();
-  virtual ~ExtendableEventInit();
-  ExtendableEventInit(const ExtendableEventInit&);
-  ExtendableEventInit& operator=(const ExtendableEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+public:
+    ExtendableEventInit();
+    virtual ~ExtendableEventInit();
+    ExtendableEventInit(const ExtendableEventInit&);
+    ExtendableEventInit& operator=(const ExtendableEventInit&);
 
- private:
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ExtendableEventInit;
+private:
+    friend class V8ExtendableEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ExtendableEventInit_h
+#endif // ExtendableEventInit_h

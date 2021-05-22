@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FontFaceSetLoadEventInit_h
 #define FontFaceSetLoadEventInit_h
 
@@ -21,27 +21,28 @@ namespace blink {
 class FontFace;
 
 class CORE_EXPORT FontFaceSetLoadEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FontFaceSetLoadEventInit();
-  virtual ~FontFaceSetLoadEventInit();
-  FontFaceSetLoadEventInit(const FontFaceSetLoadEventInit&);
-  FontFaceSetLoadEventInit& operator=(const FontFaceSetLoadEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasFontfaces() const;
-  const HeapVector<Member<FontFace>>& fontfaces() const;
-  void setFontfaces(const HeapVector<Member<FontFace>>&);
+public:
+    FontFaceSetLoadEventInit();
+    virtual ~FontFaceSetLoadEventInit();
+    FontFaceSetLoadEventInit(const FontFaceSetLoadEventInit&);
+    FontFaceSetLoadEventInit& operator=(const FontFaceSetLoadEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasFontfaces() const;
+    const HeapVector<Member<FontFace>>& fontfaces() const;
+    void setFontfaces(const HeapVector<Member<FontFace>>&);
 
- private:
-  bool m_hasFontfaces = false;
-  HeapVector<Member<FontFace>> m_fontfaces;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8FontFaceSetLoadEventInit;
+private:
+    bool m_hasFontfaces = false;
+    HeapVector<Member<FontFace>> m_fontfaces;
+
+    friend class V8FontFaceSetLoadEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // FontFaceSetLoadEventInit_h
+#endif // FontFaceSetLoadEventInit_h

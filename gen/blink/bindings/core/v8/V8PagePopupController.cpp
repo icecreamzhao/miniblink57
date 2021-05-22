@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PagePopupController.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,283 +47,306 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PagePopupController::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PagePopupController is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PagePopupControllerV8Internal {
 
-static void setValueAndClosePopupMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "setValueAndClosePopup");
+    static void setValueAndClosePopupMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "setValueAndClosePopup");
 
-  PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
+        PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  int numberValue;
-  V8StringResource<> stringValue;
-  numberValue = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int numberValue;
+        V8StringResource<> stringValue;
+        numberValue = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  stringValue = info[1];
-  if (!stringValue.prepare())
-    return;
+        stringValue = info[1];
+        if (!stringValue.prepare())
+            return;
 
-  impl->setValueAndClosePopup(numberValue, stringValue);
-}
+        impl->setValueAndClosePopup(numberValue, stringValue);
+    }
 
-CORE_EXPORT  void setValueAndClosePopupMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupControllerV8Internal::setValueAndClosePopupMethod(info);
-}
+    CORE_EXPORT void setValueAndClosePopupMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupControllerV8Internal::setValueAndClosePopupMethod(info);
+    }
 
-static void setValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
+    static void setValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setValue", "PagePopupController", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setValue", "PagePopupController", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> value;
-  value = info[0];
-  if (!value.prepare())
-    return;
+        V8StringResource<> value;
+        value = info[0];
+        if (!value.prepare())
+            return;
 
-  impl->setValue(value);
-}
+        impl->setValue(value);
+    }
 
-CORE_EXPORT  void setValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupControllerV8Internal::setValueMethod(info);
-}
+    CORE_EXPORT void setValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupControllerV8Internal::setValueMethod(info);
+    }
 
-static void closePopupMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
+    static void closePopupMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
 
-  impl->closePopup();
-}
+        impl->closePopup();
+    }
 
-CORE_EXPORT  void closePopupMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupControllerV8Internal::closePopupMethod(info);
-}
+    CORE_EXPORT void closePopupMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupControllerV8Internal::closePopupMethod(info);
+    }
 
-static void selectFontsFromOwnerDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
+    static void selectFontsFromOwnerDocumentMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectFontsFromOwnerDocument", "PagePopupController", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectFontsFromOwnerDocument", "PagePopupController", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  Document* targetDocument;
-  targetDocument = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!targetDocument) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectFontsFromOwnerDocument", "PagePopupController", "parameter 1 is not of type 'Document'."));
+        Document* targetDocument;
+        targetDocument = V8Document::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!targetDocument) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("selectFontsFromOwnerDocument", "PagePopupController", "parameter 1 is not of type 'Document'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->selectFontsFromOwnerDocument(targetDocument);
-}
+        impl->selectFontsFromOwnerDocument(targetDocument);
+    }
 
-CORE_EXPORT  void selectFontsFromOwnerDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupControllerV8Internal::selectFontsFromOwnerDocumentMethod(info);
-}
+    CORE_EXPORT void selectFontsFromOwnerDocumentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupControllerV8Internal::selectFontsFromOwnerDocumentMethod(info);
+    }
 
-static void localizeNumberStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
+    static void localizeNumberStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("localizeNumberString", "PagePopupController", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("localizeNumberString", "PagePopupController", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> numberString;
-  numberString = info[0];
-  if (!numberString.prepare())
-    return;
+        V8StringResource<> numberString;
+        numberString = info[0];
+        if (!numberString.prepare())
+            return;
 
-  v8SetReturnValueString(info, impl->localizeNumberString(numberString), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->localizeNumberString(numberString), info.GetIsolate());
+    }
 
-CORE_EXPORT  void localizeNumberStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupControllerV8Internal::localizeNumberStringMethod(info);
-}
+    CORE_EXPORT void localizeNumberStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupControllerV8Internal::localizeNumberStringMethod(info);
+    }
 
-static void formatMonthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "formatMonth");
+    static void formatMonthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "formatMonth");
 
-  PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
+        PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  int year;
-  int zeroBaseMonth;
-  year = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int year;
+        int zeroBaseMonth;
+        year = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  zeroBaseMonth = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        zeroBaseMonth = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValueString(info, impl->formatMonth(year, zeroBaseMonth), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->formatMonth(year, zeroBaseMonth), info.GetIsolate());
+    }
 
-CORE_EXPORT  void formatMonthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupControllerV8Internal::formatMonthMethod(info);
-}
+    CORE_EXPORT void formatMonthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupControllerV8Internal::formatMonthMethod(info);
+    }
 
-static void formatShortMonthMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "formatShortMonth");
+    static void formatShortMonthMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "formatShortMonth");
 
-  PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
+        PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  int year;
-  int zeroBaseMonth;
-  year = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int year;
+        int zeroBaseMonth;
+        year = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  zeroBaseMonth = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        zeroBaseMonth = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValueString(info, impl->formatShortMonth(year, zeroBaseMonth), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->formatShortMonth(year, zeroBaseMonth), info.GetIsolate());
+    }
 
-CORE_EXPORT  void formatShortMonthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupControllerV8Internal::formatShortMonthMethod(info);
-}
+    CORE_EXPORT void formatShortMonthMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupControllerV8Internal::formatShortMonthMethod(info);
+    }
 
-static void formatWeekMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "formatWeek");
+    static void formatWeekMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "formatWeek");
 
-  PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
+        PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  int year;
-  int weekNumber;
-  V8StringResource<> localizedStartDate;
-  year = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int year;
+        int weekNumber;
+        V8StringResource<> localizedStartDate;
+        year = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  weekNumber = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        weekNumber = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  localizedStartDate = info[2];
-  if (!localizedStartDate.prepare())
-    return;
+        localizedStartDate = info[2];
+        if (!localizedStartDate.prepare())
+            return;
 
-  v8SetReturnValueString(info, impl->formatWeek(year, weekNumber, localizedStartDate), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->formatWeek(year, weekNumber, localizedStartDate), info.GetIsolate());
+    }
 
-CORE_EXPORT  void formatWeekMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupControllerV8Internal::formatWeekMethod(info);
-}
+    CORE_EXPORT void formatWeekMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupControllerV8Internal::formatWeekMethod(info);
+    }
 
-static void setWindowRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "setWindowRect");
+    static void setWindowRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PagePopupController", "setWindowRect");
 
-  PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
+        PagePopupController* impl = V8PagePopupController::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 4)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 4)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(4, info.Length()));
+            return;
+        }
 
-  int x;
-  int y;
-  int width;
-  int height;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int x;
+        int y;
+        int width;
+        int height;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        width = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        height = toInt32(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setWindowRect(x, y, width, height);
-}
+        impl->setWindowRect(x, y, width, height);
+    }
 
-CORE_EXPORT  void setWindowRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PagePopupControllerV8Internal::setWindowRectMethod(info);
-}
+    CORE_EXPORT void setWindowRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PagePopupControllerV8Internal::setWindowRectMethod(info);
+    }
 
 } // namespace PagePopupControllerV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8PagePopupControllerMethods[] = {
-    {"setValueAndClosePopup", PagePopupControllerV8Internal::setValueAndClosePopupMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setValue", PagePopupControllerV8Internal::setValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"closePopup", PagePopupControllerV8Internal::closePopupMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectFontsFromOwnerDocument", PagePopupControllerV8Internal::selectFontsFromOwnerDocumentMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"localizeNumberString", PagePopupControllerV8Internal::localizeNumberStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"formatMonth", PagePopupControllerV8Internal::formatMonthMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"formatShortMonth", PagePopupControllerV8Internal::formatShortMonthMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"formatWeek", PagePopupControllerV8Internal::formatWeekMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setWindowRect", PagePopupControllerV8Internal::setWindowRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "setValueAndClosePopup", PagePopupControllerV8Internal::setValueAndClosePopupMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setValue", PagePopupControllerV8Internal::setValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "closePopup", PagePopupControllerV8Internal::closePopupMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectFontsFromOwnerDocument", PagePopupControllerV8Internal::selectFontsFromOwnerDocumentMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "localizeNumberString", PagePopupControllerV8Internal::localizeNumberStringMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "formatMonth", PagePopupControllerV8Internal::formatMonthMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "formatShortMonth", PagePopupControllerV8Internal::formatShortMonthMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "formatWeek", PagePopupControllerV8Internal::formatWeekMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setWindowRect", PagePopupControllerV8Internal::setWindowRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PagePopupControllerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PagePopupController::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PagePopupController::internalFieldCount);
+static void installV8PagePopupControllerTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PagePopupController::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PagePopupController::internalFieldCount);
 
-  if (!RuntimeEnabledFeatures::pagePopupEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::pagePopupEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PagePopupControllerMethods, WTF_ARRAY_LENGTH(V8PagePopupControllerMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PagePopupControllerMethods, WTF_ARRAY_LENGTH(V8PagePopupControllerMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8PagePopupController::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PagePopupControllerTemplate);
+v8::Local<v8::FunctionTemplate> V8PagePopupController::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PagePopupControllerTemplate);
 }
 
-bool V8PagePopupController::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PagePopupController::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PagePopupController::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PagePopupController::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PagePopupController* V8PagePopupController::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PagePopupController* V8PagePopupController::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef WebGLContextEventInit_h
 #define WebGLContextEventInit_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class MODULES_EXPORT WebGLContextEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  WebGLContextEventInit();
-  virtual ~WebGLContextEventInit();
-  WebGLContextEventInit(const WebGLContextEventInit&);
-  WebGLContextEventInit& operator=(const WebGLContextEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasStatusMessage() const;
-  String statusMessage() const;
-  void setStatusMessage(String);
+public:
+    WebGLContextEventInit();
+    virtual ~WebGLContextEventInit();
+    WebGLContextEventInit(const WebGLContextEventInit&);
+    WebGLContextEventInit& operator=(const WebGLContextEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasStatusMessage() const;
+    String statusMessage() const;
+    void setStatusMessage(String);
 
- private:
-  String m_statusMessage;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8WebGLContextEventInit;
+private:
+    String m_statusMessage;
+
+    friend class V8WebGLContextEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // WebGLContextEventInit_h
+#endif // WebGLContextEventInit_h

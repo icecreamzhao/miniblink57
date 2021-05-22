@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8CanvasPattern.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,79 +47,87 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&CanvasPattern::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "CanvasPattern is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace CanvasPatternV8Internal {
 
-static void setTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasPattern* impl = V8CanvasPattern::toImpl(info.Holder());
+    static void setTransformMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasPattern* impl = V8CanvasPattern::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setTransform", "CanvasPattern", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setTransform", "CanvasPattern", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  SVGMatrixTearOff* transform;
-  transform = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!transform) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setTransform", "CanvasPattern", "parameter 1 is not of type 'SVGMatrix'."));
+        SVGMatrixTearOff* transform;
+        transform = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!transform) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setTransform", "CanvasPattern", "parameter 1 is not of type 'SVGMatrix'."));
 
-    return;
-  }
+            return;
+        }
 
-  impl->setTransform(transform);
-}
+        impl->setTransform(transform);
+    }
 
-MODULES_EXPORT  void setTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CanvasPatternV8Internal::setTransformMethod(info);
-}
+    MODULES_EXPORT void setTransformMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CanvasPatternV8Internal::setTransformMethod(info);
+    }
 
 } // namespace CanvasPatternV8Internal
 
-static void installV8CanvasPatternTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CanvasPattern::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CanvasPattern::internalFieldCount);
+static void installV8CanvasPatternTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8CanvasPattern::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8CanvasPattern::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 }
 
-v8::Local<v8::FunctionTemplate> V8CanvasPattern::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CanvasPatternTemplate);
+v8::Local<v8::FunctionTemplate> V8CanvasPattern::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8CanvasPatternTemplate);
 }
 
-bool V8CanvasPattern::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8CanvasPattern::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8CanvasPattern::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8CanvasPattern::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-CanvasPattern* V8CanvasPattern::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+CanvasPattern* V8CanvasPattern::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-void V8CanvasPattern::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  v8::Isolate* isolate = context->GetIsolate();
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ExecutionContext* executionContext = toExecutionContext(prototypeObject->CreationContext());
-  DCHECK(executionContext);
-  if (executionContext && (executionContext->isDocument())) {
-    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-      const V8DOMConfiguration::MethodConfiguration setTransformMethodConfiguration = {"setTransform", CanvasPatternV8Internal::setTransformMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-      V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, setTransformMethodConfiguration);
+void V8CanvasPattern::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ExecutionContext* executionContext = toExecutionContext(prototypeObject->CreationContext());
+    DCHECK(executionContext);
+    if (executionContext && (executionContext->isDocument())) {
+        if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+            const V8DOMConfiguration::MethodConfiguration setTransformMethodConfiguration = { "setTransform", CanvasPatternV8Internal::setTransformMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+            V8DOMConfiguration::installMethod(isolate, world, v8::Local<v8::Object>(), prototypeObject, interfaceObject, signature, setTransformMethodConfiguration);
+        }
     }
-  }
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Element.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -87,2670 +87,2924 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Element::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Element is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace ElementV8Internal {
 
-static void namespaceURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    static void namespaceURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
 
-  v8::Local<v8::Object> holder = info.Holder();
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->namespaceURI(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->namespaceURI(), info.GetIsolate());
+    }
 
-CORE_EXPORT void namespaceURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    CORE_EXPORT void namespaceURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
 
-  ElementV8Internal::namespaceURIAttributeGetter(info);
-}
+        ElementV8Internal::namespaceURIAttributeGetter(info);
+    }
 
-static void prefixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void prefixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->prefix(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->prefix(), info.GetIsolate());
+    }
 
-CORE_EXPORT void prefixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::prefixAttributeGetter(info);
-}
+    CORE_EXPORT void prefixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::prefixAttributeGetter(info);
+    }
 
-static void localNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void localNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->localName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->localName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void localNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::localNameAttributeGetter(info);
-}
+    CORE_EXPORT void localNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::localNameAttributeGetter(info);
+    }
 
-static void tagNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void tagNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->tagName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->tagName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void tagNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::tagNameAttributeGetter(info);
-}
+    CORE_EXPORT void tagNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::tagNameAttributeGetter(info);
+    }
 
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->getIdAttribute(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getIdAttribute(), info.GetIsolate());
+    }
 
-CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::idAttributeGetter(info);
-}
+    CORE_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::idAttributeGetter(info);
+    }
 
-static void idAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void idAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::idAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::idAttr, cppValue);
+    }
 
-CORE_EXPORT void idAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void idAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ElementV8Internal::idAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::idAttributeSetter(v8Value, info);
+    }
 
-static void classNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void classNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->getClassAttribute(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->getClassAttribute(), info.GetIsolate());
+    }
 
-CORE_EXPORT void classNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::classNameAttributeGetter(info);
-}
+    CORE_EXPORT void classNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::classNameAttributeGetter(info);
+    }
 
-static void classNameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void classNameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::classAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::classAttr, cppValue);
+    }
 
-CORE_EXPORT void classNameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void classNameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ElementV8Internal::classNameAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::classNameAttributeSetter(v8Value, info);
+    }
 
-static void classListAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void classListAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->classList()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->classList()), impl);
+    }
 
-CORE_EXPORT void classListAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::classListAttributeGetter(info);
-}
+    CORE_EXPORT void classListAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::classListAttributeGetter(info);
+    }
 
-static void classListAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* proxyImpl = V8Element::toImpl(holder);
-  DOMTokenList* impl = WTF::getPtr(proxyImpl->classList());
-  if (!impl)
-    return;
+    static void classListAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* proxyImpl = V8Element::toImpl(holder);
+        DOMTokenList* impl = WTF::getPtr(proxyImpl->classList());
+        if (!impl)
+            return;
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setValue(cppValue);
-}
+        impl->setValue(cppValue);
+    }
 
-CORE_EXPORT void classListAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void classListAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  ElementV8Internal::classListAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::classListAttributeSetter(v8Value, info);
+    }
 
-static void classListAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void classListAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->classList()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->classList()));
+    }
 
-CORE_EXPORT void classListAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::classListAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void classListAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::classListAttributeGetterForMainWorld(info);
+    }
 
-static void classListAttributeSetterForMainWorld(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* proxyImpl = V8Element::toImpl(holder);
-  DOMTokenList* impl = WTF::getPtr(proxyImpl->classList());
-  if (!impl)
-    return;
+    static void classListAttributeSetterForMainWorld(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* proxyImpl = V8Element::toImpl(holder);
+        DOMTokenList* impl = WTF::getPtr(proxyImpl->classList());
+        if (!impl)
+            return;
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setValue(cppValue);
-}
+        impl->setValue(cppValue);
+    }
 
-CORE_EXPORT void classListAttributeSetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void classListAttributeSetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  ElementV8Internal::classListAttributeSetterForMainWorld(v8Value, info);
-}
+        ElementV8Internal::classListAttributeSetterForMainWorld(v8Value, info);
+    }
 
-static void slotAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void slotAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::slotAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::slotAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void slotAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::slotAttributeGetter(info);
-}
+    CORE_EXPORT void slotAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::slotAttributeGetter(info);
+    }
 
-static void slotAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void slotAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::slotAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::slotAttr, cppValue);
+    }
 
-CORE_EXPORT void slotAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void slotAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ElementV8Internal::slotAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::slotAttributeSetter(v8Value, info);
+    }
 
-static void attributesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void attributesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->attributesForBindings()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->attributesForBindings()), impl);
+    }
 
-CORE_EXPORT void attributesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::attributesAttributeGetter(info);
-}
+    CORE_EXPORT void attributesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::attributesAttributeGetter(info);
+    }
 
-static void attributesAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void attributesAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->attributesForBindings()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->attributesForBindings()));
+    }
 
-CORE_EXPORT void attributesAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::attributesAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void attributesAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::attributesAttributeGetterForMainWorld(info);
+    }
 
-static void shadowRootAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shadowRootAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->openShadowRoot()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->openShadowRoot()), impl);
+    }
 
-CORE_EXPORT void shadowRootAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::shadowRootAttributeGetter(info);
-}
+    CORE_EXPORT void shadowRootAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::shadowRootAttributeGetter(info);
+    }
 
-static void shadowRootAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shadowRootAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->openShadowRoot()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->openShadowRoot()));
+    }
 
-CORE_EXPORT void shadowRootAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::shadowRootAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void shadowRootAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::shadowRootAttributeGetterForMainWorld(info);
+    }
 
-static void assignedSlotAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void assignedSlotAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->assignedSlotForBinding()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->assignedSlotForBinding()), impl);
+    }
 
-CORE_EXPORT void assignedSlotAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::assignedSlotAttributeGetter(info);
-}
+    CORE_EXPORT void assignedSlotAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::assignedSlotAttributeGetter(info);
+    }
 
-static void innerHTMLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void innerHTMLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->innerHTML(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->innerHTML(), info.GetIsolate());
+    }
 
-CORE_EXPORT void innerHTMLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::innerHTMLAttributeGetter(info);
-}
+    CORE_EXPORT void innerHTMLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::innerHTMLAttributeGetter(info);
+    }
 
-static void innerHTMLAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void innerHTMLAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Element", "innerHTML");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Element", "innerHTML");
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setInnerHTML(cppValue, exceptionState);
-}
+        impl->setInnerHTML(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void innerHTMLAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void innerHTMLAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ElementV8Internal::innerHTMLAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::innerHTMLAttributeSetter(v8Value, info);
+    }
 
-static void outerHTMLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void outerHTMLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->outerHTML(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->outerHTML(), info.GetIsolate());
+    }
 
-CORE_EXPORT void outerHTMLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::outerHTMLAttributeGetter(info);
-}
+    CORE_EXPORT void outerHTMLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::outerHTMLAttributeGetter(info);
+    }
 
-static void outerHTMLAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void outerHTMLAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Element", "outerHTML");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Element", "outerHTML");
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setOuterHTML(cppValue, exceptionState);
-}
+        impl->setOuterHTML(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void outerHTMLAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void outerHTMLAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ElementV8Internal::outerHTMLAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::outerHTMLAttributeSetter(v8Value, info);
+    }
 
-static void scrollTopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollTopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValue(info, impl->scrollTop());
-}
+        v8SetReturnValue(info, impl->scrollTop());
+    }
 
-CORE_EXPORT void scrollTopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::scrollTopAttributeGetter(info);
-}
+    CORE_EXPORT void scrollTopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::scrollTopAttributeGetter(info);
+    }
 
-static void scrollTopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void scrollTopAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Element", "scrollTop");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Element", "scrollTop");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setScrollTop(cppValue);
-}
+        impl->setScrollTop(cppValue);
+    }
 
-CORE_EXPORT void scrollTopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void scrollTopAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::scrollTopAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::scrollTopAttributeSetter(v8Value, info);
+    }
 
-static void scrollLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValue(info, impl->scrollLeft());
-}
+        v8SetReturnValue(info, impl->scrollLeft());
+    }
 
-CORE_EXPORT void scrollLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::scrollLeftAttributeGetter(info);
-}
+    CORE_EXPORT void scrollLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::scrollLeftAttributeGetter(info);
+    }
 
-static void scrollLeftAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void scrollLeftAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Element", "scrollLeft");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Element", "scrollLeft");
 
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setScrollLeft(cppValue);
-}
+        impl->setScrollLeft(cppValue);
+    }
 
-CORE_EXPORT void scrollLeftAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void scrollLeftAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::scrollLeftAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::scrollLeftAttributeSetter(v8Value, info);
+    }
 
-static void scrollWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->scrollWidth());
-}
+        v8SetReturnValueInt(info, impl->scrollWidth());
+    }
 
-CORE_EXPORT void scrollWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::scrollWidthAttributeGetter(info);
-}
+    CORE_EXPORT void scrollWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::scrollWidthAttributeGetter(info);
+    }
 
-static void scrollHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void scrollHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->scrollHeight());
-}
+        v8SetReturnValueInt(info, impl->scrollHeight());
+    }
 
-CORE_EXPORT void scrollHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::scrollHeightAttributeGetter(info);
-}
+    CORE_EXPORT void scrollHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::scrollHeightAttributeGetter(info);
+    }
 
-static void clientTopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientTopAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->clientTop());
-}
+        v8SetReturnValueInt(info, impl->clientTop());
+    }
 
-CORE_EXPORT void clientTopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::clientTopAttributeGetter(info);
-}
+    CORE_EXPORT void clientTopAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::clientTopAttributeGetter(info);
+    }
 
-static void clientLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientLeftAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->clientLeft());
-}
+        v8SetReturnValueInt(info, impl->clientLeft());
+    }
 
-CORE_EXPORT void clientLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::clientLeftAttributeGetter(info);
-}
+    CORE_EXPORT void clientLeftAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::clientLeftAttributeGetter(info);
+    }
 
-static void clientWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientWidthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->clientWidth());
-}
+        v8SetReturnValueInt(info, impl->clientWidth());
+    }
 
-CORE_EXPORT void clientWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::clientWidthAttributeGetter(info);
-}
+    CORE_EXPORT void clientWidthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::clientWidthAttributeGetter(info);
+    }
 
-static void clientHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientHeightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->clientHeight());
-}
+        v8SetReturnValueInt(info, impl->clientHeight());
+    }
 
-CORE_EXPORT void clientHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::clientHeightAttributeGetter(info);
-}
+    CORE_EXPORT void clientHeightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::clientHeightAttributeGetter(info);
+    }
 
-static void computedRoleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void computedRoleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->computedRole(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->computedRole(), info.GetIsolate());
+    }
 
-CORE_EXPORT void computedRoleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::computedRoleAttributeGetter(info);
-}
+    CORE_EXPORT void computedRoleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::computedRoleAttributeGetter(info);
+    }
 
-static void computedNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void computedNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->computedName(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->computedName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void computedNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::computedNameAttributeGetter(info);
-}
+    CORE_EXPORT void computedNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::computedNameAttributeGetter(info);
+    }
 
-static void onbeforecopyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onbeforecopyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onbeforecopy()));
+        EventListener* cppValue(WTF::getPtr(impl->onbeforecopy()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onbeforecopyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::onbeforecopyAttributeGetter(info);
-}
+    CORE_EXPORT void onbeforecopyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::onbeforecopyAttributeGetter(info);
+    }
 
-static void onbeforecopyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void onbeforecopyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnbeforecopy(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnbeforecopy(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onbeforecopyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onbeforecopyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::onbeforecopyAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::onbeforecopyAttributeSetter(v8Value, info);
+    }
 
-static void onbeforecutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onbeforecutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onbeforecut()));
+        EventListener* cppValue(WTF::getPtr(impl->onbeforecut()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onbeforecutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::onbeforecutAttributeGetter(info);
-}
+    CORE_EXPORT void onbeforecutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::onbeforecutAttributeGetter(info);
+    }
 
-static void onbeforecutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void onbeforecutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnbeforecut(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnbeforecut(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onbeforecutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onbeforecutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::onbeforecutAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::onbeforecutAttributeSetter(v8Value, info);
+    }
 
-static void onbeforepasteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onbeforepasteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onbeforepaste()));
+        EventListener* cppValue(WTF::getPtr(impl->onbeforepaste()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onbeforepasteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::onbeforepasteAttributeGetter(info);
-}
+    CORE_EXPORT void onbeforepasteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::onbeforepasteAttributeGetter(info);
+    }
 
-static void onbeforepasteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void onbeforepasteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnbeforepaste(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnbeforepaste(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onbeforepasteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onbeforepasteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::onbeforepasteAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::onbeforepasteAttributeSetter(v8Value, info);
+    }
 
-static void oncopyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncopyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->oncopy()));
+        EventListener* cppValue(WTF::getPtr(impl->oncopy()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncopyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::oncopyAttributeGetter(info);
-}
+    CORE_EXPORT void oncopyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::oncopyAttributeGetter(info);
+    }
 
-static void oncopyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void oncopyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOncopy(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOncopy(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncopyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncopyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::oncopyAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::oncopyAttributeSetter(v8Value, info);
+    }
 
-static void oncutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void oncutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->oncut()));
+        EventListener* cppValue(WTF::getPtr(impl->oncut()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void oncutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::oncutAttributeGetter(info);
-}
+    CORE_EXPORT void oncutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::oncutAttributeGetter(info);
+    }
 
-static void oncutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void oncutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOncut(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOncut(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void oncutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void oncutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::oncutAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::oncutAttributeSetter(v8Value, info);
+    }
 
-static void onpasteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onpasteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onpaste()));
+        EventListener* cppValue(WTF::getPtr(impl->onpaste()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onpasteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::onpasteAttributeGetter(info);
-}
+    CORE_EXPORT void onpasteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::onpasteAttributeGetter(info);
+    }
 
-static void onpasteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void onpasteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnpaste(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnpaste(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onpasteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onpasteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::onpasteAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::onpasteAttributeSetter(v8Value, info);
+    }
 
-static void onsearchAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onsearchAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onsearch()));
+        EventListener* cppValue(WTF::getPtr(impl->onsearch()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onsearchAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::onsearchAttributeGetter(info);
-}
+    CORE_EXPORT void onsearchAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::onsearchAttributeGetter(info);
+    }
 
-static void onsearchAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void onsearchAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnsearch(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnsearch(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onsearchAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onsearchAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::onsearchAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::onsearchAttributeSetter(v8Value, info);
+    }
 
-static void onselectstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onselectstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onselectstart()));
+        EventListener* cppValue(WTF::getPtr(impl->onselectstart()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onselectstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::onselectstartAttributeGetter(info);
-}
+    CORE_EXPORT void onselectstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::onselectstartAttributeGetter(info);
+    }
 
-static void onselectstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void onselectstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnselectstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnselectstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onselectstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onselectstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::onselectstartAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::onselectstartAttributeSetter(v8Value, info);
+    }
 
-static void onwheelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onwheelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onwheel()));
+        EventListener* cppValue(WTF::getPtr(impl->onwheel()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onwheelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::onwheelAttributeGetter(info);
-}
+    CORE_EXPORT void onwheelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::onwheelAttributeGetter(info);
+    }
 
-static void onwheelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void onwheelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  impl->setOnwheel(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnwheel(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onwheelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onwheelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::onwheelAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::onwheelAttributeSetter(v8Value, info);
+    }
 
-static void onwebkitfullscreenchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onwebkitfullscreenchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(ElementFullscreen::onwebkitfullscreenchange(*impl));
+        EventListener* cppValue(ElementFullscreen::onwebkitfullscreenchange(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onwebkitfullscreenchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::onwebkitfullscreenchangeAttributeGetter(info);
-}
+    CORE_EXPORT void onwebkitfullscreenchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::onwebkitfullscreenchangeAttributeGetter(info);
+    }
 
-static void onwebkitfullscreenchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void onwebkitfullscreenchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  ElementFullscreen::setOnwebkitfullscreenchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        ElementFullscreen::setOnwebkitfullscreenchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onwebkitfullscreenchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onwebkitfullscreenchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::onwebkitfullscreenchangeAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::onwebkitfullscreenchangeAttributeSetter(v8Value, info);
+    }
 
-static void onwebkitfullscreenerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onwebkitfullscreenerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  EventListener* cppValue(ElementFullscreen::onwebkitfullscreenerror(*impl));
+        EventListener* cppValue(ElementFullscreen::onwebkitfullscreenerror(*impl));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onwebkitfullscreenerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::onwebkitfullscreenerrorAttributeGetter(info);
-}
+    CORE_EXPORT void onwebkitfullscreenerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::onwebkitfullscreenerrorAttributeGetter(info);
+    }
 
-static void onwebkitfullscreenerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Element* impl = V8Element::toImpl(holder);
+    static void onwebkitfullscreenerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Element* impl = V8Element::toImpl(holder);
 
-  // Prepare the value to be set.
+        // Prepare the value to be set.
 
-  ElementFullscreen::setOnwebkitfullscreenerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        ElementFullscreen::setOnwebkitfullscreenerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onwebkitfullscreenerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onwebkitfullscreenerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  ElementV8Internal::onwebkitfullscreenerrorAttributeSetter(v8Value, info);
-}
+        ElementV8Internal::onwebkitfullscreenerrorAttributeSetter(v8Value, info);
+    }
 
-static void previousElementSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void previousElementSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueFast(info, NonDocumentTypeChildNode::previousElementSibling(*impl), impl);
-}
+        v8SetReturnValueFast(info, NonDocumentTypeChildNode::previousElementSibling(*impl), impl);
+    }
 
-CORE_EXPORT void previousElementSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::previousElementSiblingAttributeGetter(info);
-}
+    CORE_EXPORT void previousElementSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::previousElementSiblingAttributeGetter(info);
+    }
 
-static void previousElementSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void previousElementSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, NonDocumentTypeChildNode::previousElementSibling(*impl));
-}
+        v8SetReturnValueForMainWorld(info, NonDocumentTypeChildNode::previousElementSibling(*impl));
+    }
 
-CORE_EXPORT void previousElementSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::previousElementSiblingAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void previousElementSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::previousElementSiblingAttributeGetterForMainWorld(info);
+    }
 
-static void nextElementSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nextElementSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueFast(info, NonDocumentTypeChildNode::nextElementSibling(*impl), impl);
-}
+        v8SetReturnValueFast(info, NonDocumentTypeChildNode::nextElementSibling(*impl), impl);
+    }
 
-CORE_EXPORT void nextElementSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::nextElementSiblingAttributeGetter(info);
-}
+    CORE_EXPORT void nextElementSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::nextElementSiblingAttributeGetter(info);
+    }
 
-static void nextElementSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nextElementSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, NonDocumentTypeChildNode::nextElementSibling(*impl));
-}
+        v8SetReturnValueForMainWorld(info, NonDocumentTypeChildNode::nextElementSibling(*impl));
+    }
 
-CORE_EXPORT void nextElementSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::nextElementSiblingAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void nextElementSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::nextElementSiblingAttributeGetterForMainWorld(info);
+    }
 
-static void childrenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void childrenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueFast(info, ParentNode::children(*impl), impl);
-}
+        v8SetReturnValueFast(info, ParentNode::children(*impl), impl);
+    }
 
-CORE_EXPORT void childrenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::childrenAttributeGetter(info);
-}
+    CORE_EXPORT void childrenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::childrenAttributeGetter(info);
+    }
 
-static void childrenAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void childrenAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, ParentNode::children(*impl));
-}
+        v8SetReturnValueForMainWorld(info, ParentNode::children(*impl));
+    }
 
-CORE_EXPORT void childrenAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::childrenAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void childrenAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::childrenAttributeGetterForMainWorld(info);
+    }
 
-static void firstElementChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void firstElementChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueFast(info, ParentNode::firstElementChild(*impl), impl);
-}
+        v8SetReturnValueFast(info, ParentNode::firstElementChild(*impl), impl);
+    }
 
-CORE_EXPORT void firstElementChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::firstElementChildAttributeGetter(info);
-}
+    CORE_EXPORT void firstElementChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::firstElementChildAttributeGetter(info);
+    }
 
-static void firstElementChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void firstElementChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, ParentNode::firstElementChild(*impl));
-}
+        v8SetReturnValueForMainWorld(info, ParentNode::firstElementChild(*impl));
+    }
 
-CORE_EXPORT void firstElementChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::firstElementChildAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void firstElementChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::firstElementChildAttributeGetterForMainWorld(info);
+    }
 
-static void lastElementChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lastElementChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueFast(info, ParentNode::lastElementChild(*impl), impl);
-}
+        v8SetReturnValueFast(info, ParentNode::lastElementChild(*impl), impl);
+    }
 
-CORE_EXPORT void lastElementChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::lastElementChildAttributeGetter(info);
-}
+    CORE_EXPORT void lastElementChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::lastElementChildAttributeGetter(info);
+    }
 
-static void lastElementChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lastElementChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, ParentNode::lastElementChild(*impl));
-}
+        v8SetReturnValueForMainWorld(info, ParentNode::lastElementChild(*impl));
+    }
 
-CORE_EXPORT void lastElementChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::lastElementChildAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void lastElementChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::lastElementChildAttributeGetterForMainWorld(info);
+    }
 
-static void childElementCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void childElementCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Element* impl = V8Element::toImpl(holder);
+        Element* impl = V8Element::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, ParentNode::childElementCount(*impl));
-}
+        v8SetReturnValueUnsigned(info, ParentNode::childElementCount(*impl));
+    }
 
-CORE_EXPORT void childElementCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::childElementCountAttributeGetter(info);
-}
+    CORE_EXPORT void childElementCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::childElementCountAttributeGetter(info);
+    }
 
-static void setPointerCaptureMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setPointerCapture");
+    static void setPointerCaptureMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setPointerCapture");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  int pointerId;
-  pointerId = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int pointerId;
+        pointerId = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setPointerCapture(pointerId, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setPointerCapture(pointerId, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void setPointerCaptureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::setPointerCaptureMethod(info);
-}
+    CORE_EXPORT void setPointerCaptureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::setPointerCaptureMethod(info);
+    }
 
-static void releasePointerCaptureMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "releasePointerCapture");
+    static void releasePointerCaptureMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "releasePointerCapture");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  int pointerId;
-  pointerId = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int pointerId;
+        pointerId = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->releasePointerCapture(pointerId, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->releasePointerCapture(pointerId, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void releasePointerCaptureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::releasePointerCaptureMethod(info);
-}
+    CORE_EXPORT void releasePointerCaptureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::releasePointerCaptureMethod(info);
+    }
 
-static void hasPointerCaptureMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "hasPointerCapture");
+    static void hasPointerCaptureMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "hasPointerCapture");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  int pointerId;
-  pointerId = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        int pointerId;
+        pointerId = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValueBool(info, impl->hasPointerCapture(pointerId));
-}
+        v8SetReturnValueBool(info, impl->hasPointerCapture(pointerId));
+    }
 
-CORE_EXPORT  void hasPointerCaptureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::hasPointerCaptureMethod(info);
-}
+    CORE_EXPORT void hasPointerCaptureMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::hasPointerCaptureMethod(info);
+    }
 
-static void hasAttributesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void hasAttributesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  v8SetReturnValueBool(info, impl->hasAttributes());
-}
+        v8SetReturnValueBool(info, impl->hasAttributes());
+    }
 
-CORE_EXPORT  void hasAttributesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::hasAttributesMethod(info);
-}
+    CORE_EXPORT void hasAttributesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::hasAttributesMethod(info);
+    }
 
-static void getAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void getAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttribute", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttribute", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  v8SetReturnValueStringOrNull(info, impl->getAttribute(name), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->getAttribute(name), info.GetIsolate());
+    }
 
-CORE_EXPORT  void getAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getAttributeMethod(info);
-}
+    CORE_EXPORT void getAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getAttributeMethod(info);
+    }
 
-static void getAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void getAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttributeNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttributeNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> localName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> localName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  localName = info[1];
-  if (!localName.prepare())
-    return;
+        localName = info[1];
+        if (!localName.prepare())
+            return;
 
-  v8SetReturnValueStringOrNull(info, impl->getAttributeNS(namespaceURI, localName), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->getAttributeNS(namespaceURI, localName), info.GetIsolate());
+    }
 
-CORE_EXPORT  void getAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getAttributeNSMethod(info);
-}
+    CORE_EXPORT void getAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getAttributeNSMethod(info);
+    }
 
-static void setAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setAttribute");
+    static void setAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setAttribute");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> name;
-  V8StringResource<> value;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        V8StringResource<> value;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  value = info[1];
-  if (!value.prepare())
-    return;
+        value = info[1];
+        if (!value.prepare())
+            return;
 
-  impl->setAttribute(name, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setAttribute(name, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void setAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::setAttributeMethod(info);
-}
+    CORE_EXPORT void setAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::setAttributeMethod(info);
+    }
 
-static void setAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setAttributeNS");
+    static void setAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setAttributeNS");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> name;
-  V8StringResource<> value;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> name;
+        V8StringResource<> value;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  name = info[1];
-  if (!name.prepare())
-    return;
+        name = info[1];
+        if (!name.prepare())
+            return;
 
-  value = info[2];
-  if (!value.prepare())
-    return;
+        value = info[2];
+        if (!value.prepare())
+            return;
 
-  impl->setAttributeNS(namespaceURI, name, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setAttributeNS(namespaceURI, name, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void setAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::setAttributeNSMethod(info);
-}
+    CORE_EXPORT void setAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::setAttributeNSMethod(info);
+    }
 
-static void removeAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void removeAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeAttribute", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeAttribute", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  impl->removeAttribute(name);
-}
+        impl->removeAttribute(name);
+    }
 
-CORE_EXPORT  void removeAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::removeAttributeMethod(info);
-}
+    CORE_EXPORT void removeAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::removeAttributeMethod(info);
+    }
 
-static void removeAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void removeAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeAttributeNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeAttributeNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> localName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> localName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  localName = info[1];
-  if (!localName.prepare())
-    return;
+        localName = info[1];
+        if (!localName.prepare())
+            return;
 
-  impl->removeAttributeNS(namespaceURI, localName);
-}
+        impl->removeAttributeNS(namespaceURI, localName);
+    }
 
-CORE_EXPORT  void removeAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::removeAttributeNSMethod(info);
-}
+    CORE_EXPORT void removeAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::removeAttributeNSMethod(info);
+    }
 
-static void hasAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void hasAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("hasAttribute", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("hasAttribute", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  v8SetReturnValueBool(info, impl->hasAttribute(name));
-}
+        v8SetReturnValueBool(info, impl->hasAttribute(name));
+    }
 
-CORE_EXPORT  void hasAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::hasAttributeMethod(info);
-}
+    CORE_EXPORT void hasAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::hasAttributeMethod(info);
+    }
 
-static void hasAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void hasAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("hasAttributeNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("hasAttributeNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> localName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> localName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  localName = info[1];
-  if (!localName.prepare())
-    return;
+        localName = info[1];
+        if (!localName.prepare())
+            return;
 
-  v8SetReturnValueBool(info, impl->hasAttributeNS(namespaceURI, localName));
-}
+        v8SetReturnValueBool(info, impl->hasAttributeNS(namespaceURI, localName));
+    }
 
-CORE_EXPORT  void hasAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::hasAttributeNSMethod(info);
-}
+    CORE_EXPORT void hasAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::hasAttributeNSMethod(info);
+    }
 
-static void getAttributeNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void getAttributeNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttributeNode", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttributeNode", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> name;
-  name = info[0];
-  if (!name.prepare())
-    return;
+        V8StringResource<> name;
+        name = info[0];
+        if (!name.prepare())
+            return;
 
-  v8SetReturnValueFast(info, impl->getAttributeNode(name), impl);
-}
+        v8SetReturnValueFast(info, impl->getAttributeNode(name), impl);
+    }
 
-CORE_EXPORT  void getAttributeNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getAttributeNodeMethod(info);
-}
+    CORE_EXPORT void getAttributeNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getAttributeNodeMethod(info);
+    }
 
-static void getAttributeNodeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void getAttributeNodeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttributeNodeNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getAttributeNodeNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> localName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> localName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  localName = info[1];
-  if (!localName.prepare())
-    return;
+        localName = info[1];
+        if (!localName.prepare())
+            return;
 
-  v8SetReturnValueFast(info, impl->getAttributeNodeNS(namespaceURI, localName), impl);
-}
+        v8SetReturnValueFast(info, impl->getAttributeNodeNS(namespaceURI, localName), impl);
+    }
 
-CORE_EXPORT  void getAttributeNodeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getAttributeNodeNSMethod(info);
-}
+    CORE_EXPORT void getAttributeNodeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getAttributeNodeNSMethod(info);
+    }
 
-static void setAttributeNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setAttributeNode");
+    static void setAttributeNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setAttributeNode");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Attr* attr;
-  attr = V8Attr::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!attr) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Attr'.");
+        Attr* attr;
+        attr = V8Attr::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!attr) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Attr'.");
 
-    return;
-  }
+            return;
+        }
 
-  Attr* result = impl->setAttributeNode(attr, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        Attr* result = impl->setAttributeNode(attr, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void setAttributeNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::setAttributeNodeMethod(info);
-}
+    CORE_EXPORT void setAttributeNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::setAttributeNodeMethod(info);
+    }
 
-static void setAttributeNodeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setAttributeNodeNS");
+    static void setAttributeNodeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setAttributeNodeNS");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Attr* attr;
-  attr = V8Attr::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!attr) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Attr'.");
+        Attr* attr;
+        attr = V8Attr::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!attr) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Attr'.");
 
-    return;
-  }
+            return;
+        }
 
-  Attr* result = impl->setAttributeNodeNS(attr, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        Attr* result = impl->setAttributeNodeNS(attr, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void setAttributeNodeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::setAttributeNodeNSMethod(info);
-}
+    CORE_EXPORT void setAttributeNodeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::setAttributeNodeNSMethod(info);
+    }
 
-static void removeAttributeNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "removeAttributeNode");
+    static void removeAttributeNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "removeAttributeNode");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Attr* attr;
-  attr = V8Attr::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!attr) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Attr'.");
+        Attr* attr;
+        attr = V8Attr::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!attr) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Attr'.");
 
-    return;
-  }
+            return;
+        }
 
-  Attr* result = impl->removeAttributeNode(attr, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        Attr* result = impl->removeAttributeNode(attr, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void removeAttributeNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::removeAttributeNodeMethod(info);
-}
+    CORE_EXPORT void removeAttributeNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::removeAttributeNodeMethod(info);
+    }
 
-static void closestMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "closest");
+    static void closestMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "closest");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> selectors;
-  selectors = info[0];
-  if (!selectors.prepare())
-    return;
+        V8StringResource<> selectors;
+        selectors = info[0];
+        if (!selectors.prepare())
+            return;
 
-  Element* result = impl->closest(selectors, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        Element* result = impl->closest(selectors, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void closestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::closestMethod(info);
-}
+    CORE_EXPORT void closestMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::closestMethod(info);
+    }
 
-static void matchesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "matches");
+    static void matchesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "matches");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> selectors;
-  selectors = info[0];
-  if (!selectors.prepare())
-    return;
+        V8StringResource<> selectors;
+        selectors = info[0];
+        if (!selectors.prepare())
+            return;
 
-  bool result = impl->matches(selectors, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
+        bool result = impl->matches(selectors, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
 
-CORE_EXPORT  void matchesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::matchesMethod(info);
-}
+    CORE_EXPORT void matchesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::matchesMethod(info);
+    }
 
-static void webkitMatchesSelectorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "webkitMatchesSelector");
+    static void webkitMatchesSelectorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "webkitMatchesSelector");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> selectors;
-  selectors = info[0];
-  if (!selectors.prepare())
-    return;
+        V8StringResource<> selectors;
+        selectors = info[0];
+        if (!selectors.prepare())
+            return;
 
-  bool result = impl->matches(selectors, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
+        bool result = impl->matches(selectors, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
 
-CORE_EXPORT  void webkitMatchesSelectorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementPrefixedMatchesSelector);
-  ElementV8Internal::webkitMatchesSelectorMethod(info);
-}
+    CORE_EXPORT void webkitMatchesSelectorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementPrefixedMatchesSelector);
+        ElementV8Internal::webkitMatchesSelectorMethod(info);
+    }
 
-static void attachShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "attachShadow");
+    static void attachShadowMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "attachShadow");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  ShadowRootInit shadowRootInitDict;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('shadowRootInitDict') is not an object.");
+        ShadowRootInit shadowRootInitDict;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('shadowRootInitDict') is not an object.");
 
-    return;
-  }
-  V8ShadowRootInit::toImpl(info.GetIsolate(), info[0], shadowRootInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8ShadowRootInit::toImpl(info.GetIsolate(), info[0], shadowRootInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ShadowRoot* result = impl->attachShadow(scriptState, shadowRootInitDict, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        ShadowRoot* result = impl->attachShadow(scriptState, shadowRootInitDict, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void attachShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementAttachShadow);
-  ElementV8Internal::attachShadowMethod(info);
-}
+    CORE_EXPORT void attachShadowMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementAttachShadow);
+        ElementV8Internal::attachShadowMethod(info);
+    }
 
-static void getElementsByTagNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void getElementsByTagNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByTagName", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByTagName", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> localName;
-  localName = info[0];
-  if (!localName.prepare())
-    return;
+        V8StringResource<> localName;
+        localName = info[0];
+        if (!localName.prepare())
+            return;
 
-  v8SetReturnValueFast(info, impl->getElementsByTagName(localName), impl);
-}
+        v8SetReturnValueFast(info, impl->getElementsByTagName(localName), impl);
+    }
 
-CORE_EXPORT  void getElementsByTagNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getElementsByTagNameMethod(info);
-}
+    CORE_EXPORT void getElementsByTagNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getElementsByTagNameMethod(info);
+    }
 
-static void getElementsByTagNameNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void getElementsByTagNameNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByTagNameNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByTagNameNS", "Element", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> localName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> localName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  localName = info[1];
-  if (!localName.prepare())
-    return;
+        localName = info[1];
+        if (!localName.prepare())
+            return;
 
-  v8SetReturnValueFast(info, impl->getElementsByTagNameNS(namespaceURI, localName), impl);
-}
+        v8SetReturnValueFast(info, impl->getElementsByTagNameNS(namespaceURI, localName), impl);
+    }
 
-CORE_EXPORT  void getElementsByTagNameNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getElementsByTagNameNSMethod(info);
-}
+    CORE_EXPORT void getElementsByTagNameNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getElementsByTagNameNSMethod(info);
+    }
 
-static void getElementsByClassNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void getElementsByClassNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByClassName", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByClassName", "Element", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> classNames;
-  classNames = info[0];
-  if (!classNames.prepare())
-    return;
+        V8StringResource<> classNames;
+        classNames = info[0];
+        if (!classNames.prepare())
+            return;
 
-  v8SetReturnValueFast(info, impl->getElementsByClassName(classNames), impl);
-}
+        v8SetReturnValueFast(info, impl->getElementsByClassName(classNames), impl);
+    }
 
-CORE_EXPORT  void getElementsByClassNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getElementsByClassNameMethod(info);
-}
+    CORE_EXPORT void getElementsByClassNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getElementsByClassNameMethod(info);
+    }
 
-static void insertAdjacentElementMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "insertAdjacentElement");
+    static void insertAdjacentElementMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "insertAdjacentElement");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> where;
-  Element* element;
-  where = info[0];
+        V8StringResource<> where;
+        Element* element;
+            where = info[0];
   if (!where.prepare())
-    return;
+      return;
 
   element = V8Element::toImplWithTypeCheck(info.GetIsolate(), info[1]);
   if (!element) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Element'.");
+      exceptionState.throwTypeError("parameter 2 is not of type 'Element'.");
 
-    return;
+      return;
   }
 
   Element* result = impl->insertAdjacentElement(where, element, exceptionState);
   if (exceptionState.hadException()) {
-    return;
+      return;
   }
   v8SetReturnValueFast(info, result, impl);
-}
+    }
 
-CORE_EXPORT  void insertAdjacentElementMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::insertAdjacentElementMethod(info);
-}
+    CORE_EXPORT void insertAdjacentElementMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::insertAdjacentElementMethod(info);
+    }
 
-static void insertAdjacentTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "insertAdjacentText");
+    static void insertAdjacentTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "insertAdjacentText");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> where;
-  V8StringResource<> data;
-  where = info[0];
+        V8StringResource<> where;
+        V8StringResource<> data;
+            where = info[0];
   if (!where.prepare())
-    return;
+      return;
 
   data = info[1];
   if (!data.prepare())
-    return;
+      return;
 
   impl->insertAdjacentText(where, data, exceptionState);
   if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void insertAdjacentTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::insertAdjacentTextMethod(info);
-}
-
-static void insertAdjacentHTMLMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "insertAdjacentHTML");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> position;
-  V8StringResource<> text;
-  position = info[0];
-  if (!position.prepare())
-    return;
-
-  text = info[1];
-  if (!text.prepare())
-    return;
-
-  impl->insertAdjacentHTML(position, text, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void insertAdjacentHTMLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::insertAdjacentHTMLMethod(info);
-}
-
-static void requestPointerLockMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  impl->requestPointerLock();
-}
-
-CORE_EXPORT  void requestPointerLockMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementRequestPointerLock);
-  ElementV8Internal::requestPointerLockMethod(info);
-}
-
-static void getClientRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  v8SetReturnValueFast(info, impl->getClientRects(), impl);
-}
-
-CORE_EXPORT  void getClientRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getClientRectsMethod(info);
-}
-
-static void getBoundingClientRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  v8SetReturnValueFast(info, impl->getBoundingClientRect(), impl);
-}
-
-CORE_EXPORT  void getBoundingClientRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getBoundingClientRectMethod(info);
-}
-
-static void scrollIntoViewMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollIntoView");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  bool alignWithTop;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->scrollIntoView();
-    return;
-  }
-  alignWithTop = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scrollIntoView(alignWithTop);
-}
-
-CORE_EXPORT  void scrollIntoViewMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::scrollIntoViewMethod(info);
-}
-
-static void scroll1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scroll");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  ScrollToOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
-
-    return;
-  }
-  V8ScrollToOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scrollTo(options);
-}
-
-static void scroll2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scroll");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  double x;
-  double y;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scrollTo(x, y);
-}
-
-static void scrollMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 0:
-      if (true) {
-        scroll1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (true) {
-        scroll1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        scroll2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scroll");
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-CORE_EXPORT  void scrollMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::scrollMethod(info);
-}
-
-static void scrollTo1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollTo");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  ScrollToOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
-
-    return;
-  }
-  V8ScrollToOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scrollTo(options);
-}
-
-static void scrollTo2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollTo");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  double x;
-  double y;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scrollTo(x, y);
-}
-
-static void scrollToMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 0:
-      if (true) {
-        scrollTo1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (true) {
-        scrollTo1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        scrollTo2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollTo");
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-CORE_EXPORT  void scrollToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::scrollToMethod(info);
-}
-
-static void scrollBy1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollBy");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  ScrollToOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
-
-    return;
-  }
-  V8ScrollToOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scrollBy(options);
-}
-
-static void scrollBy2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollBy");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  double x;
-  double y;
-  x = toDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  y = toDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scrollBy(x, y);
-}
-
-static void scrollByMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 0:
-      if (true) {
-        scrollBy1Method(info);
-        return;
-      }
-      break;
-    case 1:
-      if (true) {
-        scrollBy1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        scrollBy2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollBy");
-
-  if (isArityError) {
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
-
-CORE_EXPORT  void scrollByMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::scrollByMethod(info);
-}
-
-static void setApplyScrollMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setApplyScroll");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  ScrollStateCallback* scrollStateCallback;
-  V8StringResource<> nativeScrollBehavior;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  scrollStateCallback = V8ScrollStateCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
-
-  nativeScrollBehavior = info[1];
-  if (!nativeScrollBehavior.prepare())
-    return;
-  const char* validNativeScrollBehaviorValues[] = {
-      "disable-native-scroll",
-      "perform-before-native-scroll",
-      "perform-after-native-scroll",
-  };
-  if (!isValidEnum(nativeScrollBehavior, validNativeScrollBehaviorValues, WTF_ARRAY_LENGTH(validNativeScrollBehaviorValues), "NativeScrollBehavior", exceptionState)) {
-    return;
-  }
-
-  impl->setApplyScroll(scrollStateCallback, nativeScrollBehavior);
-}
-
-CORE_EXPORT  void setApplyScrollMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::setApplyScrollMethod(info);
-}
-
-static void setDistributeScrollMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setDistributeScroll");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  ScrollStateCallback* scrollStateCallback;
-  V8StringResource<> nativeScrollBehavior;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  scrollStateCallback = V8ScrollStateCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
-
-  nativeScrollBehavior = info[1];
-  if (!nativeScrollBehavior.prepare())
-    return;
-  const char* validNativeScrollBehaviorValues[] = {
-      "disable-native-scroll",
-      "perform-before-native-scroll",
-      "perform-after-native-scroll",
-  };
-  if (!isValidEnum(nativeScrollBehavior, validNativeScrollBehaviorValues, WTF_ARRAY_LENGTH(validNativeScrollBehaviorValues), "NativeScrollBehavior", exceptionState)) {
-    return;
-  }
-
-  impl->setDistributeScroll(scrollStateCallback, nativeScrollBehavior);
-}
-
-CORE_EXPORT  void setDistributeScrollMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::setDistributeScrollMethod(info);
-}
-
-static void scrollIntoViewIfNeededMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollIntoViewIfNeeded");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  bool centerIfNeeded;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->scrollIntoViewIfNeeded();
-    return;
-  }
-  centerIfNeeded = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->scrollIntoViewIfNeeded(centerIfNeeded);
-}
-
-CORE_EXPORT  void scrollIntoViewIfNeededMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementScrollIntoViewIfNeeded);
-  ElementV8Internal::scrollIntoViewIfNeededMethod(info);
-}
-
-static void createShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "createShadowRoot");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  ShadowRoot* result = impl->createShadowRoot(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementCreateShadowRoot);
-  ElementV8Internal::createShadowRootMethod(info);
-}
-
-static void getDestinationInsertionPointsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  v8SetReturnValueFast(info, impl->getDestinationInsertionPoints(), impl);
-}
-
-CORE_EXPORT  void getDestinationInsertionPointsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getDestinationInsertionPointsMethod(info);
-}
-
-static void animate1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "animate");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  DictionarySequenceOrDictionary effect;
-  double timing;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  V8DictionarySequenceOrDictionary::toImpl(info.GetIsolate(), info[0], effect, UnionTypeConversionMode::Nullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    Animation* result = ElementAnimation::animate(scriptState, *impl, effect, exceptionState);
-    if (exceptionState.hadException()) {
       return;
+  }
     }
-    v8SetReturnValueFast(info, result, impl);
-    return;
-  }
-  timing = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  Animation* result = ElementAnimation::animate(scriptState, *impl, effect, timing, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-static void animate2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "animate");
-
-  Element* impl = V8Element::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  DictionarySequenceOrDictionary effect;
-  KeyframeEffectOptions timing;
-  V8DictionarySequenceOrDictionary::toImpl(info.GetIsolate(), info[0], effect, UnionTypeConversionMode::Nullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('timing') is not an object.");
-
-    return;
-  }
-  V8KeyframeEffectOptions::toImpl(info.GetIsolate(), info[1], timing, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  Animation* result = ElementAnimation::animate(scriptState, *impl, effect, timing, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-static void animateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 1:
-      if (true) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Element_Animate_Method);
-        animate1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (info[1]->IsUndefined()) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Element_Animate_Method);
-        animate1Method(info);
-        return;
-      }
-      if (info[1]->IsObject()) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Element_Animate_Method);
-        animate2Method(info);
-        return;
-      }
-      if (true) {
-        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Element_Animate_Method);
-        animate1Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "animate");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+    CORE_EXPORT void insertAdjacentTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::insertAdjacentTextMethod(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-CORE_EXPORT  void animateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::animateMethod(info);
-}
+    static void insertAdjacentHTMLMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "insertAdjacentHTML");
 
-static void getAnimationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  v8SetReturnValue(info, ToV8(ElementAnimation::getAnimations(*impl), info.Holder(), info.GetIsolate()));
-}
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-CORE_EXPORT  void getAnimationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::getAnimationsMethod(info);
-}
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-static void beforeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "before");
+        V8StringResource<> position;
+        V8StringResource<> text;
+        position = info[0];
+        if (!position.prepare())
+            return;
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        text = info[1];
+        if (!text.prepare())
+            return;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        impl->insertAdjacentHTML(position, text, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    CORE_EXPORT void insertAdjacentHTMLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::insertAdjacentHTMLMethod(info);
+    }
 
-  ChildNode::before(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void requestPointerLockMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-CORE_EXPORT  void beforeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::beforeMethod(info);
-}
+        impl->requestPointerLock();
+    }
 
-static void afterMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "after");
+    CORE_EXPORT void requestPointerLockMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementRequestPointerLock);
+        ElementV8Internal::requestPointerLockMethod(info);
+    }
 
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void getClientRectsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        v8SetReturnValueFast(info, impl->getClientRects(), impl);
+    }
 
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    CORE_EXPORT void getClientRectsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getClientRectsMethod(info);
+    }
 
-  ChildNode::after(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void getBoundingClientRectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
 
-CORE_EXPORT  void afterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::afterMethod(info);
-}
+        v8SetReturnValueFast(info, impl->getBoundingClientRect(), impl);
+    }
 
-static void replaceWithMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "replaceWith");
+    CORE_EXPORT void getBoundingClientRectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getBoundingClientRectMethod(info);
+    }
 
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void scrollIntoViewMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollIntoView");
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        bool alignWithTop;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->scrollIntoView();
+            return;
+        }
+        alignWithTop = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ChildNode::replaceWith(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->scrollIntoView(alignWithTop);
+    }
 
-CORE_EXPORT  void replaceWithMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::replaceWithMethod(info);
-}
+    CORE_EXPORT void scrollIntoViewMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::scrollIntoViewMethod(info);
+    }
 
-static void removeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "remove");
+    static void scroll1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scroll");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        ScrollToOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
 
-  ChildNode::remove(*impl, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+            return;
+        }
+        V8ScrollToOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-CORE_EXPORT  void removeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::removeMethod(info);
-}
+        impl->scrollTo(options);
+    }
 
-static void requestFullscreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void scroll2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scroll");
 
-  ElementFullscreen::requestFullscreen(*impl);
-}
+        Element* impl = V8Element::toImpl(info.Holder());
 
-CORE_EXPORT  void requestFullscreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::requestFullscreenMethod(info);
-}
+        double x;
+        double y;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-static void webkitRequestFullScreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ElementFullscreen::webkitRequestFullscreen(*impl);
-}
+        impl->scrollTo(x, y);
+    }
 
-CORE_EXPORT  void webkitRequestFullScreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedElementRequestFullScreen);
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-  V8PerContextData* contextData = scriptState->perContextData();
-  if (contextData && contextData->activityLogger()) {
-    ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "webkitRequestFullScreen");
-    Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
-    contextData->activityLogger()->logMethod("Element.webkitRequestFullScreen", info.Length(), loggerArgs.data());
-  }
-  ElementV8Internal::webkitRequestFullScreenMethod(info);
-}
+    static void scrollMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 0:
+            if (true) {
+                scroll1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (true) {
+                scroll1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                scroll2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
 
-static void webkitRequestFullscreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Element* impl = V8Element::toImpl(info.Holder());
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scroll");
 
-  ElementFullscreen::webkitRequestFullscreen(*impl);
-}
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
 
-CORE_EXPORT  void webkitRequestFullscreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedElementRequestFullscreen);
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-  V8PerContextData* contextData = scriptState->perContextData();
-  if (contextData && contextData->activityLogger()) {
-    ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "webkitRequestFullscreen");
-    Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
-    contextData->activityLogger()->logMethod("Element.webkitRequestFullscreen", info.Length(), loggerArgs.data());
-  }
-  ElementV8Internal::webkitRequestFullscreenMethod(info);
-}
+    CORE_EXPORT void scrollMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::scrollMethod(info);
+    }
 
-static void prependMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "prepend");
+    static void scrollTo1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollTo");
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        ScrollToOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
 
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8ScrollToOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ParentNode::prepend(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->scrollTo(options);
+    }
 
-CORE_EXPORT  void prependMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::prependMethod(info);
-}
+    static void scrollTo2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollTo");
 
-static void appendMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "append");
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  Element* impl = V8Element::toImpl(info.Holder());
+        double x;
+        double y;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        impl->scrollTo(x, y);
+    }
 
-  ParentNode::append(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void scrollToMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 0:
+            if (true) {
+                scrollTo1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (true) {
+                scrollTo1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                scrollTo2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
 
-CORE_EXPORT  void appendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  ElementV8Internal::appendMethod(info);
-}
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollTo");
 
-static void querySelectorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "querySelector");
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
 
-  Element* impl = V8Element::toImpl(info.Holder());
+    CORE_EXPORT void scrollToMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::scrollToMethod(info);
+    }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+    static void scrollBy1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollBy");
 
-  V8StringResource<> selectors;
-  selectors = info[0];
-  if (!selectors.prepare())
-    return;
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  Element* result = ParentNode::querySelector(*impl, selectors, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        ScrollToOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
 
-CORE_EXPORT  void querySelectorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::querySelectorMethod(info);
-}
+            return;
+        }
+        V8ScrollToOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-static void querySelectorAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "querySelectorAll");
+        impl->scrollBy(options);
+    }
 
-  Element* impl = V8Element::toImpl(info.Holder());
+    static void scrollBy2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollBy");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        Element* impl = V8Element::toImpl(info.Holder());
 
-  V8StringResource<> selectors;
-  selectors = info[0];
-  if (!selectors.prepare())
-    return;
+        double x;
+        double y;
+        x = toDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  NodeList* result = ParentNode::querySelectorAll(*impl, selectors, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
+        y = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-CORE_EXPORT  void querySelectorAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ElementV8Internal::querySelectorAllMethod(info);
-}
+        impl->scrollBy(x, y);
+    }
+
+    static void scrollByMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 0:
+            if (true) {
+                scrollBy1Method(info);
+                return;
+            }
+            break;
+        case 1:
+            if (true) {
+                scrollBy1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                scrollBy2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollBy");
+
+        if (isArityError) {
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void scrollByMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::scrollByMethod(info);
+    }
+
+    static void setApplyScrollMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setApplyScroll");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        ScrollStateCallback* scrollStateCallback;
+        V8StringResource<> nativeScrollBehavior;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+
+            return;
+        }
+        scrollStateCallback = V8ScrollStateCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+
+        nativeScrollBehavior = info[1];
+        if (!nativeScrollBehavior.prepare())
+            return;
+        const char* validNativeScrollBehaviorValues[] = {
+            "disable-native-scroll",
+            "perform-before-native-scroll",
+            "perform-after-native-scroll",
+        };
+        if (!isValidEnum(nativeScrollBehavior, validNativeScrollBehaviorValues, WTF_ARRAY_LENGTH(validNativeScrollBehaviorValues), "NativeScrollBehavior", exceptionState)) {
+            return;
+        }
+
+        impl->setApplyScroll(scrollStateCallback, nativeScrollBehavior);
+    }
+
+    CORE_EXPORT void setApplyScrollMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::setApplyScrollMethod(info);
+    }
+
+    static void setDistributeScrollMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "setDistributeScroll");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        ScrollStateCallback* scrollStateCallback;
+        V8StringResource<> nativeScrollBehavior;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+
+            return;
+        }
+        scrollStateCallback = V8ScrollStateCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+
+        nativeScrollBehavior = info[1];
+        if (!nativeScrollBehavior.prepare())
+            return;
+        const char* validNativeScrollBehaviorValues[] = {
+            "disable-native-scroll",
+            "perform-before-native-scroll",
+            "perform-after-native-scroll",
+        };
+        if (!isValidEnum(nativeScrollBehavior, validNativeScrollBehaviorValues, WTF_ARRAY_LENGTH(validNativeScrollBehaviorValues), "NativeScrollBehavior", exceptionState)) {
+            return;
+        }
+
+        impl->setDistributeScroll(scrollStateCallback, nativeScrollBehavior);
+    }
+
+    CORE_EXPORT void setDistributeScrollMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::setDistributeScrollMethod(info);
+    }
+
+    static void scrollIntoViewIfNeededMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "scrollIntoViewIfNeeded");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        bool centerIfNeeded;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->scrollIntoViewIfNeeded();
+            return;
+        }
+        centerIfNeeded = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->scrollIntoViewIfNeeded(centerIfNeeded);
+    }
+
+    CORE_EXPORT void scrollIntoViewIfNeededMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementScrollIntoViewIfNeeded);
+        ElementV8Internal::scrollIntoViewIfNeededMethod(info);
+    }
+
+    static void createShadowRootMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "createShadowRoot");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        ShadowRoot* result = impl->createShadowRoot(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createShadowRootMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::ElementCreateShadowRoot);
+        ElementV8Internal::createShadowRootMethod(info);
+    }
+
+    static void getDestinationInsertionPointsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        v8SetReturnValueFast(info, impl->getDestinationInsertionPoints(), impl);
+    }
+
+    CORE_EXPORT void getDestinationInsertionPointsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getDestinationInsertionPointsMethod(info);
+    }
+
+    static void animate1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "animate");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        DictionarySequenceOrDictionary effect;
+        double timing;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        V8DictionarySequenceOrDictionary::toImpl(info.GetIsolate(), info[0], effect, UnionTypeConversionMode::Nullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            Animation* result = ElementAnimation::animate(scriptState, *impl, effect, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8SetReturnValueFast(info, result, impl);
+            return;
+        }
+        timing = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        Animation* result = ElementAnimation::animate(scriptState, *impl, effect, timing, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    static void animate2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "animate");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        DictionarySequenceOrDictionary effect;
+        KeyframeEffectOptions timing;
+        V8DictionarySequenceOrDictionary::toImpl(info.GetIsolate(), info[0], effect, UnionTypeConversionMode::Nullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('timing') is not an object.");
+
+            return;
+        }
+        V8KeyframeEffectOptions::toImpl(info.GetIsolate(), info[1], timing, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        Animation* result = ElementAnimation::animate(scriptState, *impl, effect, timing, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    static void animateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 1:
+            if (true) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Element_Animate_Method);
+                animate1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (info[1]->IsUndefined()) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Element_Animate_Method);
+                animate1Method(info);
+                return;
+            }
+            if (info[1]->IsObject()) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Element_Animate_Method);
+                animate2Method(info);
+                return;
+            }
+            if (true) {
+                UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Element_Animate_Method);
+                animate1Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "animate");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void animateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::animateMethod(info);
+    }
+
+    static void getAnimationsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        v8SetReturnValue(info, ToV8(ElementAnimation::getAnimations(*impl), info.Holder(), info.GetIsolate()));
+    }
+
+    CORE_EXPORT void getAnimationsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::getAnimationsMethod(info);
+    }
+
+    static void beforeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "before");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ChildNode::before(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void beforeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::beforeMethod(info);
+    }
+
+    static void afterMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "after");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ChildNode::after(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void afterMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::afterMethod(info);
+    }
+
+    static void replaceWithMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "replaceWith");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ChildNode::replaceWith(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void replaceWithMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::replaceWithMethod(info);
+    }
+
+    static void removeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "remove");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        ChildNode::remove(*impl, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void removeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::removeMethod(info);
+    }
+
+    static void requestFullscreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        ElementFullscreen::requestFullscreen(*impl);
+    }
+
+    CORE_EXPORT void requestFullscreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::requestFullscreenMethod(info);
+    }
+
+    static void webkitRequestFullScreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        ElementFullscreen::webkitRequestFullscreen(*impl);
+    }
+
+    CORE_EXPORT void webkitRequestFullScreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedElementRequestFullScreen);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        V8PerContextData* contextData = scriptState->perContextData();
+        if (contextData && contextData->activityLogger()) {
+            ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "webkitRequestFullScreen");
+            Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
+            contextData->activityLogger()->logMethod("Element.webkitRequestFullScreen", info.Length(), loggerArgs.data());
+        }
+        ElementV8Internal::webkitRequestFullScreenMethod(info);
+    }
+
+    static void webkitRequestFullscreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        ElementFullscreen::webkitRequestFullscreen(*impl);
+    }
+
+    CORE_EXPORT void webkitRequestFullscreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedElementRequestFullscreen);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        V8PerContextData* contextData = scriptState->perContextData();
+        if (contextData && contextData->activityLogger()) {
+            ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "webkitRequestFullscreen");
+            Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
+            contextData->activityLogger()->logMethod("Element.webkitRequestFullscreen", info.Length(), loggerArgs.data());
+        }
+        ElementV8Internal::webkitRequestFullscreenMethod(info);
+    }
+
+    static void prependMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "prepend");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ParentNode::prepend(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void prependMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::prependMethod(info);
+    }
+
+    static void appendMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "append");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ParentNode::append(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void appendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        ElementV8Internal::appendMethod(info);
+    }
+
+    static void querySelectorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "querySelector");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> selectors;
+        selectors = info[0];
+        if (!selectors.prepare())
+            return;
+
+        Element* result = ParentNode::querySelector(*impl, selectors, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void querySelectorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::querySelectorMethod(info);
+    }
+
+    static void querySelectorAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Element", "querySelectorAll");
+
+        Element* impl = V8Element::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> selectors;
+        selectors = info[0];
+        if (!selectors.prepare())
+            return;
+
+        NodeList* result = ParentNode::querySelectorAll(*impl, selectors, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void querySelectorAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ElementV8Internal::querySelectorAllMethod(info);
+    }
 
 } // namespace ElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8ElementAccessors[] = {
-    {"namespaceURI", ElementV8Internal::namespaceURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"prefix", ElementV8Internal::prefixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"localName", ElementV8Internal::localNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"tagName", ElementV8Internal::tagNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"id", ElementV8Internal::idAttributeGetterCallback, ElementV8Internal::idAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"className", ElementV8Internal::classNameAttributeGetterCallback, ElementV8Internal::classNameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"classList", ElementV8Internal::classListAttributeGetterCallback, ElementV8Internal::classListAttributeSetterCallback, ElementV8Internal::classListAttributeGetterCallbackForMainWorld, ElementV8Internal::classListAttributeSetterCallbackForMainWorld, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"slot", ElementV8Internal::slotAttributeGetterCallback, ElementV8Internal::slotAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"attributes", ElementV8Internal::attributesAttributeGetterCallback, 0, ElementV8Internal::attributesAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shadowRoot", ElementV8Internal::shadowRootAttributeGetterCallback, 0, ElementV8Internal::shadowRootAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"assignedSlot", ElementV8Internal::assignedSlotAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"innerHTML", ElementV8Internal::innerHTMLAttributeGetterCallback, ElementV8Internal::innerHTMLAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"outerHTML", ElementV8Internal::outerHTMLAttributeGetterCallback, ElementV8Internal::outerHTMLAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollTop", ElementV8Internal::scrollTopAttributeGetterCallback, ElementV8Internal::scrollTopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollLeft", ElementV8Internal::scrollLeftAttributeGetterCallback, ElementV8Internal::scrollLeftAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollWidth", ElementV8Internal::scrollWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollHeight", ElementV8Internal::scrollHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientTop", ElementV8Internal::clientTopAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientLeft", ElementV8Internal::clientLeftAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientWidth", ElementV8Internal::clientWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientHeight", ElementV8Internal::clientHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onbeforecopy", ElementV8Internal::onbeforecopyAttributeGetterCallback, ElementV8Internal::onbeforecopyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onbeforecut", ElementV8Internal::onbeforecutAttributeGetterCallback, ElementV8Internal::onbeforecutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onbeforepaste", ElementV8Internal::onbeforepasteAttributeGetterCallback, ElementV8Internal::onbeforepasteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncopy", ElementV8Internal::oncopyAttributeGetterCallback, ElementV8Internal::oncopyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncut", ElementV8Internal::oncutAttributeGetterCallback, ElementV8Internal::oncutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpaste", ElementV8Internal::onpasteAttributeGetterCallback, ElementV8Internal::onpasteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsearch", ElementV8Internal::onsearchAttributeGetterCallback, ElementV8Internal::onsearchAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onselectstart", ElementV8Internal::onselectstartAttributeGetterCallback, ElementV8Internal::onselectstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwheel", ElementV8Internal::onwheelAttributeGetterCallback, ElementV8Internal::onwheelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwebkitfullscreenchange", ElementV8Internal::onwebkitfullscreenchangeAttributeGetterCallback, ElementV8Internal::onwebkitfullscreenchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwebkitfullscreenerror", ElementV8Internal::onwebkitfullscreenerrorAttributeGetterCallback, ElementV8Internal::onwebkitfullscreenerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"previousElementSibling", ElementV8Internal::previousElementSiblingAttributeGetterCallback, 0, ElementV8Internal::previousElementSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nextElementSibling", ElementV8Internal::nextElementSiblingAttributeGetterCallback, 0, ElementV8Internal::nextElementSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"children", ElementV8Internal::childrenAttributeGetterCallback, 0, ElementV8Internal::childrenAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"firstElementChild", ElementV8Internal::firstElementChildAttributeGetterCallback, 0, ElementV8Internal::firstElementChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastElementChild", ElementV8Internal::lastElementChildAttributeGetterCallback, 0, ElementV8Internal::lastElementChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"childElementCount", ElementV8Internal::childElementCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "namespaceURI", ElementV8Internal::namespaceURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "prefix", ElementV8Internal::prefixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "localName", ElementV8Internal::localNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "tagName", ElementV8Internal::tagNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "id", ElementV8Internal::idAttributeGetterCallback, ElementV8Internal::idAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "className", ElementV8Internal::classNameAttributeGetterCallback, ElementV8Internal::classNameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "classList", ElementV8Internal::classListAttributeGetterCallback, ElementV8Internal::classListAttributeSetterCallback, ElementV8Internal::classListAttributeGetterCallbackForMainWorld, ElementV8Internal::classListAttributeSetterCallbackForMainWorld, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "slot", ElementV8Internal::slotAttributeGetterCallback, ElementV8Internal::slotAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "attributes", ElementV8Internal::attributesAttributeGetterCallback, 0, ElementV8Internal::attributesAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shadowRoot", ElementV8Internal::shadowRootAttributeGetterCallback, 0, ElementV8Internal::shadowRootAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "assignedSlot", ElementV8Internal::assignedSlotAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "innerHTML", ElementV8Internal::innerHTMLAttributeGetterCallback, ElementV8Internal::innerHTMLAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "outerHTML", ElementV8Internal::outerHTMLAttributeGetterCallback, ElementV8Internal::outerHTMLAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollTop", ElementV8Internal::scrollTopAttributeGetterCallback, ElementV8Internal::scrollTopAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollLeft", ElementV8Internal::scrollLeftAttributeGetterCallback, ElementV8Internal::scrollLeftAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollWidth", ElementV8Internal::scrollWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollHeight", ElementV8Internal::scrollHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientTop", ElementV8Internal::clientTopAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientLeft", ElementV8Internal::clientLeftAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientWidth", ElementV8Internal::clientWidthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientHeight", ElementV8Internal::clientHeightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onbeforecopy", ElementV8Internal::onbeforecopyAttributeGetterCallback, ElementV8Internal::onbeforecopyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onbeforecut", ElementV8Internal::onbeforecutAttributeGetterCallback, ElementV8Internal::onbeforecutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onbeforepaste", ElementV8Internal::onbeforepasteAttributeGetterCallback, ElementV8Internal::onbeforepasteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncopy", ElementV8Internal::oncopyAttributeGetterCallback, ElementV8Internal::oncopyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncut", ElementV8Internal::oncutAttributeGetterCallback, ElementV8Internal::oncutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpaste", ElementV8Internal::onpasteAttributeGetterCallback, ElementV8Internal::onpasteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsearch", ElementV8Internal::onsearchAttributeGetterCallback, ElementV8Internal::onsearchAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onselectstart", ElementV8Internal::onselectstartAttributeGetterCallback, ElementV8Internal::onselectstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwheel", ElementV8Internal::onwheelAttributeGetterCallback, ElementV8Internal::onwheelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwebkitfullscreenchange", ElementV8Internal::onwebkitfullscreenchangeAttributeGetterCallback, ElementV8Internal::onwebkitfullscreenchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwebkitfullscreenerror", ElementV8Internal::onwebkitfullscreenerrorAttributeGetterCallback, ElementV8Internal::onwebkitfullscreenerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "previousElementSibling", ElementV8Internal::previousElementSiblingAttributeGetterCallback, 0, ElementV8Internal::previousElementSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nextElementSibling", ElementV8Internal::nextElementSiblingAttributeGetterCallback, 0, ElementV8Internal::nextElementSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "children", ElementV8Internal::childrenAttributeGetterCallback, 0, ElementV8Internal::childrenAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "firstElementChild", ElementV8Internal::firstElementChildAttributeGetterCallback, 0, ElementV8Internal::firstElementChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastElementChild", ElementV8Internal::lastElementChildAttributeGetterCallback, 0, ElementV8Internal::lastElementChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "childElementCount", ElementV8Internal::childElementCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8ElementMethods[] = {
-    {"hasAttributes", ElementV8Internal::hasAttributesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getAttribute", ElementV8Internal::getAttributeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getAttributeNS", ElementV8Internal::getAttributeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setAttribute", ElementV8Internal::setAttributeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setAttributeNS", ElementV8Internal::setAttributeNSMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeAttribute", ElementV8Internal::removeAttributeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeAttributeNS", ElementV8Internal::removeAttributeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasAttribute", ElementV8Internal::hasAttributeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasAttributeNS", ElementV8Internal::hasAttributeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getAttributeNode", ElementV8Internal::getAttributeNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getAttributeNodeNS", ElementV8Internal::getAttributeNodeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setAttributeNode", ElementV8Internal::setAttributeNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setAttributeNodeNS", ElementV8Internal::setAttributeNodeNSMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeAttributeNode", ElementV8Internal::removeAttributeNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"closest", ElementV8Internal::closestMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"matches", ElementV8Internal::matchesMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitMatchesSelector", ElementV8Internal::webkitMatchesSelectorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"attachShadow", ElementV8Internal::attachShadowMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getElementsByTagName", ElementV8Internal::getElementsByTagNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getElementsByTagNameNS", ElementV8Internal::getElementsByTagNameNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getElementsByClassName", ElementV8Internal::getElementsByClassNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"insertAdjacentElement", ElementV8Internal::insertAdjacentElementMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"insertAdjacentText", ElementV8Internal::insertAdjacentTextMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"insertAdjacentHTML", ElementV8Internal::insertAdjacentHTMLMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"requestPointerLock", ElementV8Internal::requestPointerLockMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getClientRects", ElementV8Internal::getClientRectsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getBoundingClientRect", ElementV8Internal::getBoundingClientRectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollIntoView", ElementV8Internal::scrollIntoViewMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollIntoViewIfNeeded", ElementV8Internal::scrollIntoViewIfNeededMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createShadowRoot", ElementV8Internal::createShadowRootMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getDestinationInsertionPoints", ElementV8Internal::getDestinationInsertionPointsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"animate", ElementV8Internal::animateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"remove", ElementV8Internal::removeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitRequestFullScreen", ElementV8Internal::webkitRequestFullScreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitRequestFullscreen", ElementV8Internal::webkitRequestFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"querySelector", ElementV8Internal::querySelectorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"querySelectorAll", ElementV8Internal::querySelectorAllMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "hasAttributes", ElementV8Internal::hasAttributesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getAttribute", ElementV8Internal::getAttributeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getAttributeNS", ElementV8Internal::getAttributeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setAttribute", ElementV8Internal::setAttributeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setAttributeNS", ElementV8Internal::setAttributeNSMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeAttribute", ElementV8Internal::removeAttributeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeAttributeNS", ElementV8Internal::removeAttributeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasAttribute", ElementV8Internal::hasAttributeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasAttributeNS", ElementV8Internal::hasAttributeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getAttributeNode", ElementV8Internal::getAttributeNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getAttributeNodeNS", ElementV8Internal::getAttributeNodeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setAttributeNode", ElementV8Internal::setAttributeNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setAttributeNodeNS", ElementV8Internal::setAttributeNodeNSMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeAttributeNode", ElementV8Internal::removeAttributeNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "closest", ElementV8Internal::closestMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "matches", ElementV8Internal::matchesMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitMatchesSelector", ElementV8Internal::webkitMatchesSelectorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "attachShadow", ElementV8Internal::attachShadowMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getElementsByTagName", ElementV8Internal::getElementsByTagNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getElementsByTagNameNS", ElementV8Internal::getElementsByTagNameNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getElementsByClassName", ElementV8Internal::getElementsByClassNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "insertAdjacentElement", ElementV8Internal::insertAdjacentElementMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "insertAdjacentText", ElementV8Internal::insertAdjacentTextMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "insertAdjacentHTML", ElementV8Internal::insertAdjacentHTMLMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "requestPointerLock", ElementV8Internal::requestPointerLockMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getClientRects", ElementV8Internal::getClientRectsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getBoundingClientRect", ElementV8Internal::getBoundingClientRectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollIntoView", ElementV8Internal::scrollIntoViewMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollIntoViewIfNeeded", ElementV8Internal::scrollIntoViewIfNeededMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createShadowRoot", ElementV8Internal::createShadowRootMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getDestinationInsertionPoints", ElementV8Internal::getDestinationInsertionPointsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "animate", ElementV8Internal::animateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "remove", ElementV8Internal::removeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitRequestFullScreen", ElementV8Internal::webkitRequestFullScreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitRequestFullscreen", ElementV8Internal::webkitRequestFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "querySelector", ElementV8Internal::querySelectorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "querySelectorAll", ElementV8Internal::querySelectorAllMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8ElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Element::wrapperTypeInfo.interfaceName, V8Node::domTemplate(isolate, world), V8Element::internalFieldCount);
+static void installV8ElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Element::wrapperTypeInfo.interfaceName, V8Node::domTemplate(isolate, world), V8Element::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ElementAccessors, WTF_ARRAY_LENGTH(V8ElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ElementMethods, WTF_ARRAY_LENGTH(V8ElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ElementAccessors, WTF_ARRAY_LENGTH(V8ElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8ElementMethods, WTF_ARRAY_LENGTH(V8ElementMethods));
 
-  if (RuntimeEnabledFeatures::computedAccessibilityInfoEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorcomputedNameConfiguration = {"computedName", ElementV8Internal::computedNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcomputedNameConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorcomputedRoleConfiguration = {"computedRole", ElementV8Internal::computedRoleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcomputedRoleConfiguration);
-  }
+    if (RuntimeEnabledFeatures::computedAccessibilityInfoEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorcomputedNameConfiguration = { "computedName", ElementV8Internal::computedNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcomputedNameConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorcomputedRoleConfiguration = { "computedRole", ElementV8Internal::computedRoleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcomputedRoleConfiguration);
+    }
 
-  if (RuntimeEnabledFeatures::pointerEventEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration setPointerCaptureMethodConfiguration = {"setPointerCapture", ElementV8Internal::setPointerCaptureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setPointerCaptureMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::pointerEventEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration releasePointerCaptureMethodConfiguration = {"releasePointerCapture", ElementV8Internal::releasePointerCaptureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, releasePointerCaptureMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::pointerEventEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration hasPointerCaptureMethodConfiguration = {"hasPointerCapture", ElementV8Internal::hasPointerCaptureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, hasPointerCaptureMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::cssomSmoothScrollEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration scrollMethodConfiguration = {"scroll", ElementV8Internal::scrollMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, scrollMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::cssomSmoothScrollEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration scrollToMethodConfiguration = {"scrollTo", ElementV8Internal::scrollToMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, scrollToMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::cssomSmoothScrollEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration scrollByMethodConfiguration = {"scrollBy", ElementV8Internal::scrollByMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, scrollByMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::scrollCustomizationEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration setApplyScrollMethodConfiguration = {"setApplyScroll", ElementV8Internal::setApplyScrollMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setApplyScrollMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::scrollCustomizationEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration setDistributeScrollMethodConfiguration = {"setDistributeScroll", ElementV8Internal::setDistributeScrollMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setDistributeScrollMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration getAnimationsMethodConfiguration = {"getAnimations", ElementV8Internal::getAnimationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getAnimationsMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration beforeMethodConfiguration = {"before", ElementV8Internal::beforeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, beforeMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration afterMethodConfiguration = {"after", ElementV8Internal::afterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, afterMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration replaceWithMethodConfiguration = {"replaceWith", ElementV8Internal::replaceWithMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, replaceWithMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration requestFullscreenMethodConfiguration = {"requestFullscreen", ElementV8Internal::requestFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, requestFullscreenMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration prependMethodConfiguration = {"prepend", ElementV8Internal::prependMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, prependMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration appendMethodConfiguration = {"append", ElementV8Internal::appendMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, appendMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::pointerEventEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration setPointerCaptureMethodConfiguration = { "setPointerCapture", ElementV8Internal::setPointerCaptureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setPointerCaptureMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::pointerEventEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration releasePointerCaptureMethodConfiguration = { "releasePointerCapture", ElementV8Internal::releasePointerCaptureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, releasePointerCaptureMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::pointerEventEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration hasPointerCaptureMethodConfiguration = { "hasPointerCapture", ElementV8Internal::hasPointerCaptureMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, hasPointerCaptureMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::cssomSmoothScrollEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration scrollMethodConfiguration = { "scroll", ElementV8Internal::scrollMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, scrollMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::cssomSmoothScrollEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration scrollToMethodConfiguration = { "scrollTo", ElementV8Internal::scrollToMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, scrollToMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::cssomSmoothScrollEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration scrollByMethodConfiguration = { "scrollBy", ElementV8Internal::scrollByMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, scrollByMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::scrollCustomizationEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration setApplyScrollMethodConfiguration = { "setApplyScroll", ElementV8Internal::setApplyScrollMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setApplyScrollMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::scrollCustomizationEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration setDistributeScrollMethodConfiguration = { "setDistributeScroll", ElementV8Internal::setDistributeScrollMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setDistributeScrollMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration getAnimationsMethodConfiguration = { "getAnimations", ElementV8Internal::getAnimationsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, getAnimationsMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration beforeMethodConfiguration = { "before", ElementV8Internal::beforeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, beforeMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration afterMethodConfiguration = { "after", ElementV8Internal::afterMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, afterMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration replaceWithMethodConfiguration = { "replaceWith", ElementV8Internal::replaceWithMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, replaceWithMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration requestFullscreenMethodConfiguration = { "requestFullscreen", ElementV8Internal::requestFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, requestFullscreenMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration prependMethodConfiguration = { "prepend", ElementV8Internal::prependMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, prependMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration appendMethodConfiguration = { "append", ElementV8Internal::appendMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, appendMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8Element::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ElementTemplate);
+v8::Local<v8::FunctionTemplate> V8Element::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8ElementTemplate);
 }
 
-bool V8Element::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Element::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Element::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Element::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Element* V8Element::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Element* V8Element::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-void V8Element::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  v8::Isolate* isolate = context->GetIsolate();
-  v8::Local<v8::Name> unscopablesSymbol(v8::Symbol::GetUnscopables(isolate));
-  v8::Local<v8::Object> unscopables;
-  if (v8CallBoolean(prototypeObject->HasOwnProperty(context, unscopablesSymbol)))
-    unscopables = prototypeObject->Get(context, unscopablesSymbol).ToLocalChecked().As<v8::Object>();
-  else
-    unscopables = v8::Object::New(isolate);
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "after"), v8::True(isolate)).FromJust();
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "append"), v8::True(isolate)).FromJust();
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "before"), v8::True(isolate)).FromJust();
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "prepend"), v8::True(isolate)).FromJust();
-  }
-  unscopables->CreateDataProperty(context, v8AtomicString(isolate, "remove"), v8::True(isolate)).FromJust();
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "replaceWith"), v8::True(isolate)).FromJust();
-  }
-  unscopables->CreateDataProperty(context, v8AtomicString(isolate, "slot"), v8::True(isolate)).FromJust();
-  prototypeObject->CreateDataProperty(context, unscopablesSymbol, unscopables).FromJust();
+void V8Element::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::Local<v8::Name> unscopablesSymbol(v8::Symbol::GetUnscopables(isolate));
+    v8::Local<v8::Object> unscopables;
+    if (v8CallBoolean(prototypeObject->HasOwnProperty(context, unscopablesSymbol)))
+        unscopables = prototypeObject->Get(context, unscopablesSymbol).ToLocalChecked().As<v8::Object>();
+    else
+        unscopables = v8::Object::New(isolate);
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "after"), v8::True(isolate)).FromJust();
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "append"), v8::True(isolate)).FromJust();
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "before"), v8::True(isolate)).FromJust();
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "prepend"), v8::True(isolate)).FromJust();
+    }
+    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "remove"), v8::True(isolate)).FromJust();
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "replaceWith"), v8::True(isolate)).FromJust();
+    }
+    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "slot"), v8::True(isolate)).FromJust();
+    prototypeObject->CreateDataProperty(context, unscopablesSymbol, unscopables).FromJust();
 }
 
-}  // namespace blink
+} // namespace blink

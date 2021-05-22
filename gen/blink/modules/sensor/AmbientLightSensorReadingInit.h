@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AmbientLightSensorReadingInit_h
 #define AmbientLightSensorReadingInit_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT AmbientLightSensorReadingInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AmbientLightSensorReadingInit();
-  virtual ~AmbientLightSensorReadingInit();
-  AmbientLightSensorReadingInit(const AmbientLightSensorReadingInit&);
-  AmbientLightSensorReadingInit& operator=(const AmbientLightSensorReadingInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasIlluminance() const;
-  double illuminance() const;
-  void setIlluminance(double);
+public:
+    AmbientLightSensorReadingInit();
+    virtual ~AmbientLightSensorReadingInit();
+    AmbientLightSensorReadingInit(const AmbientLightSensorReadingInit&);
+    AmbientLightSensorReadingInit& operator=(const AmbientLightSensorReadingInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasIlluminance() const;
+    double illuminance() const;
+    void setIlluminance(double);
 
- private:
-  bool m_hasIlluminance = false;
-  double m_illuminance;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AmbientLightSensorReadingInit;
+private:
+    bool m_hasIlluminance = false;
+    double m_illuminance;
+
+    friend class V8AmbientLightSensorReadingInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AmbientLightSensorReadingInit_h
+#endif // AmbientLightSensorReadingInit_h

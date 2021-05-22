@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FocusEventInit_h
 #define FocusEventInit_h
 
@@ -21,27 +21,28 @@ namespace blink {
 class EventTarget;
 
 class CORE_EXPORT FocusEventInit : public UIEventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FocusEventInit();
-  virtual ~FocusEventInit();
-  FocusEventInit(const FocusEventInit&);
-  FocusEventInit& operator=(const FocusEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasRelatedTarget() const;
-  EventTarget* relatedTarget() const;
-  void setRelatedTarget(EventTarget*);
-  void setRelatedTargetToNull();
+public:
+    FocusEventInit();
+    virtual ~FocusEventInit();
+    FocusEventInit(const FocusEventInit&);
+    FocusEventInit& operator=(const FocusEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRelatedTarget() const;
+    EventTarget* relatedTarget() const;
+    void setRelatedTarget(EventTarget*);
+    void setRelatedTargetToNull();
 
- private:
-  Member<EventTarget> m_relatedTarget;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8FocusEventInit;
+private:
+    Member<EventTarget> m_relatedTarget;
+
+    friend class V8FocusEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // FocusEventInit_h
+#endif // FocusEventInit_h

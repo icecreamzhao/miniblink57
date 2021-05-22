@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AndroidPayMethodData_h
 #define V8AndroidPayMethodData_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8AndroidPayMethodData {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AndroidPayMethodData&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AndroidPayMethodData&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8AndroidPayMethodData(const AndroidPayMethodData&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AndroidPayMethodData& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AndroidPayMethodData& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<AndroidPayMethodData> {
-  static AndroidPayMethodData nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static AndroidPayMethodData nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<AndroidPayMethodData> {
-  typedef V8AndroidPayMethodData Type;
+    typedef V8AndroidPayMethodData Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8AndroidPayMethodData_h
+#endif // V8AndroidPayMethodData_h

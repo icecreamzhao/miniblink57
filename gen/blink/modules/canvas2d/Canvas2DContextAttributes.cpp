@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "Canvas2DContextAttributes.h"
 
 namespace blink {
 
-Canvas2DContextAttributes::Canvas2DContextAttributes() {
-  setAlpha(true);
-  setColorSpace(String("legacy-srgb"));
+Canvas2DContextAttributes::Canvas2DContextAttributes()
+{
+    setAlpha(true);
+    setColorSpace(String("legacy-srgb"));
 }
 
-Canvas2DContextAttributes::~Canvas2DContextAttributes() {}
+Canvas2DContextAttributes::~Canvas2DContextAttributes() { }
 
 Canvas2DContextAttributes::Canvas2DContextAttributes(const Canvas2DContextAttributes&) = default;
 
 Canvas2DContextAttributes& Canvas2DContextAttributes::operator=(const Canvas2DContextAttributes&) = default;
 
-bool Canvas2DContextAttributes::hasAlpha() const {
-  return m_hasAlpha;
+bool Canvas2DContextAttributes::hasAlpha() const
+{
+    return m_hasAlpha;
 }
-bool Canvas2DContextAttributes::alpha() const {
-  DCHECK(m_hasAlpha);
-  return m_alpha;
+bool Canvas2DContextAttributes::alpha() const
+{
+    DCHECK(m_hasAlpha);
+    return m_alpha;
 }
-void Canvas2DContextAttributes::setAlpha(bool value) {
-  m_alpha = value;
-  m_hasAlpha = true;
+void Canvas2DContextAttributes::setAlpha(bool value)
+{
+    m_alpha = value;
+    m_hasAlpha = true;
 }
-bool Canvas2DContextAttributes::hasColorSpace() const {
-  return !m_colorSpace.isNull();
+bool Canvas2DContextAttributes::hasColorSpace() const
+{
+    return !m_colorSpace.isNull();
 }
-String Canvas2DContextAttributes::colorSpace() const {
-  return m_colorSpace;
+String Canvas2DContextAttributes::colorSpace() const
+{
+    return m_colorSpace;
 }
-void Canvas2DContextAttributes::setColorSpace(String value) {
-  m_colorSpace = value;
+void Canvas2DContextAttributes::setColorSpace(String value)
+{
+    m_colorSpace = value;
 }
 
-DEFINE_TRACE(Canvas2DContextAttributes) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(Canvas2DContextAttributes)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

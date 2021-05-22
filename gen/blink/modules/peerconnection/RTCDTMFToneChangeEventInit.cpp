@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RTCDTMFToneChangeEventInit.h"
 
 namespace blink {
 
-RTCDTMFToneChangeEventInit::RTCDTMFToneChangeEventInit() {
+RTCDTMFToneChangeEventInit::RTCDTMFToneChangeEventInit()
+{
 }
 
-RTCDTMFToneChangeEventInit::~RTCDTMFToneChangeEventInit() {}
+RTCDTMFToneChangeEventInit::~RTCDTMFToneChangeEventInit() { }
 
 RTCDTMFToneChangeEventInit::RTCDTMFToneChangeEventInit(const RTCDTMFToneChangeEventInit&) = default;
 
 RTCDTMFToneChangeEventInit& RTCDTMFToneChangeEventInit::operator=(const RTCDTMFToneChangeEventInit&) = default;
 
-bool RTCDTMFToneChangeEventInit::hasTone() const {
-  return !m_tone.isNull();
+bool RTCDTMFToneChangeEventInit::hasTone() const
+{
+    return !m_tone.isNull();
 }
-String RTCDTMFToneChangeEventInit::tone() const {
-  return m_tone;
+String RTCDTMFToneChangeEventInit::tone() const
+{
+    return m_tone;
 }
-void RTCDTMFToneChangeEventInit::setTone(String value) {
-  m_tone = value;
+void RTCDTMFToneChangeEventInit::setTone(String value)
+{
+    m_tone = value;
 }
 
-DEFINE_TRACE(RTCDTMFToneChangeEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(RTCDTMFToneChangeEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

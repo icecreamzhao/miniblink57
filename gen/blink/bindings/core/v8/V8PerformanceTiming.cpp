@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PerformanceTiming.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,338 +47,387 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PerformanceTiming::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PerformanceTiming is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PerformanceTimingV8Internal {
 
-static void navigationStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void navigationStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->navigationStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->navigationStart()));
+    }
 
-CORE_EXPORT void navigationStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::navigationStartAttributeGetter(info);
-}
+    CORE_EXPORT void navigationStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::navigationStartAttributeGetter(info);
+    }
 
-static void unloadEventStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void unloadEventStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->unloadEventStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->unloadEventStart()));
+    }
 
-CORE_EXPORT void unloadEventStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::unloadEventStartAttributeGetter(info);
-}
+    CORE_EXPORT void unloadEventStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::unloadEventStartAttributeGetter(info);
+    }
 
-static void unloadEventEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void unloadEventEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->unloadEventEnd()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->unloadEventEnd()));
+    }
 
-CORE_EXPORT void unloadEventEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::unloadEventEndAttributeGetter(info);
-}
+    CORE_EXPORT void unloadEventEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::unloadEventEndAttributeGetter(info);
+    }
 
-static void redirectStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void redirectStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->redirectStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->redirectStart()));
+    }
 
-CORE_EXPORT void redirectStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::redirectStartAttributeGetter(info);
-}
+    CORE_EXPORT void redirectStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::redirectStartAttributeGetter(info);
+    }
 
-static void redirectEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void redirectEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->redirectEnd()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->redirectEnd()));
+    }
 
-CORE_EXPORT void redirectEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::redirectEndAttributeGetter(info);
-}
+    CORE_EXPORT void redirectEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::redirectEndAttributeGetter(info);
+    }
 
-static void fetchStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fetchStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->fetchStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->fetchStart()));
+    }
 
-CORE_EXPORT void fetchStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::fetchStartAttributeGetter(info);
-}
+    CORE_EXPORT void fetchStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::fetchStartAttributeGetter(info);
+    }
 
-static void domainLookupStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void domainLookupStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->domainLookupStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->domainLookupStart()));
+    }
 
-CORE_EXPORT void domainLookupStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::domainLookupStartAttributeGetter(info);
-}
+    CORE_EXPORT void domainLookupStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::domainLookupStartAttributeGetter(info);
+    }
 
-static void domainLookupEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void domainLookupEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->domainLookupEnd()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->domainLookupEnd()));
+    }
 
-CORE_EXPORT void domainLookupEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::domainLookupEndAttributeGetter(info);
-}
+    CORE_EXPORT void domainLookupEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::domainLookupEndAttributeGetter(info);
+    }
 
-static void connectStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void connectStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->connectStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->connectStart()));
+    }
 
-CORE_EXPORT void connectStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::connectStartAttributeGetter(info);
-}
+    CORE_EXPORT void connectStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::connectStartAttributeGetter(info);
+    }
 
-static void connectEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void connectEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->connectEnd()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->connectEnd()));
+    }
 
-CORE_EXPORT void connectEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::connectEndAttributeGetter(info);
-}
+    CORE_EXPORT void connectEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::connectEndAttributeGetter(info);
+    }
 
-static void secureConnectionStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void secureConnectionStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->secureConnectionStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->secureConnectionStart()));
+    }
 
-CORE_EXPORT void secureConnectionStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::secureConnectionStartAttributeGetter(info);
-}
+    CORE_EXPORT void secureConnectionStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::secureConnectionStartAttributeGetter(info);
+    }
 
-static void requestStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void requestStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->requestStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->requestStart()));
+    }
 
-CORE_EXPORT void requestStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::requestStartAttributeGetter(info);
-}
+    CORE_EXPORT void requestStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::requestStartAttributeGetter(info);
+    }
 
-static void responseStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void responseStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->responseStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->responseStart()));
+    }
 
-CORE_EXPORT void responseStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::responseStartAttributeGetter(info);
-}
+    CORE_EXPORT void responseStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::responseStartAttributeGetter(info);
+    }
 
-static void responseEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void responseEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->responseEnd()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->responseEnd()));
+    }
 
-CORE_EXPORT void responseEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::responseEndAttributeGetter(info);
-}
+    CORE_EXPORT void responseEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::responseEndAttributeGetter(info);
+    }
 
-static void domLoadingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void domLoadingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->domLoading()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->domLoading()));
+    }
 
-CORE_EXPORT void domLoadingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::domLoadingAttributeGetter(info);
-}
+    CORE_EXPORT void domLoadingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::domLoadingAttributeGetter(info);
+    }
 
-static void domInteractiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void domInteractiveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->domInteractive()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->domInteractive()));
+    }
 
-CORE_EXPORT void domInteractiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::domInteractiveAttributeGetter(info);
-}
+    CORE_EXPORT void domInteractiveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::domInteractiveAttributeGetter(info);
+    }
 
-static void domContentLoadedEventStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void domContentLoadedEventStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->domContentLoadedEventStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->domContentLoadedEventStart()));
+    }
 
-CORE_EXPORT void domContentLoadedEventStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::domContentLoadedEventStartAttributeGetter(info);
-}
+    CORE_EXPORT void domContentLoadedEventStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::domContentLoadedEventStartAttributeGetter(info);
+    }
 
-static void domContentLoadedEventEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void domContentLoadedEventEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->domContentLoadedEventEnd()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->domContentLoadedEventEnd()));
+    }
 
-CORE_EXPORT void domContentLoadedEventEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::domContentLoadedEventEndAttributeGetter(info);
-}
+    CORE_EXPORT void domContentLoadedEventEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::domContentLoadedEventEndAttributeGetter(info);
+    }
 
-static void domCompleteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void domCompleteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->domComplete()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->domComplete()));
+    }
 
-CORE_EXPORT void domCompleteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::domCompleteAttributeGetter(info);
-}
+    CORE_EXPORT void domCompleteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::domCompleteAttributeGetter(info);
+    }
 
-static void loadEventStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void loadEventStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->loadEventStart()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->loadEventStart()));
+    }
 
-CORE_EXPORT void loadEventStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::loadEventStartAttributeGetter(info);
-}
+    CORE_EXPORT void loadEventStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::loadEventStartAttributeGetter(info);
+    }
 
-static void loadEventEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void loadEventEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(holder);
 
-  v8SetReturnValue(info, static_cast<double>(impl->loadEventEnd()));
-}
+        v8SetReturnValue(info, static_cast<double>(impl->loadEventEnd()));
+    }
 
-CORE_EXPORT void loadEventEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::loadEventEndAttributeGetter(info);
-}
+    CORE_EXPORT void loadEventEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::loadEventEndAttributeGetter(info);
+    }
 
-static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTiming* impl = V8PerformanceTiming::toImpl(info.Holder());
+    static void toJSONMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTiming* impl = V8PerformanceTiming::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue result = impl->toJSONForBinding(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->toJSONForBinding(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-CORE_EXPORT  void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PerformanceTimingV8Internal::toJSONMethod(info);
-}
+    CORE_EXPORT void toJSONMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PerformanceTimingV8Internal::toJSONMethod(info);
+    }
 
 } // namespace PerformanceTimingV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PerformanceTimingAccessors[] = {
-    {"navigationStart", PerformanceTimingV8Internal::navigationStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"unloadEventStart", PerformanceTimingV8Internal::unloadEventStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"unloadEventEnd", PerformanceTimingV8Internal::unloadEventEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"redirectStart", PerformanceTimingV8Internal::redirectStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"redirectEnd", PerformanceTimingV8Internal::redirectEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fetchStart", PerformanceTimingV8Internal::fetchStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"domainLookupStart", PerformanceTimingV8Internal::domainLookupStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"domainLookupEnd", PerformanceTimingV8Internal::domainLookupEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"connectStart", PerformanceTimingV8Internal::connectStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"connectEnd", PerformanceTimingV8Internal::connectEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"secureConnectionStart", PerformanceTimingV8Internal::secureConnectionStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"requestStart", PerformanceTimingV8Internal::requestStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"responseStart", PerformanceTimingV8Internal::responseStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"responseEnd", PerformanceTimingV8Internal::responseEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"domLoading", PerformanceTimingV8Internal::domLoadingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"domInteractive", PerformanceTimingV8Internal::domInteractiveAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"domContentLoadedEventStart", PerformanceTimingV8Internal::domContentLoadedEventStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"domContentLoadedEventEnd", PerformanceTimingV8Internal::domContentLoadedEventEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"domComplete", PerformanceTimingV8Internal::domCompleteAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loadEventStart", PerformanceTimingV8Internal::loadEventStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"loadEventEnd", PerformanceTimingV8Internal::loadEventEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "navigationStart", PerformanceTimingV8Internal::navigationStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "unloadEventStart", PerformanceTimingV8Internal::unloadEventStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "unloadEventEnd", PerformanceTimingV8Internal::unloadEventEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "redirectStart", PerformanceTimingV8Internal::redirectStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "redirectEnd", PerformanceTimingV8Internal::redirectEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fetchStart", PerformanceTimingV8Internal::fetchStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "domainLookupStart", PerformanceTimingV8Internal::domainLookupStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "domainLookupEnd", PerformanceTimingV8Internal::domainLookupEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "connectStart", PerformanceTimingV8Internal::connectStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "connectEnd", PerformanceTimingV8Internal::connectEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "secureConnectionStart", PerformanceTimingV8Internal::secureConnectionStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "requestStart", PerformanceTimingV8Internal::requestStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "responseStart", PerformanceTimingV8Internal::responseStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "responseEnd", PerformanceTimingV8Internal::responseEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "domLoading", PerformanceTimingV8Internal::domLoadingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "domInteractive", PerformanceTimingV8Internal::domInteractiveAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "domContentLoadedEventStart", PerformanceTimingV8Internal::domContentLoadedEventStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "domContentLoadedEventEnd", PerformanceTimingV8Internal::domContentLoadedEventEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "domComplete", PerformanceTimingV8Internal::domCompleteAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loadEventStart", PerformanceTimingV8Internal::loadEventStartAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "loadEventEnd", PerformanceTimingV8Internal::loadEventEndAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8PerformanceTimingMethods[] = {
-    {"toJSON", PerformanceTimingV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "toJSON", PerformanceTimingV8Internal::toJSONMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PerformanceTimingTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PerformanceTiming::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PerformanceTiming::internalFieldCount);
+static void installV8PerformanceTimingTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PerformanceTiming::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PerformanceTiming::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceTimingAccessors, WTF_ARRAY_LENGTH(V8PerformanceTimingAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceTimingMethods, WTF_ARRAY_LENGTH(V8PerformanceTimingMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceTimingAccessors, WTF_ARRAY_LENGTH(V8PerformanceTimingAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PerformanceTimingMethods, WTF_ARRAY_LENGTH(V8PerformanceTimingMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8PerformanceTiming::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PerformanceTimingTemplate);
+v8::Local<v8::FunctionTemplate> V8PerformanceTiming::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PerformanceTimingTemplate);
 }
 
-bool V8PerformanceTiming::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PerformanceTiming::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PerformanceTiming::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PerformanceTiming::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PerformanceTiming* V8PerformanceTiming::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PerformanceTiming* V8PerformanceTiming::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

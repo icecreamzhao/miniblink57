@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLAreaElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,766 +50,851 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLAreaElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLAreaElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLAreaElementV8Internal {
 
-static void altAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void altAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::altAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::altAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void altAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::altAttributeGetter(info);
-}
+    CORE_EXPORT void altAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::altAttributeGetter(info);
+    }
 
-static void altAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void altAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::altAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::altAttr, cppValue);
+    }
 
-CORE_EXPORT void altAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void altAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLAreaElementV8Internal::altAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::altAttributeSetter(v8Value, info);
+    }
 
-static void coordsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void coordsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::coordsAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::coordsAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void coordsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::coordsAttributeGetter(info);
-}
+    CORE_EXPORT void coordsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::coordsAttributeGetter(info);
+    }
 
-static void coordsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void coordsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::coordsAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::coordsAttr, cppValue);
+    }
 
-CORE_EXPORT void coordsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void coordsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLAreaElementV8Internal::coordsAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::coordsAttributeSetter(v8Value, info);
+    }
 
-static void downloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void downloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::downloadAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::downloadAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void downloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::downloadAttributeGetter(info);
-}
+    CORE_EXPORT void downloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::downloadAttributeGetter(info);
+    }
 
-static void downloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void downloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::downloadAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::downloadAttr, cppValue);
+    }
 
-CORE_EXPORT void downloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void downloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLAreaElementV8Internal::downloadAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::downloadAttributeSetter(v8Value, info);
+    }
 
-static void shapeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shapeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::shapeAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::shapeAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void shapeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::shapeAttributeGetter(info);
-}
+    CORE_EXPORT void shapeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::shapeAttributeGetter(info);
+    }
 
-static void shapeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void shapeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::shapeAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::shapeAttr, cppValue);
+    }
 
-CORE_EXPORT void shapeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void shapeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLAreaElementV8Internal::shapeAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::shapeAttributeSetter(v8Value, info);
+    }
 
-static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::targetAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::targetAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::targetAttributeGetter(info);
-}
+    CORE_EXPORT void targetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::targetAttributeGetter(info);
+    }
 
-static void targetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void targetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::targetAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::targetAttr, cppValue);
+    }
 
-CORE_EXPORT void targetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void targetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLAreaElementV8Internal::targetAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::targetAttributeSetter(v8Value, info);
+    }
 
-static void pingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::pingAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::pingAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void pingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::pingAttributeGetter(info);
-}
+    CORE_EXPORT void pingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::pingAttributeGetter(info);
+    }
 
-static void pingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void pingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::pingAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::pingAttr, cppValue);
+    }
 
-CORE_EXPORT void pingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void pingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLAreaElementV8Internal::pingAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::pingAttributeSetter(v8Value, info);
+    }
 
-static void relAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void relAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::relAttr), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::relAttr), info.GetIsolate());
+    }
 
-CORE_EXPORT void relAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::relAttributeGetter(info);
-}
+    CORE_EXPORT void relAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::relAttributeGetter(info);
+    }
 
-static void relAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void relAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::relAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::relAttr, cppValue);
+    }
 
-CORE_EXPORT void relAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void relAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLAreaElementV8Internal::relAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::relAttributeSetter(v8Value, info);
+    }
 
-static void referrerPolicyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void referrerPolicyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  String cppValue(impl->fastGetAttribute(HTMLNames::referrerpolicyAttr));
+        String cppValue(impl->fastGetAttribute(HTMLNames::referrerpolicyAttr));
 
-  if (cppValue.isEmpty()) {
-    ;
-  } else if (equalIgnoringASCIICase(cppValue, "")) {
-    cppValue = "";
-  } else if (equalIgnoringASCIICase(cppValue, "no-referrer")) {
-    cppValue = "no-referrer";
-  } else if (equalIgnoringASCIICase(cppValue, "origin")) {
-    cppValue = "origin";
-  } else if (equalIgnoringASCIICase(cppValue, "no-referrer-when-downgrade")) {
-    cppValue = "no-referrer-when-downgrade";
-  } else if (equalIgnoringASCIICase(cppValue, "origin-when-cross-origin")) {
-    cppValue = "origin-when-cross-origin";
-  } else if (equalIgnoringASCIICase(cppValue, "unsafe-url")) {
-    cppValue = "unsafe-url";
-  } else {
-    cppValue = "";
-  }
+        if (cppValue.isEmpty()) {
+            ;
+        } else if (equalIgnoringASCIICase(cppValue, "")) {
+            cppValue = "";
+        } else if (equalIgnoringASCIICase(cppValue, "no-referrer")) {
+            cppValue = "no-referrer";
+        } else if (equalIgnoringASCIICase(cppValue, "origin")) {
+            cppValue = "origin";
+        } else if (equalIgnoringASCIICase(cppValue, "no-referrer-when-downgrade")) {
+            cppValue = "no-referrer-when-downgrade";
+        } else if (equalIgnoringASCIICase(cppValue, "origin-when-cross-origin")) {
+            cppValue = "origin-when-cross-origin";
+        } else if (equalIgnoringASCIICase(cppValue, "unsafe-url")) {
+            cppValue = "unsafe-url";
+        } else {
+            cppValue = "";
+        }
 
-  v8SetReturnValueString(info, cppValue, info.GetIsolate());
-}
+        v8SetReturnValueString(info, cppValue, info.GetIsolate());
+    }
 
-CORE_EXPORT void referrerPolicyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::referrerPolicyAttributeGetter(info);
-}
+    CORE_EXPORT void referrerPolicyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::referrerPolicyAttributeGetter(info);
+    }
 
-static void referrerPolicyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void referrerPolicyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAttribute(HTMLNames::referrerpolicyAttr, cppValue);
-}
+        impl->setAttribute(HTMLNames::referrerpolicyAttr, cppValue);
+    }
 
-CORE_EXPORT void referrerPolicyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void referrerPolicyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLAreaElementV8Internal::referrerPolicyAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::referrerPolicyAttributeSetter(v8Value, info);
+    }
 
-static void noHrefAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void noHrefAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::nohrefAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::nohrefAttr));
+    }
 
-CORE_EXPORT void noHrefAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::noHrefAttributeGetter(info);
-}
+    CORE_EXPORT void noHrefAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::noHrefAttributeGetter(info);
+    }
 
-static void noHrefAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void noHrefAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "noHref");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "noHref");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::nohrefAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::nohrefAttr, cppValue);
+    }
 
-CORE_EXPORT void noHrefAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void noHrefAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLAreaElementV8Internal::noHrefAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::noHrefAttributeSetter(v8Value, info);
+    }
 
-static void hrefAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hrefAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->href(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->href(), info.GetIsolate());
+    }
 
-CORE_EXPORT void hrefAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::hrefAttributeGetter(info);
-}
+    CORE_EXPORT void hrefAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::hrefAttributeGetter(info);
+    }
 
-static void hrefAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void hrefAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "href");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "href");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setHref(cppValue);
-}
+        impl->setHref(cppValue);
+    }
 
-CORE_EXPORT void hrefAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void hrefAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::hrefAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::hrefAttributeSetter(v8Value, info);
+    }
 
-static void originAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void originAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->origin(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->origin(), info.GetIsolate());
+    }
 
-CORE_EXPORT void originAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::originAttributeGetter(info);
-}
+    CORE_EXPORT void originAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::originAttributeGetter(info);
+    }
 
-static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->protocol(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->protocol(), info.GetIsolate());
+    }
 
-CORE_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::protocolAttributeGetter(info);
-}
+    CORE_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::protocolAttributeGetter(info);
+    }
 
-static void protocolAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void protocolAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "protocol");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "protocol");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setProtocol(cppValue);
-}
+        impl->setProtocol(cppValue);
+    }
 
-CORE_EXPORT void protocolAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void protocolAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::protocolAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::protocolAttributeSetter(v8Value, info);
+    }
 
-static void usernameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void usernameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->username(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->username(), info.GetIsolate());
+    }
 
-CORE_EXPORT void usernameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::usernameAttributeGetter(info);
-}
+    CORE_EXPORT void usernameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::usernameAttributeGetter(info);
+    }
 
-static void usernameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void usernameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "username");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "username");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setUsername(cppValue);
-}
+        impl->setUsername(cppValue);
+    }
 
-CORE_EXPORT void usernameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void usernameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::usernameAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::usernameAttributeSetter(v8Value, info);
+    }
 
-static void passwordAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void passwordAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->password(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->password(), info.GetIsolate());
+    }
 
-CORE_EXPORT void passwordAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::passwordAttributeGetter(info);
-}
+    CORE_EXPORT void passwordAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::passwordAttributeGetter(info);
+    }
 
-static void passwordAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void passwordAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "password");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "password");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setPassword(cppValue);
-}
+        impl->setPassword(cppValue);
+    }
 
-CORE_EXPORT void passwordAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void passwordAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::passwordAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::passwordAttributeSetter(v8Value, info);
+    }
 
-static void hostAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hostAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->host(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->host(), info.GetIsolate());
+    }
 
-CORE_EXPORT void hostAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::hostAttributeGetter(info);
-}
+    CORE_EXPORT void hostAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::hostAttributeGetter(info);
+    }
 
-static void hostAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void hostAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "host");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "host");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setHost(cppValue);
-}
+        impl->setHost(cppValue);
+    }
 
-CORE_EXPORT void hostAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void hostAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::hostAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::hostAttributeSetter(v8Value, info);
+    }
 
-static void hostnameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hostnameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->hostname(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->hostname(), info.GetIsolate());
+    }
 
-CORE_EXPORT void hostnameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::hostnameAttributeGetter(info);
-}
+    CORE_EXPORT void hostnameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::hostnameAttributeGetter(info);
+    }
 
-static void hostnameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void hostnameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "hostname");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "hostname");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setHostname(cppValue);
-}
+        impl->setHostname(cppValue);
+    }
 
-CORE_EXPORT void hostnameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void hostnameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::hostnameAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::hostnameAttributeSetter(v8Value, info);
+    }
 
-static void portAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void portAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->port(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->port(), info.GetIsolate());
+    }
 
-CORE_EXPORT void portAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::portAttributeGetter(info);
-}
+    CORE_EXPORT void portAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::portAttributeGetter(info);
+    }
 
-static void portAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void portAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "port");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "port");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setPort(cppValue);
-}
+        impl->setPort(cppValue);
+    }
 
-CORE_EXPORT void portAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void portAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::portAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::portAttributeSetter(v8Value, info);
+    }
 
-static void pathnameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pathnameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->pathname(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->pathname(), info.GetIsolate());
+    }
 
-CORE_EXPORT void pathnameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::pathnameAttributeGetter(info);
-}
+    CORE_EXPORT void pathnameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::pathnameAttributeGetter(info);
+    }
 
-static void pathnameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void pathnameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "pathname");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "pathname");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setPathname(cppValue);
-}
+        impl->setPathname(cppValue);
+    }
 
-CORE_EXPORT void pathnameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void pathnameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::pathnameAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::pathnameAttributeSetter(v8Value, info);
+    }
 
-static void searchAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void searchAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->search(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->search(), info.GetIsolate());
+    }
 
-CORE_EXPORT void searchAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::searchAttributeGetter(info);
-}
+    CORE_EXPORT void searchAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::searchAttributeGetter(info);
+    }
 
-static void searchAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void searchAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "search");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "search");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setSearch(cppValue);
-}
+        impl->setSearch(cppValue);
+    }
 
-CORE_EXPORT void searchAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void searchAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::searchAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::searchAttributeSetter(v8Value, info);
+    }
 
-static void hashAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void hashAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->hash(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->hash(), info.GetIsolate());
+    }
 
-CORE_EXPORT void hashAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElementV8Internal::hashAttributeGetter(info);
-}
+    CORE_EXPORT void hashAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElementV8Internal::hashAttributeGetter(info);
+    }
 
-static void hashAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
+    static void hashAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "hash");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLAreaElement", "hash");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setHash(cppValue);
-}
+        impl->setHash(cppValue);
+    }
 
-CORE_EXPORT void hashAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void hashAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLAreaElementV8Internal::hashAttributeSetter(v8Value, info);
-}
+        HTMLAreaElementV8Internal::hashAttributeSetter(v8Value, info);
+    }
 
-static void toStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(info.Holder());
+    static void toStringMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLAreaElement* impl = V8HTMLAreaElement::toImpl(info.Holder());
 
-  v8SetReturnValueString(info, impl->href(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->href(), info.GetIsolate());
+    }
 
-CORE_EXPORT  void toStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  HTMLAreaElementV8Internal::toStringMethod(info);
-}
+    CORE_EXPORT void toStringMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        HTMLAreaElementV8Internal::toStringMethod(info);
+    }
 
 } // namespace HTMLAreaElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLAreaElementAccessors[] = {
-    {"alt", HTMLAreaElementV8Internal::altAttributeGetterCallback, HTMLAreaElementV8Internal::altAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"coords", HTMLAreaElementV8Internal::coordsAttributeGetterCallback, HTMLAreaElementV8Internal::coordsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"download", HTMLAreaElementV8Internal::downloadAttributeGetterCallback, HTMLAreaElementV8Internal::downloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shape", HTMLAreaElementV8Internal::shapeAttributeGetterCallback, HTMLAreaElementV8Internal::shapeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"target", HTMLAreaElementV8Internal::targetAttributeGetterCallback, HTMLAreaElementV8Internal::targetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ping", HTMLAreaElementV8Internal::pingAttributeGetterCallback, HTMLAreaElementV8Internal::pingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rel", HTMLAreaElementV8Internal::relAttributeGetterCallback, HTMLAreaElementV8Internal::relAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"referrerPolicy", HTMLAreaElementV8Internal::referrerPolicyAttributeGetterCallback, HTMLAreaElementV8Internal::referrerPolicyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"noHref", HTMLAreaElementV8Internal::noHrefAttributeGetterCallback, HTMLAreaElementV8Internal::noHrefAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"href", HTMLAreaElementV8Internal::hrefAttributeGetterCallback, HTMLAreaElementV8Internal::hrefAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"origin", HTMLAreaElementV8Internal::originAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"protocol", HTMLAreaElementV8Internal::protocolAttributeGetterCallback, HTMLAreaElementV8Internal::protocolAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"username", HTMLAreaElementV8Internal::usernameAttributeGetterCallback, HTMLAreaElementV8Internal::usernameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"password", HTMLAreaElementV8Internal::passwordAttributeGetterCallback, HTMLAreaElementV8Internal::passwordAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"host", HTMLAreaElementV8Internal::hostAttributeGetterCallback, HTMLAreaElementV8Internal::hostAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hostname", HTMLAreaElementV8Internal::hostnameAttributeGetterCallback, HTMLAreaElementV8Internal::hostnameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"port", HTMLAreaElementV8Internal::portAttributeGetterCallback, HTMLAreaElementV8Internal::portAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pathname", HTMLAreaElementV8Internal::pathnameAttributeGetterCallback, HTMLAreaElementV8Internal::pathnameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"search", HTMLAreaElementV8Internal::searchAttributeGetterCallback, HTMLAreaElementV8Internal::searchAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hash", HTMLAreaElementV8Internal::hashAttributeGetterCallback, HTMLAreaElementV8Internal::hashAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "alt", HTMLAreaElementV8Internal::altAttributeGetterCallback, HTMLAreaElementV8Internal::altAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "coords", HTMLAreaElementV8Internal::coordsAttributeGetterCallback, HTMLAreaElementV8Internal::coordsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "download", HTMLAreaElementV8Internal::downloadAttributeGetterCallback, HTMLAreaElementV8Internal::downloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shape", HTMLAreaElementV8Internal::shapeAttributeGetterCallback, HTMLAreaElementV8Internal::shapeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "target", HTMLAreaElementV8Internal::targetAttributeGetterCallback, HTMLAreaElementV8Internal::targetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ping", HTMLAreaElementV8Internal::pingAttributeGetterCallback, HTMLAreaElementV8Internal::pingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rel", HTMLAreaElementV8Internal::relAttributeGetterCallback, HTMLAreaElementV8Internal::relAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "referrerPolicy", HTMLAreaElementV8Internal::referrerPolicyAttributeGetterCallback, HTMLAreaElementV8Internal::referrerPolicyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "noHref", HTMLAreaElementV8Internal::noHrefAttributeGetterCallback, HTMLAreaElementV8Internal::noHrefAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "href", HTMLAreaElementV8Internal::hrefAttributeGetterCallback, HTMLAreaElementV8Internal::hrefAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "origin", HTMLAreaElementV8Internal::originAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "protocol", HTMLAreaElementV8Internal::protocolAttributeGetterCallback, HTMLAreaElementV8Internal::protocolAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "username", HTMLAreaElementV8Internal::usernameAttributeGetterCallback, HTMLAreaElementV8Internal::usernameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "password", HTMLAreaElementV8Internal::passwordAttributeGetterCallback, HTMLAreaElementV8Internal::passwordAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "host", HTMLAreaElementV8Internal::hostAttributeGetterCallback, HTMLAreaElementV8Internal::hostAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hostname", HTMLAreaElementV8Internal::hostnameAttributeGetterCallback, HTMLAreaElementV8Internal::hostnameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "port", HTMLAreaElementV8Internal::portAttributeGetterCallback, HTMLAreaElementV8Internal::portAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pathname", HTMLAreaElementV8Internal::pathnameAttributeGetterCallback, HTMLAreaElementV8Internal::pathnameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "search", HTMLAreaElementV8Internal::searchAttributeGetterCallback, HTMLAreaElementV8Internal::searchAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hash", HTMLAreaElementV8Internal::hashAttributeGetterCallback, HTMLAreaElementV8Internal::hashAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLAreaElementMethods[] = {
-    {"toString", HTMLAreaElementV8Internal::toStringMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "toString", HTMLAreaElementV8Internal::toStringMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLAreaElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLAreaElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLAreaElement::internalFieldCount);
+static void installV8HTMLAreaElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLAreaElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLAreaElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLAreaElementAccessors, WTF_ARRAY_LENGTH(V8HTMLAreaElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLAreaElementMethods, WTF_ARRAY_LENGTH(V8HTMLAreaElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLAreaElementAccessors, WTF_ARRAY_LENGTH(V8HTMLAreaElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLAreaElementMethods, WTF_ARRAY_LENGTH(V8HTMLAreaElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLAreaElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLAreaElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLAreaElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLAreaElementTemplate);
 }
 
-bool V8HTMLAreaElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLAreaElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLAreaElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLAreaElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLAreaElement* V8HTMLAreaElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLAreaElement* V8HTMLAreaElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

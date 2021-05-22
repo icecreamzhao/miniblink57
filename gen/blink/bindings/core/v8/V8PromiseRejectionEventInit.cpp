@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PromiseRejectionEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -18,82 +18,86 @@
 
 namespace blink {
 
-void V8PromiseRejectionEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PromiseRejectionEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): promise.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8PromiseRejectionEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PromiseRejectionEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): promise.");
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
+    if (exceptionState.hadException())
+        return;
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> promiseValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "promise")).ToLocal(&promiseValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (promiseValue.IsEmpty() || promiseValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member promise is undefined.");
-    return;
-  } else {
-    ScriptPromise promise = ScriptPromise::cast(ScriptState::current(isolate), promiseValue);
-    impl.setPromise(promise);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> promiseValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "promise")).ToLocal(&promiseValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (promiseValue.IsEmpty() || promiseValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member promise is undefined.");
+        return;
+    } else {
+        ScriptPromise promise = ScriptPromise::cast(ScriptState::current(isolate), promiseValue);
+        impl.setPromise(promise);
+    }
 
-  v8::Local<v8::Value> reasonValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "reason")).ToLocal(&reasonValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (reasonValue.IsEmpty() || reasonValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    ScriptValue reason = ScriptValue(ScriptState::current(isolate), reasonValue);
-    impl.setReason(reason);
-  }
+    v8::Local<v8::Value> reasonValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "reason")).ToLocal(&reasonValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (reasonValue.IsEmpty() || reasonValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        ScriptValue reason = ScriptValue(ScriptState::current(isolate), reasonValue);
+        impl.setReason(reason);
+    }
 }
 
-v8::Local<v8::Value> PromiseRejectionEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8PromiseRejectionEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> PromiseRejectionEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8PromiseRejectionEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8PromiseRejectionEventInit(const PromiseRejectionEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8PromiseRejectionEventInit(const PromiseRejectionEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasPromise()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "promise"), impl.promise().v8Value())))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasPromise()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "promise"), impl.promise().v8Value())))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  if (impl.hasReason()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "reason"), impl.reason().v8Value())))
-      return false;
-  }
+    if (impl.hasReason()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "reason"), impl.reason().v8Value())))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-PromiseRejectionEventInit NativeValueTraits<PromiseRejectionEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  PromiseRejectionEventInit impl;
-  V8PromiseRejectionEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+PromiseRejectionEventInit NativeValueTraits<PromiseRejectionEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    PromiseRejectionEventInit impl;
+    V8PromiseRejectionEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

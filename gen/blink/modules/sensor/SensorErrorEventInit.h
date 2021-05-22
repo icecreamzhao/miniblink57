@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef SensorErrorEventInit_h
 #define SensorErrorEventInit_h
 
@@ -21,26 +21,27 @@ namespace blink {
 class DOMException;
 
 class MODULES_EXPORT SensorErrorEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  SensorErrorEventInit();
-  virtual ~SensorErrorEventInit();
-  SensorErrorEventInit(const SensorErrorEventInit&);
-  SensorErrorEventInit& operator=(const SensorErrorEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasError() const;
-  DOMException* error() const;
-  void setError(DOMException*);
+public:
+    SensorErrorEventInit();
+    virtual ~SensorErrorEventInit();
+    SensorErrorEventInit(const SensorErrorEventInit&);
+    SensorErrorEventInit& operator=(const SensorErrorEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasError() const;
+    DOMException* error() const;
+    void setError(DOMException*);
 
- private:
-  Member<DOMException> m_error;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8SensorErrorEventInit;
+private:
+    Member<DOMException> m_error;
+
+    friend class V8SensorErrorEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // SensorErrorEventInit_h
+#endif // SensorErrorEventInit_h

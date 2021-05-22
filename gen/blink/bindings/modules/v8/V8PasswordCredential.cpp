@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PasswordCredential.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,232 +52,253 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PasswordCredential::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PasswordCredential is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PasswordCredentialV8Internal {
 
-static void idNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void idNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
+        PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->idName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->idName(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void idNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PasswordCredentialV8Internal::idNameAttributeGetter(info);
-}
+    MODULES_EXPORT void idNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PasswordCredentialV8Internal::idNameAttributeGetter(info);
+    }
 
-static void idNameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
+    static void idNameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PasswordCredential", "idName");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PasswordCredential", "idName");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setIdName(cppValue);
-}
+        impl->setIdName(cppValue);
+    }
 
-MODULES_EXPORT void idNameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void idNameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  PasswordCredentialV8Internal::idNameAttributeSetter(v8Value, info);
-}
+        PasswordCredentialV8Internal::idNameAttributeSetter(v8Value, info);
+    }
 
-static void passwordNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void passwordNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
+        PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->passwordName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->passwordName(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void passwordNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PasswordCredentialV8Internal::passwordNameAttributeGetter(info);
-}
+    MODULES_EXPORT void passwordNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PasswordCredentialV8Internal::passwordNameAttributeGetter(info);
+    }
 
-static void passwordNameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
+    static void passwordNameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PasswordCredential", "passwordName");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PasswordCredential", "passwordName");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = toUSVString(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setPasswordName(cppValue);
-}
+        impl->setPasswordName(cppValue);
+    }
 
-MODULES_EXPORT void passwordNameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void passwordNameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  PasswordCredentialV8Internal::passwordNameAttributeSetter(v8Value, info);
-}
+        PasswordCredentialV8Internal::passwordNameAttributeSetter(v8Value, info);
+    }
 
-static void additionalDataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void additionalDataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
+        PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
 
-  FormDataOrURLSearchParams result;
-  impl->additionalData(result);
+        FormDataOrURLSearchParams result;
+        impl->additionalData(result);
 
-  v8SetReturnValue(info, result);
-}
+        v8SetReturnValue(info, result);
+    }
 
-MODULES_EXPORT void additionalDataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PasswordCredentialV8Internal::additionalDataAttributeGetter(info);
-}
+    MODULES_EXPORT void additionalDataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PasswordCredentialV8Internal::additionalDataAttributeGetter(info);
+    }
 
-static void additionalDataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
+    static void additionalDataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        PasswordCredential* impl = V8PasswordCredential::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PasswordCredential", "additionalData");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "PasswordCredential", "additionalData");
 
-  // Prepare the value to be set.
-  FormDataOrURLSearchParams cppValue;
-  V8FormDataOrURLSearchParams::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::Nullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        FormDataOrURLSearchParams cppValue;
+        V8FormDataOrURLSearchParams::toImpl(info.GetIsolate(), v8Value, cppValue, UnionTypeConversionMode::Nullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setAdditionalData(cppValue);
-}
+        impl->setAdditionalData(cppValue);
+    }
 
-MODULES_EXPORT void additionalDataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void additionalDataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  PasswordCredentialV8Internal::additionalDataAttributeSetter(v8Value, info);
-}
+        PasswordCredentialV8Internal::additionalDataAttributeSetter(v8Value, info);
+    }
 
-static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PasswordCredential");
+    static void constructor1(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PasswordCredential");
 
-  PasswordCredentialData data;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('data') is not an object.");
+        PasswordCredentialData data;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('data') is not an object.");
 
-    return;
-  }
-  V8PasswordCredentialData::toImpl(info.GetIsolate(), info[0], data, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8PasswordCredentialData::toImpl(info.GetIsolate(), info[0], data, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  PasswordCredential* impl = PasswordCredential::create(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PasswordCredential::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        PasswordCredential* impl = PasswordCredential::create(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PasswordCredential::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PasswordCredential");
+    static void constructor2(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PasswordCredential");
 
-  HTMLFormElement* form;
-  form = V8HTMLFormElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!form) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'HTMLFormElement'.");
+        HTMLFormElement* form;
+        form = V8HTMLFormElement::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!form) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'HTMLFormElement'.");
 
-    return;
-  }
+            return;
+        }
 
-  PasswordCredential* impl = PasswordCredential::create(form, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PasswordCredential::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        PasswordCredential* impl = PasswordCredential::create(form, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8PasswordCredential::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PasswordCredential");
-  switch (std::min(1, info.Length())) {
-    case 1:
-      if (V8HTMLFormElement::hasInstance(info[0], info.GetIsolate())) {
-        PasswordCredentialV8Internal::constructor2(info);
-        return;
-      }
-      if (info[0]->IsObject()) {
-        PasswordCredentialV8Internal::constructor1(info);
-        return;
-      }
-      break;
-    default:
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
-  }
-  exceptionState.throwTypeError("No matching constructor signature.");
-}
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "PasswordCredential");
+        switch (std::min(1, info.Length())) {
+        case 1:
+            if (V8HTMLFormElement::hasInstance(info[0], info.GetIsolate())) {
+                PasswordCredentialV8Internal::constructor2(info);
+                return;
+            }
+            if (info[0]->IsObject()) {
+                PasswordCredentialV8Internal::constructor1(info);
+                return;
+            }
+            break;
+        default:
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+        exceptionState.throwTypeError("No matching constructor signature.");
+    }
 
 } // namespace PasswordCredentialV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8PasswordCredentialAccessors[] = {
-    {"idName", PasswordCredentialV8Internal::idNameAttributeGetterCallback, PasswordCredentialV8Internal::idNameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"passwordName", PasswordCredentialV8Internal::passwordNameAttributeGetterCallback, PasswordCredentialV8Internal::passwordNameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"additionalData", PasswordCredentialV8Internal::additionalDataAttributeGetterCallback, PasswordCredentialV8Internal::additionalDataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "idName", PasswordCredentialV8Internal::idNameAttributeGetterCallback, PasswordCredentialV8Internal::idNameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "passwordName", PasswordCredentialV8Internal::passwordNameAttributeGetterCallback, PasswordCredentialV8Internal::passwordNameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "additionalData", PasswordCredentialV8Internal::additionalDataAttributeGetterCallback, PasswordCredentialV8Internal::additionalDataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8PasswordCredential::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("PasswordCredential"));
-    return;
-  }
+void V8PasswordCredential::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("PasswordCredential"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  PasswordCredentialV8Internal::constructor(info);
+    PasswordCredentialV8Internal::constructor(info);
 }
 
-static void installV8PasswordCredentialTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PasswordCredential::wrapperTypeInfo.interfaceName, V8SiteBoundCredential::domTemplate(isolate, world), V8PasswordCredential::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8PasswordCredential::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8PasswordCredentialTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PasswordCredential::wrapperTypeInfo.interfaceName, V8SiteBoundCredential::domTemplate(isolate, world), V8PasswordCredential::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8PasswordCredential::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  if (!RuntimeEnabledFeatures::credentialManagerEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::credentialManagerEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PasswordCredentialAccessors, WTF_ARRAY_LENGTH(V8PasswordCredentialAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PasswordCredentialAccessors, WTF_ARRAY_LENGTH(V8PasswordCredentialAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8PasswordCredential::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PasswordCredentialTemplate);
+v8::Local<v8::FunctionTemplate> V8PasswordCredential::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PasswordCredentialTemplate);
 }
 
-bool V8PasswordCredential::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PasswordCredential::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PasswordCredential::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PasswordCredential::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PasswordCredential* V8PasswordCredential::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PasswordCredential* V8PasswordCredential::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ChannelMergerOptions_h
 #define V8ChannelMergerOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ChannelMergerOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ChannelMergerOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ChannelMergerOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8ChannelMergerOptions(const ChannelMergerOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ChannelMergerOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ChannelMergerOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ChannelMergerOptions> {
-  static ChannelMergerOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ChannelMergerOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ChannelMergerOptions> {
-  typedef V8ChannelMergerOptions Type;
+    typedef V8ChannelMergerOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ChannelMergerOptions_h
+#endif // V8ChannelMergerOptions_h

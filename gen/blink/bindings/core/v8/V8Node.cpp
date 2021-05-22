@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Node.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -57,920 +57,1010 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Node::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Node is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace NodeV8Internal {
 
-static void nodeTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nodeTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->getNodeType());
-}
+        v8SetReturnValueUnsigned(info, impl->getNodeType());
+    }
 
-CORE_EXPORT void nodeTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::nodeTypeAttributeGetter(info);
-}
+    CORE_EXPORT void nodeTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::nodeTypeAttributeGetter(info);
+    }
 
-static void nodeNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nodeNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->nodeName(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->nodeName(), info.GetIsolate());
+    }
 
-CORE_EXPORT void nodeNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::nodeNameAttributeGetter(info);
-}
+    CORE_EXPORT void nodeNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::nodeNameAttributeGetter(info);
+    }
 
-static void baseURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void baseURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->baseURI(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->baseURI(), info.GetIsolate());
+    }
 
-CORE_EXPORT void baseURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::baseURIAttributeGetter(info);
-}
+    CORE_EXPORT void baseURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::baseURIAttributeGetter(info);
+    }
 
-static void isConnectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isConnectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isConnected());
-}
+        v8SetReturnValueBool(info, impl->isConnected());
+    }
 
-CORE_EXPORT void isConnectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Node_IsConnected_AttributeGetter);
+    CORE_EXPORT void isConnectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Node_IsConnected_AttributeGetter);
 
-  NodeV8Internal::isConnectedAttributeGetter(info);
-}
+        NodeV8Internal::isConnectedAttributeGetter(info);
+    }
 
-static void ownerDocumentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ownerDocumentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->ownerDocument()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->ownerDocument()), impl);
+    }
 
-CORE_EXPORT void ownerDocumentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::ownerDocumentAttributeGetter(info);
-}
+    CORE_EXPORT void ownerDocumentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::ownerDocumentAttributeGetter(info);
+    }
 
-static void ownerDocumentAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ownerDocumentAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->ownerDocument()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->ownerDocument()));
+    }
 
-CORE_EXPORT void ownerDocumentAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::ownerDocumentAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void ownerDocumentAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::ownerDocumentAttributeGetterForMainWorld(info);
+    }
 
-static void parentNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void parentNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->parentNode()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->parentNode()), impl);
+    }
 
-CORE_EXPORT void parentNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::parentNodeAttributeGetter(info);
-}
+    CORE_EXPORT void parentNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::parentNodeAttributeGetter(info);
+    }
 
-static void parentNodeAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void parentNodeAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->parentNode()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->parentNode()));
+    }
 
-CORE_EXPORT void parentNodeAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::parentNodeAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void parentNodeAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::parentNodeAttributeGetterForMainWorld(info);
+    }
 
-static void parentElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void parentElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->parentElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->parentElement()), impl);
+    }
 
-CORE_EXPORT void parentElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::parentElementAttributeGetter(info);
-}
+    CORE_EXPORT void parentElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::parentElementAttributeGetter(info);
+    }
 
-static void parentElementAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void parentElementAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->parentElement()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->parentElement()));
+    }
 
-CORE_EXPORT void parentElementAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::parentElementAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void parentElementAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::parentElementAttributeGetterForMainWorld(info);
+    }
 
-static void childNodesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void childNodesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->childNodes()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->childNodes()), impl);
+    }
 
-CORE_EXPORT void childNodesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::childNodesAttributeGetter(info);
-}
+    CORE_EXPORT void childNodesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::childNodesAttributeGetter(info);
+    }
 
-static void childNodesAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void childNodesAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->childNodes()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->childNodes()));
+    }
 
-CORE_EXPORT void childNodesAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::childNodesAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void childNodesAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::childNodesAttributeGetterForMainWorld(info);
+    }
 
-static void firstChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void firstChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->firstChild()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->firstChild()), impl);
+    }
 
-CORE_EXPORT void firstChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::firstChildAttributeGetter(info);
-}
+    CORE_EXPORT void firstChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::firstChildAttributeGetter(info);
+    }
 
-static void firstChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void firstChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->firstChild()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->firstChild()));
+    }
 
-CORE_EXPORT void firstChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::firstChildAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void firstChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::firstChildAttributeGetterForMainWorld(info);
+    }
 
-static void lastChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lastChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->lastChild()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->lastChild()), impl);
+    }
 
-CORE_EXPORT void lastChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::lastChildAttributeGetter(info);
-}
+    CORE_EXPORT void lastChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::lastChildAttributeGetter(info);
+    }
 
-static void lastChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void lastChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->lastChild()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->lastChild()));
+    }
 
-CORE_EXPORT void lastChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::lastChildAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void lastChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::lastChildAttributeGetterForMainWorld(info);
+    }
 
-static void previousSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void previousSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->previousSibling()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->previousSibling()), impl);
+    }
 
-CORE_EXPORT void previousSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::previousSiblingAttributeGetter(info);
-}
+    CORE_EXPORT void previousSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::previousSiblingAttributeGetter(info);
+    }
 
-static void previousSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void previousSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->previousSibling()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->previousSibling()));
+    }
 
-CORE_EXPORT void previousSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::previousSiblingAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void previousSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::previousSiblingAttributeGetterForMainWorld(info);
+    }
 
-static void nextSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nextSiblingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->nextSibling()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->nextSibling()), impl);
+    }
 
-CORE_EXPORT void nextSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::nextSiblingAttributeGetter(info);
-}
+    CORE_EXPORT void nextSiblingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::nextSiblingAttributeGetter(info);
+    }
 
-static void nextSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nextSiblingAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->nextSibling()));
-}
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->nextSibling()));
+    }
 
-CORE_EXPORT void nextSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::nextSiblingAttributeGetterForMainWorld(info);
-}
+    CORE_EXPORT void nextSiblingAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::nextSiblingAttributeGetterForMainWorld(info);
+    }
 
-static void nodeValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void nodeValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->nodeValue(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->nodeValue(), info.GetIsolate());
+    }
 
-CORE_EXPORT void nodeValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::nodeValueAttributeGetter(info);
-}
+    CORE_EXPORT void nodeValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::nodeValueAttributeGetter(info);
+    }
 
-static void nodeValueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Node* impl = V8Node::toImpl(holder);
+    static void nodeValueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Node* impl = V8Node::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setNodeValue(cppValue);
-}
+        impl->setNodeValue(cppValue);
+    }
 
-CORE_EXPORT void nodeValueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void nodeValueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  NodeV8Internal::nodeValueAttributeSetter(v8Value, info);
-}
+        NodeV8Internal::nodeValueAttributeSetter(v8Value, info);
+    }
 
-static void textContentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void textContentAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Node* impl = V8Node::toImpl(holder);
+        Node* impl = V8Node::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->textContent(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->textContent(), info.GetIsolate());
+    }
 
-CORE_EXPORT void textContentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::textContentAttributeGetter(info);
-}
+    CORE_EXPORT void textContentAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::textContentAttributeGetter(info);
+    }
 
-static void textContentAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Node* impl = V8Node::toImpl(holder);
+    static void textContentAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Node* impl = V8Node::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setTextContent(cppValue);
-}
+        impl->setTextContent(cppValue);
+    }
 
-CORE_EXPORT void textContentAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void textContentAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  NodeV8Internal::textContentAttributeSetter(v8Value, info);
-}
+        NodeV8Internal::textContentAttributeSetter(v8Value, info);
+    }
 
-static void hasChildNodesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Node* impl = V8Node::toImpl(info.Holder());
+    static void hasChildNodesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  v8SetReturnValueBool(info, impl->hasChildren());
-}
+        v8SetReturnValueBool(info, impl->hasChildren());
+    }
 
-CORE_EXPORT  void hasChildNodesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::hasChildNodesMethod(info);
-}
+    CORE_EXPORT void hasChildNodesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::hasChildNodesMethod(info);
+    }
 
-static void getRootNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "getRootNode");
+    static void getRootNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "getRootNode");
 
-  Node* impl = V8Node::toImpl(info.Holder());
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  GetRootNodeOptions options;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
+        GetRootNodeOptions options;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('options') is not an object.");
 
-    return;
-  }
-  V8GetRootNodeOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8GetRootNodeOptions::toImpl(info.GetIsolate(), info[0], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  v8SetReturnValueFast(info, impl->getRootNode(options), impl);
-}
+        v8SetReturnValueFast(info, impl->getRootNode(options), impl);
+    }
 
-CORE_EXPORT  void getRootNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::NodeGetRootNode);
-  NodeV8Internal::getRootNodeMethod(info);
-}
+    CORE_EXPORT void getRootNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::NodeGetRootNode);
+        NodeV8Internal::getRootNodeMethod(info);
+    }
 
-static void normalizeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Node* impl = V8Node::toImpl(info.Holder());
+    static void normalizeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  impl->normalize();
-}
+        impl->normalize();
+    }
 
-CORE_EXPORT  void normalizeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  NodeV8Internal::normalizeMethod(info);
-}
+    CORE_EXPORT void normalizeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        NodeV8Internal::normalizeMethod(info);
+    }
 
-static void cloneNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "cloneNode");
+    static void cloneNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "cloneNode");
 
-  Node* impl = V8Node::toImpl(info.Holder());
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  bool deep;
-  if (!info[0]->IsUndefined()) {
-    deep = toBoolean(info.GetIsolate(), info[0], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    deep = false;
-  }
+        bool deep;
+        if (!info[0]->IsUndefined()) {
+            deep = toBoolean(info.GetIsolate(), info[0], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            deep = false;
+        }
 
-  Node* result = impl->cloneNode(deep);
-  v8SetReturnValueFast(info, result, impl);
-}
+        Node* result = impl->cloneNode(deep);
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void cloneNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  NodeV8Internal::cloneNodeMethod(info);
-}
+    CORE_EXPORT void cloneNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        NodeV8Internal::cloneNodeMethod(info);
+    }
 
-static void isEqualNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Node* impl = V8Node::toImpl(info.Holder());
+    static void isEqualNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isEqualNode", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isEqualNode", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  Node* otherNode;
-  otherNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!otherNode && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isEqualNode", "Node", "parameter 1 is not of type 'Node'."));
+        Node* otherNode;
+        otherNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!otherNode && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isEqualNode", "Node", "parameter 1 is not of type 'Node'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValueBool(info, impl->isEqualNode(otherNode));
-}
+        v8SetReturnValueBool(info, impl->isEqualNode(otherNode));
+    }
 
-CORE_EXPORT  void isEqualNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::isEqualNodeMethod(info);
-}
+    CORE_EXPORT void isEqualNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::isEqualNodeMethod(info);
+    }
 
-static void isSameNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Node* impl = V8Node::toImpl(info.Holder());
+    static void isSameNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSameNode", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSameNode", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  Node* otherNode;
-  otherNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!otherNode && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSameNode", "Node", "parameter 1 is not of type 'Node'."));
+        Node* otherNode;
+        otherNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!otherNode && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isSameNode", "Node", "parameter 1 is not of type 'Node'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValueBool(info, impl->isSameNode(otherNode));
-}
+        v8SetReturnValueBool(info, impl->isSameNode(otherNode));
+    }
 
-CORE_EXPORT  void isSameNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::isSameNodeMethod(info);
-}
+    CORE_EXPORT void isSameNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::isSameNodeMethod(info);
+    }
 
-static void compareDocumentPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Node* impl = V8Node::toImpl(info.Holder());
+    static void compareDocumentPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("compareDocumentPosition", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("compareDocumentPosition", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  Node* other;
-  other = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!other) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("compareDocumentPosition", "Node", "parameter 1 is not of type 'Node'."));
+        Node* other;
+        other = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!other) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("compareDocumentPosition", "Node", "parameter 1 is not of type 'Node'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValueUnsigned(info, impl->compareDocumentPosition(other));
-}
+        v8SetReturnValueUnsigned(info, impl->compareDocumentPosition(other));
+    }
 
-CORE_EXPORT  void compareDocumentPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::compareDocumentPositionMethod(info);
-}
+    CORE_EXPORT void compareDocumentPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::compareDocumentPositionMethod(info);
+    }
 
-static void containsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Node* impl = V8Node::toImpl(info.Holder());
+    static void containsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("contains", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("contains", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  Node* other;
-  other = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!other && !isUndefinedOrNull(info[0])) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("contains", "Node", "parameter 1 is not of type 'Node'."));
+        Node* other;
+        other = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!other && !isUndefinedOrNull(info[0])) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("contains", "Node", "parameter 1 is not of type 'Node'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValueBool(info, impl->contains(other));
-}
+        v8SetReturnValueBool(info, impl->contains(other));
+    }
 
-CORE_EXPORT  void containsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::containsMethod(info);
-}
+    CORE_EXPORT void containsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::containsMethod(info);
+    }
 
-static void lookupPrefixMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Node* impl = V8Node::toImpl(info.Holder());
+    static void lookupPrefixMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lookupPrefix", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lookupPrefix", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  v8SetReturnValueStringOrNull(info, impl->lookupPrefix(namespaceURI), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->lookupPrefix(namespaceURI), info.GetIsolate());
+    }
 
-CORE_EXPORT  void lookupPrefixMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::lookupPrefixMethod(info);
-}
+    CORE_EXPORT void lookupPrefixMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::lookupPrefixMethod(info);
+    }
 
-static void lookupNamespaceURIMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Node* impl = V8Node::toImpl(info.Holder());
+    static void lookupNamespaceURIMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lookupNamespaceURI", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("lookupNamespaceURI", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> prefix;
-  prefix = info[0];
-  if (!prefix.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> prefix;
+        prefix = info[0];
+        if (!prefix.prepare())
+            return;
 
-  v8SetReturnValueStringOrNull(info, impl->lookupNamespaceURI(prefix), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->lookupNamespaceURI(prefix), info.GetIsolate());
+    }
 
-CORE_EXPORT  void lookupNamespaceURIMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::lookupNamespaceURIMethod(info);
-}
+    CORE_EXPORT void lookupNamespaceURIMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::lookupNamespaceURIMethod(info);
+    }
 
-static void isDefaultNamespaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Node* impl = V8Node::toImpl(info.Holder());
+    static void isDefaultNamespaceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isDefaultNamespace", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isDefaultNamespace", "Node", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
 
-  v8SetReturnValueBool(info, impl->isDefaultNamespace(namespaceURI));
-}
+        v8SetReturnValueBool(info, impl->isDefaultNamespace(namespaceURI));
+    }
 
-CORE_EXPORT  void isDefaultNamespaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  NodeV8Internal::isDefaultNamespaceMethod(info);
-}
+    CORE_EXPORT void isDefaultNamespaceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        NodeV8Internal::isDefaultNamespaceMethod(info);
+    }
 
-static void insertBeforeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "insertBefore");
+    static void insertBeforeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "insertBefore");
 
-  Node* impl = V8Node::toImpl(info.Holder());
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  Node* node;
-  Node* child;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+        Node* node;
+        Node* child;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!child && !isUndefinedOrNull(info[1])) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
+        child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!child && !isUndefinedOrNull(info[1])) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  Node* result = impl->insertBefore(node, child, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        Node* result = impl->insertBefore(node, child, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void insertBeforeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  NodeV8Internal::insertBeforeMethod(info);
-}
+    CORE_EXPORT void insertBeforeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        NodeV8Internal::insertBeforeMethod(info);
+    }
 
-static void insertBeforeMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "insertBefore");
+    static void insertBeforeMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "insertBefore");
 
-  Node* impl = V8Node::toImpl(info.Holder());
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  Node* node;
-  Node* child;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+        Node* node;
+        Node* child;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!child && !isUndefinedOrNull(info[1])) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
+        child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!child && !isUndefinedOrNull(info[1])) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  Node* result = impl->insertBefore(node, child, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueForMainWorld(info, result);
-}
+        Node* result = impl->insertBefore(node, child, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueForMainWorld(info, result);
+    }
 
-CORE_EXPORT  void insertBeforeMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  NodeV8Internal::insertBeforeMethodForMainWorld(info);
-}
+    CORE_EXPORT void insertBeforeMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        NodeV8Internal::insertBeforeMethodForMainWorld(info);
+    }
 
-static void appendChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "appendChild");
+    static void appendChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "appendChild");
 
-  Node* impl = V8Node::toImpl(info.Holder());
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  Node* result = impl->appendChild(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        Node* result = impl->appendChild(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void appendChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  NodeV8Internal::appendChildMethod(info);
-}
+    CORE_EXPORT void appendChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        NodeV8Internal::appendChildMethod(info);
+    }
 
-static void appendChildMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "appendChild");
+    static void appendChildMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "appendChild");
 
-  Node* impl = V8Node::toImpl(info.Holder());
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  Node* result = impl->appendChild(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueForMainWorld(info, result);
-}
+        Node* result = impl->appendChild(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueForMainWorld(info, result);
+    }
 
-CORE_EXPORT  void appendChildMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  NodeV8Internal::appendChildMethodForMainWorld(info);
-}
+    CORE_EXPORT void appendChildMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        NodeV8Internal::appendChildMethodForMainWorld(info);
+    }
 
-static void replaceChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "replaceChild");
+    static void replaceChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "replaceChild");
 
-  Node* impl = V8Node::toImpl(info.Holder());
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  Node* node;
-  Node* child;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+        Node* node;
+        Node* child;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!child) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
+        child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!child) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  Node* result = impl->replaceChild(node, child, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        Node* result = impl->replaceChild(node, child, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void replaceChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  NodeV8Internal::replaceChildMethod(info);
-}
+    CORE_EXPORT void replaceChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        NodeV8Internal::replaceChildMethod(info);
+    }
 
-static void replaceChildMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "replaceChild");
+    static void replaceChildMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "replaceChild");
 
-  Node* impl = V8Node::toImpl(info.Holder());
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  Node* node;
-  Node* child;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+        Node* node;
+        Node* child;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-  if (!child) {
-    exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
+        child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!child) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  Node* result = impl->replaceChild(node, child, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueForMainWorld(info, result);
-}
+        Node* result = impl->replaceChild(node, child, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueForMainWorld(info, result);
+    }
 
-CORE_EXPORT  void replaceChildMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  NodeV8Internal::replaceChildMethodForMainWorld(info);
-}
+    CORE_EXPORT void replaceChildMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        NodeV8Internal::replaceChildMethodForMainWorld(info);
+    }
 
-static void removeChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "removeChild");
+    static void removeChildMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Node", "removeChild");
 
-  Node* impl = V8Node::toImpl(info.Holder());
+        Node* impl = V8Node::toImpl(info.Holder());
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Node* child;
-  child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!child) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+        Node* child;
+        child = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!child) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
 
-    return;
-  }
+            return;
+        }
 
-  Node* result = impl->removeChild(child, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        Node* result = impl->removeChild(child, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void removeChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  NodeV8Internal::removeChildMethod(info);
-}
+    CORE_EXPORT void removeChildMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        NodeV8Internal::removeChildMethod(info);
+    }
 
 } // namespace NodeV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8NodeAccessors[] = {
-    {"nodeType", NodeV8Internal::nodeTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nodeName", NodeV8Internal::nodeNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"baseURI", NodeV8Internal::baseURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isConnected", NodeV8Internal::isConnectedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ownerDocument", NodeV8Internal::ownerDocumentAttributeGetterCallback, 0, NodeV8Internal::ownerDocumentAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"parentNode", NodeV8Internal::parentNodeAttributeGetterCallback, 0, NodeV8Internal::parentNodeAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"parentElement", NodeV8Internal::parentElementAttributeGetterCallback, 0, NodeV8Internal::parentElementAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"childNodes", NodeV8Internal::childNodesAttributeGetterCallback, 0, NodeV8Internal::childNodesAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"firstChild", NodeV8Internal::firstChildAttributeGetterCallback, 0, NodeV8Internal::firstChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastChild", NodeV8Internal::lastChildAttributeGetterCallback, 0, NodeV8Internal::lastChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"previousSibling", NodeV8Internal::previousSiblingAttributeGetterCallback, 0, NodeV8Internal::previousSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nextSibling", NodeV8Internal::nextSiblingAttributeGetterCallback, 0, NodeV8Internal::nextSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"nodeValue", NodeV8Internal::nodeValueAttributeGetterCallback, NodeV8Internal::nodeValueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"textContent", NodeV8Internal::textContentAttributeGetterCallback, NodeV8Internal::textContentAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "nodeType", NodeV8Internal::nodeTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nodeName", NodeV8Internal::nodeNameAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "baseURI", NodeV8Internal::baseURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isConnected", NodeV8Internal::isConnectedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ownerDocument", NodeV8Internal::ownerDocumentAttributeGetterCallback, 0, NodeV8Internal::ownerDocumentAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "parentNode", NodeV8Internal::parentNodeAttributeGetterCallback, 0, NodeV8Internal::parentNodeAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "parentElement", NodeV8Internal::parentElementAttributeGetterCallback, 0, NodeV8Internal::parentElementAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "childNodes", NodeV8Internal::childNodesAttributeGetterCallback, 0, NodeV8Internal::childNodesAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "firstChild", NodeV8Internal::firstChildAttributeGetterCallback, 0, NodeV8Internal::firstChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastChild", NodeV8Internal::lastChildAttributeGetterCallback, 0, NodeV8Internal::lastChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "previousSibling", NodeV8Internal::previousSiblingAttributeGetterCallback, 0, NodeV8Internal::previousSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nextSibling", NodeV8Internal::nextSiblingAttributeGetterCallback, 0, NodeV8Internal::nextSiblingAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "nodeValue", NodeV8Internal::nodeValueAttributeGetterCallback, NodeV8Internal::nodeValueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "textContent", NodeV8Internal::textContentAttributeGetterCallback, NodeV8Internal::textContentAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8NodeMethods[] = {
-    {"hasChildNodes", NodeV8Internal::hasChildNodesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getRootNode", NodeV8Internal::getRootNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"normalize", NodeV8Internal::normalizeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cloneNode", NodeV8Internal::cloneNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isEqualNode", NodeV8Internal::isEqualNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isSameNode", NodeV8Internal::isSameNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compareDocumentPosition", NodeV8Internal::compareDocumentPositionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"contains", NodeV8Internal::containsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lookupPrefix", NodeV8Internal::lookupPrefixMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lookupNamespaceURI", NodeV8Internal::lookupNamespaceURIMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isDefaultNamespace", NodeV8Internal::isDefaultNamespaceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"insertBefore", NodeV8Internal::insertBeforeMethodCallback, NodeV8Internal::insertBeforeMethodCallbackForMainWorld, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"appendChild", NodeV8Internal::appendChildMethodCallback, NodeV8Internal::appendChildMethodCallbackForMainWorld, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"replaceChild", NodeV8Internal::replaceChildMethodCallback, NodeV8Internal::replaceChildMethodCallbackForMainWorld, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeChild", NodeV8Internal::removeChildMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "hasChildNodes", NodeV8Internal::hasChildNodesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getRootNode", NodeV8Internal::getRootNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "normalize", NodeV8Internal::normalizeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cloneNode", NodeV8Internal::cloneNodeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isEqualNode", NodeV8Internal::isEqualNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isSameNode", NodeV8Internal::isSameNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compareDocumentPosition", NodeV8Internal::compareDocumentPositionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "contains", NodeV8Internal::containsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lookupPrefix", NodeV8Internal::lookupPrefixMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lookupNamespaceURI", NodeV8Internal::lookupNamespaceURIMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isDefaultNamespace", NodeV8Internal::isDefaultNamespaceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "insertBefore", NodeV8Internal::insertBeforeMethodCallback, NodeV8Internal::insertBeforeMethodCallbackForMainWorld, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "appendChild", NodeV8Internal::appendChildMethodCallback, NodeV8Internal::appendChildMethodCallbackForMainWorld, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "replaceChild", NodeV8Internal::replaceChildMethodCallback, NodeV8Internal::replaceChildMethodCallbackForMainWorld, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeChild", NodeV8Internal::removeChildMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8NodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Node::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8Node::internalFieldCount);
+static void installV8NodeTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Node::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8Node::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8NodeConstants[] = {
-      {"ELEMENT_NODE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"ATTRIBUTE_NODE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"TEXT_NODE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"CDATA_SECTION_NODE", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"ENTITY_REFERENCE_NODE", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"ENTITY_NODE", 6, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"PROCESSING_INSTRUCTION_NODE", 7, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"COMMENT_NODE", 8, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOCUMENT_NODE", 9, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOCUMENT_TYPE_NODE", 10, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOCUMENT_FRAGMENT_NODE", 11, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"NOTATION_NODE", 12, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOCUMENT_POSITION_DISCONNECTED", 0x01, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOCUMENT_POSITION_PRECEDING", 0x02, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOCUMENT_POSITION_FOLLOWING", 0x04, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOCUMENT_POSITION_CONTAINS", 0x08, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOCUMENT_POSITION_CONTAINED_BY", 0x10, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC", 0x20, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8NodeConstants, WTF_ARRAY_LENGTH(V8NodeConstants));
-  static_assert(1 == Node::kElementNode, "the value of Node_kElementNode does not match with implementation");
-  static_assert(2 == Node::kAttributeNode, "the value of Node_kAttributeNode does not match with implementation");
-  static_assert(3 == Node::kTextNode, "the value of Node_kTextNode does not match with implementation");
-  static_assert(4 == Node::kCdataSectionNode, "the value of Node_kCdataSectionNode does not match with implementation");
-  static_assert(5 == Node::kEntityReferenceNode, "the value of Node_kEntityReferenceNode does not match with implementation");
-  static_assert(6 == Node::kEntityNode, "the value of Node_kEntityNode does not match with implementation");
-  static_assert(7 == Node::kProcessingInstructionNode, "the value of Node_kProcessingInstructionNode does not match with implementation");
-  static_assert(8 == Node::kCommentNode, "the value of Node_kCommentNode does not match with implementation");
-  static_assert(9 == Node::kDocumentNode, "the value of Node_kDocumentNode does not match with implementation");
-  static_assert(10 == Node::kDocumentTypeNode, "the value of Node_kDocumentTypeNode does not match with implementation");
-  static_assert(11 == Node::kDocumentFragmentNode, "the value of Node_kDocumentFragmentNode does not match with implementation");
-  static_assert(12 == Node::kNotationNode, "the value of Node_kNotationNode does not match with implementation");
-  static_assert(0x01 == Node::kDocumentPositionDisconnected, "the value of Node_kDocumentPositionDisconnected does not match with implementation");
-  static_assert(0x02 == Node::kDocumentPositionPreceding, "the value of Node_kDocumentPositionPreceding does not match with implementation");
-  static_assert(0x04 == Node::kDocumentPositionFollowing, "the value of Node_kDocumentPositionFollowing does not match with implementation");
-  static_assert(0x08 == Node::kDocumentPositionContains, "the value of Node_kDocumentPositionContains does not match with implementation");
-  static_assert(0x10 == Node::kDocumentPositionContainedBy, "the value of Node_kDocumentPositionContainedBy does not match with implementation");
-  static_assert(0x20 == Node::kDocumentPositionImplementationSpecific, "the value of Node_kDocumentPositionImplementationSpecific does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeAccessors, WTF_ARRAY_LENGTH(V8NodeAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeMethods, WTF_ARRAY_LENGTH(V8NodeMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8NodeConstants[] = {
+        { "ELEMENT_NODE", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "ATTRIBUTE_NODE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "TEXT_NODE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "CDATA_SECTION_NODE", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "ENTITY_REFERENCE_NODE", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "ENTITY_NODE", 6, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "PROCESSING_INSTRUCTION_NODE", 7, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "COMMENT_NODE", 8, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOCUMENT_NODE", 9, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOCUMENT_TYPE_NODE", 10, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOCUMENT_FRAGMENT_NODE", 11, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "NOTATION_NODE", 12, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOCUMENT_POSITION_DISCONNECTED", 0x01, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOCUMENT_POSITION_PRECEDING", 0x02, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOCUMENT_POSITION_FOLLOWING", 0x04, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOCUMENT_POSITION_CONTAINS", 0x08, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOCUMENT_POSITION_CONTAINED_BY", 0x10, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC", 0x20, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8NodeConstants, WTF_ARRAY_LENGTH(V8NodeConstants));
+    static_assert(1 == Node::kElementNode, "the value of Node_kElementNode does not match with implementation");
+    static_assert(2 == Node::kAttributeNode, "the value of Node_kAttributeNode does not match with implementation");
+    static_assert(3 == Node::kTextNode, "the value of Node_kTextNode does not match with implementation");
+    static_assert(4 == Node::kCdataSectionNode, "the value of Node_kCdataSectionNode does not match with implementation");
+    static_assert(5 == Node::kEntityReferenceNode, "the value of Node_kEntityReferenceNode does not match with implementation");
+    static_assert(6 == Node::kEntityNode, "the value of Node_kEntityNode does not match with implementation");
+    static_assert(7 == Node::kProcessingInstructionNode, "the value of Node_kProcessingInstructionNode does not match with implementation");
+    static_assert(8 == Node::kCommentNode, "the value of Node_kCommentNode does not match with implementation");
+    static_assert(9 == Node::kDocumentNode, "the value of Node_kDocumentNode does not match with implementation");
+    static_assert(10 == Node::kDocumentTypeNode, "the value of Node_kDocumentTypeNode does not match with implementation");
+    static_assert(11 == Node::kDocumentFragmentNode, "the value of Node_kDocumentFragmentNode does not match with implementation");
+    static_assert(12 == Node::kNotationNode, "the value of Node_kNotationNode does not match with implementation");
+    static_assert(0x01 == Node::kDocumentPositionDisconnected, "the value of Node_kDocumentPositionDisconnected does not match with implementation");
+    static_assert(0x02 == Node::kDocumentPositionPreceding, "the value of Node_kDocumentPositionPreceding does not match with implementation");
+    static_assert(0x04 == Node::kDocumentPositionFollowing, "the value of Node_kDocumentPositionFollowing does not match with implementation");
+    static_assert(0x08 == Node::kDocumentPositionContains, "the value of Node_kDocumentPositionContains does not match with implementation");
+    static_assert(0x10 == Node::kDocumentPositionContainedBy, "the value of Node_kDocumentPositionContainedBy does not match with implementation");
+    static_assert(0x20 == Node::kDocumentPositionImplementationSpecific, "the value of Node_kDocumentPositionImplementationSpecific does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeAccessors, WTF_ARRAY_LENGTH(V8NodeAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8NodeMethods, WTF_ARRAY_LENGTH(V8NodeMethods));
 }
 
-void V8Node::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Node::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
+void V8Node::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Node::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
 }
 
-v8::Local<v8::FunctionTemplate> V8Node::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NodeTemplate);
+v8::Local<v8::FunctionTemplate> V8Node::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8NodeTemplate);
 }
 
-bool V8Node::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Node::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Node::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Node::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Node* V8Node::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Node* V8Node::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

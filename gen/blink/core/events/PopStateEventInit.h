@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PopStateEventInit_h
 #define PopStateEventInit_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class CORE_EXPORT PopStateEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PopStateEventInit();
-  virtual ~PopStateEventInit();
-  PopStateEventInit(const PopStateEventInit&);
-  PopStateEventInit& operator=(const PopStateEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasState() const;
-  ScriptValue state() const;
-  void setState(ScriptValue);
+public:
+    PopStateEventInit();
+    virtual ~PopStateEventInit();
+    PopStateEventInit(const PopStateEventInit&);
+    PopStateEventInit& operator=(const PopStateEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasState() const;
+    ScriptValue state() const;
+    void setState(ScriptValue);
 
- private:
-  ScriptValue m_state;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PopStateEventInit;
+private:
+    ScriptValue m_state;
+
+    friend class V8PopStateEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PopStateEventInit_h
+#endif // PopStateEventInit_h

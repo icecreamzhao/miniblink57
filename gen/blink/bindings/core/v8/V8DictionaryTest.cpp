@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8DictionaryTest.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -51,213 +51,234 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&DictionaryTest::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DictionaryTest is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DictionaryTestV8Internal {
 
-static void setMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DictionaryTest", "set");
+    static void setMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DictionaryTest", "set");
 
-  DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
+        DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
 
-  InternalDictionary testingDictionary;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('testingDictionary') is not an object.");
+        InternalDictionary testingDictionary;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('testingDictionary') is not an object.");
 
-    return;
-  }
-  V8InternalDictionary::toImpl(info.GetIsolate(), info[0], testingDictionary, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8InternalDictionary::toImpl(info.GetIsolate(), info[0], testingDictionary, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->set(testingDictionary);
-}
+        impl->set(testingDictionary);
+    }
 
- void setMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTestV8Internal::setMethod(info);
-}
+    void setMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTestV8Internal::setMethod(info);
+    }
 
-static void getMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
+    static void getMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
 
-  InternalDictionary result;
-  impl->get(result);
-  v8SetReturnValue(info, result);
-}
+        InternalDictionary result;
+        impl->get(result);
+        v8SetReturnValue(info, result);
+    }
 
- void getMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTestV8Internal::getMethod(info);
-}
+    void getMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTestV8Internal::getMethod(info);
+    }
 
-static void getDictionaryMemberPropertiesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
+    static void getDictionaryMemberPropertiesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue result = impl->getDictionaryMemberProperties(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->getDictionaryMemberProperties(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
- void getDictionaryMemberPropertiesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTestV8Internal::getDictionaryMemberPropertiesMethod(info);
-}
+    void getDictionaryMemberPropertiesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTestV8Internal::getDictionaryMemberPropertiesMethod(info);
+    }
 
-static void setDerivedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DictionaryTest", "setDerived");
+    static void setDerivedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DictionaryTest", "setDerived");
 
-  DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
+        DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  InternalDictionaryDerived derived;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('derived') is not an object.");
+        InternalDictionaryDerived derived;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('derived') is not an object.");
 
-    return;
-  }
-  V8InternalDictionaryDerived::toImpl(info.GetIsolate(), info[0], derived, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8InternalDictionaryDerived::toImpl(info.GetIsolate(), info[0], derived, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setDerived(derived);
-}
+        impl->setDerived(derived);
+    }
 
- void setDerivedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTestV8Internal::setDerivedMethod(info);
-}
+    void setDerivedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTestV8Internal::setDerivedMethod(info);
+    }
 
-static void getDerivedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
+    static void getDerivedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
 
-  InternalDictionaryDerived result;
-  impl->getDerived(result);
-  v8SetReturnValue(info, result);
-}
+        InternalDictionaryDerived result;
+        impl->getDerived(result);
+        v8SetReturnValue(info, result);
+    }
 
- void getDerivedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTestV8Internal::getDerivedMethod(info);
-}
+    void getDerivedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTestV8Internal::getDerivedMethod(info);
+    }
 
-static void setDerivedDerivedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DictionaryTest", "setDerivedDerived");
+    static void setDerivedDerivedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DictionaryTest", "setDerivedDerived");
 
-  DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
+        DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  InternalDictionaryDerivedDerived derived;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('derived') is not an object.");
+        InternalDictionaryDerivedDerived derived;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('derived') is not an object.");
 
-    return;
-  }
-  V8InternalDictionaryDerivedDerived::toImpl(info.GetIsolate(), info[0], derived, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8InternalDictionaryDerivedDerived::toImpl(info.GetIsolate(), info[0], derived, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setDerivedDerived(derived);
-}
+        impl->setDerivedDerived(derived);
+    }
 
- void setDerivedDerivedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTestV8Internal::setDerivedDerivedMethod(info);
-}
+    void setDerivedDerivedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTestV8Internal::setDerivedDerivedMethod(info);
+    }
 
-static void getDerivedDerivedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
+    static void getDerivedDerivedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
 
-  InternalDictionaryDerivedDerived result;
-  impl->getDerivedDerived(result);
-  v8SetReturnValue(info, result);
-}
+        InternalDictionaryDerivedDerived result;
+        impl->getDerivedDerived(result);
+        v8SetReturnValue(info, result);
+    }
 
- void getDerivedDerivedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTestV8Internal::getDerivedDerivedMethod(info);
-}
+    void getDerivedDerivedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTestV8Internal::getDerivedDerivedMethod(info);
+    }
 
-static void stringFromIterableMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DictionaryTest", "stringFromIterable");
+    static void stringFromIterableMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "DictionaryTest", "stringFromIterable");
 
-  DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
+        DictionaryTest* impl = V8DictionaryTest::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  Dictionary iterableDictionary;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('iterableDictionary') is not an object.");
+        Dictionary iterableDictionary;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('iterableDictionary') is not an object.");
 
-    return;
-  }
-  iterableDictionary = Dictionary(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        iterableDictionary = Dictionary(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  String result = impl->stringFromIterable(scriptState, iterableDictionary, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
+        String result = impl->stringFromIterable(scriptState, iterableDictionary, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
 
- void stringFromIterableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DictionaryTestV8Internal::stringFromIterableMethod(info);
-}
+    void stringFromIterableMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DictionaryTestV8Internal::stringFromIterableMethod(info);
+    }
 
 } // namespace DictionaryTestV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8DictionaryTestMethods[] = {
-    {"set", DictionaryTestV8Internal::setMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"get", DictionaryTestV8Internal::getMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getDictionaryMemberProperties", DictionaryTestV8Internal::getDictionaryMemberPropertiesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setDerived", DictionaryTestV8Internal::setDerivedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getDerived", DictionaryTestV8Internal::getDerivedMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setDerivedDerived", DictionaryTestV8Internal::setDerivedDerivedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getDerivedDerived", DictionaryTestV8Internal::getDerivedDerivedMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"stringFromIterable", DictionaryTestV8Internal::stringFromIterableMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "set", DictionaryTestV8Internal::setMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "get", DictionaryTestV8Internal::getMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getDictionaryMemberProperties", DictionaryTestV8Internal::getDictionaryMemberPropertiesMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setDerived", DictionaryTestV8Internal::setDerivedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getDerived", DictionaryTestV8Internal::getDerivedMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setDerivedDerived", DictionaryTestV8Internal::setDerivedDerivedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getDerivedDerived", DictionaryTestV8Internal::getDerivedDerivedMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "stringFromIterable", DictionaryTestV8Internal::stringFromIterableMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8DictionaryTestTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DictionaryTest::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DictionaryTest::internalFieldCount);
+static void installV8DictionaryTestTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8DictionaryTest::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8DictionaryTest::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DictionaryTestMethods, WTF_ARRAY_LENGTH(V8DictionaryTestMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DictionaryTestMethods, WTF_ARRAY_LENGTH(V8DictionaryTestMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8DictionaryTest::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DictionaryTestTemplate);
+v8::Local<v8::FunctionTemplate> V8DictionaryTest::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DictionaryTestTemplate);
 }
 
-bool V8DictionaryTest::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8DictionaryTest::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8DictionaryTest::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8DictionaryTest::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DictionaryTest* V8DictionaryTest::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DictionaryTest* V8DictionaryTest::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

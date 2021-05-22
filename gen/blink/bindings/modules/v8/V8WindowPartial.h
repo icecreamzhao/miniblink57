@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8WindowPartial_h
 #define V8WindowPartial_h
 
@@ -26,34 +26,35 @@ namespace blink {
 class ScriptState;
 
 class V8WindowPartial {
-  STATIC_ONLY(V8WindowPartial);
- public:
-  static void initialize();
-  static void openMethodCustom(const v8::FunctionCallbackInfo<v8::Value>&);
-  static void postMessageMethodCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+    STATIC_ONLY(V8WindowPartial);
 
-  static void installGamepadExtensions(ScriptState*, v8::Local<v8::Object> instance);
-  static void installGamepadExtensions(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installImageCapture(ScriptState*, v8::Local<v8::Object> instance);
-  static void installImageCapture(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installServiceWorkerNavigationPreload(ScriptState*, v8::Local<v8::Object> instance);
-  static void installServiceWorkerNavigationPreload(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installWebUSB(ScriptState*, v8::Local<v8::Object> instance);
-  static void installWebUSB(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
-  static void installWebVR(ScriptState*, v8::Local<v8::Object> instance);
-  static void installWebVR(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+public:
+    static void initialize();
+    static void openMethodCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+    static void postMessageMethodCustom(const v8::FunctionCallbackInfo<v8::Value>&);
 
-  static void installRuntimeEnabledFeatures(
-      v8::Isolate* isolate,
-      const DOMWrapperWorld& world,
-      v8::Local<v8::Object> instance,
-      v8::Local<v8::Object> prototype,
-      v8::Local<v8::Function> interface);
+    static void installGamepadExtensions(ScriptState*, v8::Local<v8::Object> instance);
+    static void installGamepadExtensions(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installImageCapture(ScriptState*, v8::Local<v8::Object> instance);
+    static void installImageCapture(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installServiceWorkerNavigationPreload(ScriptState*, v8::Local<v8::Object> instance);
+    static void installServiceWorkerNavigationPreload(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installWebUSB(ScriptState*, v8::Local<v8::Object> instance);
+    static void installWebUSB(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
+    static void installWebVR(ScriptState*, v8::Local<v8::Object> instance);
+    static void installWebVR(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface);
 
- private:
-  static void installV8WindowTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
+    static void installRuntimeEnabledFeatures(
+        v8::Isolate* isolate,
+        const DOMWrapperWorld& world,
+        v8::Local<v8::Object> instance,
+        v8::Local<v8::Object> prototype,
+        v8::Local<v8::Function> interface);
+
+private:
+    static void installV8WindowTemplate(v8::Isolate*, const DOMWrapperWorld&, v8::Local<v8::FunctionTemplate> interfaceTemplate);
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8WindowPartial_h
+#endif // V8WindowPartial_h

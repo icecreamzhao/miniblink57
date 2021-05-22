@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RadioNodeListOrElement_h
 #define RadioNodeListOrElement_h
 
@@ -24,58 +24,60 @@ class Element;
 class RadioNodeList;
 
 class CORE_EXPORT RadioNodeListOrElement final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RadioNodeListOrElement();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isRadioNodeList() const { return m_type == SpecificTypeRadioNodeList; }
-  RadioNodeList* getAsRadioNodeList() const;
-  void setRadioNodeList(RadioNodeList*);
-  static RadioNodeListOrElement fromRadioNodeList(RadioNodeList*);
+public:
+    RadioNodeListOrElement();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isElement() const { return m_type == SpecificTypeElement; }
-  Element* getAsElement() const;
-  void setElement(Element*);
-  static RadioNodeListOrElement fromElement(Element*);
+    bool isRadioNodeList() const { return m_type == SpecificTypeRadioNodeList; }
+    RadioNodeList* getAsRadioNodeList() const;
+    void setRadioNodeList(RadioNodeList*);
+    static RadioNodeListOrElement fromRadioNodeList(RadioNodeList*);
 
-  RadioNodeListOrElement(const RadioNodeListOrElement&);
-  ~RadioNodeListOrElement();
-  RadioNodeListOrElement& operator=(const RadioNodeListOrElement&);
-  DECLARE_TRACE();
+    bool isElement() const { return m_type == SpecificTypeElement; }
+    Element* getAsElement() const;
+    void setElement(Element*);
+    static RadioNodeListOrElement fromElement(Element*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeRadioNodeList,
-    SpecificTypeElement,
-  };
-  SpecificTypes m_type;
+    RadioNodeListOrElement(const RadioNodeListOrElement&);
+    ~RadioNodeListOrElement();
+    RadioNodeListOrElement& operator=(const RadioNodeListOrElement&);
+    DECLARE_TRACE();
 
-  Member<RadioNodeList> m_radioNodeList;
-  Member<Element> m_element;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeRadioNodeList,
+        SpecificTypeElement,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const RadioNodeListOrElement&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<RadioNodeList> m_radioNodeList;
+    Member<Element> m_element;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const RadioNodeListOrElement&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8RadioNodeListOrElement final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RadioNodeListOrElement&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, RadioNodeListOrElement&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const RadioNodeListOrElement&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RadioNodeListOrElement& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, RadioNodeListOrElement& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<RadioNodeListOrElement> {
-  CORE_EXPORT static RadioNodeListOrElement nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static RadioNodeListOrElement nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -83,4 +85,4 @@ struct NativeValueTraits<RadioNodeListOrElement> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::RadioNodeListOrElement);
 
-#endif  // RadioNodeListOrElement_h
+#endif // RadioNodeListOrElement_h

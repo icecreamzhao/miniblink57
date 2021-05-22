@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AudioScheduledSourceNode_h
 #define V8AudioScheduledSourceNode_h
 
@@ -25,32 +25,36 @@
 namespace blink {
 
 class V8AudioScheduledSourceNode {
-  STATIC_ONLY(V8AudioScheduledSourceNode);
- public:
-  MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static AudioScheduledSourceNode* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<AudioScheduledSourceNode>();
-  }
-  MODULES_EXPORT static AudioScheduledSourceNode* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<AudioScheduledSourceNode>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<AudioScheduledSourceNode>());
-  }
-  static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
+    STATIC_ONLY(V8AudioScheduledSourceNode);
+
+public:
+    MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static AudioScheduledSourceNode* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<AudioScheduledSourceNode>();
+    }
+    MODULES_EXPORT static AudioScheduledSourceNode* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<AudioScheduledSourceNode>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<AudioScheduledSourceNode>());
+    }
+    static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
 };
 
 template <>
 struct V8TypeOf<AudioScheduledSourceNode> {
-  typedef V8AudioScheduledSourceNode Type;
+    typedef V8AudioScheduledSourceNode Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8AudioScheduledSourceNode_h
+#endif // V8AudioScheduledSourceNode_h

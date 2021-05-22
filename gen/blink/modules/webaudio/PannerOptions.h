@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PannerOptions_h
 #define PannerOptions_h
 
@@ -20,103 +20,104 @@
 namespace blink {
 
 class MODULES_EXPORT PannerOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PannerOptions();
-  virtual ~PannerOptions();
-  PannerOptions(const PannerOptions&);
-  PannerOptions& operator=(const PannerOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasConeInnerAngle() const;
-  double coneInnerAngle() const;
-  void setConeInnerAngle(double);
+public:
+    PannerOptions();
+    virtual ~PannerOptions();
+    PannerOptions(const PannerOptions&);
+    PannerOptions& operator=(const PannerOptions&);
 
-  bool hasConeOuterAngle() const;
-  double coneOuterAngle() const;
-  void setConeOuterAngle(double);
+    bool hasConeInnerAngle() const;
+    double coneInnerAngle() const;
+    void setConeInnerAngle(double);
 
-  bool hasConeOuterGain() const;
-  double coneOuterGain() const;
-  void setConeOuterGain(double);
+    bool hasConeOuterAngle() const;
+    double coneOuterAngle() const;
+    void setConeOuterAngle(double);
 
-  bool hasDistanceModel() const;
-  String distanceModel() const;
-  void setDistanceModel(String);
+    bool hasConeOuterGain() const;
+    double coneOuterGain() const;
+    void setConeOuterGain(double);
 
-  bool hasMaxDistance() const;
-  double maxDistance() const;
-  void setMaxDistance(double);
+    bool hasDistanceModel() const;
+    String distanceModel() const;
+    void setDistanceModel(String);
 
-  bool hasOrientationX() const;
-  float orientationX() const;
-  void setOrientationX(float);
+    bool hasMaxDistance() const;
+    double maxDistance() const;
+    void setMaxDistance(double);
 
-  bool hasOrientationY() const;
-  float orientationY() const;
-  void setOrientationY(float);
+    bool hasOrientationX() const;
+    float orientationX() const;
+    void setOrientationX(float);
 
-  bool hasOrientationZ() const;
-  float orientationZ() const;
-  void setOrientationZ(float);
+    bool hasOrientationY() const;
+    float orientationY() const;
+    void setOrientationY(float);
 
-  bool hasPanningModel() const;
-  String panningModel() const;
-  void setPanningModel(String);
+    bool hasOrientationZ() const;
+    float orientationZ() const;
+    void setOrientationZ(float);
 
-  bool hasPositionX() const;
-  float positionX() const;
-  void setPositionX(float);
+    bool hasPanningModel() const;
+    String panningModel() const;
+    void setPanningModel(String);
 
-  bool hasPositionY() const;
-  float positionY() const;
-  void setPositionY(float);
+    bool hasPositionX() const;
+    float positionX() const;
+    void setPositionX(float);
 
-  bool hasPositionZ() const;
-  float positionZ() const;
-  void setPositionZ(float);
+    bool hasPositionY() const;
+    float positionY() const;
+    void setPositionY(float);
 
-  bool hasRefDistance() const;
-  double refDistance() const;
-  void setRefDistance(double);
+    bool hasPositionZ() const;
+    float positionZ() const;
+    void setPositionZ(float);
 
-  bool hasRolloffFactor() const;
-  double rolloffFactor() const;
-  void setRolloffFactor(double);
+    bool hasRefDistance() const;
+    double refDistance() const;
+    void setRefDistance(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRolloffFactor() const;
+    double rolloffFactor() const;
+    void setRolloffFactor(double);
 
- private:
-  bool m_hasConeInnerAngle = false;
-  double m_coneInnerAngle;
-  bool m_hasConeOuterAngle = false;
-  double m_coneOuterAngle;
-  bool m_hasConeOuterGain = false;
-  double m_coneOuterGain;
-  String m_distanceModel;
-  bool m_hasMaxDistance = false;
-  double m_maxDistance;
-  bool m_hasOrientationX = false;
-  float m_orientationX;
-  bool m_hasOrientationY = false;
-  float m_orientationY;
-  bool m_hasOrientationZ = false;
-  float m_orientationZ;
-  String m_panningModel;
-  bool m_hasPositionX = false;
-  float m_positionX;
-  bool m_hasPositionY = false;
-  float m_positionY;
-  bool m_hasPositionZ = false;
-  float m_positionZ;
-  bool m_hasRefDistance = false;
-  double m_refDistance;
-  bool m_hasRolloffFactor = false;
-  double m_rolloffFactor;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PannerOptions;
+private:
+    bool m_hasConeInnerAngle = false;
+    double m_coneInnerAngle;
+    bool m_hasConeOuterAngle = false;
+    double m_coneOuterAngle;
+    bool m_hasConeOuterGain = false;
+    double m_coneOuterGain;
+    String m_distanceModel;
+    bool m_hasMaxDistance = false;
+    double m_maxDistance;
+    bool m_hasOrientationX = false;
+    float m_orientationX;
+    bool m_hasOrientationY = false;
+    float m_orientationY;
+    bool m_hasOrientationZ = false;
+    float m_orientationZ;
+    String m_panningModel;
+    bool m_hasPositionX = false;
+    float m_positionX;
+    bool m_hasPositionY = false;
+    float m_positionY;
+    bool m_hasPositionZ = false;
+    float m_positionZ;
+    bool m_hasRefDistance = false;
+    double m_refDistance;
+    bool m_hasRolloffFactor = false;
+    double m_rolloffFactor;
+
+    friend class V8PannerOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PannerOptions_h
+#endif // PannerOptions_h

@@ -8,71 +8,85 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "DOMPointInit.h"
 
 namespace blink {
 
-DOMPointInit::DOMPointInit() {
-  setW(1);
-  setX(0);
-  setY(0);
-  setZ(0);
+DOMPointInit::DOMPointInit()
+{
+    setW(1);
+    setX(0);
+    setY(0);
+    setZ(0);
 }
 
-DOMPointInit::~DOMPointInit() {}
+DOMPointInit::~DOMPointInit() { }
 
 DOMPointInit::DOMPointInit(const DOMPointInit&) = default;
 
 DOMPointInit& DOMPointInit::operator=(const DOMPointInit&) = default;
 
-bool DOMPointInit::hasW() const {
-  return m_hasW;
+bool DOMPointInit::hasW() const
+{
+    return m_hasW;
 }
-double DOMPointInit::w() const {
-  DCHECK(m_hasW);
-  return m_w;
+double DOMPointInit::w() const
+{
+    DCHECK(m_hasW);
+    return m_w;
 }
-void DOMPointInit::setW(double value) {
-  m_w = value;
-  m_hasW = true;
+void DOMPointInit::setW(double value)
+{
+    m_w = value;
+    m_hasW = true;
 }
-bool DOMPointInit::hasX() const {
-  return m_hasX;
+bool DOMPointInit::hasX() const
+{
+    return m_hasX;
 }
-double DOMPointInit::x() const {
-  DCHECK(m_hasX);
-  return m_x;
+double DOMPointInit::x() const
+{
+    DCHECK(m_hasX);
+    return m_x;
 }
-void DOMPointInit::setX(double value) {
-  m_x = value;
-  m_hasX = true;
+void DOMPointInit::setX(double value)
+{
+    m_x = value;
+    m_hasX = true;
 }
-bool DOMPointInit::hasY() const {
-  return m_hasY;
+bool DOMPointInit::hasY() const
+{
+    return m_hasY;
 }
-double DOMPointInit::y() const {
-  DCHECK(m_hasY);
-  return m_y;
+double DOMPointInit::y() const
+{
+    DCHECK(m_hasY);
+    return m_y;
 }
-void DOMPointInit::setY(double value) {
-  m_y = value;
-  m_hasY = true;
+void DOMPointInit::setY(double value)
+{
+    m_y = value;
+    m_hasY = true;
 }
-bool DOMPointInit::hasZ() const {
-  return m_hasZ;
+bool DOMPointInit::hasZ() const
+{
+    return m_hasZ;
 }
-double DOMPointInit::z() const {
-  DCHECK(m_hasZ);
-  return m_z;
+double DOMPointInit::z() const
+{
+    DCHECK(m_hasZ);
+    return m_z;
 }
-void DOMPointInit::setZ(double value) {
-  m_z = value;
-  m_hasZ = true;
+void DOMPointInit::setZ(double value)
+{
+    m_z = value;
+    m_hasZ = true;
 }
 
-DEFINE_TRACE(DOMPointInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(DOMPointInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

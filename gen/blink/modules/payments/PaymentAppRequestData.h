@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentAppRequestData_h
 #define PaymentAppRequestData_h
 
@@ -24,49 +24,50 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentAppRequestData : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentAppRequestData();
-  virtual ~PaymentAppRequestData();
-  PaymentAppRequestData(const PaymentAppRequestData&);
-  PaymentAppRequestData& operator=(const PaymentAppRequestData&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMethodData() const;
-  const HeapVector<PaymentMethodData>& methodData() const;
-  void setMethodData(const HeapVector<PaymentMethodData>&);
+public:
+    PaymentAppRequestData();
+    virtual ~PaymentAppRequestData();
+    PaymentAppRequestData(const PaymentAppRequestData&);
+    PaymentAppRequestData& operator=(const PaymentAppRequestData&);
 
-  bool hasModifiers() const;
-  const HeapVector<PaymentDetailsModifier>& modifiers() const;
-  void setModifiers(const HeapVector<PaymentDetailsModifier>&);
+    bool hasMethodData() const;
+    const HeapVector<PaymentMethodData>& methodData() const;
+    void setMethodData(const HeapVector<PaymentMethodData>&);
 
-  bool hasOptionId() const;
-  String optionId() const;
-  void setOptionId(String);
+    bool hasModifiers() const;
+    const HeapVector<PaymentDetailsModifier>& modifiers() const;
+    void setModifiers(const HeapVector<PaymentDetailsModifier>&);
 
-  bool hasOrigin() const;
-  String origin() const;
-  void setOrigin(String);
+    bool hasOptionId() const;
+    String optionId() const;
+    void setOptionId(String);
 
-  bool hasTotal() const;
-  const PaymentItem& total() const;
-  void setTotal(const PaymentItem&);
+    bool hasOrigin() const;
+    String origin() const;
+    void setOrigin(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTotal() const;
+    const PaymentItem& total() const;
+    void setTotal(const PaymentItem&);
 
- private:
-  bool m_hasMethodData = false;
-  HeapVector<PaymentMethodData> m_methodData;
-  bool m_hasModifiers = false;
-  HeapVector<PaymentDetailsModifier> m_modifiers;
-  String m_optionId;
-  String m_origin;
-  bool m_hasTotal = false;
-  PaymentItem m_total;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentAppRequestData;
+private:
+    bool m_hasMethodData = false;
+    HeapVector<PaymentMethodData> m_methodData;
+    bool m_hasModifiers = false;
+    HeapVector<PaymentDetailsModifier> m_modifiers;
+    String m_optionId;
+    String m_origin;
+    bool m_hasTotal = false;
+    PaymentItem m_total;
+
+    friend class V8PaymentAppRequestData;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentAppRequestData_h
+#endif // PaymentAppRequestData_h

@@ -8,107 +8,130 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "WebGLContextAttributes.h"
 
 namespace blink {
 
-WebGLContextAttributes::WebGLContextAttributes() {
-  setAlpha(true);
-  setAntialias(true);
-  setDepth(true);
-  setFailIfMajorPerformanceCaveat(false);
-  setPremultipliedAlpha(true);
-  setPreserveDrawingBuffer(false);
-  setStencil(false);
+WebGLContextAttributes::WebGLContextAttributes()
+{
+    setAlpha(true);
+    setAntialias(true);
+    setDepth(true);
+    setFailIfMajorPerformanceCaveat(false);
+    setPremultipliedAlpha(true);
+    setPreserveDrawingBuffer(false);
+    setStencil(false);
 }
 
-WebGLContextAttributes::~WebGLContextAttributes() {}
+WebGLContextAttributes::~WebGLContextAttributes() { }
 
 WebGLContextAttributes::WebGLContextAttributes(const WebGLContextAttributes&) = default;
 
 WebGLContextAttributes& WebGLContextAttributes::operator=(const WebGLContextAttributes&) = default;
 
-bool WebGLContextAttributes::hasAlpha() const {
-  return m_hasAlpha;
+bool WebGLContextAttributes::hasAlpha() const
+{
+    return m_hasAlpha;
 }
-bool WebGLContextAttributes::alpha() const {
-  DCHECK(m_hasAlpha);
-  return m_alpha;
+bool WebGLContextAttributes::alpha() const
+{
+    DCHECK(m_hasAlpha);
+    return m_alpha;
 }
-void WebGLContextAttributes::setAlpha(bool value) {
-  m_alpha = value;
-  m_hasAlpha = true;
+void WebGLContextAttributes::setAlpha(bool value)
+{
+    m_alpha = value;
+    m_hasAlpha = true;
 }
-bool WebGLContextAttributes::hasAntialias() const {
-  return m_hasAntialias;
+bool WebGLContextAttributes::hasAntialias() const
+{
+    return m_hasAntialias;
 }
-bool WebGLContextAttributes::antialias() const {
-  DCHECK(m_hasAntialias);
-  return m_antialias;
+bool WebGLContextAttributes::antialias() const
+{
+    DCHECK(m_hasAntialias);
+    return m_antialias;
 }
-void WebGLContextAttributes::setAntialias(bool value) {
-  m_antialias = value;
-  m_hasAntialias = true;
+void WebGLContextAttributes::setAntialias(bool value)
+{
+    m_antialias = value;
+    m_hasAntialias = true;
 }
-bool WebGLContextAttributes::hasDepth() const {
-  return m_hasDepth;
+bool WebGLContextAttributes::hasDepth() const
+{
+    return m_hasDepth;
 }
-bool WebGLContextAttributes::depth() const {
-  DCHECK(m_hasDepth);
-  return m_depth;
+bool WebGLContextAttributes::depth() const
+{
+    DCHECK(m_hasDepth);
+    return m_depth;
 }
-void WebGLContextAttributes::setDepth(bool value) {
-  m_depth = value;
-  m_hasDepth = true;
+void WebGLContextAttributes::setDepth(bool value)
+{
+    m_depth = value;
+    m_hasDepth = true;
 }
-bool WebGLContextAttributes::hasFailIfMajorPerformanceCaveat() const {
-  return m_hasFailIfMajorPerformanceCaveat;
+bool WebGLContextAttributes::hasFailIfMajorPerformanceCaveat() const
+{
+    return m_hasFailIfMajorPerformanceCaveat;
 }
-bool WebGLContextAttributes::failIfMajorPerformanceCaveat() const {
-  DCHECK(m_hasFailIfMajorPerformanceCaveat);
-  return m_failIfMajorPerformanceCaveat;
+bool WebGLContextAttributes::failIfMajorPerformanceCaveat() const
+{
+    DCHECK(m_hasFailIfMajorPerformanceCaveat);
+    return m_failIfMajorPerformanceCaveat;
 }
-void WebGLContextAttributes::setFailIfMajorPerformanceCaveat(bool value) {
-  m_failIfMajorPerformanceCaveat = value;
-  m_hasFailIfMajorPerformanceCaveat = true;
+void WebGLContextAttributes::setFailIfMajorPerformanceCaveat(bool value)
+{
+    m_failIfMajorPerformanceCaveat = value;
+    m_hasFailIfMajorPerformanceCaveat = true;
 }
-bool WebGLContextAttributes::hasPremultipliedAlpha() const {
-  return m_hasPremultipliedAlpha;
+bool WebGLContextAttributes::hasPremultipliedAlpha() const
+{
+    return m_hasPremultipliedAlpha;
 }
-bool WebGLContextAttributes::premultipliedAlpha() const {
-  DCHECK(m_hasPremultipliedAlpha);
-  return m_premultipliedAlpha;
+bool WebGLContextAttributes::premultipliedAlpha() const
+{
+    DCHECK(m_hasPremultipliedAlpha);
+    return m_premultipliedAlpha;
 }
-void WebGLContextAttributes::setPremultipliedAlpha(bool value) {
-  m_premultipliedAlpha = value;
-  m_hasPremultipliedAlpha = true;
+void WebGLContextAttributes::setPremultipliedAlpha(bool value)
+{
+    m_premultipliedAlpha = value;
+    m_hasPremultipliedAlpha = true;
 }
-bool WebGLContextAttributes::hasPreserveDrawingBuffer() const {
-  return m_hasPreserveDrawingBuffer;
+bool WebGLContextAttributes::hasPreserveDrawingBuffer() const
+{
+    return m_hasPreserveDrawingBuffer;
 }
-bool WebGLContextAttributes::preserveDrawingBuffer() const {
-  DCHECK(m_hasPreserveDrawingBuffer);
-  return m_preserveDrawingBuffer;
+bool WebGLContextAttributes::preserveDrawingBuffer() const
+{
+    DCHECK(m_hasPreserveDrawingBuffer);
+    return m_preserveDrawingBuffer;
 }
-void WebGLContextAttributes::setPreserveDrawingBuffer(bool value) {
-  m_preserveDrawingBuffer = value;
-  m_hasPreserveDrawingBuffer = true;
+void WebGLContextAttributes::setPreserveDrawingBuffer(bool value)
+{
+    m_preserveDrawingBuffer = value;
+    m_hasPreserveDrawingBuffer = true;
 }
-bool WebGLContextAttributes::hasStencil() const {
-  return m_hasStencil;
+bool WebGLContextAttributes::hasStencil() const
+{
+    return m_hasStencil;
 }
-bool WebGLContextAttributes::stencil() const {
-  DCHECK(m_hasStencil);
-  return m_stencil;
+bool WebGLContextAttributes::stencil() const
+{
+    DCHECK(m_hasStencil);
+    return m_stencil;
 }
-void WebGLContextAttributes::setStencil(bool value) {
-  m_stencil = value;
-  m_hasStencil = true;
+void WebGLContextAttributes::setStencil(bool value)
+{
+    m_stencil = value;
+    m_hasStencil = true;
 }
 
-DEFINE_TRACE(WebGLContextAttributes) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(WebGLContextAttributes)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

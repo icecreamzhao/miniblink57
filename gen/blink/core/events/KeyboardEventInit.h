@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef KeyboardEventInit_h
 #define KeyboardEventInit_h
 
@@ -20,49 +20,50 @@
 namespace blink {
 
 class CORE_EXPORT KeyboardEventInit : public EventModifierInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  KeyboardEventInit();
-  virtual ~KeyboardEventInit();
-  KeyboardEventInit(const KeyboardEventInit&);
-  KeyboardEventInit& operator=(const KeyboardEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCode() const;
-  String code() const;
-  void setCode(String);
+public:
+    KeyboardEventInit();
+    virtual ~KeyboardEventInit();
+    KeyboardEventInit(const KeyboardEventInit&);
+    KeyboardEventInit& operator=(const KeyboardEventInit&);
 
-  bool hasIsComposing() const;
-  bool isComposing() const;
-  void setIsComposing(bool);
+    bool hasCode() const;
+    String code() const;
+    void setCode(String);
 
-  bool hasKey() const;
-  String key() const;
-  void setKey(String);
+    bool hasIsComposing() const;
+    bool isComposing() const;
+    void setIsComposing(bool);
 
-  bool hasLocation() const;
-  unsigned location() const;
-  void setLocation(unsigned);
+    bool hasKey() const;
+    String key() const;
+    void setKey(String);
 
-  bool hasRepeat() const;
-  bool repeat() const;
-  void setRepeat(bool);
+    bool hasLocation() const;
+    unsigned location() const;
+    void setLocation(unsigned);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRepeat() const;
+    bool repeat() const;
+    void setRepeat(bool);
 
- private:
-  String m_code;
-  bool m_hasIsComposing = false;
-  bool m_isComposing;
-  String m_key;
-  bool m_hasLocation = false;
-  unsigned m_location;
-  bool m_hasRepeat = false;
-  bool m_repeat;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8KeyboardEventInit;
+private:
+    String m_code;
+    bool m_hasIsComposing = false;
+    bool m_isComposing;
+    String m_key;
+    bool m_hasLocation = false;
+    unsigned m_location;
+    bool m_hasRepeat = false;
+    bool m_repeat;
+
+    friend class V8KeyboardEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // KeyboardEventInit_h
+#endif // KeyboardEventInit_h

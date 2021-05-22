@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef IdleRequestOptions_h
 #define IdleRequestOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class CORE_EXPORT IdleRequestOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  IdleRequestOptions();
-  virtual ~IdleRequestOptions();
-  IdleRequestOptions(const IdleRequestOptions&);
-  IdleRequestOptions& operator=(const IdleRequestOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasTimeout() const;
-  unsigned timeout() const;
-  void setTimeout(unsigned);
+public:
+    IdleRequestOptions();
+    virtual ~IdleRequestOptions();
+    IdleRequestOptions(const IdleRequestOptions&);
+    IdleRequestOptions& operator=(const IdleRequestOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTimeout() const;
+    unsigned timeout() const;
+    void setTimeout(unsigned);
 
- private:
-  bool m_hasTimeout = false;
-  unsigned m_timeout;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8IdleRequestOptions;
+private:
+    bool m_hasTimeout = false;
+    unsigned m_timeout;
+
+    friend class V8IdleRequestOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // IdleRequestOptions_h
+#endif // IdleRequestOptions_h

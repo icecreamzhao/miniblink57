@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaError.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,71 +45,78 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MediaError::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaError is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaErrorV8Internal {
 
-static void codeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void codeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaError* impl = V8MediaError::toImpl(holder);
+        MediaError* impl = V8MediaError::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->code());
-}
+        v8SetReturnValueUnsigned(info, impl->code());
+    }
 
-CORE_EXPORT void codeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaErrorV8Internal::codeAttributeGetter(info);
-}
+    CORE_EXPORT void codeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaErrorV8Internal::codeAttributeGetter(info);
+    }
 
 } // namespace MediaErrorV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaErrorAccessors[] = {
-    {"code", MediaErrorV8Internal::codeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "code", MediaErrorV8Internal::codeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8MediaErrorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaError::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaError::internalFieldCount);
+static void installV8MediaErrorTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaError::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaError::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8MediaErrorConstants[] = {
-      {"MEDIA_ERR_ABORTED", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"MEDIA_ERR_NETWORK", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"MEDIA_ERR_DECODE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"MEDIA_ERR_SRC_NOT_SUPPORTED", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8MediaErrorConstants, WTF_ARRAY_LENGTH(V8MediaErrorConstants));
-  static_assert(1 == MediaError::kMediaErrAborted, "the value of MediaError_kMediaErrAborted does not match with implementation");
-  static_assert(2 == MediaError::kMediaErrNetwork, "the value of MediaError_kMediaErrNetwork does not match with implementation");
-  static_assert(3 == MediaError::kMediaErrDecode, "the value of MediaError_kMediaErrDecode does not match with implementation");
-  static_assert(4 == MediaError::kMediaErrSrcNotSupported, "the value of MediaError_kMediaErrSrcNotSupported does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaErrorAccessors, WTF_ARRAY_LENGTH(V8MediaErrorAccessors));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8MediaErrorConstants[] = {
+        { "MEDIA_ERR_ABORTED", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "MEDIA_ERR_NETWORK", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "MEDIA_ERR_DECODE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "MEDIA_ERR_SRC_NOT_SUPPORTED", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8MediaErrorConstants, WTF_ARRAY_LENGTH(V8MediaErrorConstants));
+    static_assert(1 == MediaError::kMediaErrAborted, "the value of MediaError_kMediaErrAborted does not match with implementation");
+    static_assert(2 == MediaError::kMediaErrNetwork, "the value of MediaError_kMediaErrNetwork does not match with implementation");
+    static_assert(3 == MediaError::kMediaErrDecode, "the value of MediaError_kMediaErrDecode does not match with implementation");
+    static_assert(4 == MediaError::kMediaErrSrcNotSupported, "the value of MediaError_kMediaErrSrcNotSupported does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaErrorAccessors, WTF_ARRAY_LENGTH(V8MediaErrorAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaError::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaErrorTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaError::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaErrorTemplate);
 }
 
-bool V8MediaError::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaError::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaError::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaError::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaError* V8MediaError::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaError* V8MediaError::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

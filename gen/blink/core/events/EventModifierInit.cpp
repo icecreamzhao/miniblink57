@@ -8,143 +8,175 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "EventModifierInit.h"
 
 namespace blink {
 
-EventModifierInit::EventModifierInit() {
-  setAltKey(false);
-  setCtrlKey(false);
-  setMetaKey(false);
-  setModifierAltGraph(false);
-  setModifierCapsLock(false);
-  setModifierFn(false);
-  setModifierNumLock(false);
-  setModifierScrollLock(false);
-  setModifierSymbol(false);
-  setShiftKey(false);
+EventModifierInit::EventModifierInit()
+{
+    setAltKey(false);
+    setCtrlKey(false);
+    setMetaKey(false);
+    setModifierAltGraph(false);
+    setModifierCapsLock(false);
+    setModifierFn(false);
+    setModifierNumLock(false);
+    setModifierScrollLock(false);
+    setModifierSymbol(false);
+    setShiftKey(false);
 }
 
-EventModifierInit::~EventModifierInit() {}
+EventModifierInit::~EventModifierInit() { }
 
 EventModifierInit::EventModifierInit(const EventModifierInit&) = default;
 
 EventModifierInit& EventModifierInit::operator=(const EventModifierInit&) = default;
 
-bool EventModifierInit::hasAltKey() const {
-  return m_hasAltKey;
+bool EventModifierInit::hasAltKey() const
+{
+    return m_hasAltKey;
 }
-bool EventModifierInit::altKey() const {
-  DCHECK(m_hasAltKey);
-  return m_altKey;
+bool EventModifierInit::altKey() const
+{
+    DCHECK(m_hasAltKey);
+    return m_altKey;
 }
-void EventModifierInit::setAltKey(bool value) {
-  m_altKey = value;
-  m_hasAltKey = true;
+void EventModifierInit::setAltKey(bool value)
+{
+    m_altKey = value;
+    m_hasAltKey = true;
 }
-bool EventModifierInit::hasCtrlKey() const {
-  return m_hasCtrlKey;
+bool EventModifierInit::hasCtrlKey() const
+{
+    return m_hasCtrlKey;
 }
-bool EventModifierInit::ctrlKey() const {
-  DCHECK(m_hasCtrlKey);
-  return m_ctrlKey;
+bool EventModifierInit::ctrlKey() const
+{
+    DCHECK(m_hasCtrlKey);
+    return m_ctrlKey;
 }
-void EventModifierInit::setCtrlKey(bool value) {
-  m_ctrlKey = value;
-  m_hasCtrlKey = true;
+void EventModifierInit::setCtrlKey(bool value)
+{
+    m_ctrlKey = value;
+    m_hasCtrlKey = true;
 }
-bool EventModifierInit::hasMetaKey() const {
-  return m_hasMetaKey;
+bool EventModifierInit::hasMetaKey() const
+{
+    return m_hasMetaKey;
 }
-bool EventModifierInit::metaKey() const {
-  DCHECK(m_hasMetaKey);
-  return m_metaKey;
+bool EventModifierInit::metaKey() const
+{
+    DCHECK(m_hasMetaKey);
+    return m_metaKey;
 }
-void EventModifierInit::setMetaKey(bool value) {
-  m_metaKey = value;
-  m_hasMetaKey = true;
+void EventModifierInit::setMetaKey(bool value)
+{
+    m_metaKey = value;
+    m_hasMetaKey = true;
 }
-bool EventModifierInit::hasModifierAltGraph() const {
-  return m_hasModifierAltGraph;
+bool EventModifierInit::hasModifierAltGraph() const
+{
+    return m_hasModifierAltGraph;
 }
-bool EventModifierInit::modifierAltGraph() const {
-  DCHECK(m_hasModifierAltGraph);
-  return m_modifierAltGraph;
+bool EventModifierInit::modifierAltGraph() const
+{
+    DCHECK(m_hasModifierAltGraph);
+    return m_modifierAltGraph;
 }
-void EventModifierInit::setModifierAltGraph(bool value) {
-  m_modifierAltGraph = value;
-  m_hasModifierAltGraph = true;
+void EventModifierInit::setModifierAltGraph(bool value)
+{
+    m_modifierAltGraph = value;
+    m_hasModifierAltGraph = true;
 }
-bool EventModifierInit::hasModifierCapsLock() const {
-  return m_hasModifierCapsLock;
+bool EventModifierInit::hasModifierCapsLock() const
+{
+    return m_hasModifierCapsLock;
 }
-bool EventModifierInit::modifierCapsLock() const {
-  DCHECK(m_hasModifierCapsLock);
-  return m_modifierCapsLock;
+bool EventModifierInit::modifierCapsLock() const
+{
+    DCHECK(m_hasModifierCapsLock);
+    return m_modifierCapsLock;
 }
-void EventModifierInit::setModifierCapsLock(bool value) {
-  m_modifierCapsLock = value;
-  m_hasModifierCapsLock = true;
+void EventModifierInit::setModifierCapsLock(bool value)
+{
+    m_modifierCapsLock = value;
+    m_hasModifierCapsLock = true;
 }
-bool EventModifierInit::hasModifierFn() const {
-  return m_hasModifierFn;
+bool EventModifierInit::hasModifierFn() const
+{
+    return m_hasModifierFn;
 }
-bool EventModifierInit::modifierFn() const {
-  DCHECK(m_hasModifierFn);
-  return m_modifierFn;
+bool EventModifierInit::modifierFn() const
+{
+    DCHECK(m_hasModifierFn);
+    return m_modifierFn;
 }
-void EventModifierInit::setModifierFn(bool value) {
-  m_modifierFn = value;
-  m_hasModifierFn = true;
+void EventModifierInit::setModifierFn(bool value)
+{
+    m_modifierFn = value;
+    m_hasModifierFn = true;
 }
-bool EventModifierInit::hasModifierNumLock() const {
-  return m_hasModifierNumLock;
+bool EventModifierInit::hasModifierNumLock() const
+{
+    return m_hasModifierNumLock;
 }
-bool EventModifierInit::modifierNumLock() const {
-  DCHECK(m_hasModifierNumLock);
-  return m_modifierNumLock;
+bool EventModifierInit::modifierNumLock() const
+{
+    DCHECK(m_hasModifierNumLock);
+    return m_modifierNumLock;
 }
-void EventModifierInit::setModifierNumLock(bool value) {
-  m_modifierNumLock = value;
-  m_hasModifierNumLock = true;
+void EventModifierInit::setModifierNumLock(bool value)
+{
+    m_modifierNumLock = value;
+    m_hasModifierNumLock = true;
 }
-bool EventModifierInit::hasModifierScrollLock() const {
-  return m_hasModifierScrollLock;
+bool EventModifierInit::hasModifierScrollLock() const
+{
+    return m_hasModifierScrollLock;
 }
-bool EventModifierInit::modifierScrollLock() const {
-  DCHECK(m_hasModifierScrollLock);
-  return m_modifierScrollLock;
+bool EventModifierInit::modifierScrollLock() const
+{
+    DCHECK(m_hasModifierScrollLock);
+    return m_modifierScrollLock;
 }
-void EventModifierInit::setModifierScrollLock(bool value) {
-  m_modifierScrollLock = value;
-  m_hasModifierScrollLock = true;
+void EventModifierInit::setModifierScrollLock(bool value)
+{
+    m_modifierScrollLock = value;
+    m_hasModifierScrollLock = true;
 }
-bool EventModifierInit::hasModifierSymbol() const {
-  return m_hasModifierSymbol;
+bool EventModifierInit::hasModifierSymbol() const
+{
+    return m_hasModifierSymbol;
 }
-bool EventModifierInit::modifierSymbol() const {
-  DCHECK(m_hasModifierSymbol);
-  return m_modifierSymbol;
+bool EventModifierInit::modifierSymbol() const
+{
+    DCHECK(m_hasModifierSymbol);
+    return m_modifierSymbol;
 }
-void EventModifierInit::setModifierSymbol(bool value) {
-  m_modifierSymbol = value;
-  m_hasModifierSymbol = true;
+void EventModifierInit::setModifierSymbol(bool value)
+{
+    m_modifierSymbol = value;
+    m_hasModifierSymbol = true;
 }
-bool EventModifierInit::hasShiftKey() const {
-  return m_hasShiftKey;
+bool EventModifierInit::hasShiftKey() const
+{
+    return m_hasShiftKey;
 }
-bool EventModifierInit::shiftKey() const {
-  DCHECK(m_hasShiftKey);
-  return m_shiftKey;
+bool EventModifierInit::shiftKey() const
+{
+    DCHECK(m_hasShiftKey);
+    return m_shiftKey;
 }
-void EventModifierInit::setShiftKey(bool value) {
-  m_shiftKey = value;
-  m_hasShiftKey = true;
+void EventModifierInit::setShiftKey(bool value)
+{
+    m_shiftKey = value;
+    m_hasShiftKey = true;
 }
 
-DEFINE_TRACE(EventModifierInit) {
-  UIEventInit::trace(visitor);
+DEFINE_TRACE(EventModifierInit)
+{
+    UIEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

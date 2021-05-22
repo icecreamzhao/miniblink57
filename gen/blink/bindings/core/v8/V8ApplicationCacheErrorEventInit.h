@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ApplicationCacheErrorEventInit_h
 #define V8ApplicationCacheErrorEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ApplicationCacheErrorEventInit {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ApplicationCacheErrorEventInit&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ApplicationCacheErrorEventInit&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8ApplicationCacheErrorEventInit(const ApplicationCacheErrorEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ApplicationCacheErrorEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ApplicationCacheErrorEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ApplicationCacheErrorEventInit> {
-  static ApplicationCacheErrorEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ApplicationCacheErrorEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ApplicationCacheErrorEventInit> {
-  typedef V8ApplicationCacheErrorEventInit Type;
+    typedef V8ApplicationCacheErrorEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ApplicationCacheErrorEventInit_h
+#endif // V8ApplicationCacheErrorEventInit_h

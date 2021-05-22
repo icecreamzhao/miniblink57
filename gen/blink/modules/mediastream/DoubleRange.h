@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DoubleRange_h
 #define DoubleRange_h
 
@@ -19,33 +19,34 @@
 namespace blink {
 
 class MODULES_EXPORT DoubleRange : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DoubleRange();
-  virtual ~DoubleRange();
-  DoubleRange(const DoubleRange&);
-  DoubleRange& operator=(const DoubleRange&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMax() const;
-  double max() const;
-  void setMax(double);
+public:
+    DoubleRange();
+    virtual ~DoubleRange();
+    DoubleRange(const DoubleRange&);
+    DoubleRange& operator=(const DoubleRange&);
 
-  bool hasMin() const;
-  double min() const;
-  void setMin(double);
+    bool hasMax() const;
+    double max() const;
+    void setMax(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMin() const;
+    double min() const;
+    void setMin(double);
 
- private:
-  bool m_hasMax = false;
-  double m_max;
-  bool m_hasMin = false;
-  double m_min;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8DoubleRange;
+private:
+    bool m_hasMax = false;
+    double m_max;
+    bool m_hasMin = false;
+    double m_min;
+
+    friend class V8DoubleRange;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // DoubleRange_h
+#endif // DoubleRange_h

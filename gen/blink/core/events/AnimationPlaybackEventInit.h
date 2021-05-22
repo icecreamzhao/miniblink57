@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AnimationPlaybackEventInit_h
 #define AnimationPlaybackEventInit_h
 
@@ -19,35 +19,36 @@
 namespace blink {
 
 class CORE_EXPORT AnimationPlaybackEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AnimationPlaybackEventInit();
-  virtual ~AnimationPlaybackEventInit();
-  AnimationPlaybackEventInit(const AnimationPlaybackEventInit&);
-  AnimationPlaybackEventInit& operator=(const AnimationPlaybackEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasCurrentTime() const;
-  double currentTime() const;
-  void setCurrentTime(double);
-  void setCurrentTimeToNull();
+public:
+    AnimationPlaybackEventInit();
+    virtual ~AnimationPlaybackEventInit();
+    AnimationPlaybackEventInit(const AnimationPlaybackEventInit&);
+    AnimationPlaybackEventInit& operator=(const AnimationPlaybackEventInit&);
 
-  bool hasTimelineTime() const;
-  double timelineTime() const;
-  void setTimelineTime(double);
-  void setTimelineTimeToNull();
+    bool hasCurrentTime() const;
+    double currentTime() const;
+    void setCurrentTime(double);
+    void setCurrentTimeToNull();
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTimelineTime() const;
+    double timelineTime() const;
+    void setTimelineTime(double);
+    void setTimelineTimeToNull();
 
- private:
-  bool m_hasCurrentTime = false;
-  double m_currentTime;
-  bool m_hasTimelineTime = false;
-  double m_timelineTime;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AnimationPlaybackEventInit;
+private:
+    bool m_hasCurrentTime = false;
+    double m_currentTime;
+    bool m_hasTimelineTime = false;
+    double m_timelineTime;
+
+    friend class V8AnimationPlaybackEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AnimationPlaybackEventInit_h
+#endif // AnimationPlaybackEventInit_h

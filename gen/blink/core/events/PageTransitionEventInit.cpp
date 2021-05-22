@@ -8,34 +8,39 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PageTransitionEventInit.h"
 
 namespace blink {
 
-PageTransitionEventInit::PageTransitionEventInit() {
+PageTransitionEventInit::PageTransitionEventInit()
+{
 }
 
-PageTransitionEventInit::~PageTransitionEventInit() {}
+PageTransitionEventInit::~PageTransitionEventInit() { }
 
 PageTransitionEventInit::PageTransitionEventInit(const PageTransitionEventInit&) = default;
 
 PageTransitionEventInit& PageTransitionEventInit::operator=(const PageTransitionEventInit&) = default;
 
-bool PageTransitionEventInit::hasPersisted() const {
-  return m_hasPersisted;
+bool PageTransitionEventInit::hasPersisted() const
+{
+    return m_hasPersisted;
 }
-bool PageTransitionEventInit::persisted() const {
-  DCHECK(m_hasPersisted);
-  return m_persisted;
+bool PageTransitionEventInit::persisted() const
+{
+    DCHECK(m_hasPersisted);
+    return m_persisted;
 }
-void PageTransitionEventInit::setPersisted(bool value) {
-  m_persisted = value;
-  m_hasPersisted = true;
+void PageTransitionEventInit::setPersisted(bool value)
+{
+    m_persisted = value;
+    m_hasPersisted = true;
 }
 
-DEFINE_TRACE(PageTransitionEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(PageTransitionEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

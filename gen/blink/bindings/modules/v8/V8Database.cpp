@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Database.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,222 +48,235 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Database::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Database is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DatabaseV8Internal {
 
-static void versionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void versionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Database* impl = V8Database::toImpl(holder);
+        Database* impl = V8Database::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->version(), info.GetIsolate());
-}
-
-MODULES_EXPORT void versionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DatabaseV8Internal::versionAttributeGetter(info);
-}
-
-static void changeVersionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Database* impl = V8Database::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("changeVersion", "Database", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  V8StringResource<> oldVersion;
-  V8StringResource<> newVersion;
-  SQLTransactionCallback* callback;
-  SQLTransactionErrorCallback* errorCallback;
-  VoidCallback* successCallback;
-  oldVersion = info[0];
-  if (!oldVersion.prepare())
-    return;
-
-  newVersion = info[1];
-  if (!newVersion.prepare())
-    return;
-
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("changeVersion", "Database", "The callback provided as parameter 3 is not a function."));
-
-      return;
+        v8SetReturnValueString(info, impl->version(), info.GetIsolate());
     }
-    callback = V8SQLTransactionCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    callback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[3])) {
-    if (!info[3]->IsFunction()) {
-      V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("changeVersion", "Database", "The callback provided as parameter 4 is not a function."));
-
-      return;
+    MODULES_EXPORT void versionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DatabaseV8Internal::versionAttributeGetter(info);
     }
-    errorCallback = V8SQLTransactionErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[4])) {
-    if (!info[4]->IsFunction()) {
-      V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("changeVersion", "Database", "The callback provided as parameter 5 is not a function."));
+    static void changeVersionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Database* impl = V8Database::toImpl(info.Holder());
 
-      return;
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("changeVersion", "Database", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        V8StringResource<> oldVersion;
+        V8StringResource<> newVersion;
+        SQLTransactionCallback* callback;
+        SQLTransactionErrorCallback* errorCallback;
+        VoidCallback* successCallback;
+        oldVersion = info[0];
+        if (!oldVersion.prepare())
+            return;
+
+        newVersion = info[1];
+        if (!newVersion.prepare())
+            return;
+
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("changeVersion", "Database", "The callback provided as parameter 3 is not a function."));
+
+                return;
+            }
+            callback = V8SQLTransactionCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            callback = nullptr;
+        }
+
+        if (!isUndefinedOrNull(info[3])) {
+            if (!info[3]->IsFunction()) {
+                V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("changeVersion", "Database", "The callback provided as parameter 4 is not a function."));
+
+                return;
+            }
+            errorCallback = V8SQLTransactionErrorCallback::create(v8::Local<v8::Function>::Cast(info[3]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        if (!isUndefinedOrNull(info[4])) {
+            if (!info[4]->IsFunction()) {
+                V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("changeVersion", "Database", "The callback provided as parameter 5 is not a function."));
+
+                return;
+            }
+            successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[4]), ScriptState::current(info.GetIsolate()));
+        } else {
+            successCallback = nullptr;
+        }
+
+        impl->changeVersion(oldVersion, newVersion, callback, errorCallback, successCallback);
     }
-    successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[4]), ScriptState::current(info.GetIsolate()));
-  } else {
-    successCallback = nullptr;
-  }
 
-  impl->changeVersion(oldVersion, newVersion, callback, errorCallback, successCallback);
-}
-
-MODULES_EXPORT  void changeVersionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DatabaseV8Internal::changeVersionMethod(info);
-}
-
-static void transactionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Database* impl = V8Database::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transaction", "Database", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  SQLTransactionCallback* callback;
-  SQLTransactionErrorCallback* errorCallback;
-  VoidCallback* successCallback;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transaction", "Database", "The callback provided as parameter 1 is not a function."));
-
-    return;
-  }
-  callback = V8SQLTransactionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
-
-  if (!isUndefinedOrNull(info[1])) {
-    if (!info[1]->IsFunction()) {
-      V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transaction", "Database", "The callback provided as parameter 2 is not a function."));
-
-      return;
+    MODULES_EXPORT void changeVersionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DatabaseV8Internal::changeVersionMethod(info);
     }
-    errorCallback = V8SQLTransactionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transaction", "Database", "The callback provided as parameter 3 is not a function."));
+    static void transactionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Database* impl = V8Database::toImpl(info.Holder());
 
-      return;
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transaction", "Database", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        SQLTransactionCallback* callback;
+        SQLTransactionErrorCallback* errorCallback;
+        VoidCallback* successCallback;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transaction", "Database", "The callback provided as parameter 1 is not a function."));
+
+            return;
+        }
+        callback = V8SQLTransactionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+
+        if (!isUndefinedOrNull(info[1])) {
+            if (!info[1]->IsFunction()) {
+                V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transaction", "Database", "The callback provided as parameter 2 is not a function."));
+
+                return;
+            }
+            errorCallback = V8SQLTransactionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("transaction", "Database", "The callback provided as parameter 3 is not a function."));
+
+                return;
+            }
+            successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            successCallback = nullptr;
+        }
+
+        impl->transaction(callback, errorCallback, successCallback);
     }
-    successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    successCallback = nullptr;
-  }
 
-  impl->transaction(callback, errorCallback, successCallback);
-}
-
-MODULES_EXPORT  void transactionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DatabaseV8Internal::transactionMethod(info);
-}
-
-static void readTransactionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Database* impl = V8Database::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("readTransaction", "Database", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  SQLTransactionCallback* callback;
-  SQLTransactionErrorCallback* errorCallback;
-  VoidCallback* successCallback;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("readTransaction", "Database", "The callback provided as parameter 1 is not a function."));
-
-    return;
-  }
-  callback = V8SQLTransactionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
-
-  if (!isUndefinedOrNull(info[1])) {
-    if (!info[1]->IsFunction()) {
-      V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("readTransaction", "Database", "The callback provided as parameter 2 is not a function."));
-
-      return;
+    MODULES_EXPORT void transactionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DatabaseV8Internal::transactionMethod(info);
     }
-    errorCallback = V8SQLTransactionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[2])) {
-    if (!info[2]->IsFunction()) {
-      V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("readTransaction", "Database", "The callback provided as parameter 3 is not a function."));
+    static void readTransactionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Database* impl = V8Database::toImpl(info.Holder());
 
-      return;
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("readTransaction", "Database", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        SQLTransactionCallback* callback;
+        SQLTransactionErrorCallback* errorCallback;
+        VoidCallback* successCallback;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("readTransaction", "Database", "The callback provided as parameter 1 is not a function."));
+
+            return;
+        }
+        callback = V8SQLTransactionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+
+        if (!isUndefinedOrNull(info[1])) {
+            if (!info[1]->IsFunction()) {
+                V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("readTransaction", "Database", "The callback provided as parameter 2 is not a function."));
+
+                return;
+            }
+            errorCallback = V8SQLTransactionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        if (!isUndefinedOrNull(info[2])) {
+            if (!info[2]->IsFunction()) {
+                V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("readTransaction", "Database", "The callback provided as parameter 3 is not a function."));
+
+                return;
+            }
+            successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
+        } else {
+            successCallback = nullptr;
+        }
+
+        impl->readTransaction(callback, errorCallback, successCallback);
     }
-    successCallback = V8VoidCallback::create(v8::Local<v8::Function>::Cast(info[2]), ScriptState::current(info.GetIsolate()));
-  } else {
-    successCallback = nullptr;
-  }
 
-  impl->readTransaction(callback, errorCallback, successCallback);
-}
-
-MODULES_EXPORT  void readTransactionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DatabaseV8Internal::readTransactionMethod(info);
-}
+    MODULES_EXPORT void readTransactionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DatabaseV8Internal::readTransactionMethod(info);
+    }
 
 } // namespace DatabaseV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8DatabaseAccessors[] = {
-    {"version", DatabaseV8Internal::versionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "version", DatabaseV8Internal::versionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8DatabaseMethods[] = {
-    {"changeVersion", DatabaseV8Internal::changeVersionMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"transaction", DatabaseV8Internal::transactionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readTransaction", DatabaseV8Internal::readTransactionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "changeVersion", DatabaseV8Internal::changeVersionMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "transaction", DatabaseV8Internal::transactionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readTransaction", DatabaseV8Internal::readTransactionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8DatabaseTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Database::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Database::internalFieldCount);
+static void installV8DatabaseTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Database::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Database::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DatabaseAccessors, WTF_ARRAY_LENGTH(V8DatabaseAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DatabaseMethods, WTF_ARRAY_LENGTH(V8DatabaseMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DatabaseAccessors, WTF_ARRAY_LENGTH(V8DatabaseAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DatabaseMethods, WTF_ARRAY_LENGTH(V8DatabaseMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Database::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DatabaseTemplate);
+v8::Local<v8::FunctionTemplate> V8Database::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DatabaseTemplate);
 }
 
-bool V8Database::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Database::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Database::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Database::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Database* V8Database::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Database* V8Database::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

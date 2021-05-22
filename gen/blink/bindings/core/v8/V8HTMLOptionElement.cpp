@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLOptionElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,256 +52,284 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLOptionElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLOptionElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLOptionElementV8Internal {
 
-static void disabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void disabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::disabledAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::disabledAttr));
+    }
 
-CORE_EXPORT void disabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLOptionElementV8Internal::disabledAttributeGetter(info);
-}
+    CORE_EXPORT void disabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLOptionElementV8Internal::disabledAttributeGetter(info);
+    }
 
-static void disabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+    static void disabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLOptionElement", "disabled");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLOptionElement", "disabled");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::disabledAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::disabledAttr, cppValue);
+    }
 
-CORE_EXPORT void disabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void disabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLOptionElementV8Internal::disabledAttributeSetter(v8Value, info);
-}
+        HTMLOptionElementV8Internal::disabledAttributeSetter(v8Value, info);
+    }
 
-static void formAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void formAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->form()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->form()), impl);
+    }
 
-CORE_EXPORT void formAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLOptionElementV8Internal::formAttributeGetter(info);
-}
+    CORE_EXPORT void formAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLOptionElementV8Internal::formAttributeGetter(info);
+    }
 
-static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->label(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->label(), info.GetIsolate());
+    }
 
-CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLOptionElementV8Internal::labelAttributeGetter(info);
-}
+    CORE_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLOptionElementV8Internal::labelAttributeGetter(info);
+    }
 
-static void labelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+    static void labelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setLabel(cppValue);
-}
+        impl->setLabel(cppValue);
+    }
 
-CORE_EXPORT void labelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void labelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLOptionElementV8Internal::labelAttributeSetter(v8Value, info);
-}
+        HTMLOptionElementV8Internal::labelAttributeSetter(v8Value, info);
+    }
 
-static void defaultSelectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void defaultSelectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::selectedAttr));
-}
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::selectedAttr));
+    }
 
-CORE_EXPORT void defaultSelectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLOptionElementV8Internal::defaultSelectedAttributeGetter(info);
-}
+    CORE_EXPORT void defaultSelectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLOptionElementV8Internal::defaultSelectedAttributeGetter(info);
+    }
 
-static void defaultSelectedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+    static void defaultSelectedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLOptionElement", "defaultSelected");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLOptionElement", "defaultSelected");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setBooleanAttribute(HTMLNames::selectedAttr, cppValue);
-}
+        impl->setBooleanAttribute(HTMLNames::selectedAttr, cppValue);
+    }
 
-CORE_EXPORT void defaultSelectedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void defaultSelectedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  HTMLOptionElementV8Internal::defaultSelectedAttributeSetter(v8Value, info);
-}
+        HTMLOptionElementV8Internal::defaultSelectedAttributeSetter(v8Value, info);
+    }
 
-static void selectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void selectedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->selectedForBinding());
-}
+        v8SetReturnValueBool(info, impl->selectedForBinding());
+    }
 
-CORE_EXPORT void selectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLOptionElementV8Internal::selectedAttributeGetter(info);
-}
+    CORE_EXPORT void selectedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLOptionElementV8Internal::selectedAttributeGetter(info);
+    }
 
-static void selectedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+    static void selectedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLOptionElement", "selected");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLOptionElement", "selected");
 
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setSelectedForBinding(cppValue);
-}
+        impl->setSelectedForBinding(cppValue);
+    }
 
-CORE_EXPORT void selectedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void selectedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  HTMLOptionElementV8Internal::selectedAttributeSetter(v8Value, info);
-}
+        HTMLOptionElementV8Internal::selectedAttributeSetter(v8Value, info);
+    }
 
-static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->value(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->value(), info.GetIsolate());
+    }
 
-CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLOptionElementV8Internal::valueAttributeGetter(info);
-}
+    CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLOptionElementV8Internal::valueAttributeGetter(info);
+    }
 
-static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+    static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setValue(cppValue);
-}
+        impl->setValue(cppValue);
+    }
 
-CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLOptionElementV8Internal::valueAttributeSetter(v8Value, info);
-}
+        HTMLOptionElementV8Internal::valueAttributeSetter(v8Value, info);
+    }
 
-static void textAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void textAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->text(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->text(), info.GetIsolate());
+    }
 
-CORE_EXPORT void textAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLOptionElementV8Internal::textAttributeGetter(info);
-}
+    CORE_EXPORT void textAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLOptionElementV8Internal::textAttributeGetter(info);
+    }
 
-static void textAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+    static void textAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLOptionElement", "text");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLOptionElement", "text");
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setText(cppValue, exceptionState);
-}
+        impl->setText(cppValue, exceptionState);
+    }
 
-CORE_EXPORT void textAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void textAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  CEReactionsScope ceReactionsScope;
+        CEReactionsScope ceReactionsScope;
 
-  HTMLOptionElementV8Internal::textAttributeSetter(v8Value, info);
-}
+        HTMLOptionElementV8Internal::textAttributeSetter(v8Value, info);
+    }
 
-static void indexAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void indexAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
+        HTMLOptionElement* impl = V8HTMLOptionElement::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->index());
-}
+        v8SetReturnValueInt(info, impl->index());
+    }
 
-CORE_EXPORT void indexAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLOptionElementV8Internal::indexAttributeGetter(info);
-}
+    CORE_EXPORT void indexAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLOptionElementV8Internal::indexAttributeGetter(info);
+    }
 
 } // namespace HTMLOptionElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLOptionElementAccessors[] = {
-    {"disabled", HTMLOptionElementV8Internal::disabledAttributeGetterCallback, HTMLOptionElementV8Internal::disabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"form", HTMLOptionElementV8Internal::formAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"label", HTMLOptionElementV8Internal::labelAttributeGetterCallback, HTMLOptionElementV8Internal::labelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"defaultSelected", HTMLOptionElementV8Internal::defaultSelectedAttributeGetterCallback, HTMLOptionElementV8Internal::defaultSelectedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selected", HTMLOptionElementV8Internal::selectedAttributeGetterCallback, HTMLOptionElementV8Internal::selectedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"value", HTMLOptionElementV8Internal::valueAttributeGetterCallback, HTMLOptionElementV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"text", HTMLOptionElementV8Internal::textAttributeGetterCallback, HTMLOptionElementV8Internal::textAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"index", HTMLOptionElementV8Internal::indexAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "disabled", HTMLOptionElementV8Internal::disabledAttributeGetterCallback, HTMLOptionElementV8Internal::disabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "form", HTMLOptionElementV8Internal::formAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "label", HTMLOptionElementV8Internal::labelAttributeGetterCallback, HTMLOptionElementV8Internal::labelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "defaultSelected", HTMLOptionElementV8Internal::defaultSelectedAttributeGetterCallback, HTMLOptionElementV8Internal::defaultSelectedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selected", HTMLOptionElementV8Internal::selectedAttributeGetterCallback, HTMLOptionElementV8Internal::selectedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "value", HTMLOptionElementV8Internal::valueAttributeGetterCallback, HTMLOptionElementV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "text", HTMLOptionElementV8Internal::textAttributeGetterCallback, HTMLOptionElementV8Internal::textAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "index", HTMLOptionElementV8Internal::indexAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 // Suppress warning: global constructors, because struct WrapperTypeInfo is trivial
@@ -315,107 +343,114 @@ const WrapperTypeInfo V8HTMLOptionElementConstructor::wrapperTypeInfo = { gin::k
 #pragma clang diagnostic pop
 #endif
 
-static void V8HTMLOptionElementConstructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Option"));
-    return;
-  }
+static void V8HTMLOptionElementConstructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Option"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "HTMLOptionElement");
+    ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "HTMLOptionElement");
 
-  V8StringResource<> data;
-  V8StringResource<> value;
-  bool defaultSelected;
-  bool selected;
-  if (!info[0]->IsUndefined()) {
-    data = info[0];
-    if (!data.prepare())
-      return;
-  } else {
-    data = nullptr;
-  }
-  if (!info[1]->IsUndefined()) {
-    value = info[1];
-    if (!value.prepare())
-      return;
-  } else {
-    value = nullptr;
-  }
-  if (!info[2]->IsUndefined()) {
-    defaultSelected = toBoolean(info.GetIsolate(), info[2], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    defaultSelected = false;
-  }
-  if (!info[3]->IsUndefined()) {
-    selected = toBoolean(info.GetIsolate(), info[3], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    selected = false;
-  }
+    V8StringResource<> data;
+    V8StringResource<> value;
+    bool defaultSelected;
+    bool selected;
+    if (!info[0]->IsUndefined()) {
+        data = info[0];
+        if (!data.prepare())
+            return;
+    } else {
+        data = nullptr;
+    }
+    if (!info[1]->IsUndefined()) {
+        value = info[1];
+        if (!value.prepare())
+            return;
+    } else {
+        value = nullptr;
+    }
+    if (!info[2]->IsUndefined()) {
+        defaultSelected = toBoolean(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+    } else {
+        defaultSelected = false;
+    }
+    if (!info[3]->IsUndefined()) {
+        selected = toBoolean(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+    } else {
+        selected = false;
+    }
 
-  Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
-  HTMLOptionElement* impl = HTMLOptionElement::createForJSConstructor(document, data, value, defaultSelected, selected, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8HTMLOptionElementConstructor::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
+    Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+    HTMLOptionElement* impl = HTMLOptionElement::createForJSConstructor(document, data, value, defaultSelected, selected, exceptionState);
+    if (exceptionState.hadException()) {
+        return;
+    }
+    v8::Local<v8::Object> wrapper = info.Holder();
+    wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8HTMLOptionElementConstructor::wrapperTypeInfo, wrapper);
+    v8SetReturnValue(info, wrapper);
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLOptionElementConstructor::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  static int domTemplateKey; // This address is used for a key to look up the dom template.
-  V8PerIsolateData* data = V8PerIsolateData::from(isolate);
-  v8::Local<v8::FunctionTemplate> result = data->findInterfaceTemplate(world, &domTemplateKey);
-  if (!result.IsEmpty())
+v8::Local<v8::FunctionTemplate> V8HTMLOptionElementConstructor::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    static int domTemplateKey; // This address is used for a key to look up the dom template.
+    V8PerIsolateData* data = V8PerIsolateData::from(isolate);
+    v8::Local<v8::FunctionTemplate> result = data->findInterfaceTemplate(world, &domTemplateKey);
+    if (!result.IsEmpty())
+        return result;
+
+    result = v8::FunctionTemplate::New(isolate, V8HTMLOptionElementConstructorCallback);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = result->InstanceTemplate();
+    instanceTemplate->SetInternalFieldCount(V8HTMLOptionElement::internalFieldCount);
+    result->SetClassName(v8AtomicString(isolate, "HTMLOptionElement"));
+    result->Inherit(V8HTMLOptionElement::domTemplate(isolate, world));
+    data->setInterfaceTemplate(world, &domTemplateKey, result);
     return result;
-
-  result = v8::FunctionTemplate::New(isolate, V8HTMLOptionElementConstructorCallback);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = result->InstanceTemplate();
-  instanceTemplate->SetInternalFieldCount(V8HTMLOptionElement::internalFieldCount);
-  result->SetClassName(v8AtomicString(isolate, "HTMLOptionElement"));
-  result->Inherit(V8HTMLOptionElement::domTemplate(isolate, world));
-  data->setInterfaceTemplate(world, &domTemplateKey, result);
-  return result;
 }
 
-static void installV8HTMLOptionElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLOptionElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLOptionElement::internalFieldCount);
+static void installV8HTMLOptionElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLOptionElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLOptionElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLOptionElementAccessors, WTF_ARRAY_LENGTH(V8HTMLOptionElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLOptionElementAccessors, WTF_ARRAY_LENGTH(V8HTMLOptionElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLOptionElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLOptionElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLOptionElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLOptionElementTemplate);
 }
 
-bool V8HTMLOptionElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLOptionElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLOptionElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLOptionElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLOptionElement* V8HTMLOptionElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLOptionElement* V8HTMLOptionElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

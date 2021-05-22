@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8XMLHttpRequest_h
 #define V8XMLHttpRequest_h
 
@@ -26,35 +26,39 @@
 namespace blink {
 
 class V8XMLHttpRequest {
-  STATIC_ONLY(V8XMLHttpRequest);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static XMLHttpRequest* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<XMLHttpRequest>();
-  }
-  CORE_EXPORT static XMLHttpRequest* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<XMLHttpRequest>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<XMLHttpRequest>());
-  }
-  static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
-  static void responseAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>&);
-  static void responseTextAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>&);
-  static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
+    STATIC_ONLY(V8XMLHttpRequest);
+
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static XMLHttpRequest* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<XMLHttpRequest>();
+    }
+    CORE_EXPORT static XMLHttpRequest* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<XMLHttpRequest>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<XMLHttpRequest>());
+    }
+    static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
+    static void responseAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+    static void responseTextAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>&);
+    static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
 };
 
 template <>
 struct V8TypeOf<XMLHttpRequest> {
-  typedef V8XMLHttpRequest Type;
+    typedef V8XMLHttpRequest Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8XMLHttpRequest_h
+#endif // V8XMLHttpRequest_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentItem_h
 #define PaymentItem_h
 
@@ -21,38 +21,39 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentItem : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentItem();
-  virtual ~PaymentItem();
-  PaymentItem(const PaymentItem&);
-  PaymentItem& operator=(const PaymentItem&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAmount() const;
-  const PaymentCurrencyAmount& amount() const;
-  void setAmount(const PaymentCurrencyAmount&);
+public:
+    PaymentItem();
+    virtual ~PaymentItem();
+    PaymentItem(const PaymentItem&);
+    PaymentItem& operator=(const PaymentItem&);
 
-  bool hasLabel() const;
-  String label() const;
-  void setLabel(String);
+    bool hasAmount() const;
+    const PaymentCurrencyAmount& amount() const;
+    void setAmount(const PaymentCurrencyAmount&);
 
-  bool hasPending() const;
-  bool pending() const;
-  void setPending(bool);
+    bool hasLabel() const;
+    String label() const;
+    void setLabel(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPending() const;
+    bool pending() const;
+    void setPending(bool);
 
- private:
-  bool m_hasAmount = false;
-  PaymentCurrencyAmount m_amount;
-  String m_label;
-  bool m_hasPending = false;
-  bool m_pending;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentItem;
+private:
+    bool m_hasAmount = false;
+    PaymentCurrencyAmount m_amount;
+    String m_label;
+    bool m_hasPending = false;
+    bool m_pending;
+
+    friend class V8PaymentItem;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentItem_h
+#endif // PaymentItem_h

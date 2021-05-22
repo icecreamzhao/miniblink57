@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AudioBufferCallback_h
 #define V8AudioBufferCallback_h
 
@@ -20,22 +20,24 @@
 namespace blink {
 
 class V8AudioBufferCallback final : public AudioBufferCallback {
- public:
-  static V8AudioBufferCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState) {
-    return new V8AudioBufferCallback(callback, scriptState);
-  }
+public:
+    static V8AudioBufferCallback* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
+    {
+        return new V8AudioBufferCallback(callback, scriptState);
+    }
 
-  ~V8AudioBufferCallback() override;
+    ~V8AudioBufferCallback() override;
 
-  DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE();
 
-  void handleEvent(AudioBuffer* audioBuffer) override;
-  void handleEvent(DOMException* exception) override;
- private:
-  MODULES_EXPORT V8AudioBufferCallback(v8::Local<v8::Function>, ScriptState*);
+    void handleEvent(AudioBuffer* audioBuffer) override;
+    void handleEvent(DOMException* exception) override;
 
-  ScopedPersistent<v8::Function> m_callback;
-  RefPtr<ScriptState> m_scriptState;
+private:
+    MODULES_EXPORT V8AudioBufferCallback(v8::Local<v8::Function>, ScriptState*);
+
+    ScopedPersistent<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
 };
 }
-#endif  // V8AudioBufferCallback_h
+#endif // V8AudioBufferCallback_h

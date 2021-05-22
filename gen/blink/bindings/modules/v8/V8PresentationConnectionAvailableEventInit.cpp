@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PresentationConnectionAvailableEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -17,69 +17,73 @@
 
 namespace blink {
 
-void V8PresentationConnectionAvailableEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PresentationConnectionAvailableEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("Missing required member(s): connection.");
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
-
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> connectionValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "connection")).ToLocal(&connectionValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (connectionValue.IsEmpty() || connectionValue->IsUndefined()) {
-    exceptionState.throwTypeError("required member connection is undefined.");
-    return;
-  } else {
-    PresentationConnection* connection = V8PresentationConnection::toImplWithTypeCheck(isolate, connectionValue);
-    if (!connection) {
-      exceptionState.throwTypeError("member connection is not of type PresentationConnection.");
-      return;
+void V8PresentationConnectionAvailableEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, PresentationConnectionAvailableEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        exceptionState.throwTypeError("Missing required member(s): connection.");
+        return;
     }
-    impl.setConnection(connection);
-  }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
+
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
+    if (exceptionState.hadException())
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> connectionValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "connection")).ToLocal(&connectionValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (connectionValue.IsEmpty() || connectionValue->IsUndefined()) {
+        exceptionState.throwTypeError("required member connection is undefined.");
+        return;
+    } else {
+        PresentationConnection* connection = V8PresentationConnection::toImplWithTypeCheck(isolate, connectionValue);
+        if (!connection) {
+            exceptionState.throwTypeError("member connection is not of type PresentationConnection.");
+            return;
+        }
+        impl.setConnection(connection);
+    }
 }
 
-v8::Local<v8::Value> PresentationConnectionAvailableEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8PresentationConnectionAvailableEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> PresentationConnectionAvailableEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8PresentationConnectionAvailableEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8PresentationConnectionAvailableEventInit(const PresentationConnectionAvailableEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8PresentationConnectionAvailableEventInit(const PresentationConnectionAvailableEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasConnection()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "connection"), ToV8(impl.connection(), creationContext, isolate))))
-      return false;
-  } else {
-    NOTREACHED();
-  }
+    if (impl.hasConnection()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "connection"), ToV8(impl.connection(), creationContext, isolate))))
+            return false;
+    } else {
+        NOTREACHED();
+    }
 
-  return true;
+    return true;
 }
 
-PresentationConnectionAvailableEventInit NativeValueTraits<PresentationConnectionAvailableEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  PresentationConnectionAvailableEventInit impl;
-  V8PresentationConnectionAvailableEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+PresentationConnectionAvailableEventInit NativeValueTraits<PresentationConnectionAvailableEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    PresentationConnectionAvailableEventInit impl;
+    V8PresentationConnectionAvailableEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

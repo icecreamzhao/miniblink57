@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLTextAreaElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -58,977 +58,1082 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&HTMLTextAreaElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "HTMLTextAreaElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace HTMLTextAreaElementV8Internal {
 
-static void autofocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void autofocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::autofocusAttr));
-}
-
-CORE_EXPORT void autofocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::autofocusAttributeGetter(info);
-}
-
-static void autofocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "autofocus");
-
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setBooleanAttribute(HTMLNames::autofocusAttr, cppValue);
-}
-
-CORE_EXPORT void autofocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HTMLTextAreaElementV8Internal::autofocusAttributeSetter(v8Value, info);
-}
-
-static void colsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->cols());
-}
-
-CORE_EXPORT void colsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::colsAttributeGetter(info);
-}
-
-static void colsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "cols");
-
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setCols(cppValue);
-}
-
-CORE_EXPORT void colsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  HTMLTextAreaElementV8Internal::colsAttributeSetter(v8Value, info);
-}
-
-static void dirNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::dirnameAttr), info.GetIsolate());
-}
-
-CORE_EXPORT void dirNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::dirNameAttributeGetter(info);
-}
-
-static void dirNameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setAttribute(HTMLNames::dirnameAttr, cppValue);
-}
-
-CORE_EXPORT void dirNameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HTMLTextAreaElementV8Internal::dirNameAttributeSetter(v8Value, info);
-}
-
-static void disabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::disabledAttr));
-}
-
-CORE_EXPORT void disabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::disabledAttributeGetter(info);
-}
-
-static void disabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "disabled");
-
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setBooleanAttribute(HTMLNames::disabledAttr, cppValue);
-}
-
-CORE_EXPORT void disabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HTMLTextAreaElementV8Internal::disabledAttributeSetter(v8Value, info);
-}
-
-static void formAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->formOwner()), impl);
-}
-
-CORE_EXPORT void formAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::formAttributeGetter(info);
-}
-
-static void maxLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueInt(info, impl->maxLength());
-}
-
-CORE_EXPORT void maxLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::maxLengthAttributeGetter(info);
-}
-
-static void maxLengthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "maxLength");
-
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setMaxLength(cppValue, exceptionState);
-}
-
-CORE_EXPORT void maxLengthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  HTMLTextAreaElementV8Internal::maxLengthAttributeSetter(v8Value, info);
-}
-
-static void minLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueInt(info, impl->minLength());
-}
-
-CORE_EXPORT void minLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::minLengthAttributeGetter(info);
-}
-
-static void minLengthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "minLength");
-
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setMinLength(cppValue, exceptionState);
-}
-
-CORE_EXPORT void minLengthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  HTMLTextAreaElementV8Internal::minLengthAttributeSetter(v8Value, info);
-}
-
-static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->getNameAttribute(), info.GetIsolate());
-}
-
-CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::nameAttributeGetter(info);
-}
-
-static void nameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setAttribute(HTMLNames::nameAttr, cppValue);
-}
-
-CORE_EXPORT void nameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HTMLTextAreaElementV8Internal::nameAttributeSetter(v8Value, info);
-}
-
-static void placeholderAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::placeholderAttr), info.GetIsolate());
-}
-
-CORE_EXPORT void placeholderAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::placeholderAttributeGetter(info);
-}
-
-static void placeholderAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setAttribute(HTMLNames::placeholderAttr, cppValue);
-}
-
-CORE_EXPORT void placeholderAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HTMLTextAreaElementV8Internal::placeholderAttributeSetter(v8Value, info);
-}
-
-static void readOnlyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::readonlyAttr));
-}
-
-CORE_EXPORT void readOnlyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::readOnlyAttributeGetter(info);
-}
-
-static void readOnlyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "readOnly");
-
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setBooleanAttribute(HTMLNames::readonlyAttr, cppValue);
-}
-
-CORE_EXPORT void readOnlyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HTMLTextAreaElementV8Internal::readOnlyAttributeSetter(v8Value, info);
-}
-
-static void requiredAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::requiredAttr));
-}
-
-CORE_EXPORT void requiredAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::requiredAttributeGetter(info);
-}
-
-static void requiredAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "required");
-
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setBooleanAttribute(HTMLNames::requiredAttr, cppValue);
-}
-
-CORE_EXPORT void requiredAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HTMLTextAreaElementV8Internal::requiredAttributeSetter(v8Value, info);
-}
-
-static void rowsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->rows());
-}
-
-CORE_EXPORT void rowsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::rowsAttributeGetter(info);
-}
-
-static void rowsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "rows");
-
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setRows(cppValue);
-}
-
-CORE_EXPORT void rowsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  HTMLTextAreaElementV8Internal::rowsAttributeSetter(v8Value, info);
-}
-
-static void wrapAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::wrapAttr), info.GetIsolate());
-}
-
-CORE_EXPORT void wrapAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::wrapAttributeGetter(info);
-}
-
-static void wrapAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setAttribute(HTMLNames::wrapAttr, cppValue);
-}
-
-CORE_EXPORT void wrapAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HTMLTextAreaElementV8Internal::wrapAttributeSetter(v8Value, info);
-}
-
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->type(), info.GetIsolate());
-}
-
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::typeAttributeGetter(info);
-}
-
-static void defaultValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->defaultValue(), info.GetIsolate());
-}
-
-CORE_EXPORT void defaultValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::defaultValueAttributeGetter(info);
-}
-
-static void defaultValueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setDefaultValue(cppValue);
-}
-
-CORE_EXPORT void defaultValueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  HTMLTextAreaElementV8Internal::defaultValueAttributeSetter(v8Value, info);
-}
-
-static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->value(), info.GetIsolate());
-}
-
-CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::valueAttributeGetter(info);
-}
-
-static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setValue(cppValue);
-}
-
-CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  HTMLTextAreaElementV8Internal::valueAttributeSetter(v8Value, info);
-}
-
-static void textLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->textLength());
-}
-
-CORE_EXPORT void textLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::textLengthAttributeGetter(info);
-}
-
-static void willValidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->willValidate());
-}
-
-CORE_EXPORT void willValidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::willValidateAttributeGetter(info);
-}
-
-static void validityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->validity()), impl);
-}
-
-CORE_EXPORT void validityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::validityAttributeGetter(info);
-}
-
-static void validationMessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->validationMessage(), info.GetIsolate());
-}
-
-CORE_EXPORT void validationMessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::validationMessageAttributeGetter(info);
-}
-
-static void labelsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->labels()), impl);
-}
-
-CORE_EXPORT void labelsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::labelsAttributeGetter(info);
-}
-
-static void selectionStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueInt(info, impl->selectionStart());
-}
-
-CORE_EXPORT void selectionStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::selectionStartAttributeGetter(info);
-}
-
-static void selectionStartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "selectionStart");
-
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setSelectionStart(cppValue);
-}
-
-CORE_EXPORT void selectionStartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  HTMLTextAreaElementV8Internal::selectionStartAttributeSetter(v8Value, info);
-}
-
-static void selectionEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueInt(info, impl->selectionEnd());
-}
-
-CORE_EXPORT void selectionEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::selectionEndAttributeGetter(info);
-}
-
-static void selectionEndAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "selectionEnd");
-
-  // Prepare the value to be set.
-  int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setSelectionEnd(cppValue);
-}
-
-CORE_EXPORT void selectionEndAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  HTMLTextAreaElementV8Internal::selectionEndAttributeSetter(v8Value, info);
-}
-
-static void selectionDirectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->selectionDirection(), info.GetIsolate());
-}
-
-CORE_EXPORT void selectionDirectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::selectionDirectionAttributeGetter(info);
-}
-
-static void selectionDirectionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setSelectionDirection(cppValue);
-}
-
-CORE_EXPORT void selectionDirectionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  HTMLTextAreaElementV8Internal::selectionDirectionAttributeSetter(v8Value, info);
-}
-
-static void autocapitalizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->autocapitalize(), info.GetIsolate());
-}
-
-CORE_EXPORT void autocapitalizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLTextAreaElement_Autocapitalize_AttributeGetter);
-
-  HTMLTextAreaElementV8Internal::autocapitalizeAttributeGetter(info);
-}
-
-static void autocapitalizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setAutocapitalize(cppValue);
-}
-
-CORE_EXPORT void autocapitalizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLTextAreaElement_Autocapitalize_AttributeSetter);
-
-  HTMLTextAreaElementV8Internal::autocapitalizeAttributeSetter(v8Value, info);
-}
-
-static void checkValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
-
-  v8SetReturnValueBool(info, impl->checkValidity());
-}
-
-CORE_EXPORT  void checkValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::checkValidityMethod(info);
-}
-
-static void reportValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
-
-  v8SetReturnValueBool(info, impl->reportValidity());
-}
-
-CORE_EXPORT  void reportValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::reportValidityMethod(info);
-}
-
-static void setCustomValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setCustomValidity", "HTMLTextAreaElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> error;
-  error = info[0];
-  if (!error.prepare())
-    return;
-
-  impl->setCustomValidity(error);
-}
-
-CORE_EXPORT  void setCustomValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::setCustomValidityMethod(info);
-}
-
-static void selectMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
-
-  impl->select();
-}
-
-CORE_EXPORT  void selectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::selectMethod(info);
-}
-
-static void setRangeText1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTextAreaElement", "setRangeText");
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
-
-  V8StringResource<> replacement;
-  replacement = info[0];
-  if (!replacement.prepare())
-    return;
-
-  impl->setRangeText(replacement, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void setRangeText2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTextAreaElement", "setRangeText");
-
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
-
-  V8StringResource<> replacement;
-  unsigned start;
-  unsigned end;
-  V8StringResource<> selectionMode;
-  replacement = info[0];
-  if (!replacement.prepare())
-    return;
-
-  start = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  end = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  if (!info[3]->IsUndefined()) {
-    selectionMode = info[3];
-    if (!selectionMode.prepare())
-      return;
-    const char* validSelectionModeValues[] = {
-        "select",
-        "start",
-        "end",
-        "preserve",
-    };
-    if (!isValidEnum(selectionMode, validSelectionModeValues, WTF_ARRAY_LENGTH(validSelectionModeValues), "SelectionMode", exceptionState)) {
-      return;
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::autofocusAttr));
     }
-  } else {
-    selectionMode = String("preserve");
-  }
 
-  impl->setRangeText(replacement, start, end, selectionMode, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void setRangeTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(4, info.Length())) {
-    case 1:
-      if (true) {
-        setRangeText1Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        setRangeText2Method(info);
-        return;
-      }
-      break;
-    case 4:
-      if (true) {
-        setRangeText2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTextAreaElement", "setRangeText");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+    CORE_EXPORT void autofocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::autofocusAttributeGetter(info);
     }
-    if (info.Length() >= 1) {
-      exceptionState.throwTypeError(ExceptionMessages::invalidArity("[1, 3, 4]", info.Length()));
-      return;
+
+    static void autofocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "autofocus");
+
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setBooleanAttribute(HTMLNames::autofocusAttr, cppValue);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-CORE_EXPORT  void setRangeTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::setRangeTextMethod(info);
-}
+    CORE_EXPORT void autofocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-static void setSelectionRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTextAreaElement", "setSelectionRange");
+        CEReactionsScope ceReactionsScope;
 
-  HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
 
-  int start;
-  int end;
-  V8StringResource<> direction;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  start = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        HTMLTextAreaElementV8Internal::autofocusAttributeSetter(v8Value, info);
+    }
 
-  end = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void colsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    impl->setSelectionRangeForBinding(start, end);
-    return;
-  }
-  direction = info[2];
-  if (!direction.prepare())
-    return;
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
 
-  impl->setSelectionRangeForBinding(start, end, direction);
-}
+        v8SetReturnValueUnsigned(info, impl->cols());
+    }
 
-CORE_EXPORT  void setSelectionRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  HTMLTextAreaElementV8Internal::setSelectionRangeMethod(info);
-}
+    CORE_EXPORT void colsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::colsAttributeGetter(info);
+    }
+
+    static void colsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "cols");
+
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setCols(cppValue);
+    }
+
+    CORE_EXPORT void colsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        HTMLTextAreaElementV8Internal::colsAttributeSetter(v8Value, info);
+    }
+
+    static void dirNameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::dirnameAttr), info.GetIsolate());
+    }
+
+    CORE_EXPORT void dirNameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::dirNameAttributeGetter(info);
+    }
+
+    static void dirNameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setAttribute(HTMLNames::dirnameAttr, cppValue);
+    }
+
+    CORE_EXPORT void dirNameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HTMLTextAreaElementV8Internal::dirNameAttributeSetter(v8Value, info);
+    }
+
+    static void disabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::disabledAttr));
+    }
+
+    CORE_EXPORT void disabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::disabledAttributeGetter(info);
+    }
+
+    static void disabledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "disabled");
+
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setBooleanAttribute(HTMLNames::disabledAttr, cppValue);
+    }
+
+    CORE_EXPORT void disabledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HTMLTextAreaElementV8Internal::disabledAttributeSetter(v8Value, info);
+    }
+
+    static void formAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->formOwner()), impl);
+    }
+
+    CORE_EXPORT void formAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::formAttributeGetter(info);
+    }
+
+    static void maxLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueInt(info, impl->maxLength());
+    }
+
+    CORE_EXPORT void maxLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::maxLengthAttributeGetter(info);
+    }
+
+    static void maxLengthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "maxLength");
+
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setMaxLength(cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void maxLengthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        HTMLTextAreaElementV8Internal::maxLengthAttributeSetter(v8Value, info);
+    }
+
+    static void minLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueInt(info, impl->minLength());
+    }
+
+    CORE_EXPORT void minLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::minLengthAttributeGetter(info);
+    }
+
+    static void minLengthAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "minLength");
+
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setMinLength(cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void minLengthAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        HTMLTextAreaElementV8Internal::minLengthAttributeSetter(v8Value, info);
+    }
+
+    static void nameAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->getNameAttribute(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void nameAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::nameAttributeGetter(info);
+    }
+
+    static void nameAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setAttribute(HTMLNames::nameAttr, cppValue);
+    }
+
+    CORE_EXPORT void nameAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HTMLTextAreaElementV8Internal::nameAttributeSetter(v8Value, info);
+    }
+
+    static void placeholderAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::placeholderAttr), info.GetIsolate());
+    }
+
+    CORE_EXPORT void placeholderAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::placeholderAttributeGetter(info);
+    }
+
+    static void placeholderAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setAttribute(HTMLNames::placeholderAttr, cppValue);
+    }
+
+    CORE_EXPORT void placeholderAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HTMLTextAreaElementV8Internal::placeholderAttributeSetter(v8Value, info);
+    }
+
+    static void readOnlyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::readonlyAttr));
+    }
+
+    CORE_EXPORT void readOnlyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::readOnlyAttributeGetter(info);
+    }
+
+    static void readOnlyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "readOnly");
+
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setBooleanAttribute(HTMLNames::readonlyAttr, cppValue);
+    }
+
+    CORE_EXPORT void readOnlyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HTMLTextAreaElementV8Internal::readOnlyAttributeSetter(v8Value, info);
+    }
+
+    static void requiredAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->fastHasAttribute(HTMLNames::requiredAttr));
+    }
+
+    CORE_EXPORT void requiredAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::requiredAttributeGetter(info);
+    }
+
+    static void requiredAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "required");
+
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setBooleanAttribute(HTMLNames::requiredAttr, cppValue);
+    }
+
+    CORE_EXPORT void requiredAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HTMLTextAreaElementV8Internal::requiredAttributeSetter(v8Value, info);
+    }
+
+    static void rowsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->rows());
+    }
+
+    CORE_EXPORT void rowsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::rowsAttributeGetter(info);
+    }
+
+    static void rowsAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "rows");
+
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setRows(cppValue);
+    }
+
+    CORE_EXPORT void rowsAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        HTMLTextAreaElementV8Internal::rowsAttributeSetter(v8Value, info);
+    }
+
+    static void wrapAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->fastGetAttribute(HTMLNames::wrapAttr), info.GetIsolate());
+    }
+
+    CORE_EXPORT void wrapAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::wrapAttributeGetter(info);
+    }
+
+    static void wrapAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setAttribute(HTMLNames::wrapAttr, cppValue);
+    }
+
+    CORE_EXPORT void wrapAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HTMLTextAreaElementV8Internal::wrapAttributeSetter(v8Value, info);
+    }
+
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->type(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::typeAttributeGetter(info);
+    }
+
+    static void defaultValueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->defaultValue(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void defaultValueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::defaultValueAttributeGetter(info);
+    }
+
+    static void defaultValueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setDefaultValue(cppValue);
+    }
+
+    CORE_EXPORT void defaultValueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        HTMLTextAreaElementV8Internal::defaultValueAttributeSetter(v8Value, info);
+    }
+
+    static void valueAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->value(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void valueAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::valueAttributeGetter(info);
+    }
+
+    static void valueAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setValue(cppValue);
+    }
+
+    CORE_EXPORT void valueAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        HTMLTextAreaElementV8Internal::valueAttributeSetter(v8Value, info);
+    }
+
+    static void textLengthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->textLength());
+    }
+
+    CORE_EXPORT void textLengthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::textLengthAttributeGetter(info);
+    }
+
+    static void willValidateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->willValidate());
+    }
+
+    CORE_EXPORT void willValidateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::willValidateAttributeGetter(info);
+    }
+
+    static void validityAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->validity()), impl);
+    }
+
+    CORE_EXPORT void validityAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::validityAttributeGetter(info);
+    }
+
+    static void validationMessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->validationMessage(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void validationMessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::validationMessageAttributeGetter(info);
+    }
+
+    static void labelsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->labels()), impl);
+    }
+
+    CORE_EXPORT void labelsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::labelsAttributeGetter(info);
+    }
+
+    static void selectionStartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueInt(info, impl->selectionStart());
+    }
+
+    CORE_EXPORT void selectionStartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::selectionStartAttributeGetter(info);
+    }
+
+    static void selectionStartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "selectionStart");
+
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setSelectionStart(cppValue);
+    }
+
+    CORE_EXPORT void selectionStartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        HTMLTextAreaElementV8Internal::selectionStartAttributeSetter(v8Value, info);
+    }
+
+    static void selectionEndAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueInt(info, impl->selectionEnd());
+    }
+
+    CORE_EXPORT void selectionEndAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::selectionEndAttributeGetter(info);
+    }
+
+    static void selectionEndAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "HTMLTextAreaElement", "selectionEnd");
+
+        // Prepare the value to be set.
+        int cppValue = toInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setSelectionEnd(cppValue);
+    }
+
+    CORE_EXPORT void selectionEndAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        HTMLTextAreaElementV8Internal::selectionEndAttributeSetter(v8Value, info);
+    }
+
+    static void selectionDirectionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->selectionDirection(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void selectionDirectionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::selectionDirectionAttributeGetter(info);
+    }
+
+    static void selectionDirectionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setSelectionDirection(cppValue);
+    }
+
+    CORE_EXPORT void selectionDirectionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        HTMLTextAreaElementV8Internal::selectionDirectionAttributeSetter(v8Value, info);
+    }
+
+    static void autocapitalizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->autocapitalize(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void autocapitalizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLTextAreaElement_Autocapitalize_AttributeGetter);
+
+        HTMLTextAreaElementV8Internal::autocapitalizeAttributeGetter(info);
+    }
+
+    static void autocapitalizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setAutocapitalize(cppValue);
+    }
+
+    CORE_EXPORT void autocapitalizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLTextAreaElement_Autocapitalize_AttributeSetter);
+
+        HTMLTextAreaElementV8Internal::autocapitalizeAttributeSetter(v8Value, info);
+    }
+
+    static void checkValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
+
+        v8SetReturnValueBool(info, impl->checkValidity());
+    }
+
+    CORE_EXPORT void checkValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::checkValidityMethod(info);
+    }
+
+    static void reportValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
+
+        v8SetReturnValueBool(info, impl->reportValidity());
+    }
+
+    CORE_EXPORT void reportValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::reportValidityMethod(info);
+    }
+
+    static void setCustomValidityMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("setCustomValidity", "HTMLTextAreaElement", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> error;
+        error = info[0];
+        if (!error.prepare())
+            return;
+
+        impl->setCustomValidity(error);
+    }
+
+    CORE_EXPORT void setCustomValidityMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::setCustomValidityMethod(info);
+    }
+
+    static void selectMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
+
+        impl->select();
+    }
+
+    CORE_EXPORT void selectMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::selectMethod(info);
+    }
+
+    static void setRangeText1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTextAreaElement", "setRangeText");
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
+
+        V8StringResource<> replacement;
+        replacement = info[0];
+        if (!replacement.prepare())
+            return;
+
+        impl->setRangeText(replacement, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void setRangeText2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTextAreaElement", "setRangeText");
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
+
+        V8StringResource<> replacement;
+        unsigned start;
+        unsigned end;
+        V8StringResource<> selectionMode;
+        replacement = info[0];
+        if (!replacement.prepare())
+            return;
+
+        start = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        end = toUInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (!info[3]->IsUndefined()) {
+            selectionMode = info[3];
+            if (!selectionMode.prepare())
+                return;
+            const char* validSelectionModeValues[] = {
+                "select",
+                "start",
+                "end",
+                "preserve",
+            };
+            if (!isValidEnum(selectionMode, validSelectionModeValues, WTF_ARRAY_LENGTH(validSelectionModeValues), "SelectionMode", exceptionState)) {
+                return;
+            }
+        } else {
+            selectionMode = String("preserve");
+        }
+
+        impl->setRangeText(replacement, start, end, selectionMode, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void setRangeTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(4, info.Length())) {
+        case 1:
+            if (true) {
+                setRangeText1Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                setRangeText2Method(info);
+                return;
+            }
+            break;
+        case 4:
+            if (true) {
+                setRangeText2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTextAreaElement", "setRangeText");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+            if (info.Length() >= 1) {
+                exceptionState.throwTypeError(ExceptionMessages::invalidArity("[1, 3, 4]", info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void setRangeTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::setRangeTextMethod(info);
+    }
+
+    static void setSelectionRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "HTMLTextAreaElement", "setSelectionRange");
+
+        HTMLTextAreaElement* impl = V8HTMLTextAreaElement::toImpl(info.Holder());
+
+        int start;
+        int end;
+        V8StringResource<> direction;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        start = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        end = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            impl->setSelectionRangeForBinding(start, end);
+            return;
+        }
+        direction = info[2];
+        if (!direction.prepare())
+            return;
+
+        impl->setSelectionRangeForBinding(start, end, direction);
+    }
+
+    CORE_EXPORT void setSelectionRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        HTMLTextAreaElementV8Internal::setSelectionRangeMethod(info);
+    }
 
 } // namespace HTMLTextAreaElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8HTMLTextAreaElementAccessors[] = {
-    {"autofocus", HTMLTextAreaElementV8Internal::autofocusAttributeGetterCallback, HTMLTextAreaElementV8Internal::autofocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cols", HTMLTextAreaElementV8Internal::colsAttributeGetterCallback, HTMLTextAreaElementV8Internal::colsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dirName", HTMLTextAreaElementV8Internal::dirNameAttributeGetterCallback, HTMLTextAreaElementV8Internal::dirNameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"disabled", HTMLTextAreaElementV8Internal::disabledAttributeGetterCallback, HTMLTextAreaElementV8Internal::disabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"form", HTMLTextAreaElementV8Internal::formAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"maxLength", HTMLTextAreaElementV8Internal::maxLengthAttributeGetterCallback, HTMLTextAreaElementV8Internal::maxLengthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"minLength", HTMLTextAreaElementV8Internal::minLengthAttributeGetterCallback, HTMLTextAreaElementV8Internal::minLengthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"name", HTMLTextAreaElementV8Internal::nameAttributeGetterCallback, HTMLTextAreaElementV8Internal::nameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"placeholder", HTMLTextAreaElementV8Internal::placeholderAttributeGetterCallback, HTMLTextAreaElementV8Internal::placeholderAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readOnly", HTMLTextAreaElementV8Internal::readOnlyAttributeGetterCallback, HTMLTextAreaElementV8Internal::readOnlyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"required", HTMLTextAreaElementV8Internal::requiredAttributeGetterCallback, HTMLTextAreaElementV8Internal::requiredAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rows", HTMLTextAreaElementV8Internal::rowsAttributeGetterCallback, HTMLTextAreaElementV8Internal::rowsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"wrap", HTMLTextAreaElementV8Internal::wrapAttributeGetterCallback, HTMLTextAreaElementV8Internal::wrapAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"type", HTMLTextAreaElementV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"defaultValue", HTMLTextAreaElementV8Internal::defaultValueAttributeGetterCallback, HTMLTextAreaElementV8Internal::defaultValueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"value", HTMLTextAreaElementV8Internal::valueAttributeGetterCallback, HTMLTextAreaElementV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"textLength", HTMLTextAreaElementV8Internal::textLengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"willValidate", HTMLTextAreaElementV8Internal::willValidateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"validity", HTMLTextAreaElementV8Internal::validityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"validationMessage", HTMLTextAreaElementV8Internal::validationMessageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"labels", HTMLTextAreaElementV8Internal::labelsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectionStart", HTMLTextAreaElementV8Internal::selectionStartAttributeGetterCallback, HTMLTextAreaElementV8Internal::selectionStartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectionEnd", HTMLTextAreaElementV8Internal::selectionEndAttributeGetterCallback, HTMLTextAreaElementV8Internal::selectionEndAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectionDirection", HTMLTextAreaElementV8Internal::selectionDirectionAttributeGetterCallback, HTMLTextAreaElementV8Internal::selectionDirectionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"autocapitalize", HTMLTextAreaElementV8Internal::autocapitalizeAttributeGetterCallback, HTMLTextAreaElementV8Internal::autocapitalizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "autofocus", HTMLTextAreaElementV8Internal::autofocusAttributeGetterCallback, HTMLTextAreaElementV8Internal::autofocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cols", HTMLTextAreaElementV8Internal::colsAttributeGetterCallback, HTMLTextAreaElementV8Internal::colsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dirName", HTMLTextAreaElementV8Internal::dirNameAttributeGetterCallback, HTMLTextAreaElementV8Internal::dirNameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "disabled", HTMLTextAreaElementV8Internal::disabledAttributeGetterCallback, HTMLTextAreaElementV8Internal::disabledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "form", HTMLTextAreaElementV8Internal::formAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "maxLength", HTMLTextAreaElementV8Internal::maxLengthAttributeGetterCallback, HTMLTextAreaElementV8Internal::maxLengthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "minLength", HTMLTextAreaElementV8Internal::minLengthAttributeGetterCallback, HTMLTextAreaElementV8Internal::minLengthAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "name", HTMLTextAreaElementV8Internal::nameAttributeGetterCallback, HTMLTextAreaElementV8Internal::nameAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "placeholder", HTMLTextAreaElementV8Internal::placeholderAttributeGetterCallback, HTMLTextAreaElementV8Internal::placeholderAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readOnly", HTMLTextAreaElementV8Internal::readOnlyAttributeGetterCallback, HTMLTextAreaElementV8Internal::readOnlyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "required", HTMLTextAreaElementV8Internal::requiredAttributeGetterCallback, HTMLTextAreaElementV8Internal::requiredAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rows", HTMLTextAreaElementV8Internal::rowsAttributeGetterCallback, HTMLTextAreaElementV8Internal::rowsAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "wrap", HTMLTextAreaElementV8Internal::wrapAttributeGetterCallback, HTMLTextAreaElementV8Internal::wrapAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "type", HTMLTextAreaElementV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "defaultValue", HTMLTextAreaElementV8Internal::defaultValueAttributeGetterCallback, HTMLTextAreaElementV8Internal::defaultValueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "value", HTMLTextAreaElementV8Internal::valueAttributeGetterCallback, HTMLTextAreaElementV8Internal::valueAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "textLength", HTMLTextAreaElementV8Internal::textLengthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "willValidate", HTMLTextAreaElementV8Internal::willValidateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "validity", HTMLTextAreaElementV8Internal::validityAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "validationMessage", HTMLTextAreaElementV8Internal::validationMessageAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "labels", HTMLTextAreaElementV8Internal::labelsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectionStart", HTMLTextAreaElementV8Internal::selectionStartAttributeGetterCallback, HTMLTextAreaElementV8Internal::selectionStartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectionEnd", HTMLTextAreaElementV8Internal::selectionEndAttributeGetterCallback, HTMLTextAreaElementV8Internal::selectionEndAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectionDirection", HTMLTextAreaElementV8Internal::selectionDirectionAttributeGetterCallback, HTMLTextAreaElementV8Internal::selectionDirectionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "autocapitalize", HTMLTextAreaElementV8Internal::autocapitalizeAttributeGetterCallback, HTMLTextAreaElementV8Internal::autocapitalizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8HTMLTextAreaElementMethods[] = {
-    {"checkValidity", HTMLTextAreaElementV8Internal::checkValidityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"reportValidity", HTMLTextAreaElementV8Internal::reportValidityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setCustomValidity", HTMLTextAreaElementV8Internal::setCustomValidityMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"select", HTMLTextAreaElementV8Internal::selectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setRangeText", HTMLTextAreaElementV8Internal::setRangeTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setSelectionRange", HTMLTextAreaElementV8Internal::setSelectionRangeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "checkValidity", HTMLTextAreaElementV8Internal::checkValidityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "reportValidity", HTMLTextAreaElementV8Internal::reportValidityMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setCustomValidity", HTMLTextAreaElementV8Internal::setCustomValidityMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "select", HTMLTextAreaElementV8Internal::selectMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setRangeText", HTMLTextAreaElementV8Internal::setRangeTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setSelectionRange", HTMLTextAreaElementV8Internal::setSelectionRangeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8HTMLTextAreaElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLTextAreaElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLTextAreaElement::internalFieldCount);
+static void installV8HTMLTextAreaElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8HTMLTextAreaElement::wrapperTypeInfo.interfaceName, V8HTMLElement::domTemplate(isolate, world), V8HTMLTextAreaElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTextAreaElementAccessors, WTF_ARRAY_LENGTH(V8HTMLTextAreaElementAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTextAreaElementMethods, WTF_ARRAY_LENGTH(V8HTMLTextAreaElementMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTextAreaElementAccessors, WTF_ARRAY_LENGTH(V8HTMLTextAreaElementAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8HTMLTextAreaElementMethods, WTF_ARRAY_LENGTH(V8HTMLTextAreaElementMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8HTMLTextAreaElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLTextAreaElementTemplate);
+v8::Local<v8::FunctionTemplate> V8HTMLTextAreaElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8HTMLTextAreaElementTemplate);
 }
 
-bool V8HTMLTextAreaElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8HTMLTextAreaElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8HTMLTextAreaElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8HTMLTextAreaElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-HTMLTextAreaElement* V8HTMLTextAreaElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+HTMLTextAreaElement* V8HTMLTextAreaElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

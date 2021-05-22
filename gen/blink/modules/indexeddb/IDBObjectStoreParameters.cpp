@@ -8,50 +8,59 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "IDBObjectStoreParameters.h"
 
 #include "bindings/modules/v8/StringOrStringSequence.h"
 
 namespace blink {
 
-IDBObjectStoreParameters::IDBObjectStoreParameters() {
-  setAutoIncrement(false);
+IDBObjectStoreParameters::IDBObjectStoreParameters()
+{
+    setAutoIncrement(false);
 }
 
-IDBObjectStoreParameters::~IDBObjectStoreParameters() {}
+IDBObjectStoreParameters::~IDBObjectStoreParameters() { }
 
 IDBObjectStoreParameters::IDBObjectStoreParameters(const IDBObjectStoreParameters&) = default;
 
 IDBObjectStoreParameters& IDBObjectStoreParameters::operator=(const IDBObjectStoreParameters&) = default;
 
-bool IDBObjectStoreParameters::hasAutoIncrement() const {
-  return m_hasAutoIncrement;
+bool IDBObjectStoreParameters::hasAutoIncrement() const
+{
+    return m_hasAutoIncrement;
 }
-bool IDBObjectStoreParameters::autoIncrement() const {
-  DCHECK(m_hasAutoIncrement);
-  return m_autoIncrement;
+bool IDBObjectStoreParameters::autoIncrement() const
+{
+    DCHECK(m_hasAutoIncrement);
+    return m_autoIncrement;
 }
-void IDBObjectStoreParameters::setAutoIncrement(bool value) {
-  m_autoIncrement = value;
-  m_hasAutoIncrement = true;
+void IDBObjectStoreParameters::setAutoIncrement(bool value)
+{
+    m_autoIncrement = value;
+    m_hasAutoIncrement = true;
 }
-bool IDBObjectStoreParameters::hasKeyPath() const {
-  return !m_keyPath.isNull();
+bool IDBObjectStoreParameters::hasKeyPath() const
+{
+    return !m_keyPath.isNull();
 }
-const StringOrStringSequence& IDBObjectStoreParameters::keyPath() const {
-  return m_keyPath;
+const StringOrStringSequence& IDBObjectStoreParameters::keyPath() const
+{
+    return m_keyPath;
 }
-void IDBObjectStoreParameters::setKeyPath(const StringOrStringSequence& value) {
-  m_keyPath = value;
+void IDBObjectStoreParameters::setKeyPath(const StringOrStringSequence& value)
+{
+    m_keyPath = value;
 }
-void IDBObjectStoreParameters::setKeyPathToNull() {
-  m_keyPath = StringOrStringSequence();
+void IDBObjectStoreParameters::setKeyPathToNull()
+{
+    m_keyPath = StringOrStringSequence();
 }
 
-DEFINE_TRACE(IDBObjectStoreParameters) {
-  visitor->trace(m_keyPath);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(IDBObjectStoreParameters)
+{
+    visitor->trace(m_keyPath);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

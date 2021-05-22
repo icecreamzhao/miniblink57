@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8LayerRect.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,122 +48,137 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&LayerRect::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "LayerRect is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace LayerRectV8Internal {
 
-static void layerAssociatedNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void layerAssociatedNodeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  LayerRect* impl = V8LayerRect::toImpl(holder);
+        LayerRect* impl = V8LayerRect::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->layerAssociatedNode()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->layerAssociatedNode()), impl);
+    }
 
-void layerAssociatedNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LayerRectV8Internal::layerAssociatedNodeAttributeGetter(info);
-}
+    void layerAssociatedNodeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LayerRectV8Internal::layerAssociatedNodeAttributeGetter(info);
+    }
 
-static void layerTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void layerTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  LayerRect* impl = V8LayerRect::toImpl(holder);
+        LayerRect* impl = V8LayerRect::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->layerType(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->layerType(), info.GetIsolate());
+    }
 
-void layerTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LayerRectV8Internal::layerTypeAttributeGetter(info);
-}
+    void layerTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LayerRectV8Internal::layerTypeAttributeGetter(info);
+    }
 
-static void associatedNodeOffsetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void associatedNodeOffsetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  LayerRect* impl = V8LayerRect::toImpl(holder);
+        LayerRect* impl = V8LayerRect::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->associatedNodeOffsetX());
-}
+        v8SetReturnValueInt(info, impl->associatedNodeOffsetX());
+    }
 
-void associatedNodeOffsetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LayerRectV8Internal::associatedNodeOffsetXAttributeGetter(info);
-}
+    void associatedNodeOffsetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LayerRectV8Internal::associatedNodeOffsetXAttributeGetter(info);
+    }
 
-static void associatedNodeOffsetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void associatedNodeOffsetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  LayerRect* impl = V8LayerRect::toImpl(holder);
+        LayerRect* impl = V8LayerRect::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->associatedNodeOffsetY());
-}
+        v8SetReturnValueInt(info, impl->associatedNodeOffsetY());
+    }
 
-void associatedNodeOffsetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LayerRectV8Internal::associatedNodeOffsetYAttributeGetter(info);
-}
+    void associatedNodeOffsetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LayerRectV8Internal::associatedNodeOffsetYAttributeGetter(info);
+    }
 
-static void layerRelativeRectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void layerRelativeRectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  LayerRect* impl = V8LayerRect::toImpl(holder);
+        LayerRect* impl = V8LayerRect::toImpl(holder);
 
-  ClientRect* cppValue(WTF::getPtr(impl->layerRelativeRect()));
+        ClientRect* cppValue(WTF::getPtr(impl->layerRelativeRect()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#LayerRect#layerRelativeRect";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#LayerRect#layerRelativeRect";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-void layerRelativeRectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  LayerRectV8Internal::layerRelativeRectAttributeGetter(info);
-}
+    void layerRelativeRectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        LayerRectV8Internal::layerRelativeRectAttributeGetter(info);
+    }
 
 } // namespace LayerRectV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8LayerRectAccessors[] = {
-    {"layerAssociatedNode", LayerRectV8Internal::layerAssociatedNodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"layerType", LayerRectV8Internal::layerTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"associatedNodeOffsetX", LayerRectV8Internal::associatedNodeOffsetXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"associatedNodeOffsetY", LayerRectV8Internal::associatedNodeOffsetYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"layerRelativeRect", LayerRectV8Internal::layerRelativeRectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "layerAssociatedNode", LayerRectV8Internal::layerAssociatedNodeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "layerType", LayerRectV8Internal::layerTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "associatedNodeOffsetX", LayerRectV8Internal::associatedNodeOffsetXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "associatedNodeOffsetY", LayerRectV8Internal::associatedNodeOffsetYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "layerRelativeRect", LayerRectV8Internal::layerRelativeRectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8LayerRectTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8LayerRect::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8LayerRect::internalFieldCount);
+static void installV8LayerRectTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8LayerRect::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8LayerRect::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8LayerRectAccessors, WTF_ARRAY_LENGTH(V8LayerRectAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8LayerRectAccessors, WTF_ARRAY_LENGTH(V8LayerRectAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8LayerRect::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8LayerRectTemplate);
+v8::Local<v8::FunctionTemplate> V8LayerRect::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8LayerRectTemplate);
 }
 
-bool V8LayerRect::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8LayerRect::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8LayerRect::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8LayerRect::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-LayerRect* V8LayerRect::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+LayerRect* V8LayerRect::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

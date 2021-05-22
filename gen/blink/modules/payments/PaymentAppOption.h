@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PaymentAppOption_h
 #define PaymentAppOption_h
 
@@ -21,43 +21,44 @@
 namespace blink {
 
 class MODULES_EXPORT PaymentAppOption : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PaymentAppOption();
-  virtual ~PaymentAppOption();
-  PaymentAppOption(const PaymentAppOption&);
-  PaymentAppOption& operator=(const PaymentAppOption&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasEnabledMethods() const;
-  const Vector<String>& enabledMethods() const;
-  void setEnabledMethods(const Vector<String>&);
+public:
+    PaymentAppOption();
+    virtual ~PaymentAppOption();
+    PaymentAppOption(const PaymentAppOption&);
+    PaymentAppOption& operator=(const PaymentAppOption&);
 
-  bool hasIcon() const;
-  String icon() const;
-  void setIcon(String);
-  void setIconToNull();
+    bool hasEnabledMethods() const;
+    const Vector<String>& enabledMethods() const;
+    void setEnabledMethods(const Vector<String>&);
 
-  bool hasId() const;
-  String id() const;
-  void setId(String);
+    bool hasIcon() const;
+    String icon() const;
+    void setIcon(String);
+    void setIconToNull();
 
-  bool hasName() const;
-  String name() const;
-  void setName(String);
+    bool hasId() const;
+    String id() const;
+    void setId(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasName() const;
+    String name() const;
+    void setName(String);
 
- private:
-  bool m_hasEnabledMethods = false;
-  Vector<String> m_enabledMethods;
-  String m_icon;
-  String m_id;
-  String m_name;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PaymentAppOption;
+private:
+    bool m_hasEnabledMethods = false;
+    Vector<String> m_enabledMethods;
+    String m_icon;
+    String m_id;
+    String m_name;
+
+    friend class V8PaymentAppOption;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PaymentAppOption_h
+#endif // PaymentAppOption_h

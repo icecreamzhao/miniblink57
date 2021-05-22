@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaSource.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,430 +52,471 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&MediaSource::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaSource is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaSourceV8Internal {
 
-static void sourceBuffersAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  SourceBufferList* cppValue(WTF::getPtr(impl->sourceBuffers()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#MediaSource#sourceBuffers";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void sourceBuffersAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::sourceBuffersAttributeGetter(info);
-}
-
-static void activeSourceBuffersAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  SourceBufferList* cppValue(WTF::getPtr(impl->activeSourceBuffers()));
-
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#MediaSource#activeSourceBuffers";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-  v8SetReturnValue(info, v8Value);
-}
-
-MODULES_EXPORT void activeSourceBuffersAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::activeSourceBuffersAttributeGetter(info);
-}
-
-static void durationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  v8SetReturnValue(info, impl->duration());
-}
-
-MODULES_EXPORT void durationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::durationAttributeGetter(info);
-}
-
-static void durationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "MediaSource", "duration");
-
-  // Prepare the value to be set.
-  double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setDuration(cppValue, exceptionState);
-}
-
-MODULES_EXPORT void durationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaSourceV8Internal::durationAttributeSetter(v8Value, info);
-}
-
-static void onsourceopenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onsourceopen()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onsourceopenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::onsourceopenAttributeGetter(info);
-}
-
-static void onsourceopenAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsourceopen(), v8Value, V8MediaSource::eventListenerCacheIndex);
-
-  impl->setOnsourceopen(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onsourceopenAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaSourceV8Internal::onsourceopenAttributeSetter(v8Value, info);
-}
-
-static void onsourceendedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onsourceended()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onsourceendedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::onsourceendedAttributeGetter(info);
-}
-
-static void onsourceendedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsourceended(), v8Value, V8MediaSource::eventListenerCacheIndex);
-
-  impl->setOnsourceended(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onsourceendedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaSourceV8Internal::onsourceendedAttributeSetter(v8Value, info);
-}
-
-static void onsourcecloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onsourceclose()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onsourcecloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::onsourcecloseAttributeGetter(info);
-}
-
-static void onsourcecloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsourceclose(), v8Value, V8MediaSource::eventListenerCacheIndex);
-
-  impl->setOnsourceclose(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onsourcecloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  MediaSourceV8Internal::onsourcecloseAttributeSetter(v8Value, info);
-}
-
-static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  MediaSource* impl = V8MediaSource::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->readyState(), info.GetIsolate());
-}
-
-MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::readyStateAttributeGetter(info);
-}
-
-static void addSourceBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "addSourceBuffer");
-
-  MediaSource* impl = V8MediaSource::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> type;
-  type = info[0];
-  if (!type.prepare())
-    return;
-
-  SourceBuffer* result = impl->addSourceBuffer(type, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result);
-}
-
-MODULES_EXPORT  void addSourceBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::addSourceBufferMethod(info);
-}
-
-static void removeSourceBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "removeSourceBuffer");
-
-  MediaSource* impl = V8MediaSource::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  SourceBuffer* buffer;
-  buffer = V8SourceBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!buffer) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'SourceBuffer'.");
-
-    return;
-  }
-
-  impl->removeSourceBuffer(buffer, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-MODULES_EXPORT  void removeSourceBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::removeSourceBufferMethod(info);
-}
-
-static void endOfStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "endOfStream");
-
-  MediaSource* impl = V8MediaSource::toImpl(info.Holder());
-
-  V8StringResource<> error;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->endOfStream(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    static void sourceBuffersAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaSource* impl = V8MediaSource::toImpl(holder);
+
+        SourceBufferList* cppValue(WTF::getPtr(impl->sourceBuffers()));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#MediaSource#sourceBuffers";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
     }
-    return;
-  }
-  error = info[0];
-  if (!error.prepare())
-    return;
-  const char* validErrorValues[] = {
-      "network",
-      "decode",
-  };
-  if (!isValidEnum(error, validErrorValues, WTF_ARRAY_LENGTH(validErrorValues), "EndOfStreamError", exceptionState)) {
-    return;
-  }
 
-  impl->endOfStream(error, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    MODULES_EXPORT void sourceBuffersAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::sourceBuffersAttributeGetter(info);
+    }
 
-MODULES_EXPORT  void endOfStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::endOfStreamMethod(info);
-}
+    static void activeSourceBuffersAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void setLiveSeekableRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "setLiveSeekableRange");
+        MediaSource* impl = V8MediaSource::toImpl(holder);
 
-  MediaSource* impl = V8MediaSource::toImpl(info.Holder());
+        SourceBufferList* cppValue(WTF::getPtr(impl->activeSourceBuffers()));
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#MediaSource#activeSourceBuffers";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  double start;
-  double end;
-  start = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        v8SetReturnValue(info, v8Value);
+    }
 
-  end = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+    MODULES_EXPORT void activeSourceBuffersAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::activeSourceBuffersAttributeGetter(info);
+    }
 
-  impl->setLiveSeekableRange(start, end, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void durationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void setLiveSeekableRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::setLiveSeekableRangeMethod(info);
-}
+        MediaSource* impl = V8MediaSource::toImpl(holder);
 
-static void clearLiveSeekableRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "clearLiveSeekableRange");
+        v8SetReturnValue(info, impl->duration());
+    }
 
-  MediaSource* impl = V8MediaSource::toImpl(info.Holder());
+    MODULES_EXPORT void durationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::durationAttributeGetter(info);
+    }
 
-  impl->clearLiveSeekableRange(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void durationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaSource* impl = V8MediaSource::toImpl(holder);
 
-MODULES_EXPORT  void clearLiveSeekableRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::clearLiveSeekableRangeMethod(info);
-}
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "MediaSource", "duration");
 
-static void isTypeSupportedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isTypeSupported", "MediaSource", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        // Prepare the value to be set.
+        double cppValue = toDouble(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  V8StringResource<> type;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        impl->setDuration(cppValue, exceptionState);
+    }
 
-  v8SetReturnValueBool(info, MediaSource::isTypeSupported(type));
-}
+    MODULES_EXPORT void durationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-MODULES_EXPORT  void isTypeSupportedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaSourceV8Internal::isTypeSupportedMethod(info);
-}
+        MediaSourceV8Internal::durationAttributeSetter(v8Value, info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  MediaSource* impl = MediaSource::create(executionContext);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaSource::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void onsourceopenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaSource* impl = V8MediaSource::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onsourceopen()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onsourceopenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::onsourceopenAttributeGetter(info);
+    }
+
+    static void onsourceopenAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaSource* impl = V8MediaSource::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsourceopen(), v8Value, V8MediaSource::eventListenerCacheIndex);
+
+        impl->setOnsourceopen(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onsourceopenAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        MediaSourceV8Internal::onsourceopenAttributeSetter(v8Value, info);
+    }
+
+    static void onsourceendedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaSource* impl = V8MediaSource::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onsourceended()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onsourceendedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::onsourceendedAttributeGetter(info);
+    }
+
+    static void onsourceendedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaSource* impl = V8MediaSource::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsourceended(), v8Value, V8MediaSource::eventListenerCacheIndex);
+
+        impl->setOnsourceended(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onsourceendedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        MediaSourceV8Internal::onsourceendedAttributeSetter(v8Value, info);
+    }
+
+    static void onsourcecloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaSource* impl = V8MediaSource::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onsourceclose()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onsourcecloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::onsourcecloseAttributeGetter(info);
+    }
+
+    static void onsourcecloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaSource* impl = V8MediaSource::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onsourceclose(), v8Value, V8MediaSource::eventListenerCacheIndex);
+
+        impl->setOnsourceclose(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onsourcecloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        MediaSourceV8Internal::onsourcecloseAttributeSetter(v8Value, info);
+    }
+
+    static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        MediaSource* impl = V8MediaSource::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->readyState(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::readyStateAttributeGetter(info);
+    }
+
+    static void addSourceBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "addSourceBuffer");
+
+        MediaSource* impl = V8MediaSource::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> type;
+        type = info[0];
+        if (!type.prepare())
+            return;
+
+        SourceBuffer* result = impl->addSourceBuffer(type, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result);
+    }
+
+    MODULES_EXPORT void addSourceBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::addSourceBufferMethod(info);
+    }
+
+    static void removeSourceBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "removeSourceBuffer");
+
+        MediaSource* impl = V8MediaSource::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        SourceBuffer* buffer;
+        buffer = V8SourceBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!buffer) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'SourceBuffer'.");
+
+            return;
+        }
+
+        impl->removeSourceBuffer(buffer, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void removeSourceBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::removeSourceBufferMethod(info);
+    }
+
+    static void endOfStreamMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "endOfStream");
+
+        MediaSource* impl = V8MediaSource::toImpl(info.Holder());
+
+        V8StringResource<> error;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->endOfStream(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        error = info[0];
+        if (!error.prepare())
+            return;
+        const char* validErrorValues[] = {
+            "network",
+            "decode",
+        };
+        if (!isValidEnum(error, validErrorValues, WTF_ARRAY_LENGTH(validErrorValues), "EndOfStreamError", exceptionState)) {
+            return;
+        }
+
+        impl->endOfStream(error, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void endOfStreamMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::endOfStreamMethod(info);
+    }
+
+    static void setLiveSeekableRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "setLiveSeekableRange");
+
+        MediaSource* impl = V8MediaSource::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        double start;
+        double end;
+        start = toRestrictedDouble(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        end = toRestrictedDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLiveSeekableRange(start, end, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void setLiveSeekableRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::setLiveSeekableRangeMethod(info);
+    }
+
+    static void clearLiveSeekableRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaSource", "clearLiveSeekableRange");
+
+        MediaSource* impl = V8MediaSource::toImpl(info.Holder());
+
+        impl->clearLiveSeekableRange(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void clearLiveSeekableRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::clearLiveSeekableRangeMethod(info);
+    }
+
+    static void isTypeSupportedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("isTypeSupported", "MediaSource", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> type;
+        type = info[0];
+        if (!type.prepare())
+            return;
+
+        v8SetReturnValueBool(info, MediaSource::isTypeSupported(type));
+    }
+
+    MODULES_EXPORT void isTypeSupportedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaSourceV8Internal::isTypeSupportedMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        MediaSource* impl = MediaSource::create(executionContext);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaSource::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace MediaSourceV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaSourceAccessors[] = {
-    {"sourceBuffers", MediaSourceV8Internal::sourceBuffersAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"activeSourceBuffers", MediaSourceV8Internal::activeSourceBuffersAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"duration", MediaSourceV8Internal::durationAttributeGetterCallback, MediaSourceV8Internal::durationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsourceopen", MediaSourceV8Internal::onsourceopenAttributeGetterCallback, MediaSourceV8Internal::onsourceopenAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsourceended", MediaSourceV8Internal::onsourceendedAttributeGetterCallback, MediaSourceV8Internal::onsourceendedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsourceclose", MediaSourceV8Internal::onsourcecloseAttributeGetterCallback, MediaSourceV8Internal::onsourcecloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readyState", MediaSourceV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "sourceBuffers", MediaSourceV8Internal::sourceBuffersAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "activeSourceBuffers", MediaSourceV8Internal::activeSourceBuffersAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "duration", MediaSourceV8Internal::durationAttributeGetterCallback, MediaSourceV8Internal::durationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsourceopen", MediaSourceV8Internal::onsourceopenAttributeGetterCallback, MediaSourceV8Internal::onsourceopenAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsourceended", MediaSourceV8Internal::onsourceendedAttributeGetterCallback, MediaSourceV8Internal::onsourceendedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsourceclose", MediaSourceV8Internal::onsourcecloseAttributeGetterCallback, MediaSourceV8Internal::onsourcecloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readyState", MediaSourceV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MediaSourceMethods[] = {
-    {"addSourceBuffer", MediaSourceV8Internal::addSourceBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeSourceBuffer", MediaSourceV8Internal::removeSourceBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"endOfStream", MediaSourceV8Internal::endOfStreamMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTypeSupported", MediaSourceV8Internal::isTypeSupportedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder},
+    { "addSourceBuffer", MediaSourceV8Internal::addSourceBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeSourceBuffer", MediaSourceV8Internal::removeSourceBufferMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "endOfStream", MediaSourceV8Internal::endOfStreamMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTypeSupported", MediaSourceV8Internal::isTypeSupportedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnInterface, V8DOMConfiguration::CheckHolder },
 };
 
-void V8MediaSource::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaSource"));
-    return;
-  }
+void V8MediaSource::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaSource"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  MediaSourceV8Internal::constructor(info);
+    MediaSourceV8Internal::constructor(info);
 }
 
-static void installV8MediaSourceTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaSource::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MediaSource::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8MediaSource::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8MediaSourceTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaSource::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MediaSource::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8MediaSource::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSourceAccessors, WTF_ARRAY_LENGTH(V8MediaSourceAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSourceMethods, WTF_ARRAY_LENGTH(V8MediaSourceMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSourceAccessors, WTF_ARRAY_LENGTH(V8MediaSourceAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaSourceMethods, WTF_ARRAY_LENGTH(V8MediaSourceMethods));
 
-  if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration setLiveSeekableRangeMethodConfiguration = {"setLiveSeekableRange", MediaSourceV8Internal::setLiveSeekableRangeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setLiveSeekableRangeMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration clearLiveSeekableRangeMethodConfiguration = {"clearLiveSeekableRange", MediaSourceV8Internal::clearLiveSeekableRangeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, clearLiveSeekableRangeMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration setLiveSeekableRangeMethodConfiguration = { "setLiveSeekableRange", MediaSourceV8Internal::setLiveSeekableRangeMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, setLiveSeekableRangeMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::mediaSourceExperimentalEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration clearLiveSeekableRangeMethodConfiguration = { "clearLiveSeekableRange", MediaSourceV8Internal::clearLiveSeekableRangeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, clearLiveSeekableRangeMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaSource::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaSourceTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaSource::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaSourceTemplate);
 }
 
-bool V8MediaSource::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaSource::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaSource::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaSource::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaSource* V8MediaSource::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaSource* V8MediaSource::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

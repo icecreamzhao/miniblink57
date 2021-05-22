@@ -8,111 +8,124 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "BooleanOrMediaTrackConstraints.h"
 
 #include "bindings/core/v8/ToV8.h"
 
 namespace blink {
 
-BooleanOrMediaTrackConstraints::BooleanOrMediaTrackConstraints() : m_type(SpecificTypeNone) {}
-
-bool BooleanOrMediaTrackConstraints::getAsBoolean() const {
-  DCHECK(isBoolean());
-  return m_boolean;
+BooleanOrMediaTrackConstraints::BooleanOrMediaTrackConstraints()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void BooleanOrMediaTrackConstraints::setBoolean(bool value) {
-  DCHECK(isNull());
-  m_boolean = value;
-  m_type = SpecificTypeBoolean;
+bool BooleanOrMediaTrackConstraints::getAsBoolean() const
+{
+    DCHECK(isBoolean());
+    return m_boolean;
 }
 
-BooleanOrMediaTrackConstraints BooleanOrMediaTrackConstraints::fromBoolean(bool value) {
-  BooleanOrMediaTrackConstraints container;
-  container.setBoolean(value);
-  return container;
+void BooleanOrMediaTrackConstraints::setBoolean(bool value)
+{
+    DCHECK(isNull());
+    m_boolean = value;
+    m_type = SpecificTypeBoolean;
 }
 
-const MediaTrackConstraints& BooleanOrMediaTrackConstraints::getAsMediaTrackConstraints() const {
-  DCHECK(isMediaTrackConstraints());
-  return m_mediaTrackConstraints;
+BooleanOrMediaTrackConstraints BooleanOrMediaTrackConstraints::fromBoolean(bool value)
+{
+    BooleanOrMediaTrackConstraints container;
+    container.setBoolean(value);
+    return container;
 }
 
-void BooleanOrMediaTrackConstraints::setMediaTrackConstraints(const MediaTrackConstraints& value) {
-  DCHECK(isNull());
-  m_mediaTrackConstraints = value;
-  m_type = SpecificTypeMediaTrackConstraints;
+const MediaTrackConstraints& BooleanOrMediaTrackConstraints::getAsMediaTrackConstraints() const
+{
+    DCHECK(isMediaTrackConstraints());
+    return m_mediaTrackConstraints;
 }
 
-BooleanOrMediaTrackConstraints BooleanOrMediaTrackConstraints::fromMediaTrackConstraints(const MediaTrackConstraints& value) {
-  BooleanOrMediaTrackConstraints container;
-  container.setMediaTrackConstraints(value);
-  return container;
+void BooleanOrMediaTrackConstraints::setMediaTrackConstraints(const MediaTrackConstraints& value)
+{
+    DCHECK(isNull());
+    m_mediaTrackConstraints = value;
+    m_type = SpecificTypeMediaTrackConstraints;
+}
+
+BooleanOrMediaTrackConstraints BooleanOrMediaTrackConstraints::fromMediaTrackConstraints(const MediaTrackConstraints& value)
+{
+    BooleanOrMediaTrackConstraints container;
+    container.setMediaTrackConstraints(value);
+    return container;
 }
 
 BooleanOrMediaTrackConstraints::BooleanOrMediaTrackConstraints(const BooleanOrMediaTrackConstraints&) = default;
 BooleanOrMediaTrackConstraints::~BooleanOrMediaTrackConstraints() = default;
 BooleanOrMediaTrackConstraints& BooleanOrMediaTrackConstraints::operator=(const BooleanOrMediaTrackConstraints&) = default;
 
-DEFINE_TRACE(BooleanOrMediaTrackConstraints) {
-  visitor->trace(m_mediaTrackConstraints);
+DEFINE_TRACE(BooleanOrMediaTrackConstraints)
+{
+    visitor->trace(m_mediaTrackConstraints);
 }
 
-void V8BooleanOrMediaTrackConstraints::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, BooleanOrMediaTrackConstraints& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8BooleanOrMediaTrackConstraints::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, BooleanOrMediaTrackConstraints& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (isUndefinedOrNull(v8Value)) {
-    MediaTrackConstraints cppValue;
-    V8MediaTrackConstraints::toImpl(isolate, v8Value, cppValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setMediaTrackConstraints(cppValue);
-    return;
-  }
+    if (isUndefinedOrNull(v8Value)) {
+        MediaTrackConstraints cppValue;
+        V8MediaTrackConstraints::toImpl(isolate, v8Value, cppValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setMediaTrackConstraints(cppValue);
+        return;
+    }
 
-  if (v8Value->IsObject()) {
-    MediaTrackConstraints cppValue;
-    V8MediaTrackConstraints::toImpl(isolate, v8Value, cppValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setMediaTrackConstraints(cppValue);
-    return;
-  }
+    if (v8Value->IsObject()) {
+        MediaTrackConstraints cppValue;
+        V8MediaTrackConstraints::toImpl(isolate, v8Value, cppValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setMediaTrackConstraints(cppValue);
+        return;
+    }
 
-  if (v8Value->IsBoolean()) {
-    impl.setBoolean(v8Value.As<v8::Boolean>()->Value());
-    return;
-  }
+    if (v8Value->IsBoolean()) {
+        impl.setBoolean(v8Value.As<v8::Boolean>()->Value());
+        return;
+    }
 
-  {
-    impl.setBoolean(v8Value->BooleanValue());
-    return;
-  }
+    {
+        impl.setBoolean(v8Value->BooleanValue());
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const BooleanOrMediaTrackConstraints& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const BooleanOrMediaTrackConstraints& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case BooleanOrMediaTrackConstraints::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case BooleanOrMediaTrackConstraints::SpecificTypeBoolean:
-      return v8Boolean(impl.getAsBoolean(), isolate);
+        return v8Boolean(impl.getAsBoolean(), isolate);
     case BooleanOrMediaTrackConstraints::SpecificTypeMediaTrackConstraints:
-      return ToV8(impl.getAsMediaTrackConstraints(), creationContext, isolate);
+        return ToV8(impl.getAsMediaTrackConstraints(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-BooleanOrMediaTrackConstraints NativeValueTraits<BooleanOrMediaTrackConstraints>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  BooleanOrMediaTrackConstraints impl;
-  V8BooleanOrMediaTrackConstraints::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+BooleanOrMediaTrackConstraints NativeValueTraits<BooleanOrMediaTrackConstraints>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    BooleanOrMediaTrackConstraints impl;
+    V8BooleanOrMediaTrackConstraints::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

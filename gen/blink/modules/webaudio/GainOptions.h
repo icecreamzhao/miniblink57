@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef GainOptions_h
 #define GainOptions_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT GainOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  GainOptions();
-  virtual ~GainOptions();
-  GainOptions(const GainOptions&);
-  GainOptions& operator=(const GainOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasGain() const;
-  float gain() const;
-  void setGain(float);
+public:
+    GainOptions();
+    virtual ~GainOptions();
+    GainOptions(const GainOptions&);
+    GainOptions& operator=(const GainOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasGain() const;
+    float gain() const;
+    void setGain(float);
 
- private:
-  bool m_hasGain = false;
-  float m_gain;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8GainOptions;
+private:
+    bool m_hasGain = false;
+    float m_gain;
+
+    friend class V8GainOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // GainOptions_h
+#endif // GainOptions_h

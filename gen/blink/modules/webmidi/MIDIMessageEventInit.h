@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MIDIMessageEventInit_h
 #define MIDIMessageEventInit_h
 
@@ -20,27 +20,28 @@
 namespace blink {
 
 class MODULES_EXPORT MIDIMessageEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MIDIMessageEventInit();
-  virtual ~MIDIMessageEventInit();
-  MIDIMessageEventInit(const MIDIMessageEventInit&);
-  MIDIMessageEventInit& operator=(const MIDIMessageEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasData() const;
-  DOMUint8Array* data() const;
-  void setData(DOMUint8Array*);
-  void setDataToNull();
+public:
+    MIDIMessageEventInit();
+    virtual ~MIDIMessageEventInit();
+    MIDIMessageEventInit(const MIDIMessageEventInit&);
+    MIDIMessageEventInit& operator=(const MIDIMessageEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasData() const;
+    DOMUint8Array* data() const;
+    void setData(DOMUint8Array*);
+    void setDataToNull();
 
- private:
-  Member<DOMUint8Array> m_data;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MIDIMessageEventInit;
+private:
+    Member<DOMUint8Array> m_data;
+
+    friend class V8MIDIMessageEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MIDIMessageEventInit_h
+#endif // MIDIMessageEventInit_h

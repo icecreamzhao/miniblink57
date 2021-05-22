@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "IIRFilterOptions.h"
 
 namespace blink {
 
-IIRFilterOptions::IIRFilterOptions() {
+IIRFilterOptions::IIRFilterOptions()
+{
 }
 
-IIRFilterOptions::~IIRFilterOptions() {}
+IIRFilterOptions::~IIRFilterOptions() { }
 
 IIRFilterOptions::IIRFilterOptions(const IIRFilterOptions&) = default;
 
 IIRFilterOptions& IIRFilterOptions::operator=(const IIRFilterOptions&) = default;
 
-bool IIRFilterOptions::hasFeedback() const {
-  return m_hasFeedback;
+bool IIRFilterOptions::hasFeedback() const
+{
+    return m_hasFeedback;
 }
-const Vector<double>& IIRFilterOptions::feedback() const {
-  DCHECK(m_hasFeedback);
-  return m_feedback;
+const Vector<double>& IIRFilterOptions::feedback() const
+{
+    DCHECK(m_hasFeedback);
+    return m_feedback;
 }
-void IIRFilterOptions::setFeedback(const Vector<double>& value) {
-  m_feedback = value;
-  m_hasFeedback = true;
+void IIRFilterOptions::setFeedback(const Vector<double>& value)
+{
+    m_feedback = value;
+    m_hasFeedback = true;
 }
-bool IIRFilterOptions::hasFeedforward() const {
-  return m_hasFeedforward;
+bool IIRFilterOptions::hasFeedforward() const
+{
+    return m_hasFeedforward;
 }
-const Vector<double>& IIRFilterOptions::feedforward() const {
-  DCHECK(m_hasFeedforward);
-  return m_feedforward;
+const Vector<double>& IIRFilterOptions::feedforward() const
+{
+    DCHECK(m_hasFeedforward);
+    return m_feedforward;
 }
-void IIRFilterOptions::setFeedforward(const Vector<double>& value) {
-  m_feedforward = value;
-  m_hasFeedforward = true;
+void IIRFilterOptions::setFeedforward(const Vector<double>& value)
+{
+    m_feedforward = value;
+    m_hasFeedforward = true;
 }
 
-DEFINE_TRACE(IIRFilterOptions) {
-  AudioNodeOptions::trace(visitor);
+DEFINE_TRACE(IIRFilterOptions)
+{
+    AudioNodeOptions::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

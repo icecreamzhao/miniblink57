@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8TrackEventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -20,69 +20,73 @@
 
 namespace blink {
 
-void V8TrackEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, TrackEventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8TrackEventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, TrackEventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> trackValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "track")).ToLocal(&trackValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (trackValue.IsEmpty() || trackValue->IsUndefined()) {
-    // Do nothing.
-  } else if (trackValue->IsNull()) {
-    impl.setTrackToNull();
-  } else {
-    VideoTrackOrAudioTrackOrTextTrack track;
-    V8VideoTrackOrAudioTrackOrTextTrack::toImpl(isolate, trackValue, track, UnionTypeConversionMode::NotNullable, exceptionState);
+    V8EventInit::toImpl(isolate, v8Value, impl, exceptionState);
     if (exceptionState.hadException())
-      return;
-    impl.setTrack(track);
-  }
+        return;
+
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> trackValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "track")).ToLocal(&trackValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (trackValue.IsEmpty() || trackValue->IsUndefined()) {
+        // Do nothing.
+    } else if (trackValue->IsNull()) {
+        impl.setTrackToNull();
+    } else {
+        VideoTrackOrAudioTrackOrTextTrack track;
+        V8VideoTrackOrAudioTrackOrTextTrack::toImpl(isolate, trackValue, track, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setTrack(track);
+    }
 }
 
-v8::Local<v8::Value> TrackEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8TrackEventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> TrackEventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8TrackEventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8TrackEventInit(const TrackEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (!toV8EventInit(impl, dictionary, creationContext, isolate))
-    return false;
+bool toV8TrackEventInit(const TrackEventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (!toV8EventInit(impl, dictionary, creationContext, isolate))
+        return false;
 
-  if (impl.hasTrack()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "track"), ToV8(impl.track(), creationContext, isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "track"), v8::Null(isolate))))
-      return false;
-  }
+    if (impl.hasTrack()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "track"), ToV8(impl.track(), creationContext, isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "track"), v8::Null(isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-TrackEventInit NativeValueTraits<TrackEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  TrackEventInit impl;
-  V8TrackEventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+TrackEventInit NativeValueTraits<TrackEventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    TrackEventInit impl;
+    V8TrackEventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

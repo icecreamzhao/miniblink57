@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_function.h.tmpl
 
-// clang-format off
+// clang-format on
 
 #ifndef IDBObserverCallback_h
 #define IDBObserverCallback_h
@@ -25,32 +25,34 @@ class ScriptState;
 class IDBObserverChanges;
 
 class MODULES_EXPORT IDBObserverCallback final : public GarbageCollectedFinalized<IDBObserverCallback>, public TraceWrapperBase {
- public:
-  static IDBObserverCallback* create(ScriptState* scriptState, v8::Local<v8::Value> callback);
+public:
+    static IDBObserverCallback* create(ScriptState* scriptState, v8::Local<v8::Value> callback);
 
-  ~IDBObserverCallback() = default;
+    ~IDBObserverCallback() = default;
 
-  DECLARE_TRACE();
-  DECLARE_TRACE_WRAPPERS();
+    DECLARE_TRACE();
+    DECLARE_TRACE_WRAPPERS();
 
-  bool call(ScriptWrappable* scriptWrappable, IDBObserverChanges* changes);
+    bool call(ScriptWrappable* scriptWrappable, IDBObserverChanges* changes);
 
-  v8::Local<v8::Function> v8Value(v8::Isolate* isolate) {
-    return m_callback.newLocal(isolate);
-  }
+    v8::Local<v8::Function> v8Value(v8::Isolate* isolate)
+    {
+        return m_callback.newLocal(isolate);
+    }
 
-  void setWrapperReference(v8::Isolate* isolate, const v8::Persistent<v8::Object>& wrapper) {
-    DCHECK(!m_callback.isEmpty());
-    m_callback.setReference(wrapper, isolate);
-  }
+    void setWrapperReference(v8::Isolate* isolate, const v8::Persistent<v8::Object>& wrapper)
+    {
+        DCHECK(!m_callback.isEmpty());
+        m_callback.setReference(wrapper, isolate);
+    }
 
- private:
-  IDBObserverCallback(ScriptState*, v8::Local<v8::Function>);
+private:
+    IDBObserverCallback(ScriptState*, v8::Local<v8::Function>);
 
-  RefPtr<ScriptState> m_scriptState;
-  TraceWrapperV8Reference<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
+    TraceWrapperV8Reference<v8::Function> m_callback;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // IDBObserverCallback_h
+#endif // IDBObserverCallback_h

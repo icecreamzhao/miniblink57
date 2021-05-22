@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8BluetoothCharacteristicProperties_h
 #define V8BluetoothCharacteristicProperties_h
 
@@ -24,31 +24,35 @@
 namespace blink {
 
 class V8BluetoothCharacteristicProperties {
-  STATIC_ONLY(V8BluetoothCharacteristicProperties);
- public:
-  MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static BluetoothCharacteristicProperties* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<BluetoothCharacteristicProperties>();
-  }
-  MODULES_EXPORT static BluetoothCharacteristicProperties* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<BluetoothCharacteristicProperties>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<BluetoothCharacteristicProperties>());
-  }
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    STATIC_ONLY(V8BluetoothCharacteristicProperties);
+
+public:
+    MODULES_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    MODULES_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static BluetoothCharacteristicProperties* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<BluetoothCharacteristicProperties>();
+    }
+    MODULES_EXPORT static BluetoothCharacteristicProperties* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    MODULES_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<BluetoothCharacteristicProperties>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<BluetoothCharacteristicProperties>());
+    }
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
 template <>
 struct V8TypeOf<BluetoothCharacteristicProperties> {
-  typedef V8BluetoothCharacteristicProperties Type;
+    typedef V8BluetoothCharacteristicProperties Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8BluetoothCharacteristicProperties_h
+#endif // V8BluetoothCharacteristicProperties_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef BasicCardRequest_h
 #define BasicCardRequest_h
 
@@ -21,33 +21,34 @@
 namespace blink {
 
 class MODULES_EXPORT BasicCardRequest : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  BasicCardRequest();
-  virtual ~BasicCardRequest();
-  BasicCardRequest(const BasicCardRequest&);
-  BasicCardRequest& operator=(const BasicCardRequest&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasSupportedNetworks() const;
-  const Vector<String>& supportedNetworks() const;
-  void setSupportedNetworks(const Vector<String>&);
+public:
+    BasicCardRequest();
+    virtual ~BasicCardRequest();
+    BasicCardRequest(const BasicCardRequest&);
+    BasicCardRequest& operator=(const BasicCardRequest&);
 
-  bool hasSupportedTypes() const;
-  const Vector<String>& supportedTypes() const;
-  void setSupportedTypes(const Vector<String>&);
+    bool hasSupportedNetworks() const;
+    const Vector<String>& supportedNetworks() const;
+    void setSupportedNetworks(const Vector<String>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSupportedTypes() const;
+    const Vector<String>& supportedTypes() const;
+    void setSupportedTypes(const Vector<String>&);
 
- private:
-  bool m_hasSupportedNetworks = false;
-  Vector<String> m_supportedNetworks;
-  bool m_hasSupportedTypes = false;
-  Vector<String> m_supportedTypes;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8BasicCardRequest;
+private:
+    bool m_hasSupportedNetworks = false;
+    Vector<String> m_supportedNetworks;
+    bool m_hasSupportedTypes = false;
+    Vector<String> m_supportedTypes;
+
+    friend class V8BasicCardRequest;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // BasicCardRequest_h
+#endif // BasicCardRequest_h

@@ -8,102 +8,125 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MutationObserverInit.h"
 
 namespace blink {
 
-MutationObserverInit::MutationObserverInit() {
-  setChildList(false);
-  setSubtree(false);
+MutationObserverInit::MutationObserverInit()
+{
+    setChildList(false);
+    setSubtree(false);
 }
 
-MutationObserverInit::~MutationObserverInit() {}
+MutationObserverInit::~MutationObserverInit() { }
 
 MutationObserverInit::MutationObserverInit(const MutationObserverInit&) = default;
 
 MutationObserverInit& MutationObserverInit::operator=(const MutationObserverInit&) = default;
 
-bool MutationObserverInit::hasAttributeFilter() const {
-  return m_hasAttributeFilter;
+bool MutationObserverInit::hasAttributeFilter() const
+{
+    return m_hasAttributeFilter;
 }
-const Vector<String>& MutationObserverInit::attributeFilter() const {
-  DCHECK(m_hasAttributeFilter);
-  return m_attributeFilter;
+const Vector<String>& MutationObserverInit::attributeFilter() const
+{
+    DCHECK(m_hasAttributeFilter);
+    return m_attributeFilter;
 }
-void MutationObserverInit::setAttributeFilter(const Vector<String>& value) {
-  m_attributeFilter = value;
-  m_hasAttributeFilter = true;
+void MutationObserverInit::setAttributeFilter(const Vector<String>& value)
+{
+    m_attributeFilter = value;
+    m_hasAttributeFilter = true;
 }
-bool MutationObserverInit::hasAttributeOldValue() const {
-  return m_hasAttributeOldValue;
+bool MutationObserverInit::hasAttributeOldValue() const
+{
+    return m_hasAttributeOldValue;
 }
-bool MutationObserverInit::attributeOldValue() const {
-  DCHECK(m_hasAttributeOldValue);
-  return m_attributeOldValue;
+bool MutationObserverInit::attributeOldValue() const
+{
+    DCHECK(m_hasAttributeOldValue);
+    return m_attributeOldValue;
 }
-void MutationObserverInit::setAttributeOldValue(bool value) {
-  m_attributeOldValue = value;
-  m_hasAttributeOldValue = true;
+void MutationObserverInit::setAttributeOldValue(bool value)
+{
+    m_attributeOldValue = value;
+    m_hasAttributeOldValue = true;
 }
-bool MutationObserverInit::hasAttributes() const {
-  return m_hasAttributes;
+bool MutationObserverInit::hasAttributes() const
+{
+    return m_hasAttributes;
 }
-bool MutationObserverInit::attributes() const {
-  DCHECK(m_hasAttributes);
-  return m_attributes;
+bool MutationObserverInit::attributes() const
+{
+    DCHECK(m_hasAttributes);
+    return m_attributes;
 }
-void MutationObserverInit::setAttributes(bool value) {
-  m_attributes = value;
-  m_hasAttributes = true;
+void MutationObserverInit::setAttributes(bool value)
+{
+    m_attributes = value;
+    m_hasAttributes = true;
 }
-bool MutationObserverInit::hasCharacterData() const {
-  return m_hasCharacterData;
+bool MutationObserverInit::hasCharacterData() const
+{
+    return m_hasCharacterData;
 }
-bool MutationObserverInit::characterData() const {
-  DCHECK(m_hasCharacterData);
-  return m_characterData;
+bool MutationObserverInit::characterData() const
+{
+    DCHECK(m_hasCharacterData);
+    return m_characterData;
 }
-void MutationObserverInit::setCharacterData(bool value) {
-  m_characterData = value;
-  m_hasCharacterData = true;
+void MutationObserverInit::setCharacterData(bool value)
+{
+    m_characterData = value;
+    m_hasCharacterData = true;
 }
-bool MutationObserverInit::hasCharacterDataOldValue() const {
-  return m_hasCharacterDataOldValue;
+bool MutationObserverInit::hasCharacterDataOldValue() const
+{
+    return m_hasCharacterDataOldValue;
 }
-bool MutationObserverInit::characterDataOldValue() const {
-  DCHECK(m_hasCharacterDataOldValue);
-  return m_characterDataOldValue;
+bool MutationObserverInit::characterDataOldValue() const
+{
+    DCHECK(m_hasCharacterDataOldValue);
+    return m_characterDataOldValue;
 }
-void MutationObserverInit::setCharacterDataOldValue(bool value) {
-  m_characterDataOldValue = value;
-  m_hasCharacterDataOldValue = true;
+void MutationObserverInit::setCharacterDataOldValue(bool value)
+{
+    m_characterDataOldValue = value;
+    m_hasCharacterDataOldValue = true;
 }
-bool MutationObserverInit::hasChildList() const {
-  return m_hasChildList;
+bool MutationObserverInit::hasChildList() const
+{
+    return m_hasChildList;
 }
-bool MutationObserverInit::childList() const {
-  DCHECK(m_hasChildList);
-  return m_childList;
+bool MutationObserverInit::childList() const
+{
+    DCHECK(m_hasChildList);
+    return m_childList;
 }
-void MutationObserverInit::setChildList(bool value) {
-  m_childList = value;
-  m_hasChildList = true;
+void MutationObserverInit::setChildList(bool value)
+{
+    m_childList = value;
+    m_hasChildList = true;
 }
-bool MutationObserverInit::hasSubtree() const {
-  return m_hasSubtree;
+bool MutationObserverInit::hasSubtree() const
+{
+    return m_hasSubtree;
 }
-bool MutationObserverInit::subtree() const {
-  DCHECK(m_hasSubtree);
-  return m_subtree;
+bool MutationObserverInit::subtree() const
+{
+    DCHECK(m_hasSubtree);
+    return m_subtree;
 }
-void MutationObserverInit::setSubtree(bool value) {
-  m_subtree = value;
-  m_hasSubtree = true;
+void MutationObserverInit::setSubtree(bool value)
+{
+    m_subtree = value;
+    m_hasSubtree = true;
 }
 
-DEFINE_TRACE(MutationObserverInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(MutationObserverInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

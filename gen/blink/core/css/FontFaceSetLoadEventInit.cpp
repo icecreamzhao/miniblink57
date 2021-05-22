@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FontFaceSetLoadEventInit.h"
 
 #include "core/css/FontFace.h"
@@ -16,31 +16,36 @@
 
 namespace blink {
 
-FontFaceSetLoadEventInit::FontFaceSetLoadEventInit() {
-  setFontfaces(HeapVector<Member<FontFace>>());
+FontFaceSetLoadEventInit::FontFaceSetLoadEventInit()
+{
+    setFontfaces(HeapVector<Member<FontFace>>());
 }
 
-FontFaceSetLoadEventInit::~FontFaceSetLoadEventInit() {}
+FontFaceSetLoadEventInit::~FontFaceSetLoadEventInit() { }
 
 FontFaceSetLoadEventInit::FontFaceSetLoadEventInit(const FontFaceSetLoadEventInit&) = default;
 
 FontFaceSetLoadEventInit& FontFaceSetLoadEventInit::operator=(const FontFaceSetLoadEventInit&) = default;
 
-bool FontFaceSetLoadEventInit::hasFontfaces() const {
-  return m_hasFontfaces;
+bool FontFaceSetLoadEventInit::hasFontfaces() const
+{
+    return m_hasFontfaces;
 }
-const HeapVector<Member<FontFace>>& FontFaceSetLoadEventInit::fontfaces() const {
-  DCHECK(m_hasFontfaces);
-  return m_fontfaces;
+const HeapVector<Member<FontFace>>& FontFaceSetLoadEventInit::fontfaces() const
+{
+    DCHECK(m_hasFontfaces);
+    return m_fontfaces;
 }
-void FontFaceSetLoadEventInit::setFontfaces(const HeapVector<Member<FontFace>>& value) {
-  m_fontfaces = value;
-  m_hasFontfaces = true;
-}
-
-DEFINE_TRACE(FontFaceSetLoadEventInit) {
-  visitor->trace(m_fontfaces);
-  EventInit::trace(visitor);
+void FontFaceSetLoadEventInit::setFontfaces(const HeapVector<Member<FontFace>>& value)
+{
+    m_fontfaces = value;
+    m_hasFontfaces = true;
 }
 
-}  // namespace blink
+DEFINE_TRACE(FontFaceSetLoadEventInit)
+{
+    visitor->trace(m_fontfaces);
+    EventInit::trace(visitor);
+}
+
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DictionaryOrString_h
 #define DictionaryOrString_h
 
@@ -21,58 +21,60 @@
 namespace blink {
 
 class MODULES_EXPORT DictionaryOrString final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DictionaryOrString();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isDictionary() const { return m_type == SpecificTypeDictionary; }
-  Dictionary getAsDictionary() const;
-  void setDictionary(Dictionary);
-  static DictionaryOrString fromDictionary(Dictionary);
+public:
+    DictionaryOrString();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isString() const { return m_type == SpecificTypeString; }
-  String getAsString() const;
-  void setString(String);
-  static DictionaryOrString fromString(String);
+    bool isDictionary() const { return m_type == SpecificTypeDictionary; }
+    Dictionary getAsDictionary() const;
+    void setDictionary(Dictionary);
+    static DictionaryOrString fromDictionary(Dictionary);
 
-  DictionaryOrString(const DictionaryOrString&);
-  ~DictionaryOrString();
-  DictionaryOrString& operator=(const DictionaryOrString&);
-  DECLARE_TRACE();
+    bool isString() const { return m_type == SpecificTypeString; }
+    String getAsString() const;
+    void setString(String);
+    static DictionaryOrString fromString(String);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeDictionary,
-    SpecificTypeString,
-  };
-  SpecificTypes m_type;
+    DictionaryOrString(const DictionaryOrString&);
+    ~DictionaryOrString();
+    DictionaryOrString& operator=(const DictionaryOrString&);
+    DECLARE_TRACE();
 
-  Dictionary m_dictionary;
-  String m_string;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeDictionary,
+        SpecificTypeString,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const DictionaryOrString&, v8::Local<v8::Object>, v8::Isolate*);
+    Dictionary m_dictionary;
+    String m_string;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const DictionaryOrString&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8DictionaryOrString final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DictionaryOrString&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DictionaryOrString&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const DictionaryOrString&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DictionaryOrString& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DictionaryOrString& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<DictionaryOrString> {
-  MODULES_EXPORT static DictionaryOrString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static DictionaryOrString nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -80,4 +82,4 @@ struct NativeValueTraits<DictionaryOrString> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::DictionaryOrString);
 
-#endif  // DictionaryOrString_h
+#endif // DictionaryOrString_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8PerformanceObserverInit_h
 #define V8PerformanceObserverInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8PerformanceObserverInit {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PerformanceObserverInit&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, PerformanceObserverInit&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8PerformanceObserverInit(const PerformanceObserverInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PerformanceObserverInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, PerformanceObserverInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<PerformanceObserverInit> {
-  static PerformanceObserverInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static PerformanceObserverInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<PerformanceObserverInit> {
-  typedef V8PerformanceObserverInit Type;
+    typedef V8PerformanceObserverInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8PerformanceObserverInit_h
+#endif // V8PerformanceObserverInit_h

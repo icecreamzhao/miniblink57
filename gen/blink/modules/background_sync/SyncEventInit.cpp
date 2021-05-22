@@ -8,44 +8,52 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "SyncEventInit.h"
 
 namespace blink {
 
-SyncEventInit::SyncEventInit() {
-  setLastChance(false);
+SyncEventInit::SyncEventInit()
+{
+    setLastChance(false);
 }
 
-SyncEventInit::~SyncEventInit() {}
+SyncEventInit::~SyncEventInit() { }
 
 SyncEventInit::SyncEventInit(const SyncEventInit&) = default;
 
 SyncEventInit& SyncEventInit::operator=(const SyncEventInit&) = default;
 
-bool SyncEventInit::hasLastChance() const {
-  return m_hasLastChance;
+bool SyncEventInit::hasLastChance() const
+{
+    return m_hasLastChance;
 }
-bool SyncEventInit::lastChance() const {
-  DCHECK(m_hasLastChance);
-  return m_lastChance;
+bool SyncEventInit::lastChance() const
+{
+    DCHECK(m_hasLastChance);
+    return m_lastChance;
 }
-void SyncEventInit::setLastChance(bool value) {
-  m_lastChance = value;
-  m_hasLastChance = true;
+void SyncEventInit::setLastChance(bool value)
+{
+    m_lastChance = value;
+    m_hasLastChance = true;
 }
-bool SyncEventInit::hasTag() const {
-  return !m_tag.isNull();
+bool SyncEventInit::hasTag() const
+{
+    return !m_tag.isNull();
 }
-String SyncEventInit::tag() const {
-  return m_tag;
+String SyncEventInit::tag() const
+{
+    return m_tag;
 }
-void SyncEventInit::setTag(String value) {
-  m_tag = value;
+void SyncEventInit::setTag(String value)
+{
+    m_tag = value;
 }
 
-DEFINE_TRACE(SyncEventInit) {
-  ExtendableEventInit::trace(visitor);
+DEFINE_TRACE(SyncEventInit)
+{
+    ExtendableEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

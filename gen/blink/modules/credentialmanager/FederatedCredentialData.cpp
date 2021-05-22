@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "FederatedCredentialData.h"
 
 namespace blink {
 
-FederatedCredentialData::FederatedCredentialData() {
+FederatedCredentialData::FederatedCredentialData()
+{
 }
 
-FederatedCredentialData::~FederatedCredentialData() {}
+FederatedCredentialData::~FederatedCredentialData() { }
 
 FederatedCredentialData::FederatedCredentialData(const FederatedCredentialData&) = default;
 
 FederatedCredentialData& FederatedCredentialData::operator=(const FederatedCredentialData&) = default;
 
-bool FederatedCredentialData::hasProvider() const {
-  return !m_provider.isNull();
+bool FederatedCredentialData::hasProvider() const
+{
+    return !m_provider.isNull();
 }
-String FederatedCredentialData::provider() const {
-  return m_provider;
+String FederatedCredentialData::provider() const
+{
+    return m_provider;
 }
-void FederatedCredentialData::setProvider(String value) {
-  m_provider = value;
+void FederatedCredentialData::setProvider(String value)
+{
+    m_provider = value;
 }
 
-DEFINE_TRACE(FederatedCredentialData) {
-  LocallyStoredCredentialData::trace(visitor);
+DEFINE_TRACE(FederatedCredentialData)
+{
+    LocallyStoredCredentialData::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

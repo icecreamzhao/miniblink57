@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "HTMLCanvasElementOrOffscreenCanvas.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -17,91 +17,104 @@
 
 namespace blink {
 
-HTMLCanvasElementOrOffscreenCanvas::HTMLCanvasElementOrOffscreenCanvas() : m_type(SpecificTypeNone) {}
-
-HTMLCanvasElement* HTMLCanvasElementOrOffscreenCanvas::getAsHTMLCanvasElement() const {
-  DCHECK(isHTMLCanvasElement());
-  return m_htmlCanvasElement;
+HTMLCanvasElementOrOffscreenCanvas::HTMLCanvasElementOrOffscreenCanvas()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void HTMLCanvasElementOrOffscreenCanvas::setHTMLCanvasElement(HTMLCanvasElement* value) {
-  DCHECK(isNull());
-  m_htmlCanvasElement = value;
-  m_type = SpecificTypeHTMLCanvasElement;
+HTMLCanvasElement* HTMLCanvasElementOrOffscreenCanvas::getAsHTMLCanvasElement() const
+{
+    DCHECK(isHTMLCanvasElement());
+    return m_htmlCanvasElement;
 }
 
-HTMLCanvasElementOrOffscreenCanvas HTMLCanvasElementOrOffscreenCanvas::fromHTMLCanvasElement(HTMLCanvasElement* value) {
-  HTMLCanvasElementOrOffscreenCanvas container;
-  container.setHTMLCanvasElement(value);
-  return container;
+void HTMLCanvasElementOrOffscreenCanvas::setHTMLCanvasElement(HTMLCanvasElement* value)
+{
+    DCHECK(isNull());
+    m_htmlCanvasElement = value;
+    m_type = SpecificTypeHTMLCanvasElement;
 }
 
-OffscreenCanvas* HTMLCanvasElementOrOffscreenCanvas::getAsOffscreenCanvas() const {
-  DCHECK(isOffscreenCanvas());
-  return m_offscreenCanvas;
+HTMLCanvasElementOrOffscreenCanvas HTMLCanvasElementOrOffscreenCanvas::fromHTMLCanvasElement(HTMLCanvasElement* value)
+{
+    HTMLCanvasElementOrOffscreenCanvas container;
+    container.setHTMLCanvasElement(value);
+    return container;
 }
 
-void HTMLCanvasElementOrOffscreenCanvas::setOffscreenCanvas(OffscreenCanvas* value) {
-  DCHECK(isNull());
-  m_offscreenCanvas = value;
-  m_type = SpecificTypeOffscreenCanvas;
+OffscreenCanvas* HTMLCanvasElementOrOffscreenCanvas::getAsOffscreenCanvas() const
+{
+    DCHECK(isOffscreenCanvas());
+    return m_offscreenCanvas;
 }
 
-HTMLCanvasElementOrOffscreenCanvas HTMLCanvasElementOrOffscreenCanvas::fromOffscreenCanvas(OffscreenCanvas* value) {
-  HTMLCanvasElementOrOffscreenCanvas container;
-  container.setOffscreenCanvas(value);
-  return container;
+void HTMLCanvasElementOrOffscreenCanvas::setOffscreenCanvas(OffscreenCanvas* value)
+{
+    DCHECK(isNull());
+    m_offscreenCanvas = value;
+    m_type = SpecificTypeOffscreenCanvas;
+}
+
+HTMLCanvasElementOrOffscreenCanvas HTMLCanvasElementOrOffscreenCanvas::fromOffscreenCanvas(OffscreenCanvas* value)
+{
+    HTMLCanvasElementOrOffscreenCanvas container;
+    container.setOffscreenCanvas(value);
+    return container;
 }
 
 HTMLCanvasElementOrOffscreenCanvas::HTMLCanvasElementOrOffscreenCanvas(const HTMLCanvasElementOrOffscreenCanvas&) = default;
 HTMLCanvasElementOrOffscreenCanvas::~HTMLCanvasElementOrOffscreenCanvas() = default;
 HTMLCanvasElementOrOffscreenCanvas& HTMLCanvasElementOrOffscreenCanvas::operator=(const HTMLCanvasElementOrOffscreenCanvas&) = default;
 
-DEFINE_TRACE(HTMLCanvasElementOrOffscreenCanvas) {
-  visitor->trace(m_htmlCanvasElement);
-  visitor->trace(m_offscreenCanvas);
+DEFINE_TRACE(HTMLCanvasElementOrOffscreenCanvas)
+{
+    visitor->trace(m_htmlCanvasElement);
+    visitor->trace(m_offscreenCanvas);
 }
 
-void V8HTMLCanvasElementOrOffscreenCanvas::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, HTMLCanvasElementOrOffscreenCanvas& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8HTMLCanvasElementOrOffscreenCanvas::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, HTMLCanvasElementOrOffscreenCanvas& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8HTMLCanvasElement::hasInstance(v8Value, isolate)) {
-    HTMLCanvasElement* cppValue = V8HTMLCanvasElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setHTMLCanvasElement(cppValue);
-    return;
-  }
+    if (V8HTMLCanvasElement::hasInstance(v8Value, isolate)) {
+        HTMLCanvasElement* cppValue = V8HTMLCanvasElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setHTMLCanvasElement(cppValue);
+        return;
+    }
 
-  if (V8OffscreenCanvas::hasInstance(v8Value, isolate)) {
-    OffscreenCanvas* cppValue = V8OffscreenCanvas::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setOffscreenCanvas(cppValue);
-    return;
-  }
+    if (V8OffscreenCanvas::hasInstance(v8Value, isolate)) {
+        OffscreenCanvas* cppValue = V8OffscreenCanvas::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setOffscreenCanvas(cppValue);
+        return;
+    }
 
-  exceptionState.throwTypeError("The provided value is not of type '(HTMLCanvasElement or OffscreenCanvas)'");
+    exceptionState.throwTypeError("The provided value is not of type '(HTMLCanvasElement or OffscreenCanvas)'");
 }
 
-v8::Local<v8::Value> ToV8(const HTMLCanvasElementOrOffscreenCanvas& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const HTMLCanvasElementOrOffscreenCanvas& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case HTMLCanvasElementOrOffscreenCanvas::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case HTMLCanvasElementOrOffscreenCanvas::SpecificTypeHTMLCanvasElement:
-      return ToV8(impl.getAsHTMLCanvasElement(), creationContext, isolate);
+        return ToV8(impl.getAsHTMLCanvasElement(), creationContext, isolate);
     case HTMLCanvasElementOrOffscreenCanvas::SpecificTypeOffscreenCanvas:
-      return ToV8(impl.getAsOffscreenCanvas(), creationContext, isolate);
+        return ToV8(impl.getAsOffscreenCanvas(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-HTMLCanvasElementOrOffscreenCanvas NativeValueTraits<HTMLCanvasElementOrOffscreenCanvas>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  HTMLCanvasElementOrOffscreenCanvas impl;
-  V8HTMLCanvasElementOrOffscreenCanvas::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+HTMLCanvasElementOrOffscreenCanvas NativeValueTraits<HTMLCanvasElementOrOffscreenCanvas>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    HTMLCanvasElementOrOffscreenCanvas impl;
+    V8HTMLCanvasElementOrOffscreenCanvas::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

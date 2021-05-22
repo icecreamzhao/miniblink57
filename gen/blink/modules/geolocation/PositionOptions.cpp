@@ -8,59 +8,70 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PositionOptions.h"
 
 namespace blink {
 
-PositionOptions::PositionOptions() {
-  setEnableHighAccuracy(false);
-  setMaximumAge(0u);
-  setTimeout(4294967295u);
+PositionOptions::PositionOptions()
+{
+    setEnableHighAccuracy(false);
+    setMaximumAge(0u);
+    setTimeout(4294967295u);
 }
 
-PositionOptions::~PositionOptions() {}
+PositionOptions::~PositionOptions() { }
 
 PositionOptions::PositionOptions(const PositionOptions&) = default;
 
 PositionOptions& PositionOptions::operator=(const PositionOptions&) = default;
 
-bool PositionOptions::hasEnableHighAccuracy() const {
-  return m_hasEnableHighAccuracy;
+bool PositionOptions::hasEnableHighAccuracy() const
+{
+    return m_hasEnableHighAccuracy;
 }
-bool PositionOptions::enableHighAccuracy() const {
-  DCHECK(m_hasEnableHighAccuracy);
-  return m_enableHighAccuracy;
+bool PositionOptions::enableHighAccuracy() const
+{
+    DCHECK(m_hasEnableHighAccuracy);
+    return m_enableHighAccuracy;
 }
-void PositionOptions::setEnableHighAccuracy(bool value) {
-  m_enableHighAccuracy = value;
-  m_hasEnableHighAccuracy = true;
+void PositionOptions::setEnableHighAccuracy(bool value)
+{
+    m_enableHighAccuracy = value;
+    m_hasEnableHighAccuracy = true;
 }
-bool PositionOptions::hasMaximumAge() const {
-  return m_hasMaximumAge;
+bool PositionOptions::hasMaximumAge() const
+{
+    return m_hasMaximumAge;
 }
-unsigned PositionOptions::maximumAge() const {
-  DCHECK(m_hasMaximumAge);
-  return m_maximumAge;
+unsigned PositionOptions::maximumAge() const
+{
+    DCHECK(m_hasMaximumAge);
+    return m_maximumAge;
 }
-void PositionOptions::setMaximumAge(unsigned value) {
-  m_maximumAge = value;
-  m_hasMaximumAge = true;
+void PositionOptions::setMaximumAge(unsigned value)
+{
+    m_maximumAge = value;
+    m_hasMaximumAge = true;
 }
-bool PositionOptions::hasTimeout() const {
-  return m_hasTimeout;
+bool PositionOptions::hasTimeout() const
+{
+    return m_hasTimeout;
 }
-unsigned PositionOptions::timeout() const {
-  DCHECK(m_hasTimeout);
-  return m_timeout;
+unsigned PositionOptions::timeout() const
+{
+    DCHECK(m_hasTimeout);
+    return m_timeout;
 }
-void PositionOptions::setTimeout(unsigned value) {
-  m_timeout = value;
-  m_hasTimeout = true;
+void PositionOptions::setTimeout(unsigned value)
+{
+    m_timeout = value;
+    m_hasTimeout = true;
 }
 
-DEFINE_TRACE(PositionOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PositionOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

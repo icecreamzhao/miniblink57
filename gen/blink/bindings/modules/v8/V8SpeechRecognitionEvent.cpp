@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SpeechRecognitionEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -50,154 +50,169 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SpeechRecognitionEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SpeechRecognitionEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SpeechRecognitionEventV8Internal {
 
-static void resultIndexAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void resultIndexAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechRecognitionEvent* impl = V8SpeechRecognitionEvent::toImpl(holder);
+        SpeechRecognitionEvent* impl = V8SpeechRecognitionEvent::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->resultIndex());
-}
+        v8SetReturnValueUnsigned(info, impl->resultIndex());
+    }
 
-MODULES_EXPORT void resultIndexAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechRecognitionEventV8Internal::resultIndexAttributeGetter(info);
-}
+    MODULES_EXPORT void resultIndexAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechRecognitionEventV8Internal::resultIndexAttributeGetter(info);
+    }
 
-static void resultsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void resultsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechRecognitionEvent* impl = V8SpeechRecognitionEvent::toImpl(holder);
+        SpeechRecognitionEvent* impl = V8SpeechRecognitionEvent::toImpl(holder);
 
-  SpeechRecognitionResultList* cppValue(WTF::getPtr(impl->results()));
+        SpeechRecognitionResultList* cppValue(WTF::getPtr(impl->results()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#SpeechRecognitionEvent#results";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#SpeechRecognitionEvent#results";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void resultsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechRecognitionEventV8Internal::resultsAttributeGetter(info);
-}
+    MODULES_EXPORT void resultsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechRecognitionEventV8Internal::resultsAttributeGetter(info);
+    }
 
-static void interpretationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void interpretationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechRecognitionEvent* impl = V8SpeechRecognitionEvent::toImpl(holder);
+        SpeechRecognitionEvent* impl = V8SpeechRecognitionEvent::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->interpretation()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->interpretation()), impl);
+    }
 
-MODULES_EXPORT void interpretationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechRecognitionEventV8Internal::interpretationAttributeGetter(info);
-}
+    MODULES_EXPORT void interpretationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechRecognitionEventV8Internal::interpretationAttributeGetter(info);
+    }
 
-static void emmaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void emmaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SpeechRecognitionEvent* impl = V8SpeechRecognitionEvent::toImpl(holder);
+        SpeechRecognitionEvent* impl = V8SpeechRecognitionEvent::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->emma()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->emma()), impl);
+    }
 
-MODULES_EXPORT void emmaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SpeechRecognitionEventV8Internal::emmaAttributeGetter(info);
-}
+    MODULES_EXPORT void emmaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SpeechRecognitionEventV8Internal::emmaAttributeGetter(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "SpeechRecognitionEvent");
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "SpeechRecognitionEvent");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  SpeechRecognitionEventInit initDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        SpeechRecognitionEventInit initDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('initDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('initDict') is not an object.");
 
-    return;
-  }
-  V8SpeechRecognitionEventInit::toImpl(info.GetIsolate(), info[1], initDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8SpeechRecognitionEventInit::toImpl(info.GetIsolate(), info[1], initDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  SpeechRecognitionEvent* impl = SpeechRecognitionEvent::create(type, initDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SpeechRecognitionEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        SpeechRecognitionEvent* impl = SpeechRecognitionEvent::create(type, initDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8SpeechRecognitionEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace SpeechRecognitionEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SpeechRecognitionEventAccessors[] = {
-    {"resultIndex", SpeechRecognitionEventV8Internal::resultIndexAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"results", SpeechRecognitionEventV8Internal::resultsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"interpretation", SpeechRecognitionEventV8Internal::interpretationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"emma", SpeechRecognitionEventV8Internal::emmaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "resultIndex", SpeechRecognitionEventV8Internal::resultIndexAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "results", SpeechRecognitionEventV8Internal::resultsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "interpretation", SpeechRecognitionEventV8Internal::interpretationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "emma", SpeechRecognitionEventV8Internal::emmaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8SpeechRecognitionEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SpeechRecognitionEvent"));
-    return;
-  }
+void V8SpeechRecognitionEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("SpeechRecognitionEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  SpeechRecognitionEventV8Internal::constructor(info);
+    SpeechRecognitionEventV8Internal::constructor(info);
 }
 
-static void installV8SpeechRecognitionEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SpeechRecognitionEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8SpeechRecognitionEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8SpeechRecognitionEvent::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8SpeechRecognitionEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SpeechRecognitionEvent::wrapperTypeInfo.interfaceName, V8Event::domTemplate(isolate, world), V8SpeechRecognitionEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8SpeechRecognitionEvent::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechRecognitionEventAccessors, WTF_ARRAY_LENGTH(V8SpeechRecognitionEventAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SpeechRecognitionEventAccessors, WTF_ARRAY_LENGTH(V8SpeechRecognitionEventAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SpeechRecognitionEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SpeechRecognitionEventTemplate);
+v8::Local<v8::FunctionTemplate> V8SpeechRecognitionEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SpeechRecognitionEventTemplate);
 }
 
-bool V8SpeechRecognitionEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SpeechRecognitionEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SpeechRecognitionEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SpeechRecognitionEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SpeechRecognitionEvent* V8SpeechRecognitionEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SpeechRecognitionEvent* V8SpeechRecognitionEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

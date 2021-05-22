@@ -8,38 +8,44 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "DragEventInit.h"
 
 #include "core/clipboard/DataTransfer.h"
 
 namespace blink {
 
-DragEventInit::DragEventInit() {
+DragEventInit::DragEventInit()
+{
 }
 
-DragEventInit::~DragEventInit() {}
+DragEventInit::~DragEventInit() { }
 
 DragEventInit::DragEventInit(const DragEventInit&) = default;
 
 DragEventInit& DragEventInit::operator=(const DragEventInit&) = default;
 
-bool DragEventInit::hasGetDataTransfer() const {
-  return m_getDataTransfer;
+bool DragEventInit::hasGetDataTransfer() const
+{
+    return m_getDataTransfer;
 }
-DataTransfer* DragEventInit::getDataTransfer() const {
-  return m_getDataTransfer;
+DataTransfer* DragEventInit::getDataTransfer() const
+{
+    return m_getDataTransfer;
 }
-void DragEventInit::setGetDataTransfer(DataTransfer* value) {
-  m_getDataTransfer = value;
+void DragEventInit::setGetDataTransfer(DataTransfer* value)
+{
+    m_getDataTransfer = value;
 }
-void DragEventInit::setGetDataTransferToNull() {
-  m_getDataTransfer = Member<DataTransfer>();
+void DragEventInit::setGetDataTransferToNull()
+{
+    m_getDataTransfer = Member<DataTransfer>();
 }
 
-DEFINE_TRACE(DragEventInit) {
-  visitor->trace(m_getDataTransfer);
-  MouseEventInit::trace(visitor);
+DEFINE_TRACE(DragEventInit)
+{
+    visitor->trace(m_getDataTransfer);
+    MouseEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

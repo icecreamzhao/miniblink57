@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8AudioProcessingEventInit_h
 #define V8AudioProcessingEventInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8AudioProcessingEventInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AudioProcessingEventInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, AudioProcessingEventInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8AudioProcessingEventInit(const AudioProcessingEventInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AudioProcessingEventInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, AudioProcessingEventInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<AudioProcessingEventInit> {
-  static AudioProcessingEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static AudioProcessingEventInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<AudioProcessingEventInit> {
-  typedef V8AudioProcessingEventInit Type;
+    typedef V8AudioProcessingEventInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8AudioProcessingEventInit_h
+#endif // V8AudioProcessingEventInit_h

@@ -8,110 +8,114 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8EventInit.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8EventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, EventInit& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8EventInit::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, EventInit& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> bubblesValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "bubbles")).ToLocal(&bubblesValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (bubblesValue.IsEmpty() || bubblesValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool bubbles = toBoolean(isolate, bubblesValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setBubbles(bubbles);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> bubblesValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "bubbles")).ToLocal(&bubblesValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (bubblesValue.IsEmpty() || bubblesValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool bubbles = toBoolean(isolate, bubblesValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setBubbles(bubbles);
+    }
 
-  v8::Local<v8::Value> cancelableValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "cancelable")).ToLocal(&cancelableValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (cancelableValue.IsEmpty() || cancelableValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool cancelable = toBoolean(isolate, cancelableValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setCancelable(cancelable);
-  }
+    v8::Local<v8::Value> cancelableValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "cancelable")).ToLocal(&cancelableValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (cancelableValue.IsEmpty() || cancelableValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool cancelable = toBoolean(isolate, cancelableValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setCancelable(cancelable);
+    }
 
-  v8::Local<v8::Value> composedValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "composed")).ToLocal(&composedValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (composedValue.IsEmpty() || composedValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool composed = toBoolean(isolate, composedValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setComposed(composed);
-  }
+    v8::Local<v8::Value> composedValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "composed")).ToLocal(&composedValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (composedValue.IsEmpty() || composedValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool composed = toBoolean(isolate, composedValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setComposed(composed);
+    }
 }
 
-v8::Local<v8::Value> EventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8EventInit(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> EventInit::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8EventInit(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8EventInit(const EventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasBubbles()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "bubbles"), v8Boolean(impl.bubbles(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "bubbles"), v8Boolean(false, isolate))))
-      return false;
-  }
+bool toV8EventInit(const EventInit& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasBubbles()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "bubbles"), v8Boolean(impl.bubbles(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "bubbles"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  if (impl.hasCancelable()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "cancelable"), v8Boolean(impl.cancelable(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "cancelable"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasCancelable()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "cancelable"), v8Boolean(impl.cancelable(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "cancelable"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  if (impl.hasComposed()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "composed"), v8Boolean(impl.composed(), isolate))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "composed"), v8Boolean(false, isolate))))
-      return false;
-  }
+    if (impl.hasComposed()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "composed"), v8Boolean(impl.composed(), isolate))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "composed"), v8Boolean(false, isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-EventInit NativeValueTraits<EventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  EventInit impl;
-  V8EventInit::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+EventInit NativeValueTraits<EventInit>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    EventInit impl;
+    V8EventInit::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

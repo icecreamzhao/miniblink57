@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "DoubleRange.h"
 
 namespace blink {
 
-DoubleRange::DoubleRange() {
+DoubleRange::DoubleRange()
+{
 }
 
-DoubleRange::~DoubleRange() {}
+DoubleRange::~DoubleRange() { }
 
 DoubleRange::DoubleRange(const DoubleRange&) = default;
 
 DoubleRange& DoubleRange::operator=(const DoubleRange&) = default;
 
-bool DoubleRange::hasMax() const {
-  return m_hasMax;
+bool DoubleRange::hasMax() const
+{
+    return m_hasMax;
 }
-double DoubleRange::max() const {
-  DCHECK(m_hasMax);
-  return m_max;
+double DoubleRange::max() const
+{
+    DCHECK(m_hasMax);
+    return m_max;
 }
-void DoubleRange::setMax(double value) {
-  m_max = value;
-  m_hasMax = true;
+void DoubleRange::setMax(double value)
+{
+    m_max = value;
+    m_hasMax = true;
 }
-bool DoubleRange::hasMin() const {
-  return m_hasMin;
+bool DoubleRange::hasMin() const
+{
+    return m_hasMin;
 }
-double DoubleRange::min() const {
-  DCHECK(m_hasMin);
-  return m_min;
+double DoubleRange::min() const
+{
+    DCHECK(m_hasMin);
+    return m_min;
 }
-void DoubleRange::setMin(double value) {
-  m_min = value;
-  m_hasMin = true;
+void DoubleRange::setMin(double value)
+{
+    m_min = value;
+    m_hasMin = true;
 }
 
-DEFINE_TRACE(DoubleRange) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(DoubleRange)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

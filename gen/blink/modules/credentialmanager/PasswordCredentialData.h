@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef PasswordCredentialData_h
 #define PasswordCredentialData_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class MODULES_EXPORT PasswordCredentialData : public LocallyStoredCredentialData {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  PasswordCredentialData();
-  virtual ~PasswordCredentialData();
-  PasswordCredentialData(const PasswordCredentialData&);
-  PasswordCredentialData& operator=(const PasswordCredentialData&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasPassword() const;
-  String password() const;
-  void setPassword(String);
+public:
+    PasswordCredentialData();
+    virtual ~PasswordCredentialData();
+    PasswordCredentialData(const PasswordCredentialData&);
+    PasswordCredentialData& operator=(const PasswordCredentialData&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPassword() const;
+    String password() const;
+    void setPassword(String);
 
- private:
-  String m_password;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8PasswordCredentialData;
+private:
+    String m_password;
+
+    friend class V8PasswordCredentialData;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // PasswordCredentialData_h
+#endif // PasswordCredentialData_h

@@ -8,32 +8,37 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "PermissionDescriptor.h"
 
 namespace blink {
 
-PermissionDescriptor::PermissionDescriptor() {
+PermissionDescriptor::PermissionDescriptor()
+{
 }
 
-PermissionDescriptor::~PermissionDescriptor() {}
+PermissionDescriptor::~PermissionDescriptor() { }
 
 PermissionDescriptor::PermissionDescriptor(const PermissionDescriptor&) = default;
 
 PermissionDescriptor& PermissionDescriptor::operator=(const PermissionDescriptor&) = default;
 
-bool PermissionDescriptor::hasName() const {
-  return !m_name.isNull();
+bool PermissionDescriptor::hasName() const
+{
+    return !m_name.isNull();
 }
-String PermissionDescriptor::name() const {
-  return m_name;
+String PermissionDescriptor::name() const
+{
+    return m_name;
 }
-void PermissionDescriptor::setName(String value) {
-  m_name = value;
+void PermissionDescriptor::setName(String value)
+{
+    m_name = value;
 }
 
-DEFINE_TRACE(PermissionDescriptor) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(PermissionDescriptor)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

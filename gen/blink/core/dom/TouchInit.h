@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef TouchInit_h
 #define TouchInit_h
 
@@ -22,98 +22,99 @@ namespace blink {
 class EventTarget;
 
 class CORE_EXPORT TouchInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  TouchInit();
-  virtual ~TouchInit();
-  TouchInit(const TouchInit&);
-  TouchInit& operator=(const TouchInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasClientX() const;
-  double clientX() const;
-  void setClientX(double);
+public:
+    TouchInit();
+    virtual ~TouchInit();
+    TouchInit(const TouchInit&);
+    TouchInit& operator=(const TouchInit&);
 
-  bool hasClientY() const;
-  double clientY() const;
-  void setClientY(double);
+    bool hasClientX() const;
+    double clientX() const;
+    void setClientX(double);
 
-  bool hasForce() const;
-  float force() const;
-  void setForce(float);
+    bool hasClientY() const;
+    double clientY() const;
+    void setClientY(double);
 
-  bool hasIdentifier() const;
-  int identifier() const;
-  void setIdentifier(int);
+    bool hasForce() const;
+    float force() const;
+    void setForce(float);
 
-  bool hasPageX() const;
-  double pageX() const;
-  void setPageX(double);
+    bool hasIdentifier() const;
+    int identifier() const;
+    void setIdentifier(int);
 
-  bool hasPageY() const;
-  double pageY() const;
-  void setPageY(double);
+    bool hasPageX() const;
+    double pageX() const;
+    void setPageX(double);
 
-  bool hasRadiusX() const;
-  float radiusX() const;
-  void setRadiusX(float);
+    bool hasPageY() const;
+    double pageY() const;
+    void setPageY(double);
 
-  bool hasRadiusY() const;
-  float radiusY() const;
-  void setRadiusY(float);
+    bool hasRadiusX() const;
+    float radiusX() const;
+    void setRadiusX(float);
 
-  bool hasRegion() const;
-  String region() const;
-  void setRegion(String);
-  void setRegionToNull();
+    bool hasRadiusY() const;
+    float radiusY() const;
+    void setRadiusY(float);
 
-  bool hasRotationAngle() const;
-  float rotationAngle() const;
-  void setRotationAngle(float);
+    bool hasRegion() const;
+    String region() const;
+    void setRegion(String);
+    void setRegionToNull();
 
-  bool hasScreenX() const;
-  double screenX() const;
-  void setScreenX(double);
+    bool hasRotationAngle() const;
+    float rotationAngle() const;
+    void setRotationAngle(float);
 
-  bool hasScreenY() const;
-  double screenY() const;
-  void setScreenY(double);
+    bool hasScreenX() const;
+    double screenX() const;
+    void setScreenX(double);
 
-  bool hasTarget() const;
-  EventTarget* target() const;
-  void setTarget(EventTarget*);
+    bool hasScreenY() const;
+    double screenY() const;
+    void setScreenY(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasTarget() const;
+    EventTarget* target() const;
+    void setTarget(EventTarget*);
 
- private:
-  bool m_hasClientX = false;
-  double m_clientX;
-  bool m_hasClientY = false;
-  double m_clientY;
-  bool m_hasForce = false;
-  float m_force;
-  bool m_hasIdentifier = false;
-  int m_identifier;
-  bool m_hasPageX = false;
-  double m_pageX;
-  bool m_hasPageY = false;
-  double m_pageY;
-  bool m_hasRadiusX = false;
-  float m_radiusX;
-  bool m_hasRadiusY = false;
-  float m_radiusY;
-  String m_region;
-  bool m_hasRotationAngle = false;
-  float m_rotationAngle;
-  bool m_hasScreenX = false;
-  double m_screenX;
-  bool m_hasScreenY = false;
-  double m_screenY;
-  Member<EventTarget> m_target;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8TouchInit;
+private:
+    bool m_hasClientX = false;
+    double m_clientX;
+    bool m_hasClientY = false;
+    double m_clientY;
+    bool m_hasForce = false;
+    float m_force;
+    bool m_hasIdentifier = false;
+    int m_identifier;
+    bool m_hasPageX = false;
+    double m_pageX;
+    bool m_hasPageY = false;
+    double m_pageY;
+    bool m_hasRadiusX = false;
+    float m_radiusX;
+    bool m_hasRadiusY = false;
+    float m_radiusY;
+    String m_region;
+    bool m_hasRotationAngle = false;
+    float m_rotationAngle;
+    bool m_hasScreenX = false;
+    double m_screenX;
+    bool m_hasScreenY = false;
+    double m_screenY;
+    Member<EventTarget> m_target;
+
+    friend class V8TouchInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // TouchInit_h
+#endif // TouchInit_h

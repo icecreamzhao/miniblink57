@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -21,195 +21,220 @@
 
 namespace blink {
 
-CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas() : m_type(SpecificTypeNone) {}
-
-CSSStyleImageValue* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsCSSImageValue() const {
-  DCHECK(isCSSImageValue());
-  return m_cssImageValue;
+CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setCSSImageValue(CSSStyleImageValue* value) {
-  DCHECK(isNull());
-  m_cssImageValue = value;
-  m_type = SpecificTypeCSSImageValue;
+CSSStyleImageValue* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsCSSImageValue() const
+{
+    DCHECK(isCSSImageValue());
+    return m_cssImageValue;
 }
 
-CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromCSSImageValue(CSSStyleImageValue* value) {
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
-  container.setCSSImageValue(value);
-  return container;
+void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setCSSImageValue(CSSStyleImageValue* value)
+{
+    DCHECK(isNull());
+    m_cssImageValue = value;
+    m_type = SpecificTypeCSSImageValue;
 }
 
-HTMLImageElement* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsHTMLImageElement() const {
-  DCHECK(isHTMLImageElement());
-  return m_htmlImageElement;
+CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromCSSImageValue(CSSStyleImageValue* value)
+{
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
+    container.setCSSImageValue(value);
+    return container;
 }
 
-void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setHTMLImageElement(HTMLImageElement* value) {
-  DCHECK(isNull());
-  m_htmlImageElement = value;
-  m_type = SpecificTypeHTMLImageElement;
+HTMLImageElement* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsHTMLImageElement() const
+{
+    DCHECK(isHTMLImageElement());
+    return m_htmlImageElement;
 }
 
-CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromHTMLImageElement(HTMLImageElement* value) {
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
-  container.setHTMLImageElement(value);
-  return container;
+void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setHTMLImageElement(HTMLImageElement* value)
+{
+    DCHECK(isNull());
+    m_htmlImageElement = value;
+    m_type = SpecificTypeHTMLImageElement;
 }
 
-HTMLVideoElement* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsHTMLVideoElement() const {
-  DCHECK(isHTMLVideoElement());
-  return m_htmlVideoElement;
+CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromHTMLImageElement(HTMLImageElement* value)
+{
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
+    container.setHTMLImageElement(value);
+    return container;
 }
 
-void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setHTMLVideoElement(HTMLVideoElement* value) {
-  DCHECK(isNull());
-  m_htmlVideoElement = value;
-  m_type = SpecificTypeHTMLVideoElement;
+HTMLVideoElement* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsHTMLVideoElement() const
+{
+    DCHECK(isHTMLVideoElement());
+    return m_htmlVideoElement;
 }
 
-CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromHTMLVideoElement(HTMLVideoElement* value) {
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
-  container.setHTMLVideoElement(value);
-  return container;
+void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setHTMLVideoElement(HTMLVideoElement* value)
+{
+    DCHECK(isNull());
+    m_htmlVideoElement = value;
+    m_type = SpecificTypeHTMLVideoElement;
 }
 
-HTMLCanvasElement* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsHTMLCanvasElement() const {
-  DCHECK(isHTMLCanvasElement());
-  return m_htmlCanvasElement;
+CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromHTMLVideoElement(HTMLVideoElement* value)
+{
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
+    container.setHTMLVideoElement(value);
+    return container;
 }
 
-void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setHTMLCanvasElement(HTMLCanvasElement* value) {
-  DCHECK(isNull());
-  m_htmlCanvasElement = value;
-  m_type = SpecificTypeHTMLCanvasElement;
+HTMLCanvasElement* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsHTMLCanvasElement() const
+{
+    DCHECK(isHTMLCanvasElement());
+    return m_htmlCanvasElement;
 }
 
-CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromHTMLCanvasElement(HTMLCanvasElement* value) {
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
-  container.setHTMLCanvasElement(value);
-  return container;
+void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setHTMLCanvasElement(HTMLCanvasElement* value)
+{
+    DCHECK(isNull());
+    m_htmlCanvasElement = value;
+    m_type = SpecificTypeHTMLCanvasElement;
 }
 
-ImageBitmap* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsImageBitmap() const {
-  DCHECK(isImageBitmap());
-  return m_imageBitmap;
+CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromHTMLCanvasElement(HTMLCanvasElement* value)
+{
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
+    container.setHTMLCanvasElement(value);
+    return container;
 }
 
-void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setImageBitmap(ImageBitmap* value) {
-  DCHECK(isNull());
-  m_imageBitmap = value;
-  m_type = SpecificTypeImageBitmap;
+ImageBitmap* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsImageBitmap() const
+{
+    DCHECK(isImageBitmap());
+    return m_imageBitmap;
 }
 
-CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromImageBitmap(ImageBitmap* value) {
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
-  container.setImageBitmap(value);
-  return container;
+void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setImageBitmap(ImageBitmap* value)
+{
+    DCHECK(isNull());
+    m_imageBitmap = value;
+    m_type = SpecificTypeImageBitmap;
 }
 
-OffscreenCanvas* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsOffscreenCanvas() const {
-  DCHECK(isOffscreenCanvas());
-  return m_offscreenCanvas;
+CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromImageBitmap(ImageBitmap* value)
+{
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
+    container.setImageBitmap(value);
+    return container;
 }
 
-void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setOffscreenCanvas(OffscreenCanvas* value) {
-  DCHECK(isNull());
-  m_offscreenCanvas = value;
-  m_type = SpecificTypeOffscreenCanvas;
+OffscreenCanvas* CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::getAsOffscreenCanvas() const
+{
+    DCHECK(isOffscreenCanvas());
+    return m_offscreenCanvas;
 }
 
-CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromOffscreenCanvas(OffscreenCanvas* value) {
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
-  container.setOffscreenCanvas(value);
-  return container;
+void CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::setOffscreenCanvas(OffscreenCanvas* value)
+{
+    DCHECK(isNull());
+    m_offscreenCanvas = value;
+    m_type = SpecificTypeOffscreenCanvas;
+}
+
+CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::fromOffscreenCanvas(OffscreenCanvas* value)
+{
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas container;
+    container.setOffscreenCanvas(value);
+    return container;
 }
 
 CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&) = default;
 CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::~CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas() = default;
 CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas& CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::operator=(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas&) = default;
 
-DEFINE_TRACE(CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas) {
-  visitor->trace(m_cssImageValue);
-  visitor->trace(m_htmlImageElement);
-  visitor->trace(m_htmlVideoElement);
-  visitor->trace(m_htmlCanvasElement);
-  visitor->trace(m_imageBitmap);
-  visitor->trace(m_offscreenCanvas);
+DEFINE_TRACE(CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas)
+{
+    visitor->trace(m_cssImageValue);
+    visitor->trace(m_htmlImageElement);
+    visitor->trace(m_htmlVideoElement);
+    visitor->trace(m_htmlCanvasElement);
+    visitor->trace(m_imageBitmap);
+    visitor->trace(m_offscreenCanvas);
 }
 
-void V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8CSSImageValue::hasInstance(v8Value, isolate)) {
-    CSSStyleImageValue* cppValue = V8CSSImageValue::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setCSSImageValue(cppValue);
-    return;
-  }
+    if (V8CSSImageValue::hasInstance(v8Value, isolate)) {
+        CSSStyleImageValue* cppValue = V8CSSImageValue::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setCSSImageValue(cppValue);
+        return;
+    }
 
-  if (V8HTMLImageElement::hasInstance(v8Value, isolate)) {
-    HTMLImageElement* cppValue = V8HTMLImageElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setHTMLImageElement(cppValue);
-    return;
-  }
+    if (V8HTMLImageElement::hasInstance(v8Value, isolate)) {
+        HTMLImageElement* cppValue = V8HTMLImageElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setHTMLImageElement(cppValue);
+        return;
+    }
 
-  if (V8HTMLVideoElement::hasInstance(v8Value, isolate)) {
-    HTMLVideoElement* cppValue = V8HTMLVideoElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setHTMLVideoElement(cppValue);
-    return;
-  }
+    if (V8HTMLVideoElement::hasInstance(v8Value, isolate)) {
+        HTMLVideoElement* cppValue = V8HTMLVideoElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setHTMLVideoElement(cppValue);
+        return;
+    }
 
-  if (V8HTMLCanvasElement::hasInstance(v8Value, isolate)) {
-    HTMLCanvasElement* cppValue = V8HTMLCanvasElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setHTMLCanvasElement(cppValue);
-    return;
-  }
+    if (V8HTMLCanvasElement::hasInstance(v8Value, isolate)) {
+        HTMLCanvasElement* cppValue = V8HTMLCanvasElement::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setHTMLCanvasElement(cppValue);
+        return;
+    }
 
-  if (V8ImageBitmap::hasInstance(v8Value, isolate)) {
-    ImageBitmap* cppValue = V8ImageBitmap::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setImageBitmap(cppValue);
-    return;
-  }
+    if (V8ImageBitmap::hasInstance(v8Value, isolate)) {
+        ImageBitmap* cppValue = V8ImageBitmap::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setImageBitmap(cppValue);
+        return;
+    }
 
-  if (V8OffscreenCanvas::hasInstance(v8Value, isolate)) {
-    OffscreenCanvas* cppValue = V8OffscreenCanvas::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setOffscreenCanvas(cppValue);
-    return;
-  }
+    if (V8OffscreenCanvas::hasInstance(v8Value, isolate)) {
+        OffscreenCanvas* cppValue = V8OffscreenCanvas::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setOffscreenCanvas(cppValue);
+        return;
+    }
 
-  exceptionState.throwTypeError("The provided value is not of type '(CSSImageValue or HTMLImageElement or HTMLVideoElement or HTMLCanvasElement or ImageBitmap or OffscreenCanvas)'");
+    exceptionState.throwTypeError("The provided value is not of type '(CSSImageValue or HTMLImageElement or HTMLVideoElement or HTMLCanvasElement or ImageBitmap or OffscreenCanvas)'");
 }
 
-v8::Local<v8::Value> ToV8(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::SpecificTypeCSSImageValue:
-      return ToV8(impl.getAsCSSImageValue(), creationContext, isolate);
+        return ToV8(impl.getAsCSSImageValue(), creationContext, isolate);
     case CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::SpecificTypeHTMLImageElement:
-      return ToV8(impl.getAsHTMLImageElement(), creationContext, isolate);
+        return ToV8(impl.getAsHTMLImageElement(), creationContext, isolate);
     case CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::SpecificTypeHTMLVideoElement:
-      return ToV8(impl.getAsHTMLVideoElement(), creationContext, isolate);
+        return ToV8(impl.getAsHTMLVideoElement(), creationContext, isolate);
     case CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::SpecificTypeHTMLCanvasElement:
-      return ToV8(impl.getAsHTMLCanvasElement(), creationContext, isolate);
+        return ToV8(impl.getAsHTMLCanvasElement(), creationContext, isolate);
     case CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::SpecificTypeImageBitmap:
-      return ToV8(impl.getAsImageBitmap(), creationContext, isolate);
+        return ToV8(impl.getAsImageBitmap(), creationContext, isolate);
     case CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::SpecificTypeOffscreenCanvas:
-      return ToV8(impl.getAsOffscreenCanvas(), creationContext, isolate);
+        return ToV8(impl.getAsOffscreenCanvas(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas NativeValueTraits<CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas impl;
-  V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas NativeValueTraits<CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas impl;
+    V8CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

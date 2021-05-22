@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8NFCPushOptions_h
 #define V8NFCPushOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8NFCPushOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, NFCPushOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, NFCPushOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8NFCPushOptions(const NFCPushOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, NFCPushOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, NFCPushOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<NFCPushOptions> {
-  static NFCPushOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static NFCPushOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<NFCPushOptions> {
-  typedef V8NFCPushOptions Type;
+    typedef V8NFCPushOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8NFCPushOptions_h
+#endif // V8NFCPushOptions_h

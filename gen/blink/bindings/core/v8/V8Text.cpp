@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Text.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -54,150 +54,165 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Text::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Text is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace TextV8Internal {
 
-static void wholeTextAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void wholeTextAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Text* impl = V8Text::toImpl(holder);
+        Text* impl = V8Text::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->wholeText(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->wholeText(), info.GetIsolate());
+    }
 
-CORE_EXPORT void wholeTextAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::TextWholeText);
+    CORE_EXPORT void wholeTextAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::TextWholeText);
 
-  TextV8Internal::wholeTextAttributeGetter(info);
-}
+        TextV8Internal::wholeTextAttributeGetter(info);
+    }
 
-static void assignedSlotAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void assignedSlotAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Text* impl = V8Text::toImpl(holder);
+        Text* impl = V8Text::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->assignedSlotForBinding()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->assignedSlotForBinding()), impl);
+    }
 
-CORE_EXPORT void assignedSlotAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextV8Internal::assignedSlotAttributeGetter(info);
-}
+    CORE_EXPORT void assignedSlotAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextV8Internal::assignedSlotAttributeGetter(info);
+    }
 
-static void splitTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Text", "splitText");
+    static void splitTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Text", "splitText");
 
-  Text* impl = V8Text::toImpl(info.Holder());
+        Text* impl = V8Text::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  unsigned offset;
-  offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        unsigned offset;
+        offset = toUInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  Text* result = impl->splitText(offset, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
+        Text* result = impl->splitText(offset, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
 
-CORE_EXPORT  void splitTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextV8Internal::splitTextMethod(info);
-}
+    CORE_EXPORT void splitTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextV8Internal::splitTextMethod(info);
+    }
 
-static void getDestinationInsertionPointsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Text* impl = V8Text::toImpl(info.Holder());
+    static void getDestinationInsertionPointsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Text* impl = V8Text::toImpl(info.Holder());
 
-  v8SetReturnValueFast(info, impl->getDestinationInsertionPoints(), impl);
-}
+        v8SetReturnValueFast(info, impl->getDestinationInsertionPoints(), impl);
+    }
 
-CORE_EXPORT  void getDestinationInsertionPointsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  TextV8Internal::getDestinationInsertionPointsMethod(info);
-}
+    CORE_EXPORT void getDestinationInsertionPointsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        TextV8Internal::getDestinationInsertionPointsMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  V8StringResource<> data;
-  if (!info[0]->IsUndefined()) {
-    data = info[0];
-    if (!data.prepare())
-      return;
-  } else {
-    data = String("");
-  }
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        V8StringResource<> data;
+        if (!info[0]->IsUndefined()) {
+            data = info[0];
+            if (!data.prepare())
+                return;
+        } else {
+            data = String("");
+        }
 
-  Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
-  Text* impl = Text::create(document, data);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Text::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        Document& document = *toDocument(currentExecutionContext(info.GetIsolate()));
+        Text* impl = Text::create(document, data);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8Text::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace TextV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8TextAccessors[] = {
-    {"wholeText", TextV8Internal::wholeTextAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"assignedSlot", TextV8Internal::assignedSlotAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "wholeText", TextV8Internal::wholeTextAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "assignedSlot", TextV8Internal::assignedSlotAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8TextMethods[] = {
-    {"splitText", TextV8Internal::splitTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getDestinationInsertionPoints", TextV8Internal::getDestinationInsertionPointsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "splitText", TextV8Internal::splitTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getDestinationInsertionPoints", TextV8Internal::getDestinationInsertionPointsMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8Text::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Text"));
-    return;
-  }
+void V8Text::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("Text"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  TextV8Internal::constructor(info);
+    TextV8Internal::constructor(info);
 }
 
-static void installV8TextTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Text::wrapperTypeInfo.interfaceName, V8CharacterData::domTemplate(isolate, world), V8Text::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8Text::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8TextTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Text::wrapperTypeInfo.interfaceName, V8CharacterData::domTemplate(isolate, world), V8Text::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8Text::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextAccessors, WTF_ARRAY_LENGTH(V8TextAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextMethods, WTF_ARRAY_LENGTH(V8TextMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextAccessors, WTF_ARRAY_LENGTH(V8TextAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8TextMethods, WTF_ARRAY_LENGTH(V8TextMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Text::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TextTemplate);
+v8::Local<v8::FunctionTemplate> V8Text::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8TextTemplate);
 }
 
-bool V8Text::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Text::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Text::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Text::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Text* V8Text::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Text* V8Text::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

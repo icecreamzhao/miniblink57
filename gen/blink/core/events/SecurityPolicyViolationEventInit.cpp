@@ -8,128 +8,163 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "SecurityPolicyViolationEventInit.h"
 
 namespace blink {
 
-SecurityPolicyViolationEventInit::SecurityPolicyViolationEventInit() {
+SecurityPolicyViolationEventInit::SecurityPolicyViolationEventInit()
+{
 }
 
-SecurityPolicyViolationEventInit::~SecurityPolicyViolationEventInit() {}
+SecurityPolicyViolationEventInit::~SecurityPolicyViolationEventInit() { }
 
 SecurityPolicyViolationEventInit::SecurityPolicyViolationEventInit(const SecurityPolicyViolationEventInit&) = default;
 
 SecurityPolicyViolationEventInit& SecurityPolicyViolationEventInit::operator=(const SecurityPolicyViolationEventInit&) = default;
 
-bool SecurityPolicyViolationEventInit::hasBlockedURI() const {
-  return !m_blockedURI.isNull();
+bool SecurityPolicyViolationEventInit::hasBlockedURI() const
+{
+    return !m_blockedURI.isNull();
 }
-String SecurityPolicyViolationEventInit::blockedURI() const {
-  return m_blockedURI;
+String SecurityPolicyViolationEventInit::blockedURI() const
+{
+    return m_blockedURI;
 }
-void SecurityPolicyViolationEventInit::setBlockedURI(String value) {
-  m_blockedURI = value;
+void SecurityPolicyViolationEventInit::setBlockedURI(String value)
+{
+    m_blockedURI = value;
 }
-bool SecurityPolicyViolationEventInit::hasColumnNumber() const {
-  return m_hasColumnNumber;
+bool SecurityPolicyViolationEventInit::hasColumnNumber() const
+{
+    return m_hasColumnNumber;
 }
-int SecurityPolicyViolationEventInit::columnNumber() const {
-  DCHECK(m_hasColumnNumber);
-  return m_columnNumber;
+int SecurityPolicyViolationEventInit::columnNumber() const
+{
+    DCHECK(m_hasColumnNumber);
+    return m_columnNumber;
 }
-void SecurityPolicyViolationEventInit::setColumnNumber(int value) {
-  m_columnNumber = value;
-  m_hasColumnNumber = true;
+void SecurityPolicyViolationEventInit::setColumnNumber(int value)
+{
+    m_columnNumber = value;
+    m_hasColumnNumber = true;
 }
-bool SecurityPolicyViolationEventInit::hasDisposition() const {
-  return !m_disposition.isNull();
+bool SecurityPolicyViolationEventInit::hasDisposition() const
+{
+    return !m_disposition.isNull();
 }
-String SecurityPolicyViolationEventInit::disposition() const {
-  return m_disposition;
+String SecurityPolicyViolationEventInit::disposition() const
+{
+    return m_disposition;
 }
-void SecurityPolicyViolationEventInit::setDisposition(String value) {
-  m_disposition = value;
+void SecurityPolicyViolationEventInit::setDisposition(String value)
+{
+    m_disposition = value;
 }
-bool SecurityPolicyViolationEventInit::hasDocumentURI() const {
-  return !m_documentURI.isNull();
+bool SecurityPolicyViolationEventInit::hasDocumentURI() const
+{
+    return !m_documentURI.isNull();
 }
-String SecurityPolicyViolationEventInit::documentURI() const {
-  return m_documentURI;
+String SecurityPolicyViolationEventInit::documentURI() const
+{
+    return m_documentURI;
 }
-void SecurityPolicyViolationEventInit::setDocumentURI(String value) {
-  m_documentURI = value;
+void SecurityPolicyViolationEventInit::setDocumentURI(String value)
+{
+    m_documentURI = value;
 }
-bool SecurityPolicyViolationEventInit::hasEffectiveDirective() const {
-  return !m_effectiveDirective.isNull();
+bool SecurityPolicyViolationEventInit::hasEffectiveDirective() const
+{
+    return !m_effectiveDirective.isNull();
 }
-String SecurityPolicyViolationEventInit::effectiveDirective() const {
-  return m_effectiveDirective;
+String SecurityPolicyViolationEventInit::effectiveDirective() const
+{
+    return m_effectiveDirective;
 }
-void SecurityPolicyViolationEventInit::setEffectiveDirective(String value) {
-  m_effectiveDirective = value;
+void SecurityPolicyViolationEventInit::setEffectiveDirective(String value)
+{
+    m_effectiveDirective = value;
 }
-bool SecurityPolicyViolationEventInit::hasLineNumber() const {
-  return m_hasLineNumber;
+bool SecurityPolicyViolationEventInit::hasLineNumber() const
+{
+    return m_hasLineNumber;
 }
-int SecurityPolicyViolationEventInit::lineNumber() const {
-  DCHECK(m_hasLineNumber);
-  return m_lineNumber;
+int SecurityPolicyViolationEventInit::lineNumber() const
+{
+    DCHECK(m_hasLineNumber);
+    return m_lineNumber;
 }
-void SecurityPolicyViolationEventInit::setLineNumber(int value) {
-  m_lineNumber = value;
-  m_hasLineNumber = true;
+void SecurityPolicyViolationEventInit::setLineNumber(int value)
+{
+    m_lineNumber = value;
+    m_hasLineNumber = true;
 }
-bool SecurityPolicyViolationEventInit::hasOriginalPolicy() const {
-  return !m_originalPolicy.isNull();
+bool SecurityPolicyViolationEventInit::hasOriginalPolicy() const
+{
+    return !m_originalPolicy.isNull();
 }
-String SecurityPolicyViolationEventInit::originalPolicy() const {
-  return m_originalPolicy;
+String SecurityPolicyViolationEventInit::originalPolicy() const
+{
+    return m_originalPolicy;
 }
-void SecurityPolicyViolationEventInit::setOriginalPolicy(String value) {
-  m_originalPolicy = value;
+void SecurityPolicyViolationEventInit::setOriginalPolicy(String value)
+{
+    m_originalPolicy = value;
 }
-bool SecurityPolicyViolationEventInit::hasReferrer() const {
-  return !m_referrer.isNull();
+bool SecurityPolicyViolationEventInit::hasReferrer() const
+{
+    return !m_referrer.isNull();
 }
-String SecurityPolicyViolationEventInit::referrer() const {
-  return m_referrer;
+String SecurityPolicyViolationEventInit::referrer() const
+{
+    return m_referrer;
 }
-void SecurityPolicyViolationEventInit::setReferrer(String value) {
-  m_referrer = value;
+void SecurityPolicyViolationEventInit::setReferrer(String value)
+{
+    m_referrer = value;
 }
-bool SecurityPolicyViolationEventInit::hasSourceFile() const {
-  return !m_sourceFile.isNull();
+bool SecurityPolicyViolationEventInit::hasSourceFile() const
+{
+    return !m_sourceFile.isNull();
 }
-String SecurityPolicyViolationEventInit::sourceFile() const {
-  return m_sourceFile;
+String SecurityPolicyViolationEventInit::sourceFile() const
+{
+    return m_sourceFile;
 }
-void SecurityPolicyViolationEventInit::setSourceFile(String value) {
-  m_sourceFile = value;
+void SecurityPolicyViolationEventInit::setSourceFile(String value)
+{
+    m_sourceFile = value;
 }
-bool SecurityPolicyViolationEventInit::hasStatusCode() const {
-  return m_hasStatusCode;
+bool SecurityPolicyViolationEventInit::hasStatusCode() const
+{
+    return m_hasStatusCode;
 }
-unsigned SecurityPolicyViolationEventInit::statusCode() const {
-  DCHECK(m_hasStatusCode);
-  return m_statusCode;
+unsigned SecurityPolicyViolationEventInit::statusCode() const
+{
+    DCHECK(m_hasStatusCode);
+    return m_statusCode;
 }
-void SecurityPolicyViolationEventInit::setStatusCode(unsigned value) {
-  m_statusCode = value;
-  m_hasStatusCode = true;
+void SecurityPolicyViolationEventInit::setStatusCode(unsigned value)
+{
+    m_statusCode = value;
+    m_hasStatusCode = true;
 }
-bool SecurityPolicyViolationEventInit::hasViolatedDirective() const {
-  return !m_violatedDirective.isNull();
+bool SecurityPolicyViolationEventInit::hasViolatedDirective() const
+{
+    return !m_violatedDirective.isNull();
 }
-String SecurityPolicyViolationEventInit::violatedDirective() const {
-  return m_violatedDirective;
+String SecurityPolicyViolationEventInit::violatedDirective() const
+{
+    return m_violatedDirective;
 }
-void SecurityPolicyViolationEventInit::setViolatedDirective(String value) {
-  m_violatedDirective = value;
+void SecurityPolicyViolationEventInit::setViolatedDirective(String value)
+{
+    m_violatedDirective = value;
 }
 
-DEFINE_TRACE(SecurityPolicyViolationEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(SecurityPolicyViolationEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

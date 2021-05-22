@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef InternalDictionaryDerived_h
 #define InternalDictionaryDerived_h
 
@@ -19,37 +19,38 @@
 namespace blink {
 
 class InternalDictionaryDerived : public InternalDictionary {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  InternalDictionaryDerived();
-  virtual ~InternalDictionaryDerived();
-  InternalDictionaryDerived(const InternalDictionaryDerived&);
-  InternalDictionaryDerived& operator=(const InternalDictionaryDerived&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasDerivedStringMember() const;
-  String derivedStringMember() const;
-  void setDerivedStringMember(String);
+public:
+    InternalDictionaryDerived();
+    virtual ~InternalDictionaryDerived();
+    InternalDictionaryDerived(const InternalDictionaryDerived&);
+    InternalDictionaryDerived& operator=(const InternalDictionaryDerived&);
 
-  bool hasDerivedStringMemberWithDefault() const;
-  String derivedStringMemberWithDefault() const;
-  void setDerivedStringMemberWithDefault(String);
+    bool hasDerivedStringMember() const;
+    String derivedStringMember() const;
+    void setDerivedStringMember(String);
 
-  bool hasRequiredBooleanMember() const;
-  bool requiredBooleanMember() const;
-  void setRequiredBooleanMember(bool);
+    bool hasDerivedStringMemberWithDefault() const;
+    String derivedStringMemberWithDefault() const;
+    void setDerivedStringMemberWithDefault(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasRequiredBooleanMember() const;
+    bool requiredBooleanMember() const;
+    void setRequiredBooleanMember(bool);
 
- private:
-  String m_derivedStringMember;
-  String m_derivedStringMemberWithDefault;
-  bool m_hasRequiredBooleanMember = false;
-  bool m_requiredBooleanMember;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8InternalDictionaryDerived;
+private:
+    String m_derivedStringMember;
+    String m_derivedStringMemberWithDefault;
+    bool m_hasRequiredBooleanMember = false;
+    bool m_requiredBooleanMember;
+
+    friend class V8InternalDictionaryDerived;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // InternalDictionaryDerived_h
+#endif // InternalDictionaryDerived_h

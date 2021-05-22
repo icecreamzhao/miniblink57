@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Document.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -111,5761 +111,6393 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Document::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Document is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DocumentV8Internal {
 
-static void implementationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void implementationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  Document* impl = V8Document::toImpl(holder);
+        Document* impl = V8Document::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->implementation()), impl);
-}
-
-CORE_EXPORT void implementationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::implementationAttributeGetter(info);
-}
-
-static void URLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->url(), info.GetIsolate());
-}
-
-CORE_EXPORT void URLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::URLAttributeGetter(info);
-}
-
-static void documentURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueStringOrNull(info, impl->url(), info.GetIsolate());
-}
-
-CORE_EXPORT void documentURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::documentURIAttributeGetter(info);
-}
-
-static void originAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->origin(), info.GetIsolate());
-}
-
-CORE_EXPORT void originAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::originAttributeGetter(info);
-}
-
-static void suboriginAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->suborigin(), info.GetIsolate());
-}
-
-CORE_EXPORT void suboriginAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::suboriginAttributeGetter(info);
-}
-
-static void compatModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->compatMode(), info.GetIsolate());
-}
-
-CORE_EXPORT void compatModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::compatModeAttributeGetter(info);
-}
-
-static void characterSetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->characterSet(), info.GetIsolate());
-}
-
-CORE_EXPORT void characterSetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::characterSetAttributeGetter(info);
-}
-
-static void charsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->characterSet(), info.GetIsolate());
-}
-
-CORE_EXPORT void charsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::charsetAttributeGetter(info);
-}
-
-static void inputEncodingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->characterSet(), info.GetIsolate());
-}
-
-CORE_EXPORT void inputEncodingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::inputEncodingAttributeGetter(info);
-}
-
-static void contentTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->contentType(), info.GetIsolate());
-}
-
-CORE_EXPORT void contentTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::contentTypeAttributeGetter(info);
-}
-
-static void doctypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->doctype()), impl);
-}
-
-CORE_EXPORT void doctypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::doctypeAttributeGetter(info);
-}
-
-static void documentElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->documentElement()), impl);
-}
-
-CORE_EXPORT void documentElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::documentElementAttributeGetter(info);
-}
-
-static void rootScrollerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->rootScroller()), impl);
-}
-
-CORE_EXPORT void rootScrollerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_RootScroller_AttributeGetter);
-
-  DocumentV8Internal::rootScrollerAttributeGetter(info);
-}
-
-static void rootScrollerAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "rootScroller");
-
-  // Prepare the value to be set.
-  Element* cppValue = V8Element::toImplWithTypeCheck(info.GetIsolate(), v8Value);
-
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue && !isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("The provided value is not of type 'Element'.");
-    return;
-  }
-
-  impl->setRootScroller(cppValue, exceptionState);
-}
-
-CORE_EXPORT void rootScrollerAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_RootScroller_AttributeSetter);
-
-  DocumentV8Internal::rootScrollerAttributeSetter(v8Value, info);
-}
-
-static void xmlEncodingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueStringOrNull(info, impl->xmlEncoding(), info.GetIsolate());
-}
-
-CORE_EXPORT void xmlEncodingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLEncoding);
-
-  DocumentV8Internal::xmlEncodingAttributeGetter(info);
-}
-
-static void xmlVersionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueStringOrNull(info, impl->xmlVersion(), info.GetIsolate());
-}
-
-CORE_EXPORT void xmlVersionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLVersion);
-
-  DocumentV8Internal::xmlVersionAttributeGetter(info);
-}
-
-static void xmlVersionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "xmlVersion");
-
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setXMLVersion(cppValue, exceptionState);
-}
-
-CORE_EXPORT void xmlVersionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLVersion);
-
-  DocumentV8Internal::xmlVersionAttributeSetter(v8Value, info);
-}
-
-static void xmlStandaloneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->xmlStandalone());
-}
-
-CORE_EXPORT void xmlStandaloneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLStandalone);
-
-  DocumentV8Internal::xmlStandaloneAttributeGetter(info);
-}
-
-static void xmlStandaloneAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "xmlStandalone");
-
-  // Prepare the value to be set.
-  bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setXMLStandalone(cppValue, exceptionState);
-}
-
-CORE_EXPORT void xmlStandaloneAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLStandalone);
-
-  DocumentV8Internal::xmlStandaloneAttributeSetter(v8Value, info);
-}
-
-static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->location()), impl);
-}
-
-CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::locationAttributeGetter(info);
-}
-
-static void locationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* proxyImpl = V8Document::toImpl(holder);
-  Location* impl = WTF::getPtr(proxyImpl->location());
-  if (!impl)
-    return;
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "location");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setHref(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
-}
-
-CORE_EXPORT void locationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::locationAttributeSetter(v8Value, info);
-}
-
-static void domainAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->domain(), info.GetIsolate());
-}
-
-CORE_EXPORT void domainAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::domainAttributeGetter(info);
-}
-
-static void domainAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "domain");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setDomain(cppValue, exceptionState);
-}
-
-CORE_EXPORT void domainAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::domainAttributeSetter(v8Value, info);
-}
-
-static void referrerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->referrer(), info.GetIsolate());
-}
-
-CORE_EXPORT void referrerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::referrerAttributeGetter(info);
-}
-
-static void cookieAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Document", "cookie");
-
-  String cppValue(impl->cookie(exceptionState));
-
-  if (UNLIKELY(exceptionState.hadException()))
-    return;
-
-  v8SetReturnValueString(info, cppValue, info.GetIsolate());
-}
-
-CORE_EXPORT void cookieAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::cookieAttributeGetter(info);
-}
-
-static void cookieAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "cookie");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setCookie(cppValue, exceptionState);
-}
-
-CORE_EXPORT void cookieAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::cookieAttributeSetter(v8Value, info);
-}
-
-static void lastModifiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->lastModified(), info.GetIsolate());
-}
-
-CORE_EXPORT void lastModifiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::lastModifiedAttributeGetter(info);
-}
-
-static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->readyState(), info.GetIsolate());
-}
-
-CORE_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::readyStateAttributeGetter(info);
-}
-
-static void titleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->title(), info.GetIsolate());
-}
-
-CORE_EXPORT void titleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::titleAttributeGetter(info);
-}
-
-static void titleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setTitle(cppValue);
-}
-
-CORE_EXPORT void titleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  DocumentV8Internal::titleAttributeSetter(v8Value, info);
-}
-
-static void dirAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->dir(), info.GetIsolate());
-}
-
-CORE_EXPORT void dirAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::dirAttributeGetter(info);
-}
-
-static void dirAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setDir(cppValue);
-}
-
-CORE_EXPORT void dirAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  DocumentV8Internal::dirAttributeSetter(v8Value, info);
-}
-
-static void bodyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->body()), impl);
-}
-
-CORE_EXPORT void bodyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::bodyAttributeGetter(info);
-}
-
-static void bodyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "body");
-
-  // Prepare the value to be set.
-  HTMLElement* cppValue = V8HTMLElement::toImplWithTypeCheck(info.GetIsolate(), v8Value);
-
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue && !isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("The provided value is not of type 'HTMLElement'.");
-    return;
-  }
-
-  impl->setBody(cppValue, exceptionState);
-}
-
-CORE_EXPORT void bodyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  DocumentV8Internal::bodyAttributeSetter(v8Value, info);
-}
-
-static void bodyAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->body()));
-}
-
-CORE_EXPORT void bodyAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::bodyAttributeGetterForMainWorld(info);
-}
-
-static void bodyAttributeSetterForMainWorld(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "body");
-
-  // Prepare the value to be set.
-  HTMLElement* cppValue = V8HTMLElement::toImplWithTypeCheck(info.GetIsolate(), v8Value);
-
-  // Type check per: http://heycam.github.io/webidl/#es-interface
-  if (!cppValue && !isUndefinedOrNull(v8Value)) {
-    exceptionState.throwTypeError("The provided value is not of type 'HTMLElement'.");
-    return;
-  }
-
-  impl->setBody(cppValue, exceptionState);
-}
-
-CORE_EXPORT void bodyAttributeSetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  DocumentV8Internal::bodyAttributeSetterForMainWorld(v8Value, info);
-}
-
-static void headAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->head()), impl);
-}
-
-CORE_EXPORT void headAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::headAttributeGetter(info);
-}
-
-static void imagesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->images()), impl);
-}
-
-CORE_EXPORT void imagesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Images_AttributeGetter);
-
-  DocumentV8Internal::imagesAttributeGetter(info);
-}
-
-static void embedsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->embeds()), impl);
-}
-
-CORE_EXPORT void embedsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Embeds_AttributeGetter);
-
-  DocumentV8Internal::embedsAttributeGetter(info);
-}
-
-static void pluginsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->embeds()), impl);
-}
-
-CORE_EXPORT void pluginsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Plugins_AttributeGetter);
-
-  DocumentV8Internal::pluginsAttributeGetter(info);
-}
-
-static void linksAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->links()), impl);
-}
-
-CORE_EXPORT void linksAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Links_AttributeGetter);
-
-  DocumentV8Internal::linksAttributeGetter(info);
-}
-
-static void formsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->forms()), impl);
-}
-
-CORE_EXPORT void formsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Forms_AttributeGetter);
-
-  DocumentV8Internal::formsAttributeGetter(info);
-}
-
-static void scriptsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->scripts()), impl);
-}
-
-CORE_EXPORT void scriptsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Scripts_AttributeGetter);
-
-  DocumentV8Internal::scriptsAttributeGetter(info);
-}
-
-static void currentScriptAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  HTMLScriptElementOrSVGScriptElement result;
-  impl->currentScriptForBinding(result);
-
-  v8SetReturnValue(info, result);
-}
-
-CORE_EXPORT void currentScriptAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::currentScriptAttributeGetter(info);
-}
-
-static void defaultViewAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->domWindow()), impl);
-}
-
-CORE_EXPORT void defaultViewAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::defaultViewAttributeGetter(info);
-}
-
-static void designModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->designMode(), info.GetIsolate());
-}
-
-CORE_EXPORT void designModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentDesignMode);
-
-  DocumentV8Internal::designModeAttributeGetter(info);
-}
-
-static void designModeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Skip on compact node DOMString getters.
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setDesignMode(cppValue);
-}
-
-CORE_EXPORT void designModeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentDesignMode);
-
-  CEReactionsScope ceReactionsScope;
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  DocumentV8Internal::designModeAttributeSetter(v8Value, info);
-}
-
-static void onreadystatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
-
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onreadystatechange()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onreadystatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onreadystatechangeAttributeGetter(info);
-}
-
-static void onreadystatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
-
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnreadystatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onreadystatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onreadystatechangeAttributeSetter(v8Value, info);
-}
-
-static void anchorsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->anchors()), impl);
-}
-
-CORE_EXPORT void anchorsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Anchors_AttributeGetter);
-
-  DocumentV8Internal::anchorsAttributeGetter(info);
-}
-
-static void appletsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->applets()), impl);
-}
-
-CORE_EXPORT void appletsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Applets_AttributeGetter);
-
-  DocumentV8Internal::appletsAttributeGetter(info);
-}
-
-static void selectedStylesheetSetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueStringOrNull(info, impl->selectedStylesheetSet(), info.GetIsolate());
-}
-
-CORE_EXPORT void selectedStylesheetSetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::selectedStylesheetSetAttributeGetter(info);
-}
-
-static void selectedStylesheetSetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-  V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setSelectedStylesheetSet(cppValue);
-}
-
-CORE_EXPORT void selectedStylesheetSetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::selectedStylesheetSetAttributeSetter(v8Value, info);
-}
-
-static void preferredStylesheetSetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueStringOrNull(info, impl->preferredStylesheetSet(), info.GetIsolate());
-}
-
-CORE_EXPORT void preferredStylesheetSetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::preferredStylesheetSetAttributeGetter(info);
-}
-
-static void scrollingElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, WTF::getPtr(impl->scrollingElement()), impl);
-}
-
-CORE_EXPORT void scrollingElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::scrollingElementAttributeGetter(info);
-}
-
-static void onpointerlockchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onpointerlockchange()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointerlockchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointerlockchangeAttributeGetter(info);
-}
-
-static void onpointerlockchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnpointerlockchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointerlockchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointerlockchangeAttributeSetter(v8Value, info);
-}
-
-static void onpointerlockerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onpointerlockerror()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointerlockerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointerlockerrorAttributeGetter(info);
-}
-
-static void onpointerlockerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnpointerlockerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointerlockerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointerlockerrorAttributeSetter(v8Value, info);
-}
-
-static void hiddenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->hidden());
-}
-
-CORE_EXPORT void hiddenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::hiddenAttributeGetter(info);
-}
-
-static void visibilityStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->visibilityState(), info.GetIsolate());
-}
-
-CORE_EXPORT void visibilityStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::visibilityStateAttributeGetter(info);
-}
-
-static void addressSpaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->addressSpaceForBindings(), info.GetIsolate());
-}
-
-CORE_EXPORT void addressSpaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::addressSpaceAttributeGetter(info);
-}
-
-static void webkitVisibilityStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->visibilityState(), info.GetIsolate());
-}
-
-CORE_EXPORT void webkitVisibilityStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedPageVisibility);
-
-  DocumentV8Internal::webkitVisibilityStateAttributeGetter(info);
-}
-
-static void webkitHiddenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->hidden());
-}
-
-CORE_EXPORT void webkitHiddenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedPageVisibility);
-
-  DocumentV8Internal::webkitHiddenAttributeGetter(info);
-}
-
-static void onbeforecopyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onbeforecopy()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onbeforecopyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onbeforecopyAttributeGetter(info);
-}
-
-static void onbeforecopyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnbeforecopy(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onbeforecopyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onbeforecopyAttributeSetter(v8Value, info);
-}
-
-static void onbeforecutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onbeforecut()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onbeforecutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onbeforecutAttributeGetter(info);
-}
-
-static void onbeforecutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnbeforecut(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onbeforecutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onbeforecutAttributeSetter(v8Value, info);
-}
-
-static void onbeforepasteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onbeforepaste()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onbeforepasteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onbeforepasteAttributeGetter(info);
-}
-
-static void onbeforepasteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnbeforepaste(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onbeforepasteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onbeforepasteAttributeSetter(v8Value, info);
-}
-
-static void oncopyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->oncopy()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oncopyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oncopyAttributeGetter(info);
-}
-
-static void oncopyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOncopy(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oncopyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oncopyAttributeSetter(v8Value, info);
-}
-
-static void oncutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->oncut()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oncutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oncutAttributeGetter(info);
-}
-
-static void oncutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOncut(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oncutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oncutAttributeSetter(v8Value, info);
-}
-
-static void onpasteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onpaste()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpasteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpasteAttributeGetter(info);
-}
-
-static void onpasteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnpaste(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpasteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpasteAttributeSetter(v8Value, info);
-}
-
-static void onsearchAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onsearch()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onsearchAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onsearchAttributeGetter(info);
-}
-
-static void onsearchAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnsearch(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onsearchAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onsearchAttributeSetter(v8Value, info);
-}
-
-static void onsecuritypolicyviolationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onsecuritypolicyviolation()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onsecuritypolicyviolationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onsecuritypolicyviolationAttributeGetter(info);
-}
-
-static void onsecuritypolicyviolationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnsecuritypolicyviolation(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onsecuritypolicyviolationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onsecuritypolicyviolationAttributeSetter(v8Value, info);
-}
-
-static void onselectionchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onselectionchange()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onselectionchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onselectionchangeAttributeGetter(info);
-}
-
-static void onselectionchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnselectionchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onselectionchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onselectionchangeAttributeSetter(v8Value, info);
-}
-
-static void onselectstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onselectstart()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onselectstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onselectstartAttributeGetter(info);
-}
-
-static void onselectstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnselectstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onselectstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onselectstartAttributeSetter(v8Value, info);
-}
-
-static void onwheelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onwheel()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onwheelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onwheelAttributeGetter(info);
-}
-
-static void onwheelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  impl->setOnwheel(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onwheelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onwheelAttributeSetter(v8Value, info);
-}
-
-static void timelineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, DocumentAnimation::timeline(*impl), impl);
-}
-
-CORE_EXPORT void timelineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::timelineAttributeGetter(info);
-}
-
-static void fontsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, DocumentFontFaceSet::fonts(*impl), impl);
-}
-
-CORE_EXPORT void fontsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentFonts);
-
-  DocumentV8Internal::fontsAttributeGetter(info);
-}
-
-static void fullscreenEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueBool(info, DocumentFullscreen::fullscreenEnabled(*impl));
-}
-
-CORE_EXPORT void fullscreenEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::fullscreenEnabledAttributeGetter(info);
-}
-
-static void onfullscreenchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(DocumentFullscreen::onfullscreenchange(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onfullscreenchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onfullscreenchangeAttributeGetter(info);
-}
-
-static void onfullscreenchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  DocumentFullscreen::setOnfullscreenchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onfullscreenchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onfullscreenchangeAttributeSetter(v8Value, info);
-}
-
-static void onfullscreenerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(DocumentFullscreen::onfullscreenerror(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onfullscreenerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onfullscreenerrorAttributeGetter(info);
-}
-
-static void onfullscreenerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  DocumentFullscreen::setOnfullscreenerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onfullscreenerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onfullscreenerrorAttributeSetter(v8Value, info);
-}
-
-static void webkitIsFullScreenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueBool(info, DocumentFullscreen::currentFullScreenElement(*impl));
-}
-
-CORE_EXPORT void webkitIsFullScreenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentIsFullscreen);
-
-  DocumentV8Internal::webkitIsFullScreenAttributeGetter(info);
-}
-
-static void webkitCurrentFullScreenElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, DocumentFullscreen::currentFullScreenElement(*impl), impl);
-}
-
-CORE_EXPORT void webkitCurrentFullScreenElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentCurrentFullScreenElement);
-
-  DocumentV8Internal::webkitCurrentFullScreenElementAttributeGetter(info);
-}
-
-static void webkitFullscreenEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueBool(info, DocumentFullscreen::fullscreenEnabled(*impl));
-}
-
-CORE_EXPORT void webkitFullscreenEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentFullscreenEnabled);
-
-  DocumentV8Internal::webkitFullscreenEnabledAttributeGetter(info);
-}
-
-static void webkitFullscreenElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, DocumentFullscreen::fullscreenElement(*impl), impl);
-}
-
-CORE_EXPORT void webkitFullscreenElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentFullscreenElement);
-
-  DocumentV8Internal::webkitFullscreenElementAttributeGetter(info);
-}
-
-static void onwebkitfullscreenchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(DocumentFullscreen::onwebkitfullscreenchange(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onwebkitfullscreenchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onwebkitfullscreenchangeAttributeGetter(info);
-}
-
-static void onwebkitfullscreenchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  DocumentFullscreen::setOnwebkitfullscreenchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onwebkitfullscreenchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onwebkitfullscreenchangeAttributeSetter(v8Value, info);
-}
-
-static void onwebkitfullscreenerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(DocumentFullscreen::onwebkitfullscreenerror(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onwebkitfullscreenerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onwebkitfullscreenerrorAttributeGetter(info);
-}
-
-static void onwebkitfullscreenerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  DocumentFullscreen::setOnwebkitfullscreenerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onwebkitfullscreenerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onwebkitfullscreenerrorAttributeSetter(v8Value, info);
-}
-
-static void activeElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::activeElement(*impl), impl);
-}
-
-CORE_EXPORT void activeElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::activeElementAttributeGetter(info);
-}
-
-static void styleSheetsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::styleSheets(*impl), impl);
-}
-
-CORE_EXPORT void styleSheetsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::styleSheetsAttributeGetter(info);
-}
-
-static void pointerLockElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::pointerLockElement(*impl), impl);
-}
-
-CORE_EXPORT void pointerLockElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::pointerLockElementAttributeGetter(info);
-}
-
-static void fullscreenElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::fullscreenElement(*impl), impl);
-}
-
-CORE_EXPORT void fullscreenElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::fullscreenElementAttributeGetter(info);
-}
-
-static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onabort(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onabortAttributeGetter(info);
-}
-
-static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnabort(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onabortAttributeSetter(v8Value, info);
-}
-
-static void onblurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onblur(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onblurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onblurAttributeGetter(info);
-}
-
-static void onblurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnblur(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onblurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onblurAttributeSetter(v8Value, info);
-}
-
-static void oncancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::oncancel(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oncancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oncancelAttributeGetter(info);
-}
-
-static void oncancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOncancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oncancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oncancelAttributeSetter(v8Value, info);
-}
-
-static void oncanplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::oncanplay(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oncanplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oncanplayAttributeGetter(info);
-}
-
-static void oncanplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOncanplay(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oncanplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oncanplayAttributeSetter(v8Value, info);
-}
-
-static void oncanplaythroughAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::oncanplaythrough(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oncanplaythroughAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oncanplaythroughAttributeGetter(info);
-}
-
-static void oncanplaythroughAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOncanplaythrough(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oncanplaythroughAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oncanplaythroughAttributeSetter(v8Value, info);
-}
-
-static void onchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onchange(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onchangeAttributeGetter(info);
-}
-
-static void onchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onchangeAttributeSetter(v8Value, info);
-}
-
-static void onclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onclick(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onclickAttributeGetter(info);
-}
-
-static void onclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onclickAttributeSetter(v8Value, info);
-}
-
-static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onclose(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oncloseAttributeGetter(info);
-}
-
-static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnclose(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oncloseAttributeSetter(v8Value, info);
-}
-
-static void oncontextmenuAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::oncontextmenu(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oncontextmenuAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oncontextmenuAttributeGetter(info);
-}
-
-static void oncontextmenuAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOncontextmenu(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oncontextmenuAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oncontextmenuAttributeSetter(v8Value, info);
-}
-
-static void oncuechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::oncuechange(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oncuechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oncuechangeAttributeGetter(info);
-}
-
-static void oncuechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOncuechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oncuechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oncuechangeAttributeSetter(v8Value, info);
-}
-
-static void ondblclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ondblclick(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ondblclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ondblclickAttributeGetter(info);
-}
-
-static void ondblclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOndblclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ondblclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ondblclickAttributeSetter(v8Value, info);
-}
-
-static void ondragAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ondrag(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ondragAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ondragAttributeGetter(info);
-}
-
-static void ondragAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOndrag(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ondragAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ondragAttributeSetter(v8Value, info);
-}
-
-static void ondragendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ondragend(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ondragendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ondragendAttributeGetter(info);
-}
-
-static void ondragendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOndragend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ondragendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ondragendAttributeSetter(v8Value, info);
-}
-
-static void ondragenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ondragenter(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ondragenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ondragenterAttributeGetter(info);
-}
-
-static void ondragenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOndragenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ondragenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ondragenterAttributeSetter(v8Value, info);
-}
-
-static void ondragleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ondragleave(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ondragleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ondragleaveAttributeGetter(info);
-}
-
-static void ondragleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOndragleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ondragleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ondragleaveAttributeSetter(v8Value, info);
-}
-
-static void ondragoverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ondragover(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ondragoverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ondragoverAttributeGetter(info);
-}
-
-static void ondragoverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOndragover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ondragoverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ondragoverAttributeSetter(v8Value, info);
-}
-
-static void ondragstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ondragstart(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ondragstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ondragstartAttributeGetter(info);
-}
-
-static void ondragstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOndragstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ondragstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ondragstartAttributeSetter(v8Value, info);
-}
-
-static void ondropAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ondrop(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ondropAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ondropAttributeGetter(info);
-}
-
-static void ondropAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOndrop(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ondropAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ondropAttributeSetter(v8Value, info);
-}
-
-static void ondurationchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ondurationchange(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ondurationchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ondurationchangeAttributeGetter(info);
-}
-
-static void ondurationchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOndurationchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ondurationchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ondurationchangeAttributeSetter(v8Value, info);
-}
-
-static void onemptiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onemptied(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onemptiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onemptiedAttributeGetter(info);
-}
-
-static void onemptiedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnemptied(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onemptiedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onemptiedAttributeSetter(v8Value, info);
-}
-
-static void onendedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onended(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onendedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onendedAttributeGetter(info);
-}
-
-static void onendedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnended(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onendedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onendedAttributeSetter(v8Value, info);
-}
-
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onerror(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onerrorAttributeGetter(info);
-}
-
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onerrorAttributeSetter(v8Value, info);
-}
-
-static void onfocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onfocus(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onfocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onfocusAttributeGetter(info);
-}
-
-static void onfocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnfocus(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onfocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onfocusAttributeSetter(v8Value, info);
-}
-
-static void oninputAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::oninput(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oninputAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oninputAttributeGetter(info);
-}
-
-static void oninputAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOninput(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oninputAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oninputAttributeSetter(v8Value, info);
-}
-
-static void oninvalidAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::oninvalid(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void oninvalidAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::oninvalidAttributeGetter(info);
-}
-
-static void oninvalidAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOninvalid(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void oninvalidAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::oninvalidAttributeSetter(v8Value, info);
-}
-
-static void onkeydownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onkeydown(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onkeydownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onkeydownAttributeGetter(info);
-}
-
-static void onkeydownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnkeydown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onkeydownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onkeydownAttributeSetter(v8Value, info);
-}
-
-static void onkeypressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onkeypress(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onkeypressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onkeypressAttributeGetter(info);
-}
-
-static void onkeypressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnkeypress(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onkeypressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onkeypressAttributeSetter(v8Value, info);
-}
-
-static void onkeyupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onkeyup(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onkeyupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onkeyupAttributeGetter(info);
-}
-
-static void onkeyupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnkeyup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onkeyupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onkeyupAttributeSetter(v8Value, info);
-}
-
-static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onload(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onloadAttributeGetter(info);
-}
-
-static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnload(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onloadAttributeSetter(v8Value, info);
-}
-
-static void onloadeddataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onloadeddata(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onloadeddataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onloadeddataAttributeGetter(info);
-}
-
-static void onloadeddataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnloadeddata(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onloadeddataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onloadeddataAttributeSetter(v8Value, info);
-}
-
-static void onloadedmetadataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onloadedmetadata(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onloadedmetadataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onloadedmetadataAttributeGetter(info);
-}
-
-static void onloadedmetadataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnloadedmetadata(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onloadedmetadataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onloadedmetadataAttributeSetter(v8Value, info);
-}
-
-static void onloadstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onloadstart(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onloadstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onloadstartAttributeGetter(info);
-}
-
-static void onloadstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnloadstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onloadstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onloadstartAttributeSetter(v8Value, info);
-}
-
-static void onmousedownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onmousedown(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onmousedownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onmousedownAttributeGetter(info);
-}
-
-static void onmousedownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnmousedown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onmousedownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onmousedownAttributeSetter(v8Value, info);
-}
-
-static void onmouseenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
-
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onmouseenter(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onmouseenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onmouseenterAttributeGetter(info);
-}
-
-static void onmouseenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
-
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnmouseenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onmouseenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onmouseenterAttributeSetter(v8Value, info);
-}
-
-static void onmouseleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
-
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onmouseleave(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onmouseleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onmouseleaveAttributeGetter(info);
-}
-
-static void onmouseleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  // [LenientThis]
-  // Make sure that info.Holder() really points to an instance if [LenientThis].
-  if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
-    return; // Return silently because of [LenientThis].
-
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnmouseleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onmouseleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onmouseleaveAttributeSetter(v8Value, info);
-}
-
-static void onmousemoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onmousemove(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onmousemoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onmousemoveAttributeGetter(info);
-}
-
-static void onmousemoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnmousemove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onmousemoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onmousemoveAttributeSetter(v8Value, info);
-}
-
-static void onmouseoutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onmouseout(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onmouseoutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onmouseoutAttributeGetter(info);
-}
-
-static void onmouseoutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnmouseout(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onmouseoutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onmouseoutAttributeSetter(v8Value, info);
-}
-
-static void onmouseoverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onmouseover(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onmouseoverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onmouseoverAttributeGetter(info);
-}
-
-static void onmouseoverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnmouseover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onmouseoverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onmouseoverAttributeSetter(v8Value, info);
-}
-
-static void onmouseupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onmouseup(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onmouseupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onmouseupAttributeGetter(info);
-}
-
-static void onmouseupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnmouseup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onmouseupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onmouseupAttributeSetter(v8Value, info);
-}
-
-static void onmousewheelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onmousewheel(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onmousewheelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onmousewheelAttributeGetter(info);
-}
-
-static void onmousewheelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnmousewheel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onmousewheelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onmousewheelAttributeSetter(v8Value, info);
-}
-
-static void onpauseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onpause(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpauseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpauseAttributeGetter(info);
-}
-
-static void onpauseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnpause(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpauseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpauseAttributeSetter(v8Value, info);
-}
-
-static void onplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onplay(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onplayAttributeGetter(info);
-}
-
-static void onplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnplay(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onplayAttributeSetter(v8Value, info);
-}
-
-static void onplayingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onplaying(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onplayingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onplayingAttributeGetter(info);
-}
-
-static void onplayingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnplaying(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onplayingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onplayingAttributeSetter(v8Value, info);
-}
-
-static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onprogress(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onprogressAttributeGetter(info);
-}
-
-static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnprogress(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onprogressAttributeSetter(v8Value, info);
-}
-
-static void onratechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onratechange(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onratechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onratechangeAttributeGetter(info);
-}
-
-static void onratechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnratechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onratechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onratechangeAttributeSetter(v8Value, info);
-}
-
-static void onresetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onreset(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onresetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onresetAttributeGetter(info);
-}
-
-static void onresetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnreset(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onresetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onresetAttributeSetter(v8Value, info);
-}
-
-static void onresizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onresize(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onresizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onresizeAttributeGetter(info);
-}
-
-static void onresizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnresize(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onresizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onresizeAttributeSetter(v8Value, info);
-}
-
-static void onscrollAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onscroll(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onscrollAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onscrollAttributeGetter(info);
-}
-
-static void onscrollAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnscroll(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onscrollAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onscrollAttributeSetter(v8Value, info);
-}
-
-static void onseekedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onseeked(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onseekedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onseekedAttributeGetter(info);
-}
-
-static void onseekedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnseeked(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onseekedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onseekedAttributeSetter(v8Value, info);
-}
-
-static void onseekingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onseeking(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onseekingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onseekingAttributeGetter(info);
-}
-
-static void onseekingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnseeking(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onseekingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onseekingAttributeSetter(v8Value, info);
-}
-
-static void onselectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onselect(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onselectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onselectAttributeGetter(info);
-}
-
-static void onselectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnselect(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onselectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onselectAttributeSetter(v8Value, info);
-}
-
-static void onshowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onshow(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onshowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onshowAttributeGetter(info);
-}
-
-static void onshowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnshow(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onshowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onshowAttributeSetter(v8Value, info);
-}
-
-static void onstalledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onstalled(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onstalledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onstalledAttributeGetter(info);
-}
-
-static void onstalledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnstalled(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onstalledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onstalledAttributeSetter(v8Value, info);
-}
-
-static void onsubmitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onsubmit(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onsubmitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onsubmitAttributeGetter(info);
-}
-
-static void onsubmitAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnsubmit(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onsubmitAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onsubmitAttributeSetter(v8Value, info);
-}
-
-static void onsuspendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onsuspend(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onsuspendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onsuspendAttributeGetter(info);
-}
-
-static void onsuspendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnsuspend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onsuspendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onsuspendAttributeSetter(v8Value, info);
-}
-
-static void ontimeupdateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ontimeupdate(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ontimeupdateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ontimeupdateAttributeGetter(info);
-}
-
-static void ontimeupdateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOntimeupdate(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ontimeupdateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ontimeupdateAttributeSetter(v8Value, info);
-}
-
-static void ontoggleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ontoggle(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ontoggleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ontoggleAttributeGetter(info);
-}
-
-static void ontoggleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOntoggle(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ontoggleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ontoggleAttributeSetter(v8Value, info);
-}
-
-static void onvolumechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onvolumechange(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onvolumechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onvolumechangeAttributeGetter(info);
-}
-
-static void onvolumechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnvolumechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onvolumechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onvolumechangeAttributeSetter(v8Value, info);
-}
-
-static void onwaitingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onwaiting(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onwaitingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onwaitingAttributeGetter(info);
-}
-
-static void onwaitingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnwaiting(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onwaitingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onwaitingAttributeSetter(v8Value, info);
-}
-
-static void onauxclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onauxclick(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onauxclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onauxclickAttributeGetter(info);
-}
-
-static void onauxclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnauxclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onauxclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onauxclickAttributeSetter(v8Value, info);
-}
-
-static void ongotpointercaptureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ongotpointercapture(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ongotpointercaptureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ongotpointercaptureAttributeGetter(info);
-}
-
-static void ongotpointercaptureAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOngotpointercapture(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ongotpointercaptureAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ongotpointercaptureAttributeSetter(v8Value, info);
-}
-
-static void onlostpointercaptureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onlostpointercapture(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onlostpointercaptureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onlostpointercaptureAttributeGetter(info);
-}
-
-static void onlostpointercaptureAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnlostpointercapture(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onlostpointercaptureAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onlostpointercaptureAttributeSetter(v8Value, info);
-}
-
-static void onpointerdownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onpointerdown(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointerdownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointerdownAttributeGetter(info);
-}
-
-static void onpointerdownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnpointerdown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointerdownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointerdownAttributeSetter(v8Value, info);
-}
-
-static void onpointermoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onpointermove(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointermoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointermoveAttributeGetter(info);
-}
-
-static void onpointermoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnpointermove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointermoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointermoveAttributeSetter(v8Value, info);
-}
-
-static void onpointerupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onpointerup(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointerupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointerupAttributeGetter(info);
-}
-
-static void onpointerupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnpointerup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointerupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointerupAttributeSetter(v8Value, info);
-}
-
-static void onpointercancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onpointercancel(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointercancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointercancelAttributeGetter(info);
-}
-
-static void onpointercancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnpointercancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointercancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointercancelAttributeSetter(v8Value, info);
-}
-
-static void onpointeroverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onpointerover(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointeroverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointeroverAttributeGetter(info);
-}
-
-static void onpointeroverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnpointerover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointeroverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointeroverAttributeSetter(v8Value, info);
-}
-
-static void onpointeroutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onpointerout(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointeroutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointeroutAttributeGetter(info);
-}
-
-static void onpointeroutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnpointerout(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointeroutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointeroutAttributeSetter(v8Value, info);
-}
-
-static void onpointerenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onpointerenter(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointerenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointerenterAttributeGetter(info);
-}
-
-static void onpointerenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnpointerenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointerenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointerenterAttributeSetter(v8Value, info);
-}
-
-static void onpointerleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::onpointerleave(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void onpointerleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::onpointerleaveAttributeGetter(info);
-}
-
-static void onpointerleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOnpointerleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void onpointerleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::onpointerleaveAttributeSetter(v8Value, info);
-}
-
-static void ontouchcancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ontouchcancel(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ontouchcancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ontouchcancelAttributeGetter(info);
-}
-
-static void ontouchcancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOntouchcancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ontouchcancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ontouchcancelAttributeSetter(v8Value, info);
-}
-
-static void ontouchendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ontouchend(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ontouchendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ontouchendAttributeGetter(info);
-}
-
-static void ontouchendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOntouchend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ontouchendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ontouchendAttributeSetter(v8Value, info);
-}
-
-static void ontouchmoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ontouchmove(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ontouchmoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ontouchmoveAttributeGetter(info);
-}
-
-static void ontouchmoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOntouchmove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ontouchmoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ontouchmoveAttributeSetter(v8Value, info);
-}
-
-static void ontouchstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  EventListener* cppValue(GlobalEventHandlers::ontouchstart(*impl));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-CORE_EXPORT void ontouchstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::ontouchstartAttributeGetter(info);
-}
-
-static void ontouchstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  Document* impl = V8Document::toImpl(holder);
-
-  // Prepare the value to be set.
-
-  GlobalEventHandlers::setOntouchstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-CORE_EXPORT void ontouchstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DocumentV8Internal::ontouchstartAttributeSetter(v8Value, info);
-}
-
-static void childrenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, ParentNode::children(*impl), impl);
-}
-
-CORE_EXPORT void childrenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::childrenAttributeGetter(info);
-}
-
-static void childrenAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueForMainWorld(info, ParentNode::children(*impl));
-}
-
-CORE_EXPORT void childrenAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::childrenAttributeGetterForMainWorld(info);
-}
-
-static void firstElementChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, ParentNode::firstElementChild(*impl), impl);
-}
-
-CORE_EXPORT void firstElementChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::firstElementChildAttributeGetter(info);
-}
-
-static void firstElementChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueForMainWorld(info, ParentNode::firstElementChild(*impl));
-}
-
-CORE_EXPORT void firstElementChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::firstElementChildAttributeGetterForMainWorld(info);
-}
-
-static void lastElementChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, ParentNode::lastElementChild(*impl), impl);
-}
-
-CORE_EXPORT void lastElementChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::lastElementChildAttributeGetter(info);
-}
-
-static void lastElementChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueForMainWorld(info, ParentNode::lastElementChild(*impl));
-}
-
-CORE_EXPORT void lastElementChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::lastElementChildAttributeGetterForMainWorld(info);
-}
-
-static void childElementCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, ParentNode::childElementCount(*impl));
-}
-
-CORE_EXPORT void childElementCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::childElementCountAttributeGetter(info);
-}
-
-static void rootElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  Document* impl = V8Document::toImpl(holder);
-
-  v8SetReturnValueFast(info, SVGDocumentExtensions::rootElement(*impl), impl);
-}
-
-CORE_EXPORT void rootElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGDocumentRootElement);
-
-  DocumentV8Internal::rootElementAttributeGetter(info);
-}
-
-static void getElementsByTagNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByTagName", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> localName;
-  localName = info[0];
-  if (!localName.prepare())
-    return;
-
-  v8SetReturnValueFast(info, impl->getElementsByTagName(localName), impl);
-}
-
-CORE_EXPORT  void getElementsByTagNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::getElementsByTagNameMethod(info);
-}
-
-static void getElementsByTagNameNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByTagNameNS", "Document", ExceptionMessages::notEnoughArguments(2, info.Length())));
-    return;
-  }
-
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> localName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
-
-  localName = info[1];
-  if (!localName.prepare())
-    return;
-
-  v8SetReturnValueFast(info, impl->getElementsByTagNameNS(namespaceURI, localName), impl);
-}
-
-CORE_EXPORT  void getElementsByTagNameNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::getElementsByTagNameNSMethod(info);
-}
-
-static void getElementsByClassNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByClassName", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> classNames;
-  classNames = info[0];
-  if (!classNames.prepare())
-    return;
-
-  v8SetReturnValueFast(info, impl->getElementsByClassName(classNames), impl);
-}
-
-CORE_EXPORT  void getElementsByClassNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::getElementsByClassNameMethod(info);
-}
-
-static void createElement1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  V8StringResource<> localName;
-  localName = info[0];
-  if (!localName.prepare())
-    return;
-
-  Element* result = impl->createElement(localName, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-static void createElement1MethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  V8StringResource<> localName;
-  localName = info[0];
-  if (!localName.prepare())
-    return;
-
-  Element* result = impl->createElement(localName, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueForMainWorld(info, result);
-}
-
-static void createElementNS1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElementNS");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> qualifiedName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
-
-  qualifiedName = info[1];
-  if (!qualifiedName.prepare())
-    return;
-
-  Element* result = impl->createElementNS(namespaceURI, qualifiedName, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-static void createDocumentFragmentMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  DocumentFragment* result = impl->createDocumentFragment();
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createDocumentFragmentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createDocumentFragmentMethod(info);
-}
-
-static void createTextNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createTextNode", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> data;
-  data = info[0];
-  if (!data.prepare())
-    return;
-
-  Text* result = impl->createTextNode(data);
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createTextNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createTextNodeMethod(info);
-}
-
-static void createCDATASectionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createCDATASection");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> data;
-  data = info[0];
-  if (!data.prepare())
-    return;
-
-  CDATASection* result = impl->createCDATASection(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createCDATASectionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createCDATASectionMethod(info);
-}
-
-static void createCommentMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createComment", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> data;
-  data = info[0];
-  if (!data.prepare())
-    return;
-
-  Comment* result = impl->createComment(data);
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createCommentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createCommentMethod(info);
-}
-
-static void createProcessingInstructionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createProcessingInstruction");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> target;
-  V8StringResource<> data;
-  target = info[0];
-  if (!target.prepare())
-    return;
-
-  data = info[1];
-  if (!data.prepare())
-    return;
-
-  ProcessingInstruction* result = impl->createProcessingInstruction(target, data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createProcessingInstructionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createProcessingInstructionMethod(info);
-}
-
-static void importNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "importNode");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* node;
-  bool deep;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  if (!info[1]->IsUndefined()) {
-    deep = toBoolean(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    deep = false;
-  }
-
-  Node* result = impl->importNode(node, deep, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void importNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  DocumentV8Internal::importNodeMethod(info);
-}
-
-static void adoptNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "adoptNode");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* node;
-  node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!node) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  Node* result = impl->adoptNode(node, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void adoptNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  DocumentV8Internal::adoptNodeMethod(info);
-}
-
-static void createAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createAttribute");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> localName;
-  localName = info[0];
-  if (!localName.prepare())
-    return;
-
-  Attr* result = impl->createAttribute(localName, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentCreateAttribute);
-  DocumentV8Internal::createAttributeMethod(info);
-}
-
-static void createAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createAttributeNS");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> qualifiedName;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
-
-  qualifiedName = info[1];
-  if (!qualifiedName.prepare())
-    return;
-
-  Attr* result = impl->createAttributeNS(namespaceURI, qualifiedName, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentCreateAttributeNS);
-  DocumentV8Internal::createAttributeNSMethod(info);
-}
-
-static void createEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createEvent");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> eventType;
-  eventType = info[0];
-  if (!eventType.prepare())
-    return;
-
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  Event* result = impl->createEvent(executionContext, eventType, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createEventMethod(info);
-}
-
-static void createRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  Range* result = impl->createRange();
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createRangeMethod(info);
-}
-
-static void createNodeIteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createNodeIterator");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* root;
-  unsigned whatToShow;
-  NodeFilter* filter;
-  root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!root) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  if (!info[1]->IsUndefined()) {
-    whatToShow = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    whatToShow = 4294967295u;
-  }
-  if (!info[2]->IsUndefined()) {
-    filter = toNodeFilter(info[2], info.Holder(), ScriptState::current(info.GetIsolate()));
-  } else {
-    filter = nullptr;
-  }
-
-  NodeIterator* result = impl->createNodeIterator(root, whatToShow, filter);
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createNodeIteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createNodeIteratorMethod(info);
-}
-
-static void createTreeWalkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createTreeWalker");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  Node* root;
-  unsigned whatToShow;
-  NodeFilter* filter;
-  root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!root) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
-
-    return;
-  }
-
-  if (!info[1]->IsUndefined()) {
-    whatToShow = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    whatToShow = 4294967295u;
-  }
-  if (!info[2]->IsUndefined()) {
-    filter = toNodeFilter(info[2], info.Holder(), ScriptState::current(info.GetIsolate()));
-  } else {
-    filter = nullptr;
-  }
-
-  TreeWalker* result = impl->createTreeWalker(root, whatToShow, filter);
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void createTreeWalkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createTreeWalkerMethod(info);
-}
-
-static void getElementsByNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByName", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> elementName;
-  elementName = info[0];
-  if (!elementName.prepare())
-    return;
-
-  v8SetReturnValueFast(info, impl->getElementsByName(elementName), impl);
-}
-
-CORE_EXPORT  void getElementsByNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::getElementsByNameMethod(info);
-}
-
-static void getElementsByNameMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByName", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> elementName;
-  elementName = info[0];
-  if (!elementName.prepare())
-    return;
-
-  v8SetReturnValueForMainWorld(info, impl->getElementsByName(elementName));
-}
-
-CORE_EXPORT  void getElementsByNameMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::getElementsByNameMethodForMainWorld(info);
-}
-
-CORE_EXPORT  void openMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentOpen);
-  CEReactionsScope ceReactionsScope;
-  V8Document::openMethodCustom(info);
-}
-
-static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "close");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  impl->close(exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  DocumentV8Internal::closeMethod(info);
-}
-
-static void writeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "write");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  Vector<String> text;
-  text = toImplArguments<Vector<String>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->write(enteredDOMWindow(info.GetIsolate()), text, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void writeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  DocumentV8Internal::writeMethod(info);
-}
-
-static void writelnMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "writeln");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  Vector<String> text;
-  text = toImplArguments<Vector<String>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->writeln(enteredDOMWindow(info.GetIsolate()), text, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void writelnMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  DocumentV8Internal::writelnMethod(info);
-}
-
-static void hasFocusMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  v8SetReturnValueBool(info, impl->hasFocus());
-}
-
-CORE_EXPORT  void hasFocusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::hasFocusMethod(info);
-}
-
-static void execCommandMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "execCommand");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> commandId;
-  bool showUI;
-  V8StringResource<> value;
-  commandId = info[0];
-  if (!commandId.prepare())
-    return;
-
-  if (!info[1]->IsUndefined()) {
-    showUI = toBoolean(info.GetIsolate(), info[1], exceptionState);
-    if (exceptionState.hadException())
-      return;
-  } else {
-    showUI = false;
-  }
-  if (!info[2]->IsUndefined()) {
-    value = info[2];
-    if (!value.prepare())
-      return;
-  } else {
-    value = String("");
-  }
-
-  bool result = impl->execCommand(commandId, showUI, value, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
-CORE_EXPORT  void execCommandMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  DocumentV8Internal::execCommandMethod(info);
-}
-
-static void queryCommandEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandEnabled");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> commandId;
-  commandId = info[0];
-  if (!commandId.prepare())
-    return;
-
-  bool result = impl->queryCommandEnabled(commandId, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
-CORE_EXPORT  void queryCommandEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::queryCommandEnabledMethod(info);
-}
-
-static void queryCommandIndetermMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandIndeterm");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> commandId;
-  commandId = info[0];
-  if (!commandId.prepare())
-    return;
-
-  bool result = impl->queryCommandIndeterm(commandId, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
-CORE_EXPORT  void queryCommandIndetermMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::queryCommandIndetermMethod(info);
-}
-
-static void queryCommandStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandState");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> commandId;
-  commandId = info[0];
-  if (!commandId.prepare())
-    return;
-
-  bool result = impl->queryCommandState(commandId, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
-CORE_EXPORT  void queryCommandStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::queryCommandStateMethod(info);
-}
-
-static void queryCommandSupportedMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandSupported");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> commandId;
-  commandId = info[0];
-  if (!commandId.prepare())
-    return;
-
-  bool result = impl->queryCommandSupported(commandId, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
-
-CORE_EXPORT  void queryCommandSupportedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::queryCommandSupportedMethod(info);
-}
-
-static void queryCommandValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandValue");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> commandId;
-  commandId = info[0];
-  if (!commandId.prepare())
-    return;
-
-  String result = impl->queryCommandValue(commandId, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueString(info, result, info.GetIsolate());
-}
-
-CORE_EXPORT  void queryCommandValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::queryCommandValueMethod(info);
-}
-
-static void exitPointerLockMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  impl->exitPointerLock();
-}
-
-CORE_EXPORT  void exitPointerLockMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentExitPointerLock);
-  DocumentV8Internal::exitPointerLockMethod(info);
-}
-
-static void createTouchMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createTouch");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  DOMWindow* window;
-  EventTarget* target;
-  int identifier;
-  double pageX;
-  double pageY;
-  double screenX;
-  double screenY;
-  double radiusX;
-  double radiusY;
-  float rotationAngle;
-  float force;
-  window = toDOMWindow(info.GetIsolate(), info[0]);
-
-  target = toEventTarget(info.GetIsolate(), info[1]);
-
-  identifier = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pageX = toDouble(info.GetIsolate(), info[3], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  pageY = toDouble(info.GetIsolate(), info[4], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  screenX = toDouble(info.GetIsolate(), info[5], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  screenY = toDouble(info.GetIsolate(), info[6], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radiusX = toDouble(info.GetIsolate(), info[7], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  radiusY = toDouble(info.GetIsolate(), info[8], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  rotationAngle = toFloat(info.GetIsolate(), info[9], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  force = toFloat(info.GetIsolate(), info[10], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  V8Document::createTouchMethodPrologueCustom(info, impl);
-  v8SetReturnValueFast(info, impl->createTouch(window, target, identifier, pageX, pageY, screenX, screenY, radiusX, radiusY, rotationAngle, force), impl);
-}
-
-CORE_EXPORT  void createTouchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_CreateTouch_Method);
-  DocumentV8Internal::createTouchMethod(info);
-}
-
-static void createTouchListMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createTouchList");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  HeapVector<Member<Touch>> touches;
-  for (int i = 0; i < info.Length(); ++i) {
-    if (!V8Touch::hasInstance(info[i], info.GetIsolate())) {
-      exceptionState.throwTypeError("parameter 1 is not of type 'Touch'.");
-
-      return;
+        v8SetReturnValueFast(info, WTF::getPtr(impl->implementation()), impl);
     }
-    touches.push_back(V8Touch::toImpl(v8::Local<v8::Object>::Cast(info[i])));
-  }
 
-  v8SetReturnValueFast(info, impl->createTouchList(touches), impl);
-}
-
-CORE_EXPORT  void createTouchListMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createTouchListMethod(info);
-}
-
-static void registerElementMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "registerElement");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> type;
-  ElementRegistrationOptions options;
-  type = info[0];
-  if (!type.prepare())
-    return;
-
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
-
-    return;
-  }
-  V8ElementRegistrationOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ScriptValue result = impl->registerElement(scriptState, type, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
-
-CORE_EXPORT  void registerElementMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentRegisterElement);
-  DocumentV8Internal::registerElementMethod(info);
-}
-
-static void createElement2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  V8StringResource<> localName;
-  StringOrDictionary options;
-  localName = info[0];
-  if (!localName.prepare())
-    return;
-
-  V8StringOrDictionary::toImpl(info.GetIsolate(), info[1], options, UnionTypeConversionMode::Nullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  Element* result = impl->createElement(localName, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-static void createElementMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 1:
-      if (true) {
-        createElement1Method(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        createElement2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+    CORE_EXPORT void implementationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::implementationAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-CORE_EXPORT  void createElementMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createElementMethod(info);
-}
+    static void URLAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void createElement2MethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
+        Document* impl = V8Document::toImpl(holder);
 
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  V8StringResource<> localName;
-  StringOrDictionary options;
-  localName = info[0];
-  if (!localName.prepare())
-    return;
-
-  V8StringOrDictionary::toImpl(info.GetIsolate(), info[1], options, UnionTypeConversionMode::Nullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  Element* result = impl->createElement(localName, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueForMainWorld(info, result);
-}
-
-static void createElementMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(2, info.Length())) {
-    case 1:
-      if (true) {
-        createElement1MethodForMainWorld(info);
-        return;
-      }
-      break;
-    case 2:
-      if (true) {
-        createElement2MethodForMainWorld(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValueString(info, impl->url(), info.GetIsolate());
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-CORE_EXPORT  void createElementMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createElementMethodForMainWorld(info);
-}
-
-static void createElementNS2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElementNS");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
-  V8StringResource<> qualifiedName;
-  StringOrDictionary options;
-  namespaceURI = info[0];
-  if (!namespaceURI.prepare())
-    return;
-
-  qualifiedName = info[1];
-  if (!qualifiedName.prepare())
-    return;
-
-  V8StringOrDictionary::toImpl(info.GetIsolate(), info[2], options, UnionTypeConversionMode::Nullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  Element* result = impl->createElementNS(namespaceURI, qualifiedName, options, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-static void createElementNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(3, info.Length())) {
-    case 2:
-      if (true) {
-        createElementNS1Method(info);
-        return;
-      }
-      break;
-    case 3:
-      if (true) {
-        createElementNS2Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElementNS");
-
-  if (isArityError) {
-    if (info.Length() < 2) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-      return;
+    CORE_EXPORT void URLAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::URLAttributeGetter(info);
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-CORE_EXPORT  void createElementNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::createElementNSMethod(info);
-}
+    static void documentURIAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void caretRangeFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "caretRangeFromPoint");
+        Document* impl = V8Document::toImpl(holder);
 
-  Document* impl = V8Document::toImpl(info.Holder());
+        v8SetReturnValueStringOrNull(info, impl->url(), info.GetIsolate());
+    }
 
-  int x;
-  int y;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    CORE_EXPORT void documentURIAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::documentURIAttributeGetter(info);
+    }
 
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    static void originAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  v8SetReturnValueFast(info, impl->caretRangeFromPoint(x, y), impl);
-}
+        Document* impl = V8Document::toImpl(holder);
 
-CORE_EXPORT  void caretRangeFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentCaretRangeFromPoint);
-  DocumentV8Internal::caretRangeFromPointMethod(info);
-}
+        v8SetReturnValueString(info, impl->origin(), info.GetIsolate());
+    }
 
-static void exitFullscreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
+    CORE_EXPORT void originAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::originAttributeGetter(info);
+    }
 
-  DocumentFullscreen::exitFullscreen(*impl);
-}
+    static void suboriginAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-CORE_EXPORT  void exitFullscreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::exitFullscreenMethod(info);
-}
+        Document* impl = V8Document::toImpl(holder);
 
-static void webkitCancelFullScreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
+        v8SetReturnValueString(info, impl->suborigin(), info.GetIsolate());
+    }
 
-  DocumentFullscreen::exitFullscreen(*impl);
-}
+    CORE_EXPORT void suboriginAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::suboriginAttributeGetter(info);
+    }
 
-CORE_EXPORT  void webkitCancelFullScreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentCancelFullScreen);
-  DocumentV8Internal::webkitCancelFullScreenMethod(info);
-}
+    static void compatModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void webkitExitFullscreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
+        Document* impl = V8Document::toImpl(holder);
 
-  DocumentFullscreen::exitFullscreen(*impl);
-}
+        v8SetReturnValueString(info, impl->compatMode(), info.GetIsolate());
+    }
 
-CORE_EXPORT  void webkitExitFullscreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentExitFullscreen);
-  DocumentV8Internal::webkitExitFullscreenMethod(info);
-}
+    CORE_EXPORT void compatModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::compatModeAttributeGetter(info);
+    }
 
-static void getSelectionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
+    static void characterSetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::getSelection(*impl), impl);
-}
+        Document* impl = V8Document::toImpl(holder);
 
-CORE_EXPORT  void getSelectionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::getSelectionMethod(info);
-}
+        v8SetReturnValueString(info, impl->characterSet(), info.GetIsolate());
+    }
 
-static void elementFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "elementFromPoint");
+    CORE_EXPORT void characterSetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::characterSetAttributeGetter(info);
+    }
 
-  Document* impl = V8Document::toImpl(info.Holder());
+    static void charsetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        Document* impl = V8Document::toImpl(holder);
 
-  int x;
-  int y;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        v8SetReturnValueString(info, impl->characterSet(), info.GetIsolate());
+    }
 
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+    CORE_EXPORT void charsetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::charsetAttributeGetter(info);
+    }
 
-  v8SetReturnValueFast(info, DocumentOrShadowRoot::elementFromPoint(*impl, x, y), impl);
-}
+    static void inputEncodingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-CORE_EXPORT  void elementFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::elementFromPointMethod(info);
-}
+        Document* impl = V8Document::toImpl(holder);
 
-static void elementsFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "elementsFromPoint");
+        v8SetReturnValueString(info, impl->characterSet(), info.GetIsolate());
+    }
 
-  Document* impl = V8Document::toImpl(info.Holder());
+    CORE_EXPORT void inputEncodingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::inputEncodingAttributeGetter(info);
+    }
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+    static void contentTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  int x;
-  int y;
-  x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        Document* impl = V8Document::toImpl(holder);
 
-  y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        v8SetReturnValueString(info, impl->contentType(), info.GetIsolate());
+    }
 
-  v8SetReturnValue(info, ToV8(DocumentOrShadowRoot::elementsFromPoint(*impl, x, y), info.Holder(), info.GetIsolate()));
-}
+    CORE_EXPORT void contentTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::contentTypeAttributeGetter(info);
+    }
 
-CORE_EXPORT  void elementsFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::elementsFromPointMethod(info);
-}
+    static void doctypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void getElementByIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
+        Document* impl = V8Document::toImpl(holder);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementById", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
-
-  V8StringResource<> elementId;
-  elementId = info[0];
-  if (!elementId.prepare())
-    return;
+        v8SetReturnValueFast(info, WTF::getPtr(impl->doctype()), impl);
+    }
 
-  v8SetReturnValueFast(info, NonElementParentNode::getElementById(*impl, elementId), impl);
-}
+    CORE_EXPORT void doctypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::doctypeAttributeGetter(info);
+    }
 
-CORE_EXPORT  void getElementByIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::getElementByIdMethod(info);
-}
+    static void documentElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-static void getElementByIdMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  Document* impl = V8Document::toImpl(info.Holder());
+        Document* impl = V8Document::toImpl(holder);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementById", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        v8SetReturnValueFast(info, WTF::getPtr(impl->documentElement()), impl);
+    }
 
-  V8StringResource<> elementId;
-  elementId = info[0];
-  if (!elementId.prepare())
-    return;
-
-  v8SetReturnValueForMainWorld(info, NonElementParentNode::getElementById(*impl, elementId));
-}
-
-CORE_EXPORT  void getElementByIdMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::getElementByIdMethodForMainWorld(info);
-}
-
-static void prependMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "prepend");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ParentNode::prepend(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void prependMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  DocumentV8Internal::prependMethod(info);
-}
-
-static void appendMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "append");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
-
-  HeapVector<NodeOrString> nodes;
-  nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  ParentNode::append(*impl, nodes, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-CORE_EXPORT  void appendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CEReactionsScope ceReactionsScope;
-  DocumentV8Internal::appendMethod(info);
-}
-
-static void querySelectorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "querySelector");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> selectors;
-  selectors = info[0];
-  if (!selectors.prepare())
-    return;
-
-  Element* result = ParentNode::querySelector(*impl, selectors, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void querySelectorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::querySelectorMethod(info);
-}
-
-static void querySelectorAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "querySelectorAll");
-
-  Document* impl = V8Document::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> selectors;
-  selectors = info[0];
-  if (!selectors.prepare())
-    return;
-
-  NodeList* result = ParentNode::querySelectorAll(*impl, selectors, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  // [NewObject] must always create a new wrapper.  Check that a wrapper
-  // does not exist yet.
-  DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
-  v8SetReturnValueFast(info, result, impl);
-}
-
-CORE_EXPORT  void querySelectorAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DocumentV8Internal::querySelectorAllMethod(info);
-}
-
-// static void createExpressionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-//   ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createExpression");
-// 
-//   Document* impl = V8Document::toImpl(info.Holder());
-// 
-//   if (UNLIKELY(info.Length() < 1)) {
-//     exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-//     return;
-//   }
-// 
-//   V8StringResource<> expression;
-//   XPathNSResolver* resolver;
-//   expression = info[0];
-//   if (!expression.prepare())
-//     return;
-// 
-//   if (!info[1]->IsUndefined()) {
-//     resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[1]);
-//     if (!resolver && !isUndefinedOrNull(info[1])) {
-//       exceptionState.throwTypeError("parameter 2 is not of type 'XPathNSResolver'.");
-// 
-//       return;
-//     }
-//   } else {
-//     resolver = nullptr;
-//   }
-// 
-//   XPathExpression* result = DocumentXPathEvaluator::createExpression(*impl, expression, resolver, exceptionState);
-//   if (exceptionState.hadException()) {
-//     return;
-//   }
-//   v8SetReturnValueFast(info, result, impl);
-// }
-//
-// CORE_EXPORT  void createExpressionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-//   UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathCreateExpression);
-//   DocumentV8Internal::createExpressionMethod(info);
-// }
-//
-// static void createNSResolverMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-//   Document* impl = V8Document::toImpl(info.Holder());
-// 
-//   if (UNLIKELY(info.Length() < 1)) {
-//     V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-//     return;
-//   }
-// 
-//   Node* nodeResolver;
-//   nodeResolver = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-//   if (!nodeResolver) {
-//     V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "Document", "parameter 1 is not of type 'Node'."));
-// 
-//     return;
-//   }
-// 
-//   v8SetReturnValueFast(info, DocumentXPathEvaluator::createNSResolver(*impl, nodeResolver), impl);
-// }
-// 
-// CORE_EXPORT  void createNSResolverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-//   UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathCreateNSResolver);
-//   DocumentV8Internal::createNSResolverMethod(info);
-// }
-// 
-// static void evaluateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-//   ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "evaluate");
-// 
-//   Document* impl = V8Document::toImpl(info.Holder());
-// 
-//   if (UNLIKELY(info.Length() < 2)) {
-//     exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-//     return;
-//   }
-// 
-//   V8StringResource<> expression;
-//   Node* contextNode;
-//   XPathNSResolver* resolver;
-//   unsigned type;
-//   ScriptValue inResult;
-//   expression = info[0];
-//   if (!expression.prepare())
-//     return;
-// 
-//   contextNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-//   if (!contextNode) {
-//     exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
-// 
-//     return;
-//   }
-// 
-//   if (!info[2]->IsUndefined()) {
-//     resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[2]);
-//     if (!resolver && !isUndefinedOrNull(info[2])) {
-//       exceptionState.throwTypeError("parameter 3 is not of type 'XPathNSResolver'.");
-// 
-//       return;
-//     }
-//   } else {
-//     resolver = nullptr;
-//   }
-//   if (!info[3]->IsUndefined()) {
-//     type = toUInt16(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-//     if (exceptionState.hadException())
-//       return;
-//   } else {
-//     type = 0u;
-//   }
-//   if (!info[4]->IsUndefined()) {
-//     inResult = ScriptValue(ScriptState::current(info.GetIsolate()), info[4]);
-//   } else {
-//     inResult = ScriptValue();
-//   }
-// 
-//   XPathResult* result = DocumentXPathEvaluator::evaluate(*impl, expression, contextNode, resolver, type, inResult, exceptionState);
-//   if (exceptionState.hadException()) {
-//     return;
-//   }
-//   v8SetReturnValueFast(info, result, impl);
-// }
-// 
-// CORE_EXPORT  void evaluateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-//   UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathEvaluate);
-//   DocumentV8Internal::evaluateMethod(info);
-// }
+    CORE_EXPORT void documentElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::documentElementAttributeGetter(info);
+    }
+
+    static void rootScrollerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->rootScroller()), impl);
+    }
+
+    CORE_EXPORT void rootScrollerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_RootScroller_AttributeGetter);
+
+        DocumentV8Internal::rootScrollerAttributeGetter(info);
+    }
+
+    static void rootScrollerAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "rootScroller");
+
+        // Prepare the value to be set.
+        Element* cppValue = V8Element::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue && !isUndefinedOrNull(v8Value)) {
+            exceptionState.throwTypeError("The provided value is not of type 'Element'.");
+            return;
+        }
+
+        impl->setRootScroller(cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void rootScrollerAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_RootScroller_AttributeSetter);
+
+        DocumentV8Internal::rootScrollerAttributeSetter(v8Value, info);
+    }
+
+    static void xmlEncodingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueStringOrNull(info, impl->xmlEncoding(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void xmlEncodingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLEncoding);
+
+        DocumentV8Internal::xmlEncodingAttributeGetter(info);
+    }
+
+    static void xmlVersionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueStringOrNull(info, impl->xmlVersion(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void xmlVersionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLVersion);
+
+        DocumentV8Internal::xmlVersionAttributeGetter(info);
+    }
+
+    static void xmlVersionAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "xmlVersion");
+
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setXMLVersion(cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void xmlVersionAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLVersion);
+
+        DocumentV8Internal::xmlVersionAttributeSetter(v8Value, info);
+    }
+
+    static void xmlStandaloneAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->xmlStandalone());
+    }
+
+    CORE_EXPORT void xmlStandaloneAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLStandalone);
+
+        DocumentV8Internal::xmlStandaloneAttributeGetter(info);
+    }
+
+    static void xmlStandaloneAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "xmlStandalone");
+
+        // Prepare the value to be set.
+        bool cppValue = toBoolean(info.GetIsolate(), v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setXMLStandalone(cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void xmlStandaloneAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXMLStandalone);
+
+        DocumentV8Internal::xmlStandaloneAttributeSetter(v8Value, info);
+    }
+
+    static void locationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->location()), impl);
+    }
+
+    CORE_EXPORT void locationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::locationAttributeGetter(info);
+    }
+
+    static void locationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* proxyImpl = V8Document::toImpl(holder);
+        Location* impl = WTF::getPtr(proxyImpl->location());
+        if (!impl)
+            return;
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "location");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setHref(currentDOMWindow(info.GetIsolate()), enteredDOMWindow(info.GetIsolate()), cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void locationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::locationAttributeSetter(v8Value, info);
+    }
+
+    static void domainAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->domain(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void domainAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::domainAttributeGetter(info);
+    }
+
+    static void domainAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "domain");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setDomain(cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void domainAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::domainAttributeSetter(v8Value, info);
+    }
+
+    static void referrerAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->referrer(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void referrerAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::referrerAttributeGetter(info);
+    }
+
+    static void cookieAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::GetterContext, "Document", "cookie");
+
+        String cppValue(impl->cookie(exceptionState));
+
+        if (UNLIKELY(exceptionState.hadException()))
+            return;
+
+        v8SetReturnValueString(info, cppValue, info.GetIsolate());
+    }
+
+    CORE_EXPORT void cookieAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::cookieAttributeGetter(info);
+    }
+
+    static void cookieAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "cookie");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setCookie(cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void cookieAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::cookieAttributeSetter(v8Value, info);
+    }
+
+    static void lastModifiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->lastModified(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void lastModifiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::lastModifiedAttributeGetter(info);
+    }
+
+    static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->readyState(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::readyStateAttributeGetter(info);
+    }
+
+    static void titleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->title(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void titleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::titleAttributeGetter(info);
+    }
+
+    static void titleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setTitle(cppValue);
+    }
+
+    CORE_EXPORT void titleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        DocumentV8Internal::titleAttributeSetter(v8Value, info);
+    }
+
+    static void dirAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->dir(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void dirAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::dirAttributeGetter(info);
+    }
+
+    static void dirAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setDir(cppValue);
+    }
+
+    CORE_EXPORT void dirAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        DocumentV8Internal::dirAttributeSetter(v8Value, info);
+    }
+
+    static void bodyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->body()), impl);
+    }
+
+    CORE_EXPORT void bodyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::bodyAttributeGetter(info);
+    }
+
+    static void bodyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "body");
+
+        // Prepare the value to be set.
+        HTMLElement* cppValue = V8HTMLElement::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue && !isUndefinedOrNull(v8Value)) {
+            exceptionState.throwTypeError("The provided value is not of type 'HTMLElement'.");
+            return;
+        }
+
+        impl->setBody(cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void bodyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        DocumentV8Internal::bodyAttributeSetter(v8Value, info);
+    }
+
+    static void bodyAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueForMainWorld(info, WTF::getPtr(impl->body()));
+    }
+
+    CORE_EXPORT void bodyAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::bodyAttributeGetterForMainWorld(info);
+    }
+
+    static void bodyAttributeSetterForMainWorld(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Document", "body");
+
+        // Prepare the value to be set.
+        HTMLElement* cppValue = V8HTMLElement::toImplWithTypeCheck(info.GetIsolate(), v8Value);
+
+        // Type check per: http://heycam.github.io/webidl/#es-interface
+        if (!cppValue && !isUndefinedOrNull(v8Value)) {
+            exceptionState.throwTypeError("The provided value is not of type 'HTMLElement'.");
+            return;
+        }
+
+        impl->setBody(cppValue, exceptionState);
+    }
+
+    CORE_EXPORT void bodyAttributeSetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        DocumentV8Internal::bodyAttributeSetterForMainWorld(v8Value, info);
+    }
+
+    static void headAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->head()), impl);
+    }
+
+    CORE_EXPORT void headAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::headAttributeGetter(info);
+    }
+
+    static void imagesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->images()), impl);
+    }
+
+    CORE_EXPORT void imagesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Images_AttributeGetter);
+
+        DocumentV8Internal::imagesAttributeGetter(info);
+    }
+
+    static void embedsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->embeds()), impl);
+    }
+
+    CORE_EXPORT void embedsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Embeds_AttributeGetter);
+
+        DocumentV8Internal::embedsAttributeGetter(info);
+    }
+
+    static void pluginsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->embeds()), impl);
+    }
+
+    CORE_EXPORT void pluginsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Plugins_AttributeGetter);
+
+        DocumentV8Internal::pluginsAttributeGetter(info);
+    }
+
+    static void linksAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->links()), impl);
+    }
+
+    CORE_EXPORT void linksAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Links_AttributeGetter);
+
+        DocumentV8Internal::linksAttributeGetter(info);
+    }
+
+    static void formsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->forms()), impl);
+    }
+
+    CORE_EXPORT void formsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Forms_AttributeGetter);
+
+        DocumentV8Internal::formsAttributeGetter(info);
+    }
+
+    static void scriptsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->scripts()), impl);
+    }
+
+    CORE_EXPORT void scriptsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Scripts_AttributeGetter);
+
+        DocumentV8Internal::scriptsAttributeGetter(info);
+    }
+
+    static void currentScriptAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        HTMLScriptElementOrSVGScriptElement result;
+        impl->currentScriptForBinding(result);
+
+        v8SetReturnValue(info, result);
+    }
+
+    CORE_EXPORT void currentScriptAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::currentScriptAttributeGetter(info);
+    }
+
+    static void defaultViewAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->domWindow()), impl);
+    }
+
+    CORE_EXPORT void defaultViewAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::defaultViewAttributeGetter(info);
+    }
+
+    static void designModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->designMode(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void designModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentDesignMode);
+
+        DocumentV8Internal::designModeAttributeGetter(info);
+    }
+
+    static void designModeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Skip on compact node DOMString getters.
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setDesignMode(cppValue);
+    }
+
+    CORE_EXPORT void designModeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentDesignMode);
+
+        CEReactionsScope ceReactionsScope;
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        DocumentV8Internal::designModeAttributeSetter(v8Value, info);
+    }
+
+    static void onreadystatechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
+
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onreadystatechange()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onreadystatechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onreadystatechangeAttributeGetter(info);
+    }
+
+    static void onreadystatechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
+
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnreadystatechange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onreadystatechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onreadystatechangeAttributeSetter(v8Value, info);
+    }
+
+    static void anchorsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->anchors()), impl);
+    }
+
+    CORE_EXPORT void anchorsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Anchors_AttributeGetter);
+
+        DocumentV8Internal::anchorsAttributeGetter(info);
+    }
+
+    static void appletsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->applets()), impl);
+    }
+
+    CORE_EXPORT void appletsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_Applets_AttributeGetter);
+
+        DocumentV8Internal::appletsAttributeGetter(info);
+    }
+
+    static void selectedStylesheetSetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueStringOrNull(info, impl->selectedStylesheetSet(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void selectedStylesheetSetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::selectedStylesheetSetAttributeGetter(info);
+    }
+
+    static void selectedStylesheetSetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+        V8StringResource<TreatNullAndUndefinedAsNullString> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setSelectedStylesheetSet(cppValue);
+    }
+
+    CORE_EXPORT void selectedStylesheetSetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::selectedStylesheetSetAttributeSetter(v8Value, info);
+    }
+
+    static void preferredStylesheetSetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueStringOrNull(info, impl->preferredStylesheetSet(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void preferredStylesheetSetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::preferredStylesheetSetAttributeGetter(info);
+    }
+
+    static void scrollingElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, WTF::getPtr(impl->scrollingElement()), impl);
+    }
+
+    CORE_EXPORT void scrollingElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::scrollingElementAttributeGetter(info);
+    }
+
+    static void onpointerlockchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onpointerlockchange()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointerlockchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointerlockchangeAttributeGetter(info);
+    }
+
+    static void onpointerlockchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnpointerlockchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointerlockchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointerlockchangeAttributeSetter(v8Value, info);
+    }
+
+    static void onpointerlockerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onpointerlockerror()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointerlockerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointerlockerrorAttributeGetter(info);
+    }
+
+    static void onpointerlockerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnpointerlockerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointerlockerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointerlockerrorAttributeSetter(v8Value, info);
+    }
+
+    static void hiddenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->hidden());
+    }
+
+    CORE_EXPORT void hiddenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::hiddenAttributeGetter(info);
+    }
+
+    static void visibilityStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->visibilityState(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void visibilityStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::visibilityStateAttributeGetter(info);
+    }
+
+    static void addressSpaceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->addressSpaceForBindings(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void addressSpaceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::addressSpaceAttributeGetter(info);
+    }
+
+    static void webkitVisibilityStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->visibilityState(), info.GetIsolate());
+    }
+
+    CORE_EXPORT void webkitVisibilityStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedPageVisibility);
+
+        DocumentV8Internal::webkitVisibilityStateAttributeGetter(info);
+    }
+
+    static void webkitHiddenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->hidden());
+    }
+
+    CORE_EXPORT void webkitHiddenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedPageVisibility);
+
+        DocumentV8Internal::webkitHiddenAttributeGetter(info);
+    }
+
+    static void onbeforecopyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onbeforecopy()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onbeforecopyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onbeforecopyAttributeGetter(info);
+    }
+
+    static void onbeforecopyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnbeforecopy(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onbeforecopyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onbeforecopyAttributeSetter(v8Value, info);
+    }
+
+    static void onbeforecutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onbeforecut()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onbeforecutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onbeforecutAttributeGetter(info);
+    }
+
+    static void onbeforecutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnbeforecut(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onbeforecutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onbeforecutAttributeSetter(v8Value, info);
+    }
+
+    static void onbeforepasteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onbeforepaste()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onbeforepasteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onbeforepasteAttributeGetter(info);
+    }
+
+    static void onbeforepasteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnbeforepaste(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onbeforepasteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onbeforepasteAttributeSetter(v8Value, info);
+    }
+
+    static void oncopyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->oncopy()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oncopyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oncopyAttributeGetter(info);
+    }
+
+    static void oncopyAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOncopy(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oncopyAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oncopyAttributeSetter(v8Value, info);
+    }
+
+    static void oncutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->oncut()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oncutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oncutAttributeGetter(info);
+    }
+
+    static void oncutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOncut(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oncutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oncutAttributeSetter(v8Value, info);
+    }
+
+    static void onpasteAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onpaste()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpasteAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpasteAttributeGetter(info);
+    }
+
+    static void onpasteAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnpaste(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpasteAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpasteAttributeSetter(v8Value, info);
+    }
+
+    static void onsearchAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onsearch()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onsearchAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onsearchAttributeGetter(info);
+    }
+
+    static void onsearchAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnsearch(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onsearchAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onsearchAttributeSetter(v8Value, info);
+    }
+
+    static void onsecuritypolicyviolationAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onsecuritypolicyviolation()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onsecuritypolicyviolationAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onsecuritypolicyviolationAttributeGetter(info);
+    }
+
+    static void onsecuritypolicyviolationAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnsecuritypolicyviolation(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onsecuritypolicyviolationAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onsecuritypolicyviolationAttributeSetter(v8Value, info);
+    }
+
+    static void onselectionchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onselectionchange()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onselectionchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onselectionchangeAttributeGetter(info);
+    }
+
+    static void onselectionchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnselectionchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onselectionchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onselectionchangeAttributeSetter(v8Value, info);
+    }
+
+    static void onselectstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onselectstart()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onselectstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onselectstartAttributeGetter(info);
+    }
+
+    static void onselectstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnselectstart(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onselectstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onselectstartAttributeSetter(v8Value, info);
+    }
+
+    static void onwheelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onwheel()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onwheelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onwheelAttributeGetter(info);
+    }
+
+    static void onwheelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        impl->setOnwheel(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onwheelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onwheelAttributeSetter(v8Value, info);
+    }
+
+    static void timelineAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, DocumentAnimation::timeline(*impl), impl);
+    }
+
+    CORE_EXPORT void timelineAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::timelineAttributeGetter(info);
+    }
+
+    static void fontsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, DocumentFontFaceSet::fonts(*impl), impl);
+    }
+
+    CORE_EXPORT void fontsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentFonts);
+
+        DocumentV8Internal::fontsAttributeGetter(info);
+    }
+
+    static void fullscreenEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueBool(info, DocumentFullscreen::fullscreenEnabled(*impl));
+    }
+
+    CORE_EXPORT void fullscreenEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::fullscreenEnabledAttributeGetter(info);
+    }
+
+    static void onfullscreenchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(DocumentFullscreen::onfullscreenchange(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onfullscreenchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onfullscreenchangeAttributeGetter(info);
+    }
+
+    static void onfullscreenchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        DocumentFullscreen::setOnfullscreenchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onfullscreenchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onfullscreenchangeAttributeSetter(v8Value, info);
+    }
+
+    static void onfullscreenerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(DocumentFullscreen::onfullscreenerror(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onfullscreenerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onfullscreenerrorAttributeGetter(info);
+    }
+
+    static void onfullscreenerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        DocumentFullscreen::setOnfullscreenerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onfullscreenerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onfullscreenerrorAttributeSetter(v8Value, info);
+    }
+
+    static void webkitIsFullScreenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueBool(info, DocumentFullscreen::currentFullScreenElement(*impl));
+    }
+
+    CORE_EXPORT void webkitIsFullScreenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentIsFullscreen);
+
+        DocumentV8Internal::webkitIsFullScreenAttributeGetter(info);
+    }
+
+    static void webkitCurrentFullScreenElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, DocumentFullscreen::currentFullScreenElement(*impl), impl);
+    }
+
+    CORE_EXPORT void webkitCurrentFullScreenElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentCurrentFullScreenElement);
+
+        DocumentV8Internal::webkitCurrentFullScreenElementAttributeGetter(info);
+    }
+
+    static void webkitFullscreenEnabledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueBool(info, DocumentFullscreen::fullscreenEnabled(*impl));
+    }
+
+    CORE_EXPORT void webkitFullscreenEnabledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentFullscreenEnabled);
+
+        DocumentV8Internal::webkitFullscreenEnabledAttributeGetter(info);
+    }
+
+    static void webkitFullscreenElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, DocumentFullscreen::fullscreenElement(*impl), impl);
+    }
+
+    CORE_EXPORT void webkitFullscreenElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentFullscreenElement);
+
+        DocumentV8Internal::webkitFullscreenElementAttributeGetter(info);
+    }
+
+    static void onwebkitfullscreenchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(DocumentFullscreen::onwebkitfullscreenchange(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onwebkitfullscreenchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onwebkitfullscreenchangeAttributeGetter(info);
+    }
+
+    static void onwebkitfullscreenchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        DocumentFullscreen::setOnwebkitfullscreenchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onwebkitfullscreenchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onwebkitfullscreenchangeAttributeSetter(v8Value, info);
+    }
+
+    static void onwebkitfullscreenerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(DocumentFullscreen::onwebkitfullscreenerror(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onwebkitfullscreenerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onwebkitfullscreenerrorAttributeGetter(info);
+    }
+
+    static void onwebkitfullscreenerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        DocumentFullscreen::setOnwebkitfullscreenerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onwebkitfullscreenerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onwebkitfullscreenerrorAttributeSetter(v8Value, info);
+    }
+
+    static void activeElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::activeElement(*impl), impl);
+    }
+
+    CORE_EXPORT void activeElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::activeElementAttributeGetter(info);
+    }
+
+    static void styleSheetsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::styleSheets(*impl), impl);
+    }
+
+    CORE_EXPORT void styleSheetsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::styleSheetsAttributeGetter(info);
+    }
+
+    static void pointerLockElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::pointerLockElement(*impl), impl);
+    }
+
+    CORE_EXPORT void pointerLockElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::pointerLockElementAttributeGetter(info);
+    }
+
+    static void fullscreenElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::fullscreenElement(*impl), impl);
+    }
+
+    CORE_EXPORT void fullscreenElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::fullscreenElementAttributeGetter(info);
+    }
+
+    static void onabortAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onabort(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onabortAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onabortAttributeGetter(info);
+    }
+
+    static void onabortAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnabort(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onabortAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onabortAttributeSetter(v8Value, info);
+    }
+
+    static void onblurAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onblur(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onblurAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onblurAttributeGetter(info);
+    }
+
+    static void onblurAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnblur(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onblurAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onblurAttributeSetter(v8Value, info);
+    }
+
+    static void oncancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::oncancel(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oncancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oncancelAttributeGetter(info);
+    }
+
+    static void oncancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOncancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oncancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oncancelAttributeSetter(v8Value, info);
+    }
+
+    static void oncanplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::oncanplay(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oncanplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oncanplayAttributeGetter(info);
+    }
+
+    static void oncanplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOncanplay(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oncanplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oncanplayAttributeSetter(v8Value, info);
+    }
+
+    static void oncanplaythroughAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::oncanplaythrough(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oncanplaythroughAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oncanplaythroughAttributeGetter(info);
+    }
+
+    static void oncanplaythroughAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOncanplaythrough(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oncanplaythroughAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oncanplaythroughAttributeSetter(v8Value, info);
+    }
+
+    static void onchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onchange(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onchangeAttributeGetter(info);
+    }
+
+    static void onchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onchangeAttributeSetter(v8Value, info);
+    }
+
+    static void onclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onclick(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onclickAttributeGetter(info);
+    }
+
+    static void onclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onclickAttributeSetter(v8Value, info);
+    }
+
+    static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onclose(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oncloseAttributeGetter(info);
+    }
+
+    static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnclose(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oncloseAttributeSetter(v8Value, info);
+    }
+
+    static void oncontextmenuAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::oncontextmenu(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oncontextmenuAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oncontextmenuAttributeGetter(info);
+    }
+
+    static void oncontextmenuAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOncontextmenu(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oncontextmenuAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oncontextmenuAttributeSetter(v8Value, info);
+    }
+
+    static void oncuechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::oncuechange(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oncuechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oncuechangeAttributeGetter(info);
+    }
+
+    static void oncuechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOncuechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oncuechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oncuechangeAttributeSetter(v8Value, info);
+    }
+
+    static void ondblclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ondblclick(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ondblclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ondblclickAttributeGetter(info);
+    }
+
+    static void ondblclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOndblclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ondblclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ondblclickAttributeSetter(v8Value, info);
+    }
+
+    static void ondragAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ondrag(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ondragAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ondragAttributeGetter(info);
+    }
+
+    static void ondragAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOndrag(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ondragAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ondragAttributeSetter(v8Value, info);
+    }
+
+    static void ondragendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ondragend(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ondragendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ondragendAttributeGetter(info);
+    }
+
+    static void ondragendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOndragend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ondragendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ondragendAttributeSetter(v8Value, info);
+    }
+
+    static void ondragenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ondragenter(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ondragenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ondragenterAttributeGetter(info);
+    }
+
+    static void ondragenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOndragenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ondragenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ondragenterAttributeSetter(v8Value, info);
+    }
+
+    static void ondragleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ondragleave(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ondragleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ondragleaveAttributeGetter(info);
+    }
+
+    static void ondragleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOndragleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ondragleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ondragleaveAttributeSetter(v8Value, info);
+    }
+
+    static void ondragoverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ondragover(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ondragoverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ondragoverAttributeGetter(info);
+    }
+
+    static void ondragoverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOndragover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ondragoverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ondragoverAttributeSetter(v8Value, info);
+    }
+
+    static void ondragstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ondragstart(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ondragstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ondragstartAttributeGetter(info);
+    }
+
+    static void ondragstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOndragstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ondragstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ondragstartAttributeSetter(v8Value, info);
+    }
+
+    static void ondropAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ondrop(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ondropAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ondropAttributeGetter(info);
+    }
+
+    static void ondropAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOndrop(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ondropAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ondropAttributeSetter(v8Value, info);
+    }
+
+    static void ondurationchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ondurationchange(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ondurationchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ondurationchangeAttributeGetter(info);
+    }
+
+    static void ondurationchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOndurationchange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ondurationchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ondurationchangeAttributeSetter(v8Value, info);
+    }
+
+    static void onemptiedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onemptied(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onemptiedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onemptiedAttributeGetter(info);
+    }
+
+    static void onemptiedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnemptied(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onemptiedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onemptiedAttributeSetter(v8Value, info);
+    }
+
+    static void onendedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onended(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onendedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onendedAttributeGetter(info);
+    }
+
+    static void onendedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnended(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onendedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onendedAttributeSetter(v8Value, info);
+    }
+
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onerror(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onerrorAttributeGetter(info);
+    }
+
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnerror(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
+
+    static void onfocusAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onfocus(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onfocusAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onfocusAttributeGetter(info);
+    }
+
+    static void onfocusAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnfocus(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onfocusAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onfocusAttributeSetter(v8Value, info);
+    }
+
+    static void oninputAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::oninput(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oninputAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oninputAttributeGetter(info);
+    }
+
+    static void oninputAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOninput(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oninputAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oninputAttributeSetter(v8Value, info);
+    }
+
+    static void oninvalidAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::oninvalid(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void oninvalidAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::oninvalidAttributeGetter(info);
+    }
+
+    static void oninvalidAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOninvalid(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void oninvalidAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::oninvalidAttributeSetter(v8Value, info);
+    }
+
+    static void onkeydownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onkeydown(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onkeydownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onkeydownAttributeGetter(info);
+    }
+
+    static void onkeydownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnkeydown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onkeydownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onkeydownAttributeSetter(v8Value, info);
+    }
+
+    static void onkeypressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onkeypress(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onkeypressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onkeypressAttributeGetter(info);
+    }
+
+    static void onkeypressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnkeypress(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onkeypressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onkeypressAttributeSetter(v8Value, info);
+    }
+
+    static void onkeyupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onkeyup(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onkeyupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onkeyupAttributeGetter(info);
+    }
+
+    static void onkeyupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnkeyup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onkeyupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onkeyupAttributeSetter(v8Value, info);
+    }
+
+    static void onloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onload(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onloadAttributeGetter(info);
+    }
+
+    static void onloadAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnload(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onloadAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onloadAttributeSetter(v8Value, info);
+    }
+
+    static void onloadeddataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onloadeddata(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onloadeddataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onloadeddataAttributeGetter(info);
+    }
+
+    static void onloadeddataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnloadeddata(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onloadeddataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onloadeddataAttributeSetter(v8Value, info);
+    }
+
+    static void onloadedmetadataAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onloadedmetadata(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onloadedmetadataAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onloadedmetadataAttributeGetter(info);
+    }
+
+    static void onloadedmetadataAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnloadedmetadata(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onloadedmetadataAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onloadedmetadataAttributeSetter(v8Value, info);
+    }
+
+    static void onloadstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onloadstart(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onloadstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onloadstartAttributeGetter(info);
+    }
+
+    static void onloadstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnloadstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onloadstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onloadstartAttributeSetter(v8Value, info);
+    }
+
+    static void onmousedownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onmousedown(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onmousedownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onmousedownAttributeGetter(info);
+    }
+
+    static void onmousedownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnmousedown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onmousedownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onmousedownAttributeSetter(v8Value, info);
+    }
+
+    static void onmouseenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
+
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onmouseenter(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onmouseenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onmouseenterAttributeGetter(info);
+    }
+
+    static void onmouseenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
+
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnmouseenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onmouseenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onmouseenterAttributeSetter(v8Value, info);
+    }
+
+    static void onmouseleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
+
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onmouseleave(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onmouseleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onmouseleaveAttributeGetter(info);
+    }
+
+    static void onmouseleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        // [LenientThis]
+        // Make sure that info.Holder() really points to an instance if [LenientThis].
+        if (!V8Document::hasInstance(info.Holder(), info.GetIsolate()))
+            return; // Return silently because of [LenientThis].
+
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnmouseleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onmouseleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onmouseleaveAttributeSetter(v8Value, info);
+    }
+
+    static void onmousemoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onmousemove(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onmousemoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onmousemoveAttributeGetter(info);
+    }
+
+    static void onmousemoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnmousemove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onmousemoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onmousemoveAttributeSetter(v8Value, info);
+    }
+
+    static void onmouseoutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onmouseout(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onmouseoutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onmouseoutAttributeGetter(info);
+    }
+
+    static void onmouseoutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnmouseout(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onmouseoutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onmouseoutAttributeSetter(v8Value, info);
+    }
+
+    static void onmouseoverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onmouseover(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onmouseoverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onmouseoverAttributeGetter(info);
+    }
+
+    static void onmouseoverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnmouseover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onmouseoverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onmouseoverAttributeSetter(v8Value, info);
+    }
+
+    static void onmouseupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onmouseup(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onmouseupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onmouseupAttributeGetter(info);
+    }
+
+    static void onmouseupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnmouseup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onmouseupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onmouseupAttributeSetter(v8Value, info);
+    }
+
+    static void onmousewheelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onmousewheel(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onmousewheelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onmousewheelAttributeGetter(info);
+    }
+
+    static void onmousewheelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnmousewheel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onmousewheelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onmousewheelAttributeSetter(v8Value, info);
+    }
+
+    static void onpauseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onpause(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpauseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpauseAttributeGetter(info);
+    }
+
+    static void onpauseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnpause(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpauseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpauseAttributeSetter(v8Value, info);
+    }
+
+    static void onplayAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onplay(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onplayAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onplayAttributeGetter(info);
+    }
+
+    static void onplayAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnplay(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onplayAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onplayAttributeSetter(v8Value, info);
+    }
+
+    static void onplayingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onplaying(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onplayingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onplayingAttributeGetter(info);
+    }
+
+    static void onplayingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnplaying(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onplayingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onplayingAttributeSetter(v8Value, info);
+    }
+
+    static void onprogressAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onprogress(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onprogressAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onprogressAttributeGetter(info);
+    }
+
+    static void onprogressAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnprogress(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onprogressAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onprogressAttributeSetter(v8Value, info);
+    }
+
+    static void onratechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onratechange(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onratechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onratechangeAttributeGetter(info);
+    }
+
+    static void onratechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnratechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onratechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onratechangeAttributeSetter(v8Value, info);
+    }
+
+    static void onresetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onreset(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onresetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onresetAttributeGetter(info);
+    }
+
+    static void onresetAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnreset(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onresetAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onresetAttributeSetter(v8Value, info);
+    }
+
+    static void onresizeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onresize(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onresizeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onresizeAttributeGetter(info);
+    }
+
+    static void onresizeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnresize(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onresizeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onresizeAttributeSetter(v8Value, info);
+    }
+
+    static void onscrollAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onscroll(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onscrollAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onscrollAttributeGetter(info);
+    }
+
+    static void onscrollAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnscroll(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onscrollAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onscrollAttributeSetter(v8Value, info);
+    }
+
+    static void onseekedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onseeked(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onseekedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onseekedAttributeGetter(info);
+    }
+
+    static void onseekedAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnseeked(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onseekedAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onseekedAttributeSetter(v8Value, info);
+    }
+
+    static void onseekingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onseeking(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onseekingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onseekingAttributeGetter(info);
+    }
+
+    static void onseekingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnseeking(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onseekingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onseekingAttributeSetter(v8Value, info);
+    }
+
+    static void onselectAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onselect(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onselectAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onselectAttributeGetter(info);
+    }
+
+    static void onselectAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnselect(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onselectAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onselectAttributeSetter(v8Value, info);
+    }
+
+    static void onshowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onshow(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onshowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onshowAttributeGetter(info);
+    }
+
+    static void onshowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnshow(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onshowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onshowAttributeSetter(v8Value, info);
+    }
+
+    static void onstalledAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onstalled(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onstalledAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onstalledAttributeGetter(info);
+    }
+
+    static void onstalledAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnstalled(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onstalledAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onstalledAttributeSetter(v8Value, info);
+    }
+
+    static void onsubmitAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onsubmit(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onsubmitAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onsubmitAttributeGetter(info);
+    }
+
+    static void onsubmitAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnsubmit(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onsubmitAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onsubmitAttributeSetter(v8Value, info);
+    }
+
+    static void onsuspendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onsuspend(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onsuspendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onsuspendAttributeGetter(info);
+    }
+
+    static void onsuspendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnsuspend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onsuspendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onsuspendAttributeSetter(v8Value, info);
+    }
+
+    static void ontimeupdateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ontimeupdate(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ontimeupdateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ontimeupdateAttributeGetter(info);
+    }
+
+    static void ontimeupdateAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOntimeupdate(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ontimeupdateAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ontimeupdateAttributeSetter(v8Value, info);
+    }
+
+    static void ontoggleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ontoggle(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ontoggleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ontoggleAttributeGetter(info);
+    }
+
+    static void ontoggleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOntoggle(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ontoggleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ontoggleAttributeSetter(v8Value, info);
+    }
+
+    static void onvolumechangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onvolumechange(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onvolumechangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onvolumechangeAttributeGetter(info);
+    }
+
+    static void onvolumechangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnvolumechange(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onvolumechangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onvolumechangeAttributeSetter(v8Value, info);
+    }
+
+    static void onwaitingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onwaiting(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onwaitingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onwaitingAttributeGetter(info);
+    }
+
+    static void onwaitingAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnwaiting(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onwaitingAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onwaitingAttributeSetter(v8Value, info);
+    }
+
+    static void onauxclickAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onauxclick(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onauxclickAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onauxclickAttributeGetter(info);
+    }
+
+    static void onauxclickAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnauxclick(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onauxclickAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onauxclickAttributeSetter(v8Value, info);
+    }
+
+    static void ongotpointercaptureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ongotpointercapture(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ongotpointercaptureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ongotpointercaptureAttributeGetter(info);
+    }
+
+    static void ongotpointercaptureAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOngotpointercapture(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ongotpointercaptureAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ongotpointercaptureAttributeSetter(v8Value, info);
+    }
+
+    static void onlostpointercaptureAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onlostpointercapture(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onlostpointercaptureAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onlostpointercaptureAttributeGetter(info);
+    }
+
+    static void onlostpointercaptureAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnlostpointercapture(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onlostpointercaptureAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onlostpointercaptureAttributeSetter(v8Value, info);
+    }
+
+    static void onpointerdownAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onpointerdown(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointerdownAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointerdownAttributeGetter(info);
+    }
+
+    static void onpointerdownAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnpointerdown(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointerdownAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointerdownAttributeSetter(v8Value, info);
+    }
+
+    static void onpointermoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onpointermove(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointermoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointermoveAttributeGetter(info);
+    }
+
+    static void onpointermoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnpointermove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointermoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointermoveAttributeSetter(v8Value, info);
+    }
+
+    static void onpointerupAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onpointerup(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointerupAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointerupAttributeGetter(info);
+    }
+
+    static void onpointerupAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnpointerup(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointerupAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointerupAttributeSetter(v8Value, info);
+    }
+
+    static void onpointercancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onpointercancel(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointercancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointercancelAttributeGetter(info);
+    }
+
+    static void onpointercancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnpointercancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointercancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointercancelAttributeSetter(v8Value, info);
+    }
+
+    static void onpointeroverAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onpointerover(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointeroverAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointeroverAttributeGetter(info);
+    }
+
+    static void onpointeroverAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnpointerover(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointeroverAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointeroverAttributeSetter(v8Value, info);
+    }
+
+    static void onpointeroutAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onpointerout(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointeroutAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointeroutAttributeGetter(info);
+    }
+
+    static void onpointeroutAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnpointerout(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointeroutAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointeroutAttributeSetter(v8Value, info);
+    }
+
+    static void onpointerenterAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onpointerenter(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointerenterAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointerenterAttributeGetter(info);
+    }
+
+    static void onpointerenterAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnpointerenter(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointerenterAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointerenterAttributeSetter(v8Value, info);
+    }
+
+    static void onpointerleaveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::onpointerleave(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void onpointerleaveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::onpointerleaveAttributeGetter(info);
+    }
+
+    static void onpointerleaveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOnpointerleave(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void onpointerleaveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::onpointerleaveAttributeSetter(v8Value, info);
+    }
+
+    static void ontouchcancelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ontouchcancel(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ontouchcancelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ontouchcancelAttributeGetter(info);
+    }
+
+    static void ontouchcancelAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOntouchcancel(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ontouchcancelAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ontouchcancelAttributeSetter(v8Value, info);
+    }
+
+    static void ontouchendAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ontouchend(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ontouchendAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ontouchendAttributeGetter(info);
+    }
+
+    static void ontouchendAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOntouchend(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ontouchendAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ontouchendAttributeSetter(v8Value, info);
+    }
+
+    static void ontouchmoveAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ontouchmove(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ontouchmoveAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ontouchmoveAttributeGetter(info);
+    }
+
+    static void ontouchmoveAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOntouchmove(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ontouchmoveAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ontouchmoveAttributeSetter(v8Value, info);
+    }
+
+    static void ontouchstartAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        EventListener* cppValue(GlobalEventHandlers::ontouchstart(*impl));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    CORE_EXPORT void ontouchstartAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::ontouchstartAttributeGetter(info);
+    }
+
+    static void ontouchstartAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        Document* impl = V8Document::toImpl(holder);
+
+        // Prepare the value to be set.
+
+        GlobalEventHandlers::setOntouchstart(*impl, V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    CORE_EXPORT void ontouchstartAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DocumentV8Internal::ontouchstartAttributeSetter(v8Value, info);
+    }
+
+    static void childrenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, ParentNode::children(*impl), impl);
+    }
+
+    CORE_EXPORT void childrenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::childrenAttributeGetter(info);
+    }
+
+    static void childrenAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueForMainWorld(info, ParentNode::children(*impl));
+    }
+
+    CORE_EXPORT void childrenAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::childrenAttributeGetterForMainWorld(info);
+    }
+
+    static void firstElementChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, ParentNode::firstElementChild(*impl), impl);
+    }
+
+    CORE_EXPORT void firstElementChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::firstElementChildAttributeGetter(info);
+    }
+
+    static void firstElementChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueForMainWorld(info, ParentNode::firstElementChild(*impl));
+    }
+
+    CORE_EXPORT void firstElementChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::firstElementChildAttributeGetterForMainWorld(info);
+    }
+
+    static void lastElementChildAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, ParentNode::lastElementChild(*impl), impl);
+    }
+
+    CORE_EXPORT void lastElementChildAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::lastElementChildAttributeGetter(info);
+    }
+
+    static void lastElementChildAttributeGetterForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueForMainWorld(info, ParentNode::lastElementChild(*impl));
+    }
+
+    CORE_EXPORT void lastElementChildAttributeGetterCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::lastElementChildAttributeGetterForMainWorld(info);
+    }
+
+    static void childElementCountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, ParentNode::childElementCount(*impl));
+    }
+
+    CORE_EXPORT void childElementCountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::childElementCountAttributeGetter(info);
+    }
+
+    static void rootElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        Document* impl = V8Document::toImpl(holder);
+
+        v8SetReturnValueFast(info, SVGDocumentExtensions::rootElement(*impl), impl);
+    }
+
+    CORE_EXPORT void rootElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVGDocumentRootElement);
+
+        DocumentV8Internal::rootElementAttributeGetter(info);
+    }
+
+    static void getElementsByTagNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByTagName", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> localName;
+        localName = info[0];
+        if (!localName.prepare())
+            return;
+
+        v8SetReturnValueFast(info, impl->getElementsByTagName(localName), impl);
+    }
+
+    CORE_EXPORT void getElementsByTagNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::getElementsByTagNameMethod(info);
+    }
+
+    static void getElementsByTagNameNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByTagNameNS", "Document", ExceptionMessages::notEnoughArguments(2, info.Length())));
+            return;
+        }
+
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> localName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
+
+        localName = info[1];
+        if (!localName.prepare())
+            return;
+
+        v8SetReturnValueFast(info, impl->getElementsByTagNameNS(namespaceURI, localName), impl);
+    }
+
+    CORE_EXPORT void getElementsByTagNameNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::getElementsByTagNameNSMethod(info);
+    }
+
+    static void getElementsByClassNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByClassName", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> classNames;
+        classNames = info[0];
+        if (!classNames.prepare())
+            return;
+
+        v8SetReturnValueFast(info, impl->getElementsByClassName(classNames), impl);
+    }
+
+    CORE_EXPORT void getElementsByClassNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::getElementsByClassNameMethod(info);
+    }
+
+    static void createElement1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        V8StringResource<> localName;
+        localName = info[0];
+        if (!localName.prepare())
+            return;
+
+        Element* result = impl->createElement(localName, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    static void createElement1MethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        V8StringResource<> localName;
+        localName = info[0];
+        if (!localName.prepare())
+            return;
+
+        Element* result = impl->createElement(localName, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueForMainWorld(info, result);
+    }
+
+    static void createElementNS1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElementNS");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> qualifiedName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
+
+        qualifiedName = info[1];
+        if (!qualifiedName.prepare())
+            return;
+
+        Element* result = impl->createElementNS(namespaceURI, qualifiedName, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    static void createDocumentFragmentMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        DocumentFragment* result = impl->createDocumentFragment();
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createDocumentFragmentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createDocumentFragmentMethod(info);
+    }
+
+    static void createTextNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createTextNode", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> data;
+        data = info[0];
+        if (!data.prepare())
+            return;
+
+        Text* result = impl->createTextNode(data);
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createTextNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createTextNodeMethod(info);
+    }
+
+    static void createCDATASectionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createCDATASection");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> data;
+        data = info[0];
+        if (!data.prepare())
+            return;
+
+        CDATASection* result = impl->createCDATASection(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createCDATASectionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createCDATASectionMethod(info);
+    }
+
+    static void createCommentMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createComment", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> data;
+        data = info[0];
+        if (!data.prepare())
+            return;
+
+        Comment* result = impl->createComment(data);
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createCommentMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createCommentMethod(info);
+    }
+
+    static void createProcessingInstructionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createProcessingInstruction");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> target;
+        V8StringResource<> data;
+        target = info[0];
+        if (!target.prepare())
+            return;
+
+        data = info[1];
+        if (!data.prepare())
+            return;
+
+        ProcessingInstruction* result = impl->createProcessingInstruction(target, data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createProcessingInstructionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createProcessingInstructionMethod(info);
+    }
+
+    static void importNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "importNode");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* node;
+        bool deep;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        if (!info[1]->IsUndefined()) {
+            deep = toBoolean(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            deep = false;
+        }
+
+        Node* result = impl->importNode(node, deep, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void importNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        DocumentV8Internal::importNodeMethod(info);
+    }
+
+    static void adoptNodeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "adoptNode");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* node;
+        node = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!node) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        Node* result = impl->adoptNode(node, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void adoptNodeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        DocumentV8Internal::adoptNodeMethod(info);
+    }
+
+    static void createAttributeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createAttribute");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> localName;
+        localName = info[0];
+        if (!localName.prepare())
+            return;
+
+        Attr* result = impl->createAttribute(localName, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createAttributeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentCreateAttribute);
+        DocumentV8Internal::createAttributeMethod(info);
+    }
+
+    static void createAttributeNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createAttributeNS");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> qualifiedName;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
+
+        qualifiedName = info[1];
+        if (!qualifiedName.prepare())
+            return;
+
+        Attr* result = impl->createAttributeNS(namespaceURI, qualifiedName, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createAttributeNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentCreateAttributeNS);
+        DocumentV8Internal::createAttributeNSMethod(info);
+    }
+
+    static void createEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createEvent");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> eventType;
+        eventType = info[0];
+        if (!eventType.prepare())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        Event* result = impl->createEvent(executionContext, eventType, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createEventMethod(info);
+    }
+
+    static void createRangeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        Range* result = impl->createRange();
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createRangeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createRangeMethod(info);
+    }
+
+    static void createNodeIteratorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createNodeIterator");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* root;
+        unsigned whatToShow;
+        NodeFilter* filter;
+        root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!root) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        if (!info[1]->IsUndefined()) {
+            whatToShow = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            whatToShow = 4294967295u;
+        }
+        if (!info[2]->IsUndefined()) {
+            filter = toNodeFilter(info[2], info.Holder(), ScriptState::current(info.GetIsolate()));
+        } else {
+            filter = nullptr;
+        }
+
+        NodeIterator* result = impl->createNodeIterator(root, whatToShow, filter);
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createNodeIteratorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createNodeIteratorMethod(info);
+    }
+
+    static void createTreeWalkerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createTreeWalker");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Node* root;
+        unsigned whatToShow;
+        NodeFilter* filter;
+        root = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!root) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Node'.");
+
+            return;
+        }
+
+        if (!info[1]->IsUndefined()) {
+            whatToShow = toUInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            whatToShow = 4294967295u;
+        }
+        if (!info[2]->IsUndefined()) {
+            filter = toNodeFilter(info[2], info.Holder(), ScriptState::current(info.GetIsolate()));
+        } else {
+            filter = nullptr;
+        }
+
+        TreeWalker* result = impl->createTreeWalker(root, whatToShow, filter);
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void createTreeWalkerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createTreeWalkerMethod(info);
+    }
+
+    static void getElementsByNameMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByName", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> elementName;
+        elementName = info[0];
+        if (!elementName.prepare())
+            return;
+
+        v8SetReturnValueFast(info, impl->getElementsByName(elementName), impl);
+    }
+
+    CORE_EXPORT void getElementsByNameMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::getElementsByNameMethod(info);
+    }
+
+    static void getElementsByNameMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementsByName", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> elementName;
+        elementName = info[0];
+        if (!elementName.prepare())
+            return;
+
+        v8SetReturnValueForMainWorld(info, impl->getElementsByName(elementName));
+    }
+
+    CORE_EXPORT void getElementsByNameMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::getElementsByNameMethodForMainWorld(info);
+    }
+
+    CORE_EXPORT void openMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentOpen);
+        CEReactionsScope ceReactionsScope;
+        V8Document::openMethodCustom(info);
+    }
+
+    static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "close");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        impl->close(exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        DocumentV8Internal::closeMethod(info);
+    }
+
+    static void writeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "write");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        Vector<String> text;
+        text = toImplArguments<Vector<String>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->write(enteredDOMWindow(info.GetIsolate()), text, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void writeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        DocumentV8Internal::writeMethod(info);
+    }
+
+    static void writelnMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "writeln");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        Vector<String> text;
+        text = toImplArguments<Vector<String>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->writeln(enteredDOMWindow(info.GetIsolate()), text, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void writelnMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        DocumentV8Internal::writelnMethod(info);
+    }
+
+    static void hasFocusMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        v8SetReturnValueBool(info, impl->hasFocus());
+    }
+
+    CORE_EXPORT void hasFocusMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::hasFocusMethod(info);
+    }
+
+    static void execCommandMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "execCommand");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> commandId;
+        bool showUI;
+        V8StringResource<> value;
+        commandId = info[0];
+        if (!commandId.prepare())
+            return;
+
+        if (!info[1]->IsUndefined()) {
+            showUI = toBoolean(info.GetIsolate(), info[1], exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            showUI = false;
+        }
+        if (!info[2]->IsUndefined()) {
+            value = info[2];
+            if (!value.prepare())
+                return;
+        } else {
+            value = String("");
+        }
+
+        bool result = impl->execCommand(commandId, showUI, value, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void execCommandMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        DocumentV8Internal::execCommandMethod(info);
+    }
+
+    static void queryCommandEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandEnabled");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> commandId;
+        commandId = info[0];
+        if (!commandId.prepare())
+            return;
+
+        bool result = impl->queryCommandEnabled(commandId, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void queryCommandEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::queryCommandEnabledMethod(info);
+    }
+
+    static void queryCommandIndetermMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandIndeterm");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> commandId;
+        commandId = info[0];
+        if (!commandId.prepare())
+            return;
+
+        bool result = impl->queryCommandIndeterm(commandId, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void queryCommandIndetermMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::queryCommandIndetermMethod(info);
+    }
+
+    static void queryCommandStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandState");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> commandId;
+        commandId = info[0];
+        if (!commandId.prepare())
+            return;
+
+        bool result = impl->queryCommandState(commandId, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void queryCommandStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::queryCommandStateMethod(info);
+    }
+
+    static void queryCommandSupportedMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandSupported");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> commandId;
+        commandId = info[0];
+        if (!commandId.prepare())
+            return;
+
+        bool result = impl->queryCommandSupported(commandId, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void queryCommandSupportedMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::queryCommandSupportedMethod(info);
+    }
+
+    static void queryCommandValueMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "queryCommandValue");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> commandId;
+        commandId = info[0];
+        if (!commandId.prepare())
+            return;
+
+        String result = impl->queryCommandValue(commandId, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueString(info, result, info.GetIsolate());
+    }
+
+    CORE_EXPORT void queryCommandValueMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::queryCommandValueMethod(info);
+    }
+
+    static void exitPointerLockMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        impl->exitPointerLock();
+    }
+
+    CORE_EXPORT void exitPointerLockMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentExitPointerLock);
+        DocumentV8Internal::exitPointerLockMethod(info);
+    }
+
+    static void createTouchMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createTouch");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        DOMWindow* window;
+        EventTarget* target;
+        int identifier;
+        double pageX;
+        double pageY;
+        double screenX;
+        double screenY;
+        double radiusX;
+        double radiusY;
+        float rotationAngle;
+        float force;
+        window = toDOMWindow(info.GetIsolate(), info[0]);
+
+        target = toEventTarget(info.GetIsolate(), info[1]);
+
+        identifier = toInt32(info.GetIsolate(), info[2], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pageX = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        pageY = toDouble(info.GetIsolate(), info[4], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        screenX = toDouble(info.GetIsolate(), info[5], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        screenY = toDouble(info.GetIsolate(), info[6], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radiusX = toDouble(info.GetIsolate(), info[7], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        radiusY = toDouble(info.GetIsolate(), info[8], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        rotationAngle = toFloat(info.GetIsolate(), info[9], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        force = toFloat(info.GetIsolate(), info[10], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        V8Document::createTouchMethodPrologueCustom(info, impl);
+        v8SetReturnValueFast(info, impl->createTouch(window, target, identifier, pageX, pageY, screenX, screenY, radiusX, radiusY, rotationAngle, force), impl);
+    }
+
+    CORE_EXPORT void createTouchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8Document_CreateTouch_Method);
+        DocumentV8Internal::createTouchMethod(info);
+    }
+
+    static void createTouchListMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createTouchList");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        HeapVector<Member<Touch>> touches;
+        for (int i = 0; i < info.Length(); ++i) {
+            if (!V8Touch::hasInstance(info[i], info.GetIsolate())) {
+                exceptionState.throwTypeError("parameter 1 is not of type 'Touch'.");
+
+                return;
+            }
+            touches.push_back(V8Touch::toImpl(v8::Local<v8::Object>::Cast(info[i])));
+        }
+
+        v8SetReturnValueFast(info, impl->createTouchList(touches), impl);
+    }
+
+    CORE_EXPORT void createTouchListMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createTouchListMethod(info);
+    }
+
+    static void registerElementMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "registerElement");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> type;
+        ElementRegistrationOptions options;
+        type = info[0];
+        if (!type.prepare())
+            return;
+
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('options') is not an object.");
+
+            return;
+        }
+        V8ElementRegistrationOptions::toImpl(info.GetIsolate(), info[1], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ScriptValue result = impl->registerElement(scriptState, type, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
+
+    CORE_EXPORT void registerElementMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentRegisterElement);
+        DocumentV8Internal::registerElementMethod(info);
+    }
+
+    static void createElement2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        V8StringResource<> localName;
+        StringOrDictionary options;
+        localName = info[0];
+        if (!localName.prepare())
+            return;
+
+        V8StringOrDictionary::toImpl(info.GetIsolate(), info[1], options, UnionTypeConversionMode::Nullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        Element* result = impl->createElement(localName, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    static void createElementMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 1:
+            if (true) {
+                createElement1Method(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                createElement2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void createElementMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createElementMethod(info);
+    }
+
+    static void createElement2MethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        V8StringResource<> localName;
+        StringOrDictionary options;
+        localName = info[0];
+        if (!localName.prepare())
+            return;
+
+        V8StringOrDictionary::toImpl(info.GetIsolate(), info[1], options, UnionTypeConversionMode::Nullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        Element* result = impl->createElement(localName, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueForMainWorld(info, result);
+    }
+
+    static void createElementMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(2, info.Length())) {
+        case 1:
+            if (true) {
+                createElement1MethodForMainWorld(info);
+                return;
+            }
+            break;
+        case 2:
+            if (true) {
+                createElement2MethodForMainWorld(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElement");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void createElementMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createElementMethodForMainWorld(info);
+    }
+
+    static void createElementNS2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElementNS");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        V8StringResource<TreatNullAndUndefinedAsNullString> namespaceURI;
+        V8StringResource<> qualifiedName;
+        StringOrDictionary options;
+        namespaceURI = info[0];
+        if (!namespaceURI.prepare())
+            return;
+
+        qualifiedName = info[1];
+        if (!qualifiedName.prepare())
+            return;
+
+        V8StringOrDictionary::toImpl(info.GetIsolate(), info[2], options, UnionTypeConversionMode::Nullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        Element* result = impl->createElementNS(namespaceURI, qualifiedName, options, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    static void createElementNSMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(3, info.Length())) {
+        case 2:
+            if (true) {
+                createElementNS1Method(info);
+                return;
+            }
+            break;
+        case 3:
+            if (true) {
+                createElementNS2Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createElementNS");
+
+        if (isArityError) {
+            if (info.Length() < 2) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    CORE_EXPORT void createElementNSMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::createElementNSMethod(info);
+    }
+
+    static void caretRangeFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "caretRangeFromPoint");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        int x;
+        int y;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueFast(info, impl->caretRangeFromPoint(x, y), impl);
+    }
+
+    CORE_EXPORT void caretRangeFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentCaretRangeFromPoint);
+        DocumentV8Internal::caretRangeFromPointMethod(info);
+    }
+
+    static void exitFullscreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        DocumentFullscreen::exitFullscreen(*impl);
+    }
+
+    CORE_EXPORT void exitFullscreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::exitFullscreenMethod(info);
+    }
+
+    static void webkitCancelFullScreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        DocumentFullscreen::exitFullscreen(*impl);
+    }
+
+    CORE_EXPORT void webkitCancelFullScreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentCancelFullScreen);
+        DocumentV8Internal::webkitCancelFullScreenMethod(info);
+    }
+
+    static void webkitExitFullscreenMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        DocumentFullscreen::exitFullscreen(*impl);
+    }
+
+    CORE_EXPORT void webkitExitFullscreenMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::PrefixedDocumentExitFullscreen);
+        DocumentV8Internal::webkitExitFullscreenMethod(info);
+    }
+
+    static void getSelectionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::getSelection(*impl), impl);
+    }
+
+    CORE_EXPORT void getSelectionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::getSelectionMethod(info);
+    }
+
+    static void elementFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "elementFromPoint");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValueFast(info, DocumentOrShadowRoot::elementFromPoint(*impl, x, y), impl);
+    }
+
+    CORE_EXPORT void elementFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::elementFromPointMethod(info);
+    }
+
+    static void elementsFromPointMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "elementsFromPoint");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        int x;
+        int y;
+        x = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        v8SetReturnValue(info, ToV8(DocumentOrShadowRoot::elementsFromPoint(*impl, x, y), info.Holder(), info.GetIsolate()));
+    }
+
+    CORE_EXPORT void elementsFromPointMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::elementsFromPointMethod(info);
+    }
+
+    static void getElementByIdMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementById", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> elementId;
+        elementId = info[0];
+        if (!elementId.prepare())
+            return;
+
+        v8SetReturnValueFast(info, NonElementParentNode::getElementById(*impl, elementId), impl);
+    }
+
+    CORE_EXPORT void getElementByIdMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::getElementByIdMethod(info);
+    }
+
+    static void getElementByIdMethodForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getElementById", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> elementId;
+        elementId = info[0];
+        if (!elementId.prepare())
+            return;
+
+        v8SetReturnValueForMainWorld(info, NonElementParentNode::getElementById(*impl, elementId));
+    }
+
+    CORE_EXPORT void getElementByIdMethodCallbackForMainWorld(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::getElementByIdMethodForMainWorld(info);
+    }
+
+    static void prependMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "prepend");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ParentNode::prepend(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void prependMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        DocumentV8Internal::prependMethod(info);
+    }
+
+    static void appendMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "append");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        V0CustomElementProcessingStack::CallbackDeliveryScope deliveryScope;
+
+        HeapVector<NodeOrString> nodes;
+        nodes = toImplArguments<HeapVector<NodeOrString>>(info, 0, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ParentNode::append(*impl, nodes, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    CORE_EXPORT void appendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        CEReactionsScope ceReactionsScope;
+        DocumentV8Internal::appendMethod(info);
+    }
+
+    static void querySelectorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "querySelector");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> selectors;
+        selectors = info[0];
+        if (!selectors.prepare())
+            return;
+
+        Element* result = ParentNode::querySelector(*impl, selectors, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void querySelectorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::querySelectorMethod(info);
+    }
+
+    static void querySelectorAllMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "querySelectorAll");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> selectors;
+        selectors = info[0];
+        if (!selectors.prepare())
+            return;
+
+        NodeList* result = ParentNode::querySelectorAll(*impl, selectors, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        // [NewObject] must always create a new wrapper.  Check that a wrapper
+        // does not exist yet.
+        DCHECK(!result || DOMDataStore::getWrapper(result, info.GetIsolate()).IsEmpty());
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT void querySelectorAllMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DocumentV8Internal::querySelectorAllMethod(info);
+    }
+
+    // static void createExpressionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    //   ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createExpression");
+    //
+    //   Document* impl = V8Document::toImpl(info.Holder());
+    //
+    //   if (UNLIKELY(info.Length() < 1)) {
+    //     exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+    //     return;
+    //   }
+    //
+    //   V8StringResource<> expression;
+    //   XPathNSResolver* resolver;
+    //   expression = info[0];
+    //   if (!expression.prepare())
+    //     return;
+    //
+    //   if (!info[1]->IsUndefined()) {
+    //     resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[1]);
+    //     if (!resolver && !isUndefinedOrNull(info[1])) {
+    //       exceptionState.throwTypeError("parameter 2 is not of type 'XPathNSResolver'.");
+    //
+    //       return;
+    //     }
+    //   } else {
+    //     resolver = nullptr;
+    //   }
+    //
+    //   XPathExpression* result = DocumentXPathEvaluator::createExpression(*impl, expression, resolver, exceptionState);
+    //   if (exceptionState.hadException()) {
+    //     return;
+    //   }
+    //   v8SetReturnValueFast(info, result, impl);
+    // }
+    //
+    // CORE_EXPORT  void createExpressionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    //   UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathCreateExpression);
+    //   DocumentV8Internal::createExpressionMethod(info);
+    // }
+    //
+    // static void createNSResolverMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    //   Document* impl = V8Document::toImpl(info.Holder());
+    //
+    //   if (UNLIKELY(info.Length() < 1)) {
+    //     V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+    //     return;
+    //   }
+    //
+    //   Node* nodeResolver;
+    //   nodeResolver = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+    //   if (!nodeResolver) {
+    //     V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "Document", "parameter 1 is not of type 'Node'."));
+    //
+    //     return;
+    //   }
+    //
+    //   v8SetReturnValueFast(info, DocumentXPathEvaluator::createNSResolver(*impl, nodeResolver), impl);
+    // }
+    //
+    // CORE_EXPORT  void createNSResolverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    //   UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathCreateNSResolver);
+    //   DocumentV8Internal::createNSResolverMethod(info);
+    // }
+    //
+    // static void evaluateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    //   ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "evaluate");
+    //
+    //   Document* impl = V8Document::toImpl(info.Holder());
+    //
+    //   if (UNLIKELY(info.Length() < 2)) {
+    //     exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+    //     return;
+    //   }
+    //
+    //   V8StringResource<> expression;
+    //   Node* contextNode;
+    //   XPathNSResolver* resolver;
+    //   unsigned type;
+    //   ScriptValue inResult;
+    //   expression = info[0];
+    //   if (!expression.prepare())
+    //     return;
+    //
+    //   contextNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+    //   if (!contextNode) {
+    //     exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
+    //
+    //     return;
+    //   }
+    //
+    //   if (!info[2]->IsUndefined()) {
+    //     resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[2]);
+    //     if (!resolver && !isUndefinedOrNull(info[2])) {
+    //       exceptionState.throwTypeError("parameter 3 is not of type 'XPathNSResolver'.");
+    //
+    //       return;
+    //     }
+    //   } else {
+    //     resolver = nullptr;
+    //   }
+    //   if (!info[3]->IsUndefined()) {
+    //     type = toUInt16(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+    //     if (exceptionState.hadException())
+    //       return;
+    //   } else {
+    //     type = 0u;
+    //   }
+    //   if (!info[4]->IsUndefined()) {
+    //     inResult = ScriptValue(ScriptState::current(info.GetIsolate()), info[4]);
+    //   } else {
+    //     inResult = ScriptValue();
+    //   }
+    //
+    //   XPathResult* result = DocumentXPathEvaluator::evaluate(*impl, expression, contextNode, resolver, type, inResult, exceptionState);
+    //   if (exceptionState.hadException()) {
+    //     return;
+    //   }
+    //   v8SetReturnValueFast(info, result, impl);
+    // }
+    //
+    // CORE_EXPORT  void evaluateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    //   UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathEvaluate);
+    //   DocumentV8Internal::evaluateMethod(info);
+    // }
 
 } // namespace DocumentV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8DocumentAccessors[] = {
-    {"implementation", DocumentV8Internal::implementationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"URL", DocumentV8Internal::URLAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"documentURI", DocumentV8Internal::documentURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"origin", DocumentV8Internal::originAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"compatMode", DocumentV8Internal::compatModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"characterSet", DocumentV8Internal::characterSetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"charset", DocumentV8Internal::charsetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"inputEncoding", DocumentV8Internal::inputEncodingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"contentType", DocumentV8Internal::contentTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"doctype", DocumentV8Internal::doctypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"documentElement", DocumentV8Internal::documentElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"xmlEncoding", DocumentV8Internal::xmlEncodingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"xmlVersion", DocumentV8Internal::xmlVersionAttributeGetterCallback, DocumentV8Internal::xmlVersionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"xmlStandalone", DocumentV8Internal::xmlStandaloneAttributeGetterCallback, DocumentV8Internal::xmlStandaloneAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"location", DocumentV8Internal::locationAttributeGetterCallback, DocumentV8Internal::locationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
-    {"domain", DocumentV8Internal::domainAttributeGetterCallback, DocumentV8Internal::domainAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"referrer", DocumentV8Internal::referrerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"cookie", DocumentV8Internal::cookieAttributeGetterCallback, DocumentV8Internal::cookieAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastModified", DocumentV8Internal::lastModifiedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readyState", DocumentV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"title", DocumentV8Internal::titleAttributeGetterCallback, DocumentV8Internal::titleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dir", DocumentV8Internal::dirAttributeGetterCallback, DocumentV8Internal::dirAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"body", DocumentV8Internal::bodyAttributeGetterCallback, DocumentV8Internal::bodyAttributeSetterCallback, DocumentV8Internal::bodyAttributeGetterCallbackForMainWorld, DocumentV8Internal::bodyAttributeSetterCallbackForMainWorld, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"head", DocumentV8Internal::headAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"images", DocumentV8Internal::imagesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"embeds", DocumentV8Internal::embedsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"plugins", DocumentV8Internal::pluginsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"links", DocumentV8Internal::linksAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"forms", DocumentV8Internal::formsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scripts", DocumentV8Internal::scriptsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"currentScript", DocumentV8Internal::currentScriptAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"defaultView", DocumentV8Internal::defaultViewAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"designMode", DocumentV8Internal::designModeAttributeGetterCallback, DocumentV8Internal::designModeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onreadystatechange", DocumentV8Internal::onreadystatechangeAttributeGetterCallback, DocumentV8Internal::onreadystatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"anchors", DocumentV8Internal::anchorsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"applets", DocumentV8Internal::appletsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"selectedStylesheetSet", DocumentV8Internal::selectedStylesheetSetAttributeGetterCallback, DocumentV8Internal::selectedStylesheetSetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"preferredStylesheetSet", DocumentV8Internal::preferredStylesheetSetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"scrollingElement", DocumentV8Internal::scrollingElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpointerlockchange", DocumentV8Internal::onpointerlockchangeAttributeGetterCallback, DocumentV8Internal::onpointerlockchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpointerlockerror", DocumentV8Internal::onpointerlockerrorAttributeGetterCallback, DocumentV8Internal::onpointerlockerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hidden", DocumentV8Internal::hiddenAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"visibilityState", DocumentV8Internal::visibilityStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitVisibilityState", DocumentV8Internal::webkitVisibilityStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitHidden", DocumentV8Internal::webkitHiddenAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onbeforecopy", DocumentV8Internal::onbeforecopyAttributeGetterCallback, DocumentV8Internal::onbeforecopyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onbeforecut", DocumentV8Internal::onbeforecutAttributeGetterCallback, DocumentV8Internal::onbeforecutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onbeforepaste", DocumentV8Internal::onbeforepasteAttributeGetterCallback, DocumentV8Internal::onbeforepasteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncopy", DocumentV8Internal::oncopyAttributeGetterCallback, DocumentV8Internal::oncopyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncut", DocumentV8Internal::oncutAttributeGetterCallback, DocumentV8Internal::oncutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpaste", DocumentV8Internal::onpasteAttributeGetterCallback, DocumentV8Internal::onpasteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsearch", DocumentV8Internal::onsearchAttributeGetterCallback, DocumentV8Internal::onsearchAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onselectionchange", DocumentV8Internal::onselectionchangeAttributeGetterCallback, DocumentV8Internal::onselectionchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onselectstart", DocumentV8Internal::onselectstartAttributeGetterCallback, DocumentV8Internal::onselectstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwheel", DocumentV8Internal::onwheelAttributeGetterCallback, DocumentV8Internal::onwheelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fonts", DocumentV8Internal::fontsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitIsFullScreen", DocumentV8Internal::webkitIsFullScreenAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitCurrentFullScreenElement", DocumentV8Internal::webkitCurrentFullScreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitFullscreenEnabled", DocumentV8Internal::webkitFullscreenEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitFullscreenElement", DocumentV8Internal::webkitFullscreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwebkitfullscreenchange", DocumentV8Internal::onwebkitfullscreenchangeAttributeGetterCallback, DocumentV8Internal::onwebkitfullscreenchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwebkitfullscreenerror", DocumentV8Internal::onwebkitfullscreenerrorAttributeGetterCallback, DocumentV8Internal::onwebkitfullscreenerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"activeElement", DocumentV8Internal::activeElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"styleSheets", DocumentV8Internal::styleSheetsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pointerLockElement", DocumentV8Internal::pointerLockElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onabort", DocumentV8Internal::onabortAttributeGetterCallback, DocumentV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onblur", DocumentV8Internal::onblurAttributeGetterCallback, DocumentV8Internal::onblurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncancel", DocumentV8Internal::oncancelAttributeGetterCallback, DocumentV8Internal::oncancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncanplay", DocumentV8Internal::oncanplayAttributeGetterCallback, DocumentV8Internal::oncanplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncanplaythrough", DocumentV8Internal::oncanplaythroughAttributeGetterCallback, DocumentV8Internal::oncanplaythroughAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onchange", DocumentV8Internal::onchangeAttributeGetterCallback, DocumentV8Internal::onchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onclick", DocumentV8Internal::onclickAttributeGetterCallback, DocumentV8Internal::onclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onclose", DocumentV8Internal::oncloseAttributeGetterCallback, DocumentV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncontextmenu", DocumentV8Internal::oncontextmenuAttributeGetterCallback, DocumentV8Internal::oncontextmenuAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oncuechange", DocumentV8Internal::oncuechangeAttributeGetterCallback, DocumentV8Internal::oncuechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondblclick", DocumentV8Internal::ondblclickAttributeGetterCallback, DocumentV8Internal::ondblclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondrag", DocumentV8Internal::ondragAttributeGetterCallback, DocumentV8Internal::ondragAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragend", DocumentV8Internal::ondragendAttributeGetterCallback, DocumentV8Internal::ondragendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragenter", DocumentV8Internal::ondragenterAttributeGetterCallback, DocumentV8Internal::ondragenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragleave", DocumentV8Internal::ondragleaveAttributeGetterCallback, DocumentV8Internal::ondragleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragover", DocumentV8Internal::ondragoverAttributeGetterCallback, DocumentV8Internal::ondragoverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondragstart", DocumentV8Internal::ondragstartAttributeGetterCallback, DocumentV8Internal::ondragstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondrop", DocumentV8Internal::ondropAttributeGetterCallback, DocumentV8Internal::ondropAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ondurationchange", DocumentV8Internal::ondurationchangeAttributeGetterCallback, DocumentV8Internal::ondurationchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onemptied", DocumentV8Internal::onemptiedAttributeGetterCallback, DocumentV8Internal::onemptiedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onended", DocumentV8Internal::onendedAttributeGetterCallback, DocumentV8Internal::onendedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", DocumentV8Internal::onerrorAttributeGetterCallback, DocumentV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onfocus", DocumentV8Internal::onfocusAttributeGetterCallback, DocumentV8Internal::onfocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oninput", DocumentV8Internal::oninputAttributeGetterCallback, DocumentV8Internal::oninputAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"oninvalid", DocumentV8Internal::oninvalidAttributeGetterCallback, DocumentV8Internal::oninvalidAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onkeydown", DocumentV8Internal::onkeydownAttributeGetterCallback, DocumentV8Internal::onkeydownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onkeypress", DocumentV8Internal::onkeypressAttributeGetterCallback, DocumentV8Internal::onkeypressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onkeyup", DocumentV8Internal::onkeyupAttributeGetterCallback, DocumentV8Internal::onkeyupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onload", DocumentV8Internal::onloadAttributeGetterCallback, DocumentV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadeddata", DocumentV8Internal::onloadeddataAttributeGetterCallback, DocumentV8Internal::onloadeddataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadedmetadata", DocumentV8Internal::onloadedmetadataAttributeGetterCallback, DocumentV8Internal::onloadedmetadataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onloadstart", DocumentV8Internal::onloadstartAttributeGetterCallback, DocumentV8Internal::onloadstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmousedown", DocumentV8Internal::onmousedownAttributeGetterCallback, DocumentV8Internal::onmousedownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmouseenter", DocumentV8Internal::onmouseenterAttributeGetterCallback, DocumentV8Internal::onmouseenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"onmouseleave", DocumentV8Internal::onmouseleaveAttributeGetterCallback, DocumentV8Internal::onmouseleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
-    {"onmousemove", DocumentV8Internal::onmousemoveAttributeGetterCallback, DocumentV8Internal::onmousemoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmouseout", DocumentV8Internal::onmouseoutAttributeGetterCallback, DocumentV8Internal::onmouseoutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmouseover", DocumentV8Internal::onmouseoverAttributeGetterCallback, DocumentV8Internal::onmouseoverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmouseup", DocumentV8Internal::onmouseupAttributeGetterCallback, DocumentV8Internal::onmouseupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmousewheel", DocumentV8Internal::onmousewheelAttributeGetterCallback, DocumentV8Internal::onmousewheelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onpause", DocumentV8Internal::onpauseAttributeGetterCallback, DocumentV8Internal::onpauseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onplay", DocumentV8Internal::onplayAttributeGetterCallback, DocumentV8Internal::onplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onplaying", DocumentV8Internal::onplayingAttributeGetterCallback, DocumentV8Internal::onplayingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onprogress", DocumentV8Internal::onprogressAttributeGetterCallback, DocumentV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onratechange", DocumentV8Internal::onratechangeAttributeGetterCallback, DocumentV8Internal::onratechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onreset", DocumentV8Internal::onresetAttributeGetterCallback, DocumentV8Internal::onresetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onresize", DocumentV8Internal::onresizeAttributeGetterCallback, DocumentV8Internal::onresizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onscroll", DocumentV8Internal::onscrollAttributeGetterCallback, DocumentV8Internal::onscrollAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onseeked", DocumentV8Internal::onseekedAttributeGetterCallback, DocumentV8Internal::onseekedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onseeking", DocumentV8Internal::onseekingAttributeGetterCallback, DocumentV8Internal::onseekingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onselect", DocumentV8Internal::onselectAttributeGetterCallback, DocumentV8Internal::onselectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onshow", DocumentV8Internal::onshowAttributeGetterCallback, DocumentV8Internal::onshowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onstalled", DocumentV8Internal::onstalledAttributeGetterCallback, DocumentV8Internal::onstalledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsubmit", DocumentV8Internal::onsubmitAttributeGetterCallback, DocumentV8Internal::onsubmitAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onsuspend", DocumentV8Internal::onsuspendAttributeGetterCallback, DocumentV8Internal::onsuspendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ontimeupdate", DocumentV8Internal::ontimeupdateAttributeGetterCallback, DocumentV8Internal::ontimeupdateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ontoggle", DocumentV8Internal::ontoggleAttributeGetterCallback, DocumentV8Internal::ontoggleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onvolumechange", DocumentV8Internal::onvolumechangeAttributeGetterCallback, DocumentV8Internal::onvolumechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onwaiting", DocumentV8Internal::onwaitingAttributeGetterCallback, DocumentV8Internal::onwaitingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"children", DocumentV8Internal::childrenAttributeGetterCallback, 0, DocumentV8Internal::childrenAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"firstElementChild", DocumentV8Internal::firstElementChildAttributeGetterCallback, 0, DocumentV8Internal::firstElementChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"lastElementChild", DocumentV8Internal::lastElementChildAttributeGetterCallback, 0, DocumentV8Internal::lastElementChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"childElementCount", DocumentV8Internal::childElementCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"rootElement", DocumentV8Internal::rootElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "implementation", DocumentV8Internal::implementationAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "URL", DocumentV8Internal::URLAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "documentURI", DocumentV8Internal::documentURIAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "origin", DocumentV8Internal::originAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "compatMode", DocumentV8Internal::compatModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "characterSet", DocumentV8Internal::characterSetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "charset", DocumentV8Internal::charsetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "inputEncoding", DocumentV8Internal::inputEncodingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "contentType", DocumentV8Internal::contentTypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "doctype", DocumentV8Internal::doctypeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "documentElement", DocumentV8Internal::documentElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "xmlEncoding", DocumentV8Internal::xmlEncodingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "xmlVersion", DocumentV8Internal::xmlVersionAttributeGetterCallback, DocumentV8Internal::xmlVersionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "xmlStandalone", DocumentV8Internal::xmlStandaloneAttributeGetterCallback, DocumentV8Internal::xmlStandaloneAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "location", DocumentV8Internal::locationAttributeGetterCallback, DocumentV8Internal::locationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "domain", DocumentV8Internal::domainAttributeGetterCallback, DocumentV8Internal::domainAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "referrer", DocumentV8Internal::referrerAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "cookie", DocumentV8Internal::cookieAttributeGetterCallback, DocumentV8Internal::cookieAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastModified", DocumentV8Internal::lastModifiedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readyState", DocumentV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "title", DocumentV8Internal::titleAttributeGetterCallback, DocumentV8Internal::titleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dir", DocumentV8Internal::dirAttributeGetterCallback, DocumentV8Internal::dirAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "body", DocumentV8Internal::bodyAttributeGetterCallback, DocumentV8Internal::bodyAttributeSetterCallback, DocumentV8Internal::bodyAttributeGetterCallbackForMainWorld, DocumentV8Internal::bodyAttributeSetterCallbackForMainWorld, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "head", DocumentV8Internal::headAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "images", DocumentV8Internal::imagesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "embeds", DocumentV8Internal::embedsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "plugins", DocumentV8Internal::pluginsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "links", DocumentV8Internal::linksAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "forms", DocumentV8Internal::formsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scripts", DocumentV8Internal::scriptsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "currentScript", DocumentV8Internal::currentScriptAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "defaultView", DocumentV8Internal::defaultViewAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "designMode", DocumentV8Internal::designModeAttributeGetterCallback, DocumentV8Internal::designModeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onreadystatechange", DocumentV8Internal::onreadystatechangeAttributeGetterCallback, DocumentV8Internal::onreadystatechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "anchors", DocumentV8Internal::anchorsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "applets", DocumentV8Internal::appletsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "selectedStylesheetSet", DocumentV8Internal::selectedStylesheetSetAttributeGetterCallback, DocumentV8Internal::selectedStylesheetSetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "preferredStylesheetSet", DocumentV8Internal::preferredStylesheetSetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "scrollingElement", DocumentV8Internal::scrollingElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpointerlockchange", DocumentV8Internal::onpointerlockchangeAttributeGetterCallback, DocumentV8Internal::onpointerlockchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpointerlockerror", DocumentV8Internal::onpointerlockerrorAttributeGetterCallback, DocumentV8Internal::onpointerlockerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hidden", DocumentV8Internal::hiddenAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "visibilityState", DocumentV8Internal::visibilityStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitVisibilityState", DocumentV8Internal::webkitVisibilityStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitHidden", DocumentV8Internal::webkitHiddenAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onbeforecopy", DocumentV8Internal::onbeforecopyAttributeGetterCallback, DocumentV8Internal::onbeforecopyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onbeforecut", DocumentV8Internal::onbeforecutAttributeGetterCallback, DocumentV8Internal::onbeforecutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onbeforepaste", DocumentV8Internal::onbeforepasteAttributeGetterCallback, DocumentV8Internal::onbeforepasteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncopy", DocumentV8Internal::oncopyAttributeGetterCallback, DocumentV8Internal::oncopyAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncut", DocumentV8Internal::oncutAttributeGetterCallback, DocumentV8Internal::oncutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpaste", DocumentV8Internal::onpasteAttributeGetterCallback, DocumentV8Internal::onpasteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsearch", DocumentV8Internal::onsearchAttributeGetterCallback, DocumentV8Internal::onsearchAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onselectionchange", DocumentV8Internal::onselectionchangeAttributeGetterCallback, DocumentV8Internal::onselectionchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onselectstart", DocumentV8Internal::onselectstartAttributeGetterCallback, DocumentV8Internal::onselectstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwheel", DocumentV8Internal::onwheelAttributeGetterCallback, DocumentV8Internal::onwheelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fonts", DocumentV8Internal::fontsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitIsFullScreen", DocumentV8Internal::webkitIsFullScreenAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitCurrentFullScreenElement", DocumentV8Internal::webkitCurrentFullScreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitFullscreenEnabled", DocumentV8Internal::webkitFullscreenEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitFullscreenElement", DocumentV8Internal::webkitFullscreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwebkitfullscreenchange", DocumentV8Internal::onwebkitfullscreenchangeAttributeGetterCallback, DocumentV8Internal::onwebkitfullscreenchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwebkitfullscreenerror", DocumentV8Internal::onwebkitfullscreenerrorAttributeGetterCallback, DocumentV8Internal::onwebkitfullscreenerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "activeElement", DocumentV8Internal::activeElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "styleSheets", DocumentV8Internal::styleSheetsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pointerLockElement", DocumentV8Internal::pointerLockElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onabort", DocumentV8Internal::onabortAttributeGetterCallback, DocumentV8Internal::onabortAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onblur", DocumentV8Internal::onblurAttributeGetterCallback, DocumentV8Internal::onblurAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncancel", DocumentV8Internal::oncancelAttributeGetterCallback, DocumentV8Internal::oncancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncanplay", DocumentV8Internal::oncanplayAttributeGetterCallback, DocumentV8Internal::oncanplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncanplaythrough", DocumentV8Internal::oncanplaythroughAttributeGetterCallback, DocumentV8Internal::oncanplaythroughAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onchange", DocumentV8Internal::onchangeAttributeGetterCallback, DocumentV8Internal::onchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onclick", DocumentV8Internal::onclickAttributeGetterCallback, DocumentV8Internal::onclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onclose", DocumentV8Internal::oncloseAttributeGetterCallback, DocumentV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncontextmenu", DocumentV8Internal::oncontextmenuAttributeGetterCallback, DocumentV8Internal::oncontextmenuAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oncuechange", DocumentV8Internal::oncuechangeAttributeGetterCallback, DocumentV8Internal::oncuechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondblclick", DocumentV8Internal::ondblclickAttributeGetterCallback, DocumentV8Internal::ondblclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondrag", DocumentV8Internal::ondragAttributeGetterCallback, DocumentV8Internal::ondragAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragend", DocumentV8Internal::ondragendAttributeGetterCallback, DocumentV8Internal::ondragendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragenter", DocumentV8Internal::ondragenterAttributeGetterCallback, DocumentV8Internal::ondragenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragleave", DocumentV8Internal::ondragleaveAttributeGetterCallback, DocumentV8Internal::ondragleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragover", DocumentV8Internal::ondragoverAttributeGetterCallback, DocumentV8Internal::ondragoverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondragstart", DocumentV8Internal::ondragstartAttributeGetterCallback, DocumentV8Internal::ondragstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondrop", DocumentV8Internal::ondropAttributeGetterCallback, DocumentV8Internal::ondropAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ondurationchange", DocumentV8Internal::ondurationchangeAttributeGetterCallback, DocumentV8Internal::ondurationchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onemptied", DocumentV8Internal::onemptiedAttributeGetterCallback, DocumentV8Internal::onemptiedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onended", DocumentV8Internal::onendedAttributeGetterCallback, DocumentV8Internal::onendedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", DocumentV8Internal::onerrorAttributeGetterCallback, DocumentV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onfocus", DocumentV8Internal::onfocusAttributeGetterCallback, DocumentV8Internal::onfocusAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oninput", DocumentV8Internal::oninputAttributeGetterCallback, DocumentV8Internal::oninputAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "oninvalid", DocumentV8Internal::oninvalidAttributeGetterCallback, DocumentV8Internal::oninvalidAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onkeydown", DocumentV8Internal::onkeydownAttributeGetterCallback, DocumentV8Internal::onkeydownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onkeypress", DocumentV8Internal::onkeypressAttributeGetterCallback, DocumentV8Internal::onkeypressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onkeyup", DocumentV8Internal::onkeyupAttributeGetterCallback, DocumentV8Internal::onkeyupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onload", DocumentV8Internal::onloadAttributeGetterCallback, DocumentV8Internal::onloadAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadeddata", DocumentV8Internal::onloadeddataAttributeGetterCallback, DocumentV8Internal::onloadeddataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadedmetadata", DocumentV8Internal::onloadedmetadataAttributeGetterCallback, DocumentV8Internal::onloadedmetadataAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onloadstart", DocumentV8Internal::onloadstartAttributeGetterCallback, DocumentV8Internal::onloadstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmousedown", DocumentV8Internal::onmousedownAttributeGetterCallback, DocumentV8Internal::onmousedownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmouseenter", DocumentV8Internal::onmouseenterAttributeGetterCallback, DocumentV8Internal::onmouseenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "onmouseleave", DocumentV8Internal::onmouseleaveAttributeGetterCallback, DocumentV8Internal::onmouseleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
+    { "onmousemove", DocumentV8Internal::onmousemoveAttributeGetterCallback, DocumentV8Internal::onmousemoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmouseout", DocumentV8Internal::onmouseoutAttributeGetterCallback, DocumentV8Internal::onmouseoutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmouseover", DocumentV8Internal::onmouseoverAttributeGetterCallback, DocumentV8Internal::onmouseoverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmouseup", DocumentV8Internal::onmouseupAttributeGetterCallback, DocumentV8Internal::onmouseupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmousewheel", DocumentV8Internal::onmousewheelAttributeGetterCallback, DocumentV8Internal::onmousewheelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onpause", DocumentV8Internal::onpauseAttributeGetterCallback, DocumentV8Internal::onpauseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onplay", DocumentV8Internal::onplayAttributeGetterCallback, DocumentV8Internal::onplayAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onplaying", DocumentV8Internal::onplayingAttributeGetterCallback, DocumentV8Internal::onplayingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onprogress", DocumentV8Internal::onprogressAttributeGetterCallback, DocumentV8Internal::onprogressAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onratechange", DocumentV8Internal::onratechangeAttributeGetterCallback, DocumentV8Internal::onratechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onreset", DocumentV8Internal::onresetAttributeGetterCallback, DocumentV8Internal::onresetAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onresize", DocumentV8Internal::onresizeAttributeGetterCallback, DocumentV8Internal::onresizeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onscroll", DocumentV8Internal::onscrollAttributeGetterCallback, DocumentV8Internal::onscrollAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onseeked", DocumentV8Internal::onseekedAttributeGetterCallback, DocumentV8Internal::onseekedAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onseeking", DocumentV8Internal::onseekingAttributeGetterCallback, DocumentV8Internal::onseekingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onselect", DocumentV8Internal::onselectAttributeGetterCallback, DocumentV8Internal::onselectAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onshow", DocumentV8Internal::onshowAttributeGetterCallback, DocumentV8Internal::onshowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onstalled", DocumentV8Internal::onstalledAttributeGetterCallback, DocumentV8Internal::onstalledAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsubmit", DocumentV8Internal::onsubmitAttributeGetterCallback, DocumentV8Internal::onsubmitAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onsuspend", DocumentV8Internal::onsuspendAttributeGetterCallback, DocumentV8Internal::onsuspendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ontimeupdate", DocumentV8Internal::ontimeupdateAttributeGetterCallback, DocumentV8Internal::ontimeupdateAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ontoggle", DocumentV8Internal::ontoggleAttributeGetterCallback, DocumentV8Internal::ontoggleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onvolumechange", DocumentV8Internal::onvolumechangeAttributeGetterCallback, DocumentV8Internal::onvolumechangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onwaiting", DocumentV8Internal::onwaitingAttributeGetterCallback, DocumentV8Internal::onwaitingAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "children", DocumentV8Internal::childrenAttributeGetterCallback, 0, DocumentV8Internal::childrenAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "firstElementChild", DocumentV8Internal::firstElementChildAttributeGetterCallback, 0, DocumentV8Internal::firstElementChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "lastElementChild", DocumentV8Internal::lastElementChildAttributeGetterCallback, 0, DocumentV8Internal::lastElementChildAttributeGetterCallbackForMainWorld, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "childElementCount", DocumentV8Internal::childElementCountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "rootElement", DocumentV8Internal::rootElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8DocumentMethods[] = {
-    {"getElementsByTagName", DocumentV8Internal::getElementsByTagNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getElementsByTagNameNS", DocumentV8Internal::getElementsByTagNameNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getElementsByClassName", DocumentV8Internal::getElementsByClassNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createDocumentFragment", DocumentV8Internal::createDocumentFragmentMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createTextNode", DocumentV8Internal::createTextNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createCDATASection", DocumentV8Internal::createCDATASectionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createComment", DocumentV8Internal::createCommentMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createProcessingInstruction", DocumentV8Internal::createProcessingInstructionMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"importNode", DocumentV8Internal::importNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"adoptNode", DocumentV8Internal::adoptNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createAttribute", DocumentV8Internal::createAttributeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createAttributeNS", DocumentV8Internal::createAttributeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createEvent", DocumentV8Internal::createEventMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createRange", DocumentV8Internal::createRangeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createNodeIterator", DocumentV8Internal::createNodeIteratorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createTreeWalker", DocumentV8Internal::createTreeWalkerMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getElementsByName", DocumentV8Internal::getElementsByNameMethodCallback, DocumentV8Internal::getElementsByNameMethodCallbackForMainWorld, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"open", DocumentV8Internal::openMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"close", DocumentV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"write", DocumentV8Internal::writeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"writeln", DocumentV8Internal::writelnMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"hasFocus", DocumentV8Internal::hasFocusMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"execCommand", DocumentV8Internal::execCommandMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"queryCommandEnabled", DocumentV8Internal::queryCommandEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"queryCommandIndeterm", DocumentV8Internal::queryCommandIndetermMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"queryCommandState", DocumentV8Internal::queryCommandStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"queryCommandSupported", DocumentV8Internal::queryCommandSupportedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"queryCommandValue", DocumentV8Internal::queryCommandValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"exitPointerLock", DocumentV8Internal::exitPointerLockMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"registerElement", DocumentV8Internal::registerElementMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createElement", DocumentV8Internal::createElementMethodCallback, DocumentV8Internal::createElementMethodCallbackForMainWorld, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createElementNS", DocumentV8Internal::createElementNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"caretRangeFromPoint", DocumentV8Internal::caretRangeFromPointMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitCancelFullScreen", DocumentV8Internal::webkitCancelFullScreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"webkitExitFullscreen", DocumentV8Internal::webkitExitFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getSelection", DocumentV8Internal::getSelectionMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"elementFromPoint", DocumentV8Internal::elementFromPointMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"elementsFromPoint", DocumentV8Internal::elementsFromPointMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"getElementById", DocumentV8Internal::getElementByIdMethodCallback, DocumentV8Internal::getElementByIdMethodCallbackForMainWorld, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"querySelector", DocumentV8Internal::querySelectorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"querySelectorAll", DocumentV8Internal::querySelectorAllMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-//     {"createExpression", DocumentV8Internal::createExpressionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-//     {"createNSResolver", DocumentV8Internal::createNSResolverMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-//     {"evaluate", DocumentV8Internal::evaluateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getElementsByTagName", DocumentV8Internal::getElementsByTagNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getElementsByTagNameNS", DocumentV8Internal::getElementsByTagNameNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getElementsByClassName", DocumentV8Internal::getElementsByClassNameMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createDocumentFragment", DocumentV8Internal::createDocumentFragmentMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createTextNode", DocumentV8Internal::createTextNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createCDATASection", DocumentV8Internal::createCDATASectionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createComment", DocumentV8Internal::createCommentMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createProcessingInstruction", DocumentV8Internal::createProcessingInstructionMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "importNode", DocumentV8Internal::importNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "adoptNode", DocumentV8Internal::adoptNodeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createAttribute", DocumentV8Internal::createAttributeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createAttributeNS", DocumentV8Internal::createAttributeNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createEvent", DocumentV8Internal::createEventMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createRange", DocumentV8Internal::createRangeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createNodeIterator", DocumentV8Internal::createNodeIteratorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createTreeWalker", DocumentV8Internal::createTreeWalkerMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getElementsByName", DocumentV8Internal::getElementsByNameMethodCallback, DocumentV8Internal::getElementsByNameMethodCallbackForMainWorld, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "open", DocumentV8Internal::openMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "close", DocumentV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "write", DocumentV8Internal::writeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "writeln", DocumentV8Internal::writelnMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "hasFocus", DocumentV8Internal::hasFocusMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "execCommand", DocumentV8Internal::execCommandMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "queryCommandEnabled", DocumentV8Internal::queryCommandEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "queryCommandIndeterm", DocumentV8Internal::queryCommandIndetermMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "queryCommandState", DocumentV8Internal::queryCommandStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "queryCommandSupported", DocumentV8Internal::queryCommandSupportedMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "queryCommandValue", DocumentV8Internal::queryCommandValueMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "exitPointerLock", DocumentV8Internal::exitPointerLockMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "registerElement", DocumentV8Internal::registerElementMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createElement", DocumentV8Internal::createElementMethodCallback, DocumentV8Internal::createElementMethodCallbackForMainWorld, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createElementNS", DocumentV8Internal::createElementNSMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "caretRangeFromPoint", DocumentV8Internal::caretRangeFromPointMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitCancelFullScreen", DocumentV8Internal::webkitCancelFullScreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "webkitExitFullscreen", DocumentV8Internal::webkitExitFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getSelection", DocumentV8Internal::getSelectionMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "elementFromPoint", DocumentV8Internal::elementFromPointMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "elementsFromPoint", DocumentV8Internal::elementsFromPointMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "getElementById", DocumentV8Internal::getElementByIdMethodCallback, DocumentV8Internal::getElementByIdMethodCallbackForMainWorld, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "querySelector", DocumentV8Internal::querySelectorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "querySelectorAll", DocumentV8Internal::querySelectorAllMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    //     {"createExpression", DocumentV8Internal::createExpressionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    //     {"createNSResolver", DocumentV8Internal::createNSResolverMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    //     {"evaluate", DocumentV8Internal::evaluateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
 };
 
-static void installV8DocumentTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Document::wrapperTypeInfo.interfaceName, V8Node::domTemplate(isolate, world), V8Document::internalFieldCount);
+static void installV8DocumentTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Document::wrapperTypeInfo.interfaceName, V8Node::domTemplate(isolate, world), V8Document::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DocumentAccessors, WTF_ARRAY_LENGTH(V8DocumentAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DocumentMethods, WTF_ARRAY_LENGTH(V8DocumentMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DocumentAccessors, WTF_ARRAY_LENGTH(V8DocumentAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8DocumentMethods, WTF_ARRAY_LENGTH(V8DocumentMethods));
 
-  if (RuntimeEnabledFeatures::auxclickEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoronauxclickConfiguration = {"onauxclick", DocumentV8Internal::onauxclickAttributeGetterCallback, DocumentV8Internal::onauxclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronauxclickConfiguration);
-  }
-  if (RuntimeEnabledFeatures::corsRFC1918Enabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoraddressSpaceConfiguration = {"addressSpace", DocumentV8Internal::addressSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoraddressSpaceConfiguration);
-  }
-  if (RuntimeEnabledFeatures::experimentalContentSecurityPolicyFeaturesEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoronsecuritypolicyviolationConfiguration = {"onsecuritypolicyviolation", DocumentV8Internal::onsecuritypolicyviolationAttributeGetterCallback, DocumentV8Internal::onsecuritypolicyviolationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronsecuritypolicyviolationConfiguration);
-  }
-  if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorfullscreenElementConfiguration = {"fullscreenElement", DocumentV8Internal::fullscreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfullscreenElementConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorfullscreenEnabledConfiguration = {"fullscreenEnabled", DocumentV8Internal::fullscreenEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfullscreenEnabledConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronfullscreenchangeConfiguration = {"onfullscreenchange", DocumentV8Internal::onfullscreenchangeAttributeGetterCallback, DocumentV8Internal::onfullscreenchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronfullscreenchangeConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronfullscreenerrorConfiguration = {"onfullscreenerror", DocumentV8Internal::onfullscreenerrorAttributeGetterCallback, DocumentV8Internal::onfullscreenerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronfullscreenerrorConfiguration);
-  }
-  if (RuntimeEnabledFeatures::pointerEventEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorongotpointercaptureConfiguration = {"ongotpointercapture", DocumentV8Internal::ongotpointercaptureAttributeGetterCallback, DocumentV8Internal::ongotpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorongotpointercaptureConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronlostpointercaptureConfiguration = {"onlostpointercapture", DocumentV8Internal::onlostpointercaptureAttributeGetterCallback, DocumentV8Internal::onlostpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronlostpointercaptureConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointercancelConfiguration = {"onpointercancel", DocumentV8Internal::onpointercancelAttributeGetterCallback, DocumentV8Internal::onpointercancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointercancelConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerdownConfiguration = {"onpointerdown", DocumentV8Internal::onpointerdownAttributeGetterCallback, DocumentV8Internal::onpointerdownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerdownConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerenterConfiguration = {"onpointerenter", DocumentV8Internal::onpointerenterAttributeGetterCallback, DocumentV8Internal::onpointerenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerenterConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerleaveConfiguration = {"onpointerleave", DocumentV8Internal::onpointerleaveAttributeGetterCallback, DocumentV8Internal::onpointerleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerleaveConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointermoveConfiguration = {"onpointermove", DocumentV8Internal::onpointermoveAttributeGetterCallback, DocumentV8Internal::onpointermoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointermoveConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointeroutConfiguration = {"onpointerout", DocumentV8Internal::onpointeroutAttributeGetterCallback, DocumentV8Internal::onpointeroutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointeroutConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointeroverConfiguration = {"onpointerover", DocumentV8Internal::onpointeroverAttributeGetterCallback, DocumentV8Internal::onpointeroverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointeroverConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerupConfiguration = {"onpointerup", DocumentV8Internal::onpointerupAttributeGetterCallback, DocumentV8Internal::onpointerupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerupConfiguration);
-  }
-  if (RuntimeEnabledFeatures::setRootScrollerEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorrootScrollerConfiguration = {"rootScroller", DocumentV8Internal::rootScrollerAttributeGetterCallback, DocumentV8Internal::rootScrollerAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorrootScrollerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchcancelConfiguration = {"ontouchcancel", DocumentV8Internal::ontouchcancelAttributeGetterCallback, DocumentV8Internal::ontouchcancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchcancelConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchendConfiguration = {"ontouchend", DocumentV8Internal::ontouchendAttributeGetterCallback, DocumentV8Internal::ontouchendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchendConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchmoveConfiguration = {"ontouchmove", DocumentV8Internal::ontouchmoveAttributeGetterCallback, DocumentV8Internal::ontouchmoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchmoveConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchstartConfiguration = {"ontouchstart", DocumentV8Internal::ontouchstartAttributeGetterCallback, DocumentV8Internal::ontouchstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchstartConfiguration);
-  }
-  if (RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessortimelineConfiguration = {"timeline", DocumentV8Internal::timelineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessortimelineConfiguration);
-  }
-  if (RuntimeEnabledFeatures::suboriginsEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorsuboriginConfiguration = {"suborigin", DocumentV8Internal::suboriginAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorsuboriginConfiguration);
-  }
+    if (RuntimeEnabledFeatures::auxclickEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoronauxclickConfiguration = { "onauxclick", DocumentV8Internal::onauxclickAttributeGetterCallback, DocumentV8Internal::onauxclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronauxclickConfiguration);
+    }
+    if (RuntimeEnabledFeatures::corsRFC1918Enabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoraddressSpaceConfiguration = { "addressSpace", DocumentV8Internal::addressSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoraddressSpaceConfiguration);
+    }
+    if (RuntimeEnabledFeatures::experimentalContentSecurityPolicyFeaturesEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoronsecuritypolicyviolationConfiguration = { "onsecuritypolicyviolation", DocumentV8Internal::onsecuritypolicyviolationAttributeGetterCallback, DocumentV8Internal::onsecuritypolicyviolationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronsecuritypolicyviolationConfiguration);
+    }
+    if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorfullscreenElementConfiguration = { "fullscreenElement", DocumentV8Internal::fullscreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfullscreenElementConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorfullscreenEnabledConfiguration = { "fullscreenEnabled", DocumentV8Internal::fullscreenEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorfullscreenEnabledConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronfullscreenchangeConfiguration = { "onfullscreenchange", DocumentV8Internal::onfullscreenchangeAttributeGetterCallback, DocumentV8Internal::onfullscreenchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronfullscreenchangeConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronfullscreenerrorConfiguration = { "onfullscreenerror", DocumentV8Internal::onfullscreenerrorAttributeGetterCallback, DocumentV8Internal::onfullscreenerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronfullscreenerrorConfiguration);
+    }
+    if (RuntimeEnabledFeatures::pointerEventEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorongotpointercaptureConfiguration = { "ongotpointercapture", DocumentV8Internal::ongotpointercaptureAttributeGetterCallback, DocumentV8Internal::ongotpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorongotpointercaptureConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronlostpointercaptureConfiguration = { "onlostpointercapture", DocumentV8Internal::onlostpointercaptureAttributeGetterCallback, DocumentV8Internal::onlostpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronlostpointercaptureConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointercancelConfiguration = { "onpointercancel", DocumentV8Internal::onpointercancelAttributeGetterCallback, DocumentV8Internal::onpointercancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointercancelConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerdownConfiguration = { "onpointerdown", DocumentV8Internal::onpointerdownAttributeGetterCallback, DocumentV8Internal::onpointerdownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerdownConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerenterConfiguration = { "onpointerenter", DocumentV8Internal::onpointerenterAttributeGetterCallback, DocumentV8Internal::onpointerenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerenterConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerleaveConfiguration = { "onpointerleave", DocumentV8Internal::onpointerleaveAttributeGetterCallback, DocumentV8Internal::onpointerleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerleaveConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointermoveConfiguration = { "onpointermove", DocumentV8Internal::onpointermoveAttributeGetterCallback, DocumentV8Internal::onpointermoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointermoveConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointeroutConfiguration = { "onpointerout", DocumentV8Internal::onpointeroutAttributeGetterCallback, DocumentV8Internal::onpointeroutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointeroutConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointeroverConfiguration = { "onpointerover", DocumentV8Internal::onpointeroverAttributeGetterCallback, DocumentV8Internal::onpointeroverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointeroverConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerupConfiguration = { "onpointerup", DocumentV8Internal::onpointerupAttributeGetterCallback, DocumentV8Internal::onpointerupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessoronpointerupConfiguration);
+    }
+    if (RuntimeEnabledFeatures::setRootScrollerEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorrootScrollerConfiguration = { "rootScroller", DocumentV8Internal::rootScrollerAttributeGetterCallback, DocumentV8Internal::rootScrollerAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorrootScrollerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchcancelConfiguration = { "ontouchcancel", DocumentV8Internal::ontouchcancelAttributeGetterCallback, DocumentV8Internal::ontouchcancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchcancelConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchendConfiguration = { "ontouchend", DocumentV8Internal::ontouchendAttributeGetterCallback, DocumentV8Internal::ontouchendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchendConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchmoveConfiguration = { "ontouchmove", DocumentV8Internal::ontouchmoveAttributeGetterCallback, DocumentV8Internal::ontouchmoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchmoveConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchstartConfiguration = { "ontouchstart", DocumentV8Internal::ontouchstartAttributeGetterCallback, DocumentV8Internal::ontouchstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorontouchstartConfiguration);
+    }
+    if (RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessortimelineConfiguration = { "timeline", DocumentV8Internal::timelineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessortimelineConfiguration);
+    }
+    if (RuntimeEnabledFeatures::suboriginsEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorsuboriginConfiguration = { "suborigin", DocumentV8Internal::suboriginAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorsuboriginConfiguration);
+    }
 
-  if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration createTouchMethodConfiguration = {"createTouch", DocumentV8Internal::createTouchMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, createTouchMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration createTouchListMethodConfiguration = {"createTouchList", DocumentV8Internal::createTouchListMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, createTouchListMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration exitFullscreenMethodConfiguration = {"exitFullscreen", DocumentV8Internal::exitFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, exitFullscreenMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration prependMethodConfiguration = {"prepend", DocumentV8Internal::prependMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, prependMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration appendMethodConfiguration = {"append", DocumentV8Internal::appendMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, appendMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration createTouchMethodConfiguration = { "createTouch", DocumentV8Internal::createTouchMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, createTouchMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration createTouchListMethodConfiguration = { "createTouchList", DocumentV8Internal::createTouchListMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, createTouchListMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration exitFullscreenMethodConfiguration = { "exitFullscreen", DocumentV8Internal::exitFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, exitFullscreenMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration prependMethodConfiguration = { "prepend", DocumentV8Internal::prependMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, prependMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration appendMethodConfiguration = { "append", DocumentV8Internal::appendMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, appendMethodConfiguration);
+    }
 }
 
-void V8Document::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Document::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
+void V8Document::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8Document::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
 
-  if (RuntimeEnabledFeatures::auxclickEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoronauxclickConfiguration = {"onauxclick", DocumentV8Internal::onauxclickAttributeGetterCallback, DocumentV8Internal::onauxclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronauxclickConfiguration);
-  }
-  if (RuntimeEnabledFeatures::corsRFC1918Enabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoraddressSpaceConfiguration = {"addressSpace", DocumentV8Internal::addressSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoraddressSpaceConfiguration);
-  }
-  if (RuntimeEnabledFeatures::experimentalContentSecurityPolicyFeaturesEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessoronsecuritypolicyviolationConfiguration = {"onsecuritypolicyviolation", DocumentV8Internal::onsecuritypolicyviolationAttributeGetterCallback, DocumentV8Internal::onsecuritypolicyviolationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronsecuritypolicyviolationConfiguration);
-  }
-  if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorfullscreenElementConfiguration = {"fullscreenElement", DocumentV8Internal::fullscreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorfullscreenElementConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorfullscreenEnabledConfiguration = {"fullscreenEnabled", DocumentV8Internal::fullscreenEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorfullscreenEnabledConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronfullscreenchangeConfiguration = {"onfullscreenchange", DocumentV8Internal::onfullscreenchangeAttributeGetterCallback, DocumentV8Internal::onfullscreenchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronfullscreenchangeConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronfullscreenerrorConfiguration = {"onfullscreenerror", DocumentV8Internal::onfullscreenerrorAttributeGetterCallback, DocumentV8Internal::onfullscreenerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronfullscreenerrorConfiguration);
-  }
-  if (RuntimeEnabledFeatures::pointerEventEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorongotpointercaptureConfiguration = {"ongotpointercapture", DocumentV8Internal::ongotpointercaptureAttributeGetterCallback, DocumentV8Internal::ongotpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorongotpointercaptureConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronlostpointercaptureConfiguration = {"onlostpointercapture", DocumentV8Internal::onlostpointercaptureAttributeGetterCallback, DocumentV8Internal::onlostpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronlostpointercaptureConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointercancelConfiguration = {"onpointercancel", DocumentV8Internal::onpointercancelAttributeGetterCallback, DocumentV8Internal::onpointercancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointercancelConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerdownConfiguration = {"onpointerdown", DocumentV8Internal::onpointerdownAttributeGetterCallback, DocumentV8Internal::onpointerdownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointerdownConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerenterConfiguration = {"onpointerenter", DocumentV8Internal::onpointerenterAttributeGetterCallback, DocumentV8Internal::onpointerenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointerenterConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerleaveConfiguration = {"onpointerleave", DocumentV8Internal::onpointerleaveAttributeGetterCallback, DocumentV8Internal::onpointerleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointerleaveConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointermoveConfiguration = {"onpointermove", DocumentV8Internal::onpointermoveAttributeGetterCallback, DocumentV8Internal::onpointermoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointermoveConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointeroutConfiguration = {"onpointerout", DocumentV8Internal::onpointeroutAttributeGetterCallback, DocumentV8Internal::onpointeroutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointeroutConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointeroverConfiguration = {"onpointerover", DocumentV8Internal::onpointeroverAttributeGetterCallback, DocumentV8Internal::onpointeroverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointeroverConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessoronpointerupConfiguration = {"onpointerup", DocumentV8Internal::onpointerupAttributeGetterCallback, DocumentV8Internal::onpointerupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointerupConfiguration);
-  }
-  if (RuntimeEnabledFeatures::setRootScrollerEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorrootScrollerConfiguration = {"rootScroller", DocumentV8Internal::rootScrollerAttributeGetterCallback, DocumentV8Internal::rootScrollerAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorrootScrollerConfiguration);
-  }
-  if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchcancelConfiguration = {"ontouchcancel", DocumentV8Internal::ontouchcancelAttributeGetterCallback, DocumentV8Internal::ontouchcancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorontouchcancelConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchendConfiguration = {"ontouchend", DocumentV8Internal::ontouchendAttributeGetterCallback, DocumentV8Internal::ontouchendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorontouchendConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchmoveConfiguration = {"ontouchmove", DocumentV8Internal::ontouchmoveAttributeGetterCallback, DocumentV8Internal::ontouchmoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorontouchmoveConfiguration);
-    const V8DOMConfiguration::AccessorConfiguration accessorontouchstartConfiguration = {"ontouchstart", DocumentV8Internal::ontouchstartAttributeGetterCallback, DocumentV8Internal::ontouchstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorontouchstartConfiguration);
-  }
-  if (RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessortimelineConfiguration = {"timeline", DocumentV8Internal::timelineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessortimelineConfiguration);
-  }
-  if (RuntimeEnabledFeatures::suboriginsEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorsuboriginConfiguration = {"suborigin", DocumentV8Internal::suboriginAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorsuboriginConfiguration);
-  }
+    if (RuntimeEnabledFeatures::auxclickEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoronauxclickConfiguration = { "onauxclick", DocumentV8Internal::onauxclickAttributeGetterCallback, DocumentV8Internal::onauxclickAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronauxclickConfiguration);
+    }
+    if (RuntimeEnabledFeatures::corsRFC1918Enabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoraddressSpaceConfiguration = { "addressSpace", DocumentV8Internal::addressSpaceAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoraddressSpaceConfiguration);
+    }
+    if (RuntimeEnabledFeatures::experimentalContentSecurityPolicyFeaturesEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessoronsecuritypolicyviolationConfiguration = { "onsecuritypolicyviolation", DocumentV8Internal::onsecuritypolicyviolationAttributeGetterCallback, DocumentV8Internal::onsecuritypolicyviolationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronsecuritypolicyviolationConfiguration);
+    }
+    if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorfullscreenElementConfiguration = { "fullscreenElement", DocumentV8Internal::fullscreenElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorfullscreenElementConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorfullscreenEnabledConfiguration = { "fullscreenEnabled", DocumentV8Internal::fullscreenEnabledAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorfullscreenEnabledConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronfullscreenchangeConfiguration = { "onfullscreenchange", DocumentV8Internal::onfullscreenchangeAttributeGetterCallback, DocumentV8Internal::onfullscreenchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronfullscreenchangeConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronfullscreenerrorConfiguration = { "onfullscreenerror", DocumentV8Internal::onfullscreenerrorAttributeGetterCallback, DocumentV8Internal::onfullscreenerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronfullscreenerrorConfiguration);
+    }
+    if (RuntimeEnabledFeatures::pointerEventEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorongotpointercaptureConfiguration = { "ongotpointercapture", DocumentV8Internal::ongotpointercaptureAttributeGetterCallback, DocumentV8Internal::ongotpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorongotpointercaptureConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronlostpointercaptureConfiguration = { "onlostpointercapture", DocumentV8Internal::onlostpointercaptureAttributeGetterCallback, DocumentV8Internal::onlostpointercaptureAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronlostpointercaptureConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointercancelConfiguration = { "onpointercancel", DocumentV8Internal::onpointercancelAttributeGetterCallback, DocumentV8Internal::onpointercancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointercancelConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerdownConfiguration = { "onpointerdown", DocumentV8Internal::onpointerdownAttributeGetterCallback, DocumentV8Internal::onpointerdownAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointerdownConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerenterConfiguration = { "onpointerenter", DocumentV8Internal::onpointerenterAttributeGetterCallback, DocumentV8Internal::onpointerenterAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointerenterConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerleaveConfiguration = { "onpointerleave", DocumentV8Internal::onpointerleaveAttributeGetterCallback, DocumentV8Internal::onpointerleaveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointerleaveConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointermoveConfiguration = { "onpointermove", DocumentV8Internal::onpointermoveAttributeGetterCallback, DocumentV8Internal::onpointermoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointermoveConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointeroutConfiguration = { "onpointerout", DocumentV8Internal::onpointeroutAttributeGetterCallback, DocumentV8Internal::onpointeroutAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointeroutConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointeroverConfiguration = { "onpointerover", DocumentV8Internal::onpointeroverAttributeGetterCallback, DocumentV8Internal::onpointeroverAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointeroverConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessoronpointerupConfiguration = { "onpointerup", DocumentV8Internal::onpointerupAttributeGetterCallback, DocumentV8Internal::onpointerupAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessoronpointerupConfiguration);
+    }
+    if (RuntimeEnabledFeatures::setRootScrollerEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorrootScrollerConfiguration = { "rootScroller", DocumentV8Internal::rootScrollerAttributeGetterCallback, DocumentV8Internal::rootScrollerAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorrootScrollerConfiguration);
+    }
+    if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchcancelConfiguration = { "ontouchcancel", DocumentV8Internal::ontouchcancelAttributeGetterCallback, DocumentV8Internal::ontouchcancelAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorontouchcancelConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchendConfiguration = { "ontouchend", DocumentV8Internal::ontouchendAttributeGetterCallback, DocumentV8Internal::ontouchendAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorontouchendConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchmoveConfiguration = { "ontouchmove", DocumentV8Internal::ontouchmoveAttributeGetterCallback, DocumentV8Internal::ontouchmoveAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorontouchmoveConfiguration);
+        const V8DOMConfiguration::AccessorConfiguration accessorontouchstartConfiguration = { "ontouchstart", DocumentV8Internal::ontouchstartAttributeGetterCallback, DocumentV8Internal::ontouchstartAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorontouchstartConfiguration);
+    }
+    if (RuntimeEnabledFeatures::webAnimationsAPIEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessortimelineConfiguration = { "timeline", DocumentV8Internal::timelineAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessortimelineConfiguration);
+    }
+    if (RuntimeEnabledFeatures::suboriginsEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorsuboriginConfiguration = { "suborigin", DocumentV8Internal::suboriginAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorsuboriginConfiguration);
+    }
 
-  if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration createTouchMethodConfiguration = {"createTouch", DocumentV8Internal::createTouchMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, createTouchMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration createTouchListMethodConfiguration = {"createTouchList", DocumentV8Internal::createTouchListMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, createTouchListMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration exitFullscreenMethodConfiguration = {"exitFullscreen", DocumentV8Internal::exitFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, exitFullscreenMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration prependMethodConfiguration = {"prepend", DocumentV8Internal::prependMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, prependMethodConfiguration);
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    const V8DOMConfiguration::MethodConfiguration appendMethodConfiguration = {"append", DocumentV8Internal::appendMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, appendMethodConfiguration);
-  }
+    if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration createTouchMethodConfiguration = { "createTouch", DocumentV8Internal::createTouchMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, createTouchMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::touchEventFeatureDetectionEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration createTouchListMethodConfiguration = { "createTouchList", DocumentV8Internal::createTouchListMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, createTouchListMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::fullscreenUnprefixedEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration exitFullscreenMethodConfiguration = { "exitFullscreen", DocumentV8Internal::exitFullscreenMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, exitFullscreenMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration prependMethodConfiguration = { "prepend", DocumentV8Internal::prependMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, prependMethodConfiguration);
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        const V8DOMConfiguration::MethodConfiguration appendMethodConfiguration = { "append", DocumentV8Internal::appendMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installMethod(isolate, world, instance, prototype, interface, signature, appendMethodConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8Document::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DocumentTemplate);
+v8::Local<v8::FunctionTemplate> V8Document::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8DocumentTemplate);
 }
 
-bool V8Document::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Document::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Document::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Document::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Document* V8Document::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Document* V8Document::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-void V8Document::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  v8::Isolate* isolate = context->GetIsolate();
-  v8::Local<v8::Name> unscopablesSymbol(v8::Symbol::GetUnscopables(isolate));
-  v8::Local<v8::Object> unscopables;
-  if (v8CallBoolean(prototypeObject->HasOwnProperty(context, unscopablesSymbol)))
-    unscopables = prototypeObject->Get(context, unscopablesSymbol).ToLocalChecked().As<v8::Object>();
-  else
-    unscopables = v8::Object::New(isolate);
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "append"), v8::True(isolate)).FromJust();
-  }
-  if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
-    unscopables->CreateDataProperty(context, v8AtomicString(isolate, "prepend"), v8::True(isolate)).FromJust();
-  }
-  prototypeObject->CreateDataProperty(context, unscopablesSymbol, unscopables).FromJust();
+void V8Document::preparePrototypeAndInterfaceObject(v8::Local<v8::Context> context, const DOMWrapperWorld& world, v8::Local<v8::Object> prototypeObject, v8::Local<v8::Function> interfaceObject, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::Local<v8::Name> unscopablesSymbol(v8::Symbol::GetUnscopables(isolate));
+    v8::Local<v8::Object> unscopables;
+    if (v8CallBoolean(prototypeObject->HasOwnProperty(context, unscopablesSymbol)))
+        unscopables = prototypeObject->Get(context, unscopablesSymbol).ToLocalChecked().As<v8::Object>();
+    else
+        unscopables = v8::Object::New(isolate);
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "append"), v8::True(isolate)).FromJust();
+    }
+    if (RuntimeEnabledFeatures::dOMConvenienceAPIEnabled()) {
+        unscopables->CreateDataProperty(context, v8AtomicString(isolate, "prepend"), v8::True(isolate)).FromJust();
+    }
+    prototypeObject->CreateDataProperty(context, unscopablesSymbol, unscopables).FromJust();
 }
 
-}  // namespace blink
+} // namespace blink

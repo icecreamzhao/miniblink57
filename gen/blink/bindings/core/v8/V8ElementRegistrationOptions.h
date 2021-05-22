@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8ElementRegistrationOptions_h
 #define V8ElementRegistrationOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8ElementRegistrationOptions {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ElementRegistrationOptions&, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, ElementRegistrationOptions&, ExceptionState&);
 };
 
 CORE_EXPORT bool toV8ElementRegistrationOptions(const ElementRegistrationOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ElementRegistrationOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, ElementRegistrationOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<ElementRegistrationOptions> {
-  static ElementRegistrationOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static ElementRegistrationOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<ElementRegistrationOptions> {
-  typedef V8ElementRegistrationOptions Type;
+    typedef V8ElementRegistrationOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8ElementRegistrationOptions_h
+#endif // V8ElementRegistrationOptions_h

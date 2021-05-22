@@ -8,59 +8,70 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ProgressEventInit.h"
 
 namespace blink {
 
-ProgressEventInit::ProgressEventInit() {
-  setLengthComputable(false);
-  setLoaded(0);
-  setTotal(0);
+ProgressEventInit::ProgressEventInit()
+{
+    setLengthComputable(false);
+    setLoaded(0);
+    setTotal(0);
 }
 
-ProgressEventInit::~ProgressEventInit() {}
+ProgressEventInit::~ProgressEventInit() { }
 
 ProgressEventInit::ProgressEventInit(const ProgressEventInit&) = default;
 
 ProgressEventInit& ProgressEventInit::operator=(const ProgressEventInit&) = default;
 
-bool ProgressEventInit::hasLengthComputable() const {
-  return m_hasLengthComputable;
+bool ProgressEventInit::hasLengthComputable() const
+{
+    return m_hasLengthComputable;
 }
-bool ProgressEventInit::lengthComputable() const {
-  DCHECK(m_hasLengthComputable);
-  return m_lengthComputable;
+bool ProgressEventInit::lengthComputable() const
+{
+    DCHECK(m_hasLengthComputable);
+    return m_lengthComputable;
 }
-void ProgressEventInit::setLengthComputable(bool value) {
-  m_lengthComputable = value;
-  m_hasLengthComputable = true;
+void ProgressEventInit::setLengthComputable(bool value)
+{
+    m_lengthComputable = value;
+    m_hasLengthComputable = true;
 }
-bool ProgressEventInit::hasLoaded() const {
-  return m_hasLoaded;
+bool ProgressEventInit::hasLoaded() const
+{
+    return m_hasLoaded;
 }
-unsigned long long ProgressEventInit::loaded() const {
-  DCHECK(m_hasLoaded);
-  return m_loaded;
+unsigned long long ProgressEventInit::loaded() const
+{
+    DCHECK(m_hasLoaded);
+    return m_loaded;
 }
-void ProgressEventInit::setLoaded(unsigned long long value) {
-  m_loaded = value;
-  m_hasLoaded = true;
+void ProgressEventInit::setLoaded(unsigned long long value)
+{
+    m_loaded = value;
+    m_hasLoaded = true;
 }
-bool ProgressEventInit::hasTotal() const {
-  return m_hasTotal;
+bool ProgressEventInit::hasTotal() const
+{
+    return m_hasTotal;
 }
-unsigned long long ProgressEventInit::total() const {
-  DCHECK(m_hasTotal);
-  return m_total;
+unsigned long long ProgressEventInit::total() const
+{
+    DCHECK(m_hasTotal);
+    return m_total;
 }
-void ProgressEventInit::setTotal(unsigned long long value) {
-  m_total = value;
-  m_hasTotal = true;
+void ProgressEventInit::setTotal(unsigned long long value)
+{
+    m_total = value;
+    m_hasTotal = true;
 }
 
-DEFINE_TRACE(ProgressEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(ProgressEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

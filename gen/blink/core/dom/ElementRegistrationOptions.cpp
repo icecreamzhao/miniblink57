@@ -8,47 +8,57 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ElementRegistrationOptions.h"
 
 namespace blink {
 
-ElementRegistrationOptions::ElementRegistrationOptions() {
+ElementRegistrationOptions::ElementRegistrationOptions()
+{
 }
 
-ElementRegistrationOptions::~ElementRegistrationOptions() {}
+ElementRegistrationOptions::~ElementRegistrationOptions() { }
 
 ElementRegistrationOptions::ElementRegistrationOptions(const ElementRegistrationOptions&) = default;
 
 ElementRegistrationOptions& ElementRegistrationOptions::operator=(const ElementRegistrationOptions&) = default;
 
-bool ElementRegistrationOptions::hasExtends() const {
-  return !m_extends.isNull();
+bool ElementRegistrationOptions::hasExtends() const
+{
+    return !m_extends.isNull();
 }
-String ElementRegistrationOptions::extends() const {
-  return m_extends;
+String ElementRegistrationOptions::extends() const
+{
+    return m_extends;
 }
-void ElementRegistrationOptions::setExtends(String value) {
-  m_extends = value;
+void ElementRegistrationOptions::setExtends(String value)
+{
+    m_extends = value;
 }
-void ElementRegistrationOptions::setExtendsToNull() {
-  m_extends = String();
+void ElementRegistrationOptions::setExtendsToNull()
+{
+    m_extends = String();
 }
-bool ElementRegistrationOptions::hasPrototype() const {
-  return !(m_prototype.isEmpty() || m_prototype.isNull() || m_prototype.isUndefined());
+bool ElementRegistrationOptions::hasPrototype() const
+{
+    return !(m_prototype.isEmpty() || m_prototype.isNull() || m_prototype.isUndefined());
 }
-ScriptValue ElementRegistrationOptions::prototype() const {
-  return m_prototype;
+ScriptValue ElementRegistrationOptions::prototype() const
+{
+    return m_prototype;
 }
-void ElementRegistrationOptions::setPrototype(ScriptValue value) {
-  m_prototype = value;
+void ElementRegistrationOptions::setPrototype(ScriptValue value)
+{
+    m_prototype = value;
 }
-void ElementRegistrationOptions::setPrototypeToNull() {
-  m_prototype = ScriptValue();
+void ElementRegistrationOptions::setPrototypeToNull()
+{
+    m_prototype = ScriptValue();
 }
 
-DEFINE_TRACE(ElementRegistrationOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ElementRegistrationOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

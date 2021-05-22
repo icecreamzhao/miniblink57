@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8GyroscopeReadingInit_h
 #define V8GyroscopeReadingInit_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8GyroscopeReadingInit {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, GyroscopeReadingInit&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, GyroscopeReadingInit&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8GyroscopeReadingInit(const GyroscopeReadingInit&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, GyroscopeReadingInit& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, GyroscopeReadingInit& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<GyroscopeReadingInit> {
-  static GyroscopeReadingInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static GyroscopeReadingInit nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<GyroscopeReadingInit> {
-  typedef V8GyroscopeReadingInit Type;
+    typedef V8GyroscopeReadingInit Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8GyroscopeReadingInit_h
+#endif // V8GyroscopeReadingInit_h

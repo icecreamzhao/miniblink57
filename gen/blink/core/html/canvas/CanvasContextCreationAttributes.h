@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef CanvasContextCreationAttributes_h
 #define CanvasContextCreationAttributes_h
 
@@ -20,68 +20,69 @@
 namespace blink {
 
 class CORE_EXPORT CanvasContextCreationAttributes : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  CanvasContextCreationAttributes();
-  virtual ~CanvasContextCreationAttributes();
-  CanvasContextCreationAttributes(const CanvasContextCreationAttributes&);
-  CanvasContextCreationAttributes& operator=(const CanvasContextCreationAttributes&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAlpha() const;
-  bool alpha() const;
-  void setAlpha(bool);
+public:
+    CanvasContextCreationAttributes();
+    virtual ~CanvasContextCreationAttributes();
+    CanvasContextCreationAttributes(const CanvasContextCreationAttributes&);
+    CanvasContextCreationAttributes& operator=(const CanvasContextCreationAttributes&);
 
-  bool hasAntialias() const;
-  bool antialias() const;
-  void setAntialias(bool);
+    bool hasAlpha() const;
+    bool alpha() const;
+    void setAlpha(bool);
 
-  bool hasColorSpace() const;
-  String colorSpace() const;
-  void setColorSpace(String);
+    bool hasAntialias() const;
+    bool antialias() const;
+    void setAntialias(bool);
 
-  bool hasDepth() const;
-  bool depth() const;
-  void setDepth(bool);
+    bool hasColorSpace() const;
+    String colorSpace() const;
+    void setColorSpace(String);
 
-  bool hasFailIfMajorPerformanceCaveat() const;
-  bool failIfMajorPerformanceCaveat() const;
-  void setFailIfMajorPerformanceCaveat(bool);
+    bool hasDepth() const;
+    bool depth() const;
+    void setDepth(bool);
 
-  bool hasPremultipliedAlpha() const;
-  bool premultipliedAlpha() const;
-  void setPremultipliedAlpha(bool);
+    bool hasFailIfMajorPerformanceCaveat() const;
+    bool failIfMajorPerformanceCaveat() const;
+    void setFailIfMajorPerformanceCaveat(bool);
 
-  bool hasPreserveDrawingBuffer() const;
-  bool preserveDrawingBuffer() const;
-  void setPreserveDrawingBuffer(bool);
+    bool hasPremultipliedAlpha() const;
+    bool premultipliedAlpha() const;
+    void setPremultipliedAlpha(bool);
 
-  bool hasStencil() const;
-  bool stencil() const;
-  void setStencil(bool);
+    bool hasPreserveDrawingBuffer() const;
+    bool preserveDrawingBuffer() const;
+    void setPreserveDrawingBuffer(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasStencil() const;
+    bool stencil() const;
+    void setStencil(bool);
 
- private:
-  bool m_hasAlpha = false;
-  bool m_alpha;
-  bool m_hasAntialias = false;
-  bool m_antialias;
-  String m_colorSpace;
-  bool m_hasDepth = false;
-  bool m_depth;
-  bool m_hasFailIfMajorPerformanceCaveat = false;
-  bool m_failIfMajorPerformanceCaveat;
-  bool m_hasPremultipliedAlpha = false;
-  bool m_premultipliedAlpha;
-  bool m_hasPreserveDrawingBuffer = false;
-  bool m_preserveDrawingBuffer;
-  bool m_hasStencil = false;
-  bool m_stencil;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8CanvasContextCreationAttributes;
+private:
+    bool m_hasAlpha = false;
+    bool m_alpha;
+    bool m_hasAntialias = false;
+    bool m_antialias;
+    String m_colorSpace;
+    bool m_hasDepth = false;
+    bool m_depth;
+    bool m_hasFailIfMajorPerformanceCaveat = false;
+    bool m_failIfMajorPerformanceCaveat;
+    bool m_hasPremultipliedAlpha = false;
+    bool m_premultipliedAlpha;
+    bool m_hasPreserveDrawingBuffer = false;
+    bool m_preserveDrawingBuffer;
+    bool m_hasStencil = false;
+    bool m_stencil;
+
+    friend class V8CanvasContextCreationAttributes;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // CanvasContextCreationAttributes_h
+#endif // CanvasContextCreationAttributes_h

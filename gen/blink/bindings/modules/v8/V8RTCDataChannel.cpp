@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8RTCDataChannel.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,533 +53,594 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&RTCDataChannel::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "RTCDataChannel is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace RTCDataChannelV8Internal {
 
-static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void labelAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->label(), info.GetIsolate());
-}
-
-MODULES_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::labelAttributeGetter(info);
-}
-
-static void orderedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->ordered());
-}
-
-MODULES_EXPORT void orderedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::orderedAttributeGetter(info);
-}
-
-static void maxRetransmitTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->maxRetransmitTime());
-}
-
-MODULES_EXPORT void maxRetransmitTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCDataChannel_MaxRetransmitTime_AttributeGetter);
-
-  RTCDataChannelV8Internal::maxRetransmitTimeAttributeGetter(info);
-}
-
-static void maxRetransmitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->maxRetransmits());
-}
-
-MODULES_EXPORT void maxRetransmitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCDataChannel_MaxRetransmits_AttributeGetter);
-
-  RTCDataChannelV8Internal::maxRetransmitsAttributeGetter(info);
-}
-
-static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->protocol(), info.GetIsolate());
-}
-
-MODULES_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::protocolAttributeGetter(info);
-}
-
-static void negotiatedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->negotiated());
-}
-
-MODULES_EXPORT void negotiatedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::negotiatedAttributeGetter(info);
-}
-
-static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->id());
-}
-
-MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::idAttributeGetter(info);
-}
-
-static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->readyState(), info.GetIsolate());
-}
-
-MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::readyStateAttributeGetter(info);
-}
-
-static void bufferedAmountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->bufferedAmount());
-}
-
-MODULES_EXPORT void bufferedAmountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::bufferedAmountAttributeGetter(info);
-}
-
-static void bufferedAmountLowThresholdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->bufferedAmountLowThreshold());
-}
-
-MODULES_EXPORT void bufferedAmountLowThresholdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::bufferedAmountLowThresholdAttributeGetter(info);
-}
-
-static void bufferedAmountLowThresholdAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "RTCDataChannel", "bufferedAmountLowThreshold");
-
-  // Prepare the value to be set.
-  unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setBufferedAmountLowThreshold(cppValue);
-}
-
-MODULES_EXPORT void bufferedAmountLowThresholdAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCDataChannelV8Internal::bufferedAmountLowThresholdAttributeSetter(v8Value, info);
-}
-
-static void onopenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onopen()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onopenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::onopenAttributeGetter(info);
-}
-
-static void onopenAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onopen(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
-
-  impl->setOnopen(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onopenAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCDataChannelV8Internal::onopenAttributeSetter(v8Value, info);
-}
-
-static void onbufferedamountlowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onbufferedamountlow()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onbufferedamountlowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::onbufferedamountlowAttributeGetter(info);
-}
-
-static void onbufferedamountlowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onbufferedamountlow(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
-
-  impl->setOnbufferedamountlow(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onbufferedamountlowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCDataChannelV8Internal::onbufferedamountlowAttributeSetter(v8Value, info);
-}
-
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::onerrorAttributeGetter(info);
-}
-
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
-
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCDataChannelV8Internal::onerrorAttributeSetter(v8Value, info);
-}
-
-static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onclose()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::oncloseAttributeGetter(info);
-}
-
-static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onclose(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
-
-  impl->setOnclose(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCDataChannelV8Internal::oncloseAttributeSetter(v8Value, info);
-}
-
-static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onmessage()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::onmessageAttributeGetter(info);
-}
-
-static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
-
-  impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCDataChannelV8Internal::onmessageAttributeSetter(v8Value, info);
-}
-
-static void binaryTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->binaryType(), info.GetIsolate());
-}
-
-MODULES_EXPORT void binaryTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::binaryTypeAttributeGetter(info);
-}
-
-static void binaryTypeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "RTCDataChannel", "binaryType");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  impl->setBinaryType(cppValue, exceptionState);
-}
-
-MODULES_EXPORT void binaryTypeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  RTCDataChannelV8Internal::binaryTypeAttributeSetter(v8Value, info);
-}
-
-static void reliableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
-
-  v8SetReturnValueBool(info, impl->reliable());
-}
-
-MODULES_EXPORT void reliableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCDataChannel_Reliable_AttributeGetter);
-
-  RTCDataChannelV8Internal::reliableAttributeGetter(info);
-}
-
-static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
-
-  impl->close();
-}
-
-MODULES_EXPORT  void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::closeMethod(info);
-}
-
-static void send1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
-
-  V8StringResource<> data;
-  data = info[0];
-  if (!data.prepare())
-    return;
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void send2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
-
-  Blob* data;
-  data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
-
-    return;
-  }
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void send3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
-
-  DOMArrayBuffer* data;
-  data = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBuffer'.");
-
-    return;
-  }
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void send4Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
-
-  RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
-
-  DOMArrayBufferView* data;
-  data = info[0]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void sendMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(1, info.Length())) {
-    case 1:
-      if (V8Blob::hasInstance(info[0], info.GetIsolate())) {
-        send2Method(info);
-        return;
-      }
-      if (info[0]->IsArrayBuffer()) {
-        send3Method(info);
-        return;
-      }
-      if (info[0]->IsArrayBufferView()) {
-        send4Method(info);
-        return;
-      }
-      if (true) {
-        send1Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValueString(info, impl->label(), info.GetIsolate());
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void sendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  RTCDataChannelV8Internal::sendMethod(info);
-}
+    MODULES_EXPORT void labelAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::labelAttributeGetter(info);
+    }
+
+    static void orderedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->ordered());
+    }
+
+    MODULES_EXPORT void orderedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::orderedAttributeGetter(info);
+    }
+
+    static void maxRetransmitTimeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->maxRetransmitTime());
+    }
+
+    MODULES_EXPORT void maxRetransmitTimeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCDataChannel_MaxRetransmitTime_AttributeGetter);
+
+        RTCDataChannelV8Internal::maxRetransmitTimeAttributeGetter(info);
+    }
+
+    static void maxRetransmitsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->maxRetransmits());
+    }
+
+    MODULES_EXPORT void maxRetransmitsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCDataChannel_MaxRetransmits_AttributeGetter);
+
+        RTCDataChannelV8Internal::maxRetransmitsAttributeGetter(info);
+    }
+
+    static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->protocol(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::protocolAttributeGetter(info);
+    }
+
+    static void negotiatedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->negotiated());
+    }
+
+    MODULES_EXPORT void negotiatedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::negotiatedAttributeGetter(info);
+    }
+
+    static void idAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->id());
+    }
+
+    MODULES_EXPORT void idAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::idAttributeGetter(info);
+    }
+
+    static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->readyState(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::readyStateAttributeGetter(info);
+    }
+
+    static void bufferedAmountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->bufferedAmount());
+    }
+
+    MODULES_EXPORT void bufferedAmountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::bufferedAmountAttributeGetter(info);
+    }
+
+    static void bufferedAmountLowThresholdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->bufferedAmountLowThreshold());
+    }
+
+    MODULES_EXPORT void bufferedAmountLowThresholdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::bufferedAmountLowThresholdAttributeGetter(info);
+    }
+
+    static void bufferedAmountLowThresholdAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "RTCDataChannel", "bufferedAmountLowThreshold");
+
+        // Prepare the value to be set.
+        unsigned cppValue = toUInt32(info.GetIsolate(), v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setBufferedAmountLowThreshold(cppValue);
+    }
+
+    MODULES_EXPORT void bufferedAmountLowThresholdAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCDataChannelV8Internal::bufferedAmountLowThresholdAttributeSetter(v8Value, info);
+    }
+
+    static void onopenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onopen()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onopenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::onopenAttributeGetter(info);
+    }
+
+    static void onopenAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onopen(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
+
+        impl->setOnopen(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onopenAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCDataChannelV8Internal::onopenAttributeSetter(v8Value, info);
+    }
+
+    static void onbufferedamountlowAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onbufferedamountlow()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onbufferedamountlowAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::onbufferedamountlowAttributeGetter(info);
+    }
+
+    static void onbufferedamountlowAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onbufferedamountlow(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
+
+        impl->setOnbufferedamountlow(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onbufferedamountlowAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCDataChannelV8Internal::onbufferedamountlowAttributeSetter(v8Value, info);
+    }
+
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::onerrorAttributeGetter(info);
+    }
+
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
+
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCDataChannelV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
+
+    static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onclose()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::oncloseAttributeGetter(info);
+    }
+
+    static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onclose(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
+
+        impl->setOnclose(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCDataChannelV8Internal::oncloseAttributeSetter(v8Value, info);
+    }
+
+    static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onmessage()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::onmessageAttributeGetter(info);
+    }
+
+    static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8RTCDataChannel::eventListenerCacheIndex);
+
+        impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCDataChannelV8Internal::onmessageAttributeSetter(v8Value, info);
+    }
+
+    static void binaryTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->binaryType(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void binaryTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::binaryTypeAttributeGetter(info);
+    }
+
+    static void binaryTypeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "RTCDataChannel", "binaryType");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        impl->setBinaryType(cppValue, exceptionState);
+    }
+
+    MODULES_EXPORT void binaryTypeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        RTCDataChannelV8Internal::binaryTypeAttributeSetter(v8Value, info);
+    }
+
+    static void reliableAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(holder);
+
+        v8SetReturnValueBool(info, impl->reliable());
+    }
+
+    MODULES_EXPORT void reliableAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8RTCDataChannel_Reliable_AttributeGetter);
+
+        RTCDataChannelV8Internal::reliableAttributeGetter(info);
+    }
+
+    static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
+
+        impl->close();
+    }
+
+    MODULES_EXPORT void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::closeMethod(info);
+    }
+
+    static void send1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
+
+        V8StringResource<> data;
+        data = info[0];
+        if (!data.prepare())
+            return;
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void send2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
+
+        Blob* data;
+        data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+
+            return;
+        }
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void send3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
+
+        DOMArrayBuffer* data;
+        data = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBuffer'.");
+
+            return;
+        }
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void send4Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
+
+        RTCDataChannel* impl = V8RTCDataChannel::toImpl(info.Holder());
+
+        DOMArrayBufferView* data;
+        data = info[0]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void sendMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(1, info.Length())) {
+        case 1:
+            if (V8Blob::hasInstance(info[0], info.GetIsolate())) {
+                send2Method(info);
+                return;
+            }
+            if (info[0]->IsArrayBuffer()) {
+                send3Method(info);
+                return;
+            }
+            if (info[0]->IsArrayBufferView()) {
+                send4Method(info);
+                return;
+            }
+            if (true) {
+                send1Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "RTCDataChannel", "send");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void sendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        RTCDataChannelV8Internal::sendMethod(info);
+    }
 
 } // namespace RTCDataChannelV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8RTCDataChannelAccessors[] = {
-    {"label", RTCDataChannelV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ordered", RTCDataChannelV8Internal::orderedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"maxRetransmitTime", RTCDataChannelV8Internal::maxRetransmitTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"maxRetransmits", RTCDataChannelV8Internal::maxRetransmitsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"protocol", RTCDataChannelV8Internal::protocolAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"negotiated", RTCDataChannelV8Internal::negotiatedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"id", RTCDataChannelV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readyState", RTCDataChannelV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bufferedAmount", RTCDataChannelV8Internal::bufferedAmountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bufferedAmountLowThreshold", RTCDataChannelV8Internal::bufferedAmountLowThresholdAttributeGetterCallback, RTCDataChannelV8Internal::bufferedAmountLowThresholdAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onopen", RTCDataChannelV8Internal::onopenAttributeGetterCallback, RTCDataChannelV8Internal::onopenAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onbufferedamountlow", RTCDataChannelV8Internal::onbufferedamountlowAttributeGetterCallback, RTCDataChannelV8Internal::onbufferedamountlowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", RTCDataChannelV8Internal::onerrorAttributeGetterCallback, RTCDataChannelV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onclose", RTCDataChannelV8Internal::oncloseAttributeGetterCallback, RTCDataChannelV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmessage", RTCDataChannelV8Internal::onmessageAttributeGetterCallback, RTCDataChannelV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"binaryType", RTCDataChannelV8Internal::binaryTypeAttributeGetterCallback, RTCDataChannelV8Internal::binaryTypeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"reliable", RTCDataChannelV8Internal::reliableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "label", RTCDataChannelV8Internal::labelAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ordered", RTCDataChannelV8Internal::orderedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "maxRetransmitTime", RTCDataChannelV8Internal::maxRetransmitTimeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "maxRetransmits", RTCDataChannelV8Internal::maxRetransmitsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "protocol", RTCDataChannelV8Internal::protocolAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "negotiated", RTCDataChannelV8Internal::negotiatedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "id", RTCDataChannelV8Internal::idAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readyState", RTCDataChannelV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bufferedAmount", RTCDataChannelV8Internal::bufferedAmountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bufferedAmountLowThreshold", RTCDataChannelV8Internal::bufferedAmountLowThresholdAttributeGetterCallback, RTCDataChannelV8Internal::bufferedAmountLowThresholdAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onopen", RTCDataChannelV8Internal::onopenAttributeGetterCallback, RTCDataChannelV8Internal::onopenAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onbufferedamountlow", RTCDataChannelV8Internal::onbufferedamountlowAttributeGetterCallback, RTCDataChannelV8Internal::onbufferedamountlowAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", RTCDataChannelV8Internal::onerrorAttributeGetterCallback, RTCDataChannelV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onclose", RTCDataChannelV8Internal::oncloseAttributeGetterCallback, RTCDataChannelV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmessage", RTCDataChannelV8Internal::onmessageAttributeGetterCallback, RTCDataChannelV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "binaryType", RTCDataChannelV8Internal::binaryTypeAttributeGetterCallback, RTCDataChannelV8Internal::binaryTypeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "reliable", RTCDataChannelV8Internal::reliableAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8RTCDataChannelMethods[] = {
-    {"close", RTCDataChannelV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"send", RTCDataChannelV8Internal::sendMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "close", RTCDataChannelV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "send", RTCDataChannelV8Internal::sendMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8RTCDataChannelTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCDataChannel::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8RTCDataChannel::internalFieldCount);
+static void installV8RTCDataChannelTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8RTCDataChannel::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8RTCDataChannel::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCDataChannelAccessors, WTF_ARRAY_LENGTH(V8RTCDataChannelAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCDataChannelMethods, WTF_ARRAY_LENGTH(V8RTCDataChannelMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCDataChannelAccessors, WTF_ARRAY_LENGTH(V8RTCDataChannelAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8RTCDataChannelMethods, WTF_ARRAY_LENGTH(V8RTCDataChannelMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8RTCDataChannel::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCDataChannelTemplate);
+v8::Local<v8::FunctionTemplate> V8RTCDataChannel::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8RTCDataChannelTemplate);
 }
 
-bool V8RTCDataChannel::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8RTCDataChannel::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8RTCDataChannel::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8RTCDataChannel::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-RTCDataChannel* V8RTCDataChannel::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+RTCDataChannel* V8RTCDataChannel::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

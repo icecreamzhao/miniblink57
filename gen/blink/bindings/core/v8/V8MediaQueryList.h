@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8MediaQueryList_h
 #define V8MediaQueryList_h
 
@@ -25,34 +25,38 @@
 namespace blink {
 
 class V8MediaQueryList {
-  STATIC_ONLY(V8MediaQueryList);
- public:
-  CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-  static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-  CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
-  static MediaQueryList* toImpl(v8::Local<v8::Object> object) {
-    return toScriptWrappable(object)->toImpl<MediaQueryList>();
-  }
-  CORE_EXPORT static MediaQueryList* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-  CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-  template<typename VisitorDispatcher>
-  static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable) {
-    visitor->trace(scriptWrappable->toImpl<MediaQueryList>());
-  }
-  static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable) {
-    visitor->traceWrappers(scriptWrappable->toImpl<MediaQueryList>());
-  }
-  static void addListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, MediaQueryList*);
-  static void removeListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, MediaQueryList*);
-  static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
-  static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
+    STATIC_ONLY(V8MediaQueryList);
+
+public:
+    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
+    static MediaQueryList* toImpl(v8::Local<v8::Object> object)
+    {
+        return toScriptWrappable(object)->toImpl<MediaQueryList>();
+    }
+    CORE_EXPORT static MediaQueryList* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    template <typename VisitorDispatcher>
+    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->trace(scriptWrappable->toImpl<MediaQueryList>());
+    }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<MediaQueryList>());
+    }
+    static void addListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, MediaQueryList*);
+    static void removeListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>&, MediaQueryList*);
+    static const int eventListenerCacheIndex = v8DefaultWrapperInternalFieldCount + 0;
+    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 1;
 };
 
 template <>
 struct V8TypeOf<MediaQueryList> {
-  typedef V8MediaQueryList Type;
+    typedef V8MediaQueryList Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8MediaQueryList_h
+#endif // V8MediaQueryList_h

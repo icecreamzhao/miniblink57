@@ -8,33 +8,38 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "CompositionEventInit.h"
 
 namespace blink {
 
-CompositionEventInit::CompositionEventInit() {
-  setData(String(""));
+CompositionEventInit::CompositionEventInit()
+{
+    setData(String(""));
 }
 
-CompositionEventInit::~CompositionEventInit() {}
+CompositionEventInit::~CompositionEventInit() { }
 
 CompositionEventInit::CompositionEventInit(const CompositionEventInit&) = default;
 
 CompositionEventInit& CompositionEventInit::operator=(const CompositionEventInit&) = default;
 
-bool CompositionEventInit::hasData() const {
-  return !m_data.isNull();
+bool CompositionEventInit::hasData() const
+{
+    return !m_data.isNull();
 }
-String CompositionEventInit::data() const {
-  return m_data;
+String CompositionEventInit::data() const
+{
+    return m_data;
 }
-void CompositionEventInit::setData(String value) {
-  m_data = value;
+void CompositionEventInit::setData(String value)
+{
+    m_data = value;
 }
 
-DEFINE_TRACE(CompositionEventInit) {
-  UIEventInit::trace(visitor);
+DEFINE_TRACE(CompositionEventInit)
+{
+    UIEventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

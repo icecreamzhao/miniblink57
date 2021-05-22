@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaQueryListEventInit.h"
 
 namespace blink {
 
-MediaQueryListEventInit::MediaQueryListEventInit() {
-  setMatches(false);
-  setMedia(String(""));
+MediaQueryListEventInit::MediaQueryListEventInit()
+{
+    setMatches(false);
+    setMedia(String(""));
 }
 
-MediaQueryListEventInit::~MediaQueryListEventInit() {}
+MediaQueryListEventInit::~MediaQueryListEventInit() { }
 
 MediaQueryListEventInit::MediaQueryListEventInit(const MediaQueryListEventInit&) = default;
 
 MediaQueryListEventInit& MediaQueryListEventInit::operator=(const MediaQueryListEventInit&) = default;
 
-bool MediaQueryListEventInit::hasMatches() const {
-  return m_hasMatches;
+bool MediaQueryListEventInit::hasMatches() const
+{
+    return m_hasMatches;
 }
-bool MediaQueryListEventInit::matches() const {
-  DCHECK(m_hasMatches);
-  return m_matches;
+bool MediaQueryListEventInit::matches() const
+{
+    DCHECK(m_hasMatches);
+    return m_matches;
 }
-void MediaQueryListEventInit::setMatches(bool value) {
-  m_matches = value;
-  m_hasMatches = true;
+void MediaQueryListEventInit::setMatches(bool value)
+{
+    m_matches = value;
+    m_hasMatches = true;
 }
-bool MediaQueryListEventInit::hasMedia() const {
-  return !m_media.isNull();
+bool MediaQueryListEventInit::hasMedia() const
+{
+    return !m_media.isNull();
 }
-String MediaQueryListEventInit::media() const {
-  return m_media;
+String MediaQueryListEventInit::media() const
+{
+    return m_media;
 }
-void MediaQueryListEventInit::setMedia(String value) {
-  m_media = value;
+void MediaQueryListEventInit::setMedia(String value)
+{
+    m_media = value;
 }
 
-DEFINE_TRACE(MediaQueryListEventInit) {
-  EventInit::trace(visitor);
+DEFINE_TRACE(MediaQueryListEventInit)
+{
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

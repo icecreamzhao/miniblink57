@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WebSocket.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -54,517 +54,562 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&DOMWebSocket::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "DOMWebSocket is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace DOMWebSocketV8Internal {
 
-static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void urlAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->url(), info.GetIsolate());
-}
-
-MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::urlAttributeGetter(info);
-}
-
-static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->readyState());
-}
-
-MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::readyStateAttributeGetter(info);
-}
-
-static void bufferedAmountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  v8SetReturnValueUnsigned(info, impl->bufferedAmount());
-}
-
-MODULES_EXPORT void bufferedAmountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::bufferedAmountAttributeGetter(info);
-}
-
-static void onopenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onopen()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onopenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::onopenAttributeGetter(info);
-}
-
-static void onopenAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onopen(), v8Value, V8WebSocket::eventListenerCacheIndex);
-
-  impl->setOnopen(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onopenAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DOMWebSocketV8Internal::onopenAttributeSetter(v8Value, info);
-}
-
-static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onerror()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::onerrorAttributeGetter(info);
-}
-
-static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8WebSocket::eventListenerCacheIndex);
-
-  impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DOMWebSocketV8Internal::onerrorAttributeSetter(v8Value, info);
-}
-
-static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onclose()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::oncloseAttributeGetter(info);
-}
-
-static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onclose(), v8Value, V8WebSocket::eventListenerCacheIndex);
-
-  impl->setOnclose(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DOMWebSocketV8Internal::oncloseAttributeSetter(v8Value, info);
-}
-
-static void extensionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->extensions(), info.GetIsolate());
-}
-
-MODULES_EXPORT void extensionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::extensionsAttributeGetter(info);
-}
-
-static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->protocol(), info.GetIsolate());
-}
-
-MODULES_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::protocolAttributeGetter(info);
-}
-
-static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  EventListener* cppValue(WTF::getPtr(impl->onmessage()));
-
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
-
-MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::onmessageAttributeGetter(info);
-}
-
-static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8WebSocket::eventListenerCacheIndex);
-
-  impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
-
-MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DOMWebSocketV8Internal::onmessageAttributeSetter(v8Value, info);
-}
-
-static void binaryTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  v8SetReturnValueString(info, impl->binaryType(), info.GetIsolate());
-}
-
-MODULES_EXPORT void binaryTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::binaryTypeAttributeGetter(info);
-}
-
-static void binaryTypeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  DOMWebSocket* impl = V8WebSocket::toImpl(holder);
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "WebSocket", "binaryType");
-
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
-
-  // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
-  // Returns undefined without setting the value if the value is invalid.
-  DummyExceptionStateForTesting dummyExceptionState;
-  const char* validValues[] = {
-      "blob",
-      "arraybuffer",
-  };
-  if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "BinaryType", dummyExceptionState)) {
-    currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
-    return;
-  }
-
-  impl->setBinaryType(cppValue);
-}
-
-MODULES_EXPORT void binaryTypeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
-
-  DOMWebSocketV8Internal::binaryTypeAttributeSetter(v8Value, info);
-}
-
-static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "close");
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
-
-  unsigned code;
-  V8StringResource<> reason;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  if (UNLIKELY(numArgsPassed <= 0)) {
-    impl->close(exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+        v8SetReturnValueString(info, impl->url(), info.GetIsolate());
     }
-    return;
-  }
-  code = toUInt16(info.GetIsolate(), info[0], Clamp, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    impl->close(code, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    MODULES_EXPORT void urlAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::urlAttributeGetter(info);
     }
-    return;
-  }
-  reason = toUSVString(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  impl->close(code, reason, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+    static void readyStateAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-MODULES_EXPORT  void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::closeMethod(info);
-}
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
 
-static void send1Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
-
-  V8StringResource<> data;
-  data = toUSVString(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void send2Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
-
-  Blob* data;
-  data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
-
-    return;
-  }
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void send3Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
-
-  DOMArrayBuffer* data;
-  data = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBuffer'.");
-
-    return;
-  }
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void send4Method(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
-
-  DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
-
-  DOMArrayBufferView* data;
-  data = info[0]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[0])) : 0;
-  if (!data) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBufferView'.");
-
-    return;
-  }
-
-  impl->send(data, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
-static void sendMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  bool isArityError = false;
-  switch (std::min(1, info.Length())) {
-    case 1:
-      if (V8Blob::hasInstance(info[0], info.GetIsolate())) {
-        send2Method(info);
-        return;
-      }
-      if (info[0]->IsArrayBuffer()) {
-        send3Method(info);
-        return;
-      }
-      if (info[0]->IsArrayBufferView()) {
-        send4Method(info);
-        return;
-      }
-      if (true) {
-        send1Method(info);
-        return;
-      }
-      break;
-    default:
-      isArityError = true;
-  }
-
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
-
-  if (isArityError) {
-    if (info.Length() < 1) {
-      exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-      return;
+        v8SetReturnValueUnsigned(info, impl->readyState());
     }
-  }
-  exceptionState.throwTypeError("No function was found that matched the signature provided.");
-}
 
-MODULES_EXPORT  void sendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  DOMWebSocketV8Internal::sendMethod(info);
-}
-
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "WebSocket");
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> url;
-  StringOrStringSequence protocols;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  url = info[0];
-  if (!url.prepare())
-    return;
-
-  if (UNLIKELY(numArgsPassed <= 1)) {
-    ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-    DOMWebSocket* impl = DOMWebSocket::create(executionContext, url, exceptionState);
-    if (exceptionState.hadException()) {
-      return;
+    MODULES_EXPORT void readyStateAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::readyStateAttributeGetter(info);
     }
-    v8::Local<v8::Object> wrapper = info.Holder();
-    wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8WebSocket::wrapperTypeInfo, wrapper);
-    v8SetReturnValue(info, wrapper);
-    return;
-  }
-  V8StringOrStringSequence::toImpl(info.GetIsolate(), info[1], protocols, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
 
-  ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
-  DOMWebSocket* impl = DOMWebSocket::create(executionContext, url, protocols, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8WebSocket::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+    static void bufferedAmountAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        v8SetReturnValueUnsigned(info, impl->bufferedAmount());
+    }
+
+    MODULES_EXPORT void bufferedAmountAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::bufferedAmountAttributeGetter(info);
+    }
+
+    static void onopenAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onopen()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onopenAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::onopenAttributeGetter(info);
+    }
+
+    static void onopenAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onopen(), v8Value, V8WebSocket::eventListenerCacheIndex);
+
+        impl->setOnopen(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onopenAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DOMWebSocketV8Internal::onopenAttributeSetter(v8Value, info);
+    }
+
+    static void onerrorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onerror()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onerrorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::onerrorAttributeGetter(info);
+    }
+
+    static void onerrorAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onerror(), v8Value, V8WebSocket::eventListenerCacheIndex);
+
+        impl->setOnerror(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onerrorAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DOMWebSocketV8Internal::onerrorAttributeSetter(v8Value, info);
+    }
+
+    static void oncloseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onclose()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void oncloseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::oncloseAttributeGetter(info);
+    }
+
+    static void oncloseAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onclose(), v8Value, V8WebSocket::eventListenerCacheIndex);
+
+        impl->setOnclose(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void oncloseAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DOMWebSocketV8Internal::oncloseAttributeSetter(v8Value, info);
+    }
+
+    static void extensionsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->extensions(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void extensionsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::extensionsAttributeGetter(info);
+    }
+
+    static void protocolAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->protocol(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void protocolAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::protocolAttributeGetter(info);
+    }
+
+    static void onmessageAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        EventListener* cppValue(WTF::getPtr(impl->onmessage()));
+
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
+
+    MODULES_EXPORT void onmessageAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::onmessageAttributeGetter(info);
+    }
+
+    static void onmessageAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onmessage(), v8Value, V8WebSocket::eventListenerCacheIndex);
+
+        impl->setOnmessage(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
+
+    MODULES_EXPORT void onmessageAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DOMWebSocketV8Internal::onmessageAttributeSetter(v8Value, info);
+    }
+
+    static void binaryTypeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        v8SetReturnValueString(info, impl->binaryType(), info.GetIsolate());
+    }
+
+    MODULES_EXPORT void binaryTypeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::binaryTypeAttributeGetter(info);
+    }
+
+    static void binaryTypeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        DOMWebSocket* impl = V8WebSocket::toImpl(holder);
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "WebSocket", "binaryType");
+
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
+
+        // Type check per: http://heycam.github.io/webidl/#dfn-attribute-setter
+        // Returns undefined without setting the value if the value is invalid.
+        DummyExceptionStateForTesting dummyExceptionState;
+        const char* validValues[] = {
+            "blob",
+            "arraybuffer",
+        };
+        if (!isValidEnum(cppValue, validValues, WTF_ARRAY_LENGTH(validValues), "BinaryType", dummyExceptionState)) {
+            currentExecutionContext(info.GetIsolate())->addConsoleMessage(ConsoleMessage::create(JSMessageSource, WarningMessageLevel, dummyExceptionState.message()));
+            return;
+        }
+
+        impl->setBinaryType(cppValue);
+    }
+
+    MODULES_EXPORT void binaryTypeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
+
+        DOMWebSocketV8Internal::binaryTypeAttributeSetter(v8Value, info);
+    }
+
+    static void closeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "close");
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
+
+        unsigned code;
+        V8StringResource<> reason;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        if (UNLIKELY(numArgsPassed <= 0)) {
+            impl->close(exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        code = toUInt16(info.GetIsolate(), info[0], Clamp, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            impl->close(code, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            return;
+        }
+        reason = toUSVString(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->close(code, reason, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    MODULES_EXPORT void closeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::closeMethod(info);
+    }
+
+    static void send1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
+
+        V8StringResource<> data;
+        data = toUSVString(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void send2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
+
+        Blob* data;
+        data = V8Blob::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Blob'.");
+
+            return;
+        }
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void send3Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
+
+        DOMArrayBuffer* data;
+        data = info[0]->IsArrayBuffer() ? V8ArrayBuffer::toImpl(v8::Local<v8::ArrayBuffer>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBuffer'.");
+
+            return;
+        }
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void send4Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
+
+        DOMWebSocket* impl = V8WebSocket::toImpl(info.Holder());
+
+        DOMArrayBufferView* data;
+        data = info[0]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Local<v8::ArrayBufferView>::Cast(info[0])) : 0;
+        if (!data) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'ArrayBufferView'.");
+
+            return;
+        }
+
+        impl->send(data, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    static void sendMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        bool isArityError = false;
+        switch (std::min(1, info.Length())) {
+        case 1:
+            if (V8Blob::hasInstance(info[0], info.GetIsolate())) {
+                send2Method(info);
+                return;
+            }
+            if (info[0]->IsArrayBuffer()) {
+                send3Method(info);
+                return;
+            }
+            if (info[0]->IsArrayBufferView()) {
+                send4Method(info);
+                return;
+            }
+            if (true) {
+                send1Method(info);
+                return;
+            }
+            break;
+        default:
+            isArityError = true;
+        }
+
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "WebSocket", "send");
+
+        if (isArityError) {
+            if (info.Length() < 1) {
+                exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+                return;
+            }
+        }
+        exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    }
+
+    MODULES_EXPORT void sendMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWebSocketV8Internal::sendMethod(info);
+    }
+
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "WebSocket");
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> url;
+        StringOrStringSequence protocols;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        url = info[0];
+        if (!url.prepare())
+            return;
+
+        if (UNLIKELY(numArgsPassed <= 1)) {
+            ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+            DOMWebSocket* impl = DOMWebSocket::create(executionContext, url, exceptionState);
+            if (exceptionState.hadException()) {
+                return;
+            }
+            v8::Local<v8::Object> wrapper = info.Holder();
+            wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8WebSocket::wrapperTypeInfo, wrapper);
+            v8SetReturnValue(info, wrapper);
+            return;
+        }
+        V8StringOrStringSequence::toImpl(info.GetIsolate(), info[1], protocols, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        DOMWebSocket* impl = DOMWebSocket::create(executionContext, url, protocols, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8WebSocket::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace DOMWebSocketV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8WebSocketAccessors[] = {
-    {"url", DOMWebSocketV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"readyState", DOMWebSocketV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bufferedAmount", DOMWebSocketV8Internal::bufferedAmountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onopen", DOMWebSocketV8Internal::onopenAttributeGetterCallback, DOMWebSocketV8Internal::onopenAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onerror", DOMWebSocketV8Internal::onerrorAttributeGetterCallback, DOMWebSocketV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onclose", DOMWebSocketV8Internal::oncloseAttributeGetterCallback, DOMWebSocketV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"extensions", DOMWebSocketV8Internal::extensionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"protocol", DOMWebSocketV8Internal::protocolAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onmessage", DOMWebSocketV8Internal::onmessageAttributeGetterCallback, DOMWebSocketV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"binaryType", DOMWebSocketV8Internal::binaryTypeAttributeGetterCallback, DOMWebSocketV8Internal::binaryTypeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "url", DOMWebSocketV8Internal::urlAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "readyState", DOMWebSocketV8Internal::readyStateAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bufferedAmount", DOMWebSocketV8Internal::bufferedAmountAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onopen", DOMWebSocketV8Internal::onopenAttributeGetterCallback, DOMWebSocketV8Internal::onopenAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onerror", DOMWebSocketV8Internal::onerrorAttributeGetterCallback, DOMWebSocketV8Internal::onerrorAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onclose", DOMWebSocketV8Internal::oncloseAttributeGetterCallback, DOMWebSocketV8Internal::oncloseAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "extensions", DOMWebSocketV8Internal::extensionsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "protocol", DOMWebSocketV8Internal::protocolAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onmessage", DOMWebSocketV8Internal::onmessageAttributeGetterCallback, DOMWebSocketV8Internal::onmessageAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "binaryType", DOMWebSocketV8Internal::binaryTypeAttributeGetterCallback, DOMWebSocketV8Internal::binaryTypeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8WebSocketMethods[] = {
-    {"close", DOMWebSocketV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"send", DOMWebSocketV8Internal::sendMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "close", DOMWebSocketV8Internal::closeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "send", DOMWebSocketV8Internal::sendMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8WebSocket::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("WebSocket"));
-    return;
-  }
+void V8WebSocket::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("WebSocket"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  DOMWebSocketV8Internal::constructor(info);
+    DOMWebSocketV8Internal::constructor(info);
 }
 
-static void installV8WebSocketTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebSocket::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8WebSocket::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8WebSocket::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8WebSocketTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebSocket::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8WebSocket::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8WebSocket::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8WebSocketConstants[] = {
-      {"CONNECTING", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"OPEN", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"CLOSING", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"CLOSED", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebSocketConstants, WTF_ARRAY_LENGTH(V8WebSocketConstants));
-  static_assert(0 == DOMWebSocket::kConnecting, "the value of DOMWebSocket_kConnecting does not match with implementation");
-  static_assert(1 == DOMWebSocket::kOpen, "the value of DOMWebSocket_kOpen does not match with implementation");
-  static_assert(2 == DOMWebSocket::kClosing, "the value of DOMWebSocket_kClosing does not match with implementation");
-  static_assert(3 == DOMWebSocket::kClosed, "the value of DOMWebSocket_kClosed does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebSocketAccessors, WTF_ARRAY_LENGTH(V8WebSocketAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebSocketMethods, WTF_ARRAY_LENGTH(V8WebSocketMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8WebSocketConstants[] = {
+        { "CONNECTING", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "OPEN", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "CLOSING", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "CLOSED", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8WebSocketConstants, WTF_ARRAY_LENGTH(V8WebSocketConstants));
+    static_assert(0 == DOMWebSocket::kConnecting, "the value of DOMWebSocket_kConnecting does not match with implementation");
+    static_assert(1 == DOMWebSocket::kOpen, "the value of DOMWebSocket_kOpen does not match with implementation");
+    static_assert(2 == DOMWebSocket::kClosing, "the value of DOMWebSocket_kClosing does not match with implementation");
+    static_assert(3 == DOMWebSocket::kClosed, "the value of DOMWebSocket_kClosed does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebSocketAccessors, WTF_ARRAY_LENGTH(V8WebSocketAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebSocketMethods, WTF_ARRAY_LENGTH(V8WebSocketMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8WebSocket::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebSocketTemplate);
+v8::Local<v8::FunctionTemplate> V8WebSocket::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebSocketTemplate);
 }
 
-bool V8WebSocket::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WebSocket::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WebSocket::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WebSocket::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-DOMWebSocket* V8WebSocket::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+DOMWebSocket* V8WebSocket::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

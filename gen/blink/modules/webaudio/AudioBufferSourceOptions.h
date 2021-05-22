@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AudioBufferSourceOptions_h
 #define AudioBufferSourceOptions_h
 
@@ -21,57 +21,58 @@ namespace blink {
 class AudioBuffer;
 
 class MODULES_EXPORT AudioBufferSourceOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AudioBufferSourceOptions();
-  virtual ~AudioBufferSourceOptions();
-  AudioBufferSourceOptions(const AudioBufferSourceOptions&);
-  AudioBufferSourceOptions& operator=(const AudioBufferSourceOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasBuffer() const;
-  AudioBuffer* buffer() const;
-  void setBuffer(AudioBuffer*);
-  void setBufferToNull();
+public:
+    AudioBufferSourceOptions();
+    virtual ~AudioBufferSourceOptions();
+    AudioBufferSourceOptions(const AudioBufferSourceOptions&);
+    AudioBufferSourceOptions& operator=(const AudioBufferSourceOptions&);
 
-  bool hasDetune() const;
-  float detune() const;
-  void setDetune(float);
+    bool hasBuffer() const;
+    AudioBuffer* buffer() const;
+    void setBuffer(AudioBuffer*);
+    void setBufferToNull();
 
-  bool hasLoop() const;
-  bool loop() const;
-  void setLoop(bool);
+    bool hasDetune() const;
+    float detune() const;
+    void setDetune(float);
 
-  bool hasLoopEnd() const;
-  double loopEnd() const;
-  void setLoopEnd(double);
+    bool hasLoop() const;
+    bool loop() const;
+    void setLoop(bool);
 
-  bool hasLoopStart() const;
-  double loopStart() const;
-  void setLoopStart(double);
+    bool hasLoopEnd() const;
+    double loopEnd() const;
+    void setLoopEnd(double);
 
-  bool hasPlaybackRate() const;
-  float playbackRate() const;
-  void setPlaybackRate(float);
+    bool hasLoopStart() const;
+    double loopStart() const;
+    void setLoopStart(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPlaybackRate() const;
+    float playbackRate() const;
+    void setPlaybackRate(float);
 
- private:
-  Member<AudioBuffer> m_buffer;
-  bool m_hasDetune = false;
-  float m_detune;
-  bool m_hasLoop = false;
-  bool m_loop;
-  bool m_hasLoopEnd = false;
-  double m_loopEnd;
-  bool m_hasLoopStart = false;
-  double m_loopStart;
-  bool m_hasPlaybackRate = false;
-  float m_playbackRate;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AudioBufferSourceOptions;
+private:
+    Member<AudioBuffer> m_buffer;
+    bool m_hasDetune = false;
+    float m_detune;
+    bool m_hasLoop = false;
+    bool m_loop;
+    bool m_hasLoopEnd = false;
+    double m_loopEnd;
+    bool m_hasLoopStart = false;
+    double m_loopStart;
+    bool m_hasPlaybackRate = false;
+    float m_playbackRate;
+
+    friend class V8AudioBufferSourceOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AudioBufferSourceOptions_h
+#endif // AudioBufferSourceOptions_h

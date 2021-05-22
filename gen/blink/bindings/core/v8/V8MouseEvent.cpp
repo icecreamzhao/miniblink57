@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MouseEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -53,579 +53,642 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MouseEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MouseEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MouseEventV8Internal {
 
-static void screenXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void screenXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->screenX());
-}
+        v8SetReturnValue(info, impl->screenX());
+    }
 
-CORE_EXPORT void screenXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::screenXAttributeGetter(info);
-}
+    CORE_EXPORT void screenXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::screenXAttributeGetter(info);
+    }
 
-static void screenYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void screenYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->screenY());
-}
+        v8SetReturnValue(info, impl->screenY());
+    }
 
-CORE_EXPORT void screenYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::screenYAttributeGetter(info);
-}
+    CORE_EXPORT void screenYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::screenYAttributeGetter(info);
+    }
 
-static void clientXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->clientX());
-}
+        v8SetReturnValue(info, impl->clientX());
+    }
 
-CORE_EXPORT void clientXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::clientXAttributeGetter(info);
-}
+    CORE_EXPORT void clientXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::clientXAttributeGetter(info);
+    }
 
-static void clientYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->clientY());
-}
+        v8SetReturnValue(info, impl->clientY());
+    }
 
-CORE_EXPORT void clientYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::clientYAttributeGetter(info);
-}
+    CORE_EXPORT void clientYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::clientYAttributeGetter(info);
+    }
 
-static void ctrlKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void ctrlKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->ctrlKey());
-}
+        v8SetReturnValueBool(info, impl->ctrlKey());
+    }
 
-CORE_EXPORT void ctrlKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::ctrlKeyAttributeGetter(info);
-}
+    CORE_EXPORT void ctrlKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::ctrlKeyAttributeGetter(info);
+    }
 
-static void shiftKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void shiftKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->shiftKey());
-}
+        v8SetReturnValueBool(info, impl->shiftKey());
+    }
 
-CORE_EXPORT void shiftKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::shiftKeyAttributeGetter(info);
-}
+    CORE_EXPORT void shiftKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::shiftKeyAttributeGetter(info);
+    }
 
-static void altKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void altKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->altKey());
-}
+        v8SetReturnValueBool(info, impl->altKey());
+    }
 
-CORE_EXPORT void altKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::altKeyAttributeGetter(info);
-}
+    CORE_EXPORT void altKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::altKeyAttributeGetter(info);
+    }
 
-static void metaKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void metaKeyAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->metaKey());
-}
+        v8SetReturnValueBool(info, impl->metaKey());
+    }
 
-CORE_EXPORT void metaKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::metaKeyAttributeGetter(info);
-}
+    CORE_EXPORT void metaKeyAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::metaKeyAttributeGetter(info);
+    }
 
-static void buttonAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void buttonAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->button());
-}
+        v8SetReturnValueInt(info, impl->button());
+    }
 
-CORE_EXPORT void buttonAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::buttonAttributeGetter(info);
-}
+    CORE_EXPORT void buttonAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::buttonAttributeGetter(info);
+    }
 
-static void buttonsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void buttonsAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->buttons());
-}
+        v8SetReturnValueUnsigned(info, impl->buttons());
+    }
 
-CORE_EXPORT void buttonsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::buttonsAttributeGetter(info);
-}
+    CORE_EXPORT void buttonsAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::buttonsAttributeGetter(info);
+    }
 
-static void relatedTargetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void relatedTargetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->relatedTarget()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->relatedTarget()), impl);
+    }
 
-CORE_EXPORT void relatedTargetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::relatedTargetAttributeGetter(info);
-}
+    CORE_EXPORT void relatedTargetAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::relatedTargetAttributeGetter(info);
+    }
 
-static void pageXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pageXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->pageX());
-}
+        v8SetReturnValue(info, impl->pageX());
+    }
 
-CORE_EXPORT void pageXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::pageXAttributeGetter(info);
-}
+    CORE_EXPORT void pageXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::pageXAttributeGetter(info);
+    }
 
-static void pageYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void pageYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->pageY());
-}
+        v8SetReturnValue(info, impl->pageY());
+    }
 
-CORE_EXPORT void pageYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::pageYAttributeGetter(info);
-}
+    CORE_EXPORT void pageYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::pageYAttributeGetter(info);
+    }
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->x());
-}
+        v8SetReturnValue(info, impl->x());
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventX);
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventX);
 
-  MouseEventV8Internal::xAttributeGetter(info);
-}
+        MouseEventV8Internal::xAttributeGetter(info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->y());
-}
+        v8SetReturnValue(info, impl->y());
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventY);
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventY);
 
-  MouseEventV8Internal::yAttributeGetter(info);
-}
+        MouseEventV8Internal::yAttributeGetter(info);
+    }
 
-static void offsetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void offsetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->offsetX());
-}
+        v8SetReturnValue(info, impl->offsetX());
+    }
 
-CORE_EXPORT void offsetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventOffsetX);
+    CORE_EXPORT void offsetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventOffsetX);
 
-  MouseEventV8Internal::offsetXAttributeGetter(info);
-}
+        MouseEventV8Internal::offsetXAttributeGetter(info);
+    }
 
-static void offsetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void offsetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValue(info, impl->offsetY());
-}
+        v8SetReturnValue(info, impl->offsetY());
+    }
 
-CORE_EXPORT void offsetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventOffsetY);
+    CORE_EXPORT void offsetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventOffsetY);
 
-  MouseEventV8Internal::offsetYAttributeGetter(info);
-}
+        MouseEventV8Internal::offsetYAttributeGetter(info);
+    }
 
-static void movementXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void movementXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->movementX());
-}
+        v8SetReturnValueInt(info, impl->movementX());
+    }
 
-CORE_EXPORT void movementXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventMovementX);
+    CORE_EXPORT void movementXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventMovementX);
 
-  MouseEventV8Internal::movementXAttributeGetter(info);
-}
+        MouseEventV8Internal::movementXAttributeGetter(info);
+    }
 
-static void movementYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void movementYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->movementY());
-}
+        v8SetReturnValueInt(info, impl->movementY());
+    }
 
-CORE_EXPORT void movementYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventMovementY);
+    CORE_EXPORT void movementYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventMovementY);
 
-  MouseEventV8Internal::movementYAttributeGetter(info);
-}
+        MouseEventV8Internal::movementYAttributeGetter(info);
+    }
 
-static void regionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void regionAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->region(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->region(), info.GetIsolate());
+    }
 
-CORE_EXPORT void regionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::regionAttributeGetter(info);
-}
+    CORE_EXPORT void regionAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::regionAttributeGetter(info);
+    }
 
-static void fromElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void fromElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->fromElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->fromElement()), impl);
+    }
 
-CORE_EXPORT void fromElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventFromElement);
+    CORE_EXPORT void fromElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventFromElement);
 
-  MouseEventV8Internal::fromElementAttributeGetter(info);
-}
+        MouseEventV8Internal::fromElementAttributeGetter(info);
+    }
 
-static void toElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void toElementAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->toElement()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->toElement()), impl);
+    }
 
-CORE_EXPORT void toElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventToElement);
+    CORE_EXPORT void toElementAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventToElement);
 
-  MouseEventV8Internal::toElementAttributeGetter(info);
-}
+        MouseEventV8Internal::toElementAttributeGetter(info);
+    }
 
-static void whichAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void whichAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->which());
-}
+        v8SetReturnValueInt(info, impl->which());
+    }
 
-CORE_EXPORT void whichAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventWhich);
+    CORE_EXPORT void whichAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::MouseEventWhich);
 
-  MouseEventV8Internal::whichAttributeGetter(info);
-}
+        MouseEventV8Internal::whichAttributeGetter(info);
+    }
 
-static void layerXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void layerXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->layerX());
-}
+        v8SetReturnValueInt(info, impl->layerX());
+    }
 
-CORE_EXPORT void layerXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MouseEvent_LayerX_AttributeGetter);
+    CORE_EXPORT void layerXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MouseEvent_LayerX_AttributeGetter);
 
-  MouseEventV8Internal::layerXAttributeGetter(info);
-}
+        MouseEventV8Internal::layerXAttributeGetter(info);
+    }
 
-static void layerYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void layerYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueInt(info, impl->layerY());
-}
+        v8SetReturnValueInt(info, impl->layerY());
+    }
 
-CORE_EXPORT void layerYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MouseEvent_LayerY_AttributeGetter);
+    CORE_EXPORT void layerYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MouseEvent_LayerY_AttributeGetter);
 
-  MouseEventV8Internal::layerYAttributeGetter(info);
-}
+        MouseEventV8Internal::layerYAttributeGetter(info);
+    }
 
-static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isTrustedAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MouseEvent* impl = V8MouseEvent::toImpl(holder);
+        MouseEvent* impl = V8MouseEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isTrusted());
-}
+        v8SetReturnValueBool(info, impl->isTrusted());
+    }
 
-CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::isTrustedAttributeGetter(info);
-}
+    CORE_EXPORT void isTrustedAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::isTrustedAttributeGetter(info);
+    }
 
-static void getModifierStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEvent* impl = V8MouseEvent::toImpl(info.Holder());
+    static void getModifierStateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEvent* impl = V8MouseEvent::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getModifierState", "MouseEvent", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getModifierState", "MouseEvent", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  V8StringResource<> keyArg;
-  keyArg = info[0];
-  if (!keyArg.prepare())
-    return;
+        V8StringResource<> keyArg;
+        keyArg = info[0];
+        if (!keyArg.prepare())
+            return;
 
-  v8SetReturnValueBool(info, impl->getModifierState(keyArg));
-}
+        v8SetReturnValueBool(info, impl->getModifierState(keyArg));
+    }
 
-CORE_EXPORT  void getModifierStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MouseEventV8Internal::getModifierStateMethod(info);
-}
+    CORE_EXPORT void getModifierStateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MouseEventV8Internal::getModifierStateMethod(info);
+    }
 
-static void initMouseEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MouseEvent", "initMouseEvent");
+    static void initMouseEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MouseEvent", "initMouseEvent");
 
-  MouseEvent* impl = V8MouseEvent::toImpl(info.Holder());
+        MouseEvent* impl = V8MouseEvent::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  V8StringResource<> type;
-  bool bubbles;
-  bool cancelable;
-  DOMWindow* view;
-  int detail;
-  int screenX;
-  int screenY;
-  int clientX;
-  int clientY;
-  bool ctrlKey;
-  bool altKey;
-  bool shiftKey;
-  bool metaKey;
-  unsigned button;
-  EventTarget* relatedTarget;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        bool bubbles;
+        bool cancelable;
+        DOMWindow* view;
+        int detail;
+        int screenX;
+        int screenY;
+        int clientX;
+        int clientY;
+        bool ctrlKey;
+        bool altKey;
+        bool shiftKey;
+        bool metaKey;
+        unsigned button;
+        EventTarget* relatedTarget;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  bubbles = toBoolean(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        bubbles = toBoolean(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  cancelable = toBoolean(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        cancelable = toBoolean(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  view = toDOMWindow(info.GetIsolate(), info[3]);
-  if (!view && !isUndefinedOrNull(info[3])) {
-    exceptionState.throwTypeError("parameter 4 is not of type 'Window'.");
+        view = toDOMWindow(info.GetIsolate(), info[3]);
+        if (!view && !isUndefinedOrNull(info[3])) {
+            exceptionState.throwTypeError("parameter 4 is not of type 'Window'.");
 
-    return;
-  }
+            return;
+        }
 
-  detail = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        detail = toInt32(info.GetIsolate(), info[4], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  screenX = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        screenX = toInt32(info.GetIsolate(), info[5], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  screenY = toInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        screenY = toInt32(info.GetIsolate(), info[6], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  clientX = toInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        clientX = toInt32(info.GetIsolate(), info[7], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  clientY = toInt32(info.GetIsolate(), info[8], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        clientY = toInt32(info.GetIsolate(), info[8], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ctrlKey = toBoolean(info.GetIsolate(), info[9], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        ctrlKey = toBoolean(info.GetIsolate(), info[9], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  altKey = toBoolean(info.GetIsolate(), info[10], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        altKey = toBoolean(info.GetIsolate(), info[10], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  shiftKey = toBoolean(info.GetIsolate(), info[11], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        shiftKey = toBoolean(info.GetIsolate(), info[11], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  metaKey = toBoolean(info.GetIsolate(), info[12], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        metaKey = toBoolean(info.GetIsolate(), info[12], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  button = toUInt16(info.GetIsolate(), info[13], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        button = toUInt16(info.GetIsolate(), info[13], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  relatedTarget = toEventTarget(info.GetIsolate(), info[14]);
-  if (!relatedTarget && !isUndefinedOrNull(info[14])) {
-    exceptionState.throwTypeError("parameter 15 is not of type 'EventTarget'.");
+        relatedTarget = toEventTarget(info.GetIsolate(), info[14]);
+        if (!relatedTarget && !isUndefinedOrNull(info[14])) {
+            exceptionState.throwTypeError("parameter 15 is not of type 'EventTarget'.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->initMouseEvent(scriptState, type, bubbles, cancelable, view, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget);
-}
+        impl->initMouseEvent(scriptState, type, bubbles, cancelable, view, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget);
+    }
 
-CORE_EXPORT  void initMouseEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MouseEvent_InitMouseEvent_Method);
-  MouseEventV8Internal::initMouseEventMethod(info);
-}
+    CORE_EXPORT void initMouseEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8MouseEvent_InitMouseEvent_Method);
+        MouseEventV8Internal::initMouseEventMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MouseEvent");
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MouseEvent");
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  MouseEventInit eventInitDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        MouseEventInit eventInitDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
 
-    return;
-  }
-  V8MouseEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8MouseEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  MouseEvent* impl = MouseEvent::create(scriptState, type, eventInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MouseEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        MouseEvent* impl = MouseEvent::create(scriptState, type, eventInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MouseEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace MouseEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MouseEventAccessors[] = {
-    {"screenX", MouseEventV8Internal::screenXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"screenY", MouseEventV8Internal::screenYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientX", MouseEventV8Internal::clientXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientY", MouseEventV8Internal::clientYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"ctrlKey", MouseEventV8Internal::ctrlKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"shiftKey", MouseEventV8Internal::shiftKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"altKey", MouseEventV8Internal::altKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"metaKey", MouseEventV8Internal::metaKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"button", MouseEventV8Internal::buttonAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"buttons", MouseEventV8Internal::buttonsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"relatedTarget", MouseEventV8Internal::relatedTargetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageX", MouseEventV8Internal::pageXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"pageY", MouseEventV8Internal::pageYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"x", MouseEventV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", MouseEventV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"offsetX", MouseEventV8Internal::offsetXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"offsetY", MouseEventV8Internal::offsetYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"movementX", MouseEventV8Internal::movementXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"movementY", MouseEventV8Internal::movementYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"fromElement", MouseEventV8Internal::fromElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"toElement", MouseEventV8Internal::toElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"which", MouseEventV8Internal::whichAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"layerX", MouseEventV8Internal::layerXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"layerY", MouseEventV8Internal::layerYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isTrusted", MouseEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder},
+    { "screenX", MouseEventV8Internal::screenXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "screenY", MouseEventV8Internal::screenYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientX", MouseEventV8Internal::clientXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientY", MouseEventV8Internal::clientYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "ctrlKey", MouseEventV8Internal::ctrlKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "shiftKey", MouseEventV8Internal::shiftKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "altKey", MouseEventV8Internal::altKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "metaKey", MouseEventV8Internal::metaKeyAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "button", MouseEventV8Internal::buttonAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "buttons", MouseEventV8Internal::buttonsAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "relatedTarget", MouseEventV8Internal::relatedTargetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageX", MouseEventV8Internal::pageXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "pageY", MouseEventV8Internal::pageYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "x", MouseEventV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", MouseEventV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "offsetX", MouseEventV8Internal::offsetXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "offsetY", MouseEventV8Internal::offsetYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "movementX", MouseEventV8Internal::movementXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "movementY", MouseEventV8Internal::movementYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "fromElement", MouseEventV8Internal::fromElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "toElement", MouseEventV8Internal::toElementAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "which", MouseEventV8Internal::whichAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "layerX", MouseEventV8Internal::layerXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "layerY", MouseEventV8Internal::layerYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isTrusted", MouseEventV8Internal::isTrustedAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::DontDelete | v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MouseEventMethods[] = {
-    {"getModifierState", MouseEventV8Internal::getModifierStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"initMouseEvent", MouseEventV8Internal::initMouseEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getModifierState", MouseEventV8Internal::getModifierStateMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "initMouseEvent", MouseEventV8Internal::initMouseEventMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8MouseEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MouseEvent"));
-    return;
-  }
+void V8MouseEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MouseEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  MouseEventV8Internal::constructor(info);
+    MouseEventV8Internal::constructor(info);
 }
 
-static void installV8MouseEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MouseEvent::wrapperTypeInfo.interfaceName, V8UIEvent::domTemplate(isolate, world), V8MouseEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8MouseEvent::constructorCallback);
-  interfaceTemplate->SetLength(1);
+static void installV8MouseEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MouseEvent::wrapperTypeInfo.interfaceName, V8UIEvent::domTemplate(isolate, world), V8MouseEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8MouseEvent::constructorCallback);
+    interfaceTemplate->SetLength(1);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MouseEventAccessors, WTF_ARRAY_LENGTH(V8MouseEventAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MouseEventMethods, WTF_ARRAY_LENGTH(V8MouseEventMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MouseEventAccessors, WTF_ARRAY_LENGTH(V8MouseEventAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MouseEventMethods, WTF_ARRAY_LENGTH(V8MouseEventMethods));
 
-  if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorregionConfiguration = {"region", MouseEventV8Internal::regionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorregionConfiguration);
-  }
+    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorregionConfiguration = { "region", MouseEventV8Internal::regionAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorregionConfiguration);
+    }
 }
 
-v8::Local<v8::FunctionTemplate> V8MouseEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MouseEventTemplate);
+v8::Local<v8::FunctionTemplate> V8MouseEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MouseEventTemplate);
 }
 
-bool V8MouseEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MouseEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MouseEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MouseEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MouseEvent* V8MouseEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MouseEvent* V8MouseEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

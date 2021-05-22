@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef HashChangeEventInit_h
 #define HashChangeEventInit_h
 
@@ -20,31 +20,32 @@
 namespace blink {
 
 class CORE_EXPORT HashChangeEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  HashChangeEventInit();
-  virtual ~HashChangeEventInit();
-  HashChangeEventInit(const HashChangeEventInit&);
-  HashChangeEventInit& operator=(const HashChangeEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasNewURL() const;
-  String newURL() const;
-  void setNewURL(String);
+public:
+    HashChangeEventInit();
+    virtual ~HashChangeEventInit();
+    HashChangeEventInit(const HashChangeEventInit&);
+    HashChangeEventInit& operator=(const HashChangeEventInit&);
 
-  bool hasOldURL() const;
-  String oldURL() const;
-  void setOldURL(String);
+    bool hasNewURL() const;
+    String newURL() const;
+    void setNewURL(String);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasOldURL() const;
+    String oldURL() const;
+    void setOldURL(String);
 
- private:
-  String m_newURL;
-  String m_oldURL;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8HashChangeEventInit;
+private:
+    String m_newURL;
+    String m_oldURL;
+
+    friend class V8HashChangeEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // HashChangeEventInit_h
+#endif // HashChangeEventInit_h

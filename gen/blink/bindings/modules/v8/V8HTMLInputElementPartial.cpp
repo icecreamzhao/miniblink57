@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/partial_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8HTMLInputElementPartial.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -29,48 +29,52 @@ namespace blink {
 
 namespace HTMLInputElementPartialV8Internal {
 
-static void webkitEntriesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void webkitEntriesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  HTMLInputElement* impl = V8HTMLInputElement::toImpl(holder);
+        HTMLInputElement* impl = V8HTMLInputElement::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, ToV8(HTMLInputElementFileSystem::webkitEntries(scriptState, *impl), info.Holder(), info.GetIsolate()));
-}
+        v8SetReturnValue(info, ToV8(HTMLInputElementFileSystem::webkitEntries(scriptState, *impl), info.Holder(), info.GetIsolate()));
+    }
 
-void webkitEntriesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLInputElement_WebkitEntries_AttributeGetter);
+    void webkitEntriesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8HTMLInputElement_WebkitEntries_AttributeGetter);
 
-  HTMLInputElementPartialV8Internal::webkitEntriesAttributeGetter(info);
-}
+        HTMLInputElementPartialV8Internal::webkitEntriesAttributeGetter(info);
+    }
 
 } // namespace HTMLInputElementPartialV8Internal
 
-void V8HTMLInputElementPartial::installV8HTMLInputElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8HTMLInputElement::installV8HTMLInputElementTemplate(isolate, world, interfaceTemplate);
+void V8HTMLInputElementPartial::installV8HTMLInputElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8HTMLInputElement::installV8HTMLInputElementTemplate(isolate, world, interfaceTemplate);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
+    // Register DOM constants, attributes and operations.
 
-  if (RuntimeEnabledFeatures::fileSystemEnabled()) {
-    const V8DOMConfiguration::AccessorConfiguration accessorwebkitEntriesConfiguration = {"webkitEntries", HTMLInputElementPartialV8Internal::webkitEntriesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-    V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorwebkitEntriesConfiguration);
-  }
+    if (RuntimeEnabledFeatures::fileSystemEnabled()) {
+        const V8DOMConfiguration::AccessorConfiguration accessorwebkitEntriesConfiguration = { "webkitEntries", HTMLInputElementPartialV8Internal::webkitEntriesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorwebkitEntriesConfiguration);
+    }
 }
 
-void V8HTMLInputElementPartial::initialize() {
-  // Should be invoked from ModulesInitializer.
-  V8HTMLInputElement::updateWrapperTypeInfo(
-      &V8HTMLInputElementPartial::installV8HTMLInputElementTemplate,
-      nullptr);
+void V8HTMLInputElementPartial::initialize()
+{
+    // Should be invoked from ModulesInitializer.
+    V8HTMLInputElement::updateWrapperTypeInfo(
+        &V8HTMLInputElementPartial::installV8HTMLInputElementTemplate,
+        nullptr);
 }
 
-}  // namespace blink
+} // namespace blink

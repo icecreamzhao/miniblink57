@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGFEConvolveMatrixElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -55,326 +55,369 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGFEConvolveMatrixElement::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGFEConvolveMatrixElement is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGFEConvolveMatrixElementV8Internal {
 
-CORE_EXPORT void SVG_EDGEMODE_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 0);
-}
+    CORE_EXPORT void SVG_EDGEMODE_UNKNOWNConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 0);
+    }
 
-CORE_EXPORT void SVG_EDGEMODE_DUPLICATEConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 1);
-}
+    CORE_EXPORT void SVG_EDGEMODE_DUPLICATEConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 1);
+    }
 
-CORE_EXPORT void SVG_EDGEMODE_WRAPConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 2);
-}
+    CORE_EXPORT void SVG_EDGEMODE_WRAPConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 2);
+    }
 
-CORE_EXPORT void SVG_EDGEMODE_NONEConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
-  v8SetReturnValueInt(info, 3);
-}
+    CORE_EXPORT void SVG_EDGEMODE_NONEConstantGetterCallback(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+        v8SetReturnValueInt(info, 3);
+    }
 
-static void in1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void in1AttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->in1()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->in1()), impl);
+    }
 
-CORE_EXPORT void in1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void in1AttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::in1AttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::in1AttributeGetter(info);
+    }
 
-static void orderXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void orderXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->orderX()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->orderX()), impl);
+    }
 
-CORE_EXPORT void orderXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void orderXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::orderXAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::orderXAttributeGetter(info);
+    }
 
-static void orderYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void orderYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->orderY()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->orderY()), impl);
+    }
 
-CORE_EXPORT void orderYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void orderYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::orderYAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::orderYAttributeGetter(info);
+    }
 
-static void kernelMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void kernelMatrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->kernelMatrix()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->kernelMatrix()), impl);
+    }
 
-CORE_EXPORT void kernelMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void kernelMatrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::kernelMatrixAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::kernelMatrixAttributeGetter(info);
+    }
 
-static void divisorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void divisorAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->divisor()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->divisor()), impl);
+    }
 
-CORE_EXPORT void divisorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void divisorAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::divisorAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::divisorAttributeGetter(info);
+    }
 
-static void biasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void biasAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->bias()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->bias()), impl);
+    }
 
-CORE_EXPORT void biasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void biasAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::biasAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::biasAttributeGetter(info);
+    }
 
-static void targetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void targetXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->targetX()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->targetX()), impl);
+    }
 
-CORE_EXPORT void targetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void targetXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::targetXAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::targetXAttributeGetter(info);
+    }
 
-static void targetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void targetYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->targetY()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->targetY()), impl);
+    }
 
-CORE_EXPORT void targetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void targetYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::targetYAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::targetYAttributeGetter(info);
+    }
 
-static void edgeModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void edgeModeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->edgeMode()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->edgeMode()), impl);
+    }
 
-CORE_EXPORT void edgeModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void edgeModeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::edgeModeAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::edgeModeAttributeGetter(info);
+    }
 
-static void kernelUnitLengthXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void kernelUnitLengthXAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->kernelUnitLengthX()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->kernelUnitLengthX()), impl);
+    }
 
-CORE_EXPORT void kernelUnitLengthXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void kernelUnitLengthXAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::kernelUnitLengthXAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::kernelUnitLengthXAttributeGetter(info);
+    }
 
-static void kernelUnitLengthYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void kernelUnitLengthYAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->kernelUnitLengthY()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->kernelUnitLengthY()), impl);
+    }
 
-CORE_EXPORT void kernelUnitLengthYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void kernelUnitLengthYAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::kernelUnitLengthYAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::kernelUnitLengthYAttributeGetter(info);
+    }
 
-static void preserveAlphaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void preserveAlphaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->preserveAlpha()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->preserveAlpha()), impl);
+    }
 
-CORE_EXPORT void preserveAlphaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SVGFEConvolveMatrixElement_PreserveAlpha_AttributeGetter);
+    CORE_EXPORT void preserveAlphaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::V8SVGFEConvolveMatrixElement_PreserveAlpha_AttributeGetter);
 
-  SVGFEConvolveMatrixElementV8Internal::preserveAlphaAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::preserveAlphaAttributeGetter(info);
+    }
 
-static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void xAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->x()), impl);
+    }
 
-CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void xAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::xAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::xAttributeGetter(info);
+    }
 
-static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void yAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->y()), impl);
+    }
 
-CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void yAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::yAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::yAttributeGetter(info);
+    }
 
-static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void widthAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->width()), impl);
+    }
 
-CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void widthAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::widthAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::widthAttributeGetter(info);
+    }
 
-static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void heightAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->height()), impl);
+    }
 
-CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void heightAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::heightAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::heightAttributeGetter(info);
+    }
 
-static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void resultAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
+        SVGFEConvolveMatrixElement* impl = V8SVGFEConvolveMatrixElement::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->result()), impl);
+    }
 
-CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
+    CORE_EXPORT void resultAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::SVG1DOMFilter);
 
-  SVGFEConvolveMatrixElementV8Internal::resultAttributeGetter(info);
-}
+        SVGFEConvolveMatrixElementV8Internal::resultAttributeGetter(info);
+    }
 
 } // namespace SVGFEConvolveMatrixElementV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGFEConvolveMatrixElementAccessors[] = {
-    {"in1", SVGFEConvolveMatrixElementV8Internal::in1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"orderX", SVGFEConvolveMatrixElementV8Internal::orderXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"orderY", SVGFEConvolveMatrixElementV8Internal::orderYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"kernelMatrix", SVGFEConvolveMatrixElementV8Internal::kernelMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"divisor", SVGFEConvolveMatrixElementV8Internal::divisorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"bias", SVGFEConvolveMatrixElementV8Internal::biasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"targetX", SVGFEConvolveMatrixElementV8Internal::targetXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"targetY", SVGFEConvolveMatrixElementV8Internal::targetYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"edgeMode", SVGFEConvolveMatrixElementV8Internal::edgeModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"kernelUnitLengthX", SVGFEConvolveMatrixElementV8Internal::kernelUnitLengthXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"kernelUnitLengthY", SVGFEConvolveMatrixElementV8Internal::kernelUnitLengthYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"preserveAlpha", SVGFEConvolveMatrixElementV8Internal::preserveAlphaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"x", SVGFEConvolveMatrixElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"y", SVGFEConvolveMatrixElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"width", SVGFEConvolveMatrixElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"height", SVGFEConvolveMatrixElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"result", SVGFEConvolveMatrixElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "in1", SVGFEConvolveMatrixElementV8Internal::in1AttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "orderX", SVGFEConvolveMatrixElementV8Internal::orderXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "orderY", SVGFEConvolveMatrixElementV8Internal::orderYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "kernelMatrix", SVGFEConvolveMatrixElementV8Internal::kernelMatrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "divisor", SVGFEConvolveMatrixElementV8Internal::divisorAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "bias", SVGFEConvolveMatrixElementV8Internal::biasAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "targetX", SVGFEConvolveMatrixElementV8Internal::targetXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "targetY", SVGFEConvolveMatrixElementV8Internal::targetYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "edgeMode", SVGFEConvolveMatrixElementV8Internal::edgeModeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "kernelUnitLengthX", SVGFEConvolveMatrixElementV8Internal::kernelUnitLengthXAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "kernelUnitLengthY", SVGFEConvolveMatrixElementV8Internal::kernelUnitLengthYAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "preserveAlpha", SVGFEConvolveMatrixElementV8Internal::preserveAlphaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "x", SVGFEConvolveMatrixElementV8Internal::xAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "y", SVGFEConvolveMatrixElementV8Internal::yAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "width", SVGFEConvolveMatrixElementV8Internal::widthAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "height", SVGFEConvolveMatrixElementV8Internal::heightAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "result", SVGFEConvolveMatrixElementV8Internal::resultAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGFEConvolveMatrixElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFEConvolveMatrixElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFEConvolveMatrixElement::internalFieldCount);
+static void installV8SVGFEConvolveMatrixElementTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGFEConvolveMatrixElement::wrapperTypeInfo.interfaceName, V8SVGElement::domTemplate(isolate, world), V8SVGFEConvolveMatrixElement::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_EDGEMODE_UNKNOWN", SVGFEConvolveMatrixElementV8Internal::SVG_EDGEMODE_UNKNOWNConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_EDGEMODE_DUPLICATE", SVGFEConvolveMatrixElementV8Internal::SVG_EDGEMODE_DUPLICATEConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_EDGEMODE_WRAP", SVGFEConvolveMatrixElementV8Internal::SVG_EDGEMODE_WRAPConstantGetterCallback);
-  V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_EDGEMODE_NONE", SVGFEConvolveMatrixElementV8Internal::SVG_EDGEMODE_NONEConstantGetterCallback);
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFEConvolveMatrixElementAccessors, WTF_ARRAY_LENGTH(V8SVGFEConvolveMatrixElementAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_EDGEMODE_UNKNOWN", SVGFEConvolveMatrixElementV8Internal::SVG_EDGEMODE_UNKNOWNConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_EDGEMODE_DUPLICATE", SVGFEConvolveMatrixElementV8Internal::SVG_EDGEMODE_DUPLICATEConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_EDGEMODE_WRAP", SVGFEConvolveMatrixElementV8Internal::SVG_EDGEMODE_WRAPConstantGetterCallback);
+    V8DOMConfiguration::installConstantWithGetter(isolate, interfaceTemplate, prototypeTemplate, "SVG_EDGEMODE_NONE", SVGFEConvolveMatrixElementV8Internal::SVG_EDGEMODE_NONEConstantGetterCallback);
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGFEConvolveMatrixElementAccessors, WTF_ARRAY_LENGTH(V8SVGFEConvolveMatrixElementAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGFEConvolveMatrixElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFEConvolveMatrixElementTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGFEConvolveMatrixElement::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGFEConvolveMatrixElementTemplate);
 }
 
-bool V8SVGFEConvolveMatrixElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGFEConvolveMatrixElement::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGFEConvolveMatrixElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGFEConvolveMatrixElement::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGFEConvolveMatrixElement* V8SVGFEConvolveMatrixElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGFEConvolveMatrixElement* V8SVGFEConvolveMatrixElement::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

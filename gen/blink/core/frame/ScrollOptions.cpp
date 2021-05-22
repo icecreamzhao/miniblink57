@@ -8,33 +8,38 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ScrollOptions.h"
 
 namespace blink {
 
-ScrollOptions::ScrollOptions() {
-  setBehavior(String("auto"));
+ScrollOptions::ScrollOptions()
+{
+    setBehavior(String("auto"));
 }
 
-ScrollOptions::~ScrollOptions() {}
+ScrollOptions::~ScrollOptions() { }
 
 ScrollOptions::ScrollOptions(const ScrollOptions&) = default;
 
 ScrollOptions& ScrollOptions::operator=(const ScrollOptions&) = default;
 
-bool ScrollOptions::hasBehavior() const {
-  return !m_behavior.isNull();
+bool ScrollOptions::hasBehavior() const
+{
+    return !m_behavior.isNull();
 }
-String ScrollOptions::behavior() const {
-  return m_behavior;
+String ScrollOptions::behavior() const
+{
+    return m_behavior;
 }
-void ScrollOptions::setBehavior(String value) {
-  m_behavior = value;
+void ScrollOptions::setBehavior(String value)
+{
+    m_behavior = value;
 }
 
-DEFINE_TRACE(ScrollOptions) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(ScrollOptions)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

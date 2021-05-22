@@ -8,119 +8,132 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "DoubleOrConstrainDoubleRange.h"
 
 #include "bindings/core/v8/ToV8.h"
 
 namespace blink {
 
-DoubleOrConstrainDoubleRange::DoubleOrConstrainDoubleRange() : m_type(SpecificTypeNone) {}
-
-double DoubleOrConstrainDoubleRange::getAsDouble() const {
-  DCHECK(isDouble());
-  return m_double;
+DoubleOrConstrainDoubleRange::DoubleOrConstrainDoubleRange()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void DoubleOrConstrainDoubleRange::setDouble(double value) {
-  DCHECK(isNull());
-  m_double = value;
-  m_type = SpecificTypeDouble;
+double DoubleOrConstrainDoubleRange::getAsDouble() const
+{
+    DCHECK(isDouble());
+    return m_double;
 }
 
-DoubleOrConstrainDoubleRange DoubleOrConstrainDoubleRange::fromDouble(double value) {
-  DoubleOrConstrainDoubleRange container;
-  container.setDouble(value);
-  return container;
+void DoubleOrConstrainDoubleRange::setDouble(double value)
+{
+    DCHECK(isNull());
+    m_double = value;
+    m_type = SpecificTypeDouble;
 }
 
-const ConstrainDoubleRange& DoubleOrConstrainDoubleRange::getAsConstrainDoubleRange() const {
-  DCHECK(isConstrainDoubleRange());
-  return m_constrainDoubleRange;
+DoubleOrConstrainDoubleRange DoubleOrConstrainDoubleRange::fromDouble(double value)
+{
+    DoubleOrConstrainDoubleRange container;
+    container.setDouble(value);
+    return container;
 }
 
-void DoubleOrConstrainDoubleRange::setConstrainDoubleRange(const ConstrainDoubleRange& value) {
-  DCHECK(isNull());
-  m_constrainDoubleRange = value;
-  m_type = SpecificTypeConstrainDoubleRange;
+const ConstrainDoubleRange& DoubleOrConstrainDoubleRange::getAsConstrainDoubleRange() const
+{
+    DCHECK(isConstrainDoubleRange());
+    return m_constrainDoubleRange;
 }
 
-DoubleOrConstrainDoubleRange DoubleOrConstrainDoubleRange::fromConstrainDoubleRange(const ConstrainDoubleRange& value) {
-  DoubleOrConstrainDoubleRange container;
-  container.setConstrainDoubleRange(value);
-  return container;
+void DoubleOrConstrainDoubleRange::setConstrainDoubleRange(const ConstrainDoubleRange& value)
+{
+    DCHECK(isNull());
+    m_constrainDoubleRange = value;
+    m_type = SpecificTypeConstrainDoubleRange;
+}
+
+DoubleOrConstrainDoubleRange DoubleOrConstrainDoubleRange::fromConstrainDoubleRange(const ConstrainDoubleRange& value)
+{
+    DoubleOrConstrainDoubleRange container;
+    container.setConstrainDoubleRange(value);
+    return container;
 }
 
 DoubleOrConstrainDoubleRange::DoubleOrConstrainDoubleRange(const DoubleOrConstrainDoubleRange&) = default;
 DoubleOrConstrainDoubleRange::~DoubleOrConstrainDoubleRange() = default;
 DoubleOrConstrainDoubleRange& DoubleOrConstrainDoubleRange::operator=(const DoubleOrConstrainDoubleRange&) = default;
 
-DEFINE_TRACE(DoubleOrConstrainDoubleRange) {
-  visitor->trace(m_constrainDoubleRange);
+DEFINE_TRACE(DoubleOrConstrainDoubleRange)
+{
+    visitor->trace(m_constrainDoubleRange);
 }
 
-void V8DoubleOrConstrainDoubleRange::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DoubleOrConstrainDoubleRange& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8DoubleOrConstrainDoubleRange::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, DoubleOrConstrainDoubleRange& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (isUndefinedOrNull(v8Value)) {
-//     ConstrainDoubleRange cppValue;
-//     V8ConstrainDoubleRange::toImpl(isolate, v8Value, cppValue, exceptionState);
-//     if (exceptionState.hadException())
-//       return;
-//     impl.setConstrainDoubleRange(cppValue);
-    DebugBreak();
-    return;
-  }
+    if (isUndefinedOrNull(v8Value)) {
+        //     ConstrainDoubleRange cppValue;
+        //     V8ConstrainDoubleRange::toImpl(isolate, v8Value, cppValue, exceptionState);
+        //     if (exceptionState.hadException())
+        //       return;
+        //     impl.setConstrainDoubleRange(cppValue);
+        DebugBreak();
+        return;
+    }
 
-  if (v8Value->IsObject()) {
-//     ConstrainDoubleRange cppValue;
-//     V8ConstrainDoubleRange::toImpl(isolate, v8Value, cppValue, exceptionState);
-//     if (exceptionState.hadException())
-//       return;
-//     impl.setConstrainDoubleRange(cppValue);
-    DebugBreak();
-    return;
-  }
+    if (v8Value->IsObject()) {
+        //     ConstrainDoubleRange cppValue;
+        //     V8ConstrainDoubleRange::toImpl(isolate, v8Value, cppValue, exceptionState);
+        //     if (exceptionState.hadException())
+        //       return;
+        //     impl.setConstrainDoubleRange(cppValue);
+        DebugBreak();
+        return;
+    }
 
-  if (v8Value->IsNumber()) {
-    double cppValue = toRestrictedDouble(isolate, v8Value, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setDouble(cppValue);
-    return;
-  }
+    if (v8Value->IsNumber()) {
+        double cppValue = toRestrictedDouble(isolate, v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setDouble(cppValue);
+        return;
+    }
 
-  {
-    double cppValue = toRestrictedDouble(isolate, v8Value, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setDouble(cppValue);
-    return;
-  }
+    {
+        double cppValue = toRestrictedDouble(isolate, v8Value, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setDouble(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const DoubleOrConstrainDoubleRange& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const DoubleOrConstrainDoubleRange& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case DoubleOrConstrainDoubleRange::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case DoubleOrConstrainDoubleRange::SpecificTypeDouble:
-      return v8::Number::New(isolate, impl.getAsDouble());
+        return v8::Number::New(isolate, impl.getAsDouble());
     case DoubleOrConstrainDoubleRange::SpecificTypeConstrainDoubleRange:
-      return ToV8(impl.getAsConstrainDoubleRange(), creationContext, isolate);
+        return ToV8(impl.getAsConstrainDoubleRange(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-DoubleOrConstrainDoubleRange NativeValueTraits<DoubleOrConstrainDoubleRange>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  DoubleOrConstrainDoubleRange impl;
-  V8DoubleOrConstrainDoubleRange::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+DoubleOrConstrainDoubleRange NativeValueTraits<DoubleOrConstrainDoubleRange>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    DoubleOrConstrainDoubleRange impl;
+    V8DoubleOrConstrainDoubleRange::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

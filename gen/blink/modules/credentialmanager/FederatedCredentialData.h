@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FederatedCredentialData_h
 #define FederatedCredentialData_h
 
@@ -20,26 +20,27 @@
 namespace blink {
 
 class MODULES_EXPORT FederatedCredentialData : public LocallyStoredCredentialData {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FederatedCredentialData();
-  virtual ~FederatedCredentialData();
-  FederatedCredentialData(const FederatedCredentialData&);
-  FederatedCredentialData& operator=(const FederatedCredentialData&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasProvider() const;
-  String provider() const;
-  void setProvider(String);
+public:
+    FederatedCredentialData();
+    virtual ~FederatedCredentialData();
+    FederatedCredentialData(const FederatedCredentialData&);
+    FederatedCredentialData& operator=(const FederatedCredentialData&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasProvider() const;
+    String provider() const;
+    void setProvider(String);
 
- private:
-  String m_provider;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8FederatedCredentialData;
+private:
+    String m_provider;
+
+    friend class V8FederatedCredentialData;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // FederatedCredentialData_h
+#endif // FederatedCredentialData_h

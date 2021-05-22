@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8FileSystemFlags_h
 #define V8FileSystemFlags_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8FileSystemFlags {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FileSystemFlags&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FileSystemFlags&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8FileSystemFlags(const FileSystemFlags&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FileSystemFlags& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FileSystemFlags& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<FileSystemFlags> {
-  static FileSystemFlags nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static FileSystemFlags nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<FileSystemFlags> {
-  typedef V8FileSystemFlags Type;
+    typedef V8FileSystemFlags Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8FileSystemFlags_h
+#endif // V8FileSystemFlags_h

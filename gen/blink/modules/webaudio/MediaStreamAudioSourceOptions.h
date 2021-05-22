@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaStreamAudioSourceOptions_h
 #define MediaStreamAudioSourceOptions_h
 
@@ -21,26 +21,27 @@ namespace blink {
 class MediaStream;
 
 class MODULES_EXPORT MediaStreamAudioSourceOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaStreamAudioSourceOptions();
-  virtual ~MediaStreamAudioSourceOptions();
-  MediaStreamAudioSourceOptions(const MediaStreamAudioSourceOptions&);
-  MediaStreamAudioSourceOptions& operator=(const MediaStreamAudioSourceOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMediaStream() const;
-  MediaStream* mediaStream() const;
-  void setMediaStream(MediaStream*);
+public:
+    MediaStreamAudioSourceOptions();
+    virtual ~MediaStreamAudioSourceOptions();
+    MediaStreamAudioSourceOptions(const MediaStreamAudioSourceOptions&);
+    MediaStreamAudioSourceOptions& operator=(const MediaStreamAudioSourceOptions&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMediaStream() const;
+    MediaStream* mediaStream() const;
+    void setMediaStream(MediaStream*);
 
- private:
-  Member<MediaStream> m_mediaStream;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaStreamAudioSourceOptions;
+private:
+    Member<MediaStream> m_mediaStream;
+
+    friend class V8MediaStreamAudioSourceOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaStreamAudioSourceOptions_h
+#endif // MediaStreamAudioSourceOptions_h

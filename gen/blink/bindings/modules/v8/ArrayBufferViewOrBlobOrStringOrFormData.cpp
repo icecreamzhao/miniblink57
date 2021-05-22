@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "ArrayBufferViewOrBlobOrStringOrFormData.h"
 
 #include "bindings/core/v8/ArrayBufferOrArrayBufferViewOrBlobOrUSVString.h"
@@ -21,142 +21,161 @@
 
 namespace blink {
 
-ArrayBufferViewOrBlobOrStringOrFormData::ArrayBufferViewOrBlobOrStringOrFormData() : m_type(SpecificTypeNone) {}
-
-DOMArrayBufferView* ArrayBufferViewOrBlobOrStringOrFormData::getAsArrayBufferView() const {
-  DCHECK(isArrayBufferView());
-  return m_arrayBufferView;
+ArrayBufferViewOrBlobOrStringOrFormData::ArrayBufferViewOrBlobOrStringOrFormData()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void ArrayBufferViewOrBlobOrStringOrFormData::setArrayBufferView(DOMArrayBufferView* value) {
-  DCHECK(isNull());
-  m_arrayBufferView = value;
-  m_type = SpecificTypeArrayBufferView;
+DOMArrayBufferView* ArrayBufferViewOrBlobOrStringOrFormData::getAsArrayBufferView() const
+{
+    DCHECK(isArrayBufferView());
+    return m_arrayBufferView;
 }
 
-ArrayBufferViewOrBlobOrStringOrFormData ArrayBufferViewOrBlobOrStringOrFormData::fromArrayBufferView(DOMArrayBufferView* value) {
-  ArrayBufferViewOrBlobOrStringOrFormData container;
-  container.setArrayBufferView(value);
-  return container;
+void ArrayBufferViewOrBlobOrStringOrFormData::setArrayBufferView(DOMArrayBufferView* value)
+{
+    DCHECK(isNull());
+    m_arrayBufferView = value;
+    m_type = SpecificTypeArrayBufferView;
 }
 
-Blob* ArrayBufferViewOrBlobOrStringOrFormData::getAsBlob() const {
-  DCHECK(isBlob());
-  return m_blob;
+ArrayBufferViewOrBlobOrStringOrFormData ArrayBufferViewOrBlobOrStringOrFormData::fromArrayBufferView(DOMArrayBufferView* value)
+{
+    ArrayBufferViewOrBlobOrStringOrFormData container;
+    container.setArrayBufferView(value);
+    return container;
 }
 
-void ArrayBufferViewOrBlobOrStringOrFormData::setBlob(Blob* value) {
-  DCHECK(isNull());
-  m_blob = value;
-  m_type = SpecificTypeBlob;
+Blob* ArrayBufferViewOrBlobOrStringOrFormData::getAsBlob() const
+{
+    DCHECK(isBlob());
+    return m_blob;
 }
 
-ArrayBufferViewOrBlobOrStringOrFormData ArrayBufferViewOrBlobOrStringOrFormData::fromBlob(Blob* value) {
-  ArrayBufferViewOrBlobOrStringOrFormData container;
-  container.setBlob(value);
-  return container;
+void ArrayBufferViewOrBlobOrStringOrFormData::setBlob(Blob* value)
+{
+    DCHECK(isNull());
+    m_blob = value;
+    m_type = SpecificTypeBlob;
 }
 
-String ArrayBufferViewOrBlobOrStringOrFormData::getAsString() const {
-  DCHECK(isString());
-  return m_string;
+ArrayBufferViewOrBlobOrStringOrFormData ArrayBufferViewOrBlobOrStringOrFormData::fromBlob(Blob* value)
+{
+    ArrayBufferViewOrBlobOrStringOrFormData container;
+    container.setBlob(value);
+    return container;
 }
 
-void ArrayBufferViewOrBlobOrStringOrFormData::setString(String value) {
-  DCHECK(isNull());
-  m_string = value;
-  m_type = SpecificTypeString;
+String ArrayBufferViewOrBlobOrStringOrFormData::getAsString() const
+{
+    DCHECK(isString());
+    return m_string;
 }
 
-ArrayBufferViewOrBlobOrStringOrFormData ArrayBufferViewOrBlobOrStringOrFormData::fromString(String value) {
-  ArrayBufferViewOrBlobOrStringOrFormData container;
-  container.setString(value);
-  return container;
+void ArrayBufferViewOrBlobOrStringOrFormData::setString(String value)
+{
+    DCHECK(isNull());
+    m_string = value;
+    m_type = SpecificTypeString;
 }
 
-FormData* ArrayBufferViewOrBlobOrStringOrFormData::getAsFormData() const {
-  DCHECK(isFormData());
-  return m_formData;
+ArrayBufferViewOrBlobOrStringOrFormData ArrayBufferViewOrBlobOrStringOrFormData::fromString(String value)
+{
+    ArrayBufferViewOrBlobOrStringOrFormData container;
+    container.setString(value);
+    return container;
 }
 
-void ArrayBufferViewOrBlobOrStringOrFormData::setFormData(FormData* value) {
-  DCHECK(isNull());
-  m_formData = value;
-  m_type = SpecificTypeFormData;
+FormData* ArrayBufferViewOrBlobOrStringOrFormData::getAsFormData() const
+{
+    DCHECK(isFormData());
+    return m_formData;
 }
 
-ArrayBufferViewOrBlobOrStringOrFormData ArrayBufferViewOrBlobOrStringOrFormData::fromFormData(FormData* value) {
-  ArrayBufferViewOrBlobOrStringOrFormData container;
-  container.setFormData(value);
-  return container;
+void ArrayBufferViewOrBlobOrStringOrFormData::setFormData(FormData* value)
+{
+    DCHECK(isNull());
+    m_formData = value;
+    m_type = SpecificTypeFormData;
+}
+
+ArrayBufferViewOrBlobOrStringOrFormData ArrayBufferViewOrBlobOrStringOrFormData::fromFormData(FormData* value)
+{
+    ArrayBufferViewOrBlobOrStringOrFormData container;
+    container.setFormData(value);
+    return container;
 }
 
 ArrayBufferViewOrBlobOrStringOrFormData::ArrayBufferViewOrBlobOrStringOrFormData(const ArrayBufferViewOrBlobOrStringOrFormData&) = default;
 ArrayBufferViewOrBlobOrStringOrFormData::~ArrayBufferViewOrBlobOrStringOrFormData() = default;
 ArrayBufferViewOrBlobOrStringOrFormData& ArrayBufferViewOrBlobOrStringOrFormData::operator=(const ArrayBufferViewOrBlobOrStringOrFormData&) = default;
 
-DEFINE_TRACE(ArrayBufferViewOrBlobOrStringOrFormData) {
-  visitor->trace(m_arrayBufferView);
-  visitor->trace(m_blob);
-  visitor->trace(m_formData);
+DEFINE_TRACE(ArrayBufferViewOrBlobOrStringOrFormData)
+{
+    visitor->trace(m_arrayBufferView);
+    visitor->trace(m_blob);
+    visitor->trace(m_formData);
 }
 
-void V8ArrayBufferViewOrBlobOrStringOrFormData::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ArrayBufferViewOrBlobOrStringOrFormData& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8ArrayBufferViewOrBlobOrStringOrFormData::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ArrayBufferViewOrBlobOrStringOrFormData& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8Blob::hasInstance(v8Value, isolate)) {
-    Blob* cppValue = V8Blob::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setBlob(cppValue);
-    return;
-  }
+    if (V8Blob::hasInstance(v8Value, isolate)) {
+        Blob* cppValue = V8Blob::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setBlob(cppValue);
+        return;
+    }
 
-  if (V8FormData::hasInstance(v8Value, isolate)) {
-    FormData* cppValue = V8FormData::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setFormData(cppValue);
-    return;
-  }
+    if (V8FormData::hasInstance(v8Value, isolate)) {
+        FormData* cppValue = V8FormData::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setFormData(cppValue);
+        return;
+    }
 
-  if (v8Value->IsArrayBufferView()) {
-    DOMArrayBufferView* cppValue = V8ArrayBufferView::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setArrayBufferView(cppValue);
-    return;
-  }
+    if (v8Value->IsArrayBufferView()) {
+        DOMArrayBufferView* cppValue = V8ArrayBufferView::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setArrayBufferView(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = v8Value;
-    if (!cppValue.prepare(exceptionState))
-      return;
-    impl.setString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare(exceptionState))
+            return;
+        impl.setString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const ArrayBufferViewOrBlobOrStringOrFormData& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const ArrayBufferViewOrBlobOrStringOrFormData& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case ArrayBufferViewOrBlobOrStringOrFormData::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case ArrayBufferViewOrBlobOrStringOrFormData::SpecificTypeArrayBufferView:
-      return ToV8(impl.getAsArrayBufferView(), creationContext, isolate);
+        return ToV8(impl.getAsArrayBufferView(), creationContext, isolate);
     case ArrayBufferViewOrBlobOrStringOrFormData::SpecificTypeBlob:
-      return ToV8(impl.getAsBlob(), creationContext, isolate);
+        return ToV8(impl.getAsBlob(), creationContext, isolate);
     case ArrayBufferViewOrBlobOrStringOrFormData::SpecificTypeString:
-      return v8String(isolate, impl.getAsString());
+        return v8String(isolate, impl.getAsString());
     case ArrayBufferViewOrBlobOrStringOrFormData::SpecificTypeFormData:
-      return ToV8(impl.getAsFormData(), creationContext, isolate);
+        return ToV8(impl.getAsFormData(), creationContext, isolate);
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-ArrayBufferViewOrBlobOrStringOrFormData NativeValueTraits<ArrayBufferViewOrBlobOrStringOrFormData>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ArrayBufferViewOrBlobOrStringOrFormData impl;
-  V8ArrayBufferViewOrBlobOrStringOrFormData::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+ArrayBufferViewOrBlobOrStringOrFormData NativeValueTraits<ArrayBufferViewOrBlobOrStringOrFormData>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ArrayBufferViewOrBlobOrStringOrFormData impl;
+    V8ArrayBufferViewOrBlobOrStringOrFormData::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

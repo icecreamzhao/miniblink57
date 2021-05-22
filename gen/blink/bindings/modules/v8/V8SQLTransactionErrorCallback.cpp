@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SQLTransactionErrorCallback.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -22,31 +22,33 @@
 namespace blink {
 
 V8SQLTransactionErrorCallback::V8SQLTransactionErrorCallback(v8::Local<v8::Function> callback, ScriptState* scriptState)
-    : m_scriptState(scriptState) {
-  m_callback.set(scriptState->isolate(), callback);
+    : m_scriptState(scriptState)
+{
+    m_callback.set(scriptState->isolate(), callback);
 }
 
-V8SQLTransactionErrorCallback::~V8SQLTransactionErrorCallback() {}
+V8SQLTransactionErrorCallback::~V8SQLTransactionErrorCallback() { }
 
-DEFINE_TRACE(V8SQLTransactionErrorCallback) {
-  SQLTransactionErrorCallback::trace(visitor);
+DEFINE_TRACE(V8SQLTransactionErrorCallback)
+{
+    SQLTransactionErrorCallback::trace(visitor);
 }
 
-bool V8SQLTransactionErrorCallback::handleEvent(SQLError* error) {
-  ExecutionContext* executionContext = m_scriptState->getExecutionContext();
-  if (!executionContext || executionContext->isContextSuspended() ||
-      executionContext->isContextDestroyed())
-    return true;
-  if (!m_scriptState->contextIsValid())
-    return true;
-  ScriptState::Scope scope(m_scriptState.get());
-  v8::Local<v8::Value> errorHandle = ToV8(error, m_scriptState->context()->Global(), m_scriptState->isolate());
-  v8::Local<v8::Value> argv[] = { errorHandle };
+bool V8SQLTransactionErrorCallback::handleEvent(SQLError* error)
+{
+    ExecutionContext* executionContext = m_scriptState->getExecutionContext();
+    if (!executionContext || executionContext->isContextSuspended() || executionContext->isContextDestroyed())
+        return true;
+    if (!m_scriptState->contextIsValid())
+        return true;
+    ScriptState::Scope scope(m_scriptState.get());
+    v8::Local<v8::Value> errorHandle = ToV8(error, m_scriptState->context()->Global(), m_scriptState->isolate());
+    v8::Local<v8::Value> argv[] = { errorHandle };
 
-  v8::TryCatch exceptionCatcher(m_scriptState->isolate());
-  exceptionCatcher.SetVerbose(true);
-  V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 1, argv, m_scriptState->isolate());
-  return !exceptionCatcher.HasCaught();
+    v8::TryCatch exceptionCatcher(m_scriptState->isolate());
+    exceptionCatcher.SetVerbose(true);
+    V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), v8::Undefined(m_scriptState->isolate()), 1, argv, m_scriptState->isolate());
+    return !exceptionCatcher.HasCaught();
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,98 +8,111 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "StringOrUnsignedLong.h"
 
 #include "bindings/core/v8/ToV8.h"
 
 namespace blink {
 
-StringOrUnsignedLong::StringOrUnsignedLong() : m_type(SpecificTypeNone) {}
-
-String StringOrUnsignedLong::getAsString() const {
-  DCHECK(isString());
-  return m_string;
+StringOrUnsignedLong::StringOrUnsignedLong()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void StringOrUnsignedLong::setString(String value) {
-  DCHECK(isNull());
-  m_string = value;
-  m_type = SpecificTypeString;
+String StringOrUnsignedLong::getAsString() const
+{
+    DCHECK(isString());
+    return m_string;
 }
 
-StringOrUnsignedLong StringOrUnsignedLong::fromString(String value) {
-  StringOrUnsignedLong container;
-  container.setString(value);
-  return container;
+void StringOrUnsignedLong::setString(String value)
+{
+    DCHECK(isNull());
+    m_string = value;
+    m_type = SpecificTypeString;
 }
 
-unsigned StringOrUnsignedLong::getAsUnsignedLong() const {
-  DCHECK(isUnsignedLong());
-  return m_unsignedLong;
+StringOrUnsignedLong StringOrUnsignedLong::fromString(String value)
+{
+    StringOrUnsignedLong container;
+    container.setString(value);
+    return container;
 }
 
-void StringOrUnsignedLong::setUnsignedLong(unsigned value) {
-  DCHECK(isNull());
-  m_unsignedLong = value;
-  m_type = SpecificTypeUnsignedLong;
+unsigned StringOrUnsignedLong::getAsUnsignedLong() const
+{
+    DCHECK(isUnsignedLong());
+    return m_unsignedLong;
 }
 
-StringOrUnsignedLong StringOrUnsignedLong::fromUnsignedLong(unsigned value) {
-  StringOrUnsignedLong container;
-  container.setUnsignedLong(value);
-  return container;
+void StringOrUnsignedLong::setUnsignedLong(unsigned value)
+{
+    DCHECK(isNull());
+    m_unsignedLong = value;
+    m_type = SpecificTypeUnsignedLong;
+}
+
+StringOrUnsignedLong StringOrUnsignedLong::fromUnsignedLong(unsigned value)
+{
+    StringOrUnsignedLong container;
+    container.setUnsignedLong(value);
+    return container;
 }
 
 StringOrUnsignedLong::StringOrUnsignedLong(const StringOrUnsignedLong&) = default;
 StringOrUnsignedLong::~StringOrUnsignedLong() = default;
 StringOrUnsignedLong& StringOrUnsignedLong::operator=(const StringOrUnsignedLong&) = default;
 
-DEFINE_TRACE(StringOrUnsignedLong) {
+DEFINE_TRACE(StringOrUnsignedLong)
+{
 }
 
-void V8StringOrUnsignedLong::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, StringOrUnsignedLong& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8StringOrUnsignedLong::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, StringOrUnsignedLong& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (v8Value->IsNumber()) {
-    unsigned cppValue = toUInt32(isolate, v8Value, NormalConversion, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setUnsignedLong(cppValue);
-    return;
-  }
+    if (v8Value->IsNumber()) {
+        unsigned cppValue = toUInt32(isolate, v8Value, NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setUnsignedLong(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = v8Value;
-    if (!cppValue.prepare(exceptionState))
-      return;
-    impl.setString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare(exceptionState))
+            return;
+        impl.setString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const StringOrUnsignedLong& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const StringOrUnsignedLong& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case StringOrUnsignedLong::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case StringOrUnsignedLong::SpecificTypeString:
-      return v8String(isolate, impl.getAsString());
+        return v8String(isolate, impl.getAsString());
     case StringOrUnsignedLong::SpecificTypeUnsignedLong:
-      return v8::Integer::NewFromUnsigned(isolate, impl.getAsUnsignedLong());
+        return v8::Integer::NewFromUnsigned(isolate, impl.getAsUnsignedLong());
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-StringOrUnsignedLong NativeValueTraits<StringOrUnsignedLong>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  StringOrUnsignedLong impl;
-  V8StringOrUnsignedLong::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+StringOrUnsignedLong NativeValueTraits<StringOrUnsignedLong>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    StringOrUnsignedLong impl;
+    V8StringOrUnsignedLong::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaMetadata.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,220 +49,243 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MediaMetadata::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaMetadata is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaMetadataV8Internal {
 
-static void titleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void titleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
+        MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->title(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->title(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void titleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaMetadataV8Internal::titleAttributeGetter(info);
-}
+    MODULES_EXPORT void titleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaMetadataV8Internal::titleAttributeGetter(info);
+    }
 
-static void titleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
+    static void titleAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setTitle(cppValue);
-}
+        impl->setTitle(cppValue);
+    }
 
-MODULES_EXPORT void titleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void titleAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MediaMetadataV8Internal::titleAttributeSetter(v8Value, info);
-}
+        MediaMetadataV8Internal::titleAttributeSetter(v8Value, info);
+    }
 
-static void artistAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void artistAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
+        MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->artist(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->artist(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void artistAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaMetadataV8Internal::artistAttributeGetter(info);
-}
+    MODULES_EXPORT void artistAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaMetadataV8Internal::artistAttributeGetter(info);
+    }
 
-static void artistAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
+    static void artistAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setArtist(cppValue);
-}
+        impl->setArtist(cppValue);
+    }
 
-MODULES_EXPORT void artistAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void artistAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MediaMetadataV8Internal::artistAttributeSetter(v8Value, info);
-}
+        MediaMetadataV8Internal::artistAttributeSetter(v8Value, info);
+    }
 
-static void albumAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void albumAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
+        MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->album(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->album(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void albumAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaMetadataV8Internal::albumAttributeGetter(info);
-}
+    MODULES_EXPORT void albumAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaMetadataV8Internal::albumAttributeGetter(info);
+    }
 
-static void albumAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
+    static void albumAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
 
-  // Prepare the value to be set.
-  V8StringResource<> cppValue = v8Value;
-  if (!cppValue.prepare())
-    return;
+        // Prepare the value to be set.
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare())
+            return;
 
-  impl->setAlbum(cppValue);
-}
+        impl->setAlbum(cppValue);
+    }
 
-MODULES_EXPORT void albumAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void albumAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MediaMetadataV8Internal::albumAttributeSetter(v8Value, info);
-}
+        MediaMetadataV8Internal::albumAttributeSetter(v8Value, info);
+    }
 
-static void artworkAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void artworkAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
+        MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, freezeV8Object(ToV8(impl->artwork(scriptState), info.Holder(), info.GetIsolate()), info.GetIsolate()));
-}
+        v8SetReturnValue(info, freezeV8Object(ToV8(impl->artwork(scriptState), info.Holder(), info.GetIsolate()), info.GetIsolate()));
+    }
 
-MODULES_EXPORT void artworkAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaMetadataV8Internal::artworkAttributeGetter(info);
-}
+    MODULES_EXPORT void artworkAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaMetadataV8Internal::artworkAttributeGetter(info);
+    }
 
-static void artworkAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
+    static void artworkAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaMetadata* impl = V8MediaMetadata::toImpl(holder);
 
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "MediaMetadata", "artwork");
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "MediaMetadata", "artwork");
 
-  // Prepare the value to be set.
-  HeapVector<MediaImage> cppValue = toImplArray<HeapVector<MediaImage>>(v8Value, 0, info.GetIsolate(), exceptionState);
-  if (exceptionState.hadException())
-    return;
+        // Prepare the value to be set.
+        HeapVector<MediaImage> cppValue = toImplArray<HeapVector<MediaImage>>(v8Value, 0, info.GetIsolate(), exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  impl->setArtwork(scriptState, cppValue, exceptionState);
-}
+        impl->setArtwork(scriptState, cppValue, exceptionState);
+    }
 
-MODULES_EXPORT void artworkAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    MODULES_EXPORT void artworkAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MediaMetadataV8Internal::artworkAttributeSetter(v8Value, info);
-}
+        MediaMetadataV8Internal::artworkAttributeSetter(v8Value, info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaMetadata");
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "MediaMetadata");
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  MediaMetadataInit metadata;
-  if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
-    exceptionState.throwTypeError("parameter 1 ('metadata') is not an object.");
+        MediaMetadataInit metadata;
+        if (!isUndefinedOrNull(info[0]) && !info[0]->IsObject()) {
+            exceptionState.throwTypeError("parameter 1 ('metadata') is not an object.");
 
-    return;
-  }
-  V8MediaMetadataInit::toImpl(info.GetIsolate(), info[0], metadata, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8MediaMetadataInit::toImpl(info.GetIsolate(), info[0], metadata, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  MediaMetadata* impl = MediaMetadata::create(scriptState, metadata, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaMetadata::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        MediaMetadata* impl = MediaMetadata::create(scriptState, metadata, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8MediaMetadata::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace MediaMetadataV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaMetadataAccessors[] = {
-    {"title", MediaMetadataV8Internal::titleAttributeGetterCallback, MediaMetadataV8Internal::titleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"artist", MediaMetadataV8Internal::artistAttributeGetterCallback, MediaMetadataV8Internal::artistAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"album", MediaMetadataV8Internal::albumAttributeGetterCallback, MediaMetadataV8Internal::albumAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"artwork", MediaMetadataV8Internal::artworkAttributeGetterCallback, MediaMetadataV8Internal::artworkAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "title", MediaMetadataV8Internal::titleAttributeGetterCallback, MediaMetadataV8Internal::titleAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "artist", MediaMetadataV8Internal::artistAttributeGetterCallback, MediaMetadataV8Internal::artistAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "album", MediaMetadataV8Internal::albumAttributeGetterCallback, MediaMetadataV8Internal::albumAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "artwork", MediaMetadataV8Internal::artworkAttributeGetterCallback, MediaMetadataV8Internal::artworkAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8MediaMetadata::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaMetadata"));
-    return;
-  }
+void V8MediaMetadata::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("MediaMetadata"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  MediaMetadataV8Internal::constructor(info);
+    MediaMetadataV8Internal::constructor(info);
 }
 
-static void installV8MediaMetadataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaMetadata::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaMetadata::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8MediaMetadata::constructorCallback);
-  interfaceTemplate->SetLength(0);
+static void installV8MediaMetadataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaMetadata::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaMetadata::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8MediaMetadata::constructorCallback);
+    interfaceTemplate->SetLength(0);
 
-  if (!RuntimeEnabledFeatures::mediaSessionEnabled()) {
-    return;
-  }
+    if (!RuntimeEnabledFeatures::mediaSessionEnabled()) {
+        return;
+    }
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaMetadataAccessors, WTF_ARRAY_LENGTH(V8MediaMetadataAccessors));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaMetadataAccessors, WTF_ARRAY_LENGTH(V8MediaMetadataAccessors));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaMetadata::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaMetadataTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaMetadata::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaMetadataTemplate);
 }
 
-bool V8MediaMetadata::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaMetadata::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaMetadata::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaMetadata::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaMetadata* V8MediaMetadata::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaMetadata* V8MediaMetadata::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

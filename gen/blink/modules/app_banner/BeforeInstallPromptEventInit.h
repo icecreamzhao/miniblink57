@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef BeforeInstallPromptEventInit_h
 #define BeforeInstallPromptEventInit_h
 
@@ -21,27 +21,28 @@
 namespace blink {
 
 class MODULES_EXPORT BeforeInstallPromptEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  BeforeInstallPromptEventInit();
-  virtual ~BeforeInstallPromptEventInit();
-  BeforeInstallPromptEventInit(const BeforeInstallPromptEventInit&);
-  BeforeInstallPromptEventInit& operator=(const BeforeInstallPromptEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasPlatforms() const;
-  const Vector<String>& platforms() const;
-  void setPlatforms(const Vector<String>&);
+public:
+    BeforeInstallPromptEventInit();
+    virtual ~BeforeInstallPromptEventInit();
+    BeforeInstallPromptEventInit(const BeforeInstallPromptEventInit&);
+    BeforeInstallPromptEventInit& operator=(const BeforeInstallPromptEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasPlatforms() const;
+    const Vector<String>& platforms() const;
+    void setPlatforms(const Vector<String>&);
 
- private:
-  bool m_hasPlatforms = false;
-  Vector<String> m_platforms;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8BeforeInstallPromptEventInit;
+private:
+    bool m_hasPlatforms = false;
+    Vector<String> m_platforms;
+
+    friend class V8BeforeInstallPromptEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // BeforeInstallPromptEventInit_h
+#endif // BeforeInstallPromptEventInit_h

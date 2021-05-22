@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8EXTsRGB.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,7 +47,7 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&EXTsRGB::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "EXTsRGB is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
@@ -56,51 +56,57 @@ namespace EXTsRGBV8Internal {
 
 } // namespace EXTsRGBV8Internal
 
-void V8EXTsRGB::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  EXTsRGB* impl = scriptWrappable->toImpl<EXTsRGB>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8EXTsRGB::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    EXTsRGB* impl = scriptWrappable->toImpl<EXTsRGB>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
-static void installV8EXTsRGBTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8EXTsRGB::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8EXTsRGB::internalFieldCount);
+static void installV8EXTsRGBTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8EXTsRGB::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8EXTsRGB::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8EXTsRGBConstants[] = {
-      {"SRGB_EXT", 0x8C40, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SRGB_ALPHA_EXT", 0x8C42, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"SRGB8_ALPHA8_EXT", 0x8C43, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-      {"FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT", 0x8210, 0, V8DOMConfiguration::ConstantTypeUnsignedLong},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8EXTsRGBConstants, WTF_ARRAY_LENGTH(V8EXTsRGBConstants));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8EXTsRGBConstants[] = {
+        { "SRGB_EXT", 0x8C40, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SRGB_ALPHA_EXT", 0x8C42, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "SRGB8_ALPHA8_EXT", 0x8C43, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+        { "FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT", 0x8210, 0, V8DOMConfiguration::ConstantTypeUnsignedLong },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8EXTsRGBConstants, WTF_ARRAY_LENGTH(V8EXTsRGBConstants));
 }
 
-v8::Local<v8::FunctionTemplate> V8EXTsRGB::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EXTsRGBTemplate);
+v8::Local<v8::FunctionTemplate> V8EXTsRGB::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EXTsRGBTemplate);
 }
 
-bool V8EXTsRGB::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8EXTsRGB::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8EXTsRGB::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8EXTsRGB::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-EXTsRGB* V8EXTsRGB::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+EXTsRGB* V8EXTsRGB::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

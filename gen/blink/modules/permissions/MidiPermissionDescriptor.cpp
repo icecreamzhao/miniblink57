@@ -8,35 +8,40 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MidiPermissionDescriptor.h"
 
 namespace blink {
 
-MidiPermissionDescriptor::MidiPermissionDescriptor() {
-  setSysex(false);
+MidiPermissionDescriptor::MidiPermissionDescriptor()
+{
+    setSysex(false);
 }
 
-MidiPermissionDescriptor::~MidiPermissionDescriptor() {}
+MidiPermissionDescriptor::~MidiPermissionDescriptor() { }
 
 MidiPermissionDescriptor::MidiPermissionDescriptor(const MidiPermissionDescriptor&) = default;
 
 MidiPermissionDescriptor& MidiPermissionDescriptor::operator=(const MidiPermissionDescriptor&) = default;
 
-bool MidiPermissionDescriptor::hasSysex() const {
-  return m_hasSysex;
+bool MidiPermissionDescriptor::hasSysex() const
+{
+    return m_hasSysex;
 }
-bool MidiPermissionDescriptor::sysex() const {
-  DCHECK(m_hasSysex);
-  return m_sysex;
+bool MidiPermissionDescriptor::sysex() const
+{
+    DCHECK(m_hasSysex);
+    return m_sysex;
 }
-void MidiPermissionDescriptor::setSysex(bool value) {
-  m_sysex = value;
-  m_hasSysex = true;
+void MidiPermissionDescriptor::setSysex(bool value)
+{
+    m_sysex = value;
+    m_hasSysex = true;
 }
 
-DEFINE_TRACE(MidiPermissionDescriptor) {
-  PermissionDescriptor::trace(visitor);
+DEFINE_TRACE(MidiPermissionDescriptor)
+{
+    PermissionDescriptor::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

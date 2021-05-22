@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DoubleOrDoubleSequence_h
 #define DoubleOrDoubleSequence_h
 
@@ -21,58 +21,60 @@
 namespace blink {
 
 class CORE_EXPORT DoubleOrDoubleSequence final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DoubleOrDoubleSequence();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isDouble() const { return m_type == SpecificTypeDouble; }
-  double getAsDouble() const;
-  void setDouble(double);
-  static DoubleOrDoubleSequence fromDouble(double);
+public:
+    DoubleOrDoubleSequence();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isDoubleSequence() const { return m_type == SpecificTypeDoubleSequence; }
-  const Vector<double>& getAsDoubleSequence() const;
-  void setDoubleSequence(const Vector<double>&);
-  static DoubleOrDoubleSequence fromDoubleSequence(const Vector<double>&);
+    bool isDouble() const { return m_type == SpecificTypeDouble; }
+    double getAsDouble() const;
+    void setDouble(double);
+    static DoubleOrDoubleSequence fromDouble(double);
 
-  DoubleOrDoubleSequence(const DoubleOrDoubleSequence&);
-  ~DoubleOrDoubleSequence();
-  DoubleOrDoubleSequence& operator=(const DoubleOrDoubleSequence&);
-  DECLARE_TRACE();
+    bool isDoubleSequence() const { return m_type == SpecificTypeDoubleSequence; }
+    const Vector<double>& getAsDoubleSequence() const;
+    void setDoubleSequence(const Vector<double>&);
+    static DoubleOrDoubleSequence fromDoubleSequence(const Vector<double>&);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeDouble,
-    SpecificTypeDoubleSequence,
-  };
-  SpecificTypes m_type;
+    DoubleOrDoubleSequence(const DoubleOrDoubleSequence&);
+    ~DoubleOrDoubleSequence();
+    DoubleOrDoubleSequence& operator=(const DoubleOrDoubleSequence&);
+    DECLARE_TRACE();
 
-  double m_double;
-  Vector<double> m_doubleSequence;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeDouble,
+        SpecificTypeDoubleSequence,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrDoubleSequence&, v8::Local<v8::Object>, v8::Isolate*);
+    double m_double;
+    Vector<double> m_doubleSequence;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrDoubleSequence&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8DoubleOrDoubleSequence final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DoubleOrDoubleSequence&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, DoubleOrDoubleSequence&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const DoubleOrDoubleSequence&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DoubleOrDoubleSequence& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, DoubleOrDoubleSequence& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<DoubleOrDoubleSequence> {
-  CORE_EXPORT static DoubleOrDoubleSequence nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static DoubleOrDoubleSequence nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -80,4 +82,4 @@ struct NativeValueTraits<DoubleOrDoubleSequence> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::DoubleOrDoubleSequence);
 
-#endif  // DoubleOrDoubleSequence_h
+#endif // DoubleOrDoubleSequence_h

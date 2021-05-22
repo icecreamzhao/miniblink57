@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_function.h.tmpl
 
-// clang-format off
+// clang-format on
 
 #ifndef TestInterfaceCallback_h
 #define TestInterfaceCallback_h
@@ -24,32 +24,34 @@ class ScriptState;
 class HTMLDivElement;
 
 class TestInterfaceCallback final : public GarbageCollectedFinalized<TestInterfaceCallback>, public TraceWrapperBase {
- public:
-  static TestInterfaceCallback* create(ScriptState* scriptState, v8::Local<v8::Value> callback);
+public:
+    static TestInterfaceCallback* create(ScriptState* scriptState, v8::Local<v8::Value> callback);
 
-  ~TestInterfaceCallback() = default;
+    ~TestInterfaceCallback() = default;
 
-  DECLARE_TRACE();
-  DECLARE_TRACE_WRAPPERS();
+    DECLARE_TRACE();
+    DECLARE_TRACE_WRAPPERS();
 
-  bool call(ScriptWrappable* scriptWrappable, HTMLDivElement* divElement);
+    bool call(ScriptWrappable* scriptWrappable, HTMLDivElement* divElement);
 
-  v8::Local<v8::Function> v8Value(v8::Isolate* isolate) {
-    return m_callback.newLocal(isolate);
-  }
+    v8::Local<v8::Function> v8Value(v8::Isolate* isolate)
+    {
+        return m_callback.newLocal(isolate);
+    }
 
-  void setWrapperReference(v8::Isolate* isolate, const v8::Persistent<v8::Object>& wrapper) {
-    DCHECK(!m_callback.isEmpty());
-    m_callback.setReference(wrapper, isolate);
-  }
+    void setWrapperReference(v8::Isolate* isolate, const v8::Persistent<v8::Object>& wrapper)
+    {
+        DCHECK(!m_callback.isEmpty());
+        m_callback.setReference(wrapper, isolate);
+    }
 
- private:
-  TestInterfaceCallback(ScriptState*, v8::Local<v8::Function>);
+private:
+    TestInterfaceCallback(ScriptState*, v8::Local<v8::Function>);
 
-  RefPtr<ScriptState> m_scriptState;
-  TraceWrapperV8Reference<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
+    TraceWrapperV8Reference<v8::Function> m_callback;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // TestInterfaceCallback_h
+#endif // TestInterfaceCallback_h

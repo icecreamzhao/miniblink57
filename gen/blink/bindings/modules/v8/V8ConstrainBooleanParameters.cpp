@@ -8,82 +8,86 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8ConstrainBooleanParameters.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8ConstrainBooleanParameters::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ConstrainBooleanParameters& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8ConstrainBooleanParameters::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, ConstrainBooleanParameters& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> exactValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "exact")).ToLocal(&exactValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (exactValue.IsEmpty() || exactValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool exact = toBoolean(isolate, exactValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setExact(exact);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> exactValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "exact")).ToLocal(&exactValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (exactValue.IsEmpty() || exactValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool exact = toBoolean(isolate, exactValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setExact(exact);
+    }
 
-  v8::Local<v8::Value> idealValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ideal")).ToLocal(&idealValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (idealValue.IsEmpty() || idealValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    bool ideal = toBoolean(isolate, idealValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setIdeal(ideal);
-  }
+    v8::Local<v8::Value> idealValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "ideal")).ToLocal(&idealValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (idealValue.IsEmpty() || idealValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        bool ideal = toBoolean(isolate, idealValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setIdeal(ideal);
+    }
 }
 
-v8::Local<v8::Value> ConstrainBooleanParameters::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8ConstrainBooleanParameters(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> ConstrainBooleanParameters::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8ConstrainBooleanParameters(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8ConstrainBooleanParameters(const ConstrainBooleanParameters& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasExact()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "exact"), v8Boolean(impl.exact(), isolate))))
-      return false;
-  }
+bool toV8ConstrainBooleanParameters(const ConstrainBooleanParameters& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasExact()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "exact"), v8Boolean(impl.exact(), isolate))))
+            return false;
+    }
 
-  if (impl.hasIdeal()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ideal"), v8Boolean(impl.ideal(), isolate))))
-      return false;
-  }
+    if (impl.hasIdeal()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "ideal"), v8Boolean(impl.ideal(), isolate))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-ConstrainBooleanParameters NativeValueTraits<ConstrainBooleanParameters>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  ConstrainBooleanParameters impl;
-  V8ConstrainBooleanParameters::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+ConstrainBooleanParameters NativeValueTraits<ConstrainBooleanParameters>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    ConstrainBooleanParameters impl;
+    V8ConstrainBooleanParameters::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

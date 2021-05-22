@@ -8,88 +8,92 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaKeySystemMediaCapability.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8MediaKeySystemMediaCapability::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, MediaKeySystemMediaCapability& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8MediaKeySystemMediaCapability::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, MediaKeySystemMediaCapability& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> contentTypeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "contentType")).ToLocal(&contentTypeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (contentTypeValue.IsEmpty() || contentTypeValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> contentType = contentTypeValue;
-    if (!contentType.prepare(exceptionState))
-      return;
-    impl.setContentType(contentType);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> contentTypeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "contentType")).ToLocal(&contentTypeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (contentTypeValue.IsEmpty() || contentTypeValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> contentType = contentTypeValue;
+        if (!contentType.prepare(exceptionState))
+            return;
+        impl.setContentType(contentType);
+    }
 
-  v8::Local<v8::Value> robustnessValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "robustness")).ToLocal(&robustnessValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (robustnessValue.IsEmpty() || robustnessValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> robustness = robustnessValue;
-    if (!robustness.prepare(exceptionState))
-      return;
-    impl.setRobustness(robustness);
-  }
+    v8::Local<v8::Value> robustnessValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "robustness")).ToLocal(&robustnessValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (robustnessValue.IsEmpty() || robustnessValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> robustness = robustnessValue;
+        if (!robustness.prepare(exceptionState))
+            return;
+        impl.setRobustness(robustness);
+    }
 }
 
-v8::Local<v8::Value> MediaKeySystemMediaCapability::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8MediaKeySystemMediaCapability(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> MediaKeySystemMediaCapability::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8MediaKeySystemMediaCapability(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8MediaKeySystemMediaCapability(const MediaKeySystemMediaCapability& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasContentType()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "contentType"), v8String(isolate, impl.contentType()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "contentType"), v8String(isolate, String("")))))
-      return false;
-  }
+bool toV8MediaKeySystemMediaCapability(const MediaKeySystemMediaCapability& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasContentType()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "contentType"), v8String(isolate, impl.contentType()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "contentType"), v8String(isolate, String("")))))
+            return false;
+    }
 
-  if (impl.hasRobustness()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "robustness"), v8String(isolate, impl.robustness()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "robustness"), v8String(isolate, String("")))))
-      return false;
-  }
+    if (impl.hasRobustness()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "robustness"), v8String(isolate, impl.robustness()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "robustness"), v8String(isolate, String("")))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-MediaKeySystemMediaCapability NativeValueTraits<MediaKeySystemMediaCapability>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  MediaKeySystemMediaCapability impl;
-  V8MediaKeySystemMediaCapability::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+MediaKeySystemMediaCapability NativeValueTraits<MediaKeySystemMediaCapability>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    MediaKeySystemMediaCapability impl;
+    V8MediaKeySystemMediaCapability::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

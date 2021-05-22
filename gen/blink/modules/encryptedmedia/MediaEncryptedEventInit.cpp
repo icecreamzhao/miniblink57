@@ -8,48 +8,57 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "MediaEncryptedEventInit.h"
 
 #include "core/dom/DOMArrayBuffer.h"
 
 namespace blink {
 
-MediaEncryptedEventInit::MediaEncryptedEventInit() {
-  setInitDataType(String(""));
+MediaEncryptedEventInit::MediaEncryptedEventInit()
+{
+    setInitDataType(String(""));
 }
 
-MediaEncryptedEventInit::~MediaEncryptedEventInit() {}
+MediaEncryptedEventInit::~MediaEncryptedEventInit() { }
 
 MediaEncryptedEventInit::MediaEncryptedEventInit(const MediaEncryptedEventInit&) = default;
 
 MediaEncryptedEventInit& MediaEncryptedEventInit::operator=(const MediaEncryptedEventInit&) = default;
 
-bool MediaEncryptedEventInit::hasInitData() const {
-  return m_initData;
+bool MediaEncryptedEventInit::hasInitData() const
+{
+    return m_initData;
 }
-DOMArrayBuffer* MediaEncryptedEventInit::initData() const {
-  return m_initData;
+DOMArrayBuffer* MediaEncryptedEventInit::initData() const
+{
+    return m_initData;
 }
-void MediaEncryptedEventInit::setInitData(DOMArrayBuffer* value) {
-  m_initData = value;
+void MediaEncryptedEventInit::setInitData(DOMArrayBuffer* value)
+{
+    m_initData = value;
 }
-void MediaEncryptedEventInit::setInitDataToNull() {
-  m_initData = Member<DOMArrayBuffer>();
+void MediaEncryptedEventInit::setInitDataToNull()
+{
+    m_initData = Member<DOMArrayBuffer>();
 }
-bool MediaEncryptedEventInit::hasInitDataType() const {
-  return !m_initDataType.isNull();
+bool MediaEncryptedEventInit::hasInitDataType() const
+{
+    return !m_initDataType.isNull();
 }
-String MediaEncryptedEventInit::initDataType() const {
-  return m_initDataType;
+String MediaEncryptedEventInit::initDataType() const
+{
+    return m_initDataType;
 }
-void MediaEncryptedEventInit::setInitDataType(String value) {
-  m_initDataType = value;
+void MediaEncryptedEventInit::setInitDataType(String value)
+{
+    m_initDataType = value;
 }
 
-DEFINE_TRACE(MediaEncryptedEventInit) {
-  visitor->trace(m_initData);
-  EventInit::trace(visitor);
+DEFINE_TRACE(MediaEncryptedEventInit)
+{
+    visitor->trace(m_initData);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

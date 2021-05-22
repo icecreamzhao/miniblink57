@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef SecurityPolicyViolationEventInit_h
 #define SecurityPolicyViolationEventInit_h
 
@@ -20,79 +20,80 @@
 namespace blink {
 
 class CORE_EXPORT SecurityPolicyViolationEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  SecurityPolicyViolationEventInit();
-  virtual ~SecurityPolicyViolationEventInit();
-  SecurityPolicyViolationEventInit(const SecurityPolicyViolationEventInit&);
-  SecurityPolicyViolationEventInit& operator=(const SecurityPolicyViolationEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasBlockedURI() const;
-  String blockedURI() const;
-  void setBlockedURI(String);
+public:
+    SecurityPolicyViolationEventInit();
+    virtual ~SecurityPolicyViolationEventInit();
+    SecurityPolicyViolationEventInit(const SecurityPolicyViolationEventInit&);
+    SecurityPolicyViolationEventInit& operator=(const SecurityPolicyViolationEventInit&);
 
-  bool hasColumnNumber() const;
-  int columnNumber() const;
-  void setColumnNumber(int);
+    bool hasBlockedURI() const;
+    String blockedURI() const;
+    void setBlockedURI(String);
 
-  bool hasDisposition() const;
-  String disposition() const;
-  void setDisposition(String);
+    bool hasColumnNumber() const;
+    int columnNumber() const;
+    void setColumnNumber(int);
 
-  bool hasDocumentURI() const;
-  String documentURI() const;
-  void setDocumentURI(String);
+    bool hasDisposition() const;
+    String disposition() const;
+    void setDisposition(String);
 
-  bool hasEffectiveDirective() const;
-  String effectiveDirective() const;
-  void setEffectiveDirective(String);
+    bool hasDocumentURI() const;
+    String documentURI() const;
+    void setDocumentURI(String);
 
-  bool hasLineNumber() const;
-  int lineNumber() const;
-  void setLineNumber(int);
+    bool hasEffectiveDirective() const;
+    String effectiveDirective() const;
+    void setEffectiveDirective(String);
 
-  bool hasOriginalPolicy() const;
-  String originalPolicy() const;
-  void setOriginalPolicy(String);
+    bool hasLineNumber() const;
+    int lineNumber() const;
+    void setLineNumber(int);
 
-  bool hasReferrer() const;
-  String referrer() const;
-  void setReferrer(String);
+    bool hasOriginalPolicy() const;
+    String originalPolicy() const;
+    void setOriginalPolicy(String);
 
-  bool hasSourceFile() const;
-  String sourceFile() const;
-  void setSourceFile(String);
+    bool hasReferrer() const;
+    String referrer() const;
+    void setReferrer(String);
 
-  bool hasStatusCode() const;
-  unsigned statusCode() const;
-  void setStatusCode(unsigned);
+    bool hasSourceFile() const;
+    String sourceFile() const;
+    void setSourceFile(String);
 
-  bool hasViolatedDirective() const;
-  String violatedDirective() const;
-  void setViolatedDirective(String);
+    bool hasStatusCode() const;
+    unsigned statusCode() const;
+    void setStatusCode(unsigned);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasViolatedDirective() const;
+    String violatedDirective() const;
+    void setViolatedDirective(String);
 
- private:
-  String m_blockedURI;
-  bool m_hasColumnNumber = false;
-  int m_columnNumber;
-  String m_disposition;
-  String m_documentURI;
-  String m_effectiveDirective;
-  bool m_hasLineNumber = false;
-  int m_lineNumber;
-  String m_originalPolicy;
-  String m_referrer;
-  String m_sourceFile;
-  bool m_hasStatusCode = false;
-  unsigned m_statusCode;
-  String m_violatedDirective;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8SecurityPolicyViolationEventInit;
+private:
+    String m_blockedURI;
+    bool m_hasColumnNumber = false;
+    int m_columnNumber;
+    String m_disposition;
+    String m_documentURI;
+    String m_effectiveDirective;
+    bool m_hasLineNumber = false;
+    int m_lineNumber;
+    String m_originalPolicy;
+    String m_referrer;
+    String m_sourceFile;
+    bool m_hasStatusCode = false;
+    unsigned m_statusCode;
+    String m_violatedDirective;
+
+    friend class V8SecurityPolicyViolationEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // SecurityPolicyViolationEventInit_h
+#endif // SecurityPolicyViolationEventInit_h

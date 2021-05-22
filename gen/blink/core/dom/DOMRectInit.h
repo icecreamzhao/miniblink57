@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef DOMRectInit_h
 #define DOMRectInit_h
 
@@ -19,45 +19,46 @@
 namespace blink {
 
 class CORE_EXPORT DOMRectInit : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  DOMRectInit();
-  virtual ~DOMRectInit();
-  DOMRectInit(const DOMRectInit&);
-  DOMRectInit& operator=(const DOMRectInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasHeight() const;
-  double height() const;
-  void setHeight(double);
+public:
+    DOMRectInit();
+    virtual ~DOMRectInit();
+    DOMRectInit(const DOMRectInit&);
+    DOMRectInit& operator=(const DOMRectInit&);
 
-  bool hasWidth() const;
-  double width() const;
-  void setWidth(double);
+    bool hasHeight() const;
+    double height() const;
+    void setHeight(double);
 
-  bool hasX() const;
-  double x() const;
-  void setX(double);
+    bool hasWidth() const;
+    double width() const;
+    void setWidth(double);
 
-  bool hasY() const;
-  double y() const;
-  void setY(double);
+    bool hasX() const;
+    double x() const;
+    void setX(double);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasY() const;
+    double y() const;
+    void setY(double);
 
- private:
-  bool m_hasHeight = false;
-  double m_height;
-  bool m_hasWidth = false;
-  double m_width;
-  bool m_hasX = false;
-  double m_x;
-  bool m_hasY = false;
-  double m_y;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8DOMRectInit;
+private:
+    bool m_hasHeight = false;
+    double m_height;
+    bool m_hasWidth = false;
+    double m_width;
+    bool m_hasX = false;
+    double m_x;
+    bool m_hasY = false;
+    double m_y;
+
+    friend class V8DOMRectInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // DOMRectInit_h
+#endif // DOMRectInit_h

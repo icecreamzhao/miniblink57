@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8Geolocation.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,180 +49,191 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&Geolocation::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "Geolocation is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace GeolocationV8Internal {
 
-static void getCurrentPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "getCurrentPosition");
+    static void getCurrentPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "getCurrentPosition");
 
-  Geolocation* impl = V8Geolocation::toImpl(info.Holder());
+        Geolocation* impl = V8Geolocation::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  PositionCallback* successCallback;
-  PositionErrorCallback* errorCallback;
-  PositionOptions options;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
+        PositionCallback* successCallback;
+        PositionErrorCallback* errorCallback;
+        PositionOptions options;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
 
-    return;
-  }
-  successCallback = V8PositionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
+            return;
+        }
+        successCallback = V8PositionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
 
-  if (!isUndefinedOrNull(info[1])) {
-    if (!info[1]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
+        if (!isUndefinedOrNull(info[1])) {
+            if (!info[1]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
 
-      return;
+                return;
+            }
+            errorCallback = V8PositionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
+
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
+
+            return;
+        }
+        V8PositionOptions::toImpl(info.GetIsolate(), info[2], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->getCurrentPosition(successCallback, errorCallback, options);
     }
-    errorCallback = V8PositionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
-
-    return;
-  }
-  V8PositionOptions::toImpl(info.GetIsolate(), info[2], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->getCurrentPosition(successCallback, errorCallback, options);
-}
-
-MODULES_EXPORT  void getCurrentPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-  V8PerContextData* contextData = scriptState->perContextData();
-  if (contextData && contextData->activityLogger()) {
-    ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "getCurrentPosition");
-    Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
-    contextData->activityLogger()->logMethod("Geolocation.getCurrentPosition", info.Length(), loggerArgs.data());
-  }
-  GeolocationV8Internal::getCurrentPositionMethod(info);
-}
-
-static void watchPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "watchPosition");
-
-  Geolocation* impl = V8Geolocation::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  PositionCallback* successCallback;
-  PositionErrorCallback* errorCallback;
-  PositionOptions options;
-  if (info.Length() <= 0 || !info[0]->IsFunction()) {
-    exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
-
-    return;
-  }
-  successCallback = V8PositionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
-
-  if (!isUndefinedOrNull(info[1])) {
-    if (!info[1]->IsFunction()) {
-      exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
-
-      return;
+    MODULES_EXPORT void getCurrentPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        V8PerContextData* contextData = scriptState->perContextData();
+        if (contextData && contextData->activityLogger()) {
+            ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "getCurrentPosition");
+            Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
+            contextData->activityLogger()->logMethod("Geolocation.getCurrentPosition", info.Length(), loggerArgs.data());
+        }
+        GeolocationV8Internal::getCurrentPositionMethod(info);
     }
-    errorCallback = V8PositionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
-  } else {
-    errorCallback = nullptr;
-  }
 
-  if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
-    exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
+    static void watchPositionMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "watchPosition");
 
-    return;
-  }
-  V8PositionOptions::toImpl(info.GetIsolate(), info[2], options, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        Geolocation* impl = V8Geolocation::toImpl(info.Holder());
 
-  v8SetReturnValueInt(info, impl->watchPosition(successCallback, errorCallback, options));
-}
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-MODULES_EXPORT  void watchPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
-  V8PerContextData* contextData = scriptState->perContextData();
-  if (contextData && contextData->activityLogger()) {
-    ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "watchPosition");
-    Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
-    contextData->activityLogger()->logMethod("Geolocation.watchPosition", info.Length(), loggerArgs.data());
-  }
-  GeolocationV8Internal::watchPositionMethod(info);
-}
+        PositionCallback* successCallback;
+        PositionErrorCallback* errorCallback;
+        PositionOptions options;
+        if (info.Length() <= 0 || !info[0]->IsFunction()) {
+            exceptionState.throwTypeError("The callback provided as parameter 1 is not a function.");
 
-static void clearWatchMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "clearWatch");
+            return;
+        }
+        successCallback = V8PositionCallback::create(v8::Local<v8::Function>::Cast(info[0]), ScriptState::current(info.GetIsolate()));
 
-  Geolocation* impl = V8Geolocation::toImpl(info.Holder());
+        if (!isUndefinedOrNull(info[1])) {
+            if (!info[1]->IsFunction()) {
+                exceptionState.throwTypeError("The callback provided as parameter 2 is not a function.");
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+                return;
+            }
+            errorCallback = V8PositionErrorCallback::create(v8::Local<v8::Function>::Cast(info[1]), ScriptState::current(info.GetIsolate()));
+        } else {
+            errorCallback = nullptr;
+        }
 
-  int watchID;
-  watchID = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (!isUndefinedOrNull(info[2]) && !info[2]->IsObject()) {
+            exceptionState.throwTypeError("parameter 3 ('options') is not an object.");
 
-  impl->clearWatch(watchID);
-}
+            return;
+        }
+        V8PositionOptions::toImpl(info.GetIsolate(), info[2], options, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-MODULES_EXPORT  void clearWatchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  GeolocationV8Internal::clearWatchMethod(info);
-}
+        v8SetReturnValueInt(info, impl->watchPosition(successCallback, errorCallback, options));
+    }
+
+    MODULES_EXPORT void watchPositionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        V8PerContextData* contextData = scriptState->perContextData();
+        if (contextData && contextData->activityLogger()) {
+            ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "watchPosition");
+            Vector<v8::Local<v8::Value>> loggerArgs = toImplArguments<Vector<v8::Local<v8::Value>>>(info, 0, exceptionState);
+            contextData->activityLogger()->logMethod("Geolocation.watchPosition", info.Length(), loggerArgs.data());
+        }
+        GeolocationV8Internal::watchPositionMethod(info);
+    }
+
+    static void clearWatchMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Geolocation", "clearWatch");
+
+        Geolocation* impl = V8Geolocation::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        int watchID;
+        watchID = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->clearWatch(watchID);
+    }
+
+    MODULES_EXPORT void clearWatchMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        GeolocationV8Internal::clearWatchMethod(info);
+    }
 
 } // namespace GeolocationV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8GeolocationMethods[] = {
-    {"getCurrentPosition", GeolocationV8Internal::getCurrentPositionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"watchPosition", GeolocationV8Internal::watchPositionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clearWatch", GeolocationV8Internal::clearWatchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getCurrentPosition", GeolocationV8Internal::getCurrentPositionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "watchPosition", GeolocationV8Internal::watchPositionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clearWatch", GeolocationV8Internal::clearWatchMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8GeolocationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Geolocation::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Geolocation::internalFieldCount);
+static void installV8GeolocationTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8Geolocation::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8Geolocation::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8GeolocationMethods, WTF_ARRAY_LENGTH(V8GeolocationMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8GeolocationMethods, WTF_ARRAY_LENGTH(V8GeolocationMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8Geolocation::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8GeolocationTemplate);
+v8::Local<v8::FunctionTemplate> V8Geolocation::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8GeolocationTemplate);
 }
 
-bool V8Geolocation::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8Geolocation::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8Geolocation::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8Geolocation::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-Geolocation* V8Geolocation::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+Geolocation* V8Geolocation::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

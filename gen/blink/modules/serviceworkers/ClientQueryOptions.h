@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef ClientQueryOptions_h
 #define ClientQueryOptions_h
 
@@ -20,32 +20,33 @@
 namespace blink {
 
 class MODULES_EXPORT ClientQueryOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  ClientQueryOptions();
-  virtual ~ClientQueryOptions();
-  ClientQueryOptions(const ClientQueryOptions&);
-  ClientQueryOptions& operator=(const ClientQueryOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasIncludeUncontrolled() const;
-  bool includeUncontrolled() const;
-  void setIncludeUncontrolled(bool);
+public:
+    ClientQueryOptions();
+    virtual ~ClientQueryOptions();
+    ClientQueryOptions(const ClientQueryOptions&);
+    ClientQueryOptions& operator=(const ClientQueryOptions&);
 
-  bool hasType() const;
-  String type() const;
-  void setType(String);
+    bool hasIncludeUncontrolled() const;
+    bool includeUncontrolled() const;
+    void setIncludeUncontrolled(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasType() const;
+    String type() const;
+    void setType(String);
 
- private:
-  bool m_hasIncludeUncontrolled = false;
-  bool m_includeUncontrolled;
-  String m_type;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8ClientQueryOptions;
+private:
+    bool m_hasIncludeUncontrolled = false;
+    bool m_includeUncontrolled;
+    String m_type;
+
+    friend class V8ClientQueryOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // ClientQueryOptions_h
+#endif // ClientQueryOptions_h

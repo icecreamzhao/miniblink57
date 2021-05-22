@@ -8,45 +8,53 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AudioTimestamp.h"
 
 namespace blink {
 
-AudioTimestamp::AudioTimestamp() {
+AudioTimestamp::AudioTimestamp()
+{
 }
 
-AudioTimestamp::~AudioTimestamp() {}
+AudioTimestamp::~AudioTimestamp() { }
 
 AudioTimestamp::AudioTimestamp(const AudioTimestamp&) = default;
 
 AudioTimestamp& AudioTimestamp::operator=(const AudioTimestamp&) = default;
 
-bool AudioTimestamp::hasContextTime() const {
-  return m_hasContextTime;
+bool AudioTimestamp::hasContextTime() const
+{
+    return m_hasContextTime;
 }
-double AudioTimestamp::contextTime() const {
-  DCHECK(m_hasContextTime);
-  return m_contextTime;
+double AudioTimestamp::contextTime() const
+{
+    DCHECK(m_hasContextTime);
+    return m_contextTime;
 }
-void AudioTimestamp::setContextTime(double value) {
-  m_contextTime = value;
-  m_hasContextTime = true;
+void AudioTimestamp::setContextTime(double value)
+{
+    m_contextTime = value;
+    m_hasContextTime = true;
 }
-bool AudioTimestamp::hasPerformanceTime() const {
-  return m_hasPerformanceTime;
+bool AudioTimestamp::hasPerformanceTime() const
+{
+    return m_hasPerformanceTime;
 }
-double AudioTimestamp::performanceTime() const {
-  DCHECK(m_hasPerformanceTime);
-  return m_performanceTime;
+double AudioTimestamp::performanceTime() const
+{
+    DCHECK(m_hasPerformanceTime);
+    return m_performanceTime;
 }
-void AudioTimestamp::setPerformanceTime(double value) {
-  m_performanceTime = value;
-  m_hasPerformanceTime = true;
+void AudioTimestamp::setPerformanceTime(double value)
+{
+    m_performanceTime = value;
+    m_hasPerformanceTime = true;
 }
 
-DEFINE_TRACE(AudioTimestamp) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(AudioTimestamp)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

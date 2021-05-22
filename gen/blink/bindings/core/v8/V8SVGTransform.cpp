@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8SVGTransform.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -47,294 +47,318 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&SVGTransformTearOff::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "SVGTransformTearOff is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace SVGTransformTearOffV8Internal {
 
-static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void typeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGTransformTearOff* impl = V8SVGTransform::toImpl(holder);
+        SVGTransformTearOff* impl = V8SVGTransform::toImpl(holder);
 
-  v8SetReturnValueUnsigned(info, impl->transformType());
-}
+        v8SetReturnValueUnsigned(info, impl->transformType());
+    }
 
-CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTransformTearOffV8Internal::typeAttributeGetter(info);
-}
+    CORE_EXPORT void typeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTransformTearOffV8Internal::typeAttributeGetter(info);
+    }
 
-static void matrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void matrixAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGTransformTearOff* impl = V8SVGTransform::toImpl(holder);
+        SVGTransformTearOff* impl = V8SVGTransform::toImpl(holder);
 
-  v8SetReturnValueFast(info, WTF::getPtr(impl->matrix()), impl);
-}
+        v8SetReturnValueFast(info, WTF::getPtr(impl->matrix()), impl);
+    }
 
-CORE_EXPORT void matrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTransformTearOffV8Internal::matrixAttributeGetter(info);
-}
+    CORE_EXPORT void matrixAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTransformTearOffV8Internal::matrixAttributeGetter(info);
+    }
 
-static void angleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void angleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  SVGTransformTearOff* impl = V8SVGTransform::toImpl(holder);
+        SVGTransformTearOff* impl = V8SVGTransform::toImpl(holder);
 
-  v8SetReturnValue(info, impl->angle());
-}
+        v8SetReturnValue(info, impl->angle());
+    }
 
-CORE_EXPORT void angleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTransformTearOffV8Internal::angleAttributeGetter(info);
-}
+    CORE_EXPORT void angleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTransformTearOffV8Internal::angleAttributeGetter(info);
+    }
 
-static void setMatrixMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setMatrix");
+    static void setMatrixMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setMatrix");
 
-  SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
+        SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  SVGMatrixTearOff* matrix;
-  matrix = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!matrix) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'SVGMatrix'.");
+        SVGMatrixTearOff* matrix;
+        matrix = V8SVGMatrix::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!matrix) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'SVGMatrix'.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->setMatrix(matrix, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setMatrix(matrix, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void setMatrixMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTransformTearOffV8Internal::setMatrixMethod(info);
-}
+    CORE_EXPORT void setMatrixMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTransformTearOffV8Internal::setMatrixMethod(info);
+    }
 
-static void setTranslateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setTranslate");
+    static void setTranslateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setTranslate");
 
-  SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
+        SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  float tx;
-  float ty;
-  tx = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float tx;
+        float ty;
+        tx = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  ty = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        ty = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setTranslate(tx, ty, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setTranslate(tx, ty, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void setTranslateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTransformTearOffV8Internal::setTranslateMethod(info);
-}
+    CORE_EXPORT void setTranslateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTransformTearOffV8Internal::setTranslateMethod(info);
+    }
 
-static void setScaleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setScale");
+    static void setScaleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setScale");
 
-  SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
+        SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  float sx;
-  float sy;
-  sx = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float sx;
+        float sy;
+        sx = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  sy = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        sy = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setScale(sx, sy, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setScale(sx, sy, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void setScaleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTransformTearOffV8Internal::setScaleMethod(info);
-}
+    CORE_EXPORT void setScaleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTransformTearOffV8Internal::setScaleMethod(info);
+    }
 
-static void setRotateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setRotate");
+    static void setRotateMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setRotate");
 
-  SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
+        SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 3)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
 
-  float angle;
-  float cx;
-  float cy;
-  angle = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float angle;
+        float cx;
+        float cy;
+        angle = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  cx = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        cx = toRestrictedFloat(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  cy = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        cy = toRestrictedFloat(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setRotate(angle, cx, cy, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setRotate(angle, cx, cy, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void setRotateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTransformTearOffV8Internal::setRotateMethod(info);
-}
+    CORE_EXPORT void setRotateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTransformTearOffV8Internal::setRotateMethod(info);
+    }
 
-static void setSkewXMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setSkewX");
+    static void setSkewXMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setSkewX");
 
-  SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
+        SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  float angle;
-  angle = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float angle;
+        angle = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setSkewX(angle, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setSkewX(angle, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void setSkewXMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTransformTearOffV8Internal::setSkewXMethod(info);
-}
+    CORE_EXPORT void setSkewXMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTransformTearOffV8Internal::setSkewXMethod(info);
+    }
 
-static void setSkewYMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setSkewY");
+    static void setSkewYMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "SVGTransform", "setSkewY");
 
-  SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
+        SVGTransformTearOff* impl = V8SVGTransform::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  float angle;
-  angle = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
+        float angle;
+        angle = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  impl->setSkewY(angle, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->setSkewY(angle, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-CORE_EXPORT  void setSkewYMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  SVGTransformTearOffV8Internal::setSkewYMethod(info);
-}
+    CORE_EXPORT void setSkewYMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        SVGTransformTearOffV8Internal::setSkewYMethod(info);
+    }
 
 } // namespace SVGTransformTearOffV8Internal
 
-void V8SVGTransform::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  SVGTransformTearOff* impl = scriptWrappable->toImpl<SVGTransformTearOff>();
-  SVGElement* contextElement = impl->contextElement();
-  if (contextElement) {
-    DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
-  }
+void V8SVGTransform::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    SVGTransformTearOff* impl = scriptWrappable->toImpl<SVGTransformTearOff>();
+    SVGElement* contextElement = impl->contextElement();
+    if (contextElement) {
+        DOMWrapperWorld::setWrapperReferencesInAllWorlds(wrapper, contextElement, isolate);
+    }
 }
 
 const V8DOMConfiguration::AccessorConfiguration V8SVGTransformAccessors[] = {
-    {"type", SVGTransformTearOffV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"matrix", SVGTransformTearOffV8Internal::matrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"angle", SVGTransformTearOffV8Internal::angleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "type", SVGTransformTearOffV8Internal::typeAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "matrix", SVGTransformTearOffV8Internal::matrixAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "angle", SVGTransformTearOffV8Internal::angleAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8SVGTransformMethods[] = {
-    {"setMatrix", SVGTransformTearOffV8Internal::setMatrixMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTranslate", SVGTransformTearOffV8Internal::setTranslateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setScale", SVGTransformTearOffV8Internal::setScaleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setRotate", SVGTransformTearOffV8Internal::setRotateMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setSkewX", SVGTransformTearOffV8Internal::setSkewXMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setSkewY", SVGTransformTearOffV8Internal::setSkewYMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "setMatrix", SVGTransformTearOffV8Internal::setMatrixMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTranslate", SVGTransformTearOffV8Internal::setTranslateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setScale", SVGTransformTearOffV8Internal::setScaleMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setRotate", SVGTransformTearOffV8Internal::setRotateMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setSkewX", SVGTransformTearOffV8Internal::setSkewXMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setSkewY", SVGTransformTearOffV8Internal::setSkewYMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8SVGTransformTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGTransform::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGTransform::internalFieldCount);
+static void installV8SVGTransformTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8SVGTransform::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8SVGTransform::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  const V8DOMConfiguration::ConstantConfiguration V8SVGTransformConstants[] = {
-      {"SVG_TRANSFORM_UNKNOWN", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_TRANSFORM_MATRIX", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_TRANSFORM_TRANSLATE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_TRANSFORM_SCALE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_TRANSFORM_ROTATE", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_TRANSFORM_SKEWX", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-      {"SVG_TRANSFORM_SKEWY", 6, 0, V8DOMConfiguration::ConstantTypeUnsignedShort},
-  };
-  V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SVGTransformConstants, WTF_ARRAY_LENGTH(V8SVGTransformConstants));
-  static_assert(0 == SVGTransformTearOff::kSvgTransformUnknown, "the value of SVGTransformTearOff_kSvgTransformUnknown does not match with implementation");
-  static_assert(1 == SVGTransformTearOff::kSvgTransformMatrix, "the value of SVGTransformTearOff_kSvgTransformMatrix does not match with implementation");
-  static_assert(2 == SVGTransformTearOff::kSvgTransformTranslate, "the value of SVGTransformTearOff_kSvgTransformTranslate does not match with implementation");
-  static_assert(3 == SVGTransformTearOff::kSvgTransformScale, "the value of SVGTransformTearOff_kSvgTransformScale does not match with implementation");
-  static_assert(4 == SVGTransformTearOff::kSvgTransformRotate, "the value of SVGTransformTearOff_kSvgTransformRotate does not match with implementation");
-  static_assert(5 == SVGTransformTearOff::kSvgTransformSkewx, "the value of SVGTransformTearOff_kSvgTransformSkewx does not match with implementation");
-  static_assert(6 == SVGTransformTearOff::kSvgTransformSkewy, "the value of SVGTransformTearOff_kSvgTransformSkewy does not match with implementation");
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGTransformAccessors, WTF_ARRAY_LENGTH(V8SVGTransformAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGTransformMethods, WTF_ARRAY_LENGTH(V8SVGTransformMethods));
+    // Register DOM constants, attributes and operations.
+    const V8DOMConfiguration::ConstantConfiguration V8SVGTransformConstants[] = {
+        { "SVG_TRANSFORM_UNKNOWN", 0, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_TRANSFORM_MATRIX", 1, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_TRANSFORM_TRANSLATE", 2, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_TRANSFORM_SCALE", 3, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_TRANSFORM_ROTATE", 4, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_TRANSFORM_SKEWX", 5, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+        { "SVG_TRANSFORM_SKEWY", 6, 0, V8DOMConfiguration::ConstantTypeUnsignedShort },
+    };
+    V8DOMConfiguration::installConstants(isolate, interfaceTemplate, prototypeTemplate, V8SVGTransformConstants, WTF_ARRAY_LENGTH(V8SVGTransformConstants));
+    static_assert(0 == SVGTransformTearOff::kSvgTransformUnknown, "the value of SVGTransformTearOff_kSvgTransformUnknown does not match with implementation");
+    static_assert(1 == SVGTransformTearOff::kSvgTransformMatrix, "the value of SVGTransformTearOff_kSvgTransformMatrix does not match with implementation");
+    static_assert(2 == SVGTransformTearOff::kSvgTransformTranslate, "the value of SVGTransformTearOff_kSvgTransformTranslate does not match with implementation");
+    static_assert(3 == SVGTransformTearOff::kSvgTransformScale, "the value of SVGTransformTearOff_kSvgTransformScale does not match with implementation");
+    static_assert(4 == SVGTransformTearOff::kSvgTransformRotate, "the value of SVGTransformTearOff_kSvgTransformRotate does not match with implementation");
+    static_assert(5 == SVGTransformTearOff::kSvgTransformSkewx, "the value of SVGTransformTearOff_kSvgTransformSkewx does not match with implementation");
+    static_assert(6 == SVGTransformTearOff::kSvgTransformSkewy, "the value of SVGTransformTearOff_kSvgTransformSkewy does not match with implementation");
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGTransformAccessors, WTF_ARRAY_LENGTH(V8SVGTransformAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8SVGTransformMethods, WTF_ARRAY_LENGTH(V8SVGTransformMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8SVGTransform::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGTransformTemplate);
+v8::Local<v8::FunctionTemplate> V8SVGTransform::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8SVGTransformTemplate);
 }
 
-bool V8SVGTransform::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8SVGTransform::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8SVGTransform::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8SVGTransform::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-SVGTransformTearOff* V8SVGTransform::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+SVGTransformTearOff* V8SVGTransform::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8FetchEvent.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -52,211 +52,231 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&FetchEvent::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "FetchEvent is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace FetchEventV8Internal {
 
-static void requestAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void requestAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FetchEvent* impl = V8FetchEvent::toImpl(holder);
+        FetchEvent* impl = V8FetchEvent::toImpl(holder);
 
-  Request* cppValue(WTF::getPtr(impl->request()));
+        Request* cppValue(WTF::getPtr(impl->request()));
 
-  // Keep the wrapper object for the return value alive as long as |this|
-  // object is alive in order to save creation time of the wrapper object.
-  if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-    return;
-  v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-  const char kKeepAliveKey[] = "KeepAlive#FetchEvent#request";
-  V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#FetchEvent#request";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
 
-  v8SetReturnValue(info, v8Value);
-}
+        v8SetReturnValue(info, v8Value);
+    }
 
-MODULES_EXPORT void requestAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FetchEventV8Internal::requestAttributeGetter(info);
-}
+    MODULES_EXPORT void requestAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FetchEventV8Internal::requestAttributeGetter(info);
+    }
 
-static void clientIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void clientIdAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FetchEvent* impl = V8FetchEvent::toImpl(holder);
+        FetchEvent* impl = V8FetchEvent::toImpl(holder);
 
-  v8SetReturnValueStringOrNull(info, impl->clientId(), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->clientId(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void clientIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FetchEventV8Internal::clientIdAttributeGetter(info);
-}
+    MODULES_EXPORT void clientIdAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FetchEventV8Internal::clientIdAttributeGetter(info);
+    }
 
-static void isReloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void isReloadAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FetchEvent* impl = V8FetchEvent::toImpl(holder);
+        FetchEvent* impl = V8FetchEvent::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->isReload());
-}
+        v8SetReturnValueBool(info, impl->isReload());
+    }
 
-MODULES_EXPORT void isReloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FetchEventV8Internal::isReloadAttributeGetter(info);
-}
+    MODULES_EXPORT void isReloadAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FetchEventV8Internal::isReloadAttributeGetter(info);
+    }
 
-static void preloadResponseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void preloadResponseAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  FetchEvent* impl = V8FetchEvent::toImpl(holder);
+        FetchEvent* impl = V8FetchEvent::toImpl(holder);
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  v8SetReturnValue(info, impl->preloadResponse(scriptState).v8Value());
-}
+        v8SetReturnValue(info, impl->preloadResponse(scriptState).v8Value());
+    }
 
-MODULES_EXPORT void preloadResponseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FetchEventV8Internal::preloadResponseAttributeGetter(info);
-}
+    MODULES_EXPORT void preloadResponseAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FetchEventV8Internal::preloadResponseAttributeGetter(info);
+    }
 
-static void respondWithMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FetchEvent", "respondWith");
+    static void respondWithMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "FetchEvent", "respondWith");
 
-  FetchEvent* impl = V8FetchEvent::toImpl(info.Holder());
+        FetchEvent* impl = V8FetchEvent::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
 
-  ScriptPromise r;
-  r = ScriptPromise::cast(ScriptState::current(info.GetIsolate()), info[0]);
-  if (!r.isUndefinedOrNull() && !r.isObject()) {
-    exceptionState.throwTypeError("parameter 1 ('r') is not an object.");
+        ScriptPromise r;
+        r = ScriptPromise::cast(ScriptState::current(info.GetIsolate()), info[0]);
+        if (!r.isUndefinedOrNull() && !r.isObject()) {
+            exceptionState.throwTypeError("parameter 1 ('r') is not an object.");
 
-    return;
-  }
+            return;
+        }
 
-  impl->respondWith(scriptState, r, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
+        impl->respondWith(scriptState, r, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
 
-MODULES_EXPORT  void respondWithMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  FetchEventV8Internal::respondWithMethod(info);
-}
+    MODULES_EXPORT void respondWithMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        FetchEventV8Internal::respondWithMethod(info);
+    }
 
-static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "FetchEvent");
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+    static void constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ConstructionContext, "FetchEvent");
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8StringResource<> type;
-  FetchEventInit eventInitDict;
-  type = info[0];
-  if (!type.prepare())
-    return;
+        V8StringResource<> type;
+        FetchEventInit eventInitDict;
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-  if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
-    exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
+        if (!isUndefinedOrNull(info[1]) && !info[1]->IsObject()) {
+            exceptionState.throwTypeError("parameter 2 ('eventInitDict') is not an object.");
 
-    return;
-  }
-  V8FetchEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
-  if (exceptionState.hadException())
-    return;
+            return;
+        }
+        V8FetchEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  FetchEvent* impl = FetchEvent::create(scriptState, type, eventInitDict);
-  v8::Local<v8::Object> wrapper = info.Holder();
-  wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8FetchEvent::wrapperTypeInfo, wrapper);
-  v8SetReturnValue(info, wrapper);
-}
+        FetchEvent* impl = FetchEvent::create(scriptState, type, eventInitDict);
+        v8::Local<v8::Object> wrapper = info.Holder();
+        wrapper = impl->associateWithWrapper(info.GetIsolate(), &V8FetchEvent::wrapperTypeInfo, wrapper);
+        v8SetReturnValue(info, wrapper);
+    }
 
 } // namespace FetchEventV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8FetchEventAccessors[] = {
-    {"request", FetchEventV8Internal::requestAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"clientId", FetchEventV8Internal::clientIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"isReload", FetchEventV8Internal::isReloadAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "request", FetchEventV8Internal::requestAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "clientId", FetchEventV8Internal::clientIdAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isReload", FetchEventV8Internal::isReloadAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8FetchEventMethods[] = {
-    {"respondWith", FetchEventV8Internal::respondWithMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "respondWith", FetchEventV8Internal::respondWithMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-void V8FetchEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  if (!info.IsConstructCall()) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("FetchEvent"));
-    return;
-  }
+void V8FetchEvent::constructorCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (!info.IsConstructCall()) {
+        V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::constructorNotCallableAsFunction("FetchEvent"));
+        return;
+    }
 
-  if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
-    v8SetReturnValue(info, info.Holder());
-    return;
-  }
+    if (ConstructorMode::current(info.GetIsolate()) == ConstructorMode::WrapExistingObject) {
+        v8SetReturnValue(info, info.Holder());
+        return;
+    }
 
-  FetchEventV8Internal::constructor(info);
+    FetchEventV8Internal::constructor(info);
 }
 
-static void installV8FetchEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FetchEvent::wrapperTypeInfo.interfaceName, V8ExtendableEvent::domTemplate(isolate, world), V8FetchEvent::internalFieldCount);
-  interfaceTemplate->SetCallHandler(V8FetchEvent::constructorCallback);
-  interfaceTemplate->SetLength(2);
+static void installV8FetchEventTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8FetchEvent::wrapperTypeInfo.interfaceName, V8ExtendableEvent::domTemplate(isolate, world), V8FetchEvent::internalFieldCount);
+    interfaceTemplate->SetCallHandler(V8FetchEvent::constructorCallback);
+    interfaceTemplate->SetLength(2);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FetchEventAccessors, WTF_ARRAY_LENGTH(V8FetchEventAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FetchEventMethods, WTF_ARRAY_LENGTH(V8FetchEventMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FetchEventAccessors, WTF_ARRAY_LENGTH(V8FetchEventAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8FetchEventMethods, WTF_ARRAY_LENGTH(V8FetchEventMethods));
 }
 
-void V8FetchEvent::installServiceWorkerNavigationPreload(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8FetchEvent::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  const V8DOMConfiguration::AccessorConfiguration accessorpreloadResponseConfiguration = {"preloadResponse", FetchEventV8Internal::preloadResponseAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder};
-  V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorpreloadResponseConfiguration);
+void V8FetchEvent::installServiceWorkerNavigationPreload(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8FetchEvent::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    const V8DOMConfiguration::AccessorConfiguration accessorpreloadResponseConfiguration = { "preloadResponse", FetchEventV8Internal::preloadResponseAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder };
+    V8DOMConfiguration::installAccessor(isolate, world, instance, prototype, interface, signature, accessorpreloadResponseConfiguration);
 }
 
-void V8FetchEvent::installServiceWorkerNavigationPreload(ScriptState* scriptState, v8::Local<v8::Object> instance) {
-  V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
-  v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8FetchEvent::wrapperTypeInfo);
-  v8::Local<v8::Function> interface = perContextData->constructorForType(&V8FetchEvent::wrapperTypeInfo);
-  ALLOW_UNUSED_LOCAL(interface);
-  installServiceWorkerNavigationPreload(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
+void V8FetchEvent::installServiceWorkerNavigationPreload(ScriptState* scriptState, v8::Local<v8::Object> instance)
+{
+    V8PerContextData* perContextData = V8PerContextData::from(scriptState->context());
+    v8::Local<v8::Object> prototype = perContextData->prototypeForType(&V8FetchEvent::wrapperTypeInfo);
+    v8::Local<v8::Function> interface = perContextData->constructorForType(&V8FetchEvent::wrapperTypeInfo);
+    ALLOW_UNUSED_LOCAL(interface);
+    installServiceWorkerNavigationPreload(scriptState->isolate(), scriptState->world(), instance, prototype, interface);
 }
 
-void V8FetchEvent::installServiceWorkerNavigationPreload(ScriptState* scriptState) {
-  installServiceWorkerNavigationPreload(scriptState, v8::Local<v8::Object>());
+void V8FetchEvent::installServiceWorkerNavigationPreload(ScriptState* scriptState)
+{
+    installServiceWorkerNavigationPreload(scriptState, v8::Local<v8::Object>());
 }
 
-v8::Local<v8::FunctionTemplate> V8FetchEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FetchEventTemplate);
+v8::Local<v8::FunctionTemplate> V8FetchEvent::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8FetchEventTemplate);
 }
 
-bool V8FetchEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8FetchEvent::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8FetchEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8FetchEvent::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-FetchEvent* V8FetchEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+FetchEvent* V8FetchEvent::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

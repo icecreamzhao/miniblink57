@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_function.h.tmpl
 
-// clang-format off
+// clang-format on
 
 #ifndef TestReceiverObjectCallback_h
 #define TestReceiverObjectCallback_h
@@ -23,32 +23,34 @@ namespace blink {
 class ScriptState;
 
 class TestReceiverObjectCallback final : public GarbageCollectedFinalized<TestReceiverObjectCallback>, public TraceWrapperBase {
- public:
-  static TestReceiverObjectCallback* create(ScriptState* scriptState, v8::Local<v8::Value> callback);
+public:
+    static TestReceiverObjectCallback* create(ScriptState* scriptState, v8::Local<v8::Value> callback);
 
-  ~TestReceiverObjectCallback() = default;
+    ~TestReceiverObjectCallback() = default;
 
-  DECLARE_TRACE();
-  DECLARE_TRACE_WRAPPERS();
+    DECLARE_TRACE();
+    DECLARE_TRACE_WRAPPERS();
 
-  bool call(ScriptWrappable* scriptWrappable);
+    bool call(ScriptWrappable* scriptWrappable);
 
-  v8::Local<v8::Function> v8Value(v8::Isolate* isolate) {
-    return m_callback.newLocal(isolate);
-  }
+    v8::Local<v8::Function> v8Value(v8::Isolate* isolate)
+    {
+        return m_callback.newLocal(isolate);
+    }
 
-  void setWrapperReference(v8::Isolate* isolate, const v8::Persistent<v8::Object>& wrapper) {
-    DCHECK(!m_callback.isEmpty());
-    m_callback.setReference(wrapper, isolate);
-  }
+    void setWrapperReference(v8::Isolate* isolate, const v8::Persistent<v8::Object>& wrapper)
+    {
+        DCHECK(!m_callback.isEmpty());
+        m_callback.setReference(wrapper, isolate);
+    }
 
- private:
-  TestReceiverObjectCallback(ScriptState*, v8::Local<v8::Function>);
+private:
+    TestReceiverObjectCallback(ScriptState*, v8::Local<v8::Function>);
 
-  RefPtr<ScriptState> m_scriptState;
-  TraceWrapperV8Reference<v8::Function> m_callback;
+    RefPtr<ScriptState> m_scriptState;
+    TraceWrapperV8Reference<v8::Function> m_callback;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // TestReceiverObjectCallback_h
+#endif // TestReceiverObjectCallback_h

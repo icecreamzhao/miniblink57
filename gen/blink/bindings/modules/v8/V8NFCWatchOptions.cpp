@@ -8,149 +8,153 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8NFCWatchOptions.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-void V8NFCWatchOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, NFCWatchOptions& impl, ExceptionState& exceptionState) {
-  if (isUndefinedOrNull(v8Value)) {
-    return;
-  }
-  if (!v8Value->IsObject()) {
-    exceptionState.throwTypeError("cannot convert to dictionary.");
-    return;
-  }
+void V8NFCWatchOptions::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, NFCWatchOptions& impl, ExceptionState& exceptionState)
+{
+    if (isUndefinedOrNull(v8Value)) {
+        return;
+    }
+    if (!v8Value->IsObject()) {
+        exceptionState.throwTypeError("cannot convert to dictionary.");
+        return;
+    }
 
-  v8::TryCatch block(isolate);
-  v8::Local<v8::Object> v8Object;
-  if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  v8::Local<v8::Value> mediaTypeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mediaType")).ToLocal(&mediaTypeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (mediaTypeValue.IsEmpty() || mediaTypeValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> mediaType = toUSVString(isolate, mediaTypeValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setMediaType(mediaType);
-  }
+    v8::TryCatch block(isolate);
+    v8::Local<v8::Object> v8Object;
+    if (!v8Call(v8Value->ToObject(isolate->GetCurrentContext()), v8Object, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    v8::Local<v8::Value> mediaTypeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mediaType")).ToLocal(&mediaTypeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (mediaTypeValue.IsEmpty() || mediaTypeValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> mediaType = toUSVString(isolate, mediaTypeValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setMediaType(mediaType);
+    }
 
-  v8::Local<v8::Value> modeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mode")).ToLocal(&modeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (modeValue.IsEmpty() || modeValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> mode = modeValue;
-    if (!mode.prepare(exceptionState))
-      return;
-    const char* validValues[] = {
-        "web-nfc-only",
-        "any",
-    };
-    if (!isValidEnum(mode, validValues, WTF_ARRAY_LENGTH(validValues), "NFCWatchMode", exceptionState))
-      return;
-    impl.setMode(mode);
-  }
+    v8::Local<v8::Value> modeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "mode")).ToLocal(&modeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (modeValue.IsEmpty() || modeValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> mode = modeValue;
+        if (!mode.prepare(exceptionState))
+            return;
+        const char* validValues[] = {
+            "web-nfc-only",
+            "any",
+        };
+        if (!isValidEnum(mode, validValues, WTF_ARRAY_LENGTH(validValues), "NFCWatchMode", exceptionState))
+            return;
+        impl.setMode(mode);
+    }
 
-  v8::Local<v8::Value> recordTypeValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "recordType")).ToLocal(&recordTypeValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (recordTypeValue.IsEmpty() || recordTypeValue->IsUndefined()) {
-    // Do nothing.
-  } else if (recordTypeValue->IsNull()) {
-    impl.setRecordTypeToNull();
-  } else {
-    V8StringResource<> recordType = recordTypeValue;
-    if (!recordType.prepare(exceptionState))
-      return;
-    const char* validValues[] = {
-        "empty",
-        "text",
-        "url",
-        "json",
-        "opaque",
-    };
-    if (!isValidEnum(recordType, validValues, WTF_ARRAY_LENGTH(validValues), "NFCRecordType", exceptionState))
-      return;
-    impl.setRecordType(recordType);
-  }
+    v8::Local<v8::Value> recordTypeValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "recordType")).ToLocal(&recordTypeValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (recordTypeValue.IsEmpty() || recordTypeValue->IsUndefined()) {
+        // Do nothing.
+    } else if (recordTypeValue->IsNull()) {
+        impl.setRecordTypeToNull();
+    } else {
+        V8StringResource<> recordType = recordTypeValue;
+        if (!recordType.prepare(exceptionState))
+            return;
+        const char* validValues[] = {
+            "empty",
+            "text",
+            "url",
+            "json",
+            "opaque",
+        };
+        if (!isValidEnum(recordType, validValues, WTF_ARRAY_LENGTH(validValues), "NFCRecordType", exceptionState))
+            return;
+        impl.setRecordType(recordType);
+    }
 
-  v8::Local<v8::Value> urlValue;
-  if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "url")).ToLocal(&urlValue)) {
-    exceptionState.rethrowV8Exception(block.Exception());
-    return;
-  }
-  if (urlValue.IsEmpty() || urlValue->IsUndefined()) {
-    // Do nothing.
-  } else {
-    V8StringResource<> url = toUSVString(isolate, urlValue, exceptionState);
-    if (exceptionState.hadException())
-      return;
-    impl.setURL(url);
-  }
+    v8::Local<v8::Value> urlValue;
+    if (!v8Object->Get(isolate->GetCurrentContext(), v8String(isolate, "url")).ToLocal(&urlValue)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return;
+    }
+    if (urlValue.IsEmpty() || urlValue->IsUndefined()) {
+        // Do nothing.
+    } else {
+        V8StringResource<> url = toUSVString(isolate, urlValue, exceptionState);
+        if (exceptionState.hadException())
+            return;
+        impl.setURL(url);
+    }
 }
 
-v8::Local<v8::Value> NFCWatchOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const {
-  v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
-  if (!toV8NFCWatchOptions(*this, v8Object, creationContext, isolate))
-    return v8::Undefined(isolate);
-  return v8Object;
+v8::Local<v8::Value> NFCWatchOptions::toV8Impl(v8::Local<v8::Object> creationContext, v8::Isolate* isolate) const
+{
+    v8::Local<v8::Object> v8Object = v8::Object::New(isolate);
+    if (!toV8NFCWatchOptions(*this, v8Object, creationContext, isolate))
+        return v8::Undefined(isolate);
+    return v8Object;
 }
 
-bool toV8NFCWatchOptions(const NFCWatchOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  if (impl.hasMediaType()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mediaType"), v8String(isolate, impl.mediaType()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mediaType"), v8String(isolate, String("")))))
-      return false;
-  }
+bool toV8NFCWatchOptions(const NFCWatchOptions& impl, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    if (impl.hasMediaType()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mediaType"), v8String(isolate, impl.mediaType()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mediaType"), v8String(isolate, String("")))))
+            return false;
+    }
 
-  if (impl.hasMode()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mode"), v8String(isolate, impl.mode()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mode"), v8String(isolate, String("web-nfc-only")))))
-      return false;
-  }
+    if (impl.hasMode()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mode"), v8String(isolate, impl.mode()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "mode"), v8String(isolate, String("web-nfc-only")))))
+            return false;
+    }
 
-  if (impl.hasRecordType()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "recordType"), v8String(isolate, impl.recordType()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "recordType"), v8::Null(isolate))))
-      return false;
-  }
+    if (impl.hasRecordType()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "recordType"), v8String(isolate, impl.recordType()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "recordType"), v8::Null(isolate))))
+            return false;
+    }
 
-  if (impl.hasURL()) {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "url"), v8String(isolate, impl.url()))))
-      return false;
-  } else {
-    if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "url"), v8String(isolate, String("")))))
-      return false;
-  }
+    if (impl.hasURL()) {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "url"), v8String(isolate, impl.url()))))
+            return false;
+    } else {
+        if (!v8CallBoolean(dictionary->CreateDataProperty(isolate->GetCurrentContext(), v8String(isolate, "url"), v8String(isolate, String("")))))
+            return false;
+    }
 
-  return true;
+    return true;
 }
 
-NFCWatchOptions NativeValueTraits<NFCWatchOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  NFCWatchOptions impl;
-  V8NFCWatchOptions::toImpl(isolate, value, impl, exceptionState);
-  return impl;
+NFCWatchOptions NativeValueTraits<NFCWatchOptions>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    NFCWatchOptions impl;
+    V8NFCWatchOptions::toImpl(isolate, value, impl, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

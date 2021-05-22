@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaQueryListEventInit_h
 #define MediaQueryListEventInit_h
 
@@ -20,32 +20,33 @@
 namespace blink {
 
 class CORE_EXPORT MediaQueryListEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaQueryListEventInit();
-  virtual ~MediaQueryListEventInit();
-  MediaQueryListEventInit(const MediaQueryListEventInit&);
-  MediaQueryListEventInit& operator=(const MediaQueryListEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasMatches() const;
-  bool matches() const;
-  void setMatches(bool);
+public:
+    MediaQueryListEventInit();
+    virtual ~MediaQueryListEventInit();
+    MediaQueryListEventInit(const MediaQueryListEventInit&);
+    MediaQueryListEventInit& operator=(const MediaQueryListEventInit&);
 
-  bool hasMedia() const;
-  String media() const;
-  void setMedia(String);
+    bool hasMatches() const;
+    bool matches() const;
+    void setMatches(bool);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasMedia() const;
+    String media() const;
+    void setMedia(String);
 
- private:
-  bool m_hasMatches = false;
-  bool m_matches;
-  String m_media;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaQueryListEventInit;
+private:
+    bool m_hasMatches = false;
+    bool m_matches;
+    String m_media;
+
+    friend class V8MediaQueryListEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaQueryListEventInit_h
+#endif // MediaQueryListEventInit_h

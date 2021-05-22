@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8WebGLDebugShaders.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,81 +48,89 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&WebGLDebugShaders::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "WebGLDebugShaders is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace WebGLDebugShadersV8Internal {
 
-static void getTranslatedShaderSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLDebugShaders* impl = V8WebGLDebugShaders::toImpl(info.Holder());
+    static void getTranslatedShaderSourceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLDebugShaders* impl = V8WebGLDebugShaders::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getTranslatedShaderSource", "WebGLDebugShaders", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getTranslatedShaderSource", "WebGLDebugShaders", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  WebGLShader* shader;
-  shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!shader) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getTranslatedShaderSource", "WebGLDebugShaders", "parameter 1 is not of type 'WebGLShader'."));
+        WebGLShader* shader;
+        shader = V8WebGLShader::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!shader) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("getTranslatedShaderSource", "WebGLDebugShaders", "parameter 1 is not of type 'WebGLShader'."));
 
-    return;
-  }
+            return;
+        }
 
-  v8SetReturnValueStringOrNull(info, impl->getTranslatedShaderSource(shader), info.GetIsolate());
-}
+        v8SetReturnValueStringOrNull(info, impl->getTranslatedShaderSource(shader), info.GetIsolate());
+    }
 
-MODULES_EXPORT  void getTranslatedShaderSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  WebGLDebugShadersV8Internal::getTranslatedShaderSourceMethod(info);
-}
+    MODULES_EXPORT void getTranslatedShaderSourceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        WebGLDebugShadersV8Internal::getTranslatedShaderSourceMethod(info);
+    }
 
 } // namespace WebGLDebugShadersV8Internal
 
-void V8WebGLDebugShaders::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper) {
-  WebGLDebugShaders* impl = scriptWrappable->toImpl<WebGLDebugShaders>();
-  // The canvas() method may return a reference or a pointer.
-  if (Node* owner = WTF::getPtr(impl->canvas())) {
-    Node* root = V8GCController::opaqueRootForGC(isolate, owner);
-    isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
-    return;
-  }
+void V8WebGLDebugShaders::visitDOMWrapper(v8::Isolate* isolate, ScriptWrappable* scriptWrappable, const v8::Persistent<v8::Object>& wrapper)
+{
+    WebGLDebugShaders* impl = scriptWrappable->toImpl<WebGLDebugShaders>();
+    // The canvas() method may return a reference or a pointer.
+    if (Node* owner = WTF::getPtr(impl->canvas())) {
+        Node* root = V8GCController::opaqueRootForGC(isolate, owner);
+        isolate->SetReferenceFromGroup(v8::UniqueId(reinterpret_cast<intptr_t>(root)), wrapper);
+        return;
+    }
 }
 
 const V8DOMConfiguration::MethodConfiguration V8WebGLDebugShadersMethods[] = {
-    {"getTranslatedShaderSource", WebGLDebugShadersV8Internal::getTranslatedShaderSourceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "getTranslatedShaderSource", WebGLDebugShadersV8Internal::getTranslatedShaderSourceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8WebGLDebugShadersTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLDebugShaders::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLDebugShaders::internalFieldCount);
+static void installV8WebGLDebugShadersTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8WebGLDebugShaders::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8WebGLDebugShaders::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLDebugShadersMethods, WTF_ARRAY_LENGTH(V8WebGLDebugShadersMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8WebGLDebugShadersMethods, WTF_ARRAY_LENGTH(V8WebGLDebugShadersMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8WebGLDebugShaders::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLDebugShadersTemplate);
+v8::Local<v8::FunctionTemplate> V8WebGLDebugShaders::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8WebGLDebugShadersTemplate);
 }
 
-bool V8WebGLDebugShaders::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8WebGLDebugShaders::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8WebGLDebugShaders::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8WebGLDebugShaders::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-WebGLDebugShaders* V8WebGLDebugShaders::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+WebGLDebugShaders* V8WebGLDebugShaders::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

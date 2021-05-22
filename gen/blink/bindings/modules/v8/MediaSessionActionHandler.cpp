@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/callback_function.cpp.tmpl
 
-// clang-format off
+// clang-format on
 
 #include "MediaSessionActionHandler.h"
 
@@ -22,53 +22,57 @@
 namespace blink {
 
 // static
-MediaSessionActionHandler* MediaSessionActionHandler::create(ScriptState* scriptState, v8::Local<v8::Value> callback){
-  if (isUndefinedOrNull(callback))
-    return nullptr;
-  return new MediaSessionActionHandler(scriptState, v8::Local<v8::Function>::Cast(callback));
+MediaSessionActionHandler* MediaSessionActionHandler::create(ScriptState* scriptState, v8::Local<v8::Value> callback)
+{
+    if (isUndefinedOrNull(callback))
+        return nullptr;
+    return new MediaSessionActionHandler(scriptState, v8::Local<v8::Function>::Cast(callback));
 }
 
 MediaSessionActionHandler::MediaSessionActionHandler(ScriptState* scriptState, v8::Local<v8::Function> callback)
-    : m_scriptState(scriptState),
-    m_callback(scriptState->isolate(), this, callback) {
-  DCHECK(!m_callback.isEmpty());
+    : m_scriptState(scriptState)
+    , m_callback(scriptState->isolate(), this, callback)
+{
+    DCHECK(!m_callback.isEmpty());
 }
 
-DEFINE_TRACE(MediaSessionActionHandler) {}
+DEFINE_TRACE(MediaSessionActionHandler) { }
 
-DEFINE_TRACE_WRAPPERS(MediaSessionActionHandler) {
-  visitor->traceWrappers(m_callback.cast<v8::Value>());
+DEFINE_TRACE_WRAPPERS(MediaSessionActionHandler)
+{
+    visitor->traceWrappers(m_callback.cast<v8::Value>());
 }
 
-bool MediaSessionActionHandler::call(ScriptWrappable* scriptWrappable) {
-  if (!m_scriptState->contextIsValid())
+bool MediaSessionActionHandler::call(ScriptWrappable* scriptWrappable)
+{
+    if (!m_scriptState->contextIsValid())
+        return false;
+
+    ExecutionContext* context = m_scriptState->getExecutionContext();
+    DCHECK(context);
+    if (context->isContextSuspended() || context->isContextDestroyed())
+        return false;
+
+    if (m_callback.isEmpty())
+        return false;
+
+    // TODO(bashi): Make sure that using DummyExceptionStateForTesting is OK.
+    // crbug.com/653769
+    DummyExceptionStateForTesting exceptionState;
+    ScriptState::Scope scope(m_scriptState.get());
+
+    v8::Local<v8::Value> thisValue = ToV8(scriptWrappable, m_scriptState->context()->Global(), m_scriptState->isolate());
+
+    v8::Local<v8::Value>* argv = nullptr;
+
+    v8::Local<v8::Value> v8ReturnValue;
+    v8::TryCatch exceptionCatcher(m_scriptState->isolate());
+    exceptionCatcher.SetVerbose(true);
+
+    if (V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), thisValue, 0, argv, m_scriptState->isolate()).ToLocal(&v8ReturnValue)) {
+        return true;
+    }
     return false;
-
-  ExecutionContext* context = m_scriptState->getExecutionContext();
-  DCHECK(context);
-  if (context->isContextSuspended() || context->isContextDestroyed())
-    return false;
-
-  if (m_callback.isEmpty())
-    return false;
-
-  // TODO(bashi): Make sure that using DummyExceptionStateForTesting is OK.
-  // crbug.com/653769
-  DummyExceptionStateForTesting exceptionState;
-  ScriptState::Scope scope(m_scriptState.get());
-
-  v8::Local<v8::Value> thisValue = ToV8(scriptWrappable, m_scriptState->context()->Global(), m_scriptState->isolate());
-
-  v8::Local<v8::Value> *argv = nullptr;
-
-  v8::Local<v8::Value> v8ReturnValue;
-  v8::TryCatch exceptionCatcher(m_scriptState->isolate());
-  exceptionCatcher.SetVerbose(true);
-
-  if (V8ScriptRunner::callFunction(m_callback.newLocal(m_scriptState->isolate()), m_scriptState->getExecutionContext(), thisValue, 0, argv, m_scriptState->isolate()).ToLocal(&v8ReturnValue)) {
-    return true;
-  }
-  return false;
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8MediaTrackConstraints_h
 #define V8MediaTrackConstraints_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8MediaTrackConstraints {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaTrackConstraints&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, MediaTrackConstraints&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8MediaTrackConstraints(const MediaTrackConstraints&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaTrackConstraints& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, MediaTrackConstraints& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<MediaTrackConstraints> {
-  static MediaTrackConstraints nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static MediaTrackConstraints nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<MediaTrackConstraints> {
-  typedef V8MediaTrackConstraints Type;
+    typedef V8MediaTrackConstraints Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8MediaTrackConstraints_h
+#endif // V8MediaTrackConstraints_h

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef EventListenerOptionsOrBoolean_h
 #define EventListenerOptionsOrBoolean_h
 
@@ -22,58 +22,60 @@
 namespace blink {
 
 class CORE_EXPORT EventListenerOptionsOrBoolean final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  EventListenerOptionsOrBoolean();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isEventListenerOptions() const { return m_type == SpecificTypeEventListenerOptions; }
-  const EventListenerOptions& getAsEventListenerOptions() const;
-  void setEventListenerOptions(const EventListenerOptions&);
-  static EventListenerOptionsOrBoolean fromEventListenerOptions(const EventListenerOptions&);
+public:
+    EventListenerOptionsOrBoolean();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isBoolean() const { return m_type == SpecificTypeBoolean; }
-  bool getAsBoolean() const;
-  void setBoolean(bool);
-  static EventListenerOptionsOrBoolean fromBoolean(bool);
+    bool isEventListenerOptions() const { return m_type == SpecificTypeEventListenerOptions; }
+    const EventListenerOptions& getAsEventListenerOptions() const;
+    void setEventListenerOptions(const EventListenerOptions&);
+    static EventListenerOptionsOrBoolean fromEventListenerOptions(const EventListenerOptions&);
 
-  EventListenerOptionsOrBoolean(const EventListenerOptionsOrBoolean&);
-  ~EventListenerOptionsOrBoolean();
-  EventListenerOptionsOrBoolean& operator=(const EventListenerOptionsOrBoolean&);
-  DECLARE_TRACE();
+    bool isBoolean() const { return m_type == SpecificTypeBoolean; }
+    bool getAsBoolean() const;
+    void setBoolean(bool);
+    static EventListenerOptionsOrBoolean fromBoolean(bool);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeEventListenerOptions,
-    SpecificTypeBoolean,
-  };
-  SpecificTypes m_type;
+    EventListenerOptionsOrBoolean(const EventListenerOptionsOrBoolean&);
+    ~EventListenerOptionsOrBoolean();
+    EventListenerOptionsOrBoolean& operator=(const EventListenerOptionsOrBoolean&);
+    DECLARE_TRACE();
 
-  EventListenerOptions m_eventListenerOptions;
-  bool m_boolean;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeEventListenerOptions,
+        SpecificTypeBoolean,
+    };
+    SpecificTypes m_type;
 
-  friend CORE_EXPORT v8::Local<v8::Value> ToV8(const EventListenerOptionsOrBoolean&, v8::Local<v8::Object>, v8::Isolate*);
+    EventListenerOptions m_eventListenerOptions;
+    bool m_boolean;
+
+    friend CORE_EXPORT v8::Local<v8::Value> ToV8(const EventListenerOptionsOrBoolean&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8EventListenerOptionsOrBoolean final {
- public:
-  CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, EventListenerOptionsOrBoolean&, UnionTypeConversionMode, ExceptionState&);
+public:
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, EventListenerOptionsOrBoolean&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const EventListenerOptionsOrBoolean&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, EventListenerOptionsOrBoolean& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, EventListenerOptionsOrBoolean& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<EventListenerOptionsOrBoolean> {
-  CORE_EXPORT static EventListenerOptionsOrBoolean nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    CORE_EXPORT static EventListenerOptionsOrBoolean nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -81,4 +83,4 @@ struct NativeValueTraits<EventListenerOptionsOrBoolean> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::EventListenerOptionsOrBoolean);
 
-#endif  // EventListenerOptionsOrBoolean_h
+#endif // EventListenerOptionsOrBoolean_h

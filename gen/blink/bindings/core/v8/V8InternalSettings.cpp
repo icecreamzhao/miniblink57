@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8InternalSettings.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -45,956 +45,1029 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&InternalSettings::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "InternalSettings is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace InternalSettingsV8Internal {
 
-static void setMockScrollbarsEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setMockScrollbarsEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setMockScrollbarsEnabled(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setMockScrollbarsEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setMockScrollbarsEnabledMethod(info);
-}
-
-static void setHideScrollbarsMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setHideScrollbars");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setHideScrollbars(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setHideScrollbarsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setHideScrollbarsMethod(info);
-}
-
-static void setMockGestureTapHighlightsEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setMockGestureTapHighlightsEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setMockGestureTapHighlightsEnabled(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setMockGestureTapHighlightsEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setMockGestureTapHighlightsEnabledMethod(info);
-}
-
-static void setStandardFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setStandardFontFamily");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> family;
-  V8StringResource<> script;
-  family = info[0];
-  if (!family.prepare())
-    return;
-
-  script = info[1];
-  if (!script.prepare())
-    return;
-
-  impl->setStandardFontFamily(family, script, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setStandardFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setStandardFontFamilyMethod(info);
-}
-
-static void setSerifFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setSerifFontFamily");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> family;
-  V8StringResource<> script;
-  family = info[0];
-  if (!family.prepare())
-    return;
-
-  script = info[1];
-  if (!script.prepare())
-    return;
-
-  impl->setSerifFontFamily(family, script, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setSerifFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setSerifFontFamilyMethod(info);
-}
-
-static void setSansSerifFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setSansSerifFontFamily");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> family;
-  V8StringResource<> script;
-  family = info[0];
-  if (!family.prepare())
-    return;
-
-  script = info[1];
-  if (!script.prepare())
-    return;
-
-  impl->setSansSerifFontFamily(family, script, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setSansSerifFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setSansSerifFontFamilyMethod(info);
-}
-
-static void setFixedFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setFixedFontFamily");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> family;
-  V8StringResource<> script;
-  family = info[0];
-  if (!family.prepare())
-    return;
-
-  script = info[1];
-  if (!script.prepare())
-    return;
-
-  impl->setFixedFontFamily(family, script, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setFixedFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setFixedFontFamilyMethod(info);
-}
-
-static void setCursiveFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setCursiveFontFamily");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> family;
-  V8StringResource<> script;
-  family = info[0];
-  if (!family.prepare())
-    return;
-
-  script = info[1];
-  if (!script.prepare())
-    return;
-
-  impl->setCursiveFontFamily(family, script, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setCursiveFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setCursiveFontFamilyMethod(info);
-}
-
-static void setFantasyFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setFantasyFontFamily");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> family;
-  V8StringResource<> script;
-  family = info[0];
-  if (!family.prepare())
-    return;
-
-  script = info[1];
-  if (!script.prepare())
-    return;
-
-  impl->setFantasyFontFamily(family, script, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setFantasyFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setFantasyFontFamilyMethod(info);
-}
-
-static void setPictographFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setPictographFontFamily");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> family;
-  V8StringResource<> script;
-  family = info[0];
-  if (!family.prepare())
-    return;
-
-  script = info[1];
-  if (!script.prepare())
-    return;
-
-  impl->setPictographFontFamily(family, script, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setPictographFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setPictographFontFamilyMethod(info);
-}
-
-static void setTextAutosizingEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setTextAutosizingEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setTextAutosizingEnabled(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setTextAutosizingEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setTextAutosizingEnabledMethod(info);
-}
-
-static void setTextAutosizingWindowSizeOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setTextAutosizingWindowSizeOverride");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  int width;
-  int height;
-  width = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  height = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setTextAutosizingWindowSizeOverride(width, height, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setTextAutosizingWindowSizeOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setTextAutosizingWindowSizeOverrideMethod(info);
-}
-
-static void setTextTrackKindUserPreferenceMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setTextTrackKindUserPreference");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> preference;
-  preference = info[0];
-  if (!preference.prepare())
-    return;
-
-  impl->setTextTrackKindUserPreference(preference, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setTextTrackKindUserPreferenceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setTextTrackKindUserPreferenceMethod(info);
-}
-
-static void setAccessibilityFontScaleFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setAccessibilityFontScaleFactor");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  float fontScaleFactor;
-  fontScaleFactor = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setAccessibilityFontScaleFactor(fontScaleFactor, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setAccessibilityFontScaleFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setAccessibilityFontScaleFactorMethod(info);
-}
-
-static void setMediaTypeOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setMediaTypeOverride");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> mediaTypeOverride;
-  mediaTypeOverride = info[0];
-  if (!mediaTypeOverride.prepare())
-    return;
-
-  impl->setMediaTypeOverride(mediaTypeOverride, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setMediaTypeOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setMediaTypeOverrideMethod(info);
-}
-
-static void setDisplayModeOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setDisplayModeOverride");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> displayModeOverride;
-  displayModeOverride = info[0];
-  if (!displayModeOverride.prepare())
-    return;
-
-  impl->setDisplayModeOverride(displayModeOverride, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setDisplayModeOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setDisplayModeOverrideMethod(info);
-}
-
-static void setEditingBehaviorMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setEditingBehavior");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> behavior;
-  behavior = info[0];
-  if (!behavior.prepare())
-    return;
-
-  impl->setEditingBehavior(behavior, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setEditingBehaviorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setEditingBehaviorMethod(info);
-}
-
-static void setImagesEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setImagesEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setImagesEnabled(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setImagesEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setImagesEnabledMethod(info);
-}
-
-static void setDefaultVideoPosterURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setDefaultVideoPosterURL");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> poster;
-  poster = info[0];
-  if (!poster.prepare())
-    return;
-
-  impl->setDefaultVideoPosterURL(poster, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setDefaultVideoPosterURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setDefaultVideoPosterURLMethod(info);
-}
-
-static void setViewportEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setViewportEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setViewportEnabled(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setViewportEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setViewportEnabledMethod(info);
-}
-
-static void setViewportMetaEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setViewportMetaEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setViewportMetaEnabled(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setViewportMetaEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setViewportMetaEnabledMethod(info);
-}
-
-static void setViewportStyleMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setViewportStyle");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> style;
-  style = info[0];
-  if (!style.prepare())
-    return;
-
-  impl->setViewportStyle(style, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setViewportStyleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setViewportStyleMethod(info);
-}
-
-static void setAvailablePointerTypesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setAvailablePointerTypes");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> pointers;
-  pointers = info[0];
-  if (!pointers.prepare())
-    return;
-
-  impl->setAvailablePointerTypes(pointers, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setAvailablePointerTypesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setAvailablePointerTypesMethod(info);
-}
-
-static void setPrimaryPointerTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setPrimaryPointerType");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> pointer;
-  pointer = info[0];
-  if (!pointer.prepare())
-    return;
-
-  impl->setPrimaryPointerType(pointer, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setPrimaryPointerTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setPrimaryPointerTypeMethod(info);
-}
-
-static void setAvailableHoverTypesMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setAvailableHoverTypes");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> types;
-  types = info[0];
-  if (!types.prepare())
-    return;
-
-  impl->setAvailableHoverTypes(types, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setAvailableHoverTypesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setAvailableHoverTypesMethod(info);
-}
-
-static void setPrimaryHoverTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setPrimaryHoverType");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> type;
-  type = info[0];
-  if (!type.prepare())
-    return;
-
-  impl->setPrimaryHoverType(type, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setPrimaryHoverTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setPrimaryHoverTypeMethod(info);
-}
-
-static void setImageAnimationPolicyMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setImageAnimationPolicy");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  V8StringResource<> policy;
-  policy = info[0];
-  if (!policy.prepare())
-    return;
-
-  impl->setImageAnimationPolicy(policy, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setImageAnimationPolicyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setImageAnimationPolicyMethod(info);
-}
-
-static void setCompositorWorkerEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setCompositorWorkerEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setCompositorWorkerEnabled(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setCompositorWorkerEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setCompositorWorkerEnabledMethod(info);
-}
-
-static void setPresentationReceiverMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setPresentationReceiver");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setPresentationReceiver(enabled, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-}
-
- void setPresentationReceiverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setPresentationReceiverMethod(info);
-}
-
-static void setCSSStickyPositionEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setCSSStickyPositionEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setCSSStickyPositionEnabled(enabled);
-}
-
- void setCSSStickyPositionEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setCSSStickyPositionEnabledMethod(info);
-}
-
-static void setLangAttributeAwareFormControlUIEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setLangAttributeAwareFormControlUIEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setLangAttributeAwareFormControlUIEnabled(enabled);
-}
-
- void setLangAttributeAwareFormControlUIEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setLangAttributeAwareFormControlUIEnabledMethod(info);
-}
-
-static void setOverlayScrollbarsEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setOverlayScrollbarsEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setOverlayScrollbarsEnabled(enabled);
-}
-
- void setOverlayScrollbarsEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setOverlayScrollbarsEnabledMethod(info);
-}
-
-static void setExperimentalContentSecurityPolicyFeaturesEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setExperimentalContentSecurityPolicyFeaturesEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setExperimentalContentSecurityPolicyFeaturesEnabled(enabled);
-}
-
- void setExperimentalContentSecurityPolicyFeaturesEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setExperimentalContentSecurityPolicyFeaturesEnabledMethod(info);
-}
-
-static void setScrollTopLeftInteropEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setScrollTopLeftInteropEnabled");
-
-  InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
-
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
-
-  bool enabled;
-  enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  impl->setScrollTopLeftInteropEnabled(enabled);
-}
-
- void setScrollTopLeftInteropEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  InternalSettingsV8Internal::setScrollTopLeftInteropEnabledMethod(info);
-}
+    static void setMockScrollbarsEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setMockScrollbarsEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setMockScrollbarsEnabled(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setMockScrollbarsEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setMockScrollbarsEnabledMethod(info);
+    }
+
+    static void setHideScrollbarsMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setHideScrollbars");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setHideScrollbars(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setHideScrollbarsMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setHideScrollbarsMethod(info);
+    }
+
+    static void setMockGestureTapHighlightsEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setMockGestureTapHighlightsEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setMockGestureTapHighlightsEnabled(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setMockGestureTapHighlightsEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setMockGestureTapHighlightsEnabledMethod(info);
+    }
+
+    static void setStandardFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setStandardFontFamily");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> family;
+        V8StringResource<> script;
+        family = info[0];
+        if (!family.prepare())
+            return;
+
+        script = info[1];
+        if (!script.prepare())
+            return;
+
+        impl->setStandardFontFamily(family, script, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setStandardFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setStandardFontFamilyMethod(info);
+    }
+
+    static void setSerifFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setSerifFontFamily");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> family;
+        V8StringResource<> script;
+        family = info[0];
+        if (!family.prepare())
+            return;
+
+        script = info[1];
+        if (!script.prepare())
+            return;
+
+        impl->setSerifFontFamily(family, script, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setSerifFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setSerifFontFamilyMethod(info);
+    }
+
+    static void setSansSerifFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setSansSerifFontFamily");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> family;
+        V8StringResource<> script;
+        family = info[0];
+        if (!family.prepare())
+            return;
+
+        script = info[1];
+        if (!script.prepare())
+            return;
+
+        impl->setSansSerifFontFamily(family, script, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setSansSerifFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setSansSerifFontFamilyMethod(info);
+    }
+
+    static void setFixedFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setFixedFontFamily");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> family;
+        V8StringResource<> script;
+        family = info[0];
+        if (!family.prepare())
+            return;
+
+        script = info[1];
+        if (!script.prepare())
+            return;
+
+        impl->setFixedFontFamily(family, script, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setFixedFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setFixedFontFamilyMethod(info);
+    }
+
+    static void setCursiveFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setCursiveFontFamily");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> family;
+        V8StringResource<> script;
+        family = info[0];
+        if (!family.prepare())
+            return;
+
+        script = info[1];
+        if (!script.prepare())
+            return;
+
+        impl->setCursiveFontFamily(family, script, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setCursiveFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setCursiveFontFamilyMethod(info);
+    }
+
+    static void setFantasyFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setFantasyFontFamily");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> family;
+        V8StringResource<> script;
+        family = info[0];
+        if (!family.prepare())
+            return;
+
+        script = info[1];
+        if (!script.prepare())
+            return;
+
+        impl->setFantasyFontFamily(family, script, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setFantasyFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setFantasyFontFamilyMethod(info);
+    }
+
+    static void setPictographFontFamilyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setPictographFontFamily");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> family;
+        V8StringResource<> script;
+        family = info[0];
+        if (!family.prepare())
+            return;
+
+        script = info[1];
+        if (!script.prepare())
+            return;
+
+        impl->setPictographFontFamily(family, script, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setPictographFontFamilyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setPictographFontFamilyMethod(info);
+    }
+
+    static void setTextAutosizingEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setTextAutosizingEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setTextAutosizingEnabled(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setTextAutosizingEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setTextAutosizingEnabledMethod(info);
+    }
+
+    static void setTextAutosizingWindowSizeOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setTextAutosizingWindowSizeOverride");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        int width;
+        int height;
+        width = toInt32(info.GetIsolate(), info[0], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        height = toInt32(info.GetIsolate(), info[1], NormalConversion, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setTextAutosizingWindowSizeOverride(width, height, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setTextAutosizingWindowSizeOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setTextAutosizingWindowSizeOverrideMethod(info);
+    }
+
+    static void setTextTrackKindUserPreferenceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setTextTrackKindUserPreference");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> preference;
+        preference = info[0];
+        if (!preference.prepare())
+            return;
+
+        impl->setTextTrackKindUserPreference(preference, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setTextTrackKindUserPreferenceMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setTextTrackKindUserPreferenceMethod(info);
+    }
+
+    static void setAccessibilityFontScaleFactorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setAccessibilityFontScaleFactor");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        float fontScaleFactor;
+        fontScaleFactor = toRestrictedFloat(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setAccessibilityFontScaleFactor(fontScaleFactor, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setAccessibilityFontScaleFactorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setAccessibilityFontScaleFactorMethod(info);
+    }
+
+    static void setMediaTypeOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setMediaTypeOverride");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> mediaTypeOverride;
+        mediaTypeOverride = info[0];
+        if (!mediaTypeOverride.prepare())
+            return;
+
+        impl->setMediaTypeOverride(mediaTypeOverride, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setMediaTypeOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setMediaTypeOverrideMethod(info);
+    }
+
+    static void setDisplayModeOverrideMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setDisplayModeOverride");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> displayModeOverride;
+        displayModeOverride = info[0];
+        if (!displayModeOverride.prepare())
+            return;
+
+        impl->setDisplayModeOverride(displayModeOverride, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setDisplayModeOverrideMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setDisplayModeOverrideMethod(info);
+    }
+
+    static void setEditingBehaviorMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setEditingBehavior");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> behavior;
+        behavior = info[0];
+        if (!behavior.prepare())
+            return;
+
+        impl->setEditingBehavior(behavior, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setEditingBehaviorMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setEditingBehaviorMethod(info);
+    }
+
+    static void setImagesEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setImagesEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setImagesEnabled(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setImagesEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setImagesEnabledMethod(info);
+    }
+
+    static void setDefaultVideoPosterURLMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setDefaultVideoPosterURL");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> poster;
+        poster = info[0];
+        if (!poster.prepare())
+            return;
+
+        impl->setDefaultVideoPosterURL(poster, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setDefaultVideoPosterURLMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setDefaultVideoPosterURLMethod(info);
+    }
+
+    static void setViewportEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setViewportEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setViewportEnabled(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setViewportEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setViewportEnabledMethod(info);
+    }
+
+    static void setViewportMetaEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setViewportMetaEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setViewportMetaEnabled(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setViewportMetaEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setViewportMetaEnabledMethod(info);
+    }
+
+    static void setViewportStyleMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setViewportStyle");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> style;
+        style = info[0];
+        if (!style.prepare())
+            return;
+
+        impl->setViewportStyle(style, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setViewportStyleMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setViewportStyleMethod(info);
+    }
+
+    static void setAvailablePointerTypesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setAvailablePointerTypes");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> pointers;
+        pointers = info[0];
+        if (!pointers.prepare())
+            return;
+
+        impl->setAvailablePointerTypes(pointers, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setAvailablePointerTypesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setAvailablePointerTypesMethod(info);
+    }
+
+    static void setPrimaryPointerTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setPrimaryPointerType");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> pointer;
+        pointer = info[0];
+        if (!pointer.prepare())
+            return;
+
+        impl->setPrimaryPointerType(pointer, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setPrimaryPointerTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setPrimaryPointerTypeMethod(info);
+    }
+
+    static void setAvailableHoverTypesMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setAvailableHoverTypes");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> types;
+        types = info[0];
+        if (!types.prepare())
+            return;
+
+        impl->setAvailableHoverTypes(types, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setAvailableHoverTypesMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setAvailableHoverTypesMethod(info);
+    }
+
+    static void setPrimaryHoverTypeMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setPrimaryHoverType");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> type;
+        type = info[0];
+        if (!type.prepare())
+            return;
+
+        impl->setPrimaryHoverType(type, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setPrimaryHoverTypeMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setPrimaryHoverTypeMethod(info);
+    }
+
+    static void setImageAnimationPolicyMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setImageAnimationPolicy");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> policy;
+        policy = info[0];
+        if (!policy.prepare())
+            return;
+
+        impl->setImageAnimationPolicy(policy, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setImageAnimationPolicyMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setImageAnimationPolicyMethod(info);
+    }
+
+    static void setCompositorWorkerEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setCompositorWorkerEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setCompositorWorkerEnabled(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setCompositorWorkerEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setCompositorWorkerEnabledMethod(info);
+    }
+
+    static void setPresentationReceiverMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setPresentationReceiver");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setPresentationReceiver(enabled, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+    }
+
+    void setPresentationReceiverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setPresentationReceiverMethod(info);
+    }
+
+    static void setCSSStickyPositionEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setCSSStickyPositionEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setCSSStickyPositionEnabled(enabled);
+    }
+
+    void setCSSStickyPositionEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setCSSStickyPositionEnabledMethod(info);
+    }
+
+    static void setLangAttributeAwareFormControlUIEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setLangAttributeAwareFormControlUIEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setLangAttributeAwareFormControlUIEnabled(enabled);
+    }
+
+    void setLangAttributeAwareFormControlUIEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setLangAttributeAwareFormControlUIEnabledMethod(info);
+    }
+
+    static void setOverlayScrollbarsEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setOverlayScrollbarsEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setOverlayScrollbarsEnabled(enabled);
+    }
+
+    void setOverlayScrollbarsEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setOverlayScrollbarsEnabledMethod(info);
+    }
+
+    static void setExperimentalContentSecurityPolicyFeaturesEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setExperimentalContentSecurityPolicyFeaturesEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setExperimentalContentSecurityPolicyFeaturesEnabled(enabled);
+    }
+
+    void setExperimentalContentSecurityPolicyFeaturesEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setExperimentalContentSecurityPolicyFeaturesEnabledMethod(info);
+    }
+
+    static void setScrollTopLeftInteropEnabledMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "InternalSettings", "setScrollTopLeftInteropEnabled");
+
+        InternalSettings* impl = V8InternalSettings::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        bool enabled;
+        enabled = toBoolean(info.GetIsolate(), info[0], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->setScrollTopLeftInteropEnabled(enabled);
+    }
+
+    void setScrollTopLeftInteropEnabledMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        InternalSettingsV8Internal::setScrollTopLeftInteropEnabledMethod(info);
+    }
 
 } // namespace InternalSettingsV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8InternalSettingsMethods[] = {
-    {"setMockScrollbarsEnabled", InternalSettingsV8Internal::setMockScrollbarsEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setHideScrollbars", InternalSettingsV8Internal::setHideScrollbarsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setMockGestureTapHighlightsEnabled", InternalSettingsV8Internal::setMockGestureTapHighlightsEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setStandardFontFamily", InternalSettingsV8Internal::setStandardFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setSerifFontFamily", InternalSettingsV8Internal::setSerifFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setSansSerifFontFamily", InternalSettingsV8Internal::setSansSerifFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setFixedFontFamily", InternalSettingsV8Internal::setFixedFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setCursiveFontFamily", InternalSettingsV8Internal::setCursiveFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setFantasyFontFamily", InternalSettingsV8Internal::setFantasyFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setPictographFontFamily", InternalSettingsV8Internal::setPictographFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTextAutosizingEnabled", InternalSettingsV8Internal::setTextAutosizingEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTextAutosizingWindowSizeOverride", InternalSettingsV8Internal::setTextAutosizingWindowSizeOverrideMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setTextTrackKindUserPreference", InternalSettingsV8Internal::setTextTrackKindUserPreferenceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setAccessibilityFontScaleFactor", InternalSettingsV8Internal::setAccessibilityFontScaleFactorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setMediaTypeOverride", InternalSettingsV8Internal::setMediaTypeOverrideMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setDisplayModeOverride", InternalSettingsV8Internal::setDisplayModeOverrideMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setEditingBehavior", InternalSettingsV8Internal::setEditingBehaviorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setImagesEnabled", InternalSettingsV8Internal::setImagesEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setDefaultVideoPosterURL", InternalSettingsV8Internal::setDefaultVideoPosterURLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setViewportEnabled", InternalSettingsV8Internal::setViewportEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setViewportMetaEnabled", InternalSettingsV8Internal::setViewportMetaEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setViewportStyle", InternalSettingsV8Internal::setViewportStyleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setAvailablePointerTypes", InternalSettingsV8Internal::setAvailablePointerTypesMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setPrimaryPointerType", InternalSettingsV8Internal::setPrimaryPointerTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setAvailableHoverTypes", InternalSettingsV8Internal::setAvailableHoverTypesMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setPrimaryHoverType", InternalSettingsV8Internal::setPrimaryHoverTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setImageAnimationPolicy", InternalSettingsV8Internal::setImageAnimationPolicyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setCompositorWorkerEnabled", InternalSettingsV8Internal::setCompositorWorkerEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setPresentationReceiver", InternalSettingsV8Internal::setPresentationReceiverMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setCSSStickyPositionEnabled", InternalSettingsV8Internal::setCSSStickyPositionEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setLangAttributeAwareFormControlUIEnabled", InternalSettingsV8Internal::setLangAttributeAwareFormControlUIEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setOverlayScrollbarsEnabled", InternalSettingsV8Internal::setOverlayScrollbarsEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setExperimentalContentSecurityPolicyFeaturesEnabled", InternalSettingsV8Internal::setExperimentalContentSecurityPolicyFeaturesEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"setScrollTopLeftInteropEnabled", InternalSettingsV8Internal::setScrollTopLeftInteropEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "setMockScrollbarsEnabled", InternalSettingsV8Internal::setMockScrollbarsEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setHideScrollbars", InternalSettingsV8Internal::setHideScrollbarsMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setMockGestureTapHighlightsEnabled", InternalSettingsV8Internal::setMockGestureTapHighlightsEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setStandardFontFamily", InternalSettingsV8Internal::setStandardFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setSerifFontFamily", InternalSettingsV8Internal::setSerifFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setSansSerifFontFamily", InternalSettingsV8Internal::setSansSerifFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setFixedFontFamily", InternalSettingsV8Internal::setFixedFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setCursiveFontFamily", InternalSettingsV8Internal::setCursiveFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setFantasyFontFamily", InternalSettingsV8Internal::setFantasyFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setPictographFontFamily", InternalSettingsV8Internal::setPictographFontFamilyMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTextAutosizingEnabled", InternalSettingsV8Internal::setTextAutosizingEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTextAutosizingWindowSizeOverride", InternalSettingsV8Internal::setTextAutosizingWindowSizeOverrideMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setTextTrackKindUserPreference", InternalSettingsV8Internal::setTextTrackKindUserPreferenceMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setAccessibilityFontScaleFactor", InternalSettingsV8Internal::setAccessibilityFontScaleFactorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setMediaTypeOverride", InternalSettingsV8Internal::setMediaTypeOverrideMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setDisplayModeOverride", InternalSettingsV8Internal::setDisplayModeOverrideMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setEditingBehavior", InternalSettingsV8Internal::setEditingBehaviorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setImagesEnabled", InternalSettingsV8Internal::setImagesEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setDefaultVideoPosterURL", InternalSettingsV8Internal::setDefaultVideoPosterURLMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setViewportEnabled", InternalSettingsV8Internal::setViewportEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setViewportMetaEnabled", InternalSettingsV8Internal::setViewportMetaEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setViewportStyle", InternalSettingsV8Internal::setViewportStyleMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setAvailablePointerTypes", InternalSettingsV8Internal::setAvailablePointerTypesMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setPrimaryPointerType", InternalSettingsV8Internal::setPrimaryPointerTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setAvailableHoverTypes", InternalSettingsV8Internal::setAvailableHoverTypesMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setPrimaryHoverType", InternalSettingsV8Internal::setPrimaryHoverTypeMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setImageAnimationPolicy", InternalSettingsV8Internal::setImageAnimationPolicyMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setCompositorWorkerEnabled", InternalSettingsV8Internal::setCompositorWorkerEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setPresentationReceiver", InternalSettingsV8Internal::setPresentationReceiverMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setCSSStickyPositionEnabled", InternalSettingsV8Internal::setCSSStickyPositionEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setLangAttributeAwareFormControlUIEnabled", InternalSettingsV8Internal::setLangAttributeAwareFormControlUIEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setOverlayScrollbarsEnabled", InternalSettingsV8Internal::setOverlayScrollbarsEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setExperimentalContentSecurityPolicyFeaturesEnabled", InternalSettingsV8Internal::setExperimentalContentSecurityPolicyFeaturesEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "setScrollTopLeftInteropEnabled", InternalSettingsV8Internal::setScrollTopLeftInteropEnabledMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8InternalSettingsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8InternalSettings::wrapperTypeInfo.interfaceName, V8InternalSettingsGenerated::domTemplate(isolate, world), V8InternalSettings::internalFieldCount);
+static void installV8InternalSettingsTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8InternalSettings::wrapperTypeInfo.interfaceName, V8InternalSettingsGenerated::domTemplate(isolate, world), V8InternalSettings::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InternalSettingsMethods, WTF_ARRAY_LENGTH(V8InternalSettingsMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8InternalSettingsMethods, WTF_ARRAY_LENGTH(V8InternalSettingsMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8InternalSettings::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8InternalSettingsTemplate);
+v8::Local<v8::FunctionTemplate> V8InternalSettings::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8InternalSettingsTemplate);
 }
 
-bool V8InternalSettings::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8InternalSettings::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8InternalSettings::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8InternalSettings::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-InternalSettings* V8InternalSettings::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+InternalSettings* V8InternalSettings::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

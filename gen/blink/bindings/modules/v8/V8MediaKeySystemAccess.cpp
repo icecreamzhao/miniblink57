@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaKeySystemAccess.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -48,100 +48,111 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&MediaKeySystemAccess::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaKeySystemAccess is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaKeySystemAccessV8Internal {
 
-static void keySystemAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void keySystemAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaKeySystemAccess* impl = V8MediaKeySystemAccess::toImpl(holder);
+        MediaKeySystemAccess* impl = V8MediaKeySystemAccess::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->keySystem(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->keySystem(), info.GetIsolate());
+    }
 
-MODULES_EXPORT void keySystemAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaKeySystemAccessV8Internal::keySystemAttributeGetter(info);
-}
+    MODULES_EXPORT void keySystemAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaKeySystemAccessV8Internal::keySystemAttributeGetter(info);
+    }
 
-static void getConfigurationMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaKeySystemAccess* impl = V8MediaKeySystemAccess::toImpl(info.Holder());
+    static void getConfigurationMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaKeySystemAccess* impl = V8MediaKeySystemAccess::toImpl(info.Holder());
 
-  MediaKeySystemConfiguration result;
-  impl->getConfiguration(result);
-  v8SetReturnValue(info, result);
-}
+        MediaKeySystemConfiguration result;
+        impl->getConfiguration(result);
+        v8SetReturnValue(info, result);
+    }
 
-MODULES_EXPORT  void getConfigurationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaKeySystemAccessV8Internal::getConfigurationMethod(info);
-}
+    MODULES_EXPORT void getConfigurationMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaKeySystemAccessV8Internal::getConfigurationMethod(info);
+    }
 
-static void createMediaKeysMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaKeySystemAccess", "createMediaKeys");
-  ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
+    static void createMediaKeysMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "MediaKeySystemAccess", "createMediaKeys");
+        ExceptionToRejectPromiseScope rejectPromiseScope(info, exceptionState);
 
-  // V8DOMConfiguration::DoNotCheckHolder
-  // Make sure that info.Holder() really points to an instance of the type.
-  if (!V8MediaKeySystemAccess::hasInstance(info.Holder(), info.GetIsolate())) {
-    exceptionState.throwTypeError("Illegal invocation");
-    return;
-  }
-  MediaKeySystemAccess* impl = V8MediaKeySystemAccess::toImpl(info.Holder());
+        // V8DOMConfiguration::DoNotCheckHolder
+        // Make sure that info.Holder() really points to an instance of the type.
+        if (!V8MediaKeySystemAccess::hasInstance(info.Holder(), info.GetIsolate())) {
+            exceptionState.throwTypeError("Illegal invocation");
+            return;
+        }
+        MediaKeySystemAccess* impl = V8MediaKeySystemAccess::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptPromise result = impl->createMediaKeys(scriptState);
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptPromise result = impl->createMediaKeys(scriptState);
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void createMediaKeysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaKeySystemAccessV8Internal::createMediaKeysMethod(info);
-}
+    MODULES_EXPORT void createMediaKeysMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaKeySystemAccessV8Internal::createMediaKeysMethod(info);
+    }
 
 } // namespace MediaKeySystemAccessV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaKeySystemAccessAccessors[] = {
-    {"keySystem", MediaKeySystemAccessV8Internal::keySystemAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "keySystem", MediaKeySystemAccessV8Internal::keySystemAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MediaKeySystemAccessMethods[] = {
-    {"getConfiguration", MediaKeySystemAccessV8Internal::getConfigurationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"createMediaKeys", MediaKeySystemAccessV8Internal::createMediaKeysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder},
+    { "getConfiguration", MediaKeySystemAccessV8Internal::getConfigurationMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "createMediaKeys", MediaKeySystemAccessV8Internal::createMediaKeysMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::DoNotCheckHolder },
 };
 
-static void installV8MediaKeySystemAccessTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaKeySystemAccess::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaKeySystemAccess::internalFieldCount);
+static void installV8MediaKeySystemAccessTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaKeySystemAccess::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8MediaKeySystemAccess::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaKeySystemAccessAccessors, WTF_ARRAY_LENGTH(V8MediaKeySystemAccessAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaKeySystemAccessMethods, WTF_ARRAY_LENGTH(V8MediaKeySystemAccessMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaKeySystemAccessAccessors, WTF_ARRAY_LENGTH(V8MediaKeySystemAccessAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaKeySystemAccessMethods, WTF_ARRAY_LENGTH(V8MediaKeySystemAccessMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaKeySystemAccess::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaKeySystemAccessTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaKeySystemAccess::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaKeySystemAccessTemplate);
 }
 
-bool V8MediaKeySystemAccess::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaKeySystemAccess::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaKeySystemAccess::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaKeySystemAccess::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaKeySystemAccess* V8MediaKeySystemAccess::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaKeySystemAccess* V8MediaKeySystemAccess::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

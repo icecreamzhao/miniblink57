@@ -8,56 +8,67 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "AccelerometerReadingInit.h"
 
 namespace blink {
 
-AccelerometerReadingInit::AccelerometerReadingInit() {
+AccelerometerReadingInit::AccelerometerReadingInit()
+{
 }
 
-AccelerometerReadingInit::~AccelerometerReadingInit() {}
+AccelerometerReadingInit::~AccelerometerReadingInit() { }
 
 AccelerometerReadingInit::AccelerometerReadingInit(const AccelerometerReadingInit&) = default;
 
 AccelerometerReadingInit& AccelerometerReadingInit::operator=(const AccelerometerReadingInit&) = default;
 
-bool AccelerometerReadingInit::hasX() const {
-  return m_hasX;
+bool AccelerometerReadingInit::hasX() const
+{
+    return m_hasX;
 }
-double AccelerometerReadingInit::x() const {
-  DCHECK(m_hasX);
-  return m_x;
+double AccelerometerReadingInit::x() const
+{
+    DCHECK(m_hasX);
+    return m_x;
 }
-void AccelerometerReadingInit::setX(double value) {
-  m_x = value;
-  m_hasX = true;
+void AccelerometerReadingInit::setX(double value)
+{
+    m_x = value;
+    m_hasX = true;
 }
-bool AccelerometerReadingInit::hasY() const {
-  return m_hasY;
+bool AccelerometerReadingInit::hasY() const
+{
+    return m_hasY;
 }
-double AccelerometerReadingInit::y() const {
-  DCHECK(m_hasY);
-  return m_y;
+double AccelerometerReadingInit::y() const
+{
+    DCHECK(m_hasY);
+    return m_y;
 }
-void AccelerometerReadingInit::setY(double value) {
-  m_y = value;
-  m_hasY = true;
+void AccelerometerReadingInit::setY(double value)
+{
+    m_y = value;
+    m_hasY = true;
 }
-bool AccelerometerReadingInit::hasZ() const {
-  return m_hasZ;
+bool AccelerometerReadingInit::hasZ() const
+{
+    return m_hasZ;
 }
-double AccelerometerReadingInit::z() const {
-  DCHECK(m_hasZ);
-  return m_z;
+double AccelerometerReadingInit::z() const
+{
+    DCHECK(m_hasZ);
+    return m_z;
 }
-void AccelerometerReadingInit::setZ(double value) {
-  m_z = value;
-  m_hasZ = true;
+void AccelerometerReadingInit::setZ(double value)
+{
+    m_z = value;
+    m_hasZ = true;
 }
 
-DEFINE_TRACE(AccelerometerReadingInit) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(AccelerometerReadingInit)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MidiPermissionDescriptor_h
 #define MidiPermissionDescriptor_h
 
@@ -19,27 +19,28 @@
 namespace blink {
 
 class MODULES_EXPORT MidiPermissionDescriptor : public PermissionDescriptor {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MidiPermissionDescriptor();
-  virtual ~MidiPermissionDescriptor();
-  MidiPermissionDescriptor(const MidiPermissionDescriptor&);
-  MidiPermissionDescriptor& operator=(const MidiPermissionDescriptor&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasSysex() const;
-  bool sysex() const;
-  void setSysex(bool);
+public:
+    MidiPermissionDescriptor();
+    virtual ~MidiPermissionDescriptor();
+    MidiPermissionDescriptor(const MidiPermissionDescriptor&);
+    MidiPermissionDescriptor& operator=(const MidiPermissionDescriptor&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSysex() const;
+    bool sysex() const;
+    void setSysex(bool);
 
- private:
-  bool m_hasSysex = false;
-  bool m_sysex;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MidiPermissionDescriptor;
+private:
+    bool m_hasSysex = false;
+    bool m_sysex;
+
+    friend class V8MidiPermissionDescriptor;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MidiPermissionDescriptor_h
+#endif // MidiPermissionDescriptor_h

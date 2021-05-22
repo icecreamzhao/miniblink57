@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AnalyserOptions_h
 #define AnalyserOptions_h
 
@@ -19,45 +19,46 @@
 namespace blink {
 
 class MODULES_EXPORT AnalyserOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AnalyserOptions();
-  virtual ~AnalyserOptions();
-  AnalyserOptions(const AnalyserOptions&);
-  AnalyserOptions& operator=(const AnalyserOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasFftSize() const;
-  unsigned fftSize() const;
-  void setFftSize(unsigned);
+public:
+    AnalyserOptions();
+    virtual ~AnalyserOptions();
+    AnalyserOptions(const AnalyserOptions&);
+    AnalyserOptions& operator=(const AnalyserOptions&);
 
-  bool hasMaxDecibels() const;
-  float maxDecibels() const;
-  void setMaxDecibels(float);
+    bool hasFftSize() const;
+    unsigned fftSize() const;
+    void setFftSize(unsigned);
 
-  bool hasMinDecibels() const;
-  float minDecibels() const;
-  void setMinDecibels(float);
+    bool hasMaxDecibels() const;
+    float maxDecibels() const;
+    void setMaxDecibels(float);
 
-  bool hasSmoothingTimeConstant() const;
-  float smoothingTimeConstant() const;
-  void setSmoothingTimeConstant(float);
+    bool hasMinDecibels() const;
+    float minDecibels() const;
+    void setMinDecibels(float);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSmoothingTimeConstant() const;
+    float smoothingTimeConstant() const;
+    void setSmoothingTimeConstant(float);
 
- private:
-  bool m_hasFftSize = false;
-  unsigned m_fftSize;
-  bool m_hasMaxDecibels = false;
-  float m_maxDecibels;
-  bool m_hasMinDecibels = false;
-  float m_minDecibels;
-  bool m_hasSmoothingTimeConstant = false;
-  float m_smoothingTimeConstant;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AnalyserOptions;
+private:
+    bool m_hasFftSize = false;
+    unsigned m_fftSize;
+    bool m_hasMaxDecibels = false;
+    float m_maxDecibels;
+    bool m_hasMinDecibels = false;
+    float m_minDecibels;
+    bool m_hasSmoothingTimeConstant = false;
+    float m_smoothingTimeConstant;
+
+    friend class V8AnalyserOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AnalyserOptions_h
+#endif // AnalyserOptions_h

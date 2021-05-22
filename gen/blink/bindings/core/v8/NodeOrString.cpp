@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "NodeOrString.h"
 
 #include "bindings/core/v8/ToV8.h"
@@ -16,90 +16,103 @@
 
 namespace blink {
 
-NodeOrString::NodeOrString() : m_type(SpecificTypeNone) {}
-
-Node* NodeOrString::getAsNode() const {
-  DCHECK(isNode());
-  return m_node;
+NodeOrString::NodeOrString()
+    : m_type(SpecificTypeNone)
+{
 }
 
-void NodeOrString::setNode(Node* value) {
-  DCHECK(isNull());
-  m_node = value;
-  m_type = SpecificTypeNode;
+Node* NodeOrString::getAsNode() const
+{
+    DCHECK(isNode());
+    return m_node;
 }
 
-NodeOrString NodeOrString::fromNode(Node* value) {
-  NodeOrString container;
-  container.setNode(value);
-  return container;
+void NodeOrString::setNode(Node* value)
+{
+    DCHECK(isNull());
+    m_node = value;
+    m_type = SpecificTypeNode;
 }
 
-String NodeOrString::getAsString() const {
-  DCHECK(isString());
-  return m_string;
+NodeOrString NodeOrString::fromNode(Node* value)
+{
+    NodeOrString container;
+    container.setNode(value);
+    return container;
 }
 
-void NodeOrString::setString(String value) {
-  DCHECK(isNull());
-  m_string = value;
-  m_type = SpecificTypeString;
+String NodeOrString::getAsString() const
+{
+    DCHECK(isString());
+    return m_string;
 }
 
-NodeOrString NodeOrString::fromString(String value) {
-  NodeOrString container;
-  container.setString(value);
-  return container;
+void NodeOrString::setString(String value)
+{
+    DCHECK(isNull());
+    m_string = value;
+    m_type = SpecificTypeString;
+}
+
+NodeOrString NodeOrString::fromString(String value)
+{
+    NodeOrString container;
+    container.setString(value);
+    return container;
 }
 
 NodeOrString::NodeOrString(const NodeOrString&) = default;
 NodeOrString::~NodeOrString() = default;
 NodeOrString& NodeOrString::operator=(const NodeOrString&) = default;
 
-DEFINE_TRACE(NodeOrString) {
-  visitor->trace(m_node);
+DEFINE_TRACE(NodeOrString)
+{
+    visitor->trace(m_node);
 }
 
-void V8NodeOrString::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, NodeOrString& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState) {
-  if (v8Value.IsEmpty())
-    return;
+void V8NodeOrString::toImpl(v8::Isolate* isolate, v8::Local<v8::Value> v8Value, NodeOrString& impl, UnionTypeConversionMode conversionMode, ExceptionState& exceptionState)
+{
+    if (v8Value.IsEmpty())
+        return;
 
-  if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
-    return;
+    if (conversionMode == UnionTypeConversionMode::Nullable && isUndefinedOrNull(v8Value))
+        return;
 
-  if (V8Node::hasInstance(v8Value, isolate)) {
-    Node* cppValue = V8Node::toImpl(v8::Local<v8::Object>::Cast(v8Value));
-    impl.setNode(cppValue);
-    return;
-  }
+    if (V8Node::hasInstance(v8Value, isolate)) {
+        Node* cppValue = V8Node::toImpl(v8::Local<v8::Object>::Cast(v8Value));
+        impl.setNode(cppValue);
+        return;
+    }
 
-  {
-    V8StringResource<> cppValue = v8Value;
-    if (!cppValue.prepare(exceptionState))
-      return;
-    impl.setString(cppValue);
-    return;
-  }
+    {
+        V8StringResource<> cppValue = v8Value;
+        if (!cppValue.prepare(exceptionState))
+            return;
+        impl.setString(cppValue);
+        return;
+    }
 }
 
-v8::Local<v8::Value> ToV8(const NodeOrString& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate) {
-  switch (impl.m_type) {
+v8::Local<v8::Value> ToV8(const NodeOrString& impl, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    switch (impl.m_type) {
     case NodeOrString::SpecificTypeNone:
-      return v8::Null(isolate);
+        return v8::Null(isolate);
     case NodeOrString::SpecificTypeNode:
-      return ToV8(impl.getAsNode(), creationContext, isolate);
+        return ToV8(impl.getAsNode(), creationContext, isolate);
     case NodeOrString::SpecificTypeString:
-      return v8String(isolate, impl.getAsString());
+        return v8String(isolate, impl.getAsString());
     default:
-      NOTREACHED();
-  }
-  return v8::Local<v8::Value>();
+        NOTREACHED();
+    }
+    return v8::Local<v8::Value>();
 }
 
-NodeOrString NativeValueTraits<NodeOrString>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState) {
-  NodeOrString impl;
-  V8NodeOrString::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
-  return impl;
+NodeOrString NativeValueTraits<NodeOrString>::nativeValue(v8::Isolate* isolate, v8::Local<v8::Value> value, ExceptionState& exceptionState)
+{
+    NodeOrString impl;
+    V8NodeOrString::toImpl(isolate, value, impl, UnionTypeConversionMode::NotNullable, exceptionState);
+    return impl;
 }
 
-}  // namespace blink
+} // namespace blink

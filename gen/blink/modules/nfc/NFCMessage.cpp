@@ -8,44 +8,52 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "NFCMessage.h"
 
 namespace blink {
 
-NFCMessage::NFCMessage() {
+NFCMessage::NFCMessage()
+{
 }
 
-NFCMessage::~NFCMessage() {}
+NFCMessage::~NFCMessage() { }
 
 NFCMessage::NFCMessage(const NFCMessage&) = default;
 
 NFCMessage& NFCMessage::operator=(const NFCMessage&) = default;
 
-bool NFCMessage::hasData() const {
-  return m_hasData;
+bool NFCMessage::hasData() const
+{
+    return m_hasData;
 }
-const HeapVector<NFCRecord>& NFCMessage::data() const {
-  DCHECK(m_hasData);
-  return m_data;
+const HeapVector<NFCRecord>& NFCMessage::data() const
+{
+    DCHECK(m_hasData);
+    return m_data;
 }
-void NFCMessage::setData(const HeapVector<NFCRecord>& value) {
-  m_data = value;
-  m_hasData = true;
+void NFCMessage::setData(const HeapVector<NFCRecord>& value)
+{
+    m_data = value;
+    m_hasData = true;
 }
-bool NFCMessage::hasURL() const {
-  return !m_url.isNull();
+bool NFCMessage::hasURL() const
+{
+    return !m_url.isNull();
 }
-String NFCMessage::url() const {
-  return m_url;
+String NFCMessage::url() const
+{
+    return m_url;
 }
-void NFCMessage::setURL(String value) {
-  m_url = value;
+void NFCMessage::setURL(String value)
+{
+    m_url = value;
 }
 
-DEFINE_TRACE(NFCMessage) {
-  visitor->trace(m_data);
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(NFCMessage)
+{
+    visitor->trace(m_data);
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

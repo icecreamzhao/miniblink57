@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8EventTarget.h"
 
 #include "bindings/core/v8/AddEventListenerOptionsOrBoolean.h"
@@ -53,206 +53,218 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&EventTarget::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "EventTarget is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace EventTargetV8Internal {
 
-static void addEventListenerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EventTarget", "addEventListener");
+    static void addEventListenerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EventTarget", "addEventListener");
 
-  EventTarget* impl = V8EventTarget::toImpl(info.Holder());
+        EventTarget* impl = V8EventTarget::toImpl(info.Holder());
 
-  // Performance hack for EventTarget.  Checking whether it's a Window or not
-  // prior to the call to BindingSecurity::shouldAllowAccessTo increases 30%
-  // of speed performance on Android Nexus 7 as of Dec 2015.  ALWAYS_INLINE
-  // didn't work in this case.
-  if (const DOMWindow* window = impl->toDOMWindow()) {
-    if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), window, exceptionState)) {
-      return;
+        // Performance hack for EventTarget.  Checking whether it's a Window or not
+        // prior to the call to BindingSecurity::shouldAllowAccessTo increases 30%
+        // of speed performance on Android Nexus 7 as of Dec 2015.  ALWAYS_INLINE
+        // didn't work in this case.
+        if (const DOMWindow* window = impl->toDOMWindow()) {
+            if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), window, exceptionState)) {
+                return;
+            }
+        }
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> type;
+        EventListener* listener;
+        AddEventListenerOptionsOrBoolean options;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        type = info[0];
+        if (!type.prepare())
+            return;
+
+        listener = V8EventListenerHelper::getEventListener(ScriptState::current(info.GetIsolate()), info[1], false, ListenerFindOrCreate);
+
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            V8EventTarget::addEventListenerMethodPrologueCustom(info, impl);
+            impl->addEventListener(type, listener);
+            V8EventTarget::addEventListenerMethodEpilogueCustom(info, impl);
+            return;
+        }
+        V8AddEventListenerOptionsOrBoolean::toImpl(info.GetIsolate(), info[2], options, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        V8EventTarget::addEventListenerMethodPrologueCustom(info, impl);
+        impl->addEventListener(type, listener, options);
+        V8EventTarget::addEventListenerMethodEpilogueCustom(info, impl);
     }
-  }
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
-
-  V8StringResource<> type;
-  EventListener* listener;
-  AddEventListenerOptionsOrBoolean options;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  type = info[0];
-  if (!type.prepare())
-    return;
-
-  listener = V8EventListenerHelper::getEventListener(ScriptState::current(info.GetIsolate()), info[1], false, ListenerFindOrCreate);
-
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    V8EventTarget::addEventListenerMethodPrologueCustom(info, impl);
-    impl->addEventListener(type, listener);
-    V8EventTarget::addEventListenerMethodEpilogueCustom(info, impl);
-    return;
-  }
-  V8AddEventListenerOptionsOrBoolean::toImpl(info.GetIsolate(), info[2], options, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
-
-  V8EventTarget::addEventListenerMethodPrologueCustom(info, impl);
-  impl->addEventListener(type, listener, options);
-  V8EventTarget::addEventListenerMethodEpilogueCustom(info, impl);
-}
-
-CORE_EXPORT  void addEventListenerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventTargetV8Internal::addEventListenerMethod(info);
-}
-
-static void removeEventListenerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EventTarget", "removeEventListener");
-
-  EventTarget* impl = V8EventTarget::toImpl(info.Holder());
-
-  // Performance hack for EventTarget.  Checking whether it's a Window or not
-  // prior to the call to BindingSecurity::shouldAllowAccessTo increases 30%
-  // of speed performance on Android Nexus 7 as of Dec 2015.  ALWAYS_INLINE
-  // didn't work in this case.
-  if (const DOMWindow* window = impl->toDOMWindow()) {
-    if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), window, exceptionState)) {
-      return;
+    CORE_EXPORT void addEventListenerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventTargetV8Internal::addEventListenerMethod(info);
     }
-  }
 
-  if (UNLIKELY(info.Length() < 2)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    return;
-  }
+    static void removeEventListenerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EventTarget", "removeEventListener");
 
-  V8StringResource<> type;
-  EventListener* listener;
-  EventListenerOptionsOrBoolean options;
-  int numArgsPassed = info.Length();
-  while (numArgsPassed > 0) {
-    if (!info[numArgsPassed - 1]->IsUndefined())
-      break;
-    --numArgsPassed;
-  }
-  type = info[0];
-  if (!type.prepare())
-    return;
+        EventTarget* impl = V8EventTarget::toImpl(info.Holder());
 
-  listener = V8EventListenerHelper::getEventListener(ScriptState::current(info.GetIsolate()), info[1], false, ListenerFindOnly);
+        // Performance hack for EventTarget.  Checking whether it's a Window or not
+        // prior to the call to BindingSecurity::shouldAllowAccessTo increases 30%
+        // of speed performance on Android Nexus 7 as of Dec 2015.  ALWAYS_INLINE
+        // didn't work in this case.
+        if (const DOMWindow* window = impl->toDOMWindow()) {
+            if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), window, exceptionState)) {
+                return;
+            }
+        }
 
-  if (UNLIKELY(numArgsPassed <= 2)) {
-    V8EventTarget::removeEventListenerMethodPrologueCustom(info, impl);
-    impl->removeEventListener(type, listener);
-    V8EventTarget::removeEventListenerMethodEpilogueCustom(info, impl);
-    return;
-  }
-  V8EventListenerOptionsOrBoolean::toImpl(info.GetIsolate(), info[2], options, UnionTypeConversionMode::NotNullable, exceptionState);
-  if (exceptionState.hadException())
-    return;
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
 
-  V8EventTarget::removeEventListenerMethodPrologueCustom(info, impl);
-  impl->removeEventListener(type, listener, options);
-  V8EventTarget::removeEventListenerMethodEpilogueCustom(info, impl);
-}
+        V8StringResource<> type;
+        EventListener* listener;
+        EventListenerOptionsOrBoolean options;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        type = info[0];
+        if (!type.prepare())
+            return;
 
-CORE_EXPORT  void removeEventListenerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventTargetV8Internal::removeEventListenerMethod(info);
-}
+        listener = V8EventListenerHelper::getEventListener(ScriptState::current(info.GetIsolate()), info[1], false, ListenerFindOnly);
 
-static void dispatchEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EventTarget", "dispatchEvent");
+        if (UNLIKELY(numArgsPassed <= 2)) {
+            V8EventTarget::removeEventListenerMethodPrologueCustom(info, impl);
+            impl->removeEventListener(type, listener);
+            V8EventTarget::removeEventListenerMethodEpilogueCustom(info, impl);
+            return;
+        }
+        V8EventListenerOptionsOrBoolean::toImpl(info.GetIsolate(), info[2], options, UnionTypeConversionMode::NotNullable, exceptionState);
+        if (exceptionState.hadException())
+            return;
 
-  EventTarget* impl = V8EventTarget::toImpl(info.Holder());
-
-  // Performance hack for EventTarget.  Checking whether it's a Window or not
-  // prior to the call to BindingSecurity::shouldAllowAccessTo increases 30%
-  // of speed performance on Android Nexus 7 as of Dec 2015.  ALWAYS_INLINE
-  // didn't work in this case.
-  if (const DOMWindow* window = impl->toDOMWindow()) {
-    if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), window, exceptionState)) {
-      return;
+        V8EventTarget::removeEventListenerMethodPrologueCustom(info, impl);
+        impl->removeEventListener(type, listener, options);
+        V8EventTarget::removeEventListenerMethodEpilogueCustom(info, impl);
     }
-  }
 
-  if (UNLIKELY(info.Length() < 1)) {
-    exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    return;
-  }
+    CORE_EXPORT void removeEventListenerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventTargetV8Internal::removeEventListenerMethod(info);
+    }
 
-  Event* event;
-  event = V8Event::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-  if (!event) {
-    exceptionState.throwTypeError("parameter 1 is not of type 'Event'.");
+    static void dispatchEventMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "EventTarget", "dispatchEvent");
 
-    return;
-  }
+        EventTarget* impl = V8EventTarget::toImpl(info.Holder());
 
-  bool result = impl->dispatchEventForBindings(event, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValueBool(info, result);
-}
+        // Performance hack for EventTarget.  Checking whether it's a Window or not
+        // prior to the call to BindingSecurity::shouldAllowAccessTo increases 30%
+        // of speed performance on Android Nexus 7 as of Dec 2015.  ALWAYS_INLINE
+        // didn't work in this case.
+        if (const DOMWindow* window = impl->toDOMWindow()) {
+            if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), window, exceptionState)) {
+                return;
+            }
+        }
 
-CORE_EXPORT  void dispatchEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  EventTargetV8Internal::dispatchEventMethod(info);
-}
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        Event* event;
+        event = V8Event::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!event) {
+            exceptionState.throwTypeError("parameter 1 is not of type 'Event'.");
+
+            return;
+        }
+
+        bool result = impl->dispatchEventForBindings(event, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueBool(info, result);
+    }
+
+    CORE_EXPORT void dispatchEventMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        EventTargetV8Internal::dispatchEventMethod(info);
+    }
 
 } // namespace EventTargetV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8EventTargetMethods[] = {
-    {"addEventListener", EventTargetV8Internal::addEventListenerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeEventListener", EventTargetV8Internal::removeEventListenerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"dispatchEvent", EventTargetV8Internal::dispatchEventMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "addEventListener", EventTargetV8Internal::addEventListenerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeEventListener", EventTargetV8Internal::removeEventListenerMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "dispatchEvent", EventTargetV8Internal::dispatchEventMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8EventTargetTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8EventTarget::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8EventTarget::internalFieldCount);
+static void installV8EventTargetTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8EventTarget::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8EventTarget::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Global object prototype chain consists of Immutable Prototype Exotic Objects
-  prototypeTemplate->SetImmutableProto();
+    // Global object prototype chain consists of Immutable Prototype Exotic Objects
+    prototypeTemplate->SetImmutableProto();
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventTargetMethods, WTF_ARRAY_LENGTH(V8EventTargetMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8EventTargetMethods, WTF_ARRAY_LENGTH(V8EventTargetMethods));
 }
 
-void V8EventTarget::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface) {
-  v8::Local<v8::FunctionTemplate> interfaceTemplate = V8EventTarget::wrapperTypeInfo.domTemplate(isolate, world);
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
+void V8EventTarget::installRuntimeEnabledFeatures(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::Object> instance, v8::Local<v8::Object> prototype, v8::Local<v8::Function> interface)
+{
+    v8::Local<v8::FunctionTemplate> interfaceTemplate = V8EventTarget::wrapperTypeInfo.domTemplate(isolate, world);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
 }
 
-v8::Local<v8::FunctionTemplate> V8EventTarget::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EventTargetTemplate);
+v8::Local<v8::FunctionTemplate> V8EventTarget::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8EventTargetTemplate);
 }
 
-bool V8EventTarget::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8EventTarget::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8EventTarget::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8EventTarget::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-EventTarget* V8EventTarget::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+EventTarget* V8EventTarget::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

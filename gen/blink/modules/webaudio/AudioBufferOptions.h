@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef AudioBufferOptions_h
 #define AudioBufferOptions_h
 
@@ -19,39 +19,40 @@
 namespace blink {
 
 class MODULES_EXPORT AudioBufferOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  AudioBufferOptions();
-  virtual ~AudioBufferOptions();
-  AudioBufferOptions(const AudioBufferOptions&);
-  AudioBufferOptions& operator=(const AudioBufferOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasLength() const;
-  unsigned length() const;
-  void setLength(unsigned);
+public:
+    AudioBufferOptions();
+    virtual ~AudioBufferOptions();
+    AudioBufferOptions(const AudioBufferOptions&);
+    AudioBufferOptions& operator=(const AudioBufferOptions&);
 
-  bool hasNumberOfChannels() const;
-  unsigned numberOfChannels() const;
-  void setNumberOfChannels(unsigned);
+    bool hasLength() const;
+    unsigned length() const;
+    void setLength(unsigned);
 
-  bool hasSampleRate() const;
-  float sampleRate() const;
-  void setSampleRate(float);
+    bool hasNumberOfChannels() const;
+    unsigned numberOfChannels() const;
+    void setNumberOfChannels(unsigned);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasSampleRate() const;
+    float sampleRate() const;
+    void setSampleRate(float);
 
- private:
-  bool m_hasLength = false;
-  unsigned m_length;
-  bool m_hasNumberOfChannels = false;
-  unsigned m_numberOfChannels;
-  bool m_hasSampleRate = false;
-  float m_sampleRate;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8AudioBufferOptions;
+private:
+    bool m_hasLength = false;
+    unsigned m_length;
+    bool m_hasNumberOfChannels = false;
+    unsigned m_numberOfChannels;
+    bool m_hasSampleRate = false;
+    float m_sampleRate;
+
+    friend class V8AudioBufferOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // AudioBufferOptions_h
+#endif // AudioBufferOptions_h

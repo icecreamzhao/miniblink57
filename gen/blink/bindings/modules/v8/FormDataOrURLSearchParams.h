@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef FormDataOrURLSearchParams_h
 #define FormDataOrURLSearchParams_h
 
@@ -24,58 +24,60 @@ class FormData;
 class URLSearchParams;
 
 class MODULES_EXPORT FormDataOrURLSearchParams final {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  FormDataOrURLSearchParams();
-  bool isNull() const { return m_type == SpecificTypeNone; }
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool isFormData() const { return m_type == SpecificTypeFormData; }
-  FormData* getAsFormData() const;
-  void setFormData(FormData*);
-  static FormDataOrURLSearchParams fromFormData(FormData*);
+public:
+    FormDataOrURLSearchParams();
+    bool isNull() const { return m_type == SpecificTypeNone; }
 
-  bool isURLSearchParams() const { return m_type == SpecificTypeURLSearchParams; }
-  URLSearchParams* getAsURLSearchParams() const;
-  void setURLSearchParams(URLSearchParams*);
-  static FormDataOrURLSearchParams fromURLSearchParams(URLSearchParams*);
+    bool isFormData() const { return m_type == SpecificTypeFormData; }
+    FormData* getAsFormData() const;
+    void setFormData(FormData*);
+    static FormDataOrURLSearchParams fromFormData(FormData*);
 
-  FormDataOrURLSearchParams(const FormDataOrURLSearchParams&);
-  ~FormDataOrURLSearchParams();
-  FormDataOrURLSearchParams& operator=(const FormDataOrURLSearchParams&);
-  DECLARE_TRACE();
+    bool isURLSearchParams() const { return m_type == SpecificTypeURLSearchParams; }
+    URLSearchParams* getAsURLSearchParams() const;
+    void setURLSearchParams(URLSearchParams*);
+    static FormDataOrURLSearchParams fromURLSearchParams(URLSearchParams*);
 
- private:
-  enum SpecificTypes {
-    SpecificTypeNone,
-    SpecificTypeFormData,
-    SpecificTypeURLSearchParams,
-  };
-  SpecificTypes m_type;
+    FormDataOrURLSearchParams(const FormDataOrURLSearchParams&);
+    ~FormDataOrURLSearchParams();
+    FormDataOrURLSearchParams& operator=(const FormDataOrURLSearchParams&);
+    DECLARE_TRACE();
 
-  Member<FormData> m_formData;
-  Member<URLSearchParams> m_urlSearchParams;
+private:
+    enum SpecificTypes {
+        SpecificTypeNone,
+        SpecificTypeFormData,
+        SpecificTypeURLSearchParams,
+    };
+    SpecificTypes m_type;
 
-  friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const FormDataOrURLSearchParams&, v8::Local<v8::Object>, v8::Isolate*);
+    Member<FormData> m_formData;
+    Member<URLSearchParams> m_urlSearchParams;
+
+    friend MODULES_EXPORT v8::Local<v8::Value> ToV8(const FormDataOrURLSearchParams&, v8::Local<v8::Object>, v8::Isolate*);
 };
 
 class V8FormDataOrURLSearchParams final {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FormDataOrURLSearchParams&, UnionTypeConversionMode, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, FormDataOrURLSearchParams&, UnionTypeConversionMode, ExceptionState&);
 };
 
 MODULES_EXPORT v8::Local<v8::Value> ToV8(const FormDataOrURLSearchParams&, v8::Local<v8::Object>, v8::Isolate*);
 
 template <class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FormDataOrURLSearchParams& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, FormDataOrURLSearchParams& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<FormDataOrURLSearchParams> {
-  MODULES_EXPORT static FormDataOrURLSearchParams nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    MODULES_EXPORT static FormDataOrURLSearchParams nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -83,4 +85,4 @@ struct NativeValueTraits<FormDataOrURLSearchParams> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::FormDataOrURLSearchParams);
 
-#endif  // FormDataOrURLSearchParams_h
+#endif // FormDataOrURLSearchParams_h

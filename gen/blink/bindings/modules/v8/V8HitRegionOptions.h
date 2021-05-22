@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_v8.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8HitRegionOptions_h
 #define V8HitRegionOptions_h
 
@@ -23,27 +23,28 @@ namespace blink {
 class ExceptionState;
 
 class V8HitRegionOptions {
- public:
-  MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HitRegionOptions&, ExceptionState&);
+public:
+    MODULES_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, HitRegionOptions&, ExceptionState&);
 };
 
 MODULES_EXPORT bool toV8HitRegionOptions(const HitRegionOptions&, v8::Local<v8::Object> dictionary, v8::Local<v8::Object> creationContext, v8::Isolate*);
 
-template<class CallbackInfo>
-inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HitRegionOptions& impl) {
-  v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
+template <class CallbackInfo>
+inline void v8SetReturnValue(const CallbackInfo& callbackInfo, HitRegionOptions& impl)
+{
+    v8SetReturnValue(callbackInfo, ToV8(impl, callbackInfo.Holder(), callbackInfo.GetIsolate()));
 }
 
 template <>
 struct NativeValueTraits<HitRegionOptions> {
-  static HitRegionOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
+    static HitRegionOptions nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
 template <>
 struct V8TypeOf<HitRegionOptions> {
-  typedef V8HitRegionOptions Type;
+    typedef V8HitRegionOptions Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8HitRegionOptions_h
+#endif // V8HitRegionOptions_h

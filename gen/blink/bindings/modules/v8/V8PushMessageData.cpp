@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8PushMessageData.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -49,99 +49,112 @@ static_assert(
     "Be consistent.");
 static_assert(
     std::is_same<decltype(&PushMessageData::hasPendingActivity),
-                 decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "PushMessageData is overriding hasPendingActivity(), but is not specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace PushMessageDataV8Internal {
 
-static void arrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PushMessageData* impl = V8PushMessageData::toImpl(info.Holder());
+    static void arrayBufferMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PushMessageData* impl = V8PushMessageData::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->arrayBuffer());
-}
+        v8SetReturnValue(info, impl->arrayBuffer());
+    }
 
-MODULES_EXPORT  void arrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PushMessageDataV8Internal::arrayBufferMethod(info);
-}
+    MODULES_EXPORT void arrayBufferMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PushMessageDataV8Internal::arrayBufferMethod(info);
+    }
 
-static void blobMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PushMessageData* impl = V8PushMessageData::toImpl(info.Holder());
+    static void blobMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PushMessageData* impl = V8PushMessageData::toImpl(info.Holder());
 
-  v8SetReturnValue(info, impl->blob());
-}
+        v8SetReturnValue(info, impl->blob());
+    }
 
-MODULES_EXPORT  void blobMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PushMessageDataV8Internal::blobMethod(info);
-}
+    MODULES_EXPORT void blobMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PushMessageDataV8Internal::blobMethod(info);
+    }
 
-static void jsonMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PushMessageData", "json");
+    static void jsonMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "PushMessageData", "json");
 
-  PushMessageData* impl = V8PushMessageData::toImpl(info.Holder());
+        PushMessageData* impl = V8PushMessageData::toImpl(info.Holder());
 
-  ScriptState* scriptState = ScriptState::forReceiverObject(info);
+        ScriptState* scriptState = ScriptState::forReceiverObject(info);
 
-  ScriptValue result = impl->json(scriptState, exceptionState);
-  if (exceptionState.hadException()) {
-    return;
-  }
-  v8SetReturnValue(info, result.v8Value());
-}
+        ScriptValue result = impl->json(scriptState, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValue(info, result.v8Value());
+    }
 
-MODULES_EXPORT  void jsonMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PushMessageDataV8Internal::jsonMethod(info);
-}
+    MODULES_EXPORT void jsonMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PushMessageDataV8Internal::jsonMethod(info);
+    }
 
-static void textMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PushMessageData* impl = V8PushMessageData::toImpl(info.Holder());
+    static void textMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PushMessageData* impl = V8PushMessageData::toImpl(info.Holder());
 
-  v8SetReturnValueString(info, impl->text(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->text(), info.GetIsolate());
+    }
 
-MODULES_EXPORT  void textMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  PushMessageDataV8Internal::textMethod(info);
-}
+    MODULES_EXPORT void textMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        PushMessageDataV8Internal::textMethod(info);
+    }
 
 } // namespace PushMessageDataV8Internal
 
 const V8DOMConfiguration::MethodConfiguration V8PushMessageDataMethods[] = {
-    {"arrayBuffer", PushMessageDataV8Internal::arrayBufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"blob", PushMessageDataV8Internal::blobMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"json", PushMessageDataV8Internal::jsonMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"text", PushMessageDataV8Internal::textMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "arrayBuffer", PushMessageDataV8Internal::arrayBufferMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "blob", PushMessageDataV8Internal::blobMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "json", PushMessageDataV8Internal::jsonMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "text", PushMessageDataV8Internal::textMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8PushMessageDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PushMessageData::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PushMessageData::internalFieldCount);
+static void installV8PushMessageDataTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8PushMessageData::wrapperTypeInfo.interfaceName, v8::Local<v8::FunctionTemplate>(), V8PushMessageData::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PushMessageDataMethods, WTF_ARRAY_LENGTH(V8PushMessageDataMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8PushMessageDataMethods, WTF_ARRAY_LENGTH(V8PushMessageDataMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8PushMessageData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PushMessageDataTemplate);
+v8::Local<v8::FunctionTemplate> V8PushMessageData::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8PushMessageDataTemplate);
 }
 
-bool V8PushMessageData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8PushMessageData::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8PushMessageData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8PushMessageData::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-PushMessageData* V8PushMessageData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+PushMessageData* V8PushMessageData::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

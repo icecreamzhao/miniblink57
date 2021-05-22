@@ -8,47 +8,55 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "IDBIndexParameters.h"
 
 namespace blink {
 
-IDBIndexParameters::IDBIndexParameters() {
-  setMultiEntry(false);
-  setUnique(false);
+IDBIndexParameters::IDBIndexParameters()
+{
+    setMultiEntry(false);
+    setUnique(false);
 }
 
-IDBIndexParameters::~IDBIndexParameters() {}
+IDBIndexParameters::~IDBIndexParameters() { }
 
 IDBIndexParameters::IDBIndexParameters(const IDBIndexParameters&) = default;
 
 IDBIndexParameters& IDBIndexParameters::operator=(const IDBIndexParameters&) = default;
 
-bool IDBIndexParameters::hasMultiEntry() const {
-  return m_hasMultiEntry;
+bool IDBIndexParameters::hasMultiEntry() const
+{
+    return m_hasMultiEntry;
 }
-bool IDBIndexParameters::multiEntry() const {
-  DCHECK(m_hasMultiEntry);
-  return m_multiEntry;
+bool IDBIndexParameters::multiEntry() const
+{
+    DCHECK(m_hasMultiEntry);
+    return m_multiEntry;
 }
-void IDBIndexParameters::setMultiEntry(bool value) {
-  m_multiEntry = value;
-  m_hasMultiEntry = true;
+void IDBIndexParameters::setMultiEntry(bool value)
+{
+    m_multiEntry = value;
+    m_hasMultiEntry = true;
 }
-bool IDBIndexParameters::hasUnique() const {
-  return m_hasUnique;
+bool IDBIndexParameters::hasUnique() const
+{
+    return m_hasUnique;
 }
-bool IDBIndexParameters::unique() const {
-  DCHECK(m_hasUnique);
-  return m_unique;
+bool IDBIndexParameters::unique() const
+{
+    DCHECK(m_hasUnique);
+    return m_unique;
 }
-void IDBIndexParameters::setUnique(bool value) {
-  m_unique = value;
-  m_hasUnique = true;
+void IDBIndexParameters::setUnique(bool value)
+{
+    m_unique = value;
+    m_hasUnique = true;
 }
 
-DEFINE_TRACE(IDBIndexParameters) {
-  IDLDictionaryBase::trace(visitor);
+DEFINE_TRACE(IDBIndexParameters)
+{
+    IDLDictionaryBase::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink

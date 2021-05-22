@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef RequestDeviceOptions_h
 #define RequestDeviceOptions_h
 
@@ -22,39 +22,40 @@
 namespace blink {
 
 class MODULES_EXPORT RequestDeviceOptions : public IDLDictionaryBase {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  RequestDeviceOptions();
-  virtual ~RequestDeviceOptions();
-  RequestDeviceOptions(const RequestDeviceOptions&);
-  RequestDeviceOptions& operator=(const RequestDeviceOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasAcceptAllDevices() const;
-  bool acceptAllDevices() const;
-  void setAcceptAllDevices(bool);
+public:
+    RequestDeviceOptions();
+    virtual ~RequestDeviceOptions();
+    RequestDeviceOptions(const RequestDeviceOptions&);
+    RequestDeviceOptions& operator=(const RequestDeviceOptions&);
 
-  bool hasFilters() const;
-  const HeapVector<BluetoothScanFilterInit>& filters() const;
-  void setFilters(const HeapVector<BluetoothScanFilterInit>&);
+    bool hasAcceptAllDevices() const;
+    bool acceptAllDevices() const;
+    void setAcceptAllDevices(bool);
 
-  bool hasOptionalServices() const;
-  const HeapVector<StringOrUnsignedLong>& optionalServices() const;
-  void setOptionalServices(const HeapVector<StringOrUnsignedLong>&);
+    bool hasFilters() const;
+    const HeapVector<BluetoothScanFilterInit>& filters() const;
+    void setFilters(const HeapVector<BluetoothScanFilterInit>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasOptionalServices() const;
+    const HeapVector<StringOrUnsignedLong>& optionalServices() const;
+    void setOptionalServices(const HeapVector<StringOrUnsignedLong>&);
 
- private:
-  bool m_hasAcceptAllDevices = false;
-  bool m_acceptAllDevices;
-  bool m_hasFilters = false;
-  HeapVector<BluetoothScanFilterInit> m_filters;
-  bool m_hasOptionalServices = false;
-  HeapVector<StringOrUnsignedLong> m_optionalServices;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8RequestDeviceOptions;
+private:
+    bool m_hasAcceptAllDevices = false;
+    bool m_acceptAllDevices;
+    bool m_hasFilters = false;
+    HeapVector<BluetoothScanFilterInit> m_filters;
+    bool m_hasOptionalServices = false;
+    HeapVector<StringOrUnsignedLong> m_optionalServices;
+
+    friend class V8RequestDeviceOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // RequestDeviceOptions_h
+#endif // RequestDeviceOptions_h

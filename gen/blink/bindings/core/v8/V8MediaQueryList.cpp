@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "V8MediaQueryList.h"
 
 #include "bindings/core/v8/BindingSecurity.h"
@@ -49,148 +49,165 @@ static_assert(
     "Be consistent.");
 static_assert(
     !std::is_same<decltype(&MediaQueryList::hasPendingActivity),
-                  decltype(&ScriptWrappable::hasPendingActivity)>::value,
+        decltype(&ScriptWrappable::hasPendingActivity)>::value,
     "MediaQueryList is not overriding hasPendingActivity(), but is specifying "
     "[ActiveScriptWrappable] extended attribute in the IDL file.  "
     "Be consistent.");
 
 namespace MediaQueryListV8Internal {
 
-static void mediaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void mediaAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaQueryList* impl = V8MediaQueryList::toImpl(holder);
+        MediaQueryList* impl = V8MediaQueryList::toImpl(holder);
 
-  v8SetReturnValueString(info, impl->media(), info.GetIsolate());
-}
+        v8SetReturnValueString(info, impl->media(), info.GetIsolate());
+    }
 
-CORE_EXPORT void mediaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaQueryListV8Internal::mediaAttributeGetter(info);
-}
+    CORE_EXPORT void mediaAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaQueryListV8Internal::mediaAttributeGetter(info);
+    }
 
-static void matchesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void matchesAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaQueryList* impl = V8MediaQueryList::toImpl(holder);
+        MediaQueryList* impl = V8MediaQueryList::toImpl(holder);
 
-  v8SetReturnValueBool(info, impl->matches());
-}
+        v8SetReturnValueBool(info, impl->matches());
+    }
 
-CORE_EXPORT void matchesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaQueryListV8Internal::matchesAttributeGetter(info);
-}
+    CORE_EXPORT void matchesAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaQueryListV8Internal::matchesAttributeGetter(info);
+    }
 
-static void onchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
+    static void onchangeAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
 
-  MediaQueryList* impl = V8MediaQueryList::toImpl(holder);
+        MediaQueryList* impl = V8MediaQueryList::toImpl(holder);
 
-  EventListener* cppValue(WTF::getPtr(impl->onchange()));
+        EventListener* cppValue(WTF::getPtr(impl->onchange()));
 
-  v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
-}
+        v8SetReturnValue(info, cppValue ? V8AbstractEventListener::cast(cppValue)->getListenerOrNull(info.GetIsolate(), impl->getExecutionContext()) : v8::Null(info.GetIsolate()).As<v8::Value>());
+    }
 
-CORE_EXPORT void onchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaQueryListV8Internal::onchangeAttributeGetter(info);
-}
+    CORE_EXPORT void onchangeAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaQueryListV8Internal::onchangeAttributeGetter(info);
+    }
 
-static void onchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Object> holder = info.Holder();
-  MediaQueryList* impl = V8MediaQueryList::toImpl(holder);
+    static void onchangeAttributeSetter(v8::Local<v8::Value> v8Value, const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+        MediaQueryList* impl = V8MediaQueryList::toImpl(holder);
 
-  // Prepare the value to be set.
-  moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchange(), v8Value, V8MediaQueryList::eventListenerCacheIndex);
+        // Prepare the value to be set.
+        moveEventListenerToNewWrapper(info.GetIsolate(), holder, impl->onchange(), v8Value, V8MediaQueryList::eventListenerCacheIndex);
 
-  impl->setOnchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
-}
+        impl->setOnchange(V8EventListenerHelper::getEventListener(ScriptState::forReceiverObject(info), v8Value, true, ListenerFindOrCreate));
+    }
 
-CORE_EXPORT void onchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  v8::Local<v8::Value> v8Value = info[0];
+    CORE_EXPORT void onchangeAttributeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Value> v8Value = info[0];
 
-  MediaQueryListV8Internal::onchangeAttributeSetter(v8Value, info);
-}
+        MediaQueryListV8Internal::onchangeAttributeSetter(v8Value, info);
+    }
 
-static void addListenerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaQueryList* impl = V8MediaQueryList::toImpl(info.Holder());
+    static void addListenerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaQueryList* impl = V8MediaQueryList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addListener", "MediaQueryList", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("addListener", "MediaQueryList", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  EventListener* listener;
-  listener = V8EventListenerHelper::getEventListener(ScriptState::current(info.GetIsolate()), info[0], false, ListenerFindOrCreate);
+        EventListener* listener;
+        listener = V8EventListenerHelper::getEventListener(ScriptState::current(info.GetIsolate()), info[0], false, ListenerFindOrCreate);
 
-  impl->addDeprecatedListener(listener);
-  V8MediaQueryList::addListenerMethodEpilogueCustom(info, impl);
-}
+        impl->addDeprecatedListener(listener);
+        V8MediaQueryList::addListenerMethodEpilogueCustom(info, impl);
+    }
 
-CORE_EXPORT  void addListenerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaQueryListV8Internal::addListenerMethod(info);
-}
+    CORE_EXPORT void addListenerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaQueryListV8Internal::addListenerMethod(info);
+    }
 
-static void removeListenerMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaQueryList* impl = V8MediaQueryList::toImpl(info.Holder());
+    static void removeListenerMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaQueryList* impl = V8MediaQueryList::toImpl(info.Holder());
 
-  if (UNLIKELY(info.Length() < 1)) {
-    V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeListener", "MediaQueryList", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    return;
-  }
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("removeListener", "MediaQueryList", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
 
-  EventListener* listener;
-  listener = V8EventListenerHelper::getEventListener(ScriptState::current(info.GetIsolate()), info[0], false, ListenerFindOnly);
+        EventListener* listener;
+        listener = V8EventListenerHelper::getEventListener(ScriptState::current(info.GetIsolate()), info[0], false, ListenerFindOnly);
 
-  impl->removeDeprecatedListener(listener);
-  V8MediaQueryList::removeListenerMethodEpilogueCustom(info, impl);
-}
+        impl->removeDeprecatedListener(listener);
+        V8MediaQueryList::removeListenerMethodEpilogueCustom(info, impl);
+    }
 
-CORE_EXPORT  void removeListenerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  MediaQueryListV8Internal::removeListenerMethod(info);
-}
+    CORE_EXPORT void removeListenerMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        MediaQueryListV8Internal::removeListenerMethod(info);
+    }
 
 } // namespace MediaQueryListV8Internal
 
 const V8DOMConfiguration::AccessorConfiguration V8MediaQueryListAccessors[] = {
-    {"media", MediaQueryListV8Internal::mediaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"matches", MediaQueryListV8Internal::matchesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"onchange", MediaQueryListV8Internal::onchangeAttributeGetterCallback, MediaQueryListV8Internal::onchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "media", MediaQueryListV8Internal::mediaAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "matches", MediaQueryListV8Internal::matchesAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "onchange", MediaQueryListV8Internal::onchangeAttributeGetterCallback, MediaQueryListV8Internal::onchangeAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
 const V8DOMConfiguration::MethodConfiguration V8MediaQueryListMethods[] = {
-    {"addListener", MediaQueryListV8Internal::addListenerMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    {"removeListener", MediaQueryListV8Internal::removeListenerMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "addListener", MediaQueryListV8Internal::addListenerMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "removeListener", MediaQueryListV8Internal::removeListenerMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 
-static void installV8MediaQueryListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate) {
-  // Initialize the interface object's template.
-  V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaQueryList::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MediaQueryList::internalFieldCount);
+static void installV8MediaQueryListTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)
+{
+    // Initialize the interface object's template.
+    V8DOMConfiguration::initializeDOMInterfaceTemplate(isolate, interfaceTemplate, V8MediaQueryList::wrapperTypeInfo.interfaceName, V8EventTarget::domTemplate(isolate, world), V8MediaQueryList::internalFieldCount);
 
-  v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
-  ALLOW_UNUSED_LOCAL(signature);
-  v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
-  ALLOW_UNUSED_LOCAL(instanceTemplate);
-  v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
-  ALLOW_UNUSED_LOCAL(prototypeTemplate);
+    v8::Local<v8::Signature> signature = v8::Signature::New(isolate, interfaceTemplate);
+    ALLOW_UNUSED_LOCAL(signature);
+    v8::Local<v8::ObjectTemplate> instanceTemplate = interfaceTemplate->InstanceTemplate();
+    ALLOW_UNUSED_LOCAL(instanceTemplate);
+    v8::Local<v8::ObjectTemplate> prototypeTemplate = interfaceTemplate->PrototypeTemplate();
+    ALLOW_UNUSED_LOCAL(prototypeTemplate);
 
-  // Register DOM constants, attributes and operations.
-  V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaQueryListAccessors, WTF_ARRAY_LENGTH(V8MediaQueryListAccessors));
-  V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaQueryListMethods, WTF_ARRAY_LENGTH(V8MediaQueryListMethods));
+    // Register DOM constants, attributes and operations.
+    V8DOMConfiguration::installAccessors(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaQueryListAccessors, WTF_ARRAY_LENGTH(V8MediaQueryListAccessors));
+    V8DOMConfiguration::installMethods(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, V8MediaQueryListMethods, WTF_ARRAY_LENGTH(V8MediaQueryListMethods));
 }
 
-v8::Local<v8::FunctionTemplate> V8MediaQueryList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world) {
-  return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaQueryListTemplate);
+v8::Local<v8::FunctionTemplate> V8MediaQueryList::domTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world)
+{
+    return V8DOMConfiguration::domClassTemplate(isolate, world, const_cast<WrapperTypeInfo*>(&wrapperTypeInfo), installV8MediaQueryListTemplate);
 }
 
-bool V8MediaQueryList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
+bool V8MediaQueryList::hasInstance(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->hasInstance(&wrapperTypeInfo, v8Value);
 }
 
-v8::Local<v8::Object> V8MediaQueryList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate) {
-  return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
+v8::Local<v8::Object> V8MediaQueryList::findInstanceInPrototypeChain(v8::Local<v8::Value> v8Value, v8::Isolate* isolate)
+{
+    return V8PerIsolateData::from(isolate)->findInstanceInPrototypeChain(&wrapperTypeInfo, v8Value);
 }
 
-MediaQueryList* V8MediaQueryList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value) {
-  return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
+MediaQueryList* V8MediaQueryList::toImplWithTypeCheck(v8::Isolate* isolate, v8::Local<v8::Value> value)
+{
+    return hasInstance(value, isolate) ? toImpl(v8::Local<v8::Object>::Cast(value)) : nullptr;
 }
 
-}  // namespace blink
+} // namespace blink

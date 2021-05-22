@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef IIRFilterOptions_h
 #define IIRFilterOptions_h
 
@@ -20,33 +20,34 @@
 namespace blink {
 
 class MODULES_EXPORT IIRFilterOptions : public AudioNodeOptions {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  IIRFilterOptions();
-  virtual ~IIRFilterOptions();
-  IIRFilterOptions(const IIRFilterOptions&);
-  IIRFilterOptions& operator=(const IIRFilterOptions&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasFeedback() const;
-  const Vector<double>& feedback() const;
-  void setFeedback(const Vector<double>&);
+public:
+    IIRFilterOptions();
+    virtual ~IIRFilterOptions();
+    IIRFilterOptions(const IIRFilterOptions&);
+    IIRFilterOptions& operator=(const IIRFilterOptions&);
 
-  bool hasFeedforward() const;
-  const Vector<double>& feedforward() const;
-  void setFeedforward(const Vector<double>&);
+    bool hasFeedback() const;
+    const Vector<double>& feedback() const;
+    void setFeedback(const Vector<double>&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasFeedforward() const;
+    const Vector<double>& feedforward() const;
+    void setFeedforward(const Vector<double>&);
 
- private:
-  bool m_hasFeedback = false;
-  Vector<double> m_feedback;
-  bool m_hasFeedforward = false;
-  Vector<double> m_feedforward;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8IIRFilterOptions;
+private:
+    bool m_hasFeedback = false;
+    Vector<double> m_feedback;
+    bool m_hasFeedforward = false;
+    Vector<double> m_feedforward;
+
+    friend class V8IIRFilterOptions;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // IIRFilterOptions_h
+#endif // IIRFilterOptions_h

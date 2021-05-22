@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef MediaStreamEventInit_h
 #define MediaStreamEventInit_h
 
@@ -21,27 +21,28 @@ namespace blink {
 class MediaStream;
 
 class MODULES_EXPORT MediaStreamEventInit : public EventInit {
-  DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
- public:
-  MediaStreamEventInit();
-  virtual ~MediaStreamEventInit();
-  MediaStreamEventInit(const MediaStreamEventInit&);
-  MediaStreamEventInit& operator=(const MediaStreamEventInit&);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-  bool hasStream() const;
-  MediaStream* stream() const;
-  void setStream(MediaStream*);
-  void setStreamToNull();
+public:
+    MediaStreamEventInit();
+    virtual ~MediaStreamEventInit();
+    MediaStreamEventInit(const MediaStreamEventInit&);
+    MediaStreamEventInit& operator=(const MediaStreamEventInit&);
 
-  v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
-  DECLARE_VIRTUAL_TRACE();
+    bool hasStream() const;
+    MediaStream* stream() const;
+    void setStream(MediaStream*);
+    void setStreamToNull();
 
- private:
-  Member<MediaStream> m_stream;
+    v8::Local<v8::Value> toV8Impl(v8::Local<v8::Object>, v8::Isolate*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
-  friend class V8MediaStreamEventInit;
+private:
+    Member<MediaStream> m_stream;
+
+    friend class V8MediaStreamEventInit;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // MediaStreamEventInit_h
+#endif // MediaStreamEventInit_h

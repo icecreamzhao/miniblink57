@@ -8,38 +8,44 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/dictionary_impl.cpp.tmpl
 
-// clang-format off
+// clang-format on
 #include "RelatedEventInit.h"
 
 #include "core/events/EventTarget.h"
 
 namespace blink {
 
-RelatedEventInit::RelatedEventInit() {
+RelatedEventInit::RelatedEventInit()
+{
 }
 
-RelatedEventInit::~RelatedEventInit() {}
+RelatedEventInit::~RelatedEventInit() { }
 
 RelatedEventInit::RelatedEventInit(const RelatedEventInit&) = default;
 
 RelatedEventInit& RelatedEventInit::operator=(const RelatedEventInit&) = default;
 
-bool RelatedEventInit::hasRelatedTarget() const {
-  return m_relatedTarget;
+bool RelatedEventInit::hasRelatedTarget() const
+{
+    return m_relatedTarget;
 }
-EventTarget* RelatedEventInit::relatedTarget() const {
-  return m_relatedTarget;
+EventTarget* RelatedEventInit::relatedTarget() const
+{
+    return m_relatedTarget;
 }
-void RelatedEventInit::setRelatedTarget(EventTarget* value) {
-  m_relatedTarget = value;
+void RelatedEventInit::setRelatedTarget(EventTarget* value)
+{
+    m_relatedTarget = value;
 }
-void RelatedEventInit::setRelatedTargetToNull() {
-  m_relatedTarget = Member<EventTarget>();
+void RelatedEventInit::setRelatedTargetToNull()
+{
+    m_relatedTarget = Member<EventTarget>();
 }
 
-DEFINE_TRACE(RelatedEventInit) {
-  visitor->trace(m_relatedTarget);
-  EventInit::trace(visitor);
+DEFINE_TRACE(RelatedEventInit)
+{
+    visitor->trace(m_relatedTarget);
+    EventInit::trace(visitor);
 }
 
-}  // namespace blink
+} // namespace blink
